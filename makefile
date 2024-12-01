@@ -1,15 +1,14 @@
-
 BUILD_DIR = build
-ASMSOURCES = $(shell find asm -name *.s)
-ASMDIRS = $(sort $(dir $(ASMSOURCES)))
-ASMOBJECTS = $(addprefix $(BUILD_DIR)/, $(patsubst %.s, %.o, $(ASMSOURCES)))
+ASMSOURCES := $(shell find asm -name *.s)
+ASMDIRS := $(sort $(dir $(ASMSOURCES)))
+ASMOBJECTS := $(addprefix $(BUILD_DIR)/, $(patsubst %.s, %.o, $(ASMSOURCES)))
 
-CROSS = tools/mips64-elf-
-AS = $(CROSS)as.exe
-OBJCOPY = $(CROSS)objcopy.exe
+CROSS = mips-linux-gnu-
+AS = $(CROSS)as
+OBJCOPY = $(CROSS)objcopy
 ASFLAGS = -march=vr4300 -mtune=vr4300 -Iinclude -no-pad-sections
 
-LD = $(CROSS)ld.exe
+LD = $(CROSS)ld
 
 default: all
 
@@ -21,7 +20,7 @@ $(ASMOBJECTS): $(BUILD_DIR)/%.o: %.s
 	$(AS) $(ASFLAGS) $< -o $@
 
 rom.elf: $(ASMOBJECTS)
-	$(LD) -Map gexenterthegecko.map $(ASMOBJECTS) -T gexenterthegecko.ld -T symbol_addrs.txt -o $@
+	$(LD) -Map gexenterthegecko.map $(ASMOBJECTS) -T gexenterthegecko.ld -T undefined_funcs_auto.txt -T undefined_syms_auto.txt -o $@ > log.txt
 
 split:
 	cmd.exe /c splat split gexenterthegecko.yaml
@@ -43,3 +42,5 @@ clean:
 	mkdir -p build/asm/data
 
 .PHONY: all clean default split build diff
+
+# mips64-elf-gcc.exe -O2 -g3 -I../include -mabi=32 -mgp32 -mfp32 -nostdinc -fno-PIC -G 0 -mips2 -c ../src/_3eaa0.c -o ../_3eaa0.o

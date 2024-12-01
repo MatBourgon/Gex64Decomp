@@ -265,190 +265,226 @@ segments:
       - { type: bss, vram: 0x8007F340 }
 
   - name: aztec_code
-    type: databin # code
+    type: code
     start: 0x7FF40
-    #vram: 0x80159720
-    #bss_size: 0x80720
-    #subsegments:
-    #  - [0x7FF40, asm, _7ff40]
-    #  - [0x808B0, rodata, _7ff40]
-    #  - { type: bss, vram: 0x8015A0E0 }
+    vram: 0x80159720
+#     follows_vram: main
+    exclusive_ram_id: level_code
+    bss_size: 0x80720
+    subsegments:
+      - [0x7FF40, asm, _7ff40]
+      - [0x808B0, rodata, _7ff40]
+      - { type: bss, vram: 0x8015A0E0 }
 
   - name: circuit_code
-    type: databin # code
+    type: code
     start: 0x80900
-    #vram: 0x80159720
-    #bss_size: 0x77120
-    #subsegments:
-    #  - [0x80900, asm, _80900]
-    #  - [0x8A780, rodata, _80900]
-    #  - { type: bss, vram: 0x801636E0 }
+    vram: 0x80159720
+#     follows_vram: main
+    exclusive_ram_id: level_code
+    bss_size: 0x77120
+    subsegments:
+      - [0x80900, asm, _80900]
+      - [0x8A780, rodata, _80900]
+      - { type: bss, vram: 0x801636E0 }
 
   - name: final_code
-    type: databin # code
+    type: code
     start: 0x8A8C0
-    #vram: 0x80159720
-    #bss_size: 0x78FA0
-    #subsegments:
-    #  - [0x8A8C0, asm, _8a8c0]
-    #  - [0x926B0, rodata, _8a8c0]
-    #  - { type: bss, vram: 0x80161860 }
+    vram: 0x80159720
+#     follows_vram: main
+    exclusive_ram_id: level_code
+    bss_size: 0x78FA0
+    subsegments:
+      - [0x8A8C0, asm, _8a8c0]
+      - [0x926B0, rodata, _8a8c0]
+      - { type: bss, vram: 0x80161860 }
 
   - name: gexzil_code
-    type: databin # code
+    type: code
     start: 0x928A0
-    #vram: 0x80159720
-    #bss_size: 0x77C70
-    #subsegments:
-    #  - [0x928A0, asm, _928a0]
-    #  - [0x9BC10, rodata, _928a0]
-    #  - { type: bss, vram: 0x80162B90 }
+    vram: 0x80159720
+#     follows_vram: main
+    exclusive_ram_id: level_code
+    bss_size: 0x77C70
+    subsegments:
+      - [0x928A0, asm, _928a0]
+      - [0x9BC10, rodata, _928a0]
+      - { type: bss, vram: 0x80162B90 }
 
   - name: gillig_code
-    type: databin # code
+    type: code
     start: 0x9BD00
-    #vram: 0x80159720
-    #bss_size: 0x7FE90
-    #subsegments:
-    #  - [0x9BD00, asm, _9bd00]
-    #  - [0x9CF00, rodata, _9bd00]
-    #  - { type: bss, 0x8015A970 }
+    vram: 0x80159720
+#     follows_vram: main
+    exclusive_ram_id: level_code
+    bss_size: 0x7FE90
+    subsegments:
+      - [0x9BD00, asm, _9bd00]
+      - [0x9CF00, rodata, _9bd00]
+      - { type: bss, 0x8015A970 }
 
   - name: horror_code
-    type: databin # code
+    type: code
     start: 0x9CF50
-    #vram: 0x80159720
-    #bss_size: 0x75AE0
-    #subsegments:
-    #  - [0x9CF50, asm, _9cf50]
-    #  - [0xA8464, rodata, _9cf50]
-    #  - { type: bss, 0x80164D20 }
+    vram: 0x80159720
+#     follows_vram: main
+    exclusive_ram_id: level_code
+    bss_size: 0x75AE0
+    subsegments:
+      - [0x9CF50, asm, _9cf50]
+      - [0xA8464, rodata, _9cf50]
+      - { type: bss, 0x80164D20 }
 
   - name: intro_code
-    type: databin # code
+    type: code
     start: 0xA8550
-    #vram: 0x80159720
-    #bss_size: 0x80CF0
-    #subsegments:
-    #  - [0xA8550, asm, _a8550]
-    #  - [0xA8930, rodata, _a8550]
-    #  - { type: bss, vram: 0x80159B10 }
+    vram: 0x80159720
+#     follows_vram: main
+    exclusive_ram_id: level_code
+    bss_size: 0x80CF0
+    subsegments:
+      - [0xA8550, asm, _a8550]
+      - [0xA8930, rodata, _a8550]
+      - { type: bss, vram: 0x80159B10 }
 
   - name: kungfu_code
-    type: databin # code
+    type: code
     start: 0xA8940
-    #vram: 0x80159720
-    #bss_size: 0x78050
-    #subsegments:
-    #  - [0xA8940, asm, _a8940]
-    #  - [0xB18E0, rodata, _a8940]
-    #  - { type: bss, vram: 0x801627B0 }
+    vram: 0x80159720
+#     follows_vram: main
+    exclusive_ram_id: level_code
+    bss_size: 0x78050
+    subsegments:
+      - [0xA8940, asm, _a8940]
+      - [0xB18E0, rodata, _a8940]
+      - { type: bss, vram: 0x801627B0 }
 
   - name: looney_code
-    type: databin # code
+    type: code
     start: 0xB19D0
-    #vram: 0x80159720
-    #bss_size: 0x78960
-    #subsegments:
-    #  - [0xB19D0, asm, _b19d0]
-    #  - [0xB9E80, rodata, _b19d0]
-    #  - { type: bss, vram: 0x80161EA0 }
+    vram: 0x80159720
+#     follows_vram: main
+    exclusive_ram_id: level_code
+    bss_size: 0x78960
+    subsegments:
+      - [0xB19D0, asm, _b19d0]
+      - [0xB9E80, rodata, _b19d0]
+      - { type: bss, vram: 0x80161EA0 }
 
   - name: map_code
-    type: databin # code
+    type: code
     start: 0xBA150
-    #vram: 0x80159720
-    #bss_size: 0x79170
-    #subsegments:
-    #  - [0xBA150, asm, _c1e50]
-    #  - [0xC1B60, rodata, _c1e50]
-    #  - { type: bss, vram: 0x80161690 }
+    vram: 0x80159720
+#     follows_vram: main
+    exclusive_ram_id: level_code
+    bss_size: 0x79170
+    subsegments:
+      - [0xBA150, asm, _c1e50]
+      - [0xC1B60, rodata, _c1e50]
+      - { type: bss, vram: 0x80161690 }
 
   - name: mooshu_code
-    type: databin # code
+    type: code
     start: 0xC20A0
-    #vram: 0x80159720
-    #bss_size: 0x7C980
-    #subsegments:
-    #  - [0xC20A0, asm, _c20a0]
-    #  - [0xC6760, rodata, _c20a0]
-    #  - { type: bss, vram: 0x8015DE80 }
+    vram: 0x80159720
+#     follows_vram: main
+    exclusive_ram_id: level_code
+    bss_size: 0x7C980
+    subsegments:
+      - [0xC20A0, asm, _c20a0]
+      - [0xC6760, rodata, _c20a0]
+      - { type: bss, vram: 0x8015DE80 }
 
   - name: nypd_code
-    type: databin # code
+    type: code
     start: 0xC6800
-    #vram: 0x80159720
-    #bss_size: 0x80940
-    #subsegments:
-    #  - [0xC6800, asm, _c6800]
-    #  - [0xC6F50, rodata, _c6800]
-    #  - { type: bss, vram: 0x80159EC0 }
+    vram: 0x80159720
+#     follows_vram: main
+    exclusive_ram_id: level_code
+    bss_size: 0x80940
+    subsegments:
+      - [0xC6800, asm, _c6800]
+      - [0xC6F50, rodata, _c6800]
+      - { type: bss, vram: 0x80159EC0 }
 
   - name: prehst_code
-    type: databin # code
+    type: code
     start: 0xC6FA0
-    #vram: 0x80159720
-    #bss_size: 0x761F0
-    #subsegments:
-    #  - [0xC6FA0, asm, _c6fa0]
-    #  - [0xD1D10, rodata, _c6fa0]
-    #  - { type: bss, vram: 0x80164610 }
+    vram: 0x80159720
+#     follows_vram: main
+    exclusive_ram_id: level_code
+    bss_size: 0x761F0
+    subsegments:
+      - [0xC6FA0, asm, _c6fa0]
+      - [0xD1D10, rodata, _c6fa0]
+      - { type: bss, vram: 0x80164610 }
 
   - name: rezop_code
-    type: databin # code
+    type: code
     start: 0xD1E90
-    #vram: 0x80159720
-    #bss_size: 0x791E0
-    #subsegments:
-    #  - [0xD1E90, asm, _d1e90]
-    #  - [0xD9CA0, rodata, _d1e90]
-    #  - { type: bss, vram: 0x80161620 }
+    vram: 0x80159720
+#     follows_vram: main
+    exclusive_ram_id: level_code
+    bss_size: 0x791E0
+    subsegments:
+      - [0xD1E90, asm, _d1e90]
+      - [0xD9CA0, rodata, _d1e90]
+      - { type: bss, vram: 0x80161620 }
 
   - name: rta_code
-    type: databin # code
+    type: code
     start: 0xD9D90
-    #vram: 0x80159720
-    #bss_size: 0x7B8E0
-    #subsegments:
-    #  - [0xD9D90, asm, _d9d90]
-    #  - [0xDF380, rodata, _d9d90]
-    #  - { type: bss, vram: 0x8015EF20 }
+    vram: 0x80159720
+#     follows_vram: main
+    exclusive_ram_id: level_code
+    bss_size: 0x7B8E0
+    subsegments:
+      - [0xD9D90, asm, _d9d90]
+      - [0xDF380, rodata, _d9d90]
+      - { type: bss, vram: 0x8015EF20 }
 
   - name: scifi_code
-    type: databin # code
+    type: code
     start: 0xDF540
-    #vram: 0x80159720
-    #bss_size: 0x75830
-    #subsegments:
-    #  - [0xDF540, asm, _df540]
-    #  - [0xEAC10, rodata, _df540]
-    #  - { type: bss, 0x80164FD0 }
+    vram: 0x80159720
+#     follows_vram: main
+    exclusive_ram_id: level_code
+    bss_size: 0x75830
+    subsegments:
+      - [0xDF540, asm, _df540]
+      - [0xEAC10, rodata, _df540]
+      - { type: bss, 0x80164FD0 }
 
   - name: spy_code
-    type: databin # code
+    type: code
     start: 0xEADF0
-    #vram: 0x80159720
-    #bss_size: 0x7F9A0
-    #subsegments:
-    #  - [0xEADF0, asm, _eadf0]
-    #  - [0xEC440, rodata, _eadf0]
-    #  - { type: bss, 0x8015AE60 }
+    vram: 0x80159720
+#     follows_vram: main
+    exclusive_ram_id: level_code
+    bss_size: 0x7F9A0
+    subsegments:
+      - [0xEADF0, asm, _eadf0]
+      - [0xEC440, rodata, _eadf0]
+      - { type: bss, 0x8015AE60 }
 
   - name: logo_code
-    type: databin # code
+    type: code
     start: 0xEC530
-    #vram: 0x80159720 
-    #bss_size: 0x80520
-    #subsegments:
-    #  - [0xEC530, asm, _ec530]
-    #  - [0xECE80, rodata, _ec530]
-    #  - { type: bss, 0x8015A2E0 }
+    vram: 0x80159720 
+#     follows_vram: main
+    exclusive_ram_id: level_code
+    bss_size: 0x80520
+    subsegments:
+      - [0xEC530, asm, _ec530]
+      - [0xECE80, rodata, _ec530]
+      - { type: bss, 0x8015A2E0 }
 
   - name: extra_functions
     type: code
     start: 0xED0F0
     vram: 0x801DA800
-    #follows_vram: logo_code
+#     follows_vram: logo_code
     subsegments:
       - [0xED0F0, asm, _ed0f0]
       - [0xEEE40, rodata, _ed0f0]
