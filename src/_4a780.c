@@ -512,6 +512,11 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004EA2C);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004EA58);
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004EBAC);
+extern func_8004EBAC(int*, int, int);                            /* extern */
+
+int func_8004D4F4(int *arg1, int* arg2) {
+    func_8004EBAC(arg1, arg2[1], 0);
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004EBD0);
