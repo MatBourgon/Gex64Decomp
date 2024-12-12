@@ -505,7 +505,12 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004E9A8);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004E9BC);
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004E9D0);
+extern int D_8015EE2C;
+
+int func_8004E9D0(int* arg1, int* arg2) {
+    D_8015EE2C = arg2[1];
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004E9E4);
 
