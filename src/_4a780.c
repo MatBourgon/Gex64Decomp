@@ -1,5 +1,6 @@
 #include "common.h"
 
+#include "types/GameState.h"
 #include "types/TVTextData.h"
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_80049B80);
@@ -483,7 +484,12 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004E540);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004E568);
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004E580);
+extern func_80039688(char, char, char, int);                   
+
+int func_8004E580(int arg0, char* arg1) {
+    func_80039688(arg1[4], arg1[5], arg1[6], gpGameState8);
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004E5B8);
 
