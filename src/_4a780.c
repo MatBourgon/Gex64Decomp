@@ -287,7 +287,13 @@ void func_8004C43C() {
     } while (var_a0 < 0x24);
 }
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004C464);
+int func_8004C464(int** arg1, int** arg2) {
+    int* temp_v1 = arg2[1];              
+    int temp_v0 = temp_v1[7];                
+    temp_v0 |= 0x80;                    
+    temp_v1[7] = temp_v0;                    
+    return 1;     
+}
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004C484);
 
@@ -474,7 +480,13 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004E318);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004E33C);
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004E360);
+extern int func_80052A7C(int value);                               /* extern */
+
+int func_8004E360(int arg1, int* arg2) {
+    arg1 = arg2[1];
+    func_80052A7C(arg1);
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004E384);
 
