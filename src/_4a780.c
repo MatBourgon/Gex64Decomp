@@ -275,7 +275,7 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004C2F4);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004C350);
 
-extern s32 D_8007864C;
+extern int D_8007864C;
 
 void func_8004C43C() {
     int var_a0;
