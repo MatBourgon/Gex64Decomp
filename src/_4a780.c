@@ -1,4 +1,5 @@
 #include "common.h"
+#include "_4a780.h"
 
 #include "types/GameState.h"
 #include "types/TVTextData.h"
@@ -275,26 +276,17 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004C2F4);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004C350);
 
-extern int D_8007864C;
+extern int D_8007864C[];
 
 void func_8004C43C() {
-    int var_a0;
-    int* var_v1;
-
-    var_a0 = 0x20;
-    var_v1 = &D_8007864C;
-    do {
-        *var_v1 = 0;
-        var_a0 += 1;
-        var_v1 += 1;
-    } while (var_a0 < 0x24);
+    int i;
+    
+    for (i = 0x20; i < 0x24; ++i)
+        D_8007864C[i-0x20] = 0;
 }
 
 int func_8004C464(int** arg1, int** arg2) {
-    int* temp_v1 = arg2[1];              
-    int temp_v0 = temp_v1[7];                
-    temp_v0 |= 0x80;                    
-    temp_v1[7] = temp_v0;                    
+    arg2[1][7] |= 0x80;                    
     return 1;     
 }
 
@@ -329,14 +321,12 @@ int func_8004C6F0(void) {
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004C6F8);
 
 int func_8004C71C(char* arg0, int* arg1) {
-    int* temp1 = (int*)arg1[1];
-    arg0[79] =  temp1;
+    arg0[79] = arg1[1];
     
     return 1;
 }
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004C730);
-extern int func_80003D4C(int*);                               /* extern */
 
 int func_8004C760(int* arg1, int* arg2) {
     arg1 = (int*)arg2[1];
@@ -379,12 +369,8 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004CBAC);
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004CBEC);
 
 int func_8004CC2C(int* arg1, int* arg2) {
-    int temp_v0;
-
-    temp_v0 = arg2[1];
-    if (temp_v0 > 0) {
-        temp_v0 =  temp_v0 - 1;
-        arg2[1] = temp_v0;
+    if (arg2[1] > 0) {
+        --arg2[1];
         return 1;
     }
    
@@ -421,19 +407,15 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004D160);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004D184);
 
+// Unsets a flag?
 int func_8004D1A8(int* arg1, int* arg2) {
-    int* temp_v0;
-
-    temp_v0 = (int*)arg2[1];
-    *temp_v0 &= ~2;
+    *(int*)arg2[1] &= ~2;
     return 1;
 }
 
+// Sets a flag?
 int func_8004D1C8(int* arg1, int* arg2) {
-    int* temp_v1;
-
-    temp_v1 = (int*)arg2[1];
-    *temp_v1 |= 2;
+    *(int*)arg2[1] |= 2;
     return 1;
 }
 
@@ -459,7 +441,7 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004D46C);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004D4B0);
 
-int func_8004D4F4(int *arg1, int* arg2) {
+int func_8004D4F4(int *arg1, int** arg2) {
     func_8004EBAC(arg1, arg2[1], 0);
     return 0;
 }
@@ -547,8 +529,6 @@ int func_8004E33C(int* arg1, int* arg2) {
     return 1;
 }
 
-extern int func_80052A7C(int value);                               /* extern */
-
 int func_8004E360(int arg1, int* arg2) {
     arg1 = arg2[1];
     func_80052A7C(arg1);
@@ -570,8 +550,6 @@ int func_8004E3A8(void) {
     return 1;
 }
 
-extern void func_80052F58();                                  /* extern */
-
 int func_8004E3C8(void) {
     func_80052F58();
     return 1;
@@ -579,17 +557,10 @@ int func_8004E3C8(void) {
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004E3E8);
 
-void func_8004EBAC(void*, void*, void*);
-
 int func_8004E408(void* arg0, int** arg1) {
-    int temp_a1;
-    int* temp_v0;
-
-    temp_v0 = arg1[1];
-    if ((temp_v0 != 0) && (temp_v0[7] & 8)) {
-        temp_a1 = arg1[2];
-        if (temp_a1 != 0) {
-            func_8004EBAC(arg0, temp_a1, 0);
+    if ((arg1[1] != 0) && (arg1[1][7] & 8)) {
+        if (arg1[2] != NULL) {
+            func_8004EBAC(arg0, arg1[2], 0);
             return 0;
         }
     }
@@ -605,14 +576,11 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004E51C);
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004E540);
 
 int func_8004E568(int* arg1, int* arg2) {
-    int* temp1 = arg2[1];
+    int* temp1 = (int*)arg2[1];
     int temp2 = arg2[2];
     temp1[1] = temp2; 
     return 1;
-}
-
-
-extern func_80039688(char, char, char, int);                   
+}             
 
 int func_8004E580(int arg0, char* arg1) {
     func_80039688(arg1[4], arg1[5], arg1[6], gpGameState8);

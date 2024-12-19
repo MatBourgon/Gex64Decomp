@@ -56,4 +56,7 @@ clean:
 	mkdir -p build/asm/ultralib
 	mkdir -p build/src
 
+cleanc:
+	rm -rf build/src/*.o
+
 .PHONY: all clean default split build diff
