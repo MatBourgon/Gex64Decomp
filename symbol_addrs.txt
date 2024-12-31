@@ -62,6 +62,9 @@ gpGameState4 = 0x8006FCC4; // type:GameState*
 gpGameState8 = 0x8006FCC8; // type:GameState*
 gGameState = 0x800C0AC0; // size:0x4cd8 segment:main
 
+CharacterManipArray_6F078 = 0x8006F078; // type:s8 size:95
+CharacterManip_30DAC = 0x80030DAC; // type:func
+
 // zlib functions
 inflate = 0x801DA800; // type:func segment:zlib
 inflate_blocks = 0x801DAAD0; // type:func segment:zlib
