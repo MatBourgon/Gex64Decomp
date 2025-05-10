@@ -620,7 +620,14 @@ int func_8004E9D0(int* arg1, int* arg2) {
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004E9E4);
+extern int D_8015EE30;
+
+int func_8004E9E4(int arg1, int* arg2) {
+    int temp_v0;
+    temp_v0 = arg2[1];
+    D_8015EE30 = temp_v0;
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004E9F8);
 
