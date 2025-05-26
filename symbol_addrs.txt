@@ -27,6 +27,8 @@ osWritebackDCacheAll = 0x80057160; // type:func
 cstrchr = 0x8005C200; // type:func
 cstrlen = 0x8005C238; // type:func
 cstrncpy = 0x8005C25C; // type:func
+csprintf = 0x8005C290; // type:func
+strncpy_ret_end = 0x8005C2E8; // type:func
 
 __osExceptionPreamble = 0x8005CF10; // type:func
 __ptExceptionPreamble = 0x8005CF20; // type:func
