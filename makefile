@@ -9,14 +9,14 @@ MIPS3SOURCES := $(shell cat mips3.source.txt)
 MIPS3OBJECTS := $(addprefix $(BUILD_DIR)/, $(patsubst %.c, %.o, $(MIPS3SOURCES)))
 COBJECTS := $(MIPS1OBJECTS) $(MIPS3OBJECTS)
 
-AS = tools/mips64-elf-as.exe
-OBJCOPY = tools/mips64-elf-objcopy.exe
+AS = mips-linux-gnu-as
+OBJCOPY = mips-linux-gnu-objcopy
 COMMONFLAGS = -mabi=32 -mfp32 -mgp32 -Iinclude
 ASFLAGS = -mtune=vr4300 -march=vr4300 -no-pad-sections -mips3 -G0 $(COMMONFLAGS)
 CC = tools/gcc
 CDEFINES = -DNUM_LEVELS=32
 CFLAGS = -nostdinc -c -O2 -G0 $(CDEFINES) $(COMMONFLAGS) -Btools/
-LD = tools/mips64-elf-ld.exe
+LD = mips-linux-gnu-ld
 
 default: all
 
