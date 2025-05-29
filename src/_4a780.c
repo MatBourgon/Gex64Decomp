@@ -302,7 +302,9 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004C598);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004C634);
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004C664);
+int func_8004C664(void) {
+    return 1;
+}
 
 int func_8004C66C(void) {
     return 1;
