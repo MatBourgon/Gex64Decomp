@@ -682,4 +682,17 @@ void func_8004EBAC(void* arg0, void* arg1, void* arg2) {
     func_8004EA58(arg0, arg1, 1, arg2);
 }
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004EBD0);
+int func_8004EBD0(int** arg0) {
+    int* temp_v0;
+    int* temp_v1;
+    
+
+    if ((arg0 != 0) && (*arg0 != 0)) {
+        do {
+            temp_v0 = arg0[0];
+            temp_v1 = arg0[1];
+            arg0 += 2;
+            temp_v0[0] = temp_v1;
+        } while (*arg0 != 0);
+    }
+}
