@@ -482,9 +482,13 @@ int func_8004D4F4(int *arg1, int** arg2) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004D51C);
+int func_8004D51C(void) {
+    return 1;
+}
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004D524);
+int func_8004D524(void) {
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004D52C);
 
