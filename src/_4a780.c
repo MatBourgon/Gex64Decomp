@@ -432,9 +432,29 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004D00C);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004D064);
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004D0C0);
+int func_8004D0C0(int* arg1, int* arg2) {
+    short unsigned* temp_v1 = (short*)arg2[1];
+    short unsigned* temp_v2;
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004D0E8);
+    temp_v2 = temp_v1;
+    
+    if (temp_v1 != 0) {
+        *temp_v1 |= 1;
+    }
+    return 1;
+}
+
+int func_8004D0E8(int* arg1, int* arg2) {
+    short* temp_v0;
+    int* temp_v1 = (int*)arg2[1];
+    
+    temp_v0 = (short*)temp_v1;
+
+    if (temp_v0 != 0) {
+        *temp_v0 &= 0xFFFE;
+    }
+    return 1;
+}
 
 int func_8004D110(int* arg0) {
     int value = arg0[4];
@@ -607,7 +627,12 @@ int func_8004E3C8(void) {
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004E3E8);
+extern void func_80052F7C();                                  /* extern */
+
+int func_8004E3E8(void) {
+    func_80052F7C();
+    return 1;
+}
 
 int func_8004E408(void* arg0, int** arg1) {
     if ((arg1[1] != 0) && (arg1[1][7] & 8)) {
@@ -647,7 +672,12 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004E7C8);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004E828);
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004E8BC);
+extern short D_8007865C;
+
+int func_8004E8BC(void) {
+    D_8007865C = 1;
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004E8D0);
 
@@ -667,7 +697,21 @@ int func_8004E920(int* arg1, int **arg2) {
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004E95C);
+extern void func_8002AE40();                                  /* extern */
+extern void func_8015E228();                                  /* extern */
+
+int func_8004E95C(int* arg1, int* arg2) {
+    int temp_v1;
+    int temp_v2;
+
+    temp_v2 = arg2[1];
+    if ((temp_v2 != 0) && (temp_v2 == 1)) {
+        func_8015E228();
+    } else {
+        func_8002AE40();
+    }
+    return 1;
+}
 extern int D_8015EE24;
 
 int func_8004E9A8(int* arg1, int* arg2) {
