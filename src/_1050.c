@@ -62,7 +62,7 @@ int func_8000312C(int* arg0, int arg1) {
     arg0[144] &= ~arg1;
 }
 
-int func_80003140(int* arg0, int* arg1) {
+int func_80003140(int* arg0, int arg1) {
     arg0[84] = (int)arg1;
 }
 
