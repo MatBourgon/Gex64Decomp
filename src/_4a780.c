@@ -333,14 +333,10 @@ int func_8004C66C(void) {
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004C674);
 
 int func_8004C6A0(int* arg1, int* arg2) {
-    int* temp_v0;
-    short int* temp_v1;
-
-    temp_v0 = (int*)arg2[1];
-    temp_v1 = (short int*)temp_v0[9];
+    int* temp_v0 = (int*)arg2[1];
+    short* temp_v1  = (short*)temp_v0[9];
     
     if (temp_v1 != 0) {
-        temp_v1 =  (short int*)temp_v0[9];
         temp_v1[97] = arg2[2];
     }
     return 1;
@@ -443,10 +439,7 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004D064);
 
 int func_8004D0C0(int* arg1, int* arg2) {
     short unsigned* temp_v1 = (short*)arg2[1];
-    short unsigned* temp_v2;
-
-    temp_v2 = temp_v1;
-    
+        
     if (temp_v1 != 0) {
         *temp_v1 |= 1;
     }
@@ -454,11 +447,8 @@ int func_8004D0C0(int* arg1, int* arg2) {
 }
 
 int func_8004D0E8(int* arg1, int* arg2) {
-    short* temp_v0;
-    int* temp_v1 = (int*)arg2[1];
-    
-    temp_v0 = (short*)temp_v1;
-
+    short* temp_v0 = (short*)arg2[1];
+ 
     if (temp_v0 != 0) {
         *temp_v0 &= 0xFFFE;
     }
@@ -710,17 +700,16 @@ extern void func_8002AE40();                                  /* extern */
 extern void func_8015E228();                                  /* extern */
 
 int func_8004E95C(int* arg1, int* arg2) {
-    int temp_v1;
-    int temp_v2;
-
-    temp_v2 = arg2[1];
-    if ((temp_v2 != 0) && (temp_v2 == 1)) {
+    int temp_v1 = arg2[1];
+    
+    if ((temp_v1 != 0) && (temp_v1 == 1)) {
         func_8015E228();
     } else {
         func_8002AE40();
     }
     return 1;
 }
+
 extern int D_8015EE24;
 
 int func_8004E9A8(int* arg1, int* arg2) {
