@@ -58,7 +58,37 @@ int func_8004AADC(void) {
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004AAE4);
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004AC10);
+int func_8004AC10(int *arg0, int arg1, int arg2, int arg3) {
+    int var1 = 2;          
+    int var2;
+    
+    if (arg2 < 0)
+    {
+        var2 = arg2 + 3;
+    } 
+    else
+    {
+        var2 = arg2;
+    }
+    
+    if (arg3 < (var2 >> 2)) {
+        var1 = 1;          
+    }
+
+    {
+        int shift = (unsigned)arg2 >> 31;
+        int right_shift = (arg2 + shift) >> 1; 
+        if (arg3 < right_shift) {
+
+            if (arg3 & var1) {
+                arg0[4] |=  0x800;  
+            } else {
+                arg0[4] &= ~0x800;    
+            }
+        }
+    }
+    return;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004AC78);
 
