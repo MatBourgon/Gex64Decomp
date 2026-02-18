@@ -3,6 +3,7 @@
 #include "types/Level.h"
 #include "types/TVTextData.h"
 #include "types/GameState.h"
+#include "types/G2String.h"
 
 extern char D_8014F34C;
 extern int* D_8006CFA0;
@@ -241,7 +242,33 @@ INCLUDE_ASM("asm/nonmatchings/map_code", func_8015C1D8_BCC08);
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015C2D8_BCD08);
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015C63C_BD06C);
+extern G2String D_801612B4_C1CE4;
+
+int func_8015C63C_BD06C(int arg0) {
+    int temp_v0;
+    int i;
+    int var_s1;
+    G2String* temp_a0;
+    int** temp_v0_2;
+    int* v;
+    
+    temp_v0 = func_8004A344(arg0);
+    var_s1 = -1;
+    
+    for(i = 0; i < temp_v0; i++)
+    {
+        if (var_s1 != -1) break;
+        if (temp_v0_2 = (int**)func_8004A368(arg0, i)) {
+            if (G2String_Compare(temp_v0_2[0x18/4][0x20/4], &D_801612B4_C1CE4)
+                && (((char*)temp_v0_2)[0x10B]) == 1) {
+                var_s1 = i;
+            }
+        }
+
+    }
+    return var_s1;
+}
+
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015C728_BD158);
 
@@ -391,8 +418,29 @@ void func_8015DAC8_BE4F8(Level_t* level) {
     ((void**)level->_100)[0xB0/4] = &func_8015E338_BED68;
 }
 
+void func_8015DB54_BE584(Level_t* level) {
+    int var_s1;
+    int** var_s0;
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015DB54_BE584);
+    var_s0 = (int**)level->_D0;
+    if (level->_F4[2] != 0) {
+        ((int*)level->_F4[2])[0x10/4] &= ~0x400;
+        func_80047904(level->_F4[2], -1, 0, 0);
+    }
+    if (level->_100 != 0) {
+        ((int*)level->_100)[0x10/4] &= ~0x400;
+        func_8002E350(level->_100);
+    }
+    
+    for(var_s1 = 0; var_s1 < 3; var_s1++)
+     {
+        if (var_s0[var_s1] != 0) {
+            var_s0[var_s1][0x10/4] &= ~0x400;
+            func_8002E350(var_s0[var_s1]);
+        }
+        
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015DC38_BE668);
 
