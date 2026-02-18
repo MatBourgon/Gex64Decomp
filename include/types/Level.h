@@ -6,7 +6,7 @@ typedef struct
     int _00[4];
     int flags;
     int _14;
-    int _18;
+    int** _18;
     int* _1C;
     int _20[4];
     short _30[8];

@@ -1,6 +1,7 @@
 #include "common.h"
 
 #include "types/Level.h"
+#include "types/TVTextData.h"
 
 void func_80159720_BA150(void) {
 }
@@ -16,7 +17,15 @@ void func_8015973C_BA16C(void) {
 void func_80159744_BA174(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015974C_BA17C);
+void func_8015974C_BA17C(Level_t* level) {
+    if ((level->_18)[0x1C/4] != 0) {
+        level->_60[2] += (0x1000 / *(level->_18)[0x1C/4]);
+    } else {
+        level->_60[2] += 0x3C;
+    }
+    
+    level->_60[2] &= 0xFFF;
+}
 
 void func_801597CC_BA1FC(void) {
 }
@@ -73,8 +82,8 @@ void func_80159C88_BA6B8(void) {
 void func_80159C90_BA6C0(Level_t* arg0) {
     ((short*)&arg0->_100)[1] = -0x1000;
     arg0->flags |= 0xC00;
-    if (((int**)arg0->_18)[0x1C/4] != 0) {
-        ((short*)&arg0->_100)[1] = *((int**)arg0->_18)[0x1C/4];
+    if ((arg0->_18)[0x1C/4] != 0) {
+        ((short*)&arg0->_100)[1] = *(arg0->_18)[0x1C/4];
     }
 }
 
@@ -126,7 +135,7 @@ INCLUDE_ASM("asm/nonmatchings/map_code", func_8015A654_BB084);
 void func_8015A7FC_BB22C(Level_t* level) {
     short* temp_s1;
 
-    temp_s1 = (int*)level->_20[1];
+    temp_s1 = (short*)level->_20[1];
     if (func_80027500(level->_70[2]) != 0) {
         level->_104 = 1;
         level->_F4[2] = 0x12C;
@@ -201,7 +210,7 @@ void func_8015CD04_BD734(void) {
 void func_8015CD0C_BD73C(void) {
 }
 
-extern int D_8006CFA0;
+extern int* D_8006CFA0;
 
 void func_8015CD14_BD744(Level_t* level, int* arg1)
 {
@@ -216,7 +225,27 @@ void func_8015CD14_BD744(Level_t* level, int* arg1)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015CD64_BD794);
+// Unknown parameters, exactly 6 bytes
+typedef struct
+{
+    short _[3];
+} func_8015CD64_BD794_t;
+
+void func_8015CD64_BD794(Level_t* arg0) {
+    int temp_a1;
+    func_8015CD64_BD794_t* temp_v0;
+
+    ((short*)&arg0->_100)[1] = 2;
+    arg0->_F0[6] = 0x64;
+    temp_a1 = arg0->_20[1];
+    arg0->flags |= 0x800;
+    if (temp_a1 != 0) {
+        temp_v0 = (func_8015CD64_BD794_t*)((((short*)&arg0->_100)[1] * sizeof(func_8015CD64_BD794_t)) + temp_a1 + 4);
+        *(func_8015CD64_BD794_t*)&D_8006CFA0[0x50/4]
+            = *(func_8015CD64_BD794_t*)(&D_8006CFA0[0x48/4])
+            = *(func_8015CD64_BD794_t*)temp_v0;
+    }
+}
 
 INCLUDE_RODATA("asm/nonmatchings/map_code", D_80161314_C1D44);
 
@@ -226,11 +255,29 @@ INCLUDE_RODATA("asm/nonmatchings/map_code", D_80161324_C1D54);
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015CDE0_BD810);
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015D3B0_BDDE0);
+extern int D_800785CC[];
+
+void func_8015D3B0_BDDE0(Level_t* level)
+{
+    level->_100 = 0xC8;
+    if (D_800785CC[((int*)level->_20[1])[0]] != 3)
+        return;
+
+    func_80048828(level, -1, 0, 0, 0);
+    level->flags |= 0x100000;
+}
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015D420_BDE50);
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015D4B4_BDEE4);
+void func_8015D4B4_BDEE4(Level_t* arg0) {
+    int temp_v1;
+
+    temp_v1 = *(int*)arg0->_20[1];
+    if (!D_800785CC[temp_v1] && !arg0->_100) {
+        func_80052C2C(TVTextInformation[0x1E].levelName[temp_v1-1]); // todo: definitely wrong
+        arg0->_100 = 0xC8;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015D52C_BDF5C);
 
@@ -253,7 +300,17 @@ INCLUDE_ASM("asm/nonmatchings/map_code", func_8015D6F0_BE120);
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015D9E4_BE414);
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015DAC8_BE4F8);
+extern char D_801613C0_C1DF0[];
+extern void func_8015E338_BED68();
+
+void func_8015DAC8_BE4F8(Level_t* level) {
+    level->_100 = func_8002DEA8(level, func_8003EE84(&D_801613C0_C1DF0 /*etvbutn_*/));
+    level->flags |= 0x10000;
+    ((int*)level->_100)[0x10/4] |= 0x100000;
+    ((int*)level->_100)[0x10/4] |= 0x400;
+    ((void**)level->_100)[0xB0/4] = &func_8015E338_BED68;
+}
+
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015DB54_BE584);
 
