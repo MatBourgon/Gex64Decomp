@@ -1,5 +1,7 @@
 #include "common.h"
 
+#include "types/Level.h"
+
 INCLUDE_ASM("asm/nonmatchings/rta_code", func_80159720_D9D90);
 
 INCLUDE_ASM("asm/nonmatchings/rta_code", func_80159738_D9DA8);
@@ -68,7 +70,11 @@ INCLUDE_ASM("asm/nonmatchings/rta_code", func_8015A1A8_DA818);
 
 INCLUDE_ASM("asm/nonmatchings/rta_code", func_8015A2B0_DA920);
 
-INCLUDE_ASM("asm/nonmatchings/rta_code", func_8015A3B8_DAA28);
+void func_8015A3B8_DAA28(Level_t* level)
+{
+    level->_F4[0] = 0;
+    level->_4E = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/rta_code", func_8015A3C4_DAA34);
 

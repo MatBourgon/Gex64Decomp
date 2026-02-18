@@ -1,5 +1,7 @@
 #include "common.h"
 
+#include "types/Level.h"
+
 INCLUDE_ASM("asm/nonmatchings/nypd_code", func_80159720_C6800);
 
 INCLUDE_ASM("asm/nonmatchings/nypd_code", func_8015977C_C685C);

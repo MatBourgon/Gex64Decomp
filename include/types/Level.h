@@ -23,8 +23,8 @@ typedef struct
     short _C0[8];
     short _D0[8];
     int _E0[4];
-    short _F0[4];
-    int _F8[2];
+    short _F0[2];
+    int _F4[3];
     int _100;
     int _104;
 } Level_t;

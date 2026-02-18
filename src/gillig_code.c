@@ -1,5 +1,7 @@
 #include "common.h"
 
+#include "types/Level.h"
+
 INCLUDE_ASM("asm/nonmatchings/gillig_code", func_80159720_9BD00);
 
 INCLUDE_RODATA("asm/nonmatchings/gillig_code", D_8015A920_9CF00);

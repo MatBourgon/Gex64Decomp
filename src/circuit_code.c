@@ -1,5 +1,7 @@
 #include "common.h"
 
+#include "types/Level.h"
+
 INCLUDE_ASM("asm/nonmatchings/circuit_code", func_80159720_80900);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", func_801599AC_80B8C);
@@ -18,7 +20,11 @@ INCLUDE_ASM("asm/nonmatchings/circuit_code", func_8015A33C_8151C);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", func_8015AD1C_81EFC);
 
-INCLUDE_ASM("asm/nonmatchings/circuit_code", func_8015AE2C_8200C);
+void func_8015AE2C_8200C(Level_t* level)
+{
+    level->_F4[0] = 0;
+    level->_4E = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", func_8015AE38_82018);
 
@@ -94,7 +100,10 @@ INCLUDE_ASM("asm/nonmatchings/circuit_code", func_8015D6E8_848C8);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", func_8015D780_84960);
 
-INCLUDE_ASM("asm/nonmatchings/circuit_code", func_8015D7DC_849BC);
+void func_8015D7DC_849BC(Level_t* level)
+{
+    level->flags |= 0x100000;
+}
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", func_8015D7F0_849D0);
 
@@ -123,7 +132,12 @@ INCLUDE_ASM("asm/nonmatchings/circuit_code", func_8015E764_85944);
 void func_8015E9E4_85BC4(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/circuit_code", func_8015E9EC_85BCC);
+void func_8015E9EC_85BCC(Level_t* level)
+{
+    level->_104 = 0;
+    level->_F4[2] = 0x40;
+    level->_100 = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", func_8015EA00_85BE0);
 

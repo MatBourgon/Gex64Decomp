@@ -1,5 +1,7 @@
 #include "common.h"
 
+#include "types/Level.h"
+
 INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_80159720_928A0);
 
 INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_801597FC_9297C);
@@ -143,7 +145,11 @@ INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8015FA98_98C18);
 
 INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8015FD80_98F00);
 
-INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8015FF70_990F0);
+void func_8015FF70_990F0(Level_t* level, short* arg1)
+{
+    arg1[0x28/2] = 0;
+    arg1[0x26/2] = 0x23;
+}
 
 INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8015FF80_99100);
 

@@ -24,7 +24,11 @@ INCLUDE_ASM("asm/nonmatchings/scifi_code", func_8015A024_DFE44);
 
 INCLUDE_ASM("asm/nonmatchings/scifi_code", func_8015A07C_DFE9C);
 
-INCLUDE_ASM("asm/nonmatchings/scifi_code", func_8015A0D0_DFEF0);
+void func_8015A0D0_DFEF0(Level_t* level)
+{
+    level->_F4[0] = 0;
+    level->_4E = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/scifi_code", func_8015A0DC_DFEFC);
 
@@ -110,7 +114,7 @@ INCLUDE_ASM("asm/nonmatchings/scifi_code", func_8015C38C_E21AC);
 
 void func_8015C474_E2294(Level_t* level)
 {
-    level->_F8[1] = 0;
+    level->_F4[2] = 0;
 }
 
 INCLUDE_ASM("asm/nonmatchings/scifi_code", func_8015C47C_E229C);
