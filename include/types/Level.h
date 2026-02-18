@@ -21,7 +21,7 @@ typedef struct
     short _A0[8];
     short _B0[8];
     short _C0[8];
-    short _D0[8];
+    int _D0[4];
     int _E0[4];
     short _F0[2];
     int _F4[3];

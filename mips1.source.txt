@@ -1,4 +1,4 @@
 src/_4a780.c src/_1050.c src/1A6A0.c src/zlib.c src/_31960.c src/_42bd0.c
 src/aztec_code.c src/circuit_code.c src/final_code.c src/gexzil_code.c src/gillig_code.c src/horror_code.c
-src/intro_code.c src/kungfu_code.c src/logo_code.c src/looney_code.c src/mooshu_code.c src/nypd_code.c src/prehst_code.c
+src/intro_code.c src/kungfu_code.c src/logo_code.c src/looney_code.c src/map_code.c src/mooshu_code.c src/nypd_code.c src/prehst_code.c
 src/rezop_code.c src/rta_code.c src/scifi_code.c src/spy_code.c
