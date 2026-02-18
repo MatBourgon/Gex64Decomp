@@ -267,19 +267,70 @@ void func_8015D3B0_BDDE0(Level_t* level)
     level->flags |= 0x100000;
 }
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015D420_BDE50);
+int func_8015D420_BDE50(Level_t* level) {
+    int v0;
 
-void func_8015D4B4_BDEE4(Level_t* arg0) {
-    int temp_v1;
+    if (level->_100 != 0) {
+        level->_100--;
+    }
 
-    temp_v1 = *(int*)arg0->_20[1];
-    if (!D_800785CC[temp_v1] && !arg0->_100) {
-        func_80052C2C(TVTextInformation[0x1E].levelName[temp_v1-1]); // todo: definitely wrong
-        arg0->_100 = 0xC8;
+    v0 = *((int*)level->_20[1]);
+    
+    switch (D_800785CC[v0])
+    {
+        case 0:
+            break;
+        
+        case 1:
+        {
+            level->flags |= 0x02000000, D_800785CC[v0] = 2;
+            break;
+        }
+
+        case 2:
+        {
+            level->flags |= 0x02000000, D_800785CC[v0] = 3;
+            break;
+        }
+        
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015D52C_BDF5C);
+void func_8015D4B4_BDEE4(Level_t* level) {
+    int temp_v1;
+
+    temp_v1 = *(int*)level->_20[1];
+    if (!D_800785CC[temp_v1] && !level->_100) {
+        func_80052C2C(TVTextInformation[0x1E].levelName[temp_v1-1]); // todo: definitely wrong
+        level->_100 = 0xC8;
+    }
+}
+
+extern char D_80161394_C1DC4[];
+extern int D_80161684_C20B4;
+extern void func_8015D5E4_BE014();
+
+void func_8015D52C_BDF5C(Level_t* level) {
+    char buffer[0x10];
+    int v1;
+    
+    level->_50[3] = -1;
+    level->flags |= 0x80;
+    
+    csprintf(buffer, D_80161394_C1DC4, (short*)level->_20[1] + 2, ((short*)(level->_20[1]))[1]);
+    
+    level->_F4[2] = GetLevelIndexFromId(buffer);
+    
+    v1 = ((int***) level->_18)[3][0][5];
+    
+    if (v1 != 0)
+    {
+        D_80161684_C20B4 = v1;
+        ((int***)level->_18)[3][0][5] = 0;
+    }
+    
+    *((void**)level->_B0 + 1) = func_8015D5E4_BE014;
+}
 
 void func_8015D5DC_BE00C(void) {
 }
@@ -415,4 +466,12 @@ INCLUDE_ASM("asm/nonmatchings/map_code", func_80160ACC_C14FC);
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_80160DF0_C1820);
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_801610B8_C1AE8);
+extern char D_8014F34C;
+void func_801610B8_C1AE8(short* arg0) {
+    func_80037B00(0x50, 0x6E);
+    func_80038BA0("#2DATA SAVED");
+    if (++D_8014F34C >= 0x1F) {
+        arg0[0x4C12/2] = 0;
+        func_80032F90();
+    }
+}
