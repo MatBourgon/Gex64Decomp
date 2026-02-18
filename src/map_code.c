@@ -2,6 +2,25 @@
 
 #include "types/Level.h"
 #include "types/TVTextData.h"
+#include "types/GameState.h"
+
+extern char D_8014F34C;
+extern int* D_8006CFA0;
+extern char D_801613C0_C1DF0[];
+extern void func_8015E338_BED68();
+extern char D_80161394_C1DC4[];
+extern int D_80161684_C20B4;
+extern void func_8015D5E4_BE014();
+extern int D_800785CC[];
+extern unsigned short D_800E5DB2;
+extern int D_80161680_C20B0;
+
+// Unknown parameters, exactly 6 bytes
+// Might be SVECTOR
+typedef struct
+{
+    short _[3];
+} func_8015CD64_BD794_t;
 
 void func_80159720_BA150(void) {
 }
@@ -192,7 +211,31 @@ INCLUDE_ASM("asm/nonmatchings/map_code", func_8015BED0_BC900);
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015BFE0_BCA10);
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015C110_BCB40);
+void func_8015C110_BCB40(Level_t* level, short** arg1) {
+    short* temp_a3;
+    short* temp_t0;
+
+    temp_a3 = (short*)level->_20[1];
+    temp_t0 = (short*)D_8006CFA0[0x20/4];
+    if ((temp_a3 != 0) && ((((int*)temp_a3)[0x10/4] != 0) || (temp_a3[0x14/2] != 0))) {
+        
+        *(func_8015CD64_BD794_t*)(&D_8006CFA0[0x50/4])
+          = *(func_8015CD64_BD794_t*)(&D_8006CFA0[0x48/4])
+              = *(func_8015CD64_BD794_t*)&temp_a3[0x10/2];
+        
+        temp_t0[0x82/2]
+            = ((short*)D_8006CFA0)[0x64/2]
+            = temp_a3[0x18/2];
+        
+        if (((short*)D_8006CFA0)[0x4C/2] < temp_a3[0x14/2]) {
+            arg1[3][0xC0/2]
+                = ((short*)D_8006CFA0)[0x54/2]
+                = ((short*)D_8006CFA0)[0x4C/2]
+                = temp_a3[0x14/2];
+            temp_t0[0x8A/2] |= 1;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015C1D8_BCC08);
 
@@ -210,7 +253,6 @@ void func_8015CD04_BD734(void) {
 void func_8015CD0C_BD73C(void) {
 }
 
-extern int* D_8006CFA0;
 
 void func_8015CD14_BD744(Level_t* level, int* arg1)
 {
@@ -224,12 +266,6 @@ void func_8015CD14_BD744(Level_t* level, int* arg1)
         func_8004EBAC(D_8006CFA0, 4 + a1[1], 0);
     }
 }
-
-// Unknown parameters, exactly 6 bytes
-typedef struct
-{
-    short _[3];
-} func_8015CD64_BD794_t;
 
 void func_8015CD64_BD794(Level_t* arg0) {
     int temp_a1;
@@ -254,8 +290,6 @@ INCLUDE_RODATA("asm/nonmatchings/map_code", D_8016131C_C1D4C);
 INCLUDE_RODATA("asm/nonmatchings/map_code", D_80161324_C1D54);
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015CDE0_BD810);
-
-extern int D_800785CC[];
 
 void func_8015D3B0_BDDE0(Level_t* level)
 {
@@ -306,9 +340,6 @@ void func_8015D4B4_BDEE4(Level_t* level) {
     }
 }
 
-extern char D_80161394_C1DC4[];
-extern int D_80161684_C20B4;
-extern void func_8015D5E4_BE014();
 
 void func_8015D52C_BDF5C(Level_t* level) {
     char buffer[0x10];
@@ -351,8 +382,6 @@ INCLUDE_ASM("asm/nonmatchings/map_code", func_8015D6F0_BE120);
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015D9E4_BE414);
 
-extern char D_801613C0_C1DF0[];
-extern void func_8015E338_BED68();
 
 void func_8015DAC8_BE4F8(Level_t* level) {
     level->_100 = func_8002DEA8(level, func_8003EE84(&D_801613C0_C1DF0 /*etvbutn_*/));
@@ -369,7 +398,16 @@ INCLUDE_ASM("asm/nonmatchings/map_code", func_8015DC38_BE668);
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015DEC8_BE8F8);
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015E274_BECA4);
+void func_8015E274_BECA4(Level_t* level) {
+    func_8015CD64_BD794_t temp = *(func_8015CD64_BD794_t*)(&level->_40[4]);
+
+    func_80047E64(level, 0x3E8);
+    *(func_8015CD64_BD794_t*)&(((short*)gpGameState8)[0x4C66/2]) = *(func_8015CD64_BD794_t*)&level->_40[4];
+    ((short*)gpGameState8)[0x4C6A/2] -= 0x20;
+    ((short*)gpGameState8)[0x4C6C/2] = level->_60[2] & 0xFFF;
+    ((short*)gpGameState8)[0x4C6C/2] = (((short*)gpGameState8)[0x4C6C/2] + *(short*)&level->_1C[3]) & 0xfff;
+    *(func_8015CD64_BD794_t*)(&level->_40[4]) = temp;
+}
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015E338_BED68);
 
@@ -438,7 +476,20 @@ INCLUDE_RODATA("asm/nonmatchings/map_code", jtbl_80161420_C1E50);
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015F678_C00A8);
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015F770_C01A0);
+void func_8015F770_C01A0(void) {
+    if (D_80161680_C20B0 < 0x3C) {
+        D_80161680_C20B0 += 1;
+        func_80037B00(0x5A, 0x50);
+        func_80038BA0("GAME LOAD");
+        func_80037B00(0x6E, 0x6E);
+        func_80038BA0("FAILED");
+    } else {
+        func_80040170(4);
+    }
+    if (D_800E5DB2 & 0x8000) {
+        D_80161680_C20B0 = 0x3C;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015F804_C0234);
 
@@ -466,7 +517,6 @@ INCLUDE_ASM("asm/nonmatchings/map_code", func_80160ACC_C14FC);
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_80160DF0_C1820);
 
-extern char D_8014F34C;
 void func_801610B8_C1AE8(short* arg0) {
     func_80037B00(0x50, 0x6E);
     func_80038BA0("#2DATA SAVED");
