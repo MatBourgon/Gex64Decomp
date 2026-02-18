@@ -97,7 +97,7 @@ INCLUDE_ASM("asm/nonmatchings/mooshu_code", func_8015C6D0_C5050);
 
 void func_8015C708_C5088(Level_t* level)
 {
-    *(int*)(&level->_F0[6]) = 0;
+    level->_F8[1] = 0;
 }
 
 INCLUDE_ASM("asm/nonmatchings/mooshu_code", func_8015C710_C5090);
