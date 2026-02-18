@@ -7,7 +7,7 @@ typedef struct
     int flags;
     int _14;
     int _18;
-    int _1C;
+    int* _1C;
     int _20[4];
     short _30[8];
     short _40[7];
@@ -15,7 +15,7 @@ typedef struct
     char _4F;
     short _50[8];
     short _60[8];
-    short _70[8];
+    int _70[4];
     short _80[8];
     short _90[8];
     short _A0[8];
@@ -27,6 +27,9 @@ typedef struct
     int _F4[3];
     int _100;
     int _104;
+    int _108;
+    int _10C;
+    int _110;
 } Level_t;
 
 #endif

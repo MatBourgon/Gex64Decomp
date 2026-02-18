@@ -21,7 +21,22 @@ INCLUDE_ASM("asm/nonmatchings/map_code", func_8015974C_BA17C);
 void func_801597CC_BA1FC(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_801597D4_BA204);
+void func_801597D4_BA204(Level_t* level)
+{
+    if (!level->_1C[1])
+        return;
+
+    if (((Level_t***)level->_1C[1])[1][0x24/4] == level)
+    {
+        level->_F4[0] = 1;
+    }
+    else
+    {
+        level->_F4[2] = 1;
+    }
+
+    level->flags |= 0x480;
+}
 
 INCLUDE_RODATA("asm/nonmatchings/map_code", D_80161130_C1B60);
 
@@ -108,7 +123,18 @@ void func_8015A640_BB070(Level_t* level)
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015A654_BB084);
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015A7FC_BB22C);
+void func_8015A7FC_BB22C(Level_t* level) {
+    short* temp_s1;
+
+    temp_s1 = (int*)level->_20[1];
+    if (func_80027500(level->_70[2]) != 0) {
+        level->_104 = 1;
+        level->_F4[2] = 0x12C;
+        level->_110 = temp_s1[4];
+        level->_10C = 1;
+    }
+}
+
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015A854_BB284);
 
@@ -175,7 +201,20 @@ void func_8015CD04_BD734(void) {
 void func_8015CD0C_BD73C(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015CD14_BD744);
+extern int D_8006CFA0;
+
+void func_8015CD14_BD744(Level_t* level, int* arg1)
+{
+    int* a1;
+    a1 = ((int*)level->_20[1]);
+    if ((arg1[0x44/4] & 0x10) == 0)
+        return;
+    
+    if (a1[1])
+    {
+        func_8004EBAC(D_8006CFA0, 4 + a1[1], 0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015CD64_BD794);
 
