@@ -26,8 +26,23 @@ extern char D_800E5D00[];
 extern G2String D_801612B4_C1CE4;
 extern G2String D_80161324_C1D54;
 extern int D_800E5CD8;
-extern s8 D_8006FCD2;
+extern char D_8006FCD2;
 extern char D_80161314_C1D44[];
+
+extern int D_8006FA54;
+extern char D_80078174[];
+extern int D_800B83C8;
+extern char D_800E5B98;
+extern int D_800E5CD4;
+extern char D_800E5DDE[];
+extern char D_800E8EB4;
+extern int D_800E97CC;
+extern char D_8014F354;
+extern char D_80153A58[];
+extern char D_80157030;
+extern int D_80157034;
+extern char D_801613F0_C1E20[];
+extern char D_8016151C_C1F4C[];
 
 // Unknown parameters, exactly 6 bytes
 // Might be SVECTOR
@@ -858,7 +873,46 @@ INCLUDE_RODATA("asm/nonmatchings/map_code", D_80161520_C1F50);
 
 INCLUDE_RODATA("asm/nonmatchings/map_code", jtbl_80161528_C1F58);
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_80160838_C1268);
+void func_80160838_C1268(void) {
+    gSPDisplayList(D_80157050++, D_8006D578);
+    if (D_800E8EB4 == 0) {
+        func_80030DD8("USE ONE PAGE OF MEMORY", 0x41, 0x32, 1);
+        func_80030DD8("TO CREATE FILE:", 0x5A, 0x46, 1);
+        func_80030DD8(D_80078174, 0x50, 0x73, 0);
+    } else {
+        func_80030DD8("SAVE TO FILE:", 0x5A, 0x46, 1);
+        func_80030DD8((D_800E5CD4 << 5) + D_800E5DDE, 0x50, 0x73, 0);
+    }
+    if ((D_800E5DB2 & 0x808) || (D_800E5B98 != 0)) {
+        D_8014F34C = 0;
+    } else if ((D_800E5DB2 & 0x404) || (D_80157030 != 0)) {
+        D_8014F34C = 1;
+    }
+    func_80030DD8("YES, SAVE FILE", 0x3C, 0x96, 1);
+    func_80030DD8("NO, DON'T SAVE", 0x3C, 0xAA, 1);
+    func_80030DD8(D_8016151C_C1F4C, 0x2D, (D_8014F34C * 0x14) + 0x96, 1);
+    func_80030DD8(D_801613F0_C1E20, 0x55, 0xC8, 1);
+    if (D_800E5DB2 & 0x8000) {
+        if (D_8014F34C == 0) {
+            func_80040170(7);
+            if (D_800E8EB4 == 0) {
+                D_8006FA54 = 0x10;
+                func_800576F0(D_80153A58, 5, 0);
+            } else {
+                D_8006FA54 = 0xA;
+                func_800576F0(D_80153A58, 6, 0);
+            }
+            return;
+        }
+        if ((D_800B83C8 < 0x100) || (D_800E97CC >= D_80157034)) {
+            D_8014F354 = 1;
+            func_80040170(0x14);
+            return;
+        }
+        func_80040170(0xE);
+        D_8006FA54 = 0xE;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_80160ACC_C14FC);
 
