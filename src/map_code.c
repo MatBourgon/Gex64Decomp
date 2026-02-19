@@ -19,6 +19,16 @@ extern int D_800785CC[];
 extern unsigned short D_800E5DB2;
 extern int D_80161680_C20B0;
 
+extern Gfx D_8006D578[];
+extern Gfx* D_80157050;
+extern char D_800E5D00[];
+
+extern G2String D_801612B4_C1CE4;
+extern G2String D_80161324_C1D54;
+extern int D_800E5CD8;
+extern s8 D_8006FCD2;
+extern char D_80161314_C1D44[];
+
 // Unknown parameters, exactly 6 bytes
 // Might be SVECTOR
 typedef struct
@@ -90,7 +100,43 @@ INCLUDE_RODATA("asm/nonmatchings/map_code", D_801611F8_C1C28);
 
 INCLUDE_RODATA("asm/nonmatchings/map_code", D_80161208_C1C38);
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_80159828_BA258);
+void func_80159828_BA258(Level_t* level, int* arg1) {
+    int* arg2 = arg1 + 0x18/4;
+    if (level->_1C[1] != 0) {
+        level->_50[3] = level->_F4[2] * 2;
+        
+        if (!level->_F4[0]) {
+            level->_50[3] |= 1;
+        }
+        
+        if (!(arg1[0x4C08/4] & 1)) {
+            if ((arg1[0x1C/4] & 0x10) && (level->_F4[0] == 1)) {
+                func_800396E0("prehst", "prehst1", arg1);
+            }
+            else
+            {
+                if ((arg2[0] & 4) || (arg1[0x4C/4] < -0x20)) {
+                    if (level->_F4[2] == 0) {
+                        level->_F4[0] = 1;
+                    }
+                    else
+                    {
+                        level->_F4[0] = 0;
+                    }
+                }
+                else if ((arg2[0] & 8) || (arg1[0x4C/4] >= 0x21)) {
+                    if (level->_F4[2] == 1) {
+                        level->_F4[0] = level->_F4[2];
+                    }
+                    else
+                    {
+                        level->_F4[0] = 0;
+                    }
+                }
+            }
+        }
+    }
+}
 
 void func_80159934_BA364(void) {
 }
@@ -265,9 +311,6 @@ INCLUDE_ASM("asm/nonmatchings/map_code", func_8015B818_BC248);
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015B96C_BC39C);
 
-extern G2String D_801612B4_C1CE4;
-extern G2String D_80161324_C1D54;
-
 void func_8015BED0_BC900(Level_t* level) {
     int temp_t0;
     int i;
@@ -295,7 +338,40 @@ void func_8015BED0_BC900(Level_t* level) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015BFE0_BCA10);
+void func_8015BFE0_BCA10(Level_t* level, int* arg1) {
+    int count;
+    int var_a2;
+    int i;
+    int** temp_v1;
+    int* temp_v0;
+
+    temp_v1 = (int**)level->_1C[1];
+    count = (int)*temp_v1++;
+    var_a2 = 1;
+    
+    for(i = 0; i < count; ++i)
+    {
+        temp_v0 = (int*)(temp_v1[i])[0x24/4];
+        if ((temp_v0 != 0) && ((temp_v0[0x10/4] & 0xA00) == 0x200)) {
+            var_a2 = 0;
+        }
+    }
+    
+    if (var_a2 == 0 && (arg1[0x11] & 0x4000)) {
+        var_a2 = 1;
+    }
+    
+    if (var_a2 != 0) {
+        for(i = 0; i < count; ++i)
+        {
+            if ((temp_v1[i])[0x24/4] != 0) {
+                func_8002E350((temp_v1[i])[0x24/4]);
+            }
+            temp_v1[i][0x1C/4] |= 0x80;
+            temp_v1[i][0x1C/4] &= ~8;
+        }
+    }
+}
 
 void func_8015C110_BCB40(Level_t* level, short** arg1) {
     short* temp_a3;
@@ -348,8 +424,6 @@ void func_8015C1D8_BCC08(Level_t* level, char** arg1) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015C2D8_BCD08);
-
-extern G2String D_801612B4_C1CE4;
 
 int func_8015C63C_BD06C(int arg0) {
     int temp_v0;
@@ -545,8 +619,6 @@ void func_8015D52C_BDF5C(Level_t* level, GameState* gs) {
 void func_8015D5DC_BE00C(void) {
 }
 
-extern int D_800E5CD8;
-
 void func_8015D5E4_BE014(int* arg0, Level_t* level) {
     int a1;
     int i;
@@ -709,7 +781,41 @@ INCLUDE_RODATA("asm/nonmatchings/map_code", D_80161404_C1E34);
 
 INCLUDE_RODATA("asm/nonmatchings/map_code", jtbl_80161420_C1E50);
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015F678_C00A8);
+void func_8015F678_C00A8(short* arg0) {
+    int var_a0;
+    char* var_v1;
+
+    func_80037B00(0x46, 0x6E);
+    func_80038BA0("#2GAME OVER");
+    gSPDisplayList(D_80157050++, D_8006D578);
+    func_80030DD8("PRESS A TO START NEW GAME", 0x2D, 0xB4, 1);
+    // Expanded gDPPipeSync
+    {				
+    	D_80157050->words.w0 = _SHIFTL(G_RDPPIPESYNC, 24, 8);				
+        do {} while(0); // very cool, thank you nintendo
+    	D_80157050->words.w1 = 0;	 					
+    }
+    D_80157050++;
+    if (D_800E5DB2 & 0x8000) {
+        ((int*)arg0)[0x4BF4/4] = 5;
+        ((int*)arg0)[0x4C9C/4] = 0;
+        arg0[0x4C8E/2] = 0;
+        arg0[0x4C90/2] = 0;
+        ((int*)arg0)[0x4C94/4] = 0;
+        ((int*)arg0)[0x4C98/4] = 0;
+        
+        var_a0 = 0x1E;
+        var_v1 = (char*)arg0 + 0x1E;
+        
+        for(var_a0; var_a0 >= 0; var_a0--)
+        {
+            (var_v1--)[0x4C6E] = 0;
+        }
+        
+        D_8006FCD2 = 0;
+        func_800396E0(0, D_80161314_C1D44, arg0);
+    }
+}
 
 void func_8015F770_C01A0(void) {
     if (D_80161680_C20B0 < 0x3C) {
@@ -727,10 +833,6 @@ void func_8015F770_C01A0(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015F804_C0234);
-
-extern Gfx D_8006D578[];
-extern Gfx* D_80157050;
-extern char D_800E5D00[];
 
 void func_8015FBBC_C05EC(short* arg0) {
 
