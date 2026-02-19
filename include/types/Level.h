@@ -27,9 +27,18 @@ typedef struct
     int _F4[3];
     int _100;
     int _104;
-    int _108;
-    int _10C;
-    int _110;
+    char _108;
+    char _109;
+    char _10A;
+    char _10B;
+    char _10C;
+    char _10D;
+    char _10E;
+    char _10F;
+    char _110;
+    char _111;
+    unsigned char _112;
+    char _113;
 } Level_t;
 
 #endif
