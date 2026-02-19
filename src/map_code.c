@@ -322,7 +322,54 @@ INCLUDE_RODATA("asm/nonmatchings/map_code", D_80161300_C1D30);
 
 INCLUDE_RODATA("asm/nonmatchings/map_code", D_80161308_C1D38);
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015B818_BC248);
+void func_8015B818_BC248(int arg1, int*** arg3) {
+    short var_a2;
+    short var_s0;
+    int var_a1;
+    int var_s2;
+    short* var_a1_2;
+    int* temp_a0;
+
+    var_s2 = 0;
+    temp_a0 = (int*)arg3[0x8/4];
+    
+    var_a1 =     temp_a0[0x14C/4] == 5
+              && temp_a0[0x480/4] != 0
+              && temp_a0[0x484/4] != 0;
+    
+    if (var_a1 != 0) {
+        temp_a0 = (int*)*arg3[0x8/4][0x480/4];
+        
+        
+        var_s0 = var_a2 = 0;
+        if (temp_a0 != 0) {
+            var_a1_2 = (short*)temp_a0[0x0];
+            for(;var_a2 < ((short*)temp_a0)[0x4/2];)
+            {
+                var_a2++;
+                var_s0 += *var_a1_2;
+                var_a1_2 += 0x20/2;
+            }
+        }
+        
+        if ((func_800512BC(temp_a0, arg3[0x8/4][0x480/4] + 0x10/4) & 0xFFFF) >= (var_s0 - 1))
+        {
+            var_s2 = 1;
+        }
+    } else {
+        var_s2 = 1;
+    }
+    
+    if ((int)arg3[0x44/4] & 0x4000) {
+        var_s2 = 1;
+    }
+    
+    if (var_s2 != 0) {
+        arg3[0xC/4][0xF4/4] = 0;
+        (int)arg3[0xC/4][0xFC/4] &= ~0x1000;
+        func_800396E0("map", D_80161314_C1D44, arg3);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015B96C_BC39C);
 
