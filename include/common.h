@@ -44,4 +44,12 @@ __asm__(".include \"include/macro.inc\"\n");
 #define FORCE_INLINE extern inline
 #endif
 
+#define gDPPipeSync2(pkt)                           \
+{                                                   \
+	pkt->words.w0 = _SHIFTL(G_RDPPIPESYNC, 24, 8);  \
+    do {} while(0); /*required to align properly*/  \
+	pkt->words.w1 = 0;                              \
+}                                                   \
+pkt++;
+
 #endif

@@ -789,13 +789,7 @@ void func_8015F678_C00A8(short* arg0) {
     func_80038BA0("#2GAME OVER");
     gSPDisplayList(D_80157050++, D_8006D578);
     func_80030DD8("PRESS A TO START NEW GAME", 0x2D, 0xB4, 1);
-    // Expanded gDPPipeSync
-    {				
-    	D_80157050->words.w0 = _SHIFTL(G_RDPPIPESYNC, 24, 8);				
-        do {} while(0); // very cool, thank you nintendo
-    	D_80157050->words.w1 = 0;	 					
-    }
-    D_80157050++;
+    gDPPipeSync2(D_80157050);
     if (D_800E5DB2 & 0x8000) {
         ((int*)arg0)[0x4BF4/4] = 5;
         ((int*)arg0)[0x4C9C/4] = 0;
@@ -841,14 +835,7 @@ void func_8015FBBC_C05EC(short* arg0) {
     gSPDisplayList(D_80157050++, D_8006D578);
     func_80030DD8(D_800E5D00, 0x50, 0x82, 1);
     func_80030DD8("PRESS A TO CONTINUE", 0x50, 0xC8, 1);
-
-    // Expanded gDPPipeSync
-    {				
-    	D_80157050->words.w0 = _SHIFTL(G_RDPPIPESYNC, 24, 8);				
-        do {} while(0); // very cool, thank you nintendo
-    	D_80157050->words.w1 = 0;	 					
-    }
-    D_80157050++;
+    gDPPipeSync2(D_80157050);
     if (D_800E5DB2 & 0x8000) {
         arg0[0x4C12/2] = 0;
         func_80032F90();
