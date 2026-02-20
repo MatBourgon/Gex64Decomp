@@ -27,7 +27,7 @@ extern char D_800E5D00[];
 extern G2String D_801612B4_C1CE4;
 extern G2String D_80161324_C1D54;
 extern int D_800E5CD8;
-extern char D_8006FCD2;
+extern unsigned char D_8006FCD2;
 extern char D_80161314_C1D44[];
 
 extern int D_8006FA54;
@@ -938,7 +938,65 @@ void func_8015E630_BF060(int arg0, int arg1, int arg2, int arg3) {
     func_80037B34(&sp10, 0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015E674_BF0A4);
+extern s32 D_80078600;
+extern s32 D_80078640;
+
+void func_8015E674_BF0A4(char* arg0, int* arg1, int* arg2) {
+    int temp_a0;
+    int temp_s0;
+    int var_a1;
+    int var_s0;
+    int var_s1;
+
+    if (D_80078640 == 0) {
+        GetRemoteCount(arg0 + 8);
+        var_s0 = func_8001A1D8(arg0 + 8) & ~arg2[0x4C9C/4];
+        if (D_8006FCD2 != 0) {
+            var_s0 &= ~0x2000;
+        }
+        if (var_s0 != 0) {
+            if (*arg0 != 6) {
+                func_8004EBAC(arg2[3], arg1[2] + 4, 0);
+            }
+            *arg0 = 6;
+            var_s1 = 0;
+            
+countbits:
+            if (!(var_s0 & 1)) {
+                var_s1 += 1;
+                var_s0 >>= 1;
+                goto countbits;
+            }
+            
+            D_800785CC[var_s1] = 1;
+            
+            if (var_s1 == 2) {
+                if (var_s0 & 0x800) {
+                    D_8006FCD2 = 1;
+                    D_80078600 = 1;
+                    func_800509E0(0x136, 0x64, 0, 0);
+                }
+            }
+            temp_a0 = (1 << var_s1);
+            arg2[0x4C9C/4] |= (1 << var_s1);
+
+            if (temp_a0 & 0xF800) {
+                func_8004EBAC(arg2[3], arg1[4] + 4, 0);
+            }
+            else if (temp_a0 & 0x780) {
+                func_8004EBAC(arg2[3], arg1[5] + 4, 0);
+            }
+            else if (temp_a0 & 0x7F) {
+                func_8004EBAC(arg2[3], arg1[7] + 4, 0);
+            }
+        }
+        else if (*arg0 == 6)
+        {
+            func_8004EBAC(arg2[3], arg1[3] + 4, 0);
+            *arg0 = 0;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015E824_BF254);
 
