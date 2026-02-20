@@ -1104,7 +1104,77 @@ countbits:
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015E824_BF254);
+extern char D_8006FC69;
+
+void func_8015E824_BF254(Level_t* arg0, int** arg1) {
+    SVECTOR sp10;
+    SVECTOR sp18;
+    char* temp_s6;
+    int var_a1;
+    int var_s1;
+    int var_s2;
+    int* temp_a3;
+    int** temp_s0_2;
+    int* temp_s4;
+    int* temp_v1_3;
+
+    temp_s6 = (char*)&arg0->_D0[0];
+    temp_a3 = (int*)D_8006CFA0[0x8];
+    arg0->flags |= 0xC00;
+    temp_s4 = (int*)arg0->_20[1];
+    arg1[3][0x4] &= ~0x800;
+    ((short*)temp_a3)[0xDC/2] = 0;
+    ((char*)arg0->_D0)[0] = 0;
+    GetRemoteCount(&arg0->_D0[2]);
+    var_s1 = 0;
+    for(var_s2 = func_8001A1D8(&arg0->_D0[2]); var_s2 != 0; var_s1++, var_s2 >>= 1)
+    {
+        if ((var_s2 & 1) == 0)
+            continue;
+         
+        D_800785CC[var_s1] = 2;
+        
+        if (var_s1 >= 11 ) {
+            D_800785CC[var_s1] = 3;
+            if ((var_s1 == 11))
+            {
+                temp_v1_3 = (int*)temp_s4[8];
+                var_a1 = *temp_v1_3;
+                temp_v1_3++;
+                while (var_a1 != 0) {
+                     var_a1--;
+                    (((int**)temp_v1_3++)[0])[7] |= 0x80;
+                }
+            }
+        } else if (var_s1 >= 7) {
+                temp_v1_3 = (temp_s4 + var_s1) + 2;
+                (*(int**)temp_v1_3)[7] |= 0x80;
+        } else {
+            temp_s0_2 = (int**)(&temp_s4[var_s1])[0x34/4];
+            func_800516E0(((int*)temp_s0_2[10])[0], &sp10);
+            func_80051C64(((int*)temp_s0_2[10])[0], &sp10, temp_s0_2 + 4);
+            if (((int*)temp_s0_2[10])[1] != 0) {
+                func_800516E0(((int*)temp_s0_2[10])[1], &sp10);
+                func_80051C64(((int*)temp_s0_2[10])[1], &sp10, &sp18);
+                ((short*)temp_s0_2)[4] += sp18.x;
+                ((short*)temp_s0_2)[5] += sp18.y;
+                ((short*)temp_s0_2)[6] += sp18.z;
+            }
+            temp_s0_2[10] = 0;
+            temp_s0_2[7] =  (int*)((int)temp_s0_2[7] & ~0x80);
+            temp_s0_2[7] =  (int*)((int)temp_s0_2[7] & ~0x100);
+        }
+    }
+    if (arg1[0x4BF4/4] == 0) {
+        func_80032F30();
+        func_80040170(0xF);
+        D_8006FC69 = 0;
+        ((short*)gpGameState8)[0x4C66/2] = 0;
+        ((short*)gpGameState8)[0x4C68/2] = 0;
+    }
+    else
+        func_8015E674_BF0A4(temp_s6, temp_s4, (int*)arg1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015EA98_BF4C8);
 
