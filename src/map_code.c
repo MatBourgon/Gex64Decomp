@@ -179,7 +179,71 @@ void func_8015993C_BA36C(Level_t* level, int* arg1) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_80159A5C_BA48C);
+void func_80159A5C_BA48C(int* level, int* arg1) {
+    int *v0, *v1;
+    int *s1, *s2;
+    int *s3;
+    int *s4, *s5;
+    s3 = (int*)level[0x24/4];
+
+    
+    if (((int*)level[0x1C/4])[1] == 0)
+        return;
+    
+    ((short*)D_8006CFA0)[0x64/2] = -0x200;
+    ((int**)arg1)[0xC/4][0x10/4] |= 0x100;
+    v0 = (((int**)level[0x1C/4])[1]);
+    s4 = (int*)v0[0x4/4];
+    s5 = (int*)v0[0x8/4];
+    
+    if (level[0xF8/4])
+        return;
+    
+    s1 = (int*)s4[0x28/4];
+    s2 = (int*)s5[0x28/4];
+    v1 = (int*)func_80051734(s1[0], s1 + 0x10/4);
+    
+    if (v1 != 0)
+    {
+        if ((arg1[0x40/4] & 0x8010) == 0)
+        {
+            arg1[0x4C08/4] |= 1; // d0
+            ((SVECTOR*)arg1[0x8/4])->x = ((SVECTOR*)v1)->x;
+            ((SVECTOR*)arg1[0x8/4])->y = ((SVECTOR*)v1)->y;
+            ((SVECTOR*)arg1[0x8/4])->z = ((SVECTOR*)v1)->z;
+            goto _1d8;
+        } // 104
+        else
+        {
+            v1 = (int*)func_800516E0(s1[0], s1 + 0x10/4);
+            ((SVECTOR*)arg1[0x8/4])->x = ((SVECTOR*)v1)->x;
+            ((SVECTOR*)arg1[0x8/4])->y = ((SVECTOR*)v1)->y;
+            ((SVECTOR*)arg1[0x8/4])->z = ((SVECTOR*)v1)->z;
+            func_80003A68(arg1[0x8/4], func_800516E0(s2[0], s2 + 0x10/4)); // 150
+            func_80001408(arg1[0x8/4], 8); // 170
+        }
+    } // 17c
+    level[0xF8/4] = 1;
+    ((int*)arg1[0x4/4])[0x74/4] &= -2;
+
+    arg1[0x4C08/4] &= -2;
+    if (s3 != 0)
+    {
+        if (s3[0] & 1)
+        {
+            func_8002E3C4(level);
+        } // 1c8
+    } // 1c8
+    
+    func_8001A94C(arg1); // 1c8
+    return;
+
+    _1d8:
+    func_80003A68(arg1[0x8/4], func_80051734(s2[0], s2 + 0x10/4));
+    func_80001408(arg1[0x8/4], 8);
+    
+}
+
 
 void func_80159C88_BA6B8(void) {
 }
