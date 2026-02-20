@@ -376,7 +376,86 @@ void func_8015A3A0_BADD0(Level_t* level)
     *((short*)&level->_100) = level->_60[2];
 }
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015A3C0_BADF0);
+void func_8015A3C0_BADF0(Level_t* level) {
+    int var_s2;
+    int var_v1;
+    short* temp_s1;
+    short* temp_s3;
+    int* temp_v0;
+
+    var_s2 = 1;
+    temp_s1 = (short*)level->_20[1];
+    temp_s3 = &level->_F0[6];
+    switch (temp_s3[0]) {
+    case 0:
+        func_80038B8C("LKDOOR_CLOSED\n");
+        if (temp_s3[1] != 0) {
+            if (temp_s1 != 0) {
+                for (var_v1 = 0; var_v1 < temp_s1[0x6/2]; var_v1 += 1) {
+                    temp_v0 = ((int***)temp_s1 + var_v1)[0x8/4][0x24/4];
+                    if (temp_v0 != 0) {
+                        ((short*)temp_v0)[0xFC/2] = 1;
+                        ((short*)temp_v0)[0xFE/2] = 1;
+                    }
+                }
+                temp_s3[1] = 0;
+            }
+        } 
+        
+        if (temp_s1 != 0) {
+            for (var_v1 = 0; var_v1 < temp_s1[0x6/2]; ++var_v1)
+            {
+                temp_v0 = ((int***)temp_s1 + var_v1)[0x8/4][0x24/4];
+                if ((temp_v0 == 0) || (((short*)temp_v0)[0xFC/2] != 0)) {
+                    var_s2 = 0;
+                }
+            }
+        }
+        
+        if ((var_s2 != 0) && (temp_s1 != 0)) {
+            if (((int*)temp_s1)[0] != 0) {
+                func_8004EBAC(level, ((int*)temp_s1)[0] + 4, 0);
+            }
+            temp_s3[0] = 4;
+            temp_s3[1] = 1;
+        }
+        
+        break;
+    case 4:
+        if (temp_s3[1] != 0) {
+            ((short*)&level->_100)[1] = 0x2DU;
+            temp_s3[1] = 0;
+        }
+        func_80038B8C("LKDOOR_PREOPEN\n");
+        if ((--((short*)&level->_100)[1] << 0x10) < 0) {
+            temp_s3[0] = 3;
+            func_8004AAA8(level, 0x49, 0);
+        }
+        break;
+    case 3:
+        if (temp_s1[0x4/2] == 0) {
+            level->_60[2] -= 0x20;
+            if (level->_60[2] == (((short*)&level->_100)[0] - 0x400)) {
+                temp_s3[0] = 1;
+                temp_s3[1] = 1;
+            }
+        } else {
+            level->_60[2] += 0x20;
+            if (level->_60[2] == (((short*)&level->_100)[0] + 0x400)) {
+                temp_s3[0] = 1;
+                temp_s3[1] = 1;
+            }
+        }
+        
+        func_80038B8C("LKDOOR_OPENING\n");
+        return;
+    case 1:
+        if (temp_s3[1] != 0) {
+            temp_s3[1] = 0;
+        }
+        break;
+    }
+}
 
 void func_8015A638_BB068(void) {
 }
@@ -1387,12 +1466,6 @@ INCLUDE_ASM("asm/nonmatchings/map_code", func_8015FC88_C06B8);
 
 void func_8015FF60_C0990(int* arg0) {
     char sp10[0x40];
-    int* var_a0;
-    int* var_a0_2;
-    int var_v0_2;
-    u8 var_v0;
-    int* temp_v1;
-    int* temp_v1_2;
 
     if ((D_800E5DB2 & 0x808) || (D_800E5B98 != 0)) {
         D_8014F34C--;
@@ -1411,21 +1484,19 @@ void func_8015FF60_C0990(int* arg0) {
     func_80037B00(0x62, 0x64);
     if ((s8) D_8014F34C == 0) {
         csprintf(&sp10, &D_801613E8_C1E18, &D_80078184, &D_801611D8_C1C08);
-        var_a0 = &sp10;
+        func_80038BA0(&sp10);
     } else {
-        var_a0 = &D_801611D8_C1C08;
+        func_80038BA0(&D_801611D8_C1C08);
     }
-    func_80038BA0(var_a0);
     func_80037B00(0x32, 0x8C);
     if ((s8) D_8014F34C == 1) {
         csprintf(&sp10, &D_801613E8_C1E18, &D_80078184, &D_80078198);
-        var_a0_2 = &sp10;
+        func_80038BA0(&sp10);
     } else {
-        var_a0_2 = &D_80078198;
+        func_80038BA0(&D_80078198);
     }
-    func_80038BA0(var_a0_2);
     if (D_800E5DB2 & 0x8000) {
-        switch ((s8) D_8014F34C) {
+        switch (D_8014F34C) {
         case 0:
             func_80040170(6);
             func_8003FAD0(arg0, 1);
