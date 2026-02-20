@@ -228,7 +228,7 @@ void func_80047D20(int arg0, int arg1) {
         temp_v0 = ((G2String******)gpGameState8)[3][8][0x4C];
         result = 0;
         if (temp_v0 != NULL) {
-            result = G2String_Compare(temp_v0[6][8], D_8007E720);
+            result = G2String_Compare_EQ(temp_v0[6][8], D_8007E720);
         }
     }
     D_800785CC[arg0] = result;

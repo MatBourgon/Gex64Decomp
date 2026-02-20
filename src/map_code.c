@@ -7,6 +7,7 @@
 #include "types/TVTextData.h"
 #include "types/GameState.h"
 #include "types/G2String.h"
+#include "types/Vector.h"
 
 extern char D_8014F34C;
 extern int* D_8006CFA0;
@@ -43,13 +44,6 @@ extern char D_80157030;
 extern int D_80157034;
 extern char D_801613F0_C1E20[];
 extern char D_8016151C_C1F4C[];
-
-// Unknown parameters, exactly 6 bytes
-// Might be SVECTOR
-typedef struct
-{
-    short _[3];
-} func_8015CD64_BD794_t;
 
 void func_80159720_BA150(void) {
 }
@@ -198,7 +192,68 @@ void func_80159C90_BA6C0(Level_t* arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_80159CCC_BA6FC);
+void func_80159CCC_BA6FC(Level_t* arg0, int* arg1) {
+    int* temp_v0;
+    short* temp_s2;
+    short* temp_s3;
+
+    temp_v0 = (int*)arg0->_1C[0x20/4];
+    temp_s3 = (short*)arg1[3];
+    temp_s2 = (short*)&arg0->_F4[2];
+
+    if (arg0->_F4[0] == 1)
+    {
+        if ((temp_v0 != 0) && (*temp_v0 != 0)) {
+            func_800257B4(arg1[3]);
+        }
+        goto block_10;
+    
+    }
+    else if (arg0->_F4[0] == 0)
+    {
+        *(SVECTOR*)(&arg0->_40[4]) = *(SVECTOR*)&temp_s3[0x48/2];
+        arg0->_40[6] = (s16) ((u16) arg0->_40[6] + 0x400);
+        if ( temp_s3[0x4C/2] <= ((short*)&arg0->_100)[1]) {
+            func_8004A5B4(arg0, 0x1000);
+            arg0->_F4[0] = 1;
+            arg1[0x4C08/4] |= 1;
+            (*(short*)&arg0->_104) = 0x5A;
+            arg0->_40[6] -= 0x400;
+            arg0->flags &= ~0x800;
+        }
+        goto block_10;
+    }
+    else if (arg0->_F4[0] == 2)
+    {
+        
+        if (((short*)&arg0->_104)[1] <= 0) {
+            ((short*)&arg0->_104)[1] = 0x1E;
+            arg0->_F4[0] = 3;
+            goto block_10;
+        }
+        goto block_11;
+
+    }
+    else
+    {
+block_10:
+        if (temp_s2[5] > 0) {
+block_11:
+            temp_s2[5]--;
+        }
+    }
+    
+    if (temp_s2[4] > 0) {
+        temp_s2[4]--;
+        if ((temp_s2[4] << 0x10) <= 0) {
+            arg1[0x4C08/4] &= ~1;
+            func_8001C978(temp_s3, arg1[1] + 0x2C, arg1);
+            arg0->_F4[0] = 0;
+            arg0->flags |= 0x800;
+            func_8004A54C(arg0, 0x1000);
+        }
+    }
+}
 
 void func_80159E88_BA8B8(Level_t* arg0) {
     if (arg0->_F4[0] == 1) {
@@ -241,7 +296,45 @@ void func_8015A640_BB070(Level_t* level)
     level->_100 = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015A654_BB084);
+void func_8015A654_BB084(Level_t* arg0, int* arg1) {
+    int* temp_s0;
+    short* temp_t0;
+    
+
+    temp_t0 = (short*)arg0->_20[1];
+    temp_s0 = &arg0->_F4[2];
+    if (((*(int*)&arg0->_10C) != 0) && !(arg1[0x4C08/4] & 0x2000)) {
+        func_8003F6CC(temp_t0[0], temp_t0[1], temp_t0[2], temp_t0[3], temp_t0[5], temp_t0 + 6);
+    }
+    switch (temp_s0[2])
+    {
+        case 0: break;
+        
+        case 1:
+        if (func_80030840(SVECTOR_DistanceSquared((SVECTOR*)&arg0->_40[4], (SVECTOR*)&D_8006CFA0[0x48/4]), 0) > 1000
+            || !temp_s0[5])
+        {
+            temp_s0[2] = 2;
+            temp_s0[1] = -6;
+        }
+        else
+            temp_s0[5]--;
+            
+        break;
+        
+        case 2:
+        if (temp_s0[0] < 0x41) {
+            temp_s0[2] = 0;
+            temp_s0[0] = 0x40;
+            temp_s0[1]= 0;
+            temp_s0[4] = 0;
+        }
+            
+        break;
+    }
+    temp_s0[0] += temp_s0[1];
+    arg0->_60[2] = (u16) ((arg0->_60[2] + temp_s0[0]) & 0xFFF);
+}
 
 void func_8015A7FC_BB22C(Level_t* level) {
     short* temp_s1;
@@ -289,7 +382,59 @@ INCLUDE_ASM("asm/nonmatchings/map_code", func_8015A94C_BB37C);
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015AB2C_BB55C);
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015B18C_BBBBC);
+extern char D_801612C0_C1CF0[];
+
+typedef struct
+{
+    char data[8];
+} test_string;
+
+void func_8015B18C_BBBBC(Level_t* arg0, int** arg1) {
+    int* temp_a1;
+    int* temp_a2;
+    short* temp_s4;
+    int* temp_v1;
+    int* temp_v1_2;
+    int* temp_v1_3;
+    char* ptr;
+
+    temp_a1 = (int*)arg0->_20[1];
+    temp_s4 = (short*)D_8006CFA0[0x20/4];
+    ptr = (char*)&arg0->_F4[2];
+    if (!(arg0->flags & 0x20000)) {
+        temp_a2 = (int*)arg1[1][0x90/4];
+        
+        if (G2String_Compare_NEQ(D_801612C0_C1CF0, temp_a2))
+        {
+            func_8004EBAC(D_8006CFA0, temp_a1[0] + 4, 0);
+        } else {
+            func_8004EBAC(D_8006CFA0, temp_a1[1] + 4, 0);
+        }
+        
+        ptr[0x24] = 1;
+        ((char*)gpGameState8)[0x4C60] = ((char*)gpGameState8)[0x4C61] = 1;
+        ((int*)gpGameState8)[0x4C58/4] = 0x7A;
+        func_80033334(0x78);
+        ((int*)gpGameState8)[0x4C5C/4] = 0x7A;
+        ((char*)gpGameState8)[0x4C62] = 1;
+        arg0->flags |= 0x10C00;
+        temp_v1 = arg1[0xC/4];
+        temp_v1[0x10/4] = (temp_v1[0x10/4] | 0x800);
+        temp_v1_2 = arg1[0xC/4];
+        temp_v1_2[0x10/4] = (temp_v1_2[0x10/4] | 0x400);
+        temp_s4[0xDC/2] = 0;
+        temp_v1_3 = arg1[0xC/4];
+        temp_v1_3[0xFC/4] = (temp_v1_3[0xFC/4] | 0x1000);
+        temp_s4[0x12C/2] = 0;
+        ((char*)D_8006CFA0)[0x4E] = 0;
+        D_8006CFA0[0xF8/4] = 1;
+        D_8006CFA0[0xF4/4] = 0;
+        arg1[0xC/4][0xF4/4] = 5;
+        func_80052F58();
+        ((int*)arg0->_D0)[0] = 0x258;
+        ((int*)arg0->_D0)[2] = 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015B330_BBD60);
 
@@ -389,10 +534,10 @@ void func_8015BED0_BC900(Level_t* level) {
         temp_a0 = (int***)var_a2[i][0x24/4];
         if (temp_a0 != 0) {
             ((int*)temp_a0)[0x10/4] &= ~0x400;
-            if (G2String_Compare(temp_a0[0x18/4][0x20/4], &D_801612B4_C1CE4)) {
+            if (G2String_Compare_EQ(temp_a0[0x18/4][0x20/4], &D_801612B4_C1CE4)) {
                 ((int*)temp_a0)[0xF4/4] = 3;
             }
-            else if (G2String_Compare(temp_a0[0x18/4][0x20/4], &D_80161324_C1D54)) {
+            else if (G2String_Compare_EQ(temp_a0[0x18/4][0x20/4], &D_80161324_C1D54)) {
                 ((int*)temp_a0)[0xF4/4] = 3;
                 ((char*)temp_a0)[0x10E] = 1;
             }
@@ -443,9 +588,9 @@ void func_8015C110_BCB40(Level_t* level, short** arg1) {
     temp_t0 = (short*)D_8006CFA0[0x20/4];
     if ((temp_a3 != 0) && ((((int*)temp_a3)[0x10/4] != 0) || (temp_a3[0x14/2] != 0))) {
         
-        *(func_8015CD64_BD794_t*)(&D_8006CFA0[0x50/4])
-          = *(func_8015CD64_BD794_t*)(&D_8006CFA0[0x48/4])
-              = *(func_8015CD64_BD794_t*)&temp_a3[0x10/2];
+        *(SVECTOR*)(&D_8006CFA0[0x50/4])
+          = *(SVECTOR*)(&D_8006CFA0[0x48/4])
+              = *(SVECTOR*)&temp_a3[0x10/2];
         
         temp_t0[0x82/2]
             = ((short*)D_8006CFA0)[0x64/2]
@@ -502,7 +647,7 @@ int func_8015C63C_BD06C(int arg0) {
     {
         if (var_s1 != -1) break;
         if (temp_v0_2 = (int**)func_8004A368(arg0, i)) {
-            if (G2String_Compare(temp_v0_2[0x18/4][0x20/4], &D_801612B4_C1CE4)
+            if (G2String_Compare_EQ(temp_v0_2[0x18/4][0x20/4], &D_801612B4_C1CE4)
                 && (((char*)temp_v0_2)[0x10B]) == 1) {
                 var_s1 = i;
             }
@@ -584,17 +729,17 @@ void func_8015CD14_BD744(Level_t* level, int* arg1)
 
 void func_8015CD64_BD794(Level_t* arg0) {
     int temp_a1;
-    func_8015CD64_BD794_t* temp_v0;
+    SVECTOR* temp_v0;
 
     ((short*)&arg0->_100)[1] = 2;
     arg0->_F0[6] = 0x64;
     temp_a1 = arg0->_20[1];
     arg0->flags |= 0x800;
     if (temp_a1 != 0) {
-        temp_v0 = (func_8015CD64_BD794_t*)((((short*)&arg0->_100)[1] * sizeof(func_8015CD64_BD794_t)) + temp_a1 + 4);
-        *(func_8015CD64_BD794_t*)&D_8006CFA0[0x50/4]
-            = *(func_8015CD64_BD794_t*)(&D_8006CFA0[0x48/4])
-            = *(func_8015CD64_BD794_t*)temp_v0;
+        temp_v0 = (SVECTOR*)((((short*)&arg0->_100)[1] * sizeof(SVECTOR)) + temp_a1 + 4);
+        *(SVECTOR*)&D_8006CFA0[0x50/4]
+            = *(SVECTOR*)(&D_8006CFA0[0x48/4])
+            = *(SVECTOR*)temp_v0;
     }
 }
 
@@ -718,12 +863,12 @@ INCLUDE_RODATA("asm/nonmatchings/map_code", D_80161394_C1DC4);
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015D6F0_BE120);
 
 void func_8015D9E4_BE414(Level_t* arg0) {
-    func_8015CD64_BD794_t v = *(func_8015CD64_BD794_t*)&arg0->_40[4];
+    SVECTOR v = *(SVECTOR*)&arg0->_40[4];
 
     func_80047E64(arg0, -0x14);
     arg0->_40[6] += 0x80;
     arg0->_F4[2] = func_8002DEA8(arg0, func_8003EE84("lvllabl_"));
-    *(func_8015CD64_BD794_t*)&arg0->_40[4] = v;
+    *(SVECTOR*)&arg0->_40[4] = v;
     arg0->flags |= 0x10000;
     ((int*)arg0->_F4[2])[0x10/4] |= 0x100000;
     ((int*)arg0->_F4[2])[0x10/4] |= 0x400;
@@ -768,14 +913,14 @@ INCLUDE_ASM("asm/nonmatchings/map_code", func_8015DC38_BE668);
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015DEC8_BE8F8);
 
 void func_8015E274_BECA4(Level_t* level) {
-    func_8015CD64_BD794_t temp = *(func_8015CD64_BD794_t*)(&level->_40[4]);
+    SVECTOR temp = *(SVECTOR*)(&level->_40[4]);
 
     func_80047E64(level, 0x3E8);
-    *(func_8015CD64_BD794_t*)&(((short*)gpGameState8)[0x4C66/2]) = *(func_8015CD64_BD794_t*)&level->_40[4];
+    *(SVECTOR*)&(((short*)gpGameState8)[0x4C66/2]) = *(SVECTOR*)&level->_40[4];
     ((short*)gpGameState8)[0x4C6A/2] -= 0x20;
     ((short*)gpGameState8)[0x4C6C/2] = level->_60[2] & 0xFFF;
     ((short*)gpGameState8)[0x4C6C/2] = (((short*)gpGameState8)[0x4C6C/2] + *(short*)&level->_1C[3]) & 0xfff;
-    *(func_8015CD64_BD794_t*)(&level->_40[4]) = temp;
+    *(SVECTOR*)(&level->_40[4]) = temp;
 }
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015E338_BED68);
