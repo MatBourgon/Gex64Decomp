@@ -44,6 +44,22 @@ extern char D_80157030;
 extern int D_80157034;
 extern char D_801613F0_C1E20[];
 extern char D_8016151C_C1F4C[];
+extern char D_8006FC69;
+extern int D_80078600;
+extern int D_80078640;
+extern char D_801612C0_C1CF0[];
+extern char D_801613E8_C1E18[];
+extern int D_80078184;
+extern int D_80078188;
+extern int D_80078190;
+extern int D_800781B8;
+extern char D_80078170;
+extern char D_8006CF20;
+extern char D_801611C0_C1BF0[];
+extern char D_80161208_C1C38[];
+extern char D_801611CC_C1BFC[];
+extern char D_80161404_C1E34[];
+extern GameState* gpGameState8;
 
 void func_80159720_BA150(void) {
 }
@@ -487,8 +503,6 @@ void func_8015A94C_BB37C(Level_t* level) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015AB2C_BB55C);
-
-extern char D_801612C0_C1CF0[];
 
 typedef struct
 {
@@ -1044,9 +1058,6 @@ void func_8015E630_BF060(int arg0, int arg1, int arg2, int arg3) {
     func_80037B34(&sp10, 0);
 }
 
-extern s32 D_80078600;
-extern s32 D_80078640;
-
 void func_8015E674_BF0A4(char* arg0, int* arg1, int* arg2) {
     int temp_a0;
     int temp_s0;
@@ -1103,8 +1114,6 @@ countbits:
         }
     }
 }
-
-extern char D_8006FC69;
 
 void func_8015E824_BF254(Level_t* arg0, int** arg1) {
     SVECTOR sp10;
