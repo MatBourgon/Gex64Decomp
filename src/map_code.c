@@ -64,6 +64,13 @@ extern char D_801611F8_C1C28[];
 extern char D_801614D0_C1F00[];
 extern char D_801611D8_C1C08[];
 extern int D_80078198;
+extern int D_801613E0_C1E10;
+extern int D_801613D0_C1E00;
+extern int D_801613D4_C1E04;
+extern int D_801613DC_C1E0C;
+extern int D_80154834;
+extern char D_8016134_C1DC4[];
+extern int D_801613C4_C1DF4;
 
 typedef struct
 {
@@ -1213,7 +1220,69 @@ void func_8015E274_BECA4(Level_t* level) {
     *(SVECTOR*)(&level->_40[4]) = temp;
 }
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015E338_BED68);
+void func_8015E338_BED68(Level_t* level, int arg1) {
+    char sp10[0x10];
+    int* temp_a0;
+    int* temp_s2;
+    char* var_s0;
+
+    temp_s2 = (int*)level->_20[1];
+    var_s0 = (char*)&level->_D0;
+    if (G2String_Compare_EQ(level->_18[0x24/4], &D_801613D0_C1E00)) {
+        D_8006CFA0[0x10/4] |= 0x800;
+        while (D_80154834 == 3) {
+            func_80052814();
+        }
+        D_8006CFA0[0x10/4] &= ~0x800;
+        csprintf(&sp10, &D_80161394_C1DC4, temp_s2 + 1, ((short*)temp_s2)[1]);
+        func_800396E0(temp_s2 + 1, &sp10, arg1);
+        return;
+    }
+    
+    if (G2String_Compare_NEQ(level->_18[0x24/4], &D_801613DC_C1E0C)) {
+        if (G2String_Compare_EQ(level->_18[0x24/4], &D_801613C0_C1DF0)) {
+            var_s0 = (char*)(level->_20[2] + 0xD0);
+        }
+        if ((temp_s2 != 0) && (var_s0[0x43] != 0)) {
+            if ((((u8*)var_s0)[0x44] == 0) && ((u8*)D_8006CFA0)[0x4E] == 0xB) {
+                var_s0[0x44] = 1U;
+
+                switch(((u8*)var_s0)[0x42])
+                {
+                    case 0x16:
+                        func_80052C2C(0x48);
+                    break;
+
+                    case 0x15:
+                        func_80052C2C(0x4A);
+                    break;
+
+                    case 0x17:
+                        func_80052C2C(0x46);
+                    break;
+
+                    case 0x18:
+                        func_80052C2C(0x4B);
+                    break;
+                }
+            }
+            
+            ((int*)var_s0)[0x48/4] = ((short*)level->_20[2])[0x56/2];
+            if (func_8000C8E8(level, arg1) != 0) {
+                func_8015E274_BECA4(level);
+            }
+            ((short*)level->_20[2])[0x56/2] = ((int*)var_s0)[0x48/4];
+        }
+        else if (!(((int*)gpGameState8)[0x90/4] & 0x40000) && (var_s0[0x43] == 0)) {
+            temp_a0 = (int*)level->_70[2];
+            if ((((short*)temp_a0)[0x6/2] == 1) && ((u8) ((u8*)temp_a0[0xC/4])[0x5] >= 7U)) {
+                var_s0[0x43] = 1;
+                var_s0[0x41] = var_s0[0x40] = (((short*)temp_s2)[0x0/2] * 9) + 7;
+                ((int*)level->_20[2])[0xF8/4] = 0;
+            }
+        }
+    }
+}
 
 void func_8015E630_BF060(int arg0, int arg1, int arg2, int arg3) {
     int sp10[8];
