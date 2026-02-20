@@ -71,6 +71,9 @@ extern int D_801613DC_C1E0C;
 extern int D_80154834;
 extern char D_8016134_C1DC4[];
 extern int D_801613C4_C1DF4;
+extern char D_801611E4_C1C14[];
+extern int D_801614F0_C1F20;
+extern int D_80156BE4;
 
 typedef struct
 {
@@ -1531,7 +1534,66 @@ void func_8015FBBC_C05EC(short* arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015FC88_C06B8);
+void func_8015FC88_C06B8(int* arg0) {
+    char sp10[0x40];
+
+    if ((D_800E5DB2 & 0x808) || (D_800E5B98 != 0)) {
+        D_8014F34C--;
+    }
+    else if ((D_800E5DB2 & 0x404) || (D_80157030 != 0)) {
+        D_8014F34C++;
+    }
+    if (D_8014F34C < 0) {
+        D_8014F34C = 0;
+    }
+    if (D_8014F34C > 1) {
+        D_8014F34C = 1;
+    }
+    
+    func_80037B00(0x37, 0x32);
+    func_80038BA0(&D_801611E4_C1C14);
+    func_80037B00(0x62, 0x64);
+    if (D_8014F34C == 0) {
+        csprintf(&sp10, &D_801613E8_C1E18, &D_80078184, &D_801611D8_C1C08);
+        func_80038BA0(&sp10);
+    } else {
+        func_80038BA0(&D_801611D8_C1C08);
+    }
+    func_80037B00(0x32, 0x8C);
+    if (D_8014F34C == 1) {
+        csprintf(&sp10, &D_801613E8_C1E18, &D_80078184, &D_80078198);
+        func_80038BA0(&sp10);
+    } else {
+        func_80038BA0(&D_80078198);
+    }
+    if (D_800E5DB2 & 0x8000) {
+        switch (D_8014F34C) {                  /* irregular */
+        case 0:
+            func_80040170(4);
+            D_80156BE4 = 0;
+            break;
+        case 1:
+            func_80040170(5);
+            break;
+        }
+    } else if (D_800E5DB2 & 0x4000) {
+        if (D_80078170 != 0) {
+            func_80040170(0);
+        } else {
+            func_80040170(0xD);
+        }
+    } else if ((D_800E5DB2 & 0x1000) && (D_80078170 != 0)) {
+        ((short*)arg0)[0x4C12/2] = 0;
+        func_80032F90();
+    }
+    gSPDisplayList(D_80157050++, &D_8006D578);
+    if (D_80078170 != 0) {
+        func_80030DD8(&D_801614D0_C1F00, 0x23, 0xD2, 1);
+    } else {
+        func_80030DD8(&D_801614F0_C1F20, 0x4B, 0xD2, 1);
+    }
+    gDPPipeSync(D_80157050++);
+}
 
 void func_8015FF60_C0990(int* arg0) {
     char sp10[0x40];
