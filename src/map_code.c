@@ -1028,7 +1028,94 @@ void func_8015DB54_BE584(Level_t* level) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015DC38_BE668);
+typedef struct
+{
+    char bytes[4];
+} func_8015DC38_BE668_t;
+
+extern int D_80078594[];
+extern func_8015DC38_BE668_t D_801613CC_C1DFC;
+
+void func_8015DC38_BE668(Level_t* arg0) {
+    char sp10[0x10];
+    func_8015DC38_BE668_t sp20;
+    short temp_a2;
+    int var_a0;
+    int var_a1;
+    int var_s3;
+    short* temp_s1;
+    u8* temp_s2;
+    u8* ptr;
+
+    sp20 = D_801613CC_C1DFC;
+    temp_s1 = (short*)arg0->_20[1];
+    temp_s2 = (u8*)arg0->_D0;
+    if (arg0->flags & 0x20000) {
+        func_8015DB54_BE584(arg0); // shouldn't need a second argument?
+        return;
+    }
+    csprintf(&sp10, &D_80161394_C1DC4, temp_s1 + 2, temp_s1[0x2/2]);
+    
+    arg0->_112 = GetLevelIndexFromId(&sp10);
+    if (arg0->_112 < 0x15U) {
+        var_s3 = GetRedRemotesForLevel(arg0->_112);
+    }
+    arg0->flags |= 0x80;
+    if (arg0->_112 >= 0x15) {
+        arg0->_113 = 0;
+        arg0->_F4[1] = 2;
+        if ((D_80078594[arg0->_112]) == 2) {
+            arg0->_113 = 1;
+            arg0->_F4[1] = 0;
+            arg0->_111 = arg0->_110 = (temp_s1[0x0/4] * 9) + 7;
+        } else {
+            goto skip;
+        }
+    } else {
+        arg0->_F4[1] = 0;
+        arg0->_113 = 1;
+        temp_a2 = temp_s1[0x0/4];
+        var_a1 = 0;
+        if (temp_a2 >= 0) {
+            var_a0 = var_s3 - 1;
+            arg0->_50[3] = ((s8) *((u8*)&sp20 + var_s3) + (temp_a2 * 9));
+            if (var_a0 >= 0) {
+                ptr = (u8*)gpGameState8;
+                ptr = &ptr[arg0->_112];
+                while(var_a0 >= 0)
+                {
+                    if ((ptr[0x4C6E] >> var_a0) & 1) {
+                        var_a1 += 1;
+                    }
+                    var_a0 -= 1;
+                }
+            }
+            temp_s2[0x40] = arg0->_50[3] = arg0->_50[3] + var_a1;
+            temp_s2[0x41] = arg0->_50[3];
+        } else {
+            skip:
+            *(u8*)&arg0->_110 = 7U;
+            arg0->_111 = 0x2AU;
+            arg0->_50[3] = *(u8*)&arg0->_110;
+        }
+    }
+    if (arg0->_1C[0x1C/4] & 0x80) {
+        arg0->flags |= 0x800;
+    }
+    else
+    {
+        if ((temp_s2)[0x42] < 0xEU) {
+            func_8015D6F0_BE120(arg0, var_s3);
+        }
+        if (((temp_s2)[0x42] >= 0x15U) && ((char*)temp_s2)[0x43] != 0)
+        {
+            func_8015D6F0_BE120(arg0, var_s3);
+        }
+        if (((temp_s2)[0x42] - 0xEU) >= 7U) {
+            func_8015D9E4_BE414(arg0);
+        }   
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015DEC8_BE8F8);
 
