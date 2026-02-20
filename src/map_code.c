@@ -60,6 +60,18 @@ extern char D_80161208_C1C38[];
 extern char D_801611CC_C1BFC[];
 extern char D_80161404_C1E34[];
 extern GameState* gpGameState8;
+extern char D_801611F8_C1C28[];
+extern char D_801614D0_C1F00[];
+extern char D_801611D8_C1C08[];
+extern int D_80078198;
+
+typedef struct
+{
+    char bytes[4];
+} func_8015DC38_BE668_t;
+
+extern int D_80078594[];
+extern func_8015DC38_BE668_t D_801613CC_C1DFC;
 
 void func_80159720_BA150(void) {
 }
@@ -1028,14 +1040,6 @@ void func_8015DB54_BE584(Level_t* level) {
     }
 }
 
-typedef struct
-{
-    char bytes[4];
-} func_8015DC38_BE668_t;
-
-extern int D_80078594[];
-extern func_8015DC38_BE668_t D_801613CC_C1DFC;
-
 void func_8015DC38_BE668(Level_t* arg0) {
     char sp10[0x10];
     func_8015DC38_BE668_t sp20;
@@ -1381,7 +1385,73 @@ void func_8015FBBC_C05EC(short* arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015FC88_C06B8);
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015FF60_C0990);
+void func_8015FF60_C0990(int* arg0) {
+    char sp10[0x40];
+    int* var_a0;
+    int* var_a0_2;
+    int var_v0_2;
+    u8 var_v0;
+    int* temp_v1;
+    int* temp_v1_2;
+
+    if ((D_800E5DB2 & 0x808) || (D_800E5B98 != 0)) {
+        D_8014F34C--;
+    }
+    else if ((D_800E5DB2 & 0x404) || (D_80157030 != 0)) {
+        D_8014F34C++;
+    }
+    if (D_8014F34C < 0) {
+        D_8014F34C = 0;
+    }
+    if (D_8014F34C > 1) {
+        D_8014F34C = 1;
+    }
+    func_80037B00(0x46, 0x32);
+    func_80038BA0(&D_801611F8_C1C28);
+    func_80037B00(0x62, 0x64);
+    if ((s8) D_8014F34C == 0) {
+        csprintf(&sp10, &D_801613E8_C1E18, &D_80078184, &D_801611D8_C1C08);
+        var_a0 = &sp10;
+    } else {
+        var_a0 = &D_801611D8_C1C08;
+    }
+    func_80038BA0(var_a0);
+    func_80037B00(0x32, 0x8C);
+    if ((s8) D_8014F34C == 1) {
+        csprintf(&sp10, &D_801613E8_C1E18, &D_80078184, &D_80078198);
+        var_a0_2 = &sp10;
+    } else {
+        var_a0_2 = &D_80078198;
+    }
+    func_80038BA0(var_a0_2);
+    if (D_800E5DB2 & 0x8000) {
+        switch ((s8) D_8014F34C) {
+        case 0:
+            func_80040170(6);
+            func_8003FAD0(arg0, 1);
+            break;
+        case 1:
+            func_80040170(7);
+            break;
+        }
+    } else if (D_800E5DB2 & 0x4000) {
+        if (D_8006FC69 != 0) {
+            ((short*)arg0)[0x4C12/2] = 0;
+            func_80032F90();
+            D_8006FC69 = 0;
+        } else {
+            func_80040170(0);
+        }
+    } else if (D_800E5DB2 & 0x1000) {
+        ((short*)arg0)[0x4C12/2] = 0;
+        func_80032F90();
+    }
+    
+    gSPDisplayList(D_80157050++, D_8006D578);
+    func_80030DD8(D_801614D0_C1F00, 0x23, 0xD2, 1);
+    gDPPipeSync(D_80157050++);
+    
+}
 
 INCLUDE_RODATA("asm/nonmatchings/map_code", D_801614D0_C1F00);
 
