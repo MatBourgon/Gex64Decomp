@@ -74,6 +74,9 @@ extern int D_801613C4_C1DF4;
 extern char D_801611E4_C1C14[];
 extern int D_801614F0_C1F20;
 extern int D_80156BE4;
+extern char D_80078171;
+extern int D_801574FC;
+extern int D_80156BDC;
 
 typedef struct
 {
@@ -1567,7 +1570,7 @@ void func_8015FC88_C06B8(int* arg0) {
         func_80038BA0(&D_80078198);
     }
     if (D_800E5DB2 & 0x8000) {
-        switch (D_8014F34C) {                  /* irregular */
+        switch (D_8014F34C) {
         case 0:
             func_80040170(4);
             D_80156BE4 = 0;
@@ -1710,7 +1713,111 @@ void func_80160838_C1268(void) {
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_80160ACC_C14FC);
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_80160DF0_C1820);
+void func_80160DF0_C1820(void* arg0) {
+    switch (D_8006FA54) {
+        
+    case 1:
+        D_8006FA54 = 2;
+        func_800576F0(&D_80153A58, 1, 0);
+        break;
+        
+    case 3:
+        if (D_80156BDC != 0) {
+            func_80040170(0xA);
+            D_8006FA54 = 0xE;
+            D_8006CF20 = 0;
+            break;
+        }
+            
+        D_80078171 = 1;
+        func_8003FAD0(arg0, 0);
+        
+        if (D_8006CF20 != 0) {
+            D_800E5CD4 = D_8006CF20 - 1;
+            D_800E8EB4 = 1;
+            func_80040170(0x15);
+            break;
+        }
+            
+        D_8006FA54 = 4;
+        func_800576F0(&D_80153A58, 2, 0);
+        
+        break;
+        
+    case 5:
+        
+        if (D_80156BDC == 0) {
+            D_8006FA54 = 8;
+            func_800576F0(&D_80153A58, 3, 0);
+            break;
+        }
+            
+        func_80040170(0xA);
+        D_8006FA54 = 0xE;
+        break;
+        
+    case 9:
+        if (D_80156BDC != 0)
+        {
+            func_80040170(0xA);
+            D_8006FA54 = 0xE;
+            break;
+        }
+        
+        if (D_800B83C8 >= 0x100 && D_800E97CC < D_80157034) {
+            func_80040170(0xE);
+            D_8006FA54 = 0xE;
+            break;
+        }
+        
+        D_8014F354 = 1;
+        func_80040170(0x14);
+        break;
+        
+    case 6:
+        if ((D_80156BDC == 0) || ((D_80156BDC == 5))) {
+            if (D_800E5CD4 < D_80157034) {
+                D_8006FA54 = 7;
+                func_800576F0(&D_80153A58, 4, 0);
+            }
+            else
+            {
+                D_8006FA54 = 0xE;
+                D_8014F354 = 1;
+                func_80040170(0xB);
+                D_801574FC = D_8014F34C = func_80014DD4(-1);
+            }
+        }
+        else
+        {
+            func_80040170(0xA);
+            D_8006FA54 = 0xE;
+        }
+        break;
+        
+    case 17:
+        if (D_80156BDC != 0) {
+            func_80040170(0xA);
+            D_8006FA54 = 0xE;
+        } else {
+            D_8006FA54 = 0xA;
+            func_800576F0(&D_80153A58, 6, 0);
+        }
+        
+    case 11:
+        if (D_80156BDC != 0) {
+            func_80040170(0xA);
+            D_8006FA54 = 0xE;
+        }
+        else
+        {
+            D_8006FA54 = 0xD;
+            D_8006CF20 = D_800E5CD4 + 1;
+            func_80040170(0x1B);
+        }
+        return;
+    }
+}
 
 void func_801610B8_C1AE8(short* arg0) {
     func_80037B00(0x50, 0x6E);
