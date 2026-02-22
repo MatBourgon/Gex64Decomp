@@ -31,7 +31,7 @@ extern unsigned char D_8006FCD2;
 extern char D_80161314_C1D44[];
 
 extern int D_8006FA54;
-extern char D_80078174[];
+extern u8 D_80078174[];
 extern int D_800B83C8;
 extern char D_800E5B98;
 extern int D_800E5CD4;
@@ -77,6 +77,8 @@ extern int D_80156BE4;
 extern char D_80078171;
 extern int D_801574FC;
 extern int D_80156BDC;
+extern char D_801539C4;
+extern char D_800E9732;
 
 typedef struct
 {
@@ -1711,7 +1713,58 @@ void func_80160838_C1268(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_80160ACC_C14FC);
+void func_80160ACC_C14FC(short* arg0) {
+    char var_s1;
+
+    if ((D_800E5DB2 & 0x808) || (D_800E5B98 != 0)) {
+        D_80078174[D_80156BE4]++;
+        if ((D_80078174[D_80156BE4] - 0x10) >= 0x32U) {
+            D_80078174[D_80156BE4] = 0x10;
+        }
+        D_8014F34C = 0;
+    }
+    else if ((D_800E5DB2 & 0x404) || (D_80157030 != 0)) {
+        D_80078174[D_80156BE4]--;
+        if (((char*)D_80078174)[D_80156BE4] < 0x10) {
+            D_80078174[D_80156BE4] = 0x41;
+        }
+        D_8014F34C = 0;
+    } else if ((D_800E5DB2 & 0x202) || (D_801539C4 != 0)) {
+        D_8014F34C = 0;
+        D_80156BE4 = D_80156BE4 - 1;
+        if (D_80156BE4 < 4) {
+            D_80156BE4 = 4;
+        }
+    } else if ((D_800E5DB2 & 0x101) || (D_800E9732 != 0)) {
+        D_8014F34C = 0;
+        D_80156BE4++;
+        if (D_80156BE4 >= 15) {
+            D_80156BE4 = 14;
+        }
+    }
+    gSPDisplayList(D_80157050++, D_8006D578);
+    func_80030DD8("ENTER NAME FOR THIS GAME", 0x32, 0x50, 1);
+    if (D_8014F34C & 0x10) {
+        var_s1 = D_80078174[D_80156BE4];
+        D_80078174[D_80156BE4] = 15;
+    }
+    func_80030DD8(&D_80078174, 0x50, 0x73, 0);
+    func_80030DD8("PRESS A TO SAVE", 0x50, 0x96, 1);
+    func_80030DD8("PRESS START TO ABORT", 0x41, 0xAA, 1);
+    if (D_8014F34C & 0x10) {
+        D_80078174[D_80156BE4] = var_s1;
+    }
+    if (D_800E5DB2 & 0x8000) {
+        D_800E8EB4 = 0;
+        func_80040170(21);
+    } else if (D_800E5DB2 & 0x1000) {
+        arg0[0x4C12/2] = 0;
+        func_80032F90();
+        D_8006FA54 = 13;
+    }
+    gDPPipeSync(D_80157050++);
+    D_8014F34C++;
+}
 
 void func_80160DF0_C1820(void* arg0) {
     switch (D_8006FA54) {
