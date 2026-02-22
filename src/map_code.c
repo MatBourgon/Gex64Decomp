@@ -79,6 +79,7 @@ extern int D_801574FC;
 extern int D_80156BDC;
 extern char D_801539C4;
 extern char D_800E9732;
+extern char D_80078150[];
 
 typedef struct
 {
@@ -1523,7 +1524,82 @@ void func_8015F770_C01A0(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015F804_C0234);
+void func_8015F804_C0234(short* arg0) {
+    char buffer[18];
+    int i;
+
+    if ((D_800E5DB2 & 0x808) || (D_800E5B98 != 0)) {
+        D_800E5D00[D_80156BE4]++;
+        D_8014F34C = 0;
+    }
+    else if ((D_800E5DB2 & 0x404) || (D_80157030 != 0)) {
+        D_800E5D00[D_80156BE4]--;
+        D_8014F34C = 0;
+    } else if ((D_800E5DB2 & 0x202) || (D_801539C4 != 0)) {
+        D_80156BE4--;
+        D_8014F34C = 0;
+        if (D_80156BE4 < 0) {
+            D_80156BE4 = 0;
+        }
+    } else if ((D_800E5DB2 & 0x101) || (D_800E9732 != 0)) {
+        D_80156BE4++;
+        D_8014F34C = 0;
+        if (D_80156BE4 > 17) {
+            D_80156BE4 = 17;
+        }
+    }
+    
+    if (D_800E5D00[D_80156BE4] < 0) {
+        D_800E5D00[D_80156BE4] = 31;
+    }
+    
+    if (D_800E5D00[D_80156BE4] > 31) {
+        D_800E5D00[D_80156BE4] = 0;
+    }
+
+    for (i = 0; i < 18; i++) {
+        if ((D_800E5D00[i] < 0x20U) && !(i == D_80156BE4 && (D_8014F34C & 0x10))) {
+            buffer[i] = D_80078150[D_800E5D00[i]];
+        } else {
+            buffer[i] = '*';
+        }
+    }
+    buffer[i] = 0;
+    
+    func_80037B00(0x73, 0x46);
+    func_80038BA0("ENTER");
+    func_80037B00(0x62, 0x64);
+    func_80038BA0(D_801611D8_C1C08);
+    gSPDisplayList(D_80157050++, D_8006D578);
+    func_80030DD8(buffer, 0x50, 0x8C, 1);
+    if (D_800E5DB2 & 0x8000) {
+        if (func_8003FDD8(arg0) == 0) {
+            D_80078170 = 1;
+            ((short*)gpGameState8)[0x4C66/2] = 0;
+            ((short*)gpGameState8)[0x4C68/2] = 0;
+            func_800396E0(0, &D_80161314_C1D44, arg0);
+        } else {
+            func_80040170(8);
+            D_80161680_C20B0 = 0;
+        }
+    }
+    else if (D_800E5DB2 & 0x4000) {
+        func_80040170(1);
+    }
+    else if (D_800E5DB2 & 0x1000) {
+        if (D_80078170 != 0) {
+            arg0[0x4C12/2] = 0;
+            func_80032F90();
+        }
+    }
+    if (D_80078170 != 0) {
+        func_80030DD8("A=ACCEPT  B=BACK  START=ABORT", 0x1E, 0xD2, 1);
+    } else {
+        func_80030DD8("A=ACCEPT  B=BACK", 0x55, 0xD2, 1);
+    }
+    gDPPipeSync(D_80157050++);
+    D_8014F34C++;
+}
 
 void func_8015FBBC_C05EC(short* arg0) {
 
