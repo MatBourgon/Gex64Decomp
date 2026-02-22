@@ -523,7 +523,7 @@ typedef struct
     unsigned char _0004;
     unsigned char _0005;
     unsigned char _0006;
-    void* _0008;
+    int* _0008;
 } _4a780_t;
 
 extern int D_800785CC[];
@@ -545,7 +545,18 @@ int func_8004D2F8(int arg0, _4a780_t* arg1) {
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004D33C);
+int func_8004D33C(int arg0, _4a780_t* arg1) {
+    if (D_800785CC[arg1->_0004] != 0) {
+        if (arg1->_0008 != 0) {
+            func_8004EBAC(arg0, arg1->_0008, NULL);
+            return 0;
+        }
+    }
+    else if (arg1->_0008 == NULL) {
+        return 0;
+    }
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004D3AC);
 
@@ -563,7 +574,7 @@ int func_8004D4B0(int arg0, _4a780_t* arg1) {
     return 1;
 }
 
-int func_8004D4F4(int *arg1, int** arg2) {
+int func_8004D4F4(int arg1, int** arg2) {
     func_8004EBAC(arg1, arg2[1], 0);
     return 0;
 }
@@ -751,7 +762,7 @@ int func_8004E3E8(void) {
     return 1;
 }
 
-int func_8004E408(void* arg0, int** arg1) {
+int func_8004E408(int arg0, int** arg1) {
     if ((arg1[1] != 0) && (arg1[1][7] & 8)) {
         if (arg1[2] != NULL) {
             func_8004EBAC(arg0, arg1[2], 0);
@@ -783,7 +794,7 @@ int func_8004E580(int arg0, char* arg1) {
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004E5B8);
 
-int func_8004E768(void* arg0, _4a780_t* arg1) {
+int func_8004E768(int arg0, _4a780_t* arg1) {
     if (D_800785CC[arg1->_0004] != 0 && arg1->_0008 != 0) {
         func_8004EBAC(arg0, arg1->_0008, 0);
         return 0;
@@ -791,7 +802,7 @@ int func_8004E768(void* arg0, _4a780_t* arg1) {
     return 1;
 }
 
-int func_8004E7C8(void* arg0, _4a780_t* arg1) {
+int func_8004E7C8(int arg0, _4a780_t* arg1) {
     if (D_800785CC[arg1->_0004] == 0 && arg1->_0008 != 0) {
         func_8004EBAC(arg0, arg1->_0008, 0);
         return 0;
@@ -885,11 +896,45 @@ int func_8004E9F8(int* arg1, int* arg2) {
     
     return 1;
 }
+
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004EA2C);
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004EA58);
+typedef int (*funcdef_8004EA58)(int, int*);
 
-void func_8004EBAC(void* arg0, void* arg1, void* arg2) {
+extern int D_8006CFA0;
+extern funcdef_8004EA58 D_80078664[];
+extern short D_80078668[];
+extern short D_8007866A[];
+
+void func_8004EA58(int arg0, int* arg1, int arg2, int* arg3) {
+    int s4, s3;
+    int v0;
+    int s2 = 0;
+
+    if (arg3 == (void*)1 || arg3 == 0)
+        s2 = 1;
+    else if (arg3[4] >= 2U)
+        return;
+
+    if (arg2 == 0)
+        return;
+    
+    s4 = 0x80000000;
+    s3 = 0x7FFFFFFF;
+    
+    loop:
+    if (!((D_8007866A[arg1[0] * 4] == 0 || arg0 == D_8006CFA0 || s2 != 0)
+        && ((gpGameState8->_4C08 & 0x40) == 0 || ((arg1[0] & s4) == 0))
+        && (D_80078664[(arg1[0] & s3) * 2](arg0, arg1) == 0)))
+    {
+        v0 = (D_80078668[arg1[0] * 4] + 1);
+        arg1 += v0;
+        goto loop;
+    }
+
+}
+
+void func_8004EBAC(int arg0, int* arg1, int* arg2) {
     func_8004EA58(arg0, arg1, 1, arg2);
 }
 
