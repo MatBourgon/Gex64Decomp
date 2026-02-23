@@ -51,7 +51,7 @@ extern char D_801612C0_C1CF0[];
 extern char D_801613E8_C1E18[];
 extern int D_80078184;
 extern int D_80078188;
-extern int D_80078190;
+extern char D_80078190[];
 extern int D_800781B8;
 extern char D_80078170;
 extern char D_8006CF20;
@@ -80,6 +80,8 @@ extern int D_80156BDC;
 extern char D_801539C4;
 extern char D_800E9732;
 extern char D_80078150[];
+extern int D_80161674_C20A4;
+extern int D_8014F358;
 
 typedef struct
 {
@@ -1453,7 +1455,84 @@ void func_8015EEC8_BF8F8(void) {
 void func_8015EED0_BF900(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015EED8_BF908);
+void func_8015EED8_BF908(int* arg0) {
+    char sp10[0x40];
+
+    if ((arg0[0x18/4] != 0) || (arg0[0x24/4] != 0) || (arg0[0x28/4] != 0)) {
+        D_80161674_C20A4 = 0;
+    }
+    else
+    {
+        D_80161674_C20A4++;
+        if (D_80161674_C20A4 >= 0x4B1) {
+            ((short*)arg0)[0x4C12/2] = 0;
+            D_80078170 = 1;
+            func_8001A854();
+            D_8014F358 = 0;
+            return;
+        }
+    }
+    
+    if ((D_800E5DB2 & 0x808) || (D_800E5B98 != 0)) {
+        D_8014F34C--;
+    }
+    else if ((D_800E5DB2 & 0x404) || (D_80157030 != 0)) {
+        D_8014F34C++;
+    }
+    
+    if (D_8014F34C < 0) {
+        D_8014F34C = 0;
+    }
+    
+    if (D_8014F34C > 2) {
+        D_8014F34C = 2;
+    }
+    
+    func_80037B00(0x5F, 0x4B);
+    if (D_8014F34C == 0) {
+        csprintf(&sp10, D_801613E8_C1E18, &D_80078184, D_801611C0_C1BF0);
+        func_80038BA0(sp10);
+    } else {
+        func_80038BA0(D_801611C0_C1BF0);
+    }
+    
+    func_80037B00(0x53, 0x6E);
+    if (D_8014F34C == 1) {
+        csprintf(&sp10, D_801613E8_C1E18, &D_80078184, D_801611CC_C1BFC);
+        func_80038BA0(sp10);
+    } else {
+        func_80038BA0(D_801611CC_C1BFC);
+    }
+    
+    func_80037B00(0x64, 0x91);
+    if (D_8014F34C == 2) {
+        csprintf(&sp10, D_801613E8_C1E18, &D_80078184, D_80078190);
+        func_80038BA0(sp10);
+    } else {
+        func_80038BA0(D_80078190);
+    }
+    
+    if (D_800E5DB2 & 0x9000) {
+        switch (D_8014F34C) {
+        case 0:
+            D_80078170 = 1;
+            D_8006CF20 = 0;
+            ((short*)arg0)[0x4C12/2] = 0;
+            func_80032F90();
+            break;
+        case 1:
+            func_80040170(1);
+            D_80156BE4 = 0;
+            break;
+        case 2:
+            func_80040170(3);
+            break;
+        }
+    }
+    gSPDisplayList(D_80157050++, D_8006D578);
+    func_80030DD8(&D_801613F0_C1E20, 0x58, 0xD2, 1);
+    gDPPipeSync(D_80157050++);
+}
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015F228_BFC58);
 
