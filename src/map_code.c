@@ -35,7 +35,6 @@ extern u8 D_80078174[];
 extern int D_800B83C8;
 extern char D_800E5B98;
 extern int D_800E5CD4;
-extern char D_800E5DDE[];
 extern char D_800E8EB4;
 extern int D_800E97CC;
 extern char D_8014F354;
@@ -43,7 +42,6 @@ extern char D_80153A58[];
 extern char D_80157030;
 extern int D_80157034;
 extern char D_801613F0_C1E20[];
-extern char D_8016151C_C1F4C[];
 extern char D_8006FC69;
 extern int D_80078600;
 extern int D_80078640;
@@ -72,7 +70,7 @@ extern int D_80154834;
 extern char D_8016134_C1DC4[];
 extern int D_801613C4_C1DF4;
 extern char D_801611E4_C1C14[];
-extern int D_801614F0_C1F20;
+extern char D_801614F0_C1F20[];
 extern int D_80156BE4;
 extern char D_80078171;
 extern int D_801574FC;
@@ -82,6 +80,31 @@ extern char D_800E9732;
 extern char D_80078150[];
 extern int D_80161674_C20A4;
 extern int D_8014F358;
+
+// Magic string that signifies this is a Gex 2 save file, and that we're about to read the save's name
+#define SAVEFILE_MAGIC_STRING "\x20\x1E\x31\x3E"
+
+typedef struct
+{
+    char MAGIC[4]; // == SAVEFILE_MAGIC_STRING
+    char filename[12];
+} SAVEFILENAME_t;
+
+typedef struct
+{
+    SAVEFILENAME_t filename;
+    char GAMECODE[4];
+    u8 data[12];
+} SAVEFILE_t; // How it should be structured in memory
+
+typedef struct
+{
+    SAVEFILENAME_t filename;
+    char GAMECODE[4];
+    u8 data[12];
+} SAVEFILE_ALT_t; // How it is being access for some reason
+
+extern SAVEFILE_ALT_t D_800E5DDE[];
 
 typedef struct
 {
@@ -1819,13 +1842,146 @@ INCLUDE_RODATA("asm/nonmatchings/map_code", D_801614D0_C1F00);
 
 INCLUDE_RODATA("asm/nonmatchings/map_code", D_801614F0_C1F20);
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_80160214_C0C44);
+void func_80160214_C0C44(short* arg0) {
+    s32 var_s1;
+    s32 var_s3;
+    int temp_v0_3;
+    SAVEFILE_ALT_t* var_s0;
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_8016151C_C1F4C);
-
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_80161520_C1F50);
-
-INCLUDE_RODATA("asm/nonmatchings/map_code", jtbl_80161528_C1F58);
+    switch (D_8006FA54) {
+    case 1:
+        D_8006FA54 = 2;
+        func_800576F0(&D_80153A58, 1, 0);
+        return;
+    case 3:
+        if (D_80156BDC == 0) {
+            D_80078171 = 1;
+            D_8006CF20 = 0;
+            D_8006FA54 = 4;
+            func_800576F0(&D_80153A58, 2, 0);
+            return;
+        }
+        func_80040170(10);
+        D_8006FA54 = 0x12;
+        return;
+    case 5:
+        if (D_80156BDC == 0) {
+            if (D_800E97CC != 0) {
+                D_800E5CD4 = 0;
+                D_8006FA54 = 6;
+                return;
+            }
+            func_80040170(12);
+            D_8006FA54 = 0x12;
+            return;
+        }
+        func_80040170(10);
+        D_8006FA54 = 0x12;
+        return;
+    case 6:
+        if (D_800E5CD4 < D_80157034) {
+            D_8006FA54 = 7;
+            func_800576F0(&D_80153A58, 4, 0);
+        return;
+        }
+        D_8014F34C = func_80014D00(-1);
+        if (D_8014F34C == -1) {
+            func_80040170(12);
+            D_8006FA54 = 0x12;
+            return;
+        }
+        D_8006FA54 = 0x13;
+        D_801574FC = D_8014F34C;
+        return;
+    case 19:
+        if ((D_800E5DB2 & 0x808) || (D_800E5B98 != 0)) {
+            D_8014F34C = func_80014C80(D_8014F34C);
+            if (D_8014F34C < D_801574FC) {
+                D_801574FC = D_8014F34C;
+            }
+        } else if ((D_800E5DB2 & 0x404) || (D_80157030 != 0)) {
+            temp_v0_3 = func_80014D00(D_8014F34C);
+            if (temp_v0_3 != D_8014F34C) {
+                
+                var_s3 = 0;
+                for (var_s1 = D_801574FC; var_s1 < temp_v0_3; var_s1++) {
+                    var_s0 = &D_800E5DDE[var_s1];
+                    if ((   var_s0->filename.MAGIC[0] == SAVEFILE_MAGIC_STRING[0])
+                        && (var_s0->filename.MAGIC[1] == SAVEFILE_MAGIC_STRING[1])
+                        && (var_s0->filename.MAGIC[2] == SAVEFILE_MAGIC_STRING[2])
+                        && (var_s0->filename.MAGIC[3] == SAVEFILE_MAGIC_STRING[3])
+                       ) {
+                        var_s3++;
+                    }
+                }
+                if (var_s3 >= 5) {
+                    D_801574FC = func_80014D00(D_801574FC);
+                }
+                D_8014F34C = temp_v0_3;
+            }
+        }
+        if (D_800E5DB2 & 0x8000) {
+            D_8006FA54 = 0x14;
+            D_800E5CD4 = D_8014F34C;
+            func_800576F0(&D_80153A58, 7, 0);
+        } else if (D_800E5DB2 & 0x1000) {
+            if (D_80078170 != 0) {
+                arg0[0x4C12/2] = 0;
+                func_80032F90();
+                D_8006FA54 = 0xD;
+            }
+        } else if (D_800E5DB2 & 0x4000) {
+            func_80040170(1);
+        }
+        gSPDisplayList(D_80157050++, D_8006D578);
+        func_80030DD8("PICK FILE TO LOAD", 0x50, 0x32, 1);
+        if (func_80014C80(D_801574FC) != D_801574FC) {
+            func_80030DD8("^", 0x50, 0x49, 1);
+        }
+        var_s1 = D_801574FC;
+        var_s3 = 0;
+        while (var_s1 < D_80157034 && var_s3 < 5)
+        {
+            var_s0 = &D_800E5DDE[var_s1];
+            if ((   var_s0->filename.MAGIC[0] == SAVEFILE_MAGIC_STRING[0])
+                && (var_s0->filename.MAGIC[1] == SAVEFILE_MAGIC_STRING[1])
+                && (var_s0->filename.MAGIC[2] == SAVEFILE_MAGIC_STRING[2])
+                && (var_s0->filename.MAGIC[3] == SAVEFILE_MAGIC_STRING[3])) {
+                func_80030DD8(var_s0, 0x64, 0x5A + var_s3 * 0x14, 0);
+                if (var_s1 == D_8014F34C) {
+                    func_80030DD8(">", 0x50, 0x5A + var_s3 * 0x14, 1);
+                }
+                var_s3 += 1;
+            }
+            var_s1 += 1;
+        }
+        if (func_80014D00(var_s1 - 1) != (var_s1 - 1)) {
+            func_80030DD8("$", 0x50, 0xBE, 1);
+        }
+        if (D_80078170 != 0) {
+            func_80030DD8(D_801614D0_C1F00, 0x23, 0xD2, 1);
+        } else {
+            func_80030DD8(D_801614F0_C1F20, 0x4B, 0xD2, 1);
+        }
+        
+        gDPPipeSync(D_80157050++);
+        return;
+        
+    case 21:
+        if (D_80156BDC != 0) {
+            func_80040170(10);
+            D_8006FA54 = 0x12;
+            return;
+        }
+        if (func_8003FDD8(arg0) == 0) {
+            D_80078170 = 1;
+            ((short*)gpGameState8)[0x4C66/2] = 0;
+            ((short*)gpGameState8)[0x4C68/2] = 0;
+            func_800396E0(0, &D_80161314_C1D44, arg0);
+            D_8006CF20 = D_800E5CD4 + 1;
+        }
+    }
+}
 
 void func_80160838_C1268(void) {
     gSPDisplayList(D_80157050++, D_8006D578);
@@ -1835,7 +1991,7 @@ void func_80160838_C1268(void) {
         func_80030DD8(D_80078174, 0x50, 0x73, 0);
     } else {
         func_80030DD8("SAVE TO FILE:", 0x5A, 0x46, 1);
-        func_80030DD8((D_800E5CD4 << 5) + D_800E5DDE, 0x50, 0x73, 0);
+        func_80030DD8(&D_800E5DDE[D_800E5CD4], 0x50, 0x73, 0);
     }
     if ((D_800E5DB2 & 0x808) || (D_800E5B98 != 0)) {
         D_8014F34C = 0;
@@ -1844,7 +2000,7 @@ void func_80160838_C1268(void) {
     }
     func_80030DD8("YES, SAVE FILE", 0x3C, 0x96, 1);
     func_80030DD8("NO, DON'T SAVE", 0x3C, 0xAA, 1);
-    func_80030DD8(D_8016151C_C1F4C, 0x2D, (D_8014F34C * 0x14) + 0x96, 1);
+    func_80030DD8(">", 0x2D, (D_8014F34C * 0x14) + 0x96, 1);
     func_80030DD8(D_801613F0_C1E20, 0x55, 0xC8, 1);
     if (D_800E5DB2 & 0x8000) {
         if (D_8014F34C == 0) {
