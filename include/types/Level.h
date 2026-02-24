@@ -39,6 +39,8 @@ typedef struct
     char _111;
     unsigned char _112;
     char _113;
+    char _114;
+    unsigned char _115;
 } Level_t;
 
 #endif

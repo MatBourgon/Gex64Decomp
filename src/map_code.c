@@ -1241,7 +1241,78 @@ void func_8015DC38_BE668(Level_t* arg0) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015DEC8_BE8F8);
+void func_8015DEC8_BE8F8(Level_t* arg0) {
+    SVECTOR sp10;
+    int sp18;
+    int sp1C;
+    short* temp_s1;
+    int* temp_a2;
+    u8* temp_s2;
+    int* temp_v0_3;
+
+    arg0->flags = (s32) (arg0->flags & ~0x800);
+    temp_s1 = (short*)arg0->_20[1];
+    temp_s2 = (u8*)&arg0->_D0;
+    if (arg0->_113 != 0) {
+        arg0->_50[3] = ((*temp_s1 * 9) + 7);
+        if ((arg0->_112 >= 0x15U) && (arg0->_D0[0] == 0)) {
+            func_8015D6F0_BE120(arg0, 1);
+        }
+        if (((int*)temp_s2)[0x30/4] == NULL) {
+            func_8015DAC8_BE4F8(arg0);
+        }
+    } else if (D_80078594[arg0->_112] == 1) {
+        if (arg0->_115 == 0U) {
+            arg0->_115 = 0x69U;
+        }
+        if ((func_8006A020() % ((arg0->_115 >> 3) + 1)) == 0) {
+            arg0->_111 = arg0->_110 = (*temp_s1 * 9) + 7;
+        } else {
+            arg0->_110 = 7;
+            arg0->_111 = 0x2A;
+        }
+        temp_s2[0x45] = temp_s2[0x45] - 1;
+        if (!temp_s2[0x45]) {
+            temp_s2[0x43] = 1;
+            arg0->_F4[1] = 0;
+            D_80078594[temp_s2[0x42]] = 2;
+            arg0->_50[3] = ((*temp_s1 * 9) + 7);
+        }
+    }
+    arg0->_50[3] += 9;
+    if (arg0->_50[3] < temp_s2[0x40]) {
+        arg0->_50[3] = temp_s2[0x40];
+    }
+    if (arg0->_50[3] > temp_s2[0x41]) {
+        arg0->_50[3] = temp_s2[0x40];
+    }
+    
+    if ((temp_s2[0x42] - 0xE) < 7U) {
+        if (arg0->flags & 0x02000000) {
+            temp_a2 = (int*)((int*)temp_s2)[0x30/4];
+            if (temp_a2 != NULL) {
+                (*(SVECTOR*)&temp_a2[0x48/4]) = *(SVECTOR*)&arg0->_40[4];
+            }
+        } else if (((int*)temp_s2)[0x2C/4] == 0) {
+            if (arg0->_1C[0x28/4] != 0) {
+                temp_v0_3 = (int*)func_80048524(arg0, &sp18, &sp1C);
+                if (temp_v0_3[1] != 0) {
+                    func_80051C64(temp_v0_3[1], func_800485F8(arg0, temp_v0_3, sp18, sp1C), &sp10);
+                    ((short*)arg0->_1C)[0x8/2] += sp10.x;
+                    ((short*)arg0->_1C)[0xA/2] += sp10.y;
+                    ((short*)arg0->_1C)[0xC/2] += sp10.z;
+                }
+                *(SVECTOR*)(&arg0->_1C[0x10/4]) = *(SVECTOR*)&arg0->_40[4];
+                arg0->_1C[0x28/4] = 0;
+                arg0->flags &= ~1;
+            }
+            func_8015D6F0_BE120(arg0, GetRedRemotesForLevel(temp_s2[0x42]));
+            func_8015D9E4_BE414(arg0);
+            ((SVECTOR**)temp_s2)[0x30/4][0x48/6] = *(SVECTOR*)&arg0->_40[4];
+            D_80078594[temp_s2[0x42]] = 2;
+        }
+    }
+}
 
 void func_8015E274_BECA4(Level_t* level) {
     SVECTOR temp = *(SVECTOR*)(&level->_40[4]);
