@@ -80,6 +80,8 @@ extern char D_800E9732;
 extern char D_80078150[];
 extern int D_80161674_C20A4;
 extern int D_8014F358;
+extern char D_8006CF58;
+extern int D_80161670_C20A0;
 
 // Magic string that signifies this is a Gex 2 save file, and that we're about to read the save's name
 #define SAVEFILE_MAGIC_STRING "\x20\x1E\x31\x3E"
@@ -1529,7 +1531,102 @@ void func_8015E824_BF254(Level_t* arg0, int** arg1) {
         func_8015E674_BF0A4(temp_s6, temp_s4, (int*)arg1);
 }
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015EA98_BF4C8);
+void func_8015EA98_BF4C8(Level_t* arg0, int* arg1) {
+    SVECTOR sp10;
+    SVECTOR sp18;
+    int* temp_a1;
+    int* temp_a2;
+    short* temp_s0;
+    short* temp_s2;
+
+    temp_s2 = (short*)D_8006CFA0[0x20/4];
+    temp_a1 = (int*)arg0->_20[1];
+    arg1[0x4C08/4] &= ~0x2000;
+    temp_a2 = (int*)arg1[0xC/4];
+    temp_s0 = (short*)&arg0->_D0;
+    
+    if (!(temp_a2[0xFC/4] & 0x02000000)) {
+        if ((D_8006CFA0[0xF4/4] == 0) && (D_8006CFA0[0xF8/4] == 1)) {
+            temp_a2[0x104/4]++;
+        } else {
+            ((int**)arg1)[0xC/4][0x104/4] = 0;
+        }
+        ((short**)D_8006CFA0)[0x20/4][0xDC/2] = 5;
+        if (temp_s0[0x6/2] != 0) {
+            temp_s0[0x6/2] = (temp_s0[0x6/2] + 1);
+        }
+        if (temp_s0[0x6/2] >= 8) {
+            temp_s0[0x6/2] = 0;
+        }
+        switch (*(char*)temp_s0) {
+        case 0:
+            ((u8*)temp_s0)[0x20]++;
+            if ((D_8006CFA0[0xF4/4] == 5) && (((char*)temp_s0)[0x20] >= 0x15)) {
+                func_8002DAF8(D_8006CFA0, -1);
+                temp_s2[0x82/2] = ((short*)D_8006CFA0)[0x64/2] = ((short*)gpGameState8)[0x4C6C/2];
+                if (D_8006CFA0[0x14/4] & 0x10) {
+                    ((u8*)temp_s0)[0x20] = 0x42U;
+                }
+            }
+            if ((((s8*) temp_s0)[0x20] < 0x43) && (((short*)gpGameState8)[0x4C66/2] != 0) && (((short*)gpGameState8)[0x4C68/2] != 0)) {
+                sp10 = *(SVECTOR*)&((short*)D_8006CFA0)[0x48/2];
+                D_8006CFA0[0xF4/4] = 5;
+                ((u8*)D_8006CFA0)[0x4E] = 0x32;
+                ((short*)D_8006CFA0)[0x4C/2] = ((short*)gpGameState8)[0x4C6A/2];
+                ((short*)D_8006CFA0)[0x54/2] = ((short*)gpGameState8)[0x4C6A/2];
+                ((short*)D_8006CFA0)[0x48/2] = ((short*)gpGameState8)[0x4C66/2];
+                ((short*)D_8006CFA0)[0x50/2] = ((short*)gpGameState8)[0x4C66/2];
+                ((short*)D_8006CFA0)[0x4A/2] = ((short*)gpGameState8)[0x4C68/2];
+                ((short*)D_8006CFA0)[0x52/2] = ((short*)gpGameState8)[0x4C68/2];
+                ((short*)D_8006CFA0)[0x64/2] = ((short*)gpGameState8)[0x4C6C/2];
+                sp18.x = ((short*)D_8006CFA0)[0x48/2] - sp10.x;
+                sp18.y = ((short*)D_8006CFA0)[0x4A/2] - sp10.y;
+                sp18.z = ((short*)D_8006CFA0)[0x4C/2] - sp10.z;
+                func_80012BD0(D_8006CFA0, &sp18, arg1);
+                func_80001DF4((s16) ((short*)D_8006CFA0)[0x64/2]);
+                ((short*)gpGameState8)[0x4C66/2] = 0;
+                ((short*)gpGameState8)[0x4C68/2] = 0;
+                if (D_8006FC69 != 0) {
+                    func_80032F30();
+                    func_80040170(2);
+                }
+            }
+            if (((char*)temp_s0)[0x20] == 0x42) {
+                *(u8*)temp_s0 = 4;
+                ((short*)gpGameState8)[0x4C90/2] &= 0xFFFD;
+                if (D_8006CFA0[0xF4/4] == 5) {
+                    D_8006CFA0[0xF4/4] = 0;
+                    ((u8*)D_8006CFA0)[0x4E] = 0;
+                }
+                D_80161670_C20A0 = 0;
+                ((char*)arg1)[0x4CDC] = 0;
+                return;
+            }
+            break;
+        case 4:
+            if (D_8006CF58 != 0) {
+                if ((arg1[0x18/4] != 0) || (arg1[0x24/4] != 0) || (arg1[0x28/4] != 0)) {
+                    D_80161670_C20A0 = 0;
+                    return;
+                }
+                if (((short*)arg1)[0x4C12/2] != 6) {
+                    D_80161670_C20A0++;
+                    if (D_80161670_C20A0 >= 0x4B1) {
+                        ((short*)arg1)[0x4C12/2] = 0;
+                        D_80078170 = 1;
+                        func_8001A854();
+                        D_8014F358 = 0;
+                        return;
+                    }
+                }
+            }
+            break;
+        case 6:
+            func_8015E674_BF0A4((char*)temp_s0, temp_a1, arg1);
+            break;
+        }
+    }
+}
 
 void func_8015EEA8_BF8D8(void) {
 }
