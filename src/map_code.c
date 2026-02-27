@@ -772,7 +772,7 @@ void func_8015B818_BC248(int arg1, int*** arg3) {
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015B96C_BC39C);
 
-void func_8015BED0_BC900(Level_t* level) {
+void func_8015BED0_BC900(Level_t* level, void* unused) {
     int temp_t0;
     int i;
     int*** temp_a0;
@@ -959,7 +959,146 @@ void func_8015C728_BD158(Level_t* arg0) {
     arg0->_50[3] = s2[0x13];
 }
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015C840_BD270);
+void func_8015C840_BD270(Level_t* arg0, int* arg1) {
+    s16 sp10[2];
+    int temp_a1;
+    int temp_a0;
+    int var_a0;
+    int var_v0;
+    int* temp_s0;
+    short* temp_s2;
+    int* temp_v0;
+    char* temp_v0_5;
+    short* temp_v1;
+    int* var_s4;
+    int* var_s5;
+
+    var_s4 = NULL;
+    temp_v0 = (int*)arg0->_F4[2];
+    temp_s0 = (int*)arg0->_20[1];
+    temp_s2 = &arg0->_F0[6];
+    if (temp_v0 != NULL) {
+        var_s4 = &temp_v0[0xFC/4];
+        var_s5 = (int*)temp_v0[0x24/4];
+    }
+    if (arg0->_F4[0] != 0) {
+        func_8004A54C(arg0, 0x5000);
+        if (arg0->_50[3] < arg0->_10C) {
+            arg0->_50[3] = arg0->_10C;
+        }
+        if (arg0->_F4[0] == 3) {
+            func_8015BFE0_BCA10(arg0, arg1);
+            return;
+        }
+        if (arg0->_F4[0] == 2) {
+            temp_a0 = ((arg0->_C0[1] ^ 1) & 1);
+            if (arg0->_10B == 1) {
+                if (temp_a0 == arg0->_10B) {
+                    goto block_12;
+                }
+            } else if (temp_a0 == 0) {
+block_12:
+                arg0->_C0[1] = (u16) (arg0->_C0[1] ^ 1);
+            }
+        }
+        if (arg0->_F4[0] == 1) {
+            if (arg0->_50[3] >= ((char*)temp_s2)[0x14]) {
+                arg0->_50[3] = ((char*)temp_s2)[0x10];
+                arg0->_F4[0] = 2;
+            } else {
+                arg0->_50[3]++;
+            }
+        } else if (arg0->_F4[0] == 2) {
+            if ((temp_s0 != NULL) && (((char*)temp_s0)[0x8] >= 0x62) && (arg0->flags & 0x200)) {
+                func_8003EA60(arg1, arg0, 0, &sp10);
+                func_80037B24(sp10[0], sp10[1]);
+            }
+            
+            if (arg0->_50[3] >= ((char*)temp_s2)[0x11]) {
+                arg0->_50[3] = ((char*)temp_s2)[0x10];
+            } else {
+                arg0->_50[3]++;
+            }
+            if ((((char*)temp_s2)[0xF] == 1) && (((short*)var_s4)[0x6/2] != 0)) {
+                if (((int*)gpGameState8)[0xE0/4] & 8) {
+                    arg0->_C0[1] = (arg0->_C0[1] ^ 1);
+                }
+                if (arg0->_C0[1] & 1) {
+                    ((char*)temp_s2)[0x17]++;
+                }
+                if ((((char*)temp_s2)[0x17] >= 8) && ((((char*)temp_s2)[0x17] = 0U, (var_s5 == NULL)) || (((short*)var_s5)[0x16/2] == 0))) {
+                    ((char*)temp_s2)[0x12] = 1;
+                }
+                
+                if ((arg1[0x28/4] != 0) || (arg1[0x24/4] != 0)) {
+                    
+                    if (abs(arg1[0x28/4]) >= abs(arg1[0x24/4])) {
+                        var_v0 = arg1[0x28/4] < 1;
+                    } else {
+                        var_v0 = 3;
+                        if ( arg1[0x24/4] > 0) {
+                            var_v0 = 2;
+                        }
+                    }
+                    
+                    if (var_v0 != -1) {
+                        temp_a1 = ((var_v0) + temp_s2)[0x4/2];
+                        if ((temp_a1 != -1) && (((char*)temp_s2)[0x12] != 0) && (((char**)temp_s2)[0][0x10F] != 0)) {
+                            temp_v0_5 = (char*)func_8004A368(arg0, temp_a1);
+                            if (temp_v0_5 != NULL) {
+                                func_80050980(0x81);
+                                ((int*)temp_v0_5)[0xF4/4] = 1;
+                                ((short*)temp_v0_5)[0x56/2] = 0;
+                                temp_v0_5[0x10B] = 1;
+                                temp_v0_5[0x10E] = 0;
+                                ((char*)temp_s2)[0xF] = 0;
+                                
+                                if (temp_v0_5[0x110] != 0) {
+                                    ((short*)temp_v0_5)[0x56/2] = temp_v0_5[0x110];
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    var_a0 = 1;
+                    if (arg0->_C0[1] & 1) {
+                        ((char*)temp_s2)[0x12] = 1;
+                    }
+                    temp_v1 = ((short**)temp_s2)[0];
+                    if ((temp_v1 != NULL) && ((temp_v1[0x102/2] == 0) || (((char*)temp_v1)[0x10F] == 0))) {
+                        var_a0 = 0;
+                    }
+                    if ((var_a0 != 0) && (arg1[0x44/4] & 0x80)) {
+                        if ( ((char*)temp_s2)[0xE] == 1) {
+                            ((char*)temp_s2)[0xE] = 0;
+                        } else if (((char*)temp_s2)[0xE] == 0) {
+                            ((char*)temp_s2)[0xE] = 1;
+                        }
+                        arg0->_50[3] = ((char*)temp_s2)[0x10];
+                        if (temp_s0 != NULL) {
+                            if (temp_s0[0x0/4] != 0) {
+                                func_8004EBAC(D_8006CFA0, temp_s0[0x0/4] + 4, 0);
+                                if (func_80033268(0x81) == 0) {
+                                    func_80050980(0x81);
+                                }
+                            }
+                        }
+                        temp_v1 = ((short**)temp_s2)[0];
+                        if (temp_v1 != NULL) {
+                            temp_v1[0xFE/2] = 1;
+                            if ((temp_s0 != NULL) && (temp_s0[0] != 0)) {
+                                temp_v1[0x102/2] = 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (arg0->_1C[0x1C/4] & 0x80) {
+            func_8015BED0_BC900(arg0, arg1);
+        }
+    }
+}
 
 void func_8015CD04_BD734(void) {
 }
