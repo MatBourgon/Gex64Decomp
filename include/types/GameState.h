@@ -8,7 +8,9 @@ typedef struct
     int     _0000;
     int*   _0004;
     char    _0008[0x4BEC];
-    char    _4BF4[0x1C];
+    char    _4BF4[0x14];
+    uint    _4C08;
+    int     _4C0C;
     short   _4C10;
     char    _4B12[0x5C];
     byte    red_remote_bits[14];
