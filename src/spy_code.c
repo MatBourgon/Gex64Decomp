@@ -1,5 +1,7 @@
 #include "common.h"
 
+#include "types/Level.h"
+
 void func_80159720_EADF0(void) {
 }
 

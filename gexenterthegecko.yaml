@@ -380,8 +380,8 @@ segments:
     exclusive_ram_id: level_code
     bss_size: 0x79170
     subsegments:
-      - [0xBA150, asm, map_code]
-      - [0xC1B60, rodata, map_code]
+      - [0xBA150, c, map_code]
+      - [0xC1B60, .rodata, map_code]
       - { type: bss, vram: 0x80161690 }
 
   - name: mooshu_code

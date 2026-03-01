@@ -1,5 +1,7 @@
 #include "common.h"
 
+#include "types/Level.h"
+
 INCLUDE_ASM("asm/nonmatchings/horror_code", func_80159720_9CF50);
 
 INCLUDE_ASM("asm/nonmatchings/horror_code", func_80159770_9CFA0);

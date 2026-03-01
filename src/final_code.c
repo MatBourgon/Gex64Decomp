@@ -1,5 +1,7 @@
 #include "common.h"
 
+#include "types/Level.h"
+
 INCLUDE_ASM("asm/nonmatchings/final_code", func_80159720_8A8C0);
 
 INCLUDE_RODATA("asm/nonmatchings/final_code", D_80161510_926B0);
@@ -34,7 +36,10 @@ INCLUDE_ASM("asm/nonmatchings/final_code", func_80159A00_8ABA0);
 void func_80159B64_8AD04(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/final_code", func_80159B6C_8AD0C);
+void func_80159B6C_8AD0C(Level_t* level)
+{
+    level->flags |= 0x400;
+}
 
 INCLUDE_ASM("asm/nonmatchings/final_code", func_80159B80_8AD20);
 

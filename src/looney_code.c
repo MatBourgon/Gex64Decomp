@@ -1,5 +1,7 @@
 #include "common.h"
 
+#include "types/Level.h"
+
 void func_80159720_B19D0(void) {
 }
 
@@ -26,7 +28,11 @@ INCLUDE_ASM("asm/nonmatchings/looney_code", func_80159D48_B1FF8);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015A728_B29D8);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015A838_B2AE8);
+void func_8015A838_B2AE8(Level_t* level)
+{
+    level->_F4[0] = 0;
+    level->_4E = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015A844_B2AF4);
 

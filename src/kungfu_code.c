@@ -1,5 +1,7 @@
 #include "common.h"
 
+#include "types/Level.h"
+
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_80159720_A8940);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_801597A8_A89C8);
@@ -27,7 +29,11 @@ INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015A008_A9228);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015A29C_A94BC);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015A398_A95B8);
+void func_8015A398_A95B8(Level_t* level)
+{
+    level->_F4[0] = 0;
+    level->_4E = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015A3A4_A95C4);
 
@@ -115,7 +121,11 @@ INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015DBB0_ACDD0);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015DC00_ACE20);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015DC9C_ACEBC);
+void func_8015DC9C_ACEBC(Level_t* level)
+{
+    level->_4E = 2;
+    level->_50[7] = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015DCAC_ACECC);
 

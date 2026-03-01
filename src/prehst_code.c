@@ -1,5 +1,7 @@
 #include "common.h"
 
+#include "types/Level.h"
+
 INCLUDE_ASM("asm/nonmatchings/prehst_code", func_80159720_C6FA0);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", func_80159754_C6FD4);
@@ -18,7 +20,11 @@ INCLUDE_ASM("asm/nonmatchings/prehst_code", func_80159F64_C77E4);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", func_8015A944_C81C4);
 
-INCLUDE_ASM("asm/nonmatchings/prehst_code", func_8015AA54_C82D4);
+void func_8015AA54_C82D4(Level_t* level)
+{
+    level->_F4[0] = 0;
+    level->_4E = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", func_8015AA60_C82E0);
 
