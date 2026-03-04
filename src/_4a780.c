@@ -101,7 +101,7 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004B380);
 int GetLevelIndexFromId(const char* targetLevelId)
 {
     char correctLevelId[16];
-    int levelNameLen = cstrlen(targetLevelId);
+    int levelNameLen = strlen(targetLevelId);
     int i;
     
     for (i = 0; i < levelNameLen; ++i)
@@ -111,7 +111,7 @@ int GetLevelIndexFromId(const char* targetLevelId)
 
     for (i = 0; i < NUM_LEVELS; ++i)
     {
-        if (cstrcmp(correctLevelId, TVTextInformation[i].levelId) == 0)
+        if (strcmp(correctLevelId, TVTextInformation[i].levelId) == 0)
             return i;
     }
     

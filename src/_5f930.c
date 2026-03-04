@@ -6,21 +6,21 @@ typedef union
     short s[12*2];
 } _5f930_t;
 
-extern void func_80060E30(_5f930_t*, void*, void*, int);
-extern int func_80057C00(int, int, int*, int, int);
+extern void alFilterNew(_5f930_t*, void*, void*, int);
+extern int alHeapDBAlloc(int, int, int*, int, int);
 
 INCLUDE_RODATA("asm/nonmatchings/_5f930", D_8007EE10);
 
-INCLUDE_ASM("asm/nonmatchings/_5f930", func_8005ED30);
+INCLUDE_ASM("asm/nonmatchings/_5f930", init_lpfilter);
 
-INCLUDE_ASM("asm/nonmatchings/_5f930", func_8005EDD4);
+INCLUDE_ASM("asm/nonmatchings/_5f930", alFxNew);
 
-extern void func_80060180();
-extern void func_80060680();
+extern void alEnvmixerPull();
+extern void alEnvmixerParam();
 
-void func_8005F26C(_5f930_t* arg0, int* arg1) {
-    func_80060E30(arg0, &func_80060180, &func_80060680, 4);
-    arg0->i[5] = func_80057C00(0, 0, arg1, 1, 0x50);
+void alEnvmixerNew(_5f930_t* arg0, int* arg1) {
+    alFilterNew(arg0, &alEnvmixerPull, &alEnvmixerParam, 4);
+    arg0->i[5] = alHeapDBAlloc(0, 0, arg1, 1, 0x50);
     arg0->i[14] = 1;
     arg0->i[18] = 0;
     arg0->s[13] = 1;
@@ -42,25 +42,25 @@ void func_8005F26C(_5f930_t* arg0, int* arg1) {
     arg0->i[17] = 0;
 }
 
-extern void func_8005F560();
-extern void func_8005FD40();
+extern void alAdpcmPull();
+extern void alLoadParam();
 
-void func_8005F324(_5f930_t* arg0, int (*arg1)(int*), int* arg2) {
-    func_80060E30(arg0, &func_8005F560, &func_8005FD40, 0);
-    arg0->i[5] = func_80057C00(0, 0, arg2, 1, 0x20);
-    arg0->i[6] = func_80057C00(0, 0, arg2, 1, 0x20);
+void alLoadNew(_5f930_t* arg0, int (*arg1)(int*), int* arg2) {
+    alFilterNew(arg0, &alAdpcmPull, &alLoadParam, 0);
+    arg0->i[5] = alHeapDBAlloc(0, 0, arg2, 1, 0x20);
+    arg0->i[6] = alHeapDBAlloc(0, 0, arg2, 1, 0x20);
     arg0->i[12] = arg1(&arg0->i[13]);
     arg0->i[15] = 0;
     arg0->i[16] = 1;
     arg0->i[17] = 0;
 }
 
-extern void func_80060FC0();
-extern void func_800611AC();
+extern void alResamplePull();
+extern void alResampleParam();
 
-void func_8005F3D4(_5f930_t* arg0, int* arg1) {
-    func_80060E30(arg0, &func_80060FC0, &func_800611AC, 1);
-    arg0->i[5] = func_80057C00(0, 0, arg1, 1, 0x20);
+void alResampleNew(_5f930_t* arg0, int* arg1) {
+    alFilterNew(arg0, &alResamplePull, &alResampleParam, 1);
+    arg0->i[5] = alHeapDBAlloc(0, 0, arg1, 1, 0x20);
     arg0->i[8] = 0;
     arg0->i[9] = 1;
     arg0->i[12] = 0;
@@ -70,32 +70,32 @@ void func_8005F3D4(_5f930_t* arg0, int* arg1) {
     *(float*)&arg0->i[6] = 1.0f;
 }
 
-extern void func_80060070();
-extern void func_8006014C();
+extern void alAuxBusPull();
+extern void alAuxBusParam();
 
-void func_8005F460(_5f930_t* arg0, int arg1, int arg2) {
-    func_80060E30(arg0, &func_80060070, &func_8006014C, 6);
+void alAuxBusNew(_5f930_t* arg0, int arg1, int arg2) {
+    alFilterNew(arg0, &alAuxBusPull, &alAuxBusParam, 6);
     arg0->i[5] = 0;
     arg0->i[6] = arg2;
     arg0->i[7] = arg1;
 }
 
-extern void func_80060E50();
-extern void func_80060F90();
+extern void alMainBusPull();
+extern void alMainBusParam();
 
-void func_8005F4BC(_5f930_t* arg0, int arg1, int arg2) {
-    func_80060E30(arg0, &func_80060E50, &func_80060F90, 7);
+void alMainBusNew(_5f930_t* arg0, int arg1, int arg2) {
+    alFilterNew(arg0, &alMainBusPull, &alMainBusParam, 7);
     arg0->i[5] = 0;
     arg0->i[6] = arg2;
     arg0->i[7] = arg1;
 }
 
 
-extern void func_80061E10();
-extern void func_80061EB8();
+extern void alSavePull();
+extern void alSaveParam();
 
-void func_8005F518(_5f930_t* arg0) {
-    func_80060E30(arg0, &func_80061E10, &func_80061EB8, 3);
+void alSaveNew(_5f930_t* arg0) {
+    alFilterNew(arg0, &alSavePull, &alSaveParam, 3);
     arg0->i[5] = 0;
     arg0->i[6] = 1;
 }
