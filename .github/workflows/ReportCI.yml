@@ -5,6 +5,7 @@ on:
     branches: [ "objdiff" ]
   pull_request:
     branches: [ "objdiff" ]
+  workflow_dispatch:
 
 jobs:
   build:
