@@ -55,6 +55,8 @@ clean:
 	mkdir -p build/asm/data
 	mkdir -p build/asm/ultralib
 	mkdir -p build/asm/rmon
+	mkdir -p build/asm/os
+	mkdir -p build/asm/libc
 	mkdir -p build/src
 	mkdir -p build/src/ultralib
 	mkdir -p build/src/libc
@@ -63,6 +65,7 @@ clean:
 	mkdir -p build/src/gu
 	mkdir -p build/src/audio
 	mkdir -p build/src/io
+	mkdir -p build/src/os
 
 cleanc:
 	rm -rf build/src/*.o
