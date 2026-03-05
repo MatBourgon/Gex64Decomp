@@ -216,7 +216,7 @@ segments:
       - [0x65850, asm]
       - [0x659A0, asm]
       - [0x661E0, hasm, ultralib/bcopy]
-      - [0x66500, asm, _66500] # some kind of printf parser
+      - [0x66500, c, libc/xprintf]
       - [0x66F30, hasm, ultralib/getcause]
       - [0x66F40, hasm, ultralib/getcount]
       - [0x66F50, hasm, ultralib/setcompare]
@@ -268,7 +268,7 @@ segments:
       - [0x7FBC0, rodata, _61a50]
       - [0x7FBF0, rodata, _61e70]
       - [0x7FC40, rodata, _63450]
-      - [0x7FC50, rodata, _66500]
+      - [0x7FC50, .rodata, libc/xprintf]
       - [0x7FDE0, rodata, _69360]
       - [0x7FE50, rodata, _69f50]
       - [0x7FEB0, rodata, _6ac20]

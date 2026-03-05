@@ -1,1 +1,1 @@
-src/ultralib/syndelete.c src/ultralib/sprintf.c src/ultralib/string.c src/ultralib/drvrnew.c
+src/ultralib/syndelete.c src/ultralib/sprintf.c src/ultralib/string.c src/ultralib/drvrnew.c src/libc/xprintf.c

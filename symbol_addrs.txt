@@ -24,8 +24,6 @@ handle_CpU = 0x8005D9C8; // type:func
 
 ctoupper = 0x8006A4D0; // type:func
 
-
-
 TVTextInformation = 0x800782A8; // size:0x2E8
 
 gpGameState4 = 0x8006FCC4; // type:GameState*
