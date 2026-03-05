@@ -17,6 +17,13 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
+      - name: Fetch secrets
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ secrets.REPO }}
+          token: ${{ secrets.TOKEN }}
+          path: secret
+
       - name: Intall packages
         run: sudo apt-get install -y git make git build-essential binutils-mips-linux-gnu python3 python3-pip
 
