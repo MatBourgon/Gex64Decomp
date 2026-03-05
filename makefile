@@ -62,6 +62,7 @@ clean:
 	mkdir -p build/src/sched
 	mkdir -p build/src/gu
 	mkdir -p build/src/audio
+	mkdir -p build/src/io
 
 cleanc:
 	rm -rf build/src/*.o
