@@ -55,6 +55,7 @@ clean:
 	mkdir -p build/asm/data
 	mkdir -p build/asm/ultralib
 	mkdir -p build/src
+	mkdir -p build/src/ultralib
 
 cleanc:
 	rm -rf build/src/*.o
