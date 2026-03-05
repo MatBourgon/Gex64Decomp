@@ -18,7 +18,7 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha }}
 
       - name: update submods
-        run: git submodules update --init --recursive
+        run: git submodule update --init --recursive
 
       - name: get packages
         run: sudo apt-get install -y git make git build-essentials binutils-mips-linux-gnu python3 python3-pip
