@@ -14,9 +14,12 @@ OBJCOPY = mips-linux-gnu-objcopy
 COMMONFLAGS = -mabi=32 -mfp32 -mgp32 -Iinclude
 ASFLAGS = -mtune=vr4300 -march=vr4300 -no-pad-sections -mips3 -G0 $(COMMONFLAGS)
 CC = tools/gcc
-CDEFINES = -DNUM_LEVELS=32 -DF3DEX_GBI=1 -D_LANGUAGE_C
+CDEFINES = -DNUM_LEVELS=32 -DF3DEX_GBI=1 -D_LANGUAGE_C -DINCLUDE_ASM_USE_MACRO_INC
 CFLAGS = -nostdinc -c -O2 -G0 $(CDEFINES) $(COMMONFLAGS) -Btools/
 LD = mips-linux-gnu-ld
+
+ALLSOURCES := $(patsubst %.s, %.o, $(ASMSOURCES)) $(patsubst %.c, %.o, $(MIPS1SOURCES) $(MIPS3SOURCES))
+BUILDTREE := $(addprefix $(BUILD_DIR)/, $(ALLSOURCES))
 
 default: all
 
@@ -41,7 +44,18 @@ split:
 rom.z64: rom.elf
 	$(OBJCOPY) -O binary --pad-to 0x1000000 rom.elf rom.z64
 
-build: rom.z64
+build: makedirs rom.z64
+
+buildobjdiff: makedirs $(ASMOBJECTS) $(COBJECTS)
+
+splitobjdiff:
+	python3 -m splat split gexenterthegecko.yaml --make-full-disasm-for-code
+
+generatediffjson:
+	python3 genobjdiff.py
+
+report: clean splitobjdiff buildobjdiff generatediffjson
+	tools/objdiff report generate -o build/report.json
 
 diff:
 	python3 diffcheck.py
@@ -52,22 +66,9 @@ clean:
 	rm -rf assets/
 	rm -f rom.elf
 	rm -f rom.z64
-	mkdir -p build/asm/data
-	mkdir -p build/asm/ultralib
-	mkdir -p build/asm/rmon
-	mkdir -p build/asm/os
-	mkdir -p build/asm/libc
-	mkdir -p build/src
-	mkdir -p build/src/ultralib
-	mkdir -p build/src/libc
-	mkdir -p build/src/rmon
-	mkdir -p build/src/sched
-	mkdir -p build/src/gu
-	mkdir -p build/src/audio
-	mkdir -p build/src/io
-	mkdir -p build/src/os
-	mkdir -p build/src/host
-	mkdir -p build/src/debug
+
+makedirs:
+	$(shell mkdir -p $(dir $(BUILDTREE)))
 
 cleanc:
 	rm -rf build/src/*.o

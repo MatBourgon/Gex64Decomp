@@ -12,4 +12,4 @@ INCLUDE_ASM("asm/nonmatchings/libc/xldtob", _Ldunscale);
 
 INCLUDE_ASM("asm/nonmatchings/libc/xldtob", _Genld);
 
-INCLUDE_RODATA("asm/nonmatchings/libc/xldtob", D_8007F240);
+//INCLUDE_RODATA("asm/nonmatchings/libc/xldtob", D_8007F240);
