@@ -2,6 +2,7 @@
 
 #include <PR/gbi.h>
 #include <PR/mbi.h>
+#include <compiler/gcc/string.h>
 
 #include "types/Level.h"
 #include "types/TVTextData.h"

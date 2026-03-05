@@ -1,4 +1,5 @@
 #include "common.h"
+#include <compiler/gcc/string.h>
 #include "_4a780.h"
 
 #include "types/GameState.h"
