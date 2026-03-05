@@ -1,6 +1,6 @@
 #include "common.h"
 
-unsigned char* cstrchr(unsigned char* str, unsigned char c) {
+unsigned char* strchr(unsigned char* str, unsigned char c) {
 
     while(*str != c)
     {
@@ -13,7 +13,7 @@ unsigned char* cstrchr(unsigned char* str, unsigned char c) {
     return str;
 }
 
-int cstrlen(unsigned char* str) {
+int strlen(unsigned char* str) {
 
    unsigned char* c = str;
    while(*c != 0U)
@@ -22,7 +22,7 @@ int cstrlen(unsigned char* str) {
    return c - str;
 }
 
-char* cstrncpy(unsigned char* dst, char* src, int len) {
+char* memcpy(unsigned char* dst, char* src, int len) {
     int i;
     char* c = dst;
 

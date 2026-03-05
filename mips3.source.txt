@@ -1,1 +1,20 @@
-src/58E90.c src/5CE90.c src/5CE00.c src/_5f930.c
+src/audio/syndelete.c src/libc/sprintf.c src/libc/string.c src/audio/drvrnew.c src/libc/xprintf.c
+src/rmon/rmonmem.c src/rmon/rmoncmds.c src/sched/sched.c src/gu/cosf.c src/gu/sinf.c src/audio/synthesizer.c
+src/io/__osViSwapContext.c src/audio/filter.c src/audio/env.c src/audio/mainbus.c src/audio/resample.c src/audio/reverb.c
+src/gu/mtxutil.c src/gu/mtxcatf.c src/gu/perspective.c src/io/devmgr.c src/rmon/rmonrcp.c src/rmon/rmonbrk.c src/libc/xldtob.c
+src/os/stopthread.c src/io/sprawread.c src/io/sprawwrite.c src/io/sirawread.c src/io/sirawwrite.c src/os/getactivequeue.c src/libc/xlitob.c
+src/rmon/rmonmisc.c src/rmon/rmonregs.c src/rmon/rmontask.c src/rmon/rmonmain.c src/io/dp.c src/io/sp.c src/io/spgetstat.c src/io/spsetstat.c
+src/io/spsetpc.c src/io/sprawdma.c src/libc/ldiv.c src/io/leointerrupt.c src/rmon/rmonsio.c src/io/pirawdma.c src/io/pigetcmdq.c
+src/io/epirawread.c src/io/epirawwrite.c src/io/pfsisplug.c src/io/pfschecker.c src/io/contramwrite.c src/io/contpfs.c src/io/contramread.c
+src/debug/kdebugserver.c src/os/resetglobalintmask.c src/os/setglobalintmask.c src/os/timerintr.c src/os/yieldthread.c src/os/initrdb.c
+src/os/rdbsend.c src/host/readhost.c src/audio/load.c src/audio/auxbus.c src/audio/save.c src/audio/copy.c src/io/ai.c src/io/dpsetnextbuf.c
+src/io/sptask.c src/io/sptaskyield.c src/io/sptaskyielded.c src/io/vi.c src/io/vigetcurrframebuf.c src/io/vigetnextframebuf.c src/io/vimgr.c
+src/io/visetevent.c src/io/visetmode.c src/io/viswapbuf.c src/io/sirawdma.c src/io/crc.c src/os/destroythread.c src/os/getthreadpri.c src/os/gettime.c
+src/os/jammesg.c src/io/contsetch.c src/io/pfsallocatefile.c src/io/pfsdeletefile.c src/io/pfsreadwritefile.c src/io/pfsfilestate.c src/io/pfssearchfile.c
+src/io/pfsfreeblocks.c src/io/pfsnumfiles.c src/io/pfsinitpak.c src/io/pfsrepairid.c src/io/pfsgetstatus.c src/io/pirawread.c src/io/epirawdma.c
+src/io/epidma.c src/io/cartrominit.c src/io/leodiskinit.c src/io/siacs.c src/io/pidma.c src/os/createmesgqueue.c src/os/createthread.c
+src/os/initialize.c src/os/recvmesg.c src/os/sendmesg.c src/os/seteventmesg.c src/os/setthreadpri.c src/os/startthread.c src/os/thread.c
+src/os/virtualtophysical.c src/audio/sl.c src/audio/heapinit.c src/audio/heapalloc.c src/audio/synaddplayer.c src/audio/synallocvoice.c
+src/audio/synstopvoice.c src/audio/synstartvoice.c src/audio/synsetpitch.c src/audio/synsetvol.c src/audio/synsetfxmix.c src/audio/synsetpan.c
+src/io/aigetlen.c src/io/aisetfreq.c src/io/aisetnextbuf.c src/io/visetspecial.c src/io/contreaddata.c src/io/controller.c src/io/viblack.c
+src/io/si.c src/audio/synallocfx.c

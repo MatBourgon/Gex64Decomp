@@ -39,7 +39,7 @@ void func_8015974C_EC55C()
         
     case 1:
         D_8006FA54 = 2;
-        func_800576F0(&D_80153A58, 1, 0);
+        osSendMesg(&D_80153A58, 1, 0);
     break;
 
     case 3:
@@ -52,13 +52,13 @@ void func_8015974C_EC55C()
         {
             D_80078171 = 1;
             D_8006FA54 = 8;
-            func_800576F0(&D_80153A58, 3, 0);
+            osSendMesg(&D_80153A58, 3, 0);
         }
         break;
 
     case 9:
         D_8006FA54 = 4;
-        func_800576F0(&D_80153A58, 2, 0);
+        osSendMesg(&D_80153A58, 2, 0);
         break;
 
     case 5:
@@ -101,7 +101,7 @@ void func_8015974C_EC55C()
         else if (D_800E5CD4 < D_80157034)
         {
             D_8006FA54 = 7;
-            func_800576F0(&D_80153A58, 4, 0);
+            osSendMesg(&D_80153A58, 4, 0);
         }
         else
         {
