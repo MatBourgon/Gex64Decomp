@@ -54,9 +54,13 @@ clean:
 	rm -f rom.z64
 	mkdir -p build/asm/data
 	mkdir -p build/asm/ultralib
+	mkdir -p build/asm/rmon
 	mkdir -p build/src
 	mkdir -p build/src/ultralib
 	mkdir -p build/src/libc
+	mkdir -p build/src/rmon
+	mkdir -p build/src/sched
+	mkdir -p build/src/gu
 
 cleanc:
 	rm -rf build/src/*.o
