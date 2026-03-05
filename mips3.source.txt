@@ -4,4 +4,5 @@ src/io/__osViSwapContext.c src/audio/filter.c src/audio/env.c src/audio/mainbus.
 src/gu/mtxutil.c src/gu/mtxcatf.c src/gu/perspective.c src/io/devmgr.c src/rmon/rmonrcp.c src/rmon/rmonbrk.c src/libc/xldtob.c
 src/os/stopthread.c src/io/sprawread.c src/io/sprawwrite.c src/io/sirawread.c src/io/sirawwrite.c src/os/getactivequeue.c src/libc/xlitob.c
 src/rmon/rmonmisc.c src/rmon/rmonregs.c src/rmon/rmontask.c src/rmon/rmonmain.c src/io/dp.c src/io/sp.c src/io/spgetstat.c src/io/spsetstat.c
-src/io/spsetpc.c src/io/sprawdma.c src/libc/ldiv.c
+src/io/spsetpc.c src/io/sprawdma.c src/libc/ldiv.c src/io/leointerrupt.c src/rmon/rmonsio.c src/io/pirawdma.c src/io/pigetcmdq.c
+src/io/epirawread.c src/io/epirawwrite.c src/io/pfsisplug.c src/io/pfschecker.c src/io/contramwrite.c src/io/contpfs.c src/io/contramread.c
