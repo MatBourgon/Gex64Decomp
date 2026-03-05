@@ -1,4 +1,4 @@
-src/ultralib/syndelete.c src/ultralib/sprintf.c src/ultralib/string.c src/ultralib/drvrnew.c src/libc/xprintf.c
+src/audio/syndelete.c src/ultralib/sprintf.c src/ultralib/string.c src/audio/drvrnew.c src/libc/xprintf.c
 src/rmon/rmonmem.c src/rmon/rmoncmds.c src/sched/sched.c src/gu/cosf.c src/gu/sinf.c src/audio/synthesizer.c
 src/io/__osViSwapContext.c src/audio/filter.c src/audio/env.c src/audio/mainbus.c src/audio/resample.c src/audio/reverb.c
 src/gu/mtxutil.c src/gu/mtxcatf.c src/gu/perspective.c src/io/devmgr.c src/rmon/rmonrcp.c src/rmon/rmonbrk.c src/libc/xldtob.c
@@ -6,3 +6,7 @@ src/os/stopthread.c src/io/sprawread.c src/io/sprawwrite.c src/io/sirawread.c sr
 src/rmon/rmonmisc.c src/rmon/rmonregs.c src/rmon/rmontask.c src/rmon/rmonmain.c src/io/dp.c src/io/sp.c src/io/spgetstat.c src/io/spsetstat.c
 src/io/spsetpc.c src/io/sprawdma.c src/libc/ldiv.c src/io/leointerrupt.c src/rmon/rmonsio.c src/io/pirawdma.c src/io/pigetcmdq.c
 src/io/epirawread.c src/io/epirawwrite.c src/io/pfsisplug.c src/io/pfschecker.c src/io/contramwrite.c src/io/contpfs.c src/io/contramread.c
+src/debug/kdebugserver.c src/os/resetglobalintmask.c src/os/setglobalintmask.c src/os/timerintr.c src/os/yieldthread.c src/os/initrdb.c
+src/os/rdbsend.c src/host/readhost.c src/audio/load.c src/audio/auxbus.c src/audio/save.c src/audio/copy.c src/io/ai.c src/io/dpsetnextbuf.c
+src/io/sptask.c src/io/sptaskyield.c src/io/sptaskyielded.c src/io/vi.c src/io/vigetcurrframebuf.c src/io/vigetnextframebuf.c src/io/vimgr.c
+src/io/visetevent.c src/io/visetmode.c src/io/viswapbuf.c src/io/sirawdma.c src/io/crc.c

@@ -16,7 +16,7 @@
  */
 #define ms *(((s32)((f32)44.1))&~0x7)
 
-INCLUDE_RODATA("asm/nonmatchings/ultralib/drvrnew", D_8007EE10);
+INCLUDE_RODATA("asm/nonmatchings/audio/drvrnew", D_8007EE10);
 
 void init_lpfilter(ALLowPass *lp)
 {
@@ -41,7 +41,7 @@ void init_lpfilter(ALLowPass *lp)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/ultralib/drvrnew", alFxNew);
+INCLUDE_ASM("asm/nonmatchings/audio/drvrnew", alFxNew);
 
 void alEnvmixerNew(ALEnvMixer *e, ALHeap *hp)
 {

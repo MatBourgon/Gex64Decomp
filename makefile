@@ -66,6 +66,8 @@ clean:
 	mkdir -p build/src/audio
 	mkdir -p build/src/io
 	mkdir -p build/src/os
+	mkdir -p build/src/host
+	mkdir -p build/src/debug
 
 cleanc:
 	rm -rf build/src/*.o
