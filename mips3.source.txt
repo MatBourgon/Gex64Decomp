@@ -17,4 +17,4 @@ src/os/initialize.c src/os/recvmesg.c src/os/sendmesg.c src/os/seteventmesg.c sr
 src/os/virtualtophysical.c src/audio/sl.c src/audio/heapinit.c src/audio/heapalloc.c src/audio/synaddplayer.c src/audio/synallocvoice.c
 src/audio/synstopvoice.c src/audio/synstartvoice.c src/audio/synsetpitch.c src/audio/synsetvol.c src/audio/synsetfxmix.c src/audio/synsetpan.c
 src/io/aigetlen.c src/io/aisetfreq.c src/io/aisetnextbuf.c src/io/visetspecial.c src/io/contreaddata.c src/io/controller.c src/io/viblack.c
-src/io/si.c src/audio/synallocfx.c src/_4f810.c src/_56340.c
+src/io/si.c src/audio/synallocfx.c src/_4f810.c src/_56340.c src/io/piacs.c src/io/vigetcurrcontext.c

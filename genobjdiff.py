@@ -80,7 +80,7 @@ if __name__ == '__main__':
             "os/getcause",
             "os/getcount",
             "os/setcompare",
-            "ultralib/osBbUsbDevGetHandle",
+            "ultralib/NotImplemented",
             "divdi",
             "udivdi",
             "umoddi",

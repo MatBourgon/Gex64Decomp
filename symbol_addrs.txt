@@ -8,6 +8,7 @@
 .L8015998C_D9FFC = 0x8015998C; // type:label segment:rta_code
 
 func_80069398 = 0x80069398; // type:func
+bootproc = 0x8003B590; // type:func
 
 // Insert real functions from this point on
 
@@ -1190,6 +1191,9 @@ __osViSwapContext = 0x80062850; // type:func
 osViBlack = 0x80062B40; // type:func
 __osSiDeviceBusy = 0x80062BA0; // type:func
 __osSiRawStartDma = 0x80062BC0; // type:func
+__osPiCreateAccessQueue = 0x80062C60; // type:func
+__osPiGetAccess = 0x80062CB4; // type:func
+__osPiRelAccess = 0x80062D20; // type:func
 __osContAddressCrc = 0x80062D50; // type:func
 __osContDataCrc = 0x80062D98; // type:func
 __osContRamRead = 0x80062E00; // type:func
@@ -1232,8 +1236,9 @@ __osSpGetStatus = 0x800663A0; // type:func
 __osSpSetStatus = 0x800663B0; // type:func
 __osSpSetPc = 0x800663C0; // type:func
 __osSpRawStartDma = 0x800663F0; // type:func
+__osViGetCurrentContext = 0x80066480; // type:func
 __rmonExecute = 0x80066490; // type:func
-osBbUsbDevGetHandle = 0x80066510; // type:func
+NotImplemented = 0x80066510; // type:func
 __rmonWriteWordTo = 0x80066520; // type:func
 __rmonReadWordAt = 0x80066560; // type:func
 __rmonMemcpy = 0x800665A0; // type:func
@@ -1251,6 +1256,8 @@ __rmonSetComm = 0x80066DA4; // type:func
 __rmonGetGRegisters = 0x80066DE0; // type:func
 __rmonSetGRegisters = 0x80066EB8; // type:func
 __rmonGetFRegisters = 0x80066FA8; // type:func
+__rmonSetFRegisters = 0x80067034; // type:func
+rmonGetRcpRegister = 0x800670C0; // type:func
 __rmonGetSRegs = 0x80067194; // type:func
 __rmonSetSRegs = 0x8006732C; // type:func
 __rmonGetVRegs = 0x80067498; // type:func
