@@ -22,7 +22,7 @@ INCLUDE_ASM("asm/nonmatchings/prehst_code", func_8015A944_C81C4);
 
 void func_8015AA54_C82D4(Level_t* level)
 {
-    level->_F4[0] = 0;
+    level->_F4[0] = 1;
     level->_4E = 0;
 }
 
