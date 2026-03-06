@@ -1,5 +1,7 @@
 #include "common.h"
 
+#include <audio/player.h>
+
 INCLUDE_RODATA("asm/nonmatchings/_4f810", D_8007EAC0);
 
 INCLUDE_RODATA("asm/nonmatchings/_4f810", D_8007EAC8);
@@ -152,93 +154,101 @@ void func_80052FC0(void) {
 void func_80052FC8(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80052FD0);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fstop);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80052FEC);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fwave);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_8005301C);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fport);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_8005303C);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fportoff);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80053048);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fdefa);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80053170);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Ftempo);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80053254);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fendit);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80053268);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fcutoff);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_8005328C);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fvibup);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_800532D4);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fvibdown);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80053320);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fviboff);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80053330);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Flength);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80053370);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fignore);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80053380);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Ftrans);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80053390);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fignore_trans);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_800533A0);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fdistort);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_800533F8);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fenvelope);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80053458);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fenvoff);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80053468);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fenvon);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80053474);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Ftroff);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80053484);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Ftron);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80053490);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Ffor);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80053544);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fnext);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_800535F0);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fwobble);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80053618);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fwobbleoff);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80053624);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fvelon);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80053634);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fveloff);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80053640);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fvelocity);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80053654);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fpan);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80053668);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fstereo);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80053670);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fdrums);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80053698);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fdrumsoff);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_800536A4);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fprint);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_800536AC);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fgoto);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_8005371C);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Freverb);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_8005372C);
+INCLUDE_ASM("asm/nonmatchings/_4f810", FrandNote);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_8005377C);
+INCLUDE_ASM("asm/nonmatchings/_4f810", FrandVolume);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_800537CC);
+INCLUDE_ASM("asm/nonmatchings/_4f810", FrandPan);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_8005381C);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fvolume);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_8005382C);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fstartfx);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_800538FC);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fbendrange);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80053938);
+INCLUDE_ASM("asm/nonmatchings/_4f810", Fsweep);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80053948);
+INCLUDE_ASM("asm/nonmatchings/_4f810", MusInitialize);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", MusSetMasterVolume);
+extern short mus_master_volume_effects;
+extern short mus_master_volume_songs;
+void MusSetMasterVolume(unsigned long flags, int volume)
+{
+  if (flags&MUSFLAG_EFFECTS)
+    mus_master_volume_effects = volume;
+  if (flags&MUSFLAG_SONGS)
+    mus_master_volume_songs = volume;
+}	
 
 INCLUDE_ASM("asm/nonmatchings/_4f810", func_80053C98);
 
@@ -274,32 +284,32 @@ INCLUDE_ASM("asm/nonmatchings/_4f810", func_8005445C);
 
 INCLUDE_ASM("asm/nonmatchings/_4f810", func_800544B4);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80054510);
+INCLUDE_ASM("asm/nonmatchings/_4f810", __MusIntMain);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80054770);
+INCLUDE_ASM("asm/nonmatchings/_4f810", __MusIntGetNewNote);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80054B04);
+INCLUDE_ASM("asm/nonmatchings/_4f810", __MusIntFlushPending);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80054B90);
+INCLUDE_ASM("asm/nonmatchings/_4f810", __MusIntSetVolumeAndPan);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80054CF4);
+INCLUDE_ASM("asm/nonmatchings/_4f810", __MusIntSetPitch);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80054E34);
+INCLUDE_ASM("asm/nonmatchings/_4f810", __MusIntInitEnvelope);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80054E9C);
+INCLUDE_ASM("asm/nonmatchings/_4f810", __MusIntProcessEnvelope);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80055090);
+INCLUDE_ASM("asm/nonmatchings/_4f810", __MusIntInitSweep);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_800550AC);
+INCLUDE_ASM("asm/nonmatchings/_4f810", __MusIntProcessSweep);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80055164);
+INCLUDE_ASM("asm/nonmatchings/_4f810", __MusIntProcessWobble);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_800551BC);
+INCLUDE_ASM("asm/nonmatchings/_4f810", __MusIntProcessVibrato);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_8005523C);
+INCLUDE_ASM("asm/nonmatchings/_4f810", __MusIntProcessContinuousVolume);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80055300);
+INCLUDE_ASM("asm/nonmatchings/_4f810", __MusIntProcessContinuousPitchBend);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80055414);
+INCLUDE_ASM("asm/nonmatchings/_4f810", __MusIntPowerOf2);
 
 INCLUDE_ASM("asm/nonmatchings/_4f810", alSynRemovePlayer);
