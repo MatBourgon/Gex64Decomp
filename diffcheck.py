@@ -24,5 +24,8 @@ except:
     diffFound = "Error diffing! Maybe file sizes are different?"
 
 if not diffFound:
-    diffFound = "No differences found!"
-print(diffFound)
+    print("No differences found!")
+    exit(0)
+else:
+    print(diffFound)
+    exit(1)

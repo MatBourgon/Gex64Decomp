@@ -1,7 +1,7 @@
-name: ReportCI
+name: DiffCI
 
 on:
-  push:
+  pull_request:
     branches: [ "master" ]
   workflow_dispatch:
 
@@ -40,18 +40,13 @@ jobs:
       - name: Setup project
         run: |
           make clean
-          make splitobjdiff
-          make buildobjdiff -j8
-          make generatediffjson
+          make split
 
-      - name: Generate report
-        run: make report
+      - name: Buldiing project
+        run: make build -j8
 
-      - name: Upload report
-        uses: actions/upload-artifact@v4
-        with:
-          name: US_report
-          path: build/report.json
+      - name: Diffing project
+        run: make diff
 
       - name: Cleanup
         run: rm -f gex64.z64
