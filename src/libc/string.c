@@ -1,7 +1,34 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/libc/string", strchr);
+unsigned char* strchr(unsigned char* str, unsigned char c) {
 
-INCLUDE_ASM("asm/nonmatchings/libc/string", strlen);
+    while(*str != c)
+    {
+        if (*str == '\0')
+            return NULL;
 
-INCLUDE_ASM("asm/nonmatchings/libc/string", memcpy);
+        ++str;
+    }
+
+    return str;
+}
+
+int strlen(unsigned char* str) {
+
+   unsigned char* c = str;
+   while(*c != 0U)
+       c++;
+
+   return c - str;
+}
+
+char* memcpy(unsigned char* dst, char* src, int len) {
+    int i;
+    char* c = dst;
+
+    for (i = len; i != 0; i--) {
+        *(c++) = *(src++);
+    }
+
+    return dst;
+}

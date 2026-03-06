@@ -33,3 +33,4 @@ There is currently no naming scheme, but at the very least:
 * Enums follow a `EEnumType` form, and each entry follows a shorter `EET_EntryName`. See `TVTextData.h`.
 
 After converting an assembly file to a C file in the yaml file, make sure to add it to either `mips1.source.txt` or `mips3.source.txt`, otherwise it won't compile and you'll get a linking error. You should always try `mips1.source.txt` first.
+

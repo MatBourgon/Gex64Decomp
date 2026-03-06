@@ -8,6 +8,8 @@ options:
   platform: n64
   compiler: KMC
 
+  generate_asm_macros_files: False
+
   # asm_path: asm
   # src_path: src
   # build_path: build
@@ -37,6 +39,7 @@ options:
     - reloc_addrs.txt
 
   symbol_name_format: $VRAM_$ROM
+  make_full_disasm_for_code: False
 
   # undefined_funcs_auto_path: undefined_funcs_auto.txt
   # undefined_syms_auto_path: undefined_syms_auto.txt
@@ -225,7 +228,7 @@ segments:
       - [0x63350, c, io/visetevent]
       - [0x633B0, c, io/visetmode]
       - [0x63400, c, io/viswapbuf]
-      - [0x63450, c, io/__osViSwapContext]
+      - [0x63450, c, io/viswapcontext]
       - [0x63740, c, io/viblack]
       - [0x637A0, c, io/si]
       - [0x637C0, c, io/sirawdma]
@@ -300,7 +303,7 @@ segments:
       - [0x7FAD0, .rodata, audio/env]
       - [0x7FBC0, .rodata, audio/resample]
       - [0x7FBF0, .rodata, audio/reverb]
-      - [0x7FC40, .rodata, io/__osViSwapContext]
+      - [0x7FC40, .rodata, io/viswapcontext]
       - [0x7FC50, .rodata, libc/xprintf]
       - [0x7FDE0, .rodata, libc/xldtob]
       - [0x7FE50, rodata]
