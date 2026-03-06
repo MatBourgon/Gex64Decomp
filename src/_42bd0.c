@@ -20,43 +20,43 @@ INCLUDE_ASM("asm/nonmatchings/_42bd0", func_800434BC);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80043708);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_800437F0);
+INCLUDE_ASM("asm/nonmatchings/_42bd0", common_fpower_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80043958);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80043B50);
+INCLUDE_ASM("asm/nonmatchings/_42bd0", common_colfire_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80043BCC);
+INCLUDE_ASM("asm/nonmatchings/_42bd0", common_ice_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80044104);
+INCLUDE_ASM("asm/nonmatchings/_42bd0", common_icecube_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80044428);
+INCLUDE_ASM("asm/nonmatchings/_42bd0", common_icecube_OnDestroy);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_800444B8);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80044518);
+INCLUDE_ASM("asm/nonmatchings/_42bd0", common_powerbug_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_800445F4);
+INCLUDE_ASM("asm/nonmatchings/_42bd0", common_powerbug_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80044A9C);
+INCLUDE_ASM("asm/nonmatchings/_42bd0", common_powerbug_OnDestroy);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80044B2C);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80044B98);
+INCLUDE_ASM("asm/nonmatchings/_42bd0", common_powertv_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80044C6C);
+INCLUDE_ASM("asm/nonmatchings/_42bd0", common_powertv_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80044FF0);
+INCLUDE_ASM("asm/nonmatchings/_42bd0", common_powertv_OnDestroy);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80045200);
+INCLUDE_ASM("asm/nonmatchings/_42bd0", common_remsilv_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80045320);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_800454E4);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80045638);
+INCLUDE_ASM("asm/nonmatchings/_42bd0", common_remsilv_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80046148);
+INCLUDE_ASM("asm/nonmatchings/_42bd0", common_remsilv_OnDestroy);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_800462C0);
 
