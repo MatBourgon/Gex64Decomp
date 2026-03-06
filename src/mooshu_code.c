@@ -36,15 +36,15 @@ void func_8015A398_C2D18()
 
 INCLUDE_RODATA("asm/nonmatchings/mooshu_code", D_8015DDE0_C6760);
 
-INCLUDE_ASM("asm/nonmatchings/mooshu_code", func_8015A3A4_C2D24);
+INCLUDE_ASM("asm/nonmatchings/mooshu_code", mooshu_moo_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/mooshu_code", func_8015A5C0_C2F40);
+INCLUDE_ASM("asm/nonmatchings/mooshu_code", mooshu_moo_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/mooshu_code", func_8015B13C_C3ABC);
+INCLUDE_ASM("asm/nonmatchings/mooshu_code", mooshu_moobar_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/mooshu_code", func_8015B160_C3AE0);
+INCLUDE_ASM("asm/nonmatchings/mooshu_code", mooshu_moobar_OnDestroy);
 
-INCLUDE_ASM("asm/nonmatchings/mooshu_code", func_8015B1C8_C3B48);
+INCLUDE_ASM("asm/nonmatchings/mooshu_code", mooshu_moo_OnDestroy);
 
 INCLUDE_ASM("asm/nonmatchings/mooshu_code", func_8015B2FC_C3C7C);
 
@@ -84,14 +84,15 @@ INCLUDE_ASM("asm/nonmatchings/mooshu_code", func_8015BDB4_C4734);
 
 INCLUDE_ASM("asm/nonmatchings/mooshu_code", func_8015C2E0_C4C60);
 
-void func_8015C3CC_C4D4C(Level_t* level)
+void mooshu_moolevr_OnCreate(Level_t* level)
 {
     level->flags |= 0x400;
 }
 
-INCLUDE_ASM("asm/nonmatchings/mooshu_code", func_8015C3E0_C4D60);
 
-INCLUDE_ASM("asm/nonmatchings/mooshu_code", func_8015C5D0_C4F50);
+INCLUDE_ASM("asm/nonmatchings/mooshu_code", mooshu_moolevr_OnUpdate);
+
+INCLUDE_ASM("asm/nonmatchings/mooshu_code", mooshu_moolevr_OnDestroy);
 
 INCLUDE_ASM("asm/nonmatchings/mooshu_code", func_8015C6D0_C5050);
 
@@ -104,18 +105,18 @@ INCLUDE_ASM("asm/nonmatchings/mooshu_code", func_8015C710_C5090);
 
 INCLUDE_ASM("asm/nonmatchings/mooshu_code", func_8015C780_C5100);
 
-void func_8015C820_C51A0(Level_t* level)
+void mooshu_moosprk_OnCreate(Level_t* level)
 {
     level->_E0[1] = -0x10;
 }
 
-INCLUDE_ASM("asm/nonmatchings/mooshu_code", func_8015C82C_C51AC);
+INCLUDE_ASM("asm/nonmatchings/mooshu_code", mooshu_moosprk_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/mooshu_code", func_8015C994_C5314);
+INCLUDE_ASM("asm/nonmatchings/mooshu_code", mooshu_moosprk_OnDestroy);
 
-INCLUDE_ASM("asm/nonmatchings/mooshu_code", func_8015CA74_C53F4);
+INCLUDE_ASM("asm/nonmatchings/mooshu_code", mooshu_jacob_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/mooshu_code", func_8015CD88_C5708);
+INCLUDE_ASM("asm/nonmatchings/mooshu_code", mooshu_jacob_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/mooshu_code", func_8015D084_C5A04);
 
@@ -136,13 +137,13 @@ INCLUDE_ASM("asm/nonmatchings/mooshu_code", func_8015D7C8_C6148);
 
 INCLUDE_ASM("asm/nonmatchings/mooshu_code", func_8015DA78_C63F8);
 
-INCLUDE_ASM("asm/nonmatchings/mooshu_code", func_8015DBB0_C6530);
+INCLUDE_ASM("asm/nonmatchings/mooshu_code", mooshu_ebolt_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/mooshu_code", func_8015DC2C_C65AC);
+INCLUDE_ASM("asm/nonmatchings/mooshu_code", mooshu_ebolt_OnUpdate);
 
-void func_8015DC84_C6604(Level_t* level)
+void mooshu_vandb_OnCreate(Level_t* level)
 {
     level->flags |= 0x400;
 }
 
-INCLUDE_ASM("asm/nonmatchings/mooshu_code", func_8015DC98_C6618);
+INCLUDE_ASM("asm/nonmatchings/mooshu_code", mooshu_vandb_OnUpdate);
