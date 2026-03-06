@@ -54,7 +54,7 @@ splitobjdiff:
 generatediffjson:
 	python3 genobjdiff.py
 
-report: clean splitobjdiff buildobjdiff generatediffjson
+buildreport:
 	tools/objdiff report generate -o build/report.json
 
 diff:

@@ -43,6 +43,7 @@ jobs:
           make splitobjdiff
           make buildobjdiff -j8
           make generatediffjson
+          make buildreport
 
       - name: Generate report
         run: make report
