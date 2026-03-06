@@ -1,3 +1,8 @@
+![Overall](https://decomp.dev/MatBourgon/Gex64Decomp.svg?mode=shield)
+![Game Code](https://decomp.dev/MatBourgon/Gex64Decomp.svg?mode=shield&category=game&color=%2349a343)
+![Level Code](https://decomp.dev/MatBourgon/Gex64Decomp.svg?mode=shield&category=level&color=%23ab4f4f)
+![SDK Code](https://decomp.dev/MatBourgon/Gex64Decomp.svg?mode=shield&category=sdk&color=%23292c47)
+
 # Gex 64: Enter the Gecko
 
 W.I.P. decompilation of Gex 64
