@@ -5,11 +5,12 @@
 
 const int D_8015A090_808B0[4] = { 0x02000014, 0, 0, 0 };
 
-void func_80159720_7FF40(Level_t* level) {
+void aztec_funplat_OnCreate(Level_t* level)
+{
     short sp10[6];
 
     if (level->_20[1] == 0) {
-        level->_20[1] = D_8015A090_808B0;
+        level->_20[1] = (int)D_8015A090_808B0;
     }
     sp10[0] = sp10[4] = level->_40[4];
     sp10[1] = sp10[5] = level->_40[5];
@@ -20,10 +21,10 @@ void func_80159720_7FF40(Level_t* level) {
     func_8000F0B0(gpGameState8->_0004[0], &sp10[0], &sp10[4], level);
 }
 
-INCLUDE_ASM("asm/nonmatchings/aztec_code", func_801597BC_7FFDC);
+INCLUDE_ASM("asm/nonmatchings/aztec_code", aztec_funplat_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/aztec_code", func_801599C4_801E4);
+INCLUDE_ASM("asm/nonmatchings/aztec_code", aztec_funplat_OnDestroy);
 
-INCLUDE_ASM("asm/nonmatchings/aztec_code", func_80159AA8_802C8);
+INCLUDE_ASM("asm/nonmatchings/aztec_code", aztec_btimer_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/aztec_code", func_80159B64_80384);
+INCLUDE_ASM("asm/nonmatchings/aztec_code", aztec_btimer_OnUpdate);

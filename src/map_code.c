@@ -12,7 +12,7 @@
 
 extern char D_8014F34C;
 extern int* D_8006CFA0;
-extern void func_8015E338_BED68();
+extern void map_lvltv_OnDestroy();
 extern char D_80161394_C1DC4[];
 extern char* D_80161684_C20B4;
 extern void func_8015D5E4_BE014();
@@ -104,21 +104,21 @@ extern SAVEFILE_ALT_t D_800E5DDE[];
 
 extern int D_80078594[];
 
-void func_80159720_BA150(void) {
+void map_remrlow_OnCreate(void) {
 }
 
-void func_80159728_BA158(Level_t* level)
+void map_remrlow_OnUpdate(Level_t* level)
 {
     level->_D0[0]++;
 }
 
-void func_8015973C_BA16C(void) {
+void map_remrlow_OnDestroy(void) {
 }
 
-void func_80159744_BA174(void) {
+void map_dish_OnCreate(void) {
 }
 
-void func_8015974C_BA17C(Level_t* level) {
+void map_dish_OnUpdate(Level_t* level) {
     if ((level->_18)[0x1C/4] != 0) {
         level->_60[2] += (0x1000 / *(level->_18)[0x1C/4]);
     } else {
@@ -128,10 +128,10 @@ void func_8015974C_BA17C(Level_t* level) {
     level->_60[2] &= 0xFFF;
 }
 
-void func_801597CC_BA1FC(void) {
+void map_dish_OnDestroy(void) {
 }
 
-void func_801597D4_BA204(Level_t* level)
+void map_temptv_OnCreate(Level_t* level)
 {
     if (!level->_1C[1])
         return;
@@ -168,7 +168,7 @@ INCLUDE_RODATA("asm/nonmatchings/map_code", D_801611F8_C1C28);
 
 INCLUDE_RODATA("asm/nonmatchings/map_code", D_80161208_C1C38);
 
-void func_80159828_BA258(Level_t* level, int* arg1) {
+void map_temptv_OnUpdate(Level_t* level, int* arg1) {
     int* arg2 = arg1 + 0x18/4;
     if (level->_1C[1] != 0) {
         level->_50[3] = level->_F4[2] * 2;
@@ -206,10 +206,10 @@ void func_80159828_BA258(Level_t* level, int* arg1) {
     }
 }
 
-void func_80159934_BA364(void) {
+void map_temptv_OnDestroy(void) {
 }
 
-void func_8015993C_BA36C(Level_t* level, int* arg1) {
+void map_intro_OnCreate(Level_t* level, int* arg1) {
     int* temp_s1;
     int* temp_v0;
     int** temp_a1;
@@ -238,7 +238,7 @@ void func_8015993C_BA36C(Level_t* level, int* arg1) {
     }
 }
 
-void func_80159A5C_BA48C(int* level, int* arg1) {
+void map_intro_OnUpdate(int* level, int* arg1) {
     int *v0, *v1;
     int *s1, *s2;
     int *s3;
@@ -303,11 +303,10 @@ void func_80159A5C_BA48C(int* level, int* arg1) {
     
 }
 
-
-void func_80159C88_BA6B8(void) {
+void map_intro_OnDestroy(void) {
 }
 
-void func_80159C90_BA6C0(Level_t* arg0) {
+void map_angel_OnCreate(Level_t* arg0) {
     ((short*)&arg0->_100)[1] = -0x1000;
     arg0->flags |= 0xC00;
     if ((arg0->_18)[0x1C/4] != 0) {
@@ -315,7 +314,7 @@ void func_80159C90_BA6C0(Level_t* arg0) {
     }
 }
 
-void func_80159CCC_BA6FC(Level_t* arg0, int* arg1) {
+void map_angel_OnUpdate(Level_t* arg0, int* arg1) {
     int* temp_v0;
     short* temp_s2;
     short* temp_s3;
@@ -378,15 +377,14 @@ block_11:
     }
 }
 
-void func_80159E88_BA8B8(Level_t* arg0) {
+void map_angel_OnDestroy(Level_t* arg0) {
     if (arg0->_F4[0] == 1) {
         arg0->_F4[0] = 2;
         ((short*)&arg0->_104)[1] = 0x1E;
     }
 }
 
-
-void func_80159EAC_BA8DC(Level_t* level)
+void map_lktorch_OnCreate(Level_t* level)
 {
     *((short*)&level->_F4[2]) = 1;
     *(((short*)&level->_F4[2]) + 1) = 1;
@@ -395,19 +393,19 @@ void func_80159EAC_BA8DC(Level_t* level)
 
 INCLUDE_RODATA("asm/nonmatchings/map_code", D_80161230_C1C60);
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_80159EC8_BA8F8);
+INCLUDE_ASM("asm/nonmatchings/map_code", map_lktorch_OnUpdate);
 
-void func_8015A398_BADC8(void) {
+void map_lktorch_OnDestroy(void) {
 }
 
-void func_8015A3A0_BADD0(Level_t* level)
+void map_lkdoor_OnCreate(Level_t* level)
 {
     *(((short*)&level->_F4[2]) + 1) = 1;
     level->flags |= 0x400;
     *((short*)&level->_100) = level->_60[2];
 }
 
-void func_8015A3C0_BADF0(Level_t* level) {
+void map_lkdoor_OnUpdate(Level_t* level) {
     int var_s2;
     int var_v1;
     short* temp_s1;
@@ -488,17 +486,17 @@ void func_8015A3C0_BADF0(Level_t* level) {
     }
 }
 
-void func_8015A638_BB068(void) {
+void map_lkdoor_OnDestroy(void) {
 }
 
-void func_8015A640_BB070(Level_t* level)
+void map_qmark_OnCreate(Level_t* level)
 {
     level->_104 = 0;
     level->_F4[2] = 0x40;
     level->_100 = 0;
 }
 
-void func_8015A654_BB084(Level_t* arg0, int* arg1) {
+void map_qmark_OnUpdate(Level_t* arg0, int* arg1) {
     int* temp_s0;
     short* temp_t0;
     
@@ -538,7 +536,7 @@ void func_8015A654_BB084(Level_t* arg0, int* arg1) {
     arg0->_60[2] = (u16) ((arg0->_60[2] + temp_s0[0]) & 0xFFF);
 }
 
-void func_8015A7FC_BB22C(Level_t* level) {
+void map_qmark_OnDestroy(Level_t* level) {
     short* temp_s1;
 
     temp_s1 = (short*)level->_20[1];
@@ -580,7 +578,7 @@ void func_8015A854_BB284(int arg0, short arg1) {
     } while (last_char != 0);
 }
 
-void func_8015A94C_BB37C(Level_t* level) {
+void map_speaker_OnCreate(Level_t* level) {
     s32 var_a1;
     short* temp_s0;
     int* temp_s0_2;
@@ -624,14 +622,9 @@ void func_8015A94C_BB37C(Level_t* level) {
     func_80048A4C(level, temp_s0_2, 0, 0, &temp_s1[4], 0, 1);
 }
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015AB2C_BB55C);
+INCLUDE_ASM("asm/nonmatchings/map_code", map_speaker_OnUpdate);
 
-typedef struct
-{
-    char data[8];
-} test_string;
-
-void func_8015B18C_BBBBC(Level_t* arg0, int** arg1) {
+void map_start_OnCreate(Level_t* arg0, int** arg1) {
     int* temp_a1;
     int* temp_a2;
     short* temp_s4;
@@ -678,9 +671,9 @@ void func_8015B18C_BBBBC(Level_t* arg0, int** arg1) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015B330_BBD60);
+INCLUDE_ASM("asm/nonmatchings/map_code", map_start_OnUpdate);
 
-void func_8015B804_BC234(Level_t* level)
+void map_bobbox_OnCreate(Level_t* level)
 {
     level->flags |= 0xC00;
 }
@@ -709,7 +702,7 @@ INCLUDE_RODATA("asm/nonmatchings/map_code", D_80161300_C1D30);
 
 INCLUDE_RODATA("asm/nonmatchings/map_code", D_80161308_C1D38);
 
-void func_8015B818_BC248(int arg1, int*** arg3) {
+void map_bobbox_OnUpdate(int arg1, int*** arg3) {
     short var_a2;
     short var_s0;
     int var_a1;
@@ -848,7 +841,7 @@ void func_8015C110_BCB40(Level_t* level, short** arg1) {
     }
 }
 
-void func_8015C1D8_BCC08(Level_t* level, char** arg1) {
+void map_tvmenu_OnCreate(Level_t* level, char** arg1) {
     int temp_s2;
     int var_s1;
     int** var_s0;
@@ -872,7 +865,7 @@ void func_8015C1D8_BCC08(Level_t* level, char** arg1) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015C2D8_BCD08);
+INCLUDE_ASM("asm/nonmatchings/map_code", map_tvmenu_OnUpdate);
 
 int func_8015C63C_BD06C(int arg0) {
     int temp_v0;
@@ -899,7 +892,7 @@ int func_8015C63C_BD06C(int arg0) {
     return var_s1;
 }
 
-void func_8015C728_BD158(Level_t* arg0) {
+void map_tvbutn_OnCreate(Level_t* arg0) {
     char temp_v0;
     int* temp_s1;
     char* s2;
@@ -947,7 +940,7 @@ void func_8015C728_BD158(Level_t* arg0) {
     arg0->_50[3] = s2[0x13];
 }
 
-void func_8015C840_BD270(Level_t* arg0, int* arg1) {
+void map_tvbutn_OnUpdate(Level_t* arg0, int* arg1) {
     s16 sp10[2];
     int temp_a1;
     int temp_a0;
@@ -1088,14 +1081,13 @@ block_12:
     }
 }
 
-void func_8015CD04_BD734(void) {
+void map_tvbutn_OnDestroy(void) {
 }
 
-void func_8015CD0C_BD73C(void) {
+void map_loadtv_OnCreate(void) {
 }
 
-
-void func_8015CD14_BD744(Level_t* level, int* arg1)
+void map_loadtv_OnUpdate(Level_t* level, int* arg1)
 {
     int* a1;
     a1 = ((int*)level->_20[1]);
@@ -1108,7 +1100,7 @@ void func_8015CD14_BD744(Level_t* level, int* arg1)
     }
 }
 
-void func_8015CD64_BD794(Level_t* arg0) {
+void map_ctrlbutn_OnCreate(Level_t* arg0) {
     int temp_a1;
     SVECTOR* temp_v0;
 
@@ -1130,9 +1122,9 @@ INCLUDE_RODATA("asm/nonmatchings/map_code", D_8016131C_C1D4C);
 
 INCLUDE_RODATA("asm/nonmatchings/map_code", D_80161324_C1D54);
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015CDE0_BD810);
+INCLUDE_ASM("asm/nonmatchings/map_code", map_ctrlbutn_OnUpdate);
 
-void func_8015D3B0_BDDE0(Level_t* level)
+void map_mapgate_OnCreate(Level_t* level)
 {
     level->_100 = 0xC8;
     if (D_800785CC[((int*)level->_20[1])[0]] != 3)
@@ -1142,7 +1134,7 @@ void func_8015D3B0_BDDE0(Level_t* level)
     level->flags |= 0x100000;
 }
 
-int func_8015D420_BDE50(Level_t* level) {
+int map_mapgate_OnUpdate(Level_t* level) {
     int v0;
 
     if (level->_100 != 0) {
@@ -1171,7 +1163,7 @@ int func_8015D420_BDE50(Level_t* level) {
     }
 }
 
-void func_8015D4B4_BDEE4(Level_t* level) {
+void map_mapgate_OnDestroy(Level_t* level) {
     int temp_v1;
 
     temp_v1 = *(int*)level->_20[1];
@@ -1180,7 +1172,6 @@ void func_8015D4B4_BDEE4(Level_t* level) {
         level->_100 = 0xC8;
     }
 }
-
 
 void func_8015D52C_BDF5C(Level_t* level, GameState* gs) {
     char buffer[0x10];
@@ -1204,7 +1195,7 @@ void func_8015D52C_BDF5C(Level_t* level, GameState* gs) {
     *((void**)level->_B0 + 1) = func_8015D5E4_BE014;
 }
 
-void func_8015D5DC_BE00C(void) {
+void map_lvllabl_OnUpdate(void) {
 }
 
 void func_8015D5E4_BE014(int* arg0, Level_t* level) {
@@ -1262,7 +1253,7 @@ void func_8015DAC8_BE4F8(Level_t* level) {
     level->flags |= 0x10000;
     ((int*)level->_100)[0x10/4] |= 0x100000;
     ((int*)level->_100)[0x10/4] |= 0x400;
-    ((void**)level->_100)[0xB0/4] = &func_8015E338_BED68;
+    ((void**)level->_100)[0xB0/4] = &map_lvltv_OnDestroy;
 }
 
 void func_8015DB54_BE584(Level_t* level) {
@@ -1289,7 +1280,7 @@ void func_8015DB54_BE584(Level_t* level) {
     }
 }
 
-void func_8015DC38_BE668(Level_t* arg0) {
+void map_lvltv_OnCreate(Level_t* arg0) {
     char sp10[0x10];
     short temp_a2;
     int var_a0;
@@ -1369,7 +1360,7 @@ void func_8015DC38_BE668(Level_t* arg0) {
     }
 }
 
-void func_8015DEC8_BE8F8(Level_t* arg0) {
+void map_lvltv_OnUpdate(Level_t* arg0) {
     SVECTOR sp10;
     int sp18;
     int sp1C;
@@ -1453,7 +1444,7 @@ void func_8015E274_BECA4(Level_t* level) {
     *(SVECTOR*)(&level->_40[4]) = temp;
 }
 
-void func_8015E338_BED68(Level_t* level, int arg1) {
+void map_lvltv_OnDestroy(Level_t* level, int arg1) {
     char sp10[0x10];
     int* temp_a0;
     int* temp_s2;
@@ -1587,7 +1578,7 @@ countbits:
     }
 }
 
-void func_8015E824_BF254(Level_t* arg0, int** arg1) {
+void map_select_OnCreate(Level_t* arg0, int** arg1) {
     SVECTOR sp10;
     SVECTOR sp18;
     char* temp_s6;
@@ -1657,7 +1648,7 @@ void func_8015E824_BF254(Level_t* arg0, int** arg1) {
         func_8015E674_BF0A4(temp_s6, temp_s4, (int*)arg1);
 }
 
-void func_8015EA98_BF4C8(Level_t* arg0, int* arg1) {
+void map_select_OnUpdate(Level_t* arg0, int* arg1) {
     SVECTOR sp10;
     SVECTOR sp18;
     int* temp_a1;
@@ -1754,16 +1745,16 @@ void func_8015EA98_BF4C8(Level_t* arg0, int* arg1) {
     }
 }
 
-void func_8015EEA8_BF8D8(void) {
+void map_password_OnCreate(void) {
 }
 
-void func_8015EEB0_BF8E0(void) {
+void map_password_OnUpdate(void) {
 }
 
-void func_8015EEB8_BF8E8(void) {
+void map_markey_OnCreate(void) {
 }
 
-void func_8015EEC0_BF8F0(void) {
+void map_markey_OnUpdate(void) {
 }
 
 void func_8015EEC8_BF8F8(void) {

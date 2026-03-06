@@ -25,13 +25,13 @@ extern char D_8006CF20;
 extern short* D_8006CFA0;
 extern unsigned short D_800E5DB2;
 
-void func_80159720_EC530(Level_t* level, int** arg1)
+void logo_select_OnCreate(Level_t* level, int** arg1)
 {
     level->flags |= 0xC00;
     arg1[0xC/4][0x10/4] |= 0x800;
 }
 
-void func_8015974C_EC55C()
+void logo_select_OnUpdate()
 {
     func_8002C1AC(0);
 
@@ -119,7 +119,7 @@ void func_8015974C_EC55C()
     }
 }
 
-void func_801599A8_EC7B8(Level_t* level, short** arg1)
+void logo_cryslogo_OnCreate(Level_t* level, short** arg1)
 {
     D_8006CF20 = 0;
     D_8006FA54 = 0xD;
@@ -135,7 +135,7 @@ void func_801599A8_EC7B8(Level_t* level, short** arg1)
     level->_40[6] = -0x460;
 }
 
-void func_80159A3C_EC84C(Level_t* level, int** arg1)
+void logo_cryslogo_OnUpdate(Level_t* level, int** arg1)
 {
     func_8002C1AC(0);
     arg1[0xC/4][0x10/4] |= 0x800;
@@ -151,21 +151,21 @@ void func_80159A3C_EC84C(Level_t* level, int** arg1)
     }
 }
 
-void func_80159AE4_EC8F4(Level_t* level)
+void logo_mwgex_OnCreate(Level_t* level)
 {
     level->_60[2] = 0xC8;
     level->_104 = 0x50;
     level->flags |= 0x400;
 }
 
-FORCE_INLINE void func_80159B04_EC914_dec(int* a)
+FORCE_INLINE void logo_mwgex_OnUpdate_dec(int* a)
 {
     (*a)--;
 }
 
-void func_80159B04_EC914(Level_t* level)
+void logo_mwgex_OnUpdate(Level_t* level)
 {
-    func_80159B04_EC914_dec(&level->_104);
+    logo_mwgex_OnUpdate_dec(&level->_104);
     
     if ((D_800E5DB2 & 0x9000) != 0 || level->_104 == 0)
     {
@@ -174,7 +174,7 @@ void func_80159B04_EC914(Level_t* level)
     
 }
 
-void func_80159B68_EC978(Level_t* level, short** arg1)
+void logo_mwlogo_OnCreate(Level_t* level, short** arg1)
 {
     level->_60[0] = 0x802;
     level->_60[1] = -0x400;
@@ -184,9 +184,10 @@ void func_80159B68_EC978(Level_t* level, short** arg1)
     level->_40[6] = 0x64;
 }
 
-void func_80159BA0_EC9B0() { }
+void logo_mwlogo_OnUpdate(void) {
+}
 
-void func_80159BA8_EC9B8(Level_t* level, short** arg1)
+void logo_rtlogor_OnCreate(Level_t* level, short** arg1)
 {
     level->_104 = 0;
     level->flags |= 0x400;
@@ -204,7 +205,7 @@ void func_80159BA8_EC9B8(Level_t* level, short** arg1)
     level->_50[7] = 0;
 }
 
-void func_80159C68_ECA78(Level_t* level)
+void logo_rtlogor_OnUpdate(Level_t* level)
 {
     if (level->_104 < 0x50) {
         level->_104++;
@@ -278,3 +279,4 @@ void func_80159EF0_ECD00(int arg0)
 
     D_8014F34C += 1;
 }
+

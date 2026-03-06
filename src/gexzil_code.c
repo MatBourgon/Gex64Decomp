@@ -2,11 +2,11 @@
 
 #include "types/Level.h"
 
-INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_80159720_928A0);
+INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_bug_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_801597FC_9297C);
+INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_bug_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_80159A90_92C10);
+INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_bug_OnDestroy);
 
 INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_80159B8C_92D0C);
 
@@ -18,15 +18,15 @@ INCLUDE_RODATA("asm/nonmatchings/gexzil_code", D_80162AA0_9BC20);
 
 INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8015A09C_9321C);
 
-INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8015A1D4_93354);
+INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_ebolt_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8015A250_933D0);
+INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_ebolt_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8015A2A8_93428);
+INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_bldg_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8015A438_935B8);
+INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_bldg_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8015A72C_938AC);
+INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_bldg_OnDestroy);
 
 INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8015A7F0_93970);
 
@@ -40,16 +40,16 @@ INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8015B220_943A0);
 
 INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8015B334_944B4);
 
-INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8015B370_944F0);
+INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_mechjet_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8015B3B8_94538);
+INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_mechjet_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8015B460_945E0);
 
-void func_8015B6A0_94820(void) {
+void gexzil_mechjet_OnDestroy(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8015B6A8_94828);
+INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_mecha_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8015B964_94AE4);
 
@@ -61,15 +61,15 @@ INCLUDE_RODATA("asm/nonmatchings/gexzil_code", D_80162AC4_9BC44);
 
 INCLUDE_RODATA("asm/nonmatchings/gexzil_code", D_80162AD0_9BC50);
 
-INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8015BA44_94BC4);
+INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_mecha_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8015C188_95308);
 
 INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8015C208_95388);
 
-INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8015C36C_954EC);
+INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_mekblst_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8015C384_95504);
+INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_mekblst_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8015C484_95604);
 
@@ -164,7 +164,7 @@ void func_80160344_994C4(void) {
 
 INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8016034C_994CC);
 
-INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_80160704_99884);
+INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_mecha_OnDestroy);
 
 INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_80160B70_99CF0);
 
@@ -198,21 +198,21 @@ INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_80162024_9B1A4);
 
 INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8016218C_9B30C);
 
-INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_80162330_9B4B0);
+INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_gas_OnCreate);
 
 INCLUDE_RODATA("asm/nonmatchings/gexzil_code", D_80162B3C_9BCBC);
 
 INCLUDE_RODATA("asm/nonmatchings/gexzil_code", D_80162B48_9BCC8);
 
-INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_80162574_9B6F4);
+INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_gas_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_801627B8_9B938);
+INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_gas_OnDestroy);
 
-INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8016285C_9B9DC);
+INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_explode_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_80162990_9BB10);
+INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_explode_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_80162A40_9BBC0);
+INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_explode_OnDestroy);
 
 INCLUDE_RODATA("asm/nonmatchings/gexzil_code", D_80162B70_9BCF0);
 

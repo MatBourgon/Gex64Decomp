@@ -2,7 +2,7 @@
 
 #include "types/Level.h"
 
-INCLUDE_ASM("asm/nonmatchings/final_code", func_80159720_8A8C0);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_oldpoptv_OnCreate);
 
 INCLUDE_RODATA("asm/nonmatchings/final_code", D_80161510_926B0);
 
@@ -24,48 +24,48 @@ INCLUDE_RODATA("asm/nonmatchings/final_code", D_8016154C_926EC);
 
 INCLUDE_RODATA("asm/nonmatchings/final_code", D_80161558_926F8);
 
-INCLUDE_ASM("asm/nonmatchings/final_code", func_80159754_8A8F4);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_oldpoptv_OnUpdate);
 
-void func_80159988_8AB28(void) {
+void final_oldpoptv_OnDestroy(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/final_code", func_80159990_8AB30);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_lectro_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/final_code", func_80159A00_8ABA0);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_lectro_OnUpdate);
 
-void func_80159B64_8AD04(void) {
+void final_lectro_OnDestroy(void) {
 }
 
-void func_80159B6C_8AD0C(Level_t* level)
+void final_probe_OnCreate(Level_t* level)
 {
     level->flags |= 0x400;
 }
 
-INCLUDE_ASM("asm/nonmatchings/final_code", func_80159B80_8AD20);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_probe_OnUpdate);
 
-void func_80159BF0_8AD90(void) {
+void final_probe_OnDestroy(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/final_code", func_80159BF8_8AD98);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_reztvex_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/final_code", func_80159C28_8ADC8);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_reztvex_OnUpdate);
 
-void func_80159C84_8AE24(void) {
+void final_reztvex_OnDestroy(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/final_code", func_80159C8C_8AE2C);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_rezxpl_OnCreate);
 
 void func_80159CBC_8AE5C(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/final_code", func_80159CC4_8AE64);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_rezxpl_OnUpdate);
 
-void func_80159E04_8AFA4(void) {
+void final_rezxpl_OnDestroy(void) {
 }
 
 INCLUDE_RODATA("asm/nonmatchings/final_code", D_80161588_92728);
 
-INCLUDE_ASM("asm/nonmatchings/final_code", func_80159E0C_8AFAC);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_rezbomb_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/final_code", func_80159E50_8AFF0);
 
@@ -83,9 +83,9 @@ INCLUDE_ASM("asm/nonmatchings/final_code", func_8015A590_8B730);
 
 INCLUDE_ASM("asm/nonmatchings/final_code", func_8015A78C_8B92C);
 
-INCLUDE_ASM("asm/nonmatchings/final_code", func_8015A814_8B9B4);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_rezbomb_OnUpdate);
 
-void func_8015A9E8_8BB88(void) {
+void final_rezbomb_OnDestroy(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/final_code", func_8015A9F0_8BB90);
@@ -108,7 +108,7 @@ INCLUDE_ASM("asm/nonmatchings/final_code", func_8015B268_8C408);
 
 INCLUDE_ASM("asm/nonmatchings/final_code", func_8015B30C_8C4AC);
 
-INCLUDE_ASM("asm/nonmatchings/final_code", func_8015B4C0_8C660);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_rezzull_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/final_code", func_8015B658_8C7F8);
 
@@ -158,27 +158,27 @@ INCLUDE_RODATA("asm/nonmatchings/final_code", D_80161618_927B8);
 
 INCLUDE_RODATA("asm/nonmatchings/final_code", D_8016161C_927BC);
 
-INCLUDE_ASM("asm/nonmatchings/final_code", func_8015D1E8_8E388);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_rezzull_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/final_code", func_8015E3EC_8F58C);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_rezzull_OnDestroy);
 
 INCLUDE_ASM("asm/nonmatchings/final_code", func_8015E788_8F928);
 
-INCLUDE_ASM("asm/nonmatchings/final_code", func_8015E950_8FAF0);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_popper_OnCreate);
 
 INCLUDE_RODATA("asm/nonmatchings/final_code", D_8016166C_9280C);
 
 INCLUDE_RODATA("asm/nonmatchings/final_code", D_80161670_92810);
 
-INCLUDE_ASM("asm/nonmatchings/final_code", func_8015E9B8_8FB58);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_popper_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/final_code", func_8015ED38_8FED8);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_popper_OnDestroy);
 
-INCLUDE_ASM("asm/nonmatchings/final_code", func_8015ED90_8FF30);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_finaltv_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/final_code", func_8015EDC4_8FF64);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_finaltv_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/final_code", func_8015EE74_90014);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_finaltv_OnDestroy);
 
 INCLUDE_ASM("asm/nonmatchings/final_code", func_8015EEF4_90094);
 
@@ -194,7 +194,7 @@ INCLUDE_ASM("asm/nonmatchings/final_code", func_8015F480_90620);
 
 INCLUDE_ASM("asm/nonmatchings/final_code", func_8015F818_909B8);
 
-INCLUDE_ASM("asm/nonmatchings/final_code", func_8015F8C8_90A68);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_frez_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/final_code", func_8015F964_90B04);
 
@@ -210,22 +210,22 @@ INCLUDE_RODATA("asm/nonmatchings/final_code", D_80161694_92834);
 
 INCLUDE_RODATA("asm/nonmatchings/final_code", D_8016169C_9283C);
 
-INCLUDE_ASM("asm/nonmatchings/final_code", func_8015FEAC_9104C);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_frez_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/final_code", func_80160FAC_9214C);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_frez_OnDestroy);
 
-INCLUDE_ASM("asm/nonmatchings/final_code", func_80161104_922A4);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_rezcam_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/final_code", func_80161180_92320);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_rezcam_OnUpdate);
 
-void func_801613B8_92558(void) {
+void final_rezcam_OnDestroy(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/final_code", func_801613C0_92560);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_finplat_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/final_code", func_80161448_925E8);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_finplat_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/final_code", func_801614E8_92688);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_finplat_OnDestroy);
 
 INCLUDE_RODATA("asm/nonmatchings/final_code", D_801616F0_92890);
 

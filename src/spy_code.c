@@ -2,18 +2,18 @@
 
 #include "types/Level.h"
 
-void func_80159720_EADF0(void) {
+void spy_qsofa_OnCreate(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/spy_code", func_80159728_EADF8);
+INCLUDE_ASM("asm/nonmatchings/spy_code", spy_qsofa_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/spy_code", func_801597E8_EAEB8);
+INCLUDE_ASM("asm/nonmatchings/spy_code", spy_qsofa_OnDestroy);
 
-INCLUDE_ASM("asm/nonmatchings/spy_code", func_80159834_EAF04);
+INCLUDE_ASM("asm/nonmatchings/spy_code", spy_launch_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/spy_code", func_80159928_EAFF8);
+INCLUDE_ASM("asm/nonmatchings/spy_code", spy_launch_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/spy_code", func_80159DA4_EB474);
+INCLUDE_ASM("asm/nonmatchings/spy_code", spy_launch_OnDestroy);
 
 INCLUDE_ASM("asm/nonmatchings/spy_code", func_80159EEC_EB5BC);
 
@@ -23,19 +23,19 @@ INCLUDE_ASM("asm/nonmatchings/spy_code", func_8015A014_EB6E4);
 
 INCLUDE_ASM("asm/nonmatchings/spy_code", func_8015A098_EB768);
 
-INCLUDE_ASM("asm/nonmatchings/spy_code", func_8015A15C_EB82C);
+INCLUDE_ASM("asm/nonmatchings/spy_code", spy_onoff_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/spy_code", func_8015A278_EB948);
+INCLUDE_ASM("asm/nonmatchings/spy_code", spy_onoff_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/spy_code", func_8015A364_EBA34);
+INCLUDE_ASM("asm/nonmatchings/spy_code", spy_onoff_OnDestroy);
 
-INCLUDE_ASM("asm/nonmatchings/spy_code", func_8015A5E4_EBCB4);
+INCLUDE_ASM("asm/nonmatchings/spy_code", spy_gnrobot_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/spy_code", func_8015A618_EBCE8);
+INCLUDE_ASM("asm/nonmatchings/spy_code", spy_gnrobot_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/spy_code", func_8015A704_EBDD4);
+INCLUDE_ASM("asm/nonmatchings/spy_code", spy_gnrobot_OnDestroy);
 
-INCLUDE_ASM("asm/nonmatchings/spy_code", func_8015A788_EBE58);
+INCLUDE_ASM("asm/nonmatchings/spy_code", spy_btimer_OnCreate);
 
 INCLUDE_RODATA("asm/nonmatchings/spy_code", D_8015AD70_EC440);
 
@@ -45,4 +45,4 @@ INCLUDE_RODATA("asm/nonmatchings/spy_code", D_8015AE0C_EC4DC);
 
 INCLUDE_RODATA("asm/nonmatchings/spy_code", D_8015AE10_EC4E0);
 
-INCLUDE_ASM("asm/nonmatchings/spy_code", func_8015A844_EBF14);
+INCLUDE_ASM("asm/nonmatchings/spy_code", spy_btimer_OnUpdate);

@@ -2,58 +2,58 @@
 
 #include "types/Level.h"
 
-void func_80159720_B19D0(void) {
+void looney_rainbow_OnCreate(void) {
 }
 
-void func_80159728_B19D8(void) {
+void looney_rainbow_OnUpdate(void) {
 }
 
-void func_80159730_B19E0(void) {
+void looney_shittrn_OnCreate(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_80159738_B19E8);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_shittrn_OnUpdate);
 
-void func_80159850_B1B00(void) {
+void looney_shittrn_OnDestroy(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_80159858_B1B08);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_bug_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_80159934_B1BE4);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_bug_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_80159BC8_B1E78);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_bug_OnDestroy);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_80159CC4_B1F74);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_bouncer_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_80159D48_B1FF8);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_bouncer_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015A728_B29D8);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_bouncer_OnDestroy);
 
-void func_8015A838_B2AE8(Level_t* level)
+void looney_crawler_OnCreate(Level_t* level)
 {
     level->_F4[0] = 0;
     level->_4E = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015A844_B2AF4);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_crawler_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015A900_B2BB0);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_crawler_OnDestroy);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015AA04_B2CB4);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_bowling_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015AA58_B2D08);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_bowling_OnUpdate);
 
-void func_8015AAE8_B2D98(void) {
+void looney_bowling_OnDestroy(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015AAF0_B2DA0);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_doeboy_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015AB08_B2DB8);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_doeboy_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015AC2C_B2EDC);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_doeboy_OnDestroy);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015AC9C_B2F4C);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_brkblok_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015AD10_B2FC0);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_brkblok_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015ADD8_B3088);
 
@@ -65,7 +65,7 @@ INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015B250_B3500);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015B4BC_B376C);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015B620_B38D0);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_brkblok_OnDestroy);
 
 INCLUDE_RODATA("asm/nonmatchings/looney_code", D_80161BD0_B9E80);
 
@@ -119,7 +119,7 @@ INCLUDE_RODATA("asm/nonmatchings/looney_code", D_80161DA8_BA058);
 
 INCLUDE_RODATA("asm/nonmatchings/looney_code", D_80161DC0_BA070);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015B89C_B3B4C);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_leafgen_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015B934_B3BE4);
 
@@ -127,11 +127,11 @@ INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015BBA4_B3E54);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015BC04_B3EB4);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015BCA4_B3F54);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_leafgen_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015BDF8_B40A8);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_leafgen_OnDestroy);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015BF34_B41E4);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_funguy_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015BFCC_B427C);
 
@@ -141,61 +141,61 @@ INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015C230_B44E0);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015C2D8_B4588);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015C438_B46E8);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_funguy_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015C4CC_B477C);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_funguy_OnDestroy);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015C598_B4848);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_fallgen_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015C6A0_B4950);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015C7EC_B4A9C);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_fallgen_OnUpdate);
 
-void func_8015CA84_B4D34(void) {
+void looney_fallgen_OnDestroy(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015CA8C_B4D3C);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_fallobj_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015CB5C_B4E0C);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015CCA0_B4F50);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_fallobj_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015CF10_B51C0);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_fallobj_OnDestroy);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015CFD4_B5284);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_teeter_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015CFFC_B52AC);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_teeter_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015D1C0_B5470);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_teeter_OnDestroy);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015D278_B5528);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_trapsit_OnCreate);
 
 INCLUDE_RODATA("asm/nonmatchings/looney_code", D_80161DD8_BA088);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015D2C4_B5574);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_trapsit_OnUpdate);
 
-void func_8015D4EC_B579C(void) {
+void looney_trapsit_OnDestroy(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015D4F4_B57A4);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_trapmuv_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015D60C_B58BC);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_trapmuv_OnUpdate);
 
-void func_8015D894_B5B44(void) {
+void looney_trapmuv_OnDestroy(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015D89C_B5B4C);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_pusher_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015D8F0_B5BA0);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_pusher_OnUpdate);
 
-void func_8015DA68_B5D18(void) {
+void looney_pusher_OnDestroy(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015DA70_B5D20);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_bullet_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015DB0C_B5DBC);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_bullet_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015DCB4_B5F64);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_bullet_OnDestroy);
 
 INCLUDE_RODATA("asm/nonmatchings/looney_code", D_80161E00_BA0B0);
 
@@ -205,7 +205,7 @@ INCLUDE_RODATA("asm/nonmatchings/looney_code", D_80161E0C_BA0BC);
 
 INCLUDE_RODATA("asm/nonmatchings/looney_code", D_80161E10_BA0C0);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015DDDC_B608C);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_hunter_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015E1E4_B6494);
 
@@ -215,68 +215,68 @@ INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015E31C_B65CC);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015E4C4_B6774);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015E5B8_B6868);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_hunter_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015F25C_B750C);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_hunter_OnDestroy);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015F308_B75B8);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015F414_B76C4);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_daisy_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015F564_B7814);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_daisy_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015FEC8_B8178);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015FF9C_B824C);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_daisy_OnDestroy);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_80160108_B83B8);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_grrfish_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", func_80160164_B8414);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", func_80160318_B85C8);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_80160444_B86F4);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_grrfish_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_801605EC_B889C);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_grrfish_OnDestroy);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_80160690_B8940);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_funplat_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8016072C_B89DC);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_funplat_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_80160934_B8BE4);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_funplat_OnDestroy);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_80160A18_B8CC8);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_fxgen_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", func_80160B20_B8DD0);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", func_80160BDC_B8E8C);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_801611D8_B9488);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_fxgen_OnUpdate);
 
-void func_80161444_B96F4(void) {
+void looney_fxgen_OnDestroy(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_8016144C_B96FC);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_frocket_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", func_801615DC_B988C);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", func_80161664_B9914);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_801616DC_B998C);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_frocket_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_801619A0_B9C50);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_frocket_OnDestroy);
 
-void func_80161A00_B9CB0(void) {
+void looney_genbrk_OnCreate(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_80161A08_B9CB8);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_genbrk_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_80161A28_B9CD8);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_genbrk_OnDestroy);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_80161A78_B9D28);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_jimboat_OnDestroy);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_80161B28_B9DD8);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_colorset_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", func_80161B50_B9E00);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_colorset_OnDestroy);
 
 INCLUDE_RODATA("asm/nonmatchings/looney_code", D_80161E88_BA138);
