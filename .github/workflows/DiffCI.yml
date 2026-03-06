@@ -42,7 +42,7 @@ jobs:
           make clean
           make split
 
-      - name: Buldiing project
+      - name: Building project
         run: make build -j8
 
       - name: Diffing project
