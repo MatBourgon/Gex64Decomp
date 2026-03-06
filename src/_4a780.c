@@ -126,7 +126,6 @@ short GetRedRemotesForLevel(unsigned int levelIndex) {
     return TVTextInformation[levelIndex].nRedRemotes;
 }
 
-
 INCLUDE_RODATA("asm/nonmatchings/_4a780", D_8007E740);
 
 INCLUDE_RODATA("asm/nonmatchings/_4a780", D_8007E748);
