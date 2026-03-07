@@ -6,9 +6,9 @@ INCLUDE_ASM("asm/nonmatchings/rmon/rmonregs", __rmonSetGRegisters);
 
 INCLUDE_ASM("asm/nonmatchings/rmon/rmonregs", __rmonGetFRegisters);
 
-INCLUDE_ASM("asm/nonmatchings/rmon/rmonregs", func_80067034);
+INCLUDE_ASM("asm/nonmatchings/rmon/rmonregs", __rmonSetFRegisters);
 
-INCLUDE_ASM("asm/nonmatchings/rmon/rmonregs", func_800670C0);
+INCLUDE_ASM("asm/nonmatchings/rmon/rmonregs", rmonGetRcpRegister);
 
 INCLUDE_ASM("asm/nonmatchings/rmon/rmonregs", __rmonGetSRegs);
 
