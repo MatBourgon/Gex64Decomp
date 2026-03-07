@@ -50,4 +50,14 @@ jobs:
 
       - name: Cleanup
         run: rm -f gex64.z64
-        
+
+      - name: Setting up project for report testing
+        run: |
+          make clean
+          make splitobjdiff
+          make buildobjdiff -j8
+          make generatediffjson
+
+      - name: Generate report
+        run: make build report
+        # do not submit this report, as we are just testing to see if the report flow is working still
