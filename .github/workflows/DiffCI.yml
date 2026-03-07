@@ -58,3 +58,6 @@ jobs:
       - name: Generate report
         run: make build report
         # do not submit this report, as we are just testing to see if the report flow is working still
+
+      - name: Cleanup
+        run: rm -f gex64.z64
