@@ -48,9 +48,6 @@ jobs:
       - name: Diffing project
         run: make diff
 
-      - name: Cleanup
-        run: rm -f gex64.z64
-
       - name: Setting up project for report testing
         run: |
           make clean
