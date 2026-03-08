@@ -1,0 +1,51 @@
+name: ReportTestCI
+
+on:
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Intall packages
+        run: sudo apt-get install -y git make git build-essential binutils-mips-linux-gnu python3 python3-pip
+
+      - name: Install Python modules
+        run: pip install -r requirements.txt
+
+      - name: Fetch secrets
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ secrets.REPO }}
+          token: ${{ secrets.TOKEN }}
+          path: secret
+
+      - name: Decrypt secrets
+        working-directory: secret
+        run: |
+          python3 decrypt.py
+          cp gex64.z64 ..
+
+      - name: Setup project
+        run: |
+          make clean
+          make splitobjdiff
+          make buildobjdiff -j8
+          make generatediffjson
+
+      - name: Generate report
+        run: make buildreport
+
+      - name: Cleanup
+        run: rm -f gex64.z64
