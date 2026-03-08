@@ -1,3 +1,6 @@
-#include "common.h"
+#include "PR/os_internal.h"
+#include "PRinternal/osint.h"
 
-INCLUDE_ASM("asm/nonmatchings/os/getactivequeue", __osGetActiveQueue);
+OSThread* __osGetActiveQueue(void) {
+    return __osActiveQueue;
+}

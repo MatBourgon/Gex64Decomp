@@ -1,19 +1,13 @@
 #ifndef _XSTDIO_H
 #define _XSTDIO_H
-
-#include <compiler/gcc/stdlib.h>
-#include <compiler/gcc/stdarg.h>
-
-#ifdef __sgi
-typedef double ldouble; // IDO does not support long doubles
-#else
-typedef long double ldouble;
-#endif
+#include "PR/ultratypes.h"
+#include "compiler/gcc/stdlib.h"
+#include "compiler/gcc/stdarg.h"
 
 typedef struct {
     /* 0x0 */ union {
         /* 0x0 */ long long ll;
-        /* 0x0 */ ldouble ld;
+        /* 0x0 */ double ld;
     } v;
     /* 0x8 */ unsigned char* s;
     /* 0xC */ int n0;
@@ -34,9 +28,10 @@ typedef struct {
 #define FLAGS_MINUS 4
 #define FLAGS_HASH 8
 #define FLAGS_ZERO 16
+typedef char *outfun(char*,const char*,size_t);
 
-int _Printf(void* pfn(void*,const char*,size_t), void *arg, const char *fmt, va_list ap);
-void _Litob(_Pft *px, char code);
-void _Ldtob(_Pft* px, char code);
+int _Printf(outfun prout, char *arg, const char *fmt, va_list args);
+void _Litob(_Pft *args, char type);
+void _Ldtob(_Pft* args, char type);
 
 #endif
