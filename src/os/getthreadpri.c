@@ -1,3 +1,10 @@
-#include "common.h"
+#include "PR/os_internal.h"
+#include "PRinternal/osint.h"
 
-INCLUDE_ASM("asm/nonmatchings/os/getthreadpri", osGetThreadPri);
+OSPri osGetThreadPri(OSThread* thread) {
+    if (thread == NULL) {
+        thread = __osRunningThread;
+    }
+
+    return thread->priority;
+}
