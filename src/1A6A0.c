@@ -3,6 +3,15 @@
 #include "types/GameState.h"
 #include "types/Remotes.h"
 
+typedef struct
+{
+    int a, b;
+} D_80161130_t;
+
+extern D_80161130_t D_80161130[];
+extern int D_80161168[];
+extern int D_80161174[];
+
 extern int D_800D1810;
 extern int D_800E5FDC;
 extern int D_800EB8A0;
@@ -26,7 +35,53 @@ INCLUDE_ASM("asm/nonmatchings/1A6A0", func_80019B1C);
 
 INCLUDE_ASM("asm/nonmatchings/1A6A0", func_80019F18);
 
-INCLUDE_ASM("asm/nonmatchings/1A6A0", func_8001A1D8);
+int func_8001A1D8(unsigned char* remoteData) {
+    int i;
+    unsigned int remoteBits;
+    int var_v1;
+
+    remoteBits = 0;
+    i = -1;
+    
+    while (*remoteData >= D_80161130[i + 1].a) {
+        ++i;
+    };
+    
+    if (i >= 0) {
+        remoteBits |= D_80161130[i].b;
+    }
+    
+    var_v1 = ((unsigned int*)gpGameState8)[0x4C98/4] >> 0x15;
+    
+    i = 0;
+    while (var_v1 != 0) {
+        if (var_v1 & 1) {
+            remoteBits |= D_80161168[i];
+        }
+        var_v1 >>= 1;
+        i += 1;
+    }
+    
+    var_v1 = ((int*)gpGameState8)[0x4C94/4];
+    i = 0;
+    
+     while (var_v1 != 0) {
+        i += (var_v1 & 1);
+        var_v1 >>= 1;
+    }
+    
+    i /= 3;
+    
+    if (i >= 8) {
+        i = 7;
+    }
+    
+    while (i != 0) {
+        remoteBits |= D_80161174[i--];
+    }
+    
+    return remoteBits;
+}
 
 void GetRemoteCount(RemoteCount* remotes) {
     const int c_RedRemoteEntries = 14;
