@@ -1384,7 +1384,7 @@ void map_lvltv_OnUpdate(Level_t* arg0) {
         if (arg0->_115 == 0U) {
             arg0->_115 = 0x69U;
         }
-        if ((func_8006A020() % ((arg0->_115 >> 3) + 1)) == 0) {
+        if ((rand() % ((arg0->_115 >> 3) + 1)) == 0) {
             arg0->_111 = arg0->_110 = (*temp_s1 * 9) + 7;
         } else {
             arg0->_110 = 7;
