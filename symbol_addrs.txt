@@ -100,6 +100,8 @@ __rmonUtilityBuffer = 0x800EB8A8; // size:256
 __rmonRcpAtBreak = 0x801574DC;
 osViModeTable = 0x800799B0;
 
+Print3DTextf = 0x80038BA0;
+vPrint3DTextf = 0x800387F0;
 
 // == Segments ==
 

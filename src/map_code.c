@@ -572,7 +572,7 @@ void func_8015A854_BB284(int arg0, short arg1) {
         }
         
         func_80037B00((temp_a0 << 0x10) >> 0x10, arg1);
-        func_80038BA0("#2%s", var_s1);
+        Print3DTextf("#2%s", var_s1);
         var_s1 = bufferPtr + 1;
         arg1 += 0x1E;
     } while (last_char != 0);
@@ -1799,25 +1799,25 @@ void func_8015EED8_BF908(int* arg0) {
     func_80037B00(0x5F, 0x4B);
     if (D_8014F34C == 0) {
         sprintf(&sp10, "%s%s", &D_80078184, D_801611C0_C1BF0);
-        func_80038BA0(sp10);
+        Print3DTextf(sp10);
     } else {
-        func_80038BA0(D_801611C0_C1BF0);
+        Print3DTextf(D_801611C0_C1BF0);
     }
     
     func_80037B00(0x53, 0x6E);
     if (D_8014F34C == 1) {
         sprintf(&sp10, "%s%s", &D_80078184, D_801611CC_C1BFC);
-        func_80038BA0(sp10);
+        Print3DTextf(sp10);
     } else {
-        func_80038BA0(D_801611CC_C1BFC);
+        Print3DTextf(D_801611CC_C1BFC);
     }
     
     func_80037B00(0x64, 0x91);
     if (D_8014F34C == 2) {
         sprintf(&sp10, "%s%s", &D_80078184, D_80078190);
-        func_80038BA0(sp10);
+        Print3DTextf(sp10);
     } else {
-        func_80038BA0(D_80078190);
+        Print3DTextf(D_80078190);
     }
     
     if (D_800E5DB2 & 0x9000) {
@@ -1865,54 +1865,54 @@ void func_8015F228_BFC58(int* arg0) {
     
     if (D_8014F34C == 0) {
         sprintf(sp10, "%s%s", D_80078184, D_80078188);
-        func_80038BA0(sp10);
+        Print3DTextf(sp10);
     } else {
-        func_80038BA0(D_80078188);
+        Print3DTextf(D_80078188);
     }
     
     func_80037B00(0x5F, 0x4B);
     
     if (D_8014F34C == 1) {
         sprintf(sp10, "%s%s", D_80078184, D_801611C0_C1BF0);
-        func_80038BA0(sp10);
+        Print3DTextf(sp10);
     } else {
-        func_80038BA0(D_801611C0_C1BF0);
+        Print3DTextf(D_801611C0_C1BF0);
     }
     
     func_80037B00(0x53, 0x64);
     
     if (D_8014F34C == 2) {
         sprintf(sp10, "%s%s", D_80078184, D_801611CC_C1BFC);
-        func_80038BA0(sp10);
+        Print3DTextf(sp10);
     } else {
-        func_80038BA0(D_801611CC_C1BFC);
+        Print3DTextf(D_801611CC_C1BFC);
     }
     
     func_80037B00(0x52, 0x7D);
     
     if (D_8014F34C == 3) {
         sprintf(sp10, "%s%s", D_80078184, D_801611B4_C1BE4);
-        func_80038BA0(sp10);
+        Print3DTextf(sp10);
     } else {
-        func_80038BA0(D_801611B4_C1BE4);
+        Print3DTextf(D_801611B4_C1BE4);
     }
     
     func_80037B00(0x64, 0x96);
     
     if (D_8014F34C == 4) {
         sprintf(sp10, "%s%s", D_80078184, D_80078190);
-        func_80038BA0(sp10);
+        Print3DTextf(sp10);
     } else {
-        func_80038BA0(D_80078190);
+        Print3DTextf(D_80078190);
     }
     
     func_80037B00(0x6E, 0xAF);
     
     if (D_8014F34C == 5) {
         sprintf(sp10, "%s%s", D_80078184, D_800781B8);
-        func_80038BA0(sp10);
+        Print3DTextf(sp10);
     } else {
-        func_80038BA0(D_800781B8);
+        Print3DTextf(D_800781B8);
     }
     
     if ((D_800E5DB2 & 0x8000)) {
@@ -1970,7 +1970,7 @@ void func_8015F678_C00A8(short* arg0) {
     char* var_v1;
 
     func_80037B00(0x46, 0x6E);
-    func_80038BA0("#2GAME OVER");
+    Print3DTextf("#2GAME OVER");
     gSPDisplayList(D_80157050++, D_8006D578);
     func_80030DD8("PRESS A TO START NEW GAME", 0x2D, 0xB4, 1);
     gDPPipeSync2(D_80157050);
@@ -1999,9 +1999,9 @@ void func_8015F770_C01A0(void) {
     if (D_80161680_C20B0 < 0x3C) {
         D_80161680_C20B0 += 1;
         func_80037B00(0x5A, 0x50);
-        func_80038BA0("GAME LOAD");
+        Print3DTextf("GAME LOAD");
         func_80037B00(0x6E, 0x6E);
-        func_80038BA0("FAILED");
+        Print3DTextf("FAILED");
     } else {
         func_80040170(4);
     }
@@ -2053,9 +2053,9 @@ void func_8015F804_C0234(short* arg0) {
     buffer[i] = 0;
     
     func_80037B00(0x73, 0x46);
-    func_80038BA0("ENTER");
+    Print3DTextf("ENTER");
     func_80037B00(0x62, 0x64);
-    func_80038BA0(D_801611D8_C1C08);
+    Print3DTextf(D_801611D8_C1C08);
     gSPDisplayList(D_80157050++, D_8006D578);
     func_80030DD8(buffer, 0x50, 0x8C, 1);
     if (D_800E5DB2 & 0x8000) {
@@ -2090,7 +2090,7 @@ void func_8015F804_C0234(short* arg0) {
 void func_8015FBBC_C05EC(short* arg0) {
 
     func_80037B00(0x3C, 0x5F);
-    func_80038BA0("PASSWORD IS");
+    Print3DTextf("PASSWORD IS");
     gSPDisplayList(D_80157050++, D_8006D578);
     func_80030DD8(D_800E5D00, 0x50, 0x82, 1);
     func_80030DD8("PRESS A TO CONTINUE", 0x50, 0xC8, 1);
@@ -2118,20 +2118,20 @@ void func_8015FC88_C06B8(int* arg0) {
     }
     
     func_80037B00(0x37, 0x32);
-    func_80038BA0(&D_801611E4_C1C14);
+    Print3DTextf(&D_801611E4_C1C14);
     func_80037B00(0x62, 0x64);
     if (D_8014F34C == 0) {
         sprintf(&sp10, "%s%s", &D_80078184, &D_801611D8_C1C08);
-        func_80038BA0(&sp10);
+        Print3DTextf(&sp10);
     } else {
-        func_80038BA0(&D_801611D8_C1C08);
+        Print3DTextf(&D_801611D8_C1C08);
     }
     func_80037B00(0x32, 0x8C);
     if (D_8014F34C == 1) {
         sprintf(&sp10, "%s%s", &D_80078184, &D_80078198);
-        func_80038BA0(&sp10);
+        Print3DTextf(&sp10);
     } else {
-        func_80038BA0(&D_80078198);
+        Print3DTextf(&D_80078198);
     }
     if (D_800E5DB2 & 0x8000) {
         switch (D_8014F34C) {
@@ -2178,20 +2178,20 @@ void func_8015FF60_C0990(int* arg0) {
         D_8014F34C = 1;
     }
     func_80037B00(0x46, 0x32);
-    func_80038BA0(&D_801611F8_C1C28);
+    Print3DTextf(&D_801611F8_C1C28);
     func_80037B00(0x62, 0x64);
     if ((s8) D_8014F34C == 0) {
         sprintf(&sp10, "%s%s", &D_80078184, &D_801611D8_C1C08);
-        func_80038BA0(&sp10);
+        Print3DTextf(&sp10);
     } else {
-        func_80038BA0(&D_801611D8_C1C08);
+        Print3DTextf(&D_801611D8_C1C08);
     }
     func_80037B00(0x32, 0x8C);
     if ((s8) D_8014F34C == 1) {
         sprintf(&sp10, "%s%s", &D_80078184, &D_80078198);
-        func_80038BA0(&sp10);
+        Print3DTextf(&sp10);
     } else {
-        func_80038BA0(&D_80078198);
+        Print3DTextf(&D_80078198);
     }
     if (D_800E5DB2 & 0x8000) {
         switch (D_8014F34C) {
@@ -2569,7 +2569,7 @@ void func_80160DF0_C1820(void* arg0) {
 
 void func_801610B8_C1AE8(short* arg0) {
     func_80037B00(0x50, 0x6E);
-    func_80038BA0("#2DATA SAVED");
+    Print3DTextf("#2DATA SAVED");
     if (++D_8014F34C >= 0x1F) {
         arg0[0x4C12/2] = 0;
         func_80032F90();

@@ -110,7 +110,7 @@ segments:
       - [0x31960, c, _31960]
       - [0x32D70, asm]
       - [0x345E0, asm]
-      - [0x368B0, asm]
+      - [0x368B0, c]
       - [0x3AF50, asm]
       - [0x3BAA0, asm]
       - [0x3C190, c, main]
