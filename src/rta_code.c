@@ -168,14 +168,14 @@ void rta_qmark_OnCreate(Level_t* level)
     level->_100 = 0;
 }
 
-void rta_qmark_OnUpdate(Level_t* arg0, int* arg1) {
+void rta_qmark_OnUpdate(Level_t* level, int* arg1) {
     int* temp_s0;
     short* temp_t0;
     volatile char _[4];
     
-    temp_t0 = (short*)arg0->_20[1];
-    temp_s0 = &arg0->_F4[2];
-    if (((*(int*)&arg0->_10C) != 0) && !(arg1[0x4C08/4] & 0x2000)) {
+    temp_t0 = (short*)level->_20[1];
+    temp_s0 = &level->_F4[2];
+    if (((*(int*)&level->_10C) != 0) && !(arg1[0x4C08/4] & 0x2000)) {
         func_8003F6CC(temp_t0[0], temp_t0[1], temp_t0[2], temp_t0[3], temp_t0[5], temp_t0 + 6);
     }
     switch (temp_s0[2])
@@ -199,28 +199,28 @@ void rta_qmark_OnUpdate(Level_t* arg0, int* arg1) {
             temp_s0[0] = 0x40;
             temp_s0[1]= 0;
             temp_s0[4] = 0;
-            arg0->flags &= ~0x400;
+            level->flags &= ~0x400;
         }
             
         break;
     }
     temp_s0[0] += temp_s0[1];
-    arg0->_60[2] = ((arg0->_60[2] + temp_s0[0]) & 0xFFF);
+    level->_60[2] = ((level->_60[2] + temp_s0[0]) & 0xFFF);
 }
 
-void rta_qmark_OnDestroy(Level_t* arg0, int* arg1) {
+void rta_qmark_OnDestroy(Level_t* level, int* arg1) {
     short* temp_s2;
-    temp_s2 = (short*)arg0->_20[1];
+    temp_s2 = (short*)level->_20[1];
     
-    if (((int*)arg0->_70[2])[5] == arg1[12/4]) {
-        if (arg0->_104 != 1) {
-            func_80050508(arg0, 3, 0, 0x64, 0x1388);
+    if (((int*)level->_70[2])[5] == arg1[12/4]) {
+        if (level->_104 != 1) {
+            func_80050508(level, 3, 0, 0x64, 0x1388);
         }
-        arg0->_104 = 1;
-        arg0->_F4[2] = 0x12C;
-         (*(int*)&arg0->_110) = temp_s2[4];
-        (*(int*)&arg0->_10C) = 1;
-        arg0->flags |= 0x400;
+        level->_104 = 1;
+        level->_F4[2] = 0x12C;
+         (*(int*)&level->_110) = temp_s2[4];
+        (*(int*)&level->_10C) = 1;
+        level->flags |= 0x400;
     }
 }
 

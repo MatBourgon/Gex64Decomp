@@ -31,7 +31,32 @@ void circuit_crawler_OnCreate(Level_t* level)
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_crawler_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_crawler_OnDestroy);
+void circuit_crawler_OnDestroy(Level_t* level, int* arg1) {
+    int temp_a3;
+    int temp_v1;
+    char** temp_a2;
+
+    temp_a2 = ((char***)level->_70)[2];
+    temp_a3 = ((short*)temp_a2)[3];
+    if (temp_a3 == 1) {
+        if ((temp_a2[5] == (char*)arg1[12/4]) && (temp_a2[12/4][5] >= 6U)) {
+            if (level->_F4[0] == 0)
+            {
+                ((char*)level->_40)[0xe] = 1;
+                level->_F4[0] = temp_a3;
+                level->_50[7] = 0;
+                level->_14 &= ~0x10;
+                level->flags |= 0x100000;
+            }
+            else if (level->_F4[0] == 2)
+            {
+                func_80047904(level, 5, 3, 0);
+            }
+        } else if ((((short*)temp_a2)[3] == 1) && (temp_a2[5] == (char*)arg1[12/4]) && ((level->_F4[0] - 1) >= 2U)) {
+            func_80022714(level);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_charger_OnCreate);
 
@@ -142,13 +167,13 @@ void circuit_qmark_OnCreate(Level_t* level)
     level->_100 = 0;
 }
 
-void circuit_qmark_OnUpdate(Level_t* arg0, int* arg1) {
+void circuit_qmark_OnUpdate(Level_t* level, int* arg1) {
     int* temp_s0;
     short* temp_t0;
     
-    temp_t0 = (short*)arg0->_20[1];
-    temp_s0 = &arg0->_F4[2];
-    if (((*(int*)&arg0->_10C) != 0) && !(arg1[0x4C08/4] & 0x2000)) {
+    temp_t0 = (short*)level->_20[1];
+    temp_s0 = &level->_F4[2];
+    if (((*(int*)&level->_10C) != 0) && !(arg1[0x4C08/4] & 0x2000)) {
         func_8003F6CC(temp_t0[0], temp_t0[1], temp_t0[2], temp_t0[3], temp_t0[5], temp_t0 + 6);
     }
     switch (temp_s0[2])
@@ -156,7 +181,7 @@ void circuit_qmark_OnUpdate(Level_t* arg0, int* arg1) {
         case 0: break;
         
         case 1:
-        if (func_80030840(SVECTOR_DistanceSquared((SVECTOR*)&arg0->_40[4], (SVECTOR*)&D_8006CFA0[0x48/4]), 0) > 1000
+        if (func_80030840(SVECTOR_DistanceSquared((SVECTOR*)&level->_40[4], (SVECTOR*)&D_8006CFA0[0x48/4]), 0) > 1000
             || !temp_s0[5])
         {
             temp_s0[2] = 2;
@@ -178,7 +203,7 @@ void circuit_qmark_OnUpdate(Level_t* arg0, int* arg1) {
         break;
     }
     temp_s0[0] += temp_s0[1];
-    arg0->_60[2] = ((arg0->_60[2] + temp_s0[0]) & 0xFFF);
+    level->_60[2] = ((level->_60[2] + temp_s0[0]) & 0xFFF);
 }
 
 void circuit_qmark_OnDestroy(Level_t* level) {
