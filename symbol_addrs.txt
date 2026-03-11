@@ -19,6 +19,7 @@ GetRemoteCount = 0x8001A310; // type:func
 strcmp = 0x8003E9E0; // type:func
 GetLevelIndexFromId = 0x8004B520; // type:func
 GetRedRemotesForLevel = 0x8004B5D4; // type:func
+DrawTextToScreen = 0x80030DD8; // type:func
 
 send_mesg = 0x8005D90C; // type:func
 handle_CpU = 0x8005D9C8; // type:func
@@ -30,6 +31,8 @@ TVTextInformation = 0x800782A8; // size:0x2E8
 gpGameState4 = 0x8006FCC4; // type:GameState*
 gpGameState8 = 0x8006FCC8; // type:GameState*
 gGameState = 0x800C0AC0; // size:0x4cd8 segment:main
+
+gGlobalMessageBuffer = 0x80153A58;
 
 CharacterManipArray_6F078 = 0x8006F078; // type:s8 size:95
 CharacterManip_30DAC = 0x80030DAC; // type:func
