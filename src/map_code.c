@@ -500,7 +500,6 @@ void map_qmark_OnUpdate(Level_t* arg0, int* arg1) {
     int* temp_s0;
     short* temp_t0;
     
-
     temp_t0 = (short*)arg0->_20[1];
     temp_s0 = &arg0->_F4[2];
     if (((*(int*)&arg0->_10C) != 0) && !(arg1[0x4C08/4] & 0x2000)) {
@@ -533,7 +532,7 @@ void map_qmark_OnUpdate(Level_t* arg0, int* arg1) {
         break;
     }
     temp_s0[0] += temp_s0[1];
-    arg0->_60[2] = (u16) ((arg0->_60[2] + temp_s0[0]) & 0xFFF);
+    arg0->_60[2] = ((arg0->_60[2] + temp_s0[0]) & 0xFFF);
 }
 
 void map_qmark_OnDestroy(Level_t* level) {

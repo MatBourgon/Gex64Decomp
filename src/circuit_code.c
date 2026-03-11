@@ -2,6 +2,9 @@
 
 #include "types/Level.h"
 
+#include "types/Vector.h"
+extern int* D_8006CFA0;
+
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_plat_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_plat_OnUpdate);
@@ -139,9 +142,56 @@ void circuit_qmark_OnCreate(Level_t* level)
     level->_100 = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_qmark_OnUpdate);
+void circuit_qmark_OnUpdate(Level_t* arg0, int* arg1) {
+    int* temp_s0;
+    short* temp_t0;
+    
+    temp_t0 = (short*)arg0->_20[1];
+    temp_s0 = &arg0->_F4[2];
+    if (((*(int*)&arg0->_10C) != 0) && !(arg1[0x4C08/4] & 0x2000)) {
+        func_8003F6CC(temp_t0[0], temp_t0[1], temp_t0[2], temp_t0[3], temp_t0[5], temp_t0 + 6);
+    }
+    switch (temp_s0[2])
+    {
+        case 0: break;
+        
+        case 1:
+        if (func_80030840(SVECTOR_DistanceSquared((SVECTOR*)&arg0->_40[4], (SVECTOR*)&D_8006CFA0[0x48/4]), 0) > 1000
+            || !temp_s0[5])
+        {
+            temp_s0[2] = 2;
+            temp_s0[1] = -6;
+        }
+        else
+            temp_s0[5]--;
+            
+        break;
+        
+        case 2:
+        if (temp_s0[0] < 0x41) {
+            temp_s0[2] = 0;
+            temp_s0[0] = 0x40;
+            temp_s0[1]= 0;
+            temp_s0[4] = 0;
+        }
+            
+        break;
+    }
+    temp_s0[0] += temp_s0[1];
+    arg0->_60[2] = ((arg0->_60[2] + temp_s0[0]) & 0xFFF);
+}
 
-INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_qmark_OnDestroy);
+void circuit_qmark_OnDestroy(Level_t* level) {
+    short* temp_s1;
+
+    temp_s1 = (short*)level->_20[1];
+    if (func_80027500(level->_70[2]) != 0) {
+        level->_104 = 1;
+        level->_F4[2] = 0x12C;
+        *((int*)&level->_110) = temp_s1[4];
+        *((int*)&level->_10C) = 1;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", func_8015EC00_85DE0);
 
