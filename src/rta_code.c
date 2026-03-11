@@ -2,6 +2,9 @@
 
 #include "types/Level.h"
 
+#include "types/Vector.h"
+extern int* D_8006CFA0;
+
 INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zgrate_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zgrate_OnUpdate);
@@ -76,9 +79,32 @@ void rta_crawler_OnCreate(Level_t* level)
     level->_4E = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/rta_code", rta_crawler_OnUpdate);
+void rta_crawler_OnUpdate(Level_t* level) {
+    
+    int v0, v1;
 
-INCLUDE_ASM("asm/nonmatchings/rta_code", rta_crawler_OnDestroy);
+    
+    v1 = level->_50[0];
+    v0 = level->_50[1];
+    level->_60[2] = func_80030538(v0 - level->_40[5], v1 - level->_40[4]) - 0x400;
+    func_8002DAF8(level, -1);
+}
+
+void rta_crawler_OnDestroy(Level_t* level, int* arg1) {
+    char** temp_a2;
+
+    temp_a2 = (char**)level->_70[2];
+    if ((temp_a2[5] == (char*)arg1[12/4]) && (((short*)temp_a2)[3] == 1)) {
+        if (temp_a2[12/4][5] >= 6U) {
+            func_80047904(level, 5, 3, 0);
+        }
+        else
+        {
+            func_80022714(level, arg1);
+        }
+    }
+}
+
 
 INCLUDE_ASM("asm/nonmatchings/rta_code", rta_eel_OnCreate);
 
@@ -158,11 +184,68 @@ INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zbubgen_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zbubgen_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/rta_code", rta_qmark_OnCreate);
+void rta_qmark_OnCreate(Level_t* level)
+{
+    level->_104 = 0;
+    level->_F4[2] = 0x40;
+    level->_100 = 0;
+}
 
-INCLUDE_ASM("asm/nonmatchings/rta_code", rta_qmark_OnUpdate);
+void rta_qmark_OnUpdate(Level_t* level, int* arg1) {
+    int* temp_s0;
+    short* temp_t0;
+    volatile char _[4];
+    
+    temp_t0 = (short*)level->_20[1];
+    temp_s0 = &level->_F4[2];
+    if (((*(int*)&level->_10C) != 0) && !(arg1[0x4C08/4] & 0x2000)) {
+        func_8003F6CC(temp_t0[0], temp_t0[1], temp_t0[2], temp_t0[3], temp_t0[5], temp_t0 + 6);
+    }
+    switch (temp_s0[2])
+    {
+        case 0: break;
+        
+        case 1:
+        if (!temp_s0[5])
+        {
+            temp_s0[2] = 2;
+            temp_s0[1] = -6;
+        }
+        else
+            temp_s0[5]--;
+            
+        break;
+        
+        case 2:
+        if (temp_s0[0] < 0x41) {
+            temp_s0[2] = 0;
+            temp_s0[0] = 0x40;
+            temp_s0[1]= 0;
+            temp_s0[4] = 0;
+            level->flags &= ~0x400;
+        }
+            
+        break;
+    }
+    temp_s0[0] += temp_s0[1];
+    level->_60[2] = ((level->_60[2] + temp_s0[0]) & 0xFFF);
+}
 
-INCLUDE_ASM("asm/nonmatchings/rta_code", rta_qmark_OnDestroy);
+void rta_qmark_OnDestroy(Level_t* level, int* arg1) {
+    short* temp_s2;
+    temp_s2 = (short*)level->_20[1];
+    
+    if (((int*)level->_70[2])[5] == arg1[12/4]) {
+        if (level->_104 != 1) {
+            func_80050508(level, 3, 0, 0x64, 0x1388);
+        }
+        level->_104 = 1;
+        level->_F4[2] = 0x12C;
+         (*(int*)&level->_110) = temp_s2[4];
+        (*(int*)&level->_10C) = 1;
+        level->flags |= 0x400;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zarrow_OnCreate);
 

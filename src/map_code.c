@@ -306,24 +306,24 @@ void map_intro_OnUpdate(int* level, int* arg1) {
 void map_intro_OnDestroy(void) {
 }
 
-void map_angel_OnCreate(Level_t* arg0) {
-    ((short*)&arg0->_100)[1] = -0x1000;
-    arg0->flags |= 0xC00;
-    if ((arg0->_18)[0x1C/4] != 0) {
-        ((short*)&arg0->_100)[1] = *(arg0->_18)[0x1C/4];
+void map_angel_OnCreate(Level_t* level) {
+    ((short*)&level->_100)[1] = -0x1000;
+    level->flags |= 0xC00;
+    if ((level->_18)[0x1C/4] != 0) {
+        ((short*)&level->_100)[1] = *(level->_18)[0x1C/4];
     }
 }
 
-void map_angel_OnUpdate(Level_t* arg0, int* arg1) {
+void map_angel_OnUpdate(Level_t* level, int* arg1) {
     int* temp_v0;
     short* temp_s2;
     short* temp_s3;
 
-    temp_v0 = (int*)arg0->_1C[0x20/4];
+    temp_v0 = (int*)level->_1C[0x20/4];
     temp_s3 = (short*)arg1[3];
-    temp_s2 = (short*)&arg0->_F4[2];
+    temp_s2 = (short*)&level->_F4[2];
 
-    if (arg0->_F4[0] == 1)
+    if (level->_F4[0] == 1)
     {
         if ((temp_v0 != 0) && (*temp_v0 != 0)) {
             func_800257B4(arg1[3]);
@@ -331,26 +331,26 @@ void map_angel_OnUpdate(Level_t* arg0, int* arg1) {
         goto block_10;
     
     }
-    else if (arg0->_F4[0] == 0)
+    else if (level->_F4[0] == 0)
     {
-        *(SVECTOR*)(&arg0->_40[4]) = *(SVECTOR*)&temp_s3[0x48/2];
-        arg0->_40[6] = (s16) ((u16) arg0->_40[6] + 0x400);
-        if ( temp_s3[0x4C/2] <= ((short*)&arg0->_100)[1]) {
-            func_8004A5B4(arg0, 0x1000);
-            arg0->_F4[0] = 1;
+        *(SVECTOR*)(&level->_40[4]) = *(SVECTOR*)&temp_s3[0x48/2];
+        level->_40[6] = (s16) ((u16) level->_40[6] + 0x400);
+        if ( temp_s3[0x4C/2] <= ((short*)&level->_100)[1]) {
+            func_8004A5B4(level, 0x1000);
+            level->_F4[0] = 1;
             arg1[0x4C08/4] |= 1;
-            (*(short*)&arg0->_104) = 0x5A;
-            arg0->_40[6] -= 0x400;
-            arg0->flags &= ~0x800;
+            (*(short*)&level->_104) = 0x5A;
+            level->_40[6] -= 0x400;
+            level->flags &= ~0x800;
         }
         goto block_10;
     }
-    else if (arg0->_F4[0] == 2)
+    else if (level->_F4[0] == 2)
     {
         
-        if (((short*)&arg0->_104)[1] <= 0) {
-            ((short*)&arg0->_104)[1] = 0x1E;
-            arg0->_F4[0] = 3;
+        if (((short*)&level->_104)[1] <= 0) {
+            ((short*)&level->_104)[1] = 0x1E;
+            level->_F4[0] = 3;
             goto block_10;
         }
         goto block_11;
@@ -370,17 +370,17 @@ block_11:
         if ((temp_s2[4] << 0x10) <= 0) {
             arg1[0x4C08/4] &= ~1;
             func_8001C978(temp_s3, arg1[1] + 0x2C, arg1);
-            arg0->_F4[0] = 0;
-            arg0->flags |= 0x800;
-            func_8004A54C(arg0, 0x1000);
+            level->_F4[0] = 0;
+            level->flags |= 0x800;
+            func_8004A54C(level, 0x1000);
         }
     }
 }
 
-void map_angel_OnDestroy(Level_t* arg0) {
-    if (arg0->_F4[0] == 1) {
-        arg0->_F4[0] = 2;
-        ((short*)&arg0->_104)[1] = 0x1E;
+void map_angel_OnDestroy(Level_t* level) {
+    if (level->_F4[0] == 1) {
+        level->_F4[0] = 2;
+        ((short*)&level->_104)[1] = 0x1E;
     }
 }
 
@@ -496,14 +496,13 @@ void map_qmark_OnCreate(Level_t* level)
     level->_100 = 0;
 }
 
-void map_qmark_OnUpdate(Level_t* arg0, int* arg1) {
+void map_qmark_OnUpdate(Level_t* level, int* arg1) {
     int* temp_s0;
     short* temp_t0;
     
-
-    temp_t0 = (short*)arg0->_20[1];
-    temp_s0 = &arg0->_F4[2];
-    if (((*(int*)&arg0->_10C) != 0) && !(arg1[0x4C08/4] & 0x2000)) {
+    temp_t0 = (short*)level->_20[1];
+    temp_s0 = &level->_F4[2];
+    if (((*(int*)&level->_10C) != 0) && !(arg1[0x4C08/4] & 0x2000)) {
         func_8003F6CC(temp_t0[0], temp_t0[1], temp_t0[2], temp_t0[3], temp_t0[5], temp_t0 + 6);
     }
     switch (temp_s0[2])
@@ -511,7 +510,7 @@ void map_qmark_OnUpdate(Level_t* arg0, int* arg1) {
         case 0: break;
         
         case 1:
-        if (func_80030840(SVECTOR_DistanceSquared((SVECTOR*)&arg0->_40[4], (SVECTOR*)&D_8006CFA0[0x48/4]), 0) > 1000
+        if (func_80030840(SVECTOR_DistanceSquared((SVECTOR*)&level->_40[4], (SVECTOR*)&D_8006CFA0[0x48/4]), 0) > 1000
             || !temp_s0[5])
         {
             temp_s0[2] = 2;
@@ -533,7 +532,7 @@ void map_qmark_OnUpdate(Level_t* arg0, int* arg1) {
         break;
     }
     temp_s0[0] += temp_s0[1];
-    arg0->_60[2] = (u16) ((arg0->_60[2] + temp_s0[0]) & 0xFFF);
+    level->_60[2] = ((level->_60[2] + temp_s0[0]) & 0xFFF);
 }
 
 void map_qmark_OnDestroy(Level_t* level) {
@@ -572,7 +571,7 @@ void func_8015A854_BB284(int arg0, short arg1) {
         }
         
         func_80037B00((temp_a0 << 0x10) >> 0x10, arg1);
-        func_80038BA0("#2%s", var_s1);
+        Print3DTextf("#2%s", var_s1);
         var_s1 = bufferPtr + 1;
         arg1 += 0x1E;
     } while (last_char != 0);
@@ -624,7 +623,7 @@ void map_speaker_OnCreate(Level_t* level) {
 
 INCLUDE_ASM("asm/nonmatchings/map_code", map_speaker_OnUpdate);
 
-void map_start_OnCreate(Level_t* arg0, int** arg1) {
+void map_start_OnCreate(Level_t* level, int** arg1) {
     int* temp_a1;
     int* temp_a2;
     short* temp_s4;
@@ -633,10 +632,10 @@ void map_start_OnCreate(Level_t* arg0, int** arg1) {
     int* temp_v1_3;
     char* ptr;
 
-    temp_a1 = (int*)arg0->_20[1];
+    temp_a1 = (int*)level->_20[1];
     temp_s4 = (short*)D_8006CFA0[0x20/4];
-    ptr = (char*)&arg0->_F4[2];
-    if (!(arg0->flags & 0x20000)) {
+    ptr = (char*)&level->_F4[2];
+    if (!(level->flags & 0x20000)) {
         temp_a2 = (int*)arg1[1][0x90/4];
         
         if (G2String_Compare_NEQ(D_801612C0_C1CF0, temp_a2))
@@ -652,7 +651,7 @@ void map_start_OnCreate(Level_t* arg0, int** arg1) {
         func_80033334(0x78);
         ((int*)gpGameState8)[0x4C5C/4] = 0x7A;
         ((char*)gpGameState8)[0x4C62] = 1;
-        arg0->flags |= 0x10C00;
+        level->flags |= 0x10C00;
         temp_v1 = arg1[0xC/4];
         temp_v1[0x10/4] = (temp_v1[0x10/4] | 0x800);
         temp_v1_2 = arg1[0xC/4];
@@ -666,8 +665,8 @@ void map_start_OnCreate(Level_t* arg0, int** arg1) {
         D_8006CFA0[0xF4/4] = 0;
         arg1[0xC/4][0xF4/4] = 5;
         func_80052F58();
-        ((int*)arg0->_D0)[0] = 0x258;
-        ((int*)arg0->_D0)[2] = 0;
+        ((int*)level->_D0)[0] = 0x258;
+        ((int*)level->_D0)[2] = 0;
     }
 }
 
@@ -892,55 +891,55 @@ int func_8015C63C_BD06C(int arg0) {
     return var_s1;
 }
 
-void map_tvbutn_OnCreate(Level_t* arg0) {
+void map_tvbutn_OnCreate(Level_t* level) {
     char temp_v0;
     int* temp_s1;
     char* s2;
 
-    temp_s1 = (int*)arg0->_20[1];
-    arg0->flags |= 0x80;
-    s2 = (u8*)(arg0->_F0 + 6);
-    func_8004A5B4(arg0, 0x4000);
-    arg0->_10D = 5U;
-    arg0->_10C = 5U;
+    temp_s1 = (int*)level->_20[1];
+    level->flags |= 0x80;
+    s2 = (u8*)(level->_F0 + 6);
+    func_8004A5B4(level, 0x4000);
+    level->_10D = 5U;
+    level->_10C = 5U;
     if (temp_s1 != 0) {
-        arg0->_C0[1] = (temp_s1[1] * 2);
+        level->_C0[1] = (temp_s1[1] * 2);
     }
-    arg0->_10E = 1;
+    level->_10E = 1;
 
     if (temp_s1[1] == 0)
     {
-        arg0->_10F = 1U;
-        arg0->_110 = 4U;
-        arg0->_111 = 9;
-        arg0->_112 = 8;
+        level->_10F = 1U;
+        level->_110 = 4U;
+        level->_111 = 9;
+        level->_112 = 8;
     }
     else if (temp_s1[1] == 1)
     {
         temp_v0 = ((char*)temp_s1)[8];
-        arg0->_10D = temp_v0;
-        arg0->_10C = temp_v0;
-        arg0->_110 = temp_v0;
-        arg0->_10F = temp_v0;
+        level->_10D = temp_v0;
+        level->_10C = temp_v0;
+        level->_110 = temp_v0;
+        level->_10F = temp_v0;
     }
     else if (temp_s1[1] == 2)
     {
-        arg0->_10F = 0x11U;
-        arg0->_110 = 0x14U;
-        arg0->_111 = 0xF;
-        arg0->_112 = 0x10;
+        level->_10F = 0x11U;
+        level->_110 = 0x14U;
+        level->_111 = 0xF;
+        level->_112 = 0x10;
     }
     else
     {
-        arg0->_10F = 0U;
-        arg0->_110 = 0U;
-        arg0->_111 = 0;
-        arg0->_112 = 0;
+        level->_10F = 0U;
+        level->_110 = 0U;
+        level->_111 = 0;
+        level->_112 = 0;
     }
-    arg0->_50[3] = s2[0x13];
+    level->_50[3] = s2[0x13];
 }
 
-void map_tvbutn_OnUpdate(Level_t* arg0, int* arg1) {
+void map_tvbutn_OnUpdate(Level_t* level, int* arg1) {
     s16 sp10[2];
     int temp_a1;
     int temp_a0;
@@ -955,56 +954,56 @@ void map_tvbutn_OnUpdate(Level_t* arg0, int* arg1) {
     int* var_s5;
 
     var_s4 = NULL;
-    temp_v0 = (int*)arg0->_F4[2];
-    temp_s0 = (int*)arg0->_20[1];
-    temp_s2 = &arg0->_F0[6];
+    temp_v0 = (int*)level->_F4[2];
+    temp_s0 = (int*)level->_20[1];
+    temp_s2 = &level->_F0[6];
     if (temp_v0 != NULL) {
         var_s4 = &temp_v0[0xFC/4];
         var_s5 = (int*)temp_v0[0x24/4];
     }
-    if (arg0->_F4[0] != 0) {
-        func_8004A54C(arg0, 0x5000);
-        if (arg0->_50[3] < arg0->_10C) {
-            arg0->_50[3] = arg0->_10C;
+    if (level->_F4[0] != 0) {
+        func_8004A54C(level, 0x5000);
+        if (level->_50[3] < level->_10C) {
+            level->_50[3] = level->_10C;
         }
-        if (arg0->_F4[0] == 3) {
-            func_8015BFE0_BCA10(arg0, arg1);
+        if (level->_F4[0] == 3) {
+            func_8015BFE0_BCA10(level, arg1);
             return;
         }
-        if (arg0->_F4[0] == 2) {
-            temp_a0 = ((arg0->_C0[1] ^ 1) & 1);
-            if (arg0->_10B == 1) {
-                if (temp_a0 == arg0->_10B) {
+        if (level->_F4[0] == 2) {
+            temp_a0 = ((level->_C0[1] ^ 1) & 1);
+            if (level->_10B == 1) {
+                if (temp_a0 == level->_10B) {
                     goto block_12;
                 }
             } else if (temp_a0 == 0) {
 block_12:
-                arg0->_C0[1] = (u16) (arg0->_C0[1] ^ 1);
+                level->_C0[1] = (u16) (level->_C0[1] ^ 1);
             }
         }
-        if (arg0->_F4[0] == 1) {
-            if (arg0->_50[3] >= ((char*)temp_s2)[0x14]) {
-                arg0->_50[3] = ((char*)temp_s2)[0x10];
-                arg0->_F4[0] = 2;
+        if (level->_F4[0] == 1) {
+            if (level->_50[3] >= ((char*)temp_s2)[0x14]) {
+                level->_50[3] = ((char*)temp_s2)[0x10];
+                level->_F4[0] = 2;
             } else {
-                arg0->_50[3]++;
+                level->_50[3]++;
             }
-        } else if (arg0->_F4[0] == 2) {
-            if ((temp_s0 != NULL) && (((char*)temp_s0)[0x8] >= 0x62) && (arg0->flags & 0x200)) {
-                func_8003EA60(arg1, arg0, 0, &sp10);
+        } else if (level->_F4[0] == 2) {
+            if ((temp_s0 != NULL) && (((char*)temp_s0)[0x8] >= 0x62) && (level->flags & 0x200)) {
+                func_8003EA60(arg1, level, 0, &sp10);
                 func_80037B24(sp10[0], sp10[1]);
             }
             
-            if (arg0->_50[3] >= ((char*)temp_s2)[0x11]) {
-                arg0->_50[3] = ((char*)temp_s2)[0x10];
+            if (level->_50[3] >= ((char*)temp_s2)[0x11]) {
+                level->_50[3] = ((char*)temp_s2)[0x10];
             } else {
-                arg0->_50[3]++;
+                level->_50[3]++;
             }
             if ((((char*)temp_s2)[0xF] == 1) && (((short*)var_s4)[0x6/2] != 0)) {
                 if (((int*)gpGameState8)[0xE0/4] & 8) {
-                    arg0->_C0[1] = (arg0->_C0[1] ^ 1);
+                    level->_C0[1] = (level->_C0[1] ^ 1);
                 }
-                if (arg0->_C0[1] & 1) {
+                if (level->_C0[1] & 1) {
                     ((char*)temp_s2)[0x17]++;
                 }
                 if ((((char*)temp_s2)[0x17] >= 8) && ((((char*)temp_s2)[0x17] = 0U, (var_s5 == NULL)) || (((short*)var_s5)[0x16/2] == 0))) {
@@ -1025,7 +1024,7 @@ block_12:
                     if (var_v0 != -1) {
                         temp_a1 = ((var_v0) + temp_s2)[0x4/2];
                         if ((temp_a1 != -1) && (((char*)temp_s2)[0x12] != 0) && (((char**)temp_s2)[0][0x10F] != 0)) {
-                            temp_v0_5 = (char*)func_8004A368(arg0, temp_a1);
+                            temp_v0_5 = (char*)func_8004A368(level, temp_a1);
                             if (temp_v0_5 != NULL) {
                                 func_80050980(0x81);
                                 ((int*)temp_v0_5)[0xF4/4] = 1;
@@ -1042,7 +1041,7 @@ block_12:
                     }
                 } else {
                     var_a0 = 1;
-                    if (arg0->_C0[1] & 1) {
+                    if (level->_C0[1] & 1) {
                         ((char*)temp_s2)[0x12] = 1;
                     }
                     temp_v1 = ((short**)temp_s2)[0];
@@ -1055,7 +1054,7 @@ block_12:
                         } else if (((char*)temp_s2)[0xE] == 0) {
                             ((char*)temp_s2)[0xE] = 1;
                         }
-                        arg0->_50[3] = ((char*)temp_s2)[0x10];
+                        level->_50[3] = ((char*)temp_s2)[0x10];
                         if (temp_s0 != NULL) {
                             if (temp_s0[0x0/4] != 0) {
                                 func_8004EBAC(D_8006CFA0, temp_s0[0x0/4] + 4, 0);
@@ -1075,8 +1074,8 @@ block_12:
                 }
             }
         }
-        if (arg0->_1C[0x1C/4] & 0x80) {
-            func_8015BED0_BC900(arg0, arg1);
+        if (level->_1C[0x1C/4] & 0x80) {
+            func_8015BED0_BC900(level, arg1);
         }
     }
 }
@@ -1100,16 +1099,16 @@ void map_loadtv_OnUpdate(Level_t* level, int* arg1)
     }
 }
 
-void map_ctrlbutn_OnCreate(Level_t* arg0) {
+void map_ctrlbutn_OnCreate(Level_t* level) {
     int temp_a1;
     SVECTOR* temp_v0;
 
-    ((short*)&arg0->_100)[1] = 2;
-    arg0->_F0[6] = 0x64;
-    temp_a1 = arg0->_20[1];
-    arg0->flags |= 0x800;
+    ((short*)&level->_100)[1] = 2;
+    level->_F0[6] = 0x64;
+    temp_a1 = level->_20[1];
+    level->flags |= 0x800;
     if (temp_a1 != 0) {
-        temp_v0 = (SVECTOR*)((((short*)&arg0->_100)[1] * sizeof(SVECTOR)) + temp_a1 + 4);
+        temp_v0 = (SVECTOR*)((((short*)&level->_100)[1] * sizeof(SVECTOR)) + temp_a1 + 4);
         *(SVECTOR*)&D_8006CFA0[0x50/4]
             = *(SVECTOR*)(&D_8006CFA0[0x48/4])
             = *(SVECTOR*)temp_v0;
@@ -1234,18 +1233,18 @@ INCLUDE_RODATA("asm/nonmatchings/map_code", D_80161394_C1DC4);
 
 INCLUDE_ASM("asm/nonmatchings/map_code", func_8015D6F0_BE120);
 
-void func_8015D9E4_BE414(Level_t* arg0) {
-    SVECTOR v = *(SVECTOR*)&arg0->_40[4];
+void func_8015D9E4_BE414(Level_t* level) {
+    SVECTOR v = *(SVECTOR*)&level->_40[4];
 
-    func_80047E64(arg0, -0x14);
-    arg0->_40[6] += 0x80;
-    arg0->_F4[2] = func_8002DEA8(arg0, func_8003EE84("lvllabl_"));
-    *(SVECTOR*)&arg0->_40[4] = v;
-    arg0->flags |= 0x10000;
-    ((int*)arg0->_F4[2])[0x10/4] |= 0x100000;
-    ((int*)arg0->_F4[2])[0x10/4] |= 0x400;
-    (*(char**)&arg0->_F0[6])[0x100] = arg0->_112;
-    func_8015D52C_BDF5C((Level_t*)arg0->_F4[2], gpGameState8);
+    func_80047E64(level, -0x14);
+    level->_40[6] += 0x80;
+    level->_F4[2] = func_8002DEA8(level, func_8003EE84("lvllabl_"));
+    *(SVECTOR*)&level->_40[4] = v;
+    level->flags |= 0x10000;
+    ((int*)level->_F4[2])[0x10/4] |= 0x100000;
+    ((int*)level->_F4[2])[0x10/4] |= 0x400;
+    (*(char**)&level->_F0[6])[0x100] = level->_112;
+    func_8015D52C_BDF5C((Level_t*)level->_F4[2], gpGameState8);
 }
 
 void func_8015DAC8_BE4F8(Level_t* level) {
@@ -1280,7 +1279,7 @@ void func_8015DB54_BE584(Level_t* level) {
     }
 }
 
-void map_lvltv_OnCreate(Level_t* arg0) {
+void map_lvltv_OnCreate(Level_t* level) {
     char sp10[0x10];
     short temp_a2;
     int var_a0;
@@ -1291,40 +1290,40 @@ void map_lvltv_OnCreate(Level_t* arg0) {
     u8* ptr;
 
     char sp20[4] = {0x00, 0x03, 0x04, 0x00 };
-    temp_s1 = (short*)arg0->_20[1];
-    temp_s2 = (u8*)arg0->_D0;
-    if (arg0->flags & 0x20000) {
-        func_8015DB54_BE584(arg0); // shouldn't need a second argument?
+    temp_s1 = (short*)level->_20[1];
+    temp_s2 = (u8*)level->_D0;
+    if (level->flags & 0x20000) {
+        func_8015DB54_BE584(level); // shouldn't need a second argument?
         return;
     }
     sprintf(&sp10, &D_80161394_C1DC4, temp_s1 + 2, temp_s1[0x2/2]);
     
-    arg0->_112 = GetLevelIndexFromId(&sp10);
-    if (arg0->_112 < 0x15U) {
-        var_s3 = GetRedRemotesForLevel(arg0->_112);
+    level->_112 = GetLevelIndexFromId(&sp10);
+    if (level->_112 < 0x15U) {
+        var_s3 = GetRedRemotesForLevel(level->_112);
     }
-    arg0->flags |= 0x80;
-    if (arg0->_112 >= 0x15) {
-        arg0->_113 = 0;
-        arg0->_F4[1] = 2;
-        if ((D_80078594[arg0->_112]) == 2) {
-            arg0->_113 = 1;
-            arg0->_F4[1] = 0;
-            arg0->_111 = arg0->_110 = (temp_s1[0x0/4] * 9) + 7;
+    level->flags |= 0x80;
+    if (level->_112 >= 0x15) {
+        level->_113 = 0;
+        level->_F4[1] = 2;
+        if ((D_80078594[level->_112]) == 2) {
+            level->_113 = 1;
+            level->_F4[1] = 0;
+            level->_111 = level->_110 = (temp_s1[0x0/4] * 9) + 7;
         } else {
             goto skip;
         }
     } else {
-        arg0->_F4[1] = 0;
-        arg0->_113 = 1;
+        level->_F4[1] = 0;
+        level->_113 = 1;
         temp_a2 = temp_s1[0x0/4];
         var_a1 = 0;
         if (temp_a2 >= 0) {
             var_a0 = var_s3 - 1;
-            arg0->_50[3] = (sp20[var_s3]) + (temp_a2 * 9);
+            level->_50[3] = (sp20[var_s3]) + (temp_a2 * 9);
             if (var_a0 >= 0) {
                 ptr = (u8*)gpGameState8;
-                ptr = &ptr[arg0->_112];
+                ptr = &ptr[level->_112];
                 while(var_a0 >= 0)
                 {
                     if ((ptr[0x4C6E] >> var_a0) & 1) {
@@ -1333,34 +1332,34 @@ void map_lvltv_OnCreate(Level_t* arg0) {
                     var_a0 -= 1;
                 }
             }
-            temp_s2[0x40] = arg0->_50[3] = arg0->_50[3] + var_a1;
-            temp_s2[0x41] = arg0->_50[3];
+            temp_s2[0x40] = level->_50[3] = level->_50[3] + var_a1;
+            temp_s2[0x41] = level->_50[3];
         } else {
             skip:
-            *(u8*)&arg0->_110 = 7U;
-            arg0->_111 = 0x2AU;
-            arg0->_50[3] = *(u8*)&arg0->_110;
+            *(u8*)&level->_110 = 7U;
+            level->_111 = 0x2AU;
+            level->_50[3] = *(u8*)&level->_110;
         }
     }
-    if (arg0->_1C[0x1C/4] & 0x80) {
-        arg0->flags |= 0x800;
+    if (level->_1C[0x1C/4] & 0x80) {
+        level->flags |= 0x800;
     }
     else
     {
         if ((temp_s2)[0x42] < 0xEU) {
-            func_8015D6F0_BE120(arg0, var_s3);
+            func_8015D6F0_BE120(level, var_s3);
         }
         if (((temp_s2)[0x42] >= 0x15U) && ((char*)temp_s2)[0x43] != 0)
         {
-            func_8015D6F0_BE120(arg0, var_s3);
+            func_8015D6F0_BE120(level, var_s3);
         }
         if (((temp_s2)[0x42] - 0xEU) >= 7U) {
-            func_8015D9E4_BE414(arg0);
+            func_8015D9E4_BE414(level);
         }   
     }
 }
 
-void map_lvltv_OnUpdate(Level_t* arg0) {
+void map_lvltv_OnUpdate(Level_t* level) {
     SVECTOR sp10;
     int sp18;
     int sp1C;
@@ -1369,65 +1368,65 @@ void map_lvltv_OnUpdate(Level_t* arg0) {
     u8* temp_s2;
     int* temp_v0_3;
 
-    arg0->flags = (s32) (arg0->flags & ~0x800);
-    temp_s1 = (short*)arg0->_20[1];
-    temp_s2 = (u8*)&arg0->_D0;
-    if (arg0->_113 != 0) {
-        arg0->_50[3] = ((*temp_s1 * 9) + 7);
-        if ((arg0->_112 >= 0x15U) && (arg0->_D0[0] == 0)) {
-            func_8015D6F0_BE120(arg0, 1);
+    level->flags = (s32) (level->flags & ~0x800);
+    temp_s1 = (short*)level->_20[1];
+    temp_s2 = (u8*)&level->_D0;
+    if (level->_113 != 0) {
+        level->_50[3] = ((*temp_s1 * 9) + 7);
+        if ((level->_112 >= 0x15U) && (level->_D0[0] == 0)) {
+            func_8015D6F0_BE120(level, 1);
         }
         if (((int*)temp_s2)[0x30/4] == NULL) {
-            func_8015DAC8_BE4F8(arg0);
+            func_8015DAC8_BE4F8(level);
         }
-    } else if (D_80078594[arg0->_112] == 1) {
-        if (arg0->_115 == 0U) {
-            arg0->_115 = 0x69U;
+    } else if (D_80078594[level->_112] == 1) {
+        if (level->_115 == 0U) {
+            level->_115 = 0x69U;
         }
-        if ((func_8006A020() % ((arg0->_115 >> 3) + 1)) == 0) {
-            arg0->_111 = arg0->_110 = (*temp_s1 * 9) + 7;
+        if ((rand() % ((level->_115 >> 3) + 1)) == 0) {
+            level->_111 = level->_110 = (*temp_s1 * 9) + 7;
         } else {
-            arg0->_110 = 7;
-            arg0->_111 = 0x2A;
+            level->_110 = 7;
+            level->_111 = 0x2A;
         }
         temp_s2[0x45] = temp_s2[0x45] - 1;
         if (!temp_s2[0x45]) {
             temp_s2[0x43] = 1;
-            arg0->_F4[1] = 0;
+            level->_F4[1] = 0;
             D_80078594[temp_s2[0x42]] = 2;
-            arg0->_50[3] = ((*temp_s1 * 9) + 7);
+            level->_50[3] = ((*temp_s1 * 9) + 7);
         }
     }
-    arg0->_50[3] += 9;
-    if (arg0->_50[3] < temp_s2[0x40]) {
-        arg0->_50[3] = temp_s2[0x40];
+    level->_50[3] += 9;
+    if (level->_50[3] < temp_s2[0x40]) {
+        level->_50[3] = temp_s2[0x40];
     }
-    if (arg0->_50[3] > temp_s2[0x41]) {
-        arg0->_50[3] = temp_s2[0x40];
+    if (level->_50[3] > temp_s2[0x41]) {
+        level->_50[3] = temp_s2[0x40];
     }
     
     if ((temp_s2[0x42] - 0xE) < 7U) {
-        if (arg0->flags & 0x02000000) {
+        if (level->flags & 0x02000000) {
             temp_a2 = (int*)((int*)temp_s2)[0x30/4];
             if (temp_a2 != NULL) {
-                (*(SVECTOR*)&temp_a2[0x48/4]) = *(SVECTOR*)&arg0->_40[4];
+                (*(SVECTOR*)&temp_a2[0x48/4]) = *(SVECTOR*)&level->_40[4];
             }
         } else if (((int*)temp_s2)[0x2C/4] == 0) {
-            if (arg0->_1C[0x28/4] != 0) {
-                temp_v0_3 = (int*)func_80048524(arg0, &sp18, &sp1C);
+            if (level->_1C[0x28/4] != 0) {
+                temp_v0_3 = (int*)func_80048524(level, &sp18, &sp1C);
                 if (temp_v0_3[1] != 0) {
-                    func_80051C64(temp_v0_3[1], func_800485F8(arg0, temp_v0_3, sp18, sp1C), &sp10);
-                    ((short*)arg0->_1C)[0x8/2] += sp10.x;
-                    ((short*)arg0->_1C)[0xA/2] += sp10.y;
-                    ((short*)arg0->_1C)[0xC/2] += sp10.z;
+                    func_80051C64(temp_v0_3[1], func_800485F8(level, temp_v0_3, sp18, sp1C), &sp10);
+                    ((short*)level->_1C)[0x8/2] += sp10.x;
+                    ((short*)level->_1C)[0xA/2] += sp10.y;
+                    ((short*)level->_1C)[0xC/2] += sp10.z;
                 }
-                *(SVECTOR*)(&arg0->_1C[0x10/4]) = *(SVECTOR*)&arg0->_40[4];
-                arg0->_1C[0x28/4] = 0;
-                arg0->flags &= ~1;
+                *(SVECTOR*)(&level->_1C[0x10/4]) = *(SVECTOR*)&level->_40[4];
+                level->_1C[0x28/4] = 0;
+                level->flags &= ~1;
             }
-            func_8015D6F0_BE120(arg0, GetRedRemotesForLevel(temp_s2[0x42]));
-            func_8015D9E4_BE414(arg0);
-            ((SVECTOR**)temp_s2)[0x30/4][0x48/6] = *(SVECTOR*)&arg0->_40[4];
+            func_8015D6F0_BE120(level, GetRedRemotesForLevel(temp_s2[0x42]));
+            func_8015D9E4_BE414(level);
+            ((SVECTOR**)temp_s2)[0x30/4][0x48/6] = *(SVECTOR*)&level->_40[4];
             D_80078594[temp_s2[0x42]] = 2;
         }
     }
@@ -1578,7 +1577,7 @@ countbits:
     }
 }
 
-void map_select_OnCreate(Level_t* arg0, int** arg1) {
+void map_select_OnCreate(Level_t* level, int** arg1) {
     SVECTOR sp10;
     SVECTOR sp18;
     char* temp_s6;
@@ -1590,16 +1589,16 @@ void map_select_OnCreate(Level_t* arg0, int** arg1) {
     int* temp_s4;
     int* temp_v1_3;
 
-    temp_s6 = (char*)&arg0->_D0[0];
+    temp_s6 = (char*)&level->_D0[0];
     temp_a3 = (int*)D_8006CFA0[0x8];
-    arg0->flags |= 0xC00;
-    temp_s4 = (int*)arg0->_20[1];
+    level->flags |= 0xC00;
+    temp_s4 = (int*)level->_20[1];
     arg1[3][0x4] &= ~0x800;
     ((short*)temp_a3)[0xDC/2] = 0;
-    ((char*)arg0->_D0)[0] = 0;
-    GetRemoteCount(&arg0->_D0[2]);
+    ((char*)level->_D0)[0] = 0;
+    GetRemoteCount(&level->_D0[2]);
     var_s1 = 0;
-    for(var_s2 = func_8001A1D8(&arg0->_D0[2]); var_s2 != 0; var_s1++, var_s2 >>= 1)
+    for(var_s2 = func_8001A1D8(&level->_D0[2]); var_s2 != 0; var_s1++, var_s2 >>= 1)
     {
         if ((var_s2 & 1) == 0)
             continue;
@@ -1648,7 +1647,7 @@ void map_select_OnCreate(Level_t* arg0, int** arg1) {
         func_8015E674_BF0A4(temp_s6, temp_s4, (int*)arg1);
 }
 
-void map_select_OnUpdate(Level_t* arg0, int* arg1) {
+void map_select_OnUpdate(Level_t* level, int* arg1) {
     SVECTOR sp10;
     SVECTOR sp18;
     int* temp_a1;
@@ -1657,10 +1656,10 @@ void map_select_OnUpdate(Level_t* arg0, int* arg1) {
     short* temp_s2;
 
     temp_s2 = (short*)D_8006CFA0[0x20/4];
-    temp_a1 = (int*)arg0->_20[1];
+    temp_a1 = (int*)level->_20[1];
     arg1[0x4C08/4] &= ~0x2000;
     temp_a2 = (int*)arg1[0xC/4];
-    temp_s0 = (short*)&arg0->_D0;
+    temp_s0 = (short*)&level->_D0;
     
     if (!(temp_a2[0xFC/4] & 0x02000000)) {
         if ((D_8006CFA0[0xF4/4] == 0) && (D_8006CFA0[0xF8/4] == 1)) {
@@ -1799,25 +1798,25 @@ void func_8015EED8_BF908(int* arg0) {
     func_80037B00(0x5F, 0x4B);
     if (D_8014F34C == 0) {
         sprintf(&sp10, "%s%s", &D_80078184, D_801611C0_C1BF0);
-        func_80038BA0(sp10);
+        Print3DTextf(sp10);
     } else {
-        func_80038BA0(D_801611C0_C1BF0);
+        Print3DTextf(D_801611C0_C1BF0);
     }
     
     func_80037B00(0x53, 0x6E);
     if (D_8014F34C == 1) {
         sprintf(&sp10, "%s%s", &D_80078184, D_801611CC_C1BFC);
-        func_80038BA0(sp10);
+        Print3DTextf(sp10);
     } else {
-        func_80038BA0(D_801611CC_C1BFC);
+        Print3DTextf(D_801611CC_C1BFC);
     }
     
     func_80037B00(0x64, 0x91);
     if (D_8014F34C == 2) {
         sprintf(&sp10, "%s%s", &D_80078184, D_80078190);
-        func_80038BA0(sp10);
+        Print3DTextf(sp10);
     } else {
-        func_80038BA0(D_80078190);
+        Print3DTextf(D_80078190);
     }
     
     if (D_800E5DB2 & 0x9000) {
@@ -1865,54 +1864,54 @@ void func_8015F228_BFC58(int* arg0) {
     
     if (D_8014F34C == 0) {
         sprintf(sp10, "%s%s", D_80078184, D_80078188);
-        func_80038BA0(sp10);
+        Print3DTextf(sp10);
     } else {
-        func_80038BA0(D_80078188);
+        Print3DTextf(D_80078188);
     }
     
     func_80037B00(0x5F, 0x4B);
     
     if (D_8014F34C == 1) {
         sprintf(sp10, "%s%s", D_80078184, D_801611C0_C1BF0);
-        func_80038BA0(sp10);
+        Print3DTextf(sp10);
     } else {
-        func_80038BA0(D_801611C0_C1BF0);
+        Print3DTextf(D_801611C0_C1BF0);
     }
     
     func_80037B00(0x53, 0x64);
     
     if (D_8014F34C == 2) {
         sprintf(sp10, "%s%s", D_80078184, D_801611CC_C1BFC);
-        func_80038BA0(sp10);
+        Print3DTextf(sp10);
     } else {
-        func_80038BA0(D_801611CC_C1BFC);
+        Print3DTextf(D_801611CC_C1BFC);
     }
     
     func_80037B00(0x52, 0x7D);
     
     if (D_8014F34C == 3) {
         sprintf(sp10, "%s%s", D_80078184, D_801611B4_C1BE4);
-        func_80038BA0(sp10);
+        Print3DTextf(sp10);
     } else {
-        func_80038BA0(D_801611B4_C1BE4);
+        Print3DTextf(D_801611B4_C1BE4);
     }
     
     func_80037B00(0x64, 0x96);
     
     if (D_8014F34C == 4) {
         sprintf(sp10, "%s%s", D_80078184, D_80078190);
-        func_80038BA0(sp10);
+        Print3DTextf(sp10);
     } else {
-        func_80038BA0(D_80078190);
+        Print3DTextf(D_80078190);
     }
     
     func_80037B00(0x6E, 0xAF);
     
     if (D_8014F34C == 5) {
         sprintf(sp10, "%s%s", D_80078184, D_800781B8);
-        func_80038BA0(sp10);
+        Print3DTextf(sp10);
     } else {
-        func_80038BA0(D_800781B8);
+        Print3DTextf(D_800781B8);
     }
     
     if ((D_800E5DB2 & 0x8000)) {
@@ -1970,7 +1969,7 @@ void func_8015F678_C00A8(short* arg0) {
     char* var_v1;
 
     func_80037B00(0x46, 0x6E);
-    func_80038BA0("#2GAME OVER");
+    Print3DTextf("#2GAME OVER");
     gSPDisplayList(D_80157050++, D_8006D578);
     func_80030DD8("PRESS A TO START NEW GAME", 0x2D, 0xB4, 1);
     gDPPipeSync2(D_80157050);
@@ -1999,9 +1998,9 @@ void func_8015F770_C01A0(void) {
     if (D_80161680_C20B0 < 0x3C) {
         D_80161680_C20B0 += 1;
         func_80037B00(0x5A, 0x50);
-        func_80038BA0("GAME LOAD");
+        Print3DTextf("GAME LOAD");
         func_80037B00(0x6E, 0x6E);
-        func_80038BA0("FAILED");
+        Print3DTextf("FAILED");
     } else {
         func_80040170(4);
     }
@@ -2053,9 +2052,9 @@ void func_8015F804_C0234(short* arg0) {
     buffer[i] = 0;
     
     func_80037B00(0x73, 0x46);
-    func_80038BA0("ENTER");
+    Print3DTextf("ENTER");
     func_80037B00(0x62, 0x64);
-    func_80038BA0(D_801611D8_C1C08);
+    Print3DTextf(D_801611D8_C1C08);
     gSPDisplayList(D_80157050++, D_8006D578);
     func_80030DD8(buffer, 0x50, 0x8C, 1);
     if (D_800E5DB2 & 0x8000) {
@@ -2090,7 +2089,7 @@ void func_8015F804_C0234(short* arg0) {
 void func_8015FBBC_C05EC(short* arg0) {
 
     func_80037B00(0x3C, 0x5F);
-    func_80038BA0("PASSWORD IS");
+    Print3DTextf("PASSWORD IS");
     gSPDisplayList(D_80157050++, D_8006D578);
     func_80030DD8(D_800E5D00, 0x50, 0x82, 1);
     func_80030DD8("PRESS A TO CONTINUE", 0x50, 0xC8, 1);
@@ -2118,20 +2117,20 @@ void func_8015FC88_C06B8(int* arg0) {
     }
     
     func_80037B00(0x37, 0x32);
-    func_80038BA0(&D_801611E4_C1C14);
+    Print3DTextf(&D_801611E4_C1C14);
     func_80037B00(0x62, 0x64);
     if (D_8014F34C == 0) {
         sprintf(&sp10, "%s%s", &D_80078184, &D_801611D8_C1C08);
-        func_80038BA0(&sp10);
+        Print3DTextf(&sp10);
     } else {
-        func_80038BA0(&D_801611D8_C1C08);
+        Print3DTextf(&D_801611D8_C1C08);
     }
     func_80037B00(0x32, 0x8C);
     if (D_8014F34C == 1) {
         sprintf(&sp10, "%s%s", &D_80078184, &D_80078198);
-        func_80038BA0(&sp10);
+        Print3DTextf(&sp10);
     } else {
-        func_80038BA0(&D_80078198);
+        Print3DTextf(&D_80078198);
     }
     if (D_800E5DB2 & 0x8000) {
         switch (D_8014F34C) {
@@ -2178,20 +2177,20 @@ void func_8015FF60_C0990(int* arg0) {
         D_8014F34C = 1;
     }
     func_80037B00(0x46, 0x32);
-    func_80038BA0(&D_801611F8_C1C28);
+    Print3DTextf(&D_801611F8_C1C28);
     func_80037B00(0x62, 0x64);
     if ((s8) D_8014F34C == 0) {
         sprintf(&sp10, "%s%s", &D_80078184, &D_801611D8_C1C08);
-        func_80038BA0(&sp10);
+        Print3DTextf(&sp10);
     } else {
-        func_80038BA0(&D_801611D8_C1C08);
+        Print3DTextf(&D_801611D8_C1C08);
     }
     func_80037B00(0x32, 0x8C);
     if ((s8) D_8014F34C == 1) {
         sprintf(&sp10, "%s%s", &D_80078184, &D_80078198);
-        func_80038BA0(&sp10);
+        Print3DTextf(&sp10);
     } else {
-        func_80038BA0(&D_80078198);
+        Print3DTextf(&D_80078198);
     }
     if (D_800E5DB2 & 0x8000) {
         switch (D_8014F34C) {
@@ -2569,7 +2568,7 @@ void func_80160DF0_C1820(void* arg0) {
 
 void func_801610B8_C1AE8(short* arg0) {
     func_80037B00(0x50, 0x6E);
-    func_80038BA0("#2DATA SAVED");
+    Print3DTextf("#2DATA SAVED");
     if (++D_8014F34C >= 0x1F) {
         arg0[0x4C12/2] = 0;
         func_80032F90();

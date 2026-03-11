@@ -100,6 +100,10 @@ __rmonUtilityBuffer = 0x800EB8A8; // size:256
 __rmonRcpAtBreak = 0x801574DC;
 osViModeTable = 0x800799B0;
 
+Print3DTextf = 0x80038BA0;
+vPrint3DTextf = 0x800387F0;
+memset = 0x80069F50;
+setmem = 0x80069FF0;
 
 // == Segments ==
 
@@ -1336,7 +1340,11 @@ __rmonHitCpuFault = 0x80069B5C; // type:func
 rmonFindFaultedThreads = 0x80069B88; // type:func
 ldiv = 0x80069D90; // type:func
 lldiv = 0x80069E14; // type:func
-osViExtendVStart = 0x8006A054; // type:func
+rand = 0x8006A020;
+srand = 0x8006A054; // type:func
+sRandNext = 0x800B83A0; // type:s32
 __divdi3 = 0x8006A700; // type:func
 __udivdi3 = 0x8006A870; // type:func
 __umoddi3 = 0x8006A890; // type:func
+div64_32 = 0x8006A634; // type:func
+div64_64 = 0x8006A538; // type:func

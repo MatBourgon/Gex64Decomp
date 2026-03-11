@@ -26,9 +26,56 @@ void prehst_crawler_OnCreate(Level_t* level)
     level->_4E = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_crawler_OnUpdate);
+void prehst_crawler_OnUpdate(Level_t* level) {
+    
+    int a0, v0, v1;
 
-INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_crawler_OnDestroy);
+    if (level->_F4[0] == 0)
+    {
+        v1 = level->_50[0];
+        v0 = level->_50[1];
+        level->_60[2] = func_80030538(v0 - level->_40[5], v1 - level->_40[4]) - 0x400;
+        func_8002DAF8(level, -1);
+    }
+    else if (level->_F4[0] == 1)
+    {
+        func_8002DAF8(level, -1);
+        if ((level->_14 & 0x10))
+        {
+            a0 = (*(unsigned char*)&level->_40[7] << 2) + ((int*)(level->_18 + 4))[0];
+            level->_50[7] = ((unsigned short*)(*((int*)a0)))[1] - 1; 
+            level->_F4[0] = 2;
+        }
+        
+    }
+}
+
+void prehst_crawler_OnDestroy(Level_t* level, int* arg1) {
+    int temp_a3;
+    int temp_v1;
+    char** temp_a2;
+
+    temp_a2 = ((char***)level->_70)[2];
+    temp_a3 = ((short*)temp_a2)[3];
+    if (temp_a3 == 1) {
+        if ((temp_a2[5] == (char*)arg1[12/4]) && (temp_a2[12/4][5] >= 6U)) {
+            if (level->_F4[0] == 0)
+            {
+                ((char*)level->_40)[0xe] = 1;
+                level->_F4[0] = temp_a3;
+                level->_50[7] = 0;
+                level->_14 &= ~0x10;
+                level->flags |= 0x100000;
+            }
+            else if (level->_F4[0] == 2)
+            {
+                func_80047904(level, 5, 3, 0);
+            }
+        } else if ((((short*)temp_a2)[3] == 1) && (temp_a2[5] == (char*)arg1[12/4]) && ((level->_F4[0] - 1) >= 2U)) {
+            func_80022714(level);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", func_8015AC20_C84A0);
 

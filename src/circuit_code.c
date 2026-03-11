@@ -2,6 +2,9 @@
 
 #include "types/Level.h"
 
+#include "types/Vector.h"
+extern int* D_8006CFA0;
+
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_plat_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_plat_OnUpdate);
@@ -26,9 +29,56 @@ void circuit_crawler_OnCreate(Level_t* level)
     level->_4E = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_crawler_OnUpdate);
+void circuit_crawler_OnUpdate(Level_t* level) {
+    int a0, v0, v1;
 
-INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_crawler_OnDestroy);
+    level->_14 &= ~0x10;
+    if (level->_F4[0] == 0)
+    {
+        v1 = level->_50[0];
+        v0 = level->_50[1];
+        level->_60[2] = func_80030538(v0 - level->_40[5], v1 - level->_40[4]) - 0x400;
+        func_8002DAF8(level, -1);
+    }
+    else if (level->_F4[0] == 1)
+    {
+        func_8002DAF8(level, -1);
+        if ((level->_14 & 0x10))
+        {
+            a0 = (*(unsigned char*)&level->_40[7] << 2) + ((int*)(level->_18 + 4))[0];
+            level->_50[7] = ((unsigned short*)(*((int*)a0)))[1] - 1; 
+            level->_F4[0] = 2;
+        }
+        
+    }
+}
+
+void circuit_crawler_OnDestroy(Level_t* level, int* arg1) {
+    int temp_a3;
+    int temp_v1;
+    char** temp_a2;
+
+    temp_a2 = ((char***)level->_70)[2];
+    temp_a3 = ((short*)temp_a2)[3];
+    if (temp_a3 == 1) {
+        if ((temp_a2[5] == (char*)arg1[12/4]) && (temp_a2[12/4][5] >= 6U)) {
+            if (level->_F4[0] == 0)
+            {
+                ((char*)level->_40)[0xe] = 1;
+                level->_F4[0] = temp_a3;
+                level->_50[7] = 0;
+                level->_14 &= ~0x10;
+                level->flags |= 0x100000;
+            }
+            else if (level->_F4[0] == 2)
+            {
+                func_80047904(level, 5, 3, 0);
+            }
+        } else if ((((short*)temp_a2)[3] == 1) && (temp_a2[5] == (char*)arg1[12/4]) && ((level->_F4[0] - 1) >= 2U)) {
+            func_80022714(level);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_charger_OnCreate);
 
@@ -139,9 +189,56 @@ void circuit_qmark_OnCreate(Level_t* level)
     level->_100 = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_qmark_OnUpdate);
+void circuit_qmark_OnUpdate(Level_t* level, int* arg1) {
+    int* temp_s0;
+    short* temp_t0;
+    
+    temp_t0 = (short*)level->_20[1];
+    temp_s0 = &level->_F4[2];
+    if (((*(int*)&level->_10C) != 0) && !(arg1[0x4C08/4] & 0x2000)) {
+        func_8003F6CC(temp_t0[0], temp_t0[1], temp_t0[2], temp_t0[3], temp_t0[5], temp_t0 + 6);
+    }
+    switch (temp_s0[2])
+    {
+        case 0: break;
+        
+        case 1:
+        if (func_80030840(SVECTOR_DistanceSquared((SVECTOR*)&level->_40[4], (SVECTOR*)&D_8006CFA0[0x48/4]), 0) > 1000
+            || !temp_s0[5])
+        {
+            temp_s0[2] = 2;
+            temp_s0[1] = -6;
+        }
+        else
+            temp_s0[5]--;
+            
+        break;
+        
+        case 2:
+        if (temp_s0[0] < 0x41) {
+            temp_s0[2] = 0;
+            temp_s0[0] = 0x40;
+            temp_s0[1]= 0;
+            temp_s0[4] = 0;
+        }
+            
+        break;
+    }
+    temp_s0[0] += temp_s0[1];
+    level->_60[2] = ((level->_60[2] + temp_s0[0]) & 0xFFF);
+}
 
-INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_qmark_OnDestroy);
+void circuit_qmark_OnDestroy(Level_t* level) {
+    short* temp_s1;
+
+    temp_s1 = (short*)level->_20[1];
+    if (func_80027500(level->_70[2]) != 0) {
+        level->_104 = 1;
+        level->_F4[2] = 0x12C;
+        *((int*)&level->_110) = temp_s1[4];
+        *((int*)&level->_10C) = 1;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", func_8015EC00_85DE0);
 
