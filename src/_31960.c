@@ -19,7 +19,7 @@ char CharacterManip_30DAC(char c) {
     return (t < 95) ? CharacterManipArray_6F078[t] : '8';
 }
 
-INCLUDE_ASM("asm/nonmatchings/_31960", func_80030DD8);
+INCLUDE_ASM("asm/nonmatchings/_31960", DrawTextToScreen);
 
 INCLUDE_ASM("asm/nonmatchings/_31960", func_800311DC);
 

@@ -3,6 +3,7 @@
 
 #include <PR/gbi.h>
 #include <PR/mbi.h>
+#include <ultra64.h>
 
 #include "types/Level.h"
 
@@ -17,7 +18,7 @@ extern int D_800E5CD4;
 extern short D_800E5DB0;
 extern int D_800E97CC;
 extern char D_8014F354;
-extern int D_80153A58;
+extern OSMesgQueue gGlobalMessageBuffer;
 extern int D_80156BDC;
 extern int D_80157034;
 extern int D_801574FC;
@@ -39,7 +40,7 @@ void logo_select_OnUpdate()
         
     case 1:
         D_8006FA54 = 2;
-        osSendMesg(&D_80153A58, 1, 0);
+        osSendMesg(&gGlobalMessageBuffer, (void*)OS_EVENT_SW2, OS_MESG_NOBLOCK);
     break;
 
     case 3:
@@ -52,13 +53,13 @@ void logo_select_OnUpdate()
         {
             D_80078171 = 1;
             D_8006FA54 = 8;
-            osSendMesg(&D_80153A58, 3, 0);
+            osSendMesg(&gGlobalMessageBuffer, (void*)OS_EVENT_COUNTER, OS_MESG_NOBLOCK);
         }
         break;
 
     case 9:
         D_8006FA54 = 4;
-        osSendMesg(&D_80153A58, 2, 0);
+        osSendMesg(&gGlobalMessageBuffer, (void*)OS_EVENT_CART, OS_MESG_NOBLOCK);
         break;
 
     case 5:
@@ -101,7 +102,7 @@ void logo_select_OnUpdate()
         else if (D_800E5CD4 < D_80157034)
         {
             D_8006FA54 = 7;
-            osSendMesg(&D_80153A58, 4, 0);
+            osSendMesg(&gGlobalMessageBuffer, (void*)OS_EVENT_SP, OS_MESG_NOBLOCK);
         }
         else
         {
@@ -221,11 +222,11 @@ void func_80159CC8_ECAD8()
 
     gSPDisplayList(D_80157050++, D_8006D578);
 
-    func_80030DD8("THERE IS NO CONTROLLER", 0x44, 0x46, 1);
-    func_80030DD8("CONNECTED IN CONTROLLER", 0x3E, 0x64, 1);
-    func_80030DD8("SOCKET ONE. SHUT OFF", 0x48, 0x82, 1);
-    func_80030DD8("POWER, INSERT A", 0x55, 0xA0, 1);
-    func_80030DD8("CONTROLLER AND RESTART", 0x3D, 0xBE, 1);
+    DrawTextToScreen("THERE IS NO CONTROLLER", 0x44, 0x46, 1);
+    DrawTextToScreen("CONNECTED IN CONTROLLER", 0x3E, 0x64, 1);
+    DrawTextToScreen("SOCKET ONE. SHUT OFF", 0x48, 0x82, 1);
+    DrawTextToScreen("POWER, INSERT A", 0x55, 0xA0, 1);
+    DrawTextToScreen("CONTROLLER AND RESTART", 0x3D, 0xBE, 1);
 
     gDPPipeSync(D_80157050++);
 }
@@ -235,14 +236,14 @@ void func_80159DA0_ECBB0()
 
     gSPDisplayList(D_80157050++, D_8006D578);
 
-    func_80030DD8("GEX]: ENTER THE GECKO", 0x46, 0x32, 1);
-    func_80030DD8("[1998 CRYSTAL DYNAMICS.", 0x3C, 0x46, 1);
-    func_80030DD8("CRYSTAL DYNAMICS, THE CRYSTAL", 0x26, 0x64, 1);
-    func_80030DD8("DYNAMICS LOGO, GEX AND THE", 0x32, 0x78, 1);
-    func_80030DD8("GEX CHARACTER ARE TRADEMARKS", 0x21, 0x8C, 1);
-    func_80030DD8("OF CRYSTAL DYNAMICS.", 0x46, 0xA0, 1);
-    func_80030DD8("ALL RIGHTS RESERVED.", 0x4B, 0xB4, 1);
-    func_80030DD8("LICENSED BY NINTENDO", 0x50, 0xD2, 1);
+    DrawTextToScreen("GEX]: ENTER THE GECKO", 0x46, 0x32, 1);
+    DrawTextToScreen("[1998 CRYSTAL DYNAMICS.", 0x3C, 0x46, 1);
+    DrawTextToScreen("CRYSTAL DYNAMICS, THE CRYSTAL", 0x26, 0x64, 1);
+    DrawTextToScreen("DYNAMICS LOGO, GEX AND THE", 0x32, 0x78, 1);
+    DrawTextToScreen("GEX CHARACTER ARE TRADEMARKS", 0x21, 0x8C, 1);
+    DrawTextToScreen("OF CRYSTAL DYNAMICS.", 0x46, 0xA0, 1);
+    DrawTextToScreen("ALL RIGHTS RESERVED.", 0x4B, 0xB4, 1);
+    DrawTextToScreen("LICENSED BY NINTENDO", 0x50, 0xD2, 1);
 
     gDPPipeSync(D_80157050++);
     
@@ -259,15 +260,15 @@ void func_80159EF0_ECD00(int arg0)
 
     gSPDisplayList(D_80157050++, D_8006D578);
 
-    func_80030DD8("PUBLISHED BY", 0x6E, 0x28, 1);
-    func_80030DD8("MIDWAY HOME ENTERTAINMENT INC.", 0x21, 0x3C, 1);
-    func_80030DD8("MIDWAY IS A TRADEMARK", 0x46, 0x5A, 1);
-    func_80030DD8("OF MIDWAY GAMES INC.", 0x4B, 0x6E, 1);
-    func_80030DD8("DISTRIBUTED BY MIDWAY HOME", 0x37, 0x82, 1);
-    func_80030DD8("ENTERTAINMENT INC.", 0x55, 0x96, 1);
-    func_80030DD8("UNDER LICENSE", 0x66, 0xAA, 1);
-    func_80030DD8("N64 DEVELOPMENT BY", 0x50, 0xC8, 1);
-    func_80030DD8("REALTIME ASSOCIATES INC.", 0x41, 0xDC, 1);
+    DrawTextToScreen("PUBLISHED BY", 0x6E, 0x28, 1);
+    DrawTextToScreen("MIDWAY HOME ENTERTAINMENT INC.", 0x21, 0x3C, 1);
+    DrawTextToScreen("MIDWAY IS A TRADEMARK", 0x46, 0x5A, 1);
+    DrawTextToScreen("OF MIDWAY GAMES INC.", 0x4B, 0x6E, 1);
+    DrawTextToScreen("DISTRIBUTED BY MIDWAY HOME", 0x37, 0x82, 1);
+    DrawTextToScreen("ENTERTAINMENT INC.", 0x55, 0x96, 1);
+    DrawTextToScreen("UNDER LICENSE", 0x66, 0xAA, 1);
+    DrawTextToScreen("N64 DEVELOPMENT BY", 0x50, 0xC8, 1);
+    DrawTextToScreen("REALTIME ASSOCIATES INC.", 0x41, 0xDC, 1);
 
     gDPPipeSync(D_80157050++);
 

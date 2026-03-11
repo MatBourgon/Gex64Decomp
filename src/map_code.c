@@ -3,6 +3,7 @@
 #include <PR/gbi.h>
 #include <PR/mbi.h>
 #include <compiler/gcc/string.h>
+#include <ultra64.h>
 
 #include "types/Level.h"
 #include "types/TVTextData.h"
@@ -38,7 +39,7 @@ extern int D_800E5CD4;
 extern char D_800E8EB4;
 extern int D_800E97CC;
 extern char D_8014F354;
-extern char D_80153A58[];
+extern OSMesgQueue gGlobalMessageBuffer;
 extern char D_80157030;
 extern int D_80157034;
 extern char D_8006FC69;
@@ -1296,7 +1297,7 @@ void map_lvltv_OnCreate(Level_t* level) {
         func_8015DB54_BE584(level); // shouldn't need a second argument?
         return;
     }
-    sprintf(&sp10, &D_80161394_C1DC4, temp_s1 + 2, temp_s1[0x2/2]);
+    sprintf(sp10, &D_80161394_C1DC4, temp_s1 + 2, temp_s1[0x2/2]);
     
     level->_112 = GetLevelIndexFromId(&sp10);
     if (level->_112 < 0x15U) {
@@ -1837,7 +1838,7 @@ void func_8015EED8_BF908(int* arg0) {
         }
     }
     gSPDisplayList(D_80157050++, D_8006D578);
-    func_80030DD8("PRESS A TO SELECT", 0x58, 0xD2, 1);
+    DrawTextToScreen("PRESS A TO SELECT", 0x58, 0xD2, 1);
     gDPPipeSync(D_80157050++);
 }
 
@@ -1960,7 +1961,7 @@ void func_8015F228_BFC58(int* arg0) {
     }
     
     gSPDisplayList(D_80157050++, D_8006D578);
-    func_80030DD8("A=SELECT  START=ABORT", 0x4B, 0xD7, 1);
+    DrawTextToScreen("A=SELECT  START=ABORT", 0x4B, 0xD7, 1);
     gDPPipeSync(D_80157050++);
 }
 
@@ -1971,7 +1972,7 @@ void func_8015F678_C00A8(short* arg0) {
     func_80037B00(0x46, 0x6E);
     Print3DTextf("#2GAME OVER");
     gSPDisplayList(D_80157050++, D_8006D578);
-    func_80030DD8("PRESS A TO START NEW GAME", 0x2D, 0xB4, 1);
+    DrawTextToScreen("PRESS A TO START NEW GAME", 0x2D, 0xB4, 1);
     gDPPipeSync2(D_80157050);
     if (D_800E5DB2 & 0x8000) {
         ((int*)arg0)[0x4BF4/4] = 5;
@@ -2056,7 +2057,7 @@ void func_8015F804_C0234(short* arg0) {
     func_80037B00(0x62, 0x64);
     Print3DTextf(D_801611D8_C1C08);
     gSPDisplayList(D_80157050++, D_8006D578);
-    func_80030DD8(buffer, 0x50, 0x8C, 1);
+    DrawTextToScreen(buffer, 0x50, 0x8C, 1);
     if (D_800E5DB2 & 0x8000) {
         if (func_8003FDD8(arg0) == 0) {
             D_80078170 = 1;
@@ -2078,9 +2079,9 @@ void func_8015F804_C0234(short* arg0) {
         }
     }
     if (D_80078170 != 0) {
-        func_80030DD8("A=ACCEPT  B=BACK  START=ABORT", 0x1E, 0xD2, 1);
+        DrawTextToScreen("A=ACCEPT  B=BACK  START=ABORT", 0x1E, 0xD2, 1);
     } else {
-        func_80030DD8("A=ACCEPT  B=BACK", 0x55, 0xD2, 1);
+        DrawTextToScreen("A=ACCEPT  B=BACK", 0x55, 0xD2, 1);
     }
     gDPPipeSync(D_80157050++);
     D_8014F34C++;
@@ -2091,8 +2092,8 @@ void func_8015FBBC_C05EC(short* arg0) {
     func_80037B00(0x3C, 0x5F);
     Print3DTextf("PASSWORD IS");
     gSPDisplayList(D_80157050++, D_8006D578);
-    func_80030DD8(D_800E5D00, 0x50, 0x82, 1);
-    func_80030DD8("PRESS A TO CONTINUE", 0x50, 0xC8, 1);
+    DrawTextToScreen(D_800E5D00, 0x50, 0x82, 1);
+    DrawTextToScreen("PRESS A TO CONTINUE", 0x50, 0xC8, 1);
     gDPPipeSync2(D_80157050);
     if (D_800E5DB2 & 0x8000) {
         arg0[0x4C12/2] = 0;
@@ -2154,9 +2155,9 @@ void func_8015FC88_C06B8(int* arg0) {
     }
     gSPDisplayList(D_80157050++, &D_8006D578);
     if (D_80078170 != 0) {
-        func_80030DD8(&D_801614D0_C1F00, 0x23, 0xD2, 1);
+        DrawTextToScreen(&D_801614D0_C1F00, 0x23, 0xD2, 1);
     } else {
-        func_80030DD8(&D_801614F0_C1F20, 0x4B, 0xD2, 1);
+        DrawTextToScreen(&D_801614F0_C1F20, 0x4B, 0xD2, 1);
     }
     gDPPipeSync(D_80157050++);
 }
@@ -2216,7 +2217,7 @@ void func_8015FF60_C0990(int* arg0) {
     }
     
     gSPDisplayList(D_80157050++, D_8006D578);
-    func_80030DD8(D_801614D0_C1F00, 0x23, 0xD2, 1);
+    DrawTextToScreen(D_801614D0_C1F00, 0x23, 0xD2, 1);
     gDPPipeSync(D_80157050++);
     
 }
@@ -2234,14 +2235,14 @@ void func_80160214_C0C44(short* arg0) {
     switch (D_8006FA54) {
     case 1:
         D_8006FA54 = 2;
-        osSendMesg(&D_80153A58, 1, 0);
+        osSendMesg(&gGlobalMessageBuffer, (void*)OS_EVENT_SW2, OS_MESG_NOBLOCK);
         return;
     case 3:
         if (D_80156BDC == 0) {
             D_80078171 = 1;
             D_8006CF20 = 0;
             D_8006FA54 = 4;
-            osSendMesg(&D_80153A58, 2, 0);
+            osSendMesg(&gGlobalMessageBuffer, (void*)OS_EVENT_CART, OS_MESG_NOBLOCK);
             return;
         }
         func_80040170(10);
@@ -2264,7 +2265,7 @@ void func_80160214_C0C44(short* arg0) {
     case 6:
         if (D_800E5CD4 < D_80157034) {
             D_8006FA54 = 7;
-            osSendMesg(&D_80153A58, 4, 0);
+            osSendMesg(&gGlobalMessageBuffer, (void*)OS_EVENT_SP, OS_MESG_NOBLOCK);
         return;
         }
         D_8014F34C = func_80014D00(-1);
@@ -2306,7 +2307,7 @@ void func_80160214_C0C44(short* arg0) {
         if (D_800E5DB2 & 0x8000) {
             D_8006FA54 = 0x14;
             D_800E5CD4 = D_8014F34C;
-            osSendMesg(&D_80153A58, 7, 0);
+            osSendMesg(&gGlobalMessageBuffer, (void*)OS_EVENT_VI, OS_MESG_NOBLOCK);
         } else if (D_800E5DB2 & 0x1000) {
             if (D_80078170 != 0) {
                 arg0[0x4C12/2] = 0;
@@ -2317,9 +2318,9 @@ void func_80160214_C0C44(short* arg0) {
             func_80040170(1);
         }
         gSPDisplayList(D_80157050++, D_8006D578);
-        func_80030DD8("PICK FILE TO LOAD", 0x50, 0x32, 1);
+        DrawTextToScreen("PICK FILE TO LOAD", 0x50, 0x32, 1);
         if (func_80014C80(D_801574FC) != D_801574FC) {
-            func_80030DD8("^", 0x50, 0x49, 1);
+            DrawTextToScreen("^", 0x50, 0x49, 1);
         }
         var_s1 = D_801574FC;
         var_s3 = 0;
@@ -2330,21 +2331,21 @@ void func_80160214_C0C44(short* arg0) {
                 && (var_s0->filename.MAGIC[1] == SAVEFILE_MAGIC_STRING[1])
                 && (var_s0->filename.MAGIC[2] == SAVEFILE_MAGIC_STRING[2])
                 && (var_s0->filename.MAGIC[3] == SAVEFILE_MAGIC_STRING[3])) {
-                func_80030DD8(var_s0, 0x64, 0x5A + var_s3 * 0x14, 0);
+                DrawTextToScreen(var_s0, 0x64, 0x5A + var_s3 * 0x14, 0);
                 if (var_s1 == D_8014F34C) {
-                    func_80030DD8(">", 0x50, 0x5A + var_s3 * 0x14, 1);
+                    DrawTextToScreen(">", 0x50, 0x5A + var_s3 * 0x14, 1);
                 }
                 var_s3 += 1;
             }
             var_s1 += 1;
         }
         if (func_80014D00(var_s1 - 1) != (var_s1 - 1)) {
-            func_80030DD8("$", 0x50, 0xBE, 1);
+            DrawTextToScreen("$", 0x50, 0xBE, 1);
         }
         if (D_80078170 != 0) {
-            func_80030DD8(D_801614D0_C1F00, 0x23, 0xD2, 1);
+            DrawTextToScreen(D_801614D0_C1F00, 0x23, 0xD2, 1);
         } else {
-            func_80030DD8(D_801614F0_C1F20, 0x4B, 0xD2, 1);
+            DrawTextToScreen(D_801614F0_C1F20, 0x4B, 0xD2, 1);
         }
         
         gDPPipeSync(D_80157050++);
@@ -2369,31 +2370,31 @@ void func_80160214_C0C44(short* arg0) {
 void func_80160838_C1268(void) {
     gSPDisplayList(D_80157050++, D_8006D578);
     if (D_800E8EB4 == 0) {
-        func_80030DD8("USE ONE PAGE OF MEMORY", 0x41, 0x32, 1);
-        func_80030DD8("TO CREATE FILE:", 0x5A, 0x46, 1);
-        func_80030DD8(D_80078174, 0x50, 0x73, 0);
+        DrawTextToScreen("USE ONE PAGE OF MEMORY", 0x41, 0x32, 1);
+        DrawTextToScreen("TO CREATE FILE:", 0x5A, 0x46, 1);
+        DrawTextToScreen(D_80078174, 0x50, 0x73, 0);
     } else {
-        func_80030DD8("SAVE TO FILE:", 0x5A, 0x46, 1);
-        func_80030DD8(&D_800E5DDE[D_800E5CD4], 0x50, 0x73, 0);
+        DrawTextToScreen("SAVE TO FILE:", 0x5A, 0x46, 1);
+        DrawTextToScreen(&D_800E5DDE[D_800E5CD4], 0x50, 0x73, 0);
     }
     if ((D_800E5DB2 & 0x808) || (D_800E5B98 != 0)) {
         D_8014F34C = 0;
     } else if ((D_800E5DB2 & 0x404) || (D_80157030 != 0)) {
         D_8014F34C = 1;
     }
-    func_80030DD8("YES, SAVE FILE", 0x3C, 0x96, 1);
-    func_80030DD8("NO, DON'T SAVE", 0x3C, 0xAA, 1);
-    func_80030DD8(">", 0x2D, (D_8014F34C * 0x14) + 0x96, 1);
-    func_80030DD8("PRESS A TO SELECT", 0x55, 0xC8, 1);
+    DrawTextToScreen("YES, SAVE FILE", 0x3C, 0x96, 1);
+    DrawTextToScreen("NO, DON'T SAVE", 0x3C, 0xAA, 1);
+    DrawTextToScreen(">", 0x2D, (D_8014F34C * 0x14) + 0x96, 1);
+    DrawTextToScreen("PRESS A TO SELECT", 0x55, 0xC8, 1);
     if (D_800E5DB2 & 0x8000) {
         if (D_8014F34C == 0) {
             func_80040170(7);
             if (D_800E8EB4 == 0) {
                 D_8006FA54 = 0x10;
-                osSendMesg(D_80153A58, 5, 0);
+                osSendMesg(&gGlobalMessageBuffer, (void*)OS_EVENT_SI, OS_MESG_NOBLOCK);
             } else {
                 D_8006FA54 = 0xA;
-                osSendMesg(D_80153A58, 6, 0);
+                osSendMesg(&gGlobalMessageBuffer, (void*)OS_EVENT_AI, OS_MESG_NOBLOCK);
             }
             return;
         }
@@ -2437,14 +2438,14 @@ void func_80160ACC_C14FC(short* arg0) {
         }
     }
     gSPDisplayList(D_80157050++, D_8006D578);
-    func_80030DD8("ENTER NAME FOR THIS GAME", 0x32, 0x50, 1);
+    DrawTextToScreen("ENTER NAME FOR THIS GAME", 0x32, 0x50, 1);
     if (D_8014F34C & 0x10) {
         var_s1 = D_80078174[D_80156BE4];
         D_80078174[D_80156BE4] = 15;
     }
-    func_80030DD8(&D_80078174, 0x50, 0x73, 0);
-    func_80030DD8("PRESS A TO SAVE", 0x50, 0x96, 1);
-    func_80030DD8("PRESS START TO ABORT", 0x41, 0xAA, 1);
+    DrawTextToScreen(&D_80078174, 0x50, 0x73, 0);
+    DrawTextToScreen("PRESS A TO SAVE", 0x50, 0x96, 1);
+    DrawTextToScreen("PRESS START TO ABORT", 0x41, 0xAA, 1);
     if (D_8014F34C & 0x10) {
         D_80078174[D_80156BE4] = var_s1;
     }
@@ -2465,7 +2466,7 @@ void func_80160DF0_C1820(void* arg0) {
         
     case 1:
         D_8006FA54 = 2;
-        osSendMesg(&D_80153A58, 1, 0);
+        osSendMesg(&gGlobalMessageBuffer, (void*)OS_EVENT_SW2, OS_MESG_NOBLOCK);
         break;
         
     case 3:
@@ -2487,7 +2488,7 @@ void func_80160DF0_C1820(void* arg0) {
         }
             
         D_8006FA54 = 4;
-        osSendMesg(&D_80153A58, 2, 0);
+        osSendMesg(&gGlobalMessageBuffer, (void*)OS_EVENT_CART, OS_MESG_NOBLOCK);
         
         break;
         
@@ -2495,7 +2496,7 @@ void func_80160DF0_C1820(void* arg0) {
         
         if (D_80156BDC == 0) {
             D_8006FA54 = 8;
-            osSendMesg(&D_80153A58, 3, 0);
+            osSendMesg(&gGlobalMessageBuffer, (void*)OS_EVENT_COUNTER, OS_MESG_NOBLOCK);
             break;
         }
             
@@ -2525,7 +2526,7 @@ void func_80160DF0_C1820(void* arg0) {
         if ((D_80156BDC == 0) || ((D_80156BDC == 5))) {
             if (D_800E5CD4 < D_80157034) {
                 D_8006FA54 = 7;
-                osSendMesg(&D_80153A58, 4, 0);
+                osSendMesg(&gGlobalMessageBuffer, (void*)OS_EVENT_SP, OS_MESG_NOBLOCK);
             }
             else
             {
@@ -2548,7 +2549,7 @@ void func_80160DF0_C1820(void* arg0) {
             D_8006FA54 = 0xE;
         } else {
             D_8006FA54 = 0xA;
-            osSendMesg(&D_80153A58, 6, 0);
+            osSendMesg(&gGlobalMessageBuffer, (void*)OS_EVENT_AI, OS_MESG_NOBLOCK);
         }
         
     case 11:
