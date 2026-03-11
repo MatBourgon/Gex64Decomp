@@ -29,7 +29,29 @@ void circuit_crawler_OnCreate(Level_t* level)
     level->_4E = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_crawler_OnUpdate);
+void circuit_crawler_OnUpdate(Level_t* level) {
+    int a0, v0, v1;
+
+    level->_14 &= ~0x10;
+    if (level->_F4[0] == 0)
+    {
+        v1 = level->_50[0];
+        v0 = level->_50[1];
+        level->_60[2] = func_80030538(v0 - level->_40[5], v1 - level->_40[4]) - 0x400;
+        func_8002DAF8(level, -1);
+    }
+    else if (level->_F4[0] == 1)
+    {
+        func_8002DAF8(level, -1);
+        if ((level->_14 & 0x10))
+        {
+            a0 = (*(unsigned char*)&level->_40[7] << 2) + ((int*)(level->_18 + 4))[0];
+            level->_50[7] = ((unsigned short*)(*((int*)a0)))[1] - 1; 
+            level->_F4[0] = 2;
+        }
+        
+    }
+}
 
 void circuit_crawler_OnDestroy(Level_t* level, int* arg1) {
     int temp_a3;

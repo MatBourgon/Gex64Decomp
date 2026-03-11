@@ -79,9 +79,32 @@ void rta_crawler_OnCreate(Level_t* level)
     level->_4E = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/rta_code", rta_crawler_OnUpdate);
+void rta_crawler_OnUpdate(Level_t* level) {
+    
+    int v0, v1;
 
-INCLUDE_ASM("asm/nonmatchings/rta_code", rta_crawler_OnDestroy);
+    
+    v1 = level->_50[0];
+    v0 = level->_50[1];
+    level->_60[2] = func_80030538(v0 - level->_40[5], v1 - level->_40[4]) - 0x400;
+    func_8002DAF8(level, -1);
+}
+
+void rta_crawler_OnDestroy(Level_t* level, int* arg1) {
+    char** temp_a2;
+
+    temp_a2 = (char**)level->_70[2];
+    if ((temp_a2[5] == (char*)arg1[12/4]) && (((short*)temp_a2)[3] == 1)) {
+        if (temp_a2[12/4][5] >= 6U) {
+            func_80047904(level, 5, 3, 0);
+        }
+        else
+        {
+            func_80022714(level, arg1);
+        }
+    }
+}
+
 
 INCLUDE_ASM("asm/nonmatchings/rta_code", rta_eel_OnCreate);
 
