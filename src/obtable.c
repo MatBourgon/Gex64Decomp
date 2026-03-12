@@ -110,7 +110,7 @@ typedef struct
 
 extern ObjectAccess objectAccess[];
 
-void func_8003EE3C(void) {
+void OBTABLE_ClearObjectReferences(void) {
     int i;
 
     for (i = 0; objectAccess[i].objectName != NULL; ++i) {

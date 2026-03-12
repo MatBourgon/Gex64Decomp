@@ -33,6 +33,7 @@ COLLIDE_HandleSignal = 0x8004EA58; // type:func
 OBTABLE_InstanceInit = 0x8003EAB0; // type:func
 OBTABLE_GetInstanceProcessFunc = 0x8003EBB0; // type:func
 OBTABLE_GetInstanceCollideFunc = 0x8003EB6C; // type:func
+OBTABLE_ClearObjectReferences = 0x8003EE3C; // type:func
 OBTABLE_FindObject = 0x8003EE84; // type:func
 GenericInit = 0x8001ACA0; // type:func
 GenericProcess = 0x8001ACF4; // type:func
