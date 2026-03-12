@@ -254,7 +254,7 @@ INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80047F5C);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_800480AC);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_800480F8);
+INCLUDE_ASM("asm/nonmatchings/_42bd0", SCRIPT_InstanceSplineInit);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80048304);
 

@@ -18,8 +18,11 @@ GetRemoteCount = 0x8001A310; // type:func
 
 // Likely the gex actor object
 PlayerInstance = 0x8006CFA0;
+ObjectFunctionTable = 0x80076990; // size:0x1770
+objectAccess = 0x800767E0; //
 
 strcmp = 0x8003E9E0; // type:func
+strcpy = 0x8003EA34; // type:func
 GetLevelIndexFromId = 0x8004B520; // type:func
 GetRedRemotesForLevel = 0x8004B5D4; // type:func
 DrawTextToScreen = 0x80030DD8; // type:func
@@ -27,6 +30,15 @@ DrawTextToScreen = 0x80030DD8; // type:func
 MATH3D_FastSqrt = 0x80030840; // type:func
 SIGNAL_HandleSignal = 0x8004EBAC; // type:func
 COLLIDE_HandleSignal = 0x8004EA58; // type:func
+OBTABLE_InstanceInit = 0x8003EAB0; // type:func
+OBTABLE_GetInstanceProcessFunc = 0x8003EBB0; // type:func
+OBTABLE_GetInstanceCollideFunc = 0x8003EB6C; // type:func
+OBTABLE_FindObject = 0x8003EE84; // type:func
+GenericInit = 0x8001ACA0; // type:func
+GenericProcess = 0x8001ACF4; // type:func
+GenericCollide = 0x8001AD48; // type:func
+SCRIPT_InstanceSplineInit = 0x800480F8; // type:func
+
 
 send_mesg = 0x8005D90C; // type:func
 handle_CpU = 0x8005D9C8; // type:func

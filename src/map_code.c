@@ -556,7 +556,7 @@ void func_8015A854_BB284(int arg0, short arg1) {
     int temp_a0;
     char last_char;
 
-    func_8003EA34(buffer, arg0);
+    strcpy(buffer, arg0);
     var_s1 = buffer;
     do {
         bufferPtr = var_s1;
@@ -1239,7 +1239,7 @@ void func_8015D9E4_BE414(Level_t* level) {
 
     func_80047E64(level, -0x14);
     level->_40[6] += 0x80;
-    level->_F4[2] = func_8002DEA8(level, func_8003EE84("lvllabl_"));
+    level->_F4[2] = func_8002DEA8(level, OBTABLE_FindObject("lvllabl_"));
     *(SVECTOR*)&level->_40[4] = v;
     level->flags |= 0x10000;
     ((int*)level->_F4[2])[0x10/4] |= 0x100000;
@@ -1249,7 +1249,7 @@ void func_8015D9E4_BE414(Level_t* level) {
 }
 
 void func_8015DAC8_BE4F8(Level_t* level) {
-    level->_100 = func_8002DEA8(level, func_8003EE84("etvbutn_" /*etvbutn_*/));
+    level->_100 = func_8002DEA8(level, OBTABLE_FindObject("etvbutn_" /*etvbutn_*/));
     level->flags |= 0x10000;
     ((int*)level->_100)[0x10/4] |= 0x100000;
     ((int*)level->_100)[0x10/4] |= 0x400;
