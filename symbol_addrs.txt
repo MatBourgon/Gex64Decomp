@@ -16,10 +16,17 @@ IsLooneyLoading = 0x800013A8; // type:func
 
 GetRemoteCount = 0x8001A310; // type:func
 
+// Likely the gex actor object
+PlayerInstance = 0x8006CFA0;
+
 strcmp = 0x8003E9E0; // type:func
 GetLevelIndexFromId = 0x8004B520; // type:func
 GetRedRemotesForLevel = 0x8004B5D4; // type:func
 DrawTextToScreen = 0x80030DD8; // type:func
+// See KAIN
+MATH3D_FastSqrt = 0x80030840; // type:func
+SIGNAL_HandleSignal = 0x8004EBAC; // type:func
+COLLIDE_HandleSignal = 0x8004EA58; // type:func
 
 send_mesg = 0x8005D90C; // type:func
 handle_CpU = 0x8005D9C8; // type:func

@@ -3,7 +3,7 @@
 
 #include "types/Level.h"
 
-extern char* D_8006CFA0;
+extern char* PlayerInstance;
 extern int D_8006CF60;
 extern int D_80154840;
 extern char D_8006FCD2;
@@ -18,9 +18,9 @@ void intro_rezzull_OnCreate(Level_t* level, int* arg1) {
 
     ptr = &level->_F4[2];
     var_a1 = 0;
-    temp_s1 = ((short**)D_8006CFA0)[0x20/4];
+    temp_s1 = ((short**)PlayerInstance)[0x20/4];
     level->flags |= 0x400;
-    ((int*)gpGameState8)[0x4C08/4] &= ~0x10;
+    gpGameState8->gameFlags &= ~0x10;
     D_8006FCD2 = 0;
     do {
         temp_v0 = ((char*)gpGameState8) + var_a1;
@@ -42,9 +42,9 @@ void intro_rezzull_OnCreate(Level_t* level, int* arg1) {
     temp_s1[0xDC/2] = 0;
     temp_v1 = (short*)arg1[0x8/4];
     temp_v1[2] += 0xDC;
-    ((short*)D_8006CFA0)[0x64/2] = 0x11F0;
-    ((short*)D_8006CFA0)[0x48/2] -= 1100;
-    ((short*)D_8006CFA0)[0x4A/2] += 2200;
+    ((short*)PlayerInstance)[0x64/2] = 0x11F0;
+    ((short*)PlayerInstance)[0x48/2] -= 1100;
+    ((short*)PlayerInstance)[0x4A/2] += 2200;
     level->_60[0] = 1024;
     level->_60[1] = 1750;
     level->_60[2] = 0;
@@ -91,7 +91,7 @@ void intro_gextext_OnUpdate(Level_t* level)
         {
             level->_40[6] -= 0x14;
         }
-        D_8006CFA0[0x4E] = 0;
+        PlayerInstance[0x4E] = 0;
     }
 }
 

@@ -65,7 +65,7 @@ INCLUDE_RODATA("asm/nonmatchings/spy_code", D_8015AE0C_EC4DC);
 
 INCLUDE_RODATA("asm/nonmatchings/spy_code", D_8015AE10_EC4E0);
 
-extern int* D_8006CFA0;
+extern int* PlayerInstance;
 extern int D_800E5FD8;
 extern int D_80154834;
 
@@ -79,7 +79,7 @@ void spy_btimer_OnUpdate(Level_t* arg0, int** arg1) {
     int* temp_s3;
 
     var_v1 = 1;
-    temp_s3 = arg0->_20[1];
+    temp_s3 = (int*)arg0->_20[1];
     temp_s2 = &arg0->_F4[2];
     if (*(short*)&arg0->_100 == 0) {
         if (((short*)temp_s2)[0] != 0) {
@@ -115,10 +115,10 @@ void spy_btimer_OnUpdate(Level_t* arg0, int** arg1) {
         if (((arg1[0xC/4][0xFC/4] & 0x600000) == 0x600000) && (arg0->_F4[1] == 0)) {
             ((short*)temp_s2)[0] = (((unsigned short*)temp_s3)[1] - 1);
             if (temp_s3[0x4/4] == 0x3F2) {
-                func_8004EBAC(D_8006CFA0, temp_s3[0x8/4] + 4, 0);
+                SIGNAL_HandleSignal(PlayerInstance, temp_s3[0x8/4] + 4, 0);
             }
             arg0->_F4[1] = 1;
-            D_8006CFA0[0xFC/4] &= 0xFFBFFFFF;
+            PlayerInstance[0xFC/4] &= 0xFFBFFFFF;
         }
         if ((arg1[0xC/4][0xFC/4] & 0x400000) && ((arg1[0x4C00/4] != 0) || (arg1[0x4C04/4] != 0))) {
             func_8002C18C(5);
