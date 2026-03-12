@@ -2,8 +2,10 @@
 
 #include "types/Level.h"
 
+#include "types/GameState.h"
+
 #include "types/Vector.h"
-extern int* D_8006CFA0;
+extern int* PlayerInstance;
 
 INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zgrate_OnCreate);
 
@@ -191,14 +193,14 @@ void rta_qmark_OnCreate(Level_t* level)
     level->_100 = 0;
 }
 
-void rta_qmark_OnUpdate(Level_t* level, int* arg1) {
+void rta_qmark_OnUpdate(Level_t* level, GameState* arg1) {
     int* temp_s0;
     short* temp_t0;
     volatile char _[4];
     
     temp_t0 = (short*)level->_20[1];
     temp_s0 = &level->_F4[2];
-    if (((*(int*)&level->_10C) != 0) && !(arg1[0x4C08/4] & 0x2000)) {
+    if (((*(int*)&level->_10C) != 0) && !(arg1->gameFlags & 0x2000)) {
         func_8003F6CC(temp_t0[0], temp_t0[1], temp_t0[2], temp_t0[3], temp_t0[5], temp_t0 + 6);
     }
     switch (temp_s0[2])

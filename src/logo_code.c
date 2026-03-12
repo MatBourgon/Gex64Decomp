@@ -23,7 +23,7 @@ extern int D_80156BDC;
 extern int D_80157034;
 extern int D_801574FC;
 extern char D_8006CF20;
-extern short* D_8006CFA0;
+extern short* PlayerInstance;
 extern unsigned short D_800E5DB2;
 
 void logo_select_OnCreate(Level_t* level, int** arg1)
@@ -201,7 +201,7 @@ void logo_rtlogor_OnCreate(Level_t* level, short** arg1)
     level->_40[6] = -0x96;
     arg1[0x8/4][0x4/2] += 0xE6;
     arg1[0x8/4][0x2/2] -= 0xC8;
-    arg1[0x8/4][0] = D_8006CFA0[0x48/2];
+    arg1[0x8/4][0] = PlayerInstance[0x48/2];
     level->_4E = 0;
     level->_50[7] = 0;
 }

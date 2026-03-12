@@ -1,17 +1,55 @@
 #include "common.h"
 
 #include "types/Level.h"
-extern int* D_8006CFA0;
+#include "types/GameState.h"
+extern int* PlayerInstance;
 extern int D_800E5FD8;
 extern int D_80154834;
 
-INCLUDE_ASM("asm/nonmatchings/nypd_code", func_80159720_C6800);
+void func_80159720_C6800(Level_t* level, GameState* _)
+{
+    if (level->_20[1] != 0) {
+        if (((int**)level->_20)[1][0] != 0) {
+            if (((int**)level->_20)[1][0] > 10U) {
+                SIGNAL_HandleSignal(level, ((int**)level->_20)[1][0] + 4, 0);
+            } else {
+                SIGNAL_HandleSignal(level, ((int**)level->_20)[1][1] + 4, 0);
+            }
+        }
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/nypd_code", nypd_slider_OnCreate);
+void nypd_slider_OnCreate(Level_t* level)
+{
+    level->flags |= 0x100400;
+}
 
-INCLUDE_ASM("asm/nonmatchings/nypd_code", nypd_slider_OnUpdate);
+void nypd_slider_OnUpdate(Level_t* level)
+{
+    if (level->_F4[2] > 0)
+    {
+        level->_F4[2]--;
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/nypd_code", nypd_slider_OnDestroy);
+void nypd_slider_OnDestroy(Level_t* level, GameState* arg2) {
+    int* temp_s1;
+
+    temp_s1 = (int*)PlayerInstance[0x20/4];
+    if (!(PlayerInstance[0xFC/4] & 1) && (level->_F4[2] == 0)) {
+        func_80159720_C6800(level, arg2);
+        
+        level->_F4[2] = 0x3C;
+        temp_s1[0xE0/4] = (int)level;
+        PlayerInstance[0xFC/4] &= ~2;
+        
+        func_8002B7CC(PlayerInstance);
+
+        if (!func_80033220(0x39)) {
+            func_80050508(PlayerInstance, 0x39, (short)((rand() & 31) - 15), 0x3C, 2000);
+        }
+    }
+}
 
 void nypd_btimer_OnCreate(Level_t* level, int* arg1) {
     int var_s0;
@@ -45,7 +83,7 @@ void nypd_btimer_OnUpdate(Level_t* arg0, int** arg1) {
     int* temp_s3;
 
     var_v1 = 1;
-    temp_s3 = arg0->_20[1];
+    temp_s3 = (int*)arg0->_20[1];
     temp_s2 = &arg0->_F4[2];
     if (*(short*)&arg0->_100 == 0) {
         if (((short*)temp_s2)[0] != 0) {
@@ -84,10 +122,10 @@ void nypd_btimer_OnUpdate(Level_t* arg0, int** arg1) {
         if (((arg1[0xC/4][0xFC/4] & 0x600000) == 0x600000) && (arg0->_F4[1] == 0)) {
             ((short*)temp_s2)[0] = (((unsigned short*)temp_s3)[1] - 1);
             if (temp_s3[0x4/4] == 0x3F2) {
-                func_8004EBAC(D_8006CFA0, temp_s3[0x8/4] + 4, 0);
+                SIGNAL_HandleSignal(PlayerInstance, temp_s3[0x8/4] + 4, 0);
             }
             arg0->_F4[1] = 1;
-            D_8006CFA0[0xFC/4] &= 0xFFBFFFFF;
+            PlayerInstance[0xFC/4] &= 0xFFBFFFFF;
         }
         if ((arg1[0xC/4][0xFC/4] & 0x400000) && ((arg1[0x4C00/4] != 0) || (arg1[0x4C04/4] != 0))) {
             func_8002C18C(5);

@@ -12,7 +12,7 @@
 #include "types/Vector.h"
 
 extern char D_8014F34C;
-extern int* D_8006CFA0;
+extern int* PlayerInstance;
 extern void map_lvltv_OnDestroy();
 extern char D_80161394_C1DC4[];
 extern char* D_80161684_C20B4;
@@ -178,7 +178,7 @@ void map_temptv_OnUpdate(Level_t* level, int* arg1) {
             level->_50[3] |= 1;
         }
         
-        if (!(arg1[0x4C08/4] & 1)) {
+        if (!(((GameState*)arg1)->gameFlags & 1)) {
             if ((arg1[0x1C/4] & 0x10) && (level->_F4[0] == 1)) {
                 func_800396E0("prehst", "prehst1", arg1);
             }
@@ -235,7 +235,7 @@ void map_intro_OnCreate(Level_t* level, int* arg1) {
             func_80003A68(arg1[2], func_80051638(*temp_s1, temp_s1 + 4));
             func_80001408(arg1[2], 8);
         }
-        ((int*)arg1)[0x4C08/4] |= 1;
+        ((GameState*)arg1)->gameFlags |= 1;
     }
 }
 
@@ -250,7 +250,7 @@ void map_intro_OnUpdate(int* level, int* arg1) {
     if (((int*)level[0x1C/4])[1] == 0)
         return;
     
-    ((short*)D_8006CFA0)[0x64/2] = -0x200;
+    ((short*)PlayerInstance)[0x64/2] = -0x200;
     ((int**)arg1)[0xC/4][0x10/4] |= 0x100;
     v0 = (((int**)level[0x1C/4])[1]);
     s4 = (int*)v0[0x4/4];
@@ -267,7 +267,7 @@ void map_intro_OnUpdate(int* level, int* arg1) {
     {
         if ((arg1[0x40/4] & 0x8010) == 0)
         {
-            arg1[0x4C08/4] |= 1; // d0
+            ((GameState*)arg1)->gameFlags |= 1; // d0
             ((SVECTOR*)arg1[0x8/4])->x = ((SVECTOR*)v1)->x;
             ((SVECTOR*)arg1[0x8/4])->y = ((SVECTOR*)v1)->y;
             ((SVECTOR*)arg1[0x8/4])->z = ((SVECTOR*)v1)->z;
@@ -286,7 +286,7 @@ void map_intro_OnUpdate(int* level, int* arg1) {
     level[0xF8/4] = 1;
     ((int*)arg1[0x4/4])[0x74/4] &= -2;
 
-    arg1[0x4C08/4] &= -2;
+    ((GameState*)arg1)->gameFlags &= -2;
     if (s3 != 0)
     {
         if (s3[0] & 1)
@@ -339,7 +339,7 @@ void map_angel_OnUpdate(Level_t* level, int* arg1) {
         if ( temp_s3[0x4C/2] <= ((short*)&level->_100)[1]) {
             func_8004A5B4(level, 0x1000);
             level->_F4[0] = 1;
-            arg1[0x4C08/4] |= 1;
+            ((GameState*)arg1)->gameFlags |= 1;
             (*(short*)&level->_104) = 0x5A;
             level->_40[6] -= 0x400;
             level->flags &= ~0x800;
@@ -369,7 +369,7 @@ block_11:
     if (temp_s2[4] > 0) {
         temp_s2[4]--;
         if ((temp_s2[4] << 0x10) <= 0) {
-            arg1[0x4C08/4] &= ~1;
+            ((GameState*)arg1)->gameFlags &= ~1;
             func_8001C978(temp_s3, arg1[1] + 0x2C, arg1);
             level->_F4[0] = 0;
             level->flags |= 0x800;
@@ -444,7 +444,7 @@ void map_lkdoor_OnUpdate(Level_t* level) {
         
         if ((var_s2 != 0) && (temp_s1 != 0)) {
             if (((int*)temp_s1)[0] != 0) {
-                func_8004EBAC(level, ((int*)temp_s1)[0] + 4, 0);
+                SIGNAL_HandleSignal(level, ((int*)temp_s1)[0] + 4, 0);
             }
             temp_s3[0] = 4;
             temp_s3[1] = 1;
@@ -497,13 +497,13 @@ void map_qmark_OnCreate(Level_t* level)
     level->_100 = 0;
 }
 
-void map_qmark_OnUpdate(Level_t* level, int* arg1) {
+void map_qmark_OnUpdate(Level_t* level, GameState* arg1) {
     int* temp_s0;
     short* temp_t0;
     
     temp_t0 = (short*)level->_20[1];
     temp_s0 = &level->_F4[2];
-    if (((*(int*)&level->_10C) != 0) && !(arg1[0x4C08/4] & 0x2000)) {
+    if (((*(int*)&level->_10C) != 0) && !(arg1->gameFlags & 0x2000)) {
         func_8003F6CC(temp_t0[0], temp_t0[1], temp_t0[2], temp_t0[3], temp_t0[5], temp_t0 + 6);
     }
     switch (temp_s0[2])
@@ -511,7 +511,7 @@ void map_qmark_OnUpdate(Level_t* level, int* arg1) {
         case 0: break;
         
         case 1:
-        if (func_80030840(SVECTOR_DistanceSquared((SVECTOR*)&level->_40[4], (SVECTOR*)&D_8006CFA0[0x48/4]), 0) > 1000
+        if (MATH3D_FastSqrt(SVECTOR_DistanceSquared((SVECTOR*)&level->_40[4], (SVECTOR*)&PlayerInstance[0x48/4]), 0) > 1000
             || !temp_s0[5])
         {
             temp_s0[2] = 2;
@@ -634,16 +634,16 @@ void map_start_OnCreate(Level_t* level, int** arg1) {
     char* ptr;
 
     temp_a1 = (int*)level->_20[1];
-    temp_s4 = (short*)D_8006CFA0[0x20/4];
+    temp_s4 = (short*)PlayerInstance[0x20/4];
     ptr = (char*)&level->_F4[2];
     if (!(level->flags & 0x20000)) {
         temp_a2 = (int*)arg1[1][0x90/4];
         
         if (G2String_Compare_NEQ(D_801612C0_C1CF0, temp_a2))
         {
-            func_8004EBAC(D_8006CFA0, temp_a1[0] + 4, 0);
+            SIGNAL_HandleSignal(PlayerInstance, temp_a1[0] + 4, 0);
         } else {
-            func_8004EBAC(D_8006CFA0, temp_a1[1] + 4, 0);
+            SIGNAL_HandleSignal(PlayerInstance, temp_a1[1] + 4, 0);
         }
         
         ptr[0x24] = 1;
@@ -661,9 +661,9 @@ void map_start_OnCreate(Level_t* level, int** arg1) {
         temp_v1_3 = arg1[0xC/4];
         temp_v1_3[0xFC/4] = (temp_v1_3[0xFC/4] | 0x1000);
         temp_s4[0x12C/2] = 0;
-        ((char*)D_8006CFA0)[0x4E] = 0;
-        D_8006CFA0[0xF8/4] = 1;
-        D_8006CFA0[0xF4/4] = 0;
+        ((char*)PlayerInstance)[0x4E] = 0;
+        PlayerInstance[0xF8/4] = 1;
+        PlayerInstance[0xF4/4] = 0;
         arg1[0xC/4][0xF4/4] = 5;
         func_80052F58();
         ((int*)level->_D0)[0] = 0x258;
@@ -820,21 +820,21 @@ void func_8015C110_BCB40(Level_t* level, short** arg1) {
     short* temp_t0;
 
     temp_a3 = (short*)level->_20[1];
-    temp_t0 = (short*)D_8006CFA0[0x20/4];
+    temp_t0 = (short*)PlayerInstance[0x20/4];
     if ((temp_a3 != 0) && ((((int*)temp_a3)[0x10/4] != 0) || (temp_a3[0x14/2] != 0))) {
         
-        *(SVECTOR*)(&D_8006CFA0[0x50/4])
-          = *(SVECTOR*)(&D_8006CFA0[0x48/4])
+        *(SVECTOR*)(&PlayerInstance[0x50/4])
+          = *(SVECTOR*)(&PlayerInstance[0x48/4])
               = *(SVECTOR*)&temp_a3[0x10/2];
         
         temp_t0[0x82/2]
-            = ((short*)D_8006CFA0)[0x64/2]
+            = ((short*)PlayerInstance)[0x64/2]
             = temp_a3[0x18/2];
         
-        if (((short*)D_8006CFA0)[0x4C/2] < temp_a3[0x14/2]) {
+        if (((short*)PlayerInstance)[0x4C/2] < temp_a3[0x14/2]) {
             arg1[3][0xC0/2]
-                = ((short*)D_8006CFA0)[0x54/2]
-                = ((short*)D_8006CFA0)[0x4C/2]
+                = ((short*)PlayerInstance)[0x54/2]
+                = ((short*)PlayerInstance)[0x4C/2]
                 = temp_a3[0x14/2];
             temp_t0[0x8A/2] |= 1;
         }
@@ -1058,7 +1058,7 @@ block_12:
                         level->_50[3] = ((char*)temp_s2)[0x10];
                         if (temp_s0 != NULL) {
                             if (temp_s0[0x0/4] != 0) {
-                                func_8004EBAC(D_8006CFA0, temp_s0[0x0/4] + 4, 0);
+                                SIGNAL_HandleSignal(PlayerInstance, temp_s0[0x0/4] + 4, 0);
                                 if (func_80033268(0x81) == 0) {
                                     func_80050980(0x81);
                                 }
@@ -1096,7 +1096,7 @@ void map_loadtv_OnUpdate(Level_t* level, int* arg1)
     
     if (a1[1])
     {
-        func_8004EBAC(D_8006CFA0, 4 + a1[1], 0);
+        SIGNAL_HandleSignal(PlayerInstance, 4 + a1[1], 0);
     }
 }
 
@@ -1110,8 +1110,8 @@ void map_ctrlbutn_OnCreate(Level_t* level) {
     level->flags |= 0x800;
     if (temp_a1 != 0) {
         temp_v0 = (SVECTOR*)((((short*)&level->_100)[1] * sizeof(SVECTOR)) + temp_a1 + 4);
-        *(SVECTOR*)&D_8006CFA0[0x50/4]
-            = *(SVECTOR*)(&D_8006CFA0[0x48/4])
+        *(SVECTOR*)&PlayerInstance[0x50/4]
+            = *(SVECTOR*)(&PlayerInstance[0x48/4])
             = *(SVECTOR*)temp_v0;
     }
 }
@@ -1297,7 +1297,7 @@ void map_lvltv_OnCreate(Level_t* level) {
         func_8015DB54_BE584(level); // shouldn't need a second argument?
         return;
     }
-    sprintf(sp10, &D_80161394_C1DC4, temp_s1 + 2, temp_s1[0x2/2]);
+    sprintf(sp10, (char*)&D_80161394_C1DC4, (temp_s1 + 2), temp_s1[0x2/2]);
     
     level->_112 = GetLevelIndexFromId(&sp10);
     if (level->_112 < 0x15U) {
@@ -1453,12 +1453,12 @@ void map_lvltv_OnDestroy(Level_t* level, int arg1) {
     temp_s2 = (int*)level->_20[1];
     var_s0 = (char*)&level->_D0;
     if (G2String_Compare_EQ(level->_18[0x24/4], "bobbox__")) {
-        D_8006CFA0[0x10/4] |= 0x800;
+        PlayerInstance[0x10/4] |= 0x800;
         while (D_80154834 == 3) {
             func_80052814();
         }
-        D_8006CFA0[0x10/4] &= ~0x800;
-        sprintf(&sp10, &D_80161394_C1DC4, temp_s2 + 1, ((short*)temp_s2)[1]);
+        PlayerInstance[0x10/4] &= ~0x800;
+        sprintf(sp10, (char*)&D_80161394_C1DC4, temp_s2 + 1, ((short*)temp_s2)[1]);
         func_800396E0(temp_s2 + 1, &sp10, arg1);
         return;
     }
@@ -1468,7 +1468,7 @@ void map_lvltv_OnDestroy(Level_t* level, int arg1) {
             var_s0 = (char*)(level->_20[2] + 0xD0);
         }
         if ((temp_s2 != 0) && (var_s0[0x43] != 0)) {
-            if ((((u8*)var_s0)[0x44] == 0) && ((u8*)D_8006CFA0)[0x4E] == 0xB) {
+            if ((((u8*)var_s0)[0x44] == 0) && ((u8*)PlayerInstance)[0x4E] == 0xB) {
                 var_s0[0x44] = 1U;
 
                 switch(((u8*)var_s0)[0x42])
@@ -1536,7 +1536,7 @@ void func_8015E674_BF0A4(char* arg0, int* arg1, int* arg2) {
         }
         if (var_s0 != 0) {
             if (*arg0 != 6) {
-                func_8004EBAC(arg2[3], arg1[2] + 4, 0);
+                SIGNAL_HandleSignal(arg2[3], arg1[2] + 4, 0);
             }
             *arg0 = 6;
             var_s1 = 0;
@@ -1561,18 +1561,18 @@ countbits:
             arg2[0x4C9C/4] |= (1 << var_s1);
 
             if (temp_a0 & 0xF800) {
-                func_8004EBAC(arg2[3], arg1[4] + 4, 0);
+                SIGNAL_HandleSignal(arg2[3], arg1[4] + 4, 0);
             }
             else if (temp_a0 & 0x780) {
-                func_8004EBAC(arg2[3], arg1[5] + 4, 0);
+                SIGNAL_HandleSignal(arg2[3], arg1[5] + 4, 0);
             }
             else if (temp_a0 & 0x7F) {
-                func_8004EBAC(arg2[3], arg1[7] + 4, 0);
+                SIGNAL_HandleSignal(arg2[3], arg1[7] + 4, 0);
             }
         }
         else if (*arg0 == 6)
         {
-            func_8004EBAC(arg2[3], arg1[3] + 4, 0);
+            SIGNAL_HandleSignal(arg2[3], arg1[3] + 4, 0);
             *arg0 = 0;
         }
     }
@@ -1591,7 +1591,7 @@ void map_select_OnCreate(Level_t* level, int** arg1) {
     int* temp_v1_3;
 
     temp_s6 = (char*)&level->_D0[0];
-    temp_a3 = (int*)D_8006CFA0[0x8];
+    temp_a3 = (int*)PlayerInstance[0x8];
     level->flags |= 0xC00;
     temp_s4 = (int*)level->_20[1];
     arg1[3][0x4] &= ~0x800;
@@ -1656,19 +1656,19 @@ void map_select_OnUpdate(Level_t* level, int* arg1) {
     short* temp_s0;
     short* temp_s2;
 
-    temp_s2 = (short*)D_8006CFA0[0x20/4];
+    temp_s2 = (short*)PlayerInstance[0x20/4];
     temp_a1 = (int*)level->_20[1];
-    arg1[0x4C08/4] &= ~0x2000;
+    ((GameState*)arg1)->gameFlags &= ~0x2000;
     temp_a2 = (int*)arg1[0xC/4];
     temp_s0 = (short*)&level->_D0;
     
     if (!(temp_a2[0xFC/4] & 0x02000000)) {
-        if ((D_8006CFA0[0xF4/4] == 0) && (D_8006CFA0[0xF8/4] == 1)) {
+        if ((PlayerInstance[0xF4/4] == 0) && (PlayerInstance[0xF8/4] == 1)) {
             temp_a2[0x104/4]++;
         } else {
             ((int**)arg1)[0xC/4][0x104/4] = 0;
         }
-        ((short**)D_8006CFA0)[0x20/4][0xDC/2] = 5;
+        ((short**)PlayerInstance)[0x20/4][0xDC/2] = 5;
         if (temp_s0[0x6/2] != 0) {
             temp_s0[0x6/2] = (temp_s0[0x6/2] + 1);
         }
@@ -1678,29 +1678,29 @@ void map_select_OnUpdate(Level_t* level, int* arg1) {
         switch (*(char*)temp_s0) {
         case 0:
             ((u8*)temp_s0)[0x20]++;
-            if ((D_8006CFA0[0xF4/4] == 5) && (((char*)temp_s0)[0x20] >= 0x15)) {
-                func_8002DAF8(D_8006CFA0, -1);
-                temp_s2[0x82/2] = ((short*)D_8006CFA0)[0x64/2] = ((short*)gpGameState8)[0x4C6C/2];
-                if (D_8006CFA0[0x14/4] & 0x10) {
+            if ((PlayerInstance[0xF4/4] == 5) && (((char*)temp_s0)[0x20] >= 0x15)) {
+                func_8002DAF8(PlayerInstance, -1);
+                temp_s2[0x82/2] = ((short*)PlayerInstance)[0x64/2] = ((short*)gpGameState8)[0x4C6C/2];
+                if (PlayerInstance[0x14/4] & 0x10) {
                     ((u8*)temp_s0)[0x20] = 0x42U;
                 }
             }
             if ((((s8*) temp_s0)[0x20] < 0x43) && (((short*)gpGameState8)[0x4C66/2] != 0) && (((short*)gpGameState8)[0x4C68/2] != 0)) {
-                sp10 = *(SVECTOR*)&((short*)D_8006CFA0)[0x48/2];
-                D_8006CFA0[0xF4/4] = 5;
-                ((u8*)D_8006CFA0)[0x4E] = 0x32;
-                ((short*)D_8006CFA0)[0x4C/2] = ((short*)gpGameState8)[0x4C6A/2];
-                ((short*)D_8006CFA0)[0x54/2] = ((short*)gpGameState8)[0x4C6A/2];
-                ((short*)D_8006CFA0)[0x48/2] = ((short*)gpGameState8)[0x4C66/2];
-                ((short*)D_8006CFA0)[0x50/2] = ((short*)gpGameState8)[0x4C66/2];
-                ((short*)D_8006CFA0)[0x4A/2] = ((short*)gpGameState8)[0x4C68/2];
-                ((short*)D_8006CFA0)[0x52/2] = ((short*)gpGameState8)[0x4C68/2];
-                ((short*)D_8006CFA0)[0x64/2] = ((short*)gpGameState8)[0x4C6C/2];
-                sp18.x = ((short*)D_8006CFA0)[0x48/2] - sp10.x;
-                sp18.y = ((short*)D_8006CFA0)[0x4A/2] - sp10.y;
-                sp18.z = ((short*)D_8006CFA0)[0x4C/2] - sp10.z;
-                func_80012BD0(D_8006CFA0, &sp18, arg1);
-                func_80001DF4((s16) ((short*)D_8006CFA0)[0x64/2]);
+                sp10 = *(SVECTOR*)&((short*)PlayerInstance)[0x48/2];
+                PlayerInstance[0xF4/4] = 5;
+                ((u8*)PlayerInstance)[0x4E] = 0x32;
+                ((short*)PlayerInstance)[0x4C/2] = ((short*)gpGameState8)[0x4C6A/2];
+                ((short*)PlayerInstance)[0x54/2] = ((short*)gpGameState8)[0x4C6A/2];
+                ((short*)PlayerInstance)[0x48/2] = ((short*)gpGameState8)[0x4C66/2];
+                ((short*)PlayerInstance)[0x50/2] = ((short*)gpGameState8)[0x4C66/2];
+                ((short*)PlayerInstance)[0x4A/2] = ((short*)gpGameState8)[0x4C68/2];
+                ((short*)PlayerInstance)[0x52/2] = ((short*)gpGameState8)[0x4C68/2];
+                ((short*)PlayerInstance)[0x64/2] = ((short*)gpGameState8)[0x4C6C/2];
+                sp18.x = ((short*)PlayerInstance)[0x48/2] - sp10.x;
+                sp18.y = ((short*)PlayerInstance)[0x4A/2] - sp10.y;
+                sp18.z = ((short*)PlayerInstance)[0x4C/2] - sp10.z;
+                func_80012BD0(PlayerInstance, &sp18, arg1);
+                func_80001DF4((s16) ((short*)PlayerInstance)[0x64/2]);
                 ((short*)gpGameState8)[0x4C66/2] = 0;
                 ((short*)gpGameState8)[0x4C68/2] = 0;
                 if (D_8006FC69 != 0) {
@@ -1711,9 +1711,9 @@ void map_select_OnUpdate(Level_t* level, int* arg1) {
             if (((char*)temp_s0)[0x20] == 0x42) {
                 *(u8*)temp_s0 = 4;
                 ((short*)gpGameState8)[0x4C90/2] &= 0xFFFD;
-                if (D_8006CFA0[0xF4/4] == 5) {
-                    D_8006CFA0[0xF4/4] = 0;
-                    ((u8*)D_8006CFA0)[0x4E] = 0;
+                if (PlayerInstance[0xF4/4] == 5) {
+                    PlayerInstance[0xF4/4] = 0;
+                    ((u8*)PlayerInstance)[0x4E] = 0;
                 }
                 D_80161670_C20A0 = 0;
                 ((char*)arg1)[0x4CDC] = 0;
@@ -1798,7 +1798,7 @@ void func_8015EED8_BF908(int* arg0) {
     
     func_80037B00(0x5F, 0x4B);
     if (D_8014F34C == 0) {
-        sprintf(&sp10, "%s%s", &D_80078184, D_801611C0_C1BF0);
+        sprintf(sp10, "%s%s", &D_80078184, D_801611C0_C1BF0);
         Print3DTextf(sp10);
     } else {
         Print3DTextf(D_801611C0_C1BF0);
@@ -1806,7 +1806,7 @@ void func_8015EED8_BF908(int* arg0) {
     
     func_80037B00(0x53, 0x6E);
     if (D_8014F34C == 1) {
-        sprintf(&sp10, "%s%s", &D_80078184, D_801611CC_C1BFC);
+        sprintf(sp10, "%s%s", &D_80078184, D_801611CC_C1BFC);
         Print3DTextf(sp10);
     } else {
         Print3DTextf(D_801611CC_C1BFC);
@@ -1814,7 +1814,7 @@ void func_8015EED8_BF908(int* arg0) {
     
     func_80037B00(0x64, 0x91);
     if (D_8014F34C == 2) {
-        sprintf(&sp10, "%s%s", &D_80078184, D_80078190);
+        sprintf(sp10, "%s%s", &D_80078184, D_80078190);
         Print3DTextf(sp10);
     } else {
         Print3DTextf(D_80078190);
@@ -2121,14 +2121,14 @@ void func_8015FC88_C06B8(int* arg0) {
     Print3DTextf(&D_801611E4_C1C14);
     func_80037B00(0x62, 0x64);
     if (D_8014F34C == 0) {
-        sprintf(&sp10, "%s%s", &D_80078184, &D_801611D8_C1C08);
+        sprintf(sp10, "%s%s", &D_80078184, &D_801611D8_C1C08);
         Print3DTextf(&sp10);
     } else {
         Print3DTextf(&D_801611D8_C1C08);
     }
     func_80037B00(0x32, 0x8C);
     if (D_8014F34C == 1) {
-        sprintf(&sp10, "%s%s", &D_80078184, &D_80078198);
+        sprintf(sp10, "%s%s", &D_80078184, &D_80078198);
         Print3DTextf(&sp10);
     } else {
         Print3DTextf(&D_80078198);
@@ -2180,15 +2180,15 @@ void func_8015FF60_C0990(int* arg0) {
     func_80037B00(0x46, 0x32);
     Print3DTextf(&D_801611F8_C1C28);
     func_80037B00(0x62, 0x64);
-    if ((s8) D_8014F34C == 0) {
-        sprintf(&sp10, "%s%s", &D_80078184, &D_801611D8_C1C08);
+    if (D_8014F34C == 0) {
+        sprintf(sp10, "%s%s", &D_80078184, &D_801611D8_C1C08);
         Print3DTextf(&sp10);
     } else {
         Print3DTextf(&D_801611D8_C1C08);
     }
     func_80037B00(0x32, 0x8C);
-    if ((s8) D_8014F34C == 1) {
-        sprintf(&sp10, "%s%s", &D_80078184, &D_80078198);
+    if (D_8014F34C == 1) {
+        sprintf(sp10, "%s%s", &D_80078184, &D_80078198);
         Print3DTextf(&sp10);
     } else {
         Print3DTextf(&D_80078198);
