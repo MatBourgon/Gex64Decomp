@@ -42,7 +42,9 @@ def ParseMainSegment(segment):
     return subsegments
 
 def ParseLevelSegment(segment):
-    return CreateSegmentDefinition(segment["name"], "/", True, "level")
+    levelId = segment["subsegments"][0][2]
+    levelId = levelId[levelId.find("/") + 1:]
+    return CreateSegmentDefinition(levelId, "/level/", True, "level")
 
 def ParseSegment(segment):
     try:
