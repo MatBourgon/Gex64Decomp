@@ -39,7 +39,7 @@ INCLUDE_ASM("asm/nonmatchings/_1050", func_800018F0);
 
 void func_80001DF4(short arg0)
 {
-    short* ptr = ((short**)gameTracker)[0x8/4];
+    short* ptr = ((short**)gameTracker8)[0x8/4];
     ptr[0x180/2] = arg0;
     ptr[0x34/2] = arg0;
     ptr[0x3C/2] = arg0;
@@ -114,7 +114,7 @@ INCLUDE_ASM("asm/nonmatchings/_1050", func_80003B1C);
 
 void func_80003D4C(int arg0)
 {
-    ((int**)gameTracker)[2][0x148/4] = arg0;
+    ((int**)gameTracker8)[2][0x148/4] = arg0;
 }
 
 INCLUDE_ASM("asm/nonmatchings/_1050", func_80003D68);
@@ -145,7 +145,7 @@ INCLUDE_ASM("asm/nonmatchings/_1050", func_80005864);
 
 void func_800058E4(int* arg0, int* arg1)
 {
-    func_8000F0B0(gameTracker->_0004[0], arg0, arg1, 0);
+    func_8000F0B0(gameTracker8->_0004[0], arg0, arg1, 0);
 }
 
 INCLUDE_ASM("asm/nonmatchings/_1050", func_80005920);

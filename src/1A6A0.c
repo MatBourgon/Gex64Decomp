@@ -51,7 +51,7 @@ int func_8001A1D8(unsigned char* remoteData) {
         remoteBits |= D_80161130[i].b;
     }
     
-    var_v1 = ((unsigned int*)gameTracker)[0x4C98/4] >> 0x15;
+    var_v1 = ((unsigned int*)gameTracker8)[0x4C98/4] >> 0x15;
     
     i = 0;
     while (var_v1 != 0) {
@@ -62,7 +62,7 @@ int func_8001A1D8(unsigned char* remoteData) {
         i += 1;
     }
     
-    var_v1 = ((int*)gameTracker)[0x4C94/4];
+    var_v1 = ((int*)gameTracker8)[0x4C94/4];
     i = 0;
     
      while (var_v1 != 0) {
@@ -87,19 +87,19 @@ void GetRemoteCount(RemoteCount* remotes) {
     const int c_RedRemoteEntries = 14;
     int bits, i;
 
-    for (remotes->gold = 0, bits = gameTracker->gold_remote_bits; bits != 0; bits >>= 1)
+    for (remotes->gold = 0, bits = gameTracker8->gold_remote_bits; bits != 0; bits >>= 1)
     {
         remotes->gold += bits & 1;
     }
 
-    for (remotes->silver = 0, bits = gameTracker->silver_remote_bits; bits != 0; bits >>= 1)
+    for (remotes->silver = 0, bits = gameTracker8->silver_remote_bits; bits != 0; bits >>= 1)
     {
         remotes->silver += bits & 1;
     }
 
     for(remotes->red = 0, i = 0; i < c_RedRemoteEntries; ++i)
     {
-        for (bits = gameTracker->red_remote_bits[i]; bits != 0; bits >>= 1)
+        for (bits = gameTracker8->red_remote_bits[i]; bits != 0; bits >>= 1)
         {
             remotes->red += bits & 1;
         }

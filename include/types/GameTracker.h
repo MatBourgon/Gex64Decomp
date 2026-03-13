@@ -27,7 +27,7 @@ typedef struct
 } GameTracker;
 
 extern GameTracker* gameTracker4;
-extern GameTracker* gameTracker;
+extern GameTracker* gameTracker8;
 extern GameTracker gameTrackerX;
 
 #endif

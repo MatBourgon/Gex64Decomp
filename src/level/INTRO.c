@@ -20,23 +20,23 @@ void intro_rezzull_OnCreate(Instance* instance, int* arg1) {
     var_a1 = 0;
     temp_s1 = ((short**)PlayerInstance)[0x20/4];
     instance->flags |= 0x400;
-    gameTracker->gameFlags &= ~0x10;
+    gameTracker8->gameFlags &= ~0x10;
     D_8006FCD2 = 0;
     do {
-        temp_v0 = ((char*)gameTracker) + var_a1;
+        temp_v0 = ((char*)gameTracker8) + var_a1;
         var_a1 += 1;
         temp_v0[0x4C6E] = 0;
     } while (var_a1 <= 13);
-    ((char*)gameTracker)[0x4CC4] = 0;
-    ((char*)gameTracker)[0x4CC5] = 0;
-    ((char*)gameTracker)[0x4CC6] = 0;
-    ((int*)gameTracker)[0x4C94/4] = 0;
-    ((int*)gameTracker)[0x4C98/4] = 0;
-    ((int*)gameTracker)[0x4BF4/4] = 5;
+    ((char*)gameTracker8)[0x4CC4] = 0;
+    ((char*)gameTracker8)[0x4CC5] = 0;
+    ((char*)gameTracker8)[0x4CC6] = 0;
+    ((int*)gameTracker8)[0x4C94/4] = 0;
+    ((int*)gameTracker8)[0x4C98/4] = 0;
+    ((int*)gameTracker8)[0x4BF4/4] = 5;
     GetRemoteCount(remoteData);
-    ((int*)gameTracker)[0x4C9C/4] = func_8001A1D8(remoteData);
-    ((short*)gameTracker)[0x4C66/2] = 0;
-    ((short*)gameTracker)[0x4C68/2] = 0;
+    ((int*)gameTracker8)[0x4C9C/4] = func_8001A1D8(remoteData);
+    ((short*)gameTracker8)[0x4C66/2] = 0;
+    ((short*)gameTracker8)[0x4C68/2] = 0;
     ptr[2] = 300;
     func_8002C1AC(0);
     temp_s1[0xDC/2] = 0;
@@ -61,8 +61,8 @@ void intro_rezzull_OnUpdate(Instance* instance, int* arg1) {
     }
     if (instance->_104 == 0) {
         ((short*)arg1)[0x9c/2] = -1;
-        func_800396E0("map", "map5", gameTracker);
-        ((char*)gameTracker)[0x4CDC] = 0;
+        func_800396E0("map", "map5", gameTracker8);
+        ((char*)gameTracker8)[0x4CDC] = 0;
         D_8006CF60 = 0;
     }
 }

@@ -1,38 +1,41 @@
 #include "common.h"
 
-#include "types/GameTracker.h"
 #include "types/Instance.h"
-extern int* PlayerInstance;
-extern int D_800E5FD8;
-extern int D_80154834;
 
-// Future hint for cleanup work:
-// According to the kain decomp (soul-re), the second provided parameter is always of type GameTracker*,
-// which is actually a GameTracker object, according to soul-re
-
-const int D_8015A090_808B0[4] = { 0x02000014, 0, 0, 0 };
-
-void aztec_funplat_OnCreate(Instance* instance)
-{
-    short sp10[6];
-
-    if (instance->_20[1] == 0) {
-        instance->_20[1] = (int)D_8015A090_808B0;
-    }
-    sp10[0] = sp10[4] = instance->_40[4];
-    sp10[1] = sp10[5] = instance->_40[5];
-    sp10[2] = instance->_E0[2] = instance->_40[6];
-
-    // Out of bounds access?
-    sp10[6] = instance->_40[6] + 0x80;
-    func_8000F0B0(gameTracker->_0004[0], &sp10[0], &sp10[4], instance);
+void spy_qsofa_OnCreate(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/aztec_code", aztec_funplat_OnUpdate);
+INCLUDE_ASM("asm/nonmatchings/level/SPY", spy_qsofa_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/aztec_code", aztec_funplat_OnCollide);
+INCLUDE_ASM("asm/nonmatchings/level/SPY", spy_qsofa_OnCollide);
 
-void aztec_btimer_OnCreate(Instance* instance, int* arg1) {
+INCLUDE_ASM("asm/nonmatchings/level/SPY", spy_launch_OnCreate);
+
+INCLUDE_ASM("asm/nonmatchings/level/SPY", spy_launch_OnUpdate);
+
+INCLUDE_ASM("asm/nonmatchings/level/SPY", spy_launch_OnCollide);
+
+INCLUDE_ASM("asm/nonmatchings/level/SPY", func_80159EEC_EB5BC);
+
+INCLUDE_ASM("asm/nonmatchings/level/SPY", func_80159F3C_EB60C);
+
+INCLUDE_ASM("asm/nonmatchings/level/SPY", func_8015A014_EB6E4);
+
+INCLUDE_ASM("asm/nonmatchings/level/SPY", func_8015A098_EB768);
+
+INCLUDE_ASM("asm/nonmatchings/level/SPY", spy_onoff_OnCreate);
+
+INCLUDE_ASM("asm/nonmatchings/level/SPY", spy_onoff_OnUpdate);
+
+INCLUDE_ASM("asm/nonmatchings/level/SPY", spy_onoff_OnCollide);
+
+INCLUDE_ASM("asm/nonmatchings/level/SPY", spy_gnrobot_OnCreate);
+
+INCLUDE_ASM("asm/nonmatchings/level/SPY", spy_gnrobot_OnUpdate);
+
+INCLUDE_ASM("asm/nonmatchings/level/SPY", spy_gnrobot_OnCollide);
+
+void spy_btimer_OnCreate(Instance* instance, int* arg1) {
     int var_s0;
     short* temp_a2;
     int* temp_v1;
@@ -54,7 +57,19 @@ void aztec_btimer_OnCreate(Instance* instance, int* arg1) {
     instance->_F4[1] = 0;
 }
 
-void aztec_btimer_OnUpdate(Instance* instance, int** arg1) {
+INCLUDE_RODATA("asm/nonmatchings/level/SPY", D_8015AD70_EC440);
+
+INCLUDE_RODATA("asm/nonmatchings/level/SPY", D_8015AE00_EC4D0);
+
+INCLUDE_RODATA("asm/nonmatchings/level/SPY", D_8015AE0C_EC4DC);
+
+INCLUDE_RODATA("asm/nonmatchings/level/SPY", D_8015AE10_EC4E0);
+
+extern int* PlayerInstance;
+extern int D_800E5FD8;
+extern int D_80154834;
+
+void spy_btimer_OnUpdate(Instance* instance, int** arg1) {
     char sp10[0x50];
     int temp_s0;
     int temp_s3_2;
@@ -152,3 +167,4 @@ void aztec_btimer_OnUpdate(Instance* instance, int** arg1) {
         }
     }
 }
+

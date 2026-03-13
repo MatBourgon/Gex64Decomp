@@ -49,7 +49,7 @@ ctoupper = 0x8006A4D0; // type:func
 TVTextInformation = 0x800782A8; // size:0x2E8
 
 gameTracker4 = 0x8006FCC4; // type:GameTracker*
-gameTracker = 0x8006FCC8; // type:GameTracker*
+gameTracker8 = 0x8006FCC8; // type:GameTracker*
 gameTrackerX = 0x800C0AC0; // size:0x4cd8 segment:main
 
 gGlobalMessageBuffer = 0x80153A58;

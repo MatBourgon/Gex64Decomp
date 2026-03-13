@@ -149,25 +149,25 @@ void map_temptv_OnCreate(Instance* instance)
     instance->flags |= 0x480;
 }
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_80161130_C1B60);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_80161130_C1B60);
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_80161194_C1BC4);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_80161194_C1BC4);
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_801611A4_C1BD4);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_801611A4_C1BD4);
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_801611B4_C1BE4);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_801611B4_C1BE4);
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_801611C0_C1BF0);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_801611C0_C1BF0);
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_801611CC_C1BFC);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_801611CC_C1BFC);
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_801611D8_C1C08);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_801611D8_C1C08);
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_801611E4_C1C14);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_801611E4_C1C14);
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_801611F8_C1C28);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_801611F8_C1C28);
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_80161208_C1C38);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_80161208_C1C38);
 
 void map_temptv_OnUpdate(Instance* instance, int* arg1) {
     int* arg2 = arg1 + 0x18/4;
@@ -392,9 +392,9 @@ void map_lktorch_OnCreate(Instance* instance)
     instance->flags |= 0x400;
 }
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_80161230_C1C60);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_80161230_C1C60);
 
-INCLUDE_ASM("asm/nonmatchings/map_code", map_lktorch_OnUpdate);
+INCLUDE_ASM("asm/nonmatchings/level/MAP", map_lktorch_OnUpdate);
 
 void map_lktorch_OnCollide(void) {
 }
@@ -595,24 +595,24 @@ void map_speaker_OnCreate(Instance* instance) {
         switch (temp_s0[2])
         {
         case 0:
-            (*(short*)&instance->_10A) = ((int*)gameTracker)[0x4C58/4];
-            instance->_F4[0] = ((char*)gameTracker)[0x4C60];
+            (*(short*)&instance->_10A) = ((int*)gameTracker8)[0x4C58/4];
+            instance->_F4[0] = ((char*)gameTracker8)[0x4C60];
             break;
         case 1:
-            (*(short*)&instance->_10A) = ((int*)gameTracker)[0x4C54/4];
-            instance->_F4[0] = ((char*)gameTracker)[0x4C61];
+            (*(short*)&instance->_10A) = ((int*)gameTracker8)[0x4C54/4];
+            instance->_F4[0] = ((char*)gameTracker8)[0x4C61];
             *(short*)&instance->_10E = 0x5A;
             *(short*)&instance->_110 = func_8003333C();
             break;
         case 2:
-            (*(short*)&instance->_10A) = ((int*)gameTracker)[0x4C5C/4];
+            (*(short*)&instance->_10A) = ((int*)gameTracker8)[0x4C5C/4];
             var_a1 = 0;
-            if (((int*)gameTracker)[0x90/4] & 0x80000) {
-                var_a1 = ((char*)gameTracker)[0x4C62] != 0;
+            if (((int*)gameTracker8)[0x90/4] & 0x80000) {
+                var_a1 = ((char*)gameTracker8)[0x4C62] != 0;
             }
             instance->_F4[0] = var_a1;
             if (var_a1 != 0) {
-                func_80052F7C(gameTracker, var_a1);
+                func_80052F7C(gameTracker8, var_a1);
             }
             break;
         }
@@ -622,7 +622,7 @@ void map_speaker_OnCreate(Instance* instance) {
     func_80048A4C(instance, temp_s0_2, 0, 0, &temp_s1[4], 0, 1);
 }
 
-INCLUDE_ASM("asm/nonmatchings/map_code", map_speaker_OnUpdate);
+INCLUDE_ASM("asm/nonmatchings/level/MAP", map_speaker_OnUpdate);
 
 void map_start_OnCreate(Instance* instance, int** arg1) {
     int* temp_a1;
@@ -647,11 +647,11 @@ void map_start_OnCreate(Instance* instance, int** arg1) {
         }
         
         ptr[0x24] = 1;
-        ((char*)gameTracker)[0x4C60] = ((char*)gameTracker)[0x4C61] = 1;
-        ((int*)gameTracker)[0x4C58/4] = 0x7A;
+        ((char*)gameTracker8)[0x4C60] = ((char*)gameTracker8)[0x4C61] = 1;
+        ((int*)gameTracker8)[0x4C58/4] = 0x7A;
         func_80033334(0x78);
-        ((int*)gameTracker)[0x4C5C/4] = 0x7A;
-        ((char*)gameTracker)[0x4C62] = 1;
+        ((int*)gameTracker8)[0x4C5C/4] = 0x7A;
+        ((char*)gameTracker8)[0x4C62] = 1;
         instance->flags |= 0x10C00;
         temp_v1 = arg1[0xC/4];
         temp_v1[0x10/4] = (temp_v1[0x10/4] | 0x800);
@@ -671,36 +671,36 @@ void map_start_OnCreate(Instance* instance, int** arg1) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/map_code", map_start_OnUpdate);
+INCLUDE_ASM("asm/nonmatchings/level/MAP", map_start_OnUpdate);
 
 void map_bobbox_OnCreate(Instance* instance)
 {
     instance->flags |= 0xC00;
 }
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_801612B4_C1CE4);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_801612B4_C1CE4);
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_801612B8_C1CE8);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_801612B8_C1CE8);
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_801612C0_C1CF0);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_801612C0_C1CF0);
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_801612C4_C1CF4);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_801612C4_C1CF4);
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_801612CC_C1CFC);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_801612CC_C1CFC);
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_801612D4_C1D04);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_801612D4_C1D04);
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_801612DC_C1D0C);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_801612DC_C1D0C);
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_801612E4_C1D14);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_801612E4_C1D14);
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_801612EC_C1D1C);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_801612EC_C1D1C);
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_801612F8_C1D28);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_801612F8_C1D28);
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_80161300_C1D30);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_80161300_C1D30);
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_80161308_C1D38);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_80161308_C1D38);
 
 void map_bobbox_OnUpdate(int arg1, int*** arg3) {
     short var_a2;
@@ -751,7 +751,7 @@ void map_bobbox_OnUpdate(int arg1, int*** arg3) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015B96C_BC39C);
+INCLUDE_ASM("asm/nonmatchings/level/MAP", func_8015B96C_BC39C);
 
 void func_8015BED0_BC900(Instance* instance, void* unused) {
     int temp_t0;
@@ -865,7 +865,7 @@ void map_tvmenu_OnCreate(Instance* instance, char** arg1) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/map_code", map_tvmenu_OnUpdate);
+INCLUDE_ASM("asm/nonmatchings/level/MAP", map_tvmenu_OnUpdate);
 
 int func_8015C63C_BD06C(int arg0) {
     int temp_v0;
@@ -1001,7 +1001,7 @@ block_12:
                 instance->_50[3]++;
             }
             if ((((char*)temp_s2)[0xF] == 1) && (((short*)var_s4)[0x6/2] != 0)) {
-                if (((int*)gameTracker)[0xE0/4] & 8) {
+                if (((int*)gameTracker8)[0xE0/4] & 8) {
                     instance->_C0[1] = (instance->_C0[1] ^ 1);
                 }
                 if (instance->_C0[1] & 1) {
@@ -1116,13 +1116,13 @@ void map_ctrlbutn_OnCreate(Instance* instance) {
     }
 }
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_80161314_C1D44);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_80161314_C1D44);
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_8016131C_C1D4C);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_8016131C_C1D4C);
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_80161324_C1D54);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_80161324_C1D54);
 
-INCLUDE_ASM("asm/nonmatchings/map_code", map_ctrlbutn_OnUpdate);
+INCLUDE_ASM("asm/nonmatchings/level/MAP", map_ctrlbutn_OnUpdate);
 
 void map_mapgate_OnCreate(Instance* instance)
 {
@@ -1222,17 +1222,17 @@ void func_8015D5E4_BE014(int* arg0, Instance* instance) {
     ((int**)instance->_18[0xC/4])[0][0x14/4] = 0;
 }
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_8016136C_C1D9C);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_8016136C_C1D9C);
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_80161374_C1DA4);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_80161374_C1DA4);
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_80161380_C1DB0);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_80161380_C1DB0);
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_80161388_C1DB8);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_80161388_C1DB8);
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_80161394_C1DC4);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_80161394_C1DC4);
 
-INCLUDE_ASM("asm/nonmatchings/map_code", func_8015D6F0_BE120);
+INCLUDE_ASM("asm/nonmatchings/level/MAP", func_8015D6F0_BE120);
 
 void func_8015D9E4_BE414(Instance* instance) {
     SVECTOR v = *(SVECTOR*)&instance->_40[4];
@@ -1245,7 +1245,7 @@ void func_8015D9E4_BE414(Instance* instance) {
     ((int*)instance->_F4[2])[0x10/4] |= 0x100000;
     ((int*)instance->_F4[2])[0x10/4] |= 0x400;
     (*(char**)&instance->_F0[6])[0x100] = instance->_112;
-    func_8015D52C_BDF5C((Instance*)instance->_F4[2], gameTracker);
+    func_8015D52C_BDF5C((Instance*)instance->_F4[2], gameTracker8);
 }
 
 void func_8015DAC8_BE4F8(Instance* instance) {
@@ -1323,7 +1323,7 @@ void map_lvltv_OnCreate(Instance* instance) {
             var_a0 = var_s3 - 1;
             instance->_50[3] = (sp20[var_s3]) + (temp_a2 * 9);
             if (var_a0 >= 0) {
-                ptr = (u8*)gameTracker;
+                ptr = (u8*)gameTracker8;
                 ptr = &ptr[instance->_112];
                 while(var_a0 >= 0)
                 {
@@ -1437,10 +1437,10 @@ void func_8015E274_BECA4(Instance* instance) {
     SVECTOR temp = *(SVECTOR*)(&instance->_40[4]);
 
     func_80047E64(instance, 0x3E8);
-    *(SVECTOR*)&(((short*)gameTracker)[0x4C66/2]) = *(SVECTOR*)&instance->_40[4];
-    ((short*)gameTracker)[0x4C6A/2] -= 0x20;
-    ((short*)gameTracker)[0x4C6C/2] = instance->_60[2] & 0xFFF;
-    ((short*)gameTracker)[0x4C6C/2] = (((short*)gameTracker)[0x4C6C/2] + *(short*)&instance->_1C[3]) & 0xfff;
+    *(SVECTOR*)&(((short*)gameTracker8)[0x4C66/2]) = *(SVECTOR*)&instance->_40[4];
+    ((short*)gameTracker8)[0x4C6A/2] -= 0x20;
+    ((short*)gameTracker8)[0x4C6C/2] = instance->_60[2] & 0xFFF;
+    ((short*)gameTracker8)[0x4C6C/2] = (((short*)gameTracker8)[0x4C6C/2] + *(short*)&instance->_1C[3]) & 0xfff;
     *(SVECTOR*)(&instance->_40[4]) = temp;
 }
 
@@ -1497,7 +1497,7 @@ void map_lvltv_OnCollide(Instance* instance, int arg1) {
             }
             ((short*)instance->_20[2])[0x56/2] = ((int*)var_s0)[0x48/4];
         }
-        else if (!(((int*)gameTracker)[0x90/4] & 0x40000) && (var_s0[0x43] == 0)) {
+        else if (!(((int*)gameTracker8)[0x90/4] & 0x40000) && (var_s0[0x43] == 0)) {
             temp_a0 = (int*)instance->_70[2];
             if ((((short*)temp_a0)[0x6/2] == 1) && ((u8) ((u8*)temp_a0[0xC/4])[0x5] >= 7U)) {
                 var_s0[0x43] = 1;
@@ -1641,8 +1641,8 @@ void map_select_OnCreate(Instance* instance, int** arg1) {
         func_80032F30();
         func_80040170(0xF);
         D_8006FC69 = 0;
-        ((short*)gameTracker)[0x4C66/2] = 0;
-        ((short*)gameTracker)[0x4C68/2] = 0;
+        ((short*)gameTracker8)[0x4C66/2] = 0;
+        ((short*)gameTracker8)[0x4C68/2] = 0;
     }
     else
         func_8015E674_BF0A4(temp_s6, temp_s4, (int*)arg1);
@@ -1680,29 +1680,29 @@ void map_select_OnUpdate(Instance* instance, int* arg1) {
             ((u8*)temp_s0)[0x20]++;
             if ((PlayerInstance[0xF4/4] == 5) && (((char*)temp_s0)[0x20] >= 0x15)) {
                 func_8002DAF8(PlayerInstance, -1);
-                temp_s2[0x82/2] = ((short*)PlayerInstance)[0x64/2] = ((short*)gameTracker)[0x4C6C/2];
+                temp_s2[0x82/2] = ((short*)PlayerInstance)[0x64/2] = ((short*)gameTracker8)[0x4C6C/2];
                 if (PlayerInstance[0x14/4] & 0x10) {
                     ((u8*)temp_s0)[0x20] = 0x42U;
                 }
             }
-            if ((((s8*) temp_s0)[0x20] < 0x43) && (((short*)gameTracker)[0x4C66/2] != 0) && (((short*)gameTracker)[0x4C68/2] != 0)) {
+            if ((((s8*) temp_s0)[0x20] < 0x43) && (((short*)gameTracker8)[0x4C66/2] != 0) && (((short*)gameTracker8)[0x4C68/2] != 0)) {
                 sp10 = *(SVECTOR*)&((short*)PlayerInstance)[0x48/2];
                 PlayerInstance[0xF4/4] = 5;
                 ((u8*)PlayerInstance)[0x4E] = 0x32;
-                ((short*)PlayerInstance)[0x4C/2] = ((short*)gameTracker)[0x4C6A/2];
-                ((short*)PlayerInstance)[0x54/2] = ((short*)gameTracker)[0x4C6A/2];
-                ((short*)PlayerInstance)[0x48/2] = ((short*)gameTracker)[0x4C66/2];
-                ((short*)PlayerInstance)[0x50/2] = ((short*)gameTracker)[0x4C66/2];
-                ((short*)PlayerInstance)[0x4A/2] = ((short*)gameTracker)[0x4C68/2];
-                ((short*)PlayerInstance)[0x52/2] = ((short*)gameTracker)[0x4C68/2];
-                ((short*)PlayerInstance)[0x64/2] = ((short*)gameTracker)[0x4C6C/2];
+                ((short*)PlayerInstance)[0x4C/2] = ((short*)gameTracker8)[0x4C6A/2];
+                ((short*)PlayerInstance)[0x54/2] = ((short*)gameTracker8)[0x4C6A/2];
+                ((short*)PlayerInstance)[0x48/2] = ((short*)gameTracker8)[0x4C66/2];
+                ((short*)PlayerInstance)[0x50/2] = ((short*)gameTracker8)[0x4C66/2];
+                ((short*)PlayerInstance)[0x4A/2] = ((short*)gameTracker8)[0x4C68/2];
+                ((short*)PlayerInstance)[0x52/2] = ((short*)gameTracker8)[0x4C68/2];
+                ((short*)PlayerInstance)[0x64/2] = ((short*)gameTracker8)[0x4C6C/2];
                 sp18.x = ((short*)PlayerInstance)[0x48/2] - sp10.x;
                 sp18.y = ((short*)PlayerInstance)[0x4A/2] - sp10.y;
                 sp18.z = ((short*)PlayerInstance)[0x4C/2] - sp10.z;
                 func_80012BD0(PlayerInstance, &sp18, arg1);
                 func_80001DF4((s16) ((short*)PlayerInstance)[0x64/2]);
-                ((short*)gameTracker)[0x4C66/2] = 0;
-                ((short*)gameTracker)[0x4C68/2] = 0;
+                ((short*)gameTracker8)[0x4C66/2] = 0;
+                ((short*)gameTracker8)[0x4C68/2] = 0;
                 if (D_8006FC69 != 0) {
                     func_80032F30();
                     func_80040170(2);
@@ -1710,7 +1710,7 @@ void map_select_OnUpdate(Instance* instance, int* arg1) {
             }
             if (((char*)temp_s0)[0x20] == 0x42) {
                 *(u8*)temp_s0 = 4;
-                ((short*)gameTracker)[0x4C90/2] &= 0xFFFD;
+                ((short*)gameTracker8)[0x4C90/2] &= 0xFFFD;
                 if (PlayerInstance[0xF4/4] == 5) {
                     PlayerInstance[0xF4/4] = 0;
                     ((u8*)PlayerInstance)[0x4E] = 0;
@@ -1926,8 +1926,8 @@ void func_8015F228_BFC58(int* arg0) {
             if (func_8003FDD8(arg0) == 0) {
                 D_80078170 = 1;
                 D_8006CF20 = 0;
-                ((short*)gameTracker)[0x4C66/2] = 0;
-                ((short*)gameTracker)[0x4C68/2] = 0;
+                ((short*)gameTracker8)[0x4C66/2] = 0;
+                ((short*)gameTracker8)[0x4C68/2] = 0;
                 func_800396E0(0, D_80161314_C1D44, arg0);
             }
             break;
@@ -2061,8 +2061,8 @@ void func_8015F804_C0234(short* arg0) {
     if (D_800E5DB2 & 0x8000) {
         if (func_8003FDD8(arg0) == 0) {
             D_80078170 = 1;
-            ((short*)gameTracker)[0x4C66/2] = 0;
-            ((short*)gameTracker)[0x4C68/2] = 0;
+            ((short*)gameTracker8)[0x4C66/2] = 0;
+            ((short*)gameTracker8)[0x4C68/2] = 0;
             func_800396E0(0, &D_80161314_C1D44, arg0);
         } else {
             func_80040170(8);
@@ -2222,9 +2222,9 @@ void func_8015FF60_C0990(int* arg0) {
     
 }
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_801614D0_C1F00);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_801614D0_C1F00);
 
-INCLUDE_RODATA("asm/nonmatchings/map_code", D_801614F0_C1F20);
+INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_801614F0_C1F20);
 
 void func_80160214_C0C44(short* arg0) {
     s32 var_s1;
@@ -2359,8 +2359,8 @@ void func_80160214_C0C44(short* arg0) {
         }
         if (func_8003FDD8(arg0) == 0) {
             D_80078170 = 1;
-            ((short*)gameTracker)[0x4C66/2] = 0;
-            ((short*)gameTracker)[0x4C68/2] = 0;
+            ((short*)gameTracker8)[0x4C66/2] = 0;
+            ((short*)gameTracker8)[0x4C68/2] = 0;
             func_800396E0(0, &D_80161314_C1D44, arg0);
             D_8006CF20 = D_800E5CD4 + 1;
         }

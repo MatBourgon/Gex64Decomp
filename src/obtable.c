@@ -4,6 +4,8 @@
 
 #include "types/G2String.h"
 
+#include "types/obtable.h"
+
 void func_8003EA60(void) {
 }
 
@@ -34,39 +36,25 @@ void func_8003EAA0(void) {
 void func_8003EAA8(void) {
 }
 
-typedef void(*objFunction)(void*, void*);
-
-typedef struct
-{
-    char* name;
-    char* level;
-    objFunction init;
-    objFunction process;
-    objFunction collide;
-} OBTableEntry;
-
-extern OBTableEntry ObjectFunctionTable[];
-
-void OBTABLE_InstanceInit(void* instance) {
+void OBTABLE_InstanceInit(Instance* instance) {
     int id;
 
     id = ((short**)instance)[0x18/4][2];
     
     if (id < 0) {
-        GenericInit(instance, gameTracker);
+        GenericInit(instance, gameTracker8);
     } else if (ObjectFunctionTable[id].init != NULL) {
-        ObjectFunctionTable[id].init(instance, gameTracker);
+        ObjectFunctionTable[id].init(instance, gameTracker8);
     }
 
     ((int*)instance)[0x14/4] |= 0x200000;
     if (!(((int*)instance)[0x10/4] & 0x100000)) {
-        SCRIPT_InstanceSplineInit(instance, gameTracker);
+        SCRIPT_InstanceSplineInit(instance, gameTracker8);
     }
 }
 
-extern void GenericCollide(void*, void*);
 
-void OBTABLE_GetInstanceCollideFunc(void* instance)
+void OBTABLE_GetInstanceCollideFunc(Instance* instance)
 {
     int id;
 
@@ -82,9 +70,8 @@ void OBTABLE_GetInstanceCollideFunc(void* instance)
     }
 }
 
-extern void GenericProcess(void*, void*);
 
-void OBTABLE_GetInstanceProcessFunc(void* instance)
+void OBTABLE_GetInstanceProcessFunc(Instance* instance)
 {
     int id;
 
@@ -102,14 +89,6 @@ void OBTABLE_GetInstanceProcessFunc(void* instance)
 
 INCLUDE_ASM("asm/nonmatchings/obtable", func_8003EBF4);
 
-typedef struct
-{
-    char* objectName;
-    void* object;
-} ObjectAccess;
-
-extern ObjectAccess objectAccess[];
-
 void OBTABLE_ClearObjectReferences(void) {
     int i;
 
@@ -123,7 +102,7 @@ void* OBTABLE_FindObject(char* arg0) {
     int** var_a2;
 
     if (arg0 != NULL) {
-        var_a2 = ((int****)gameTracker)[1][0x10];
+        var_a2 = ((int****)gameTracker8)[1][0x10];
         if (*var_a2 != (int*)var_a2) {
             for(temp_t0 = var_a2; *var_a2 != (int*)temp_t0; var_a2++)
             {

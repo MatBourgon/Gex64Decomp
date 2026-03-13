@@ -5,32 +5,32 @@ extern int* PlayerInstance;
 extern int D_800E5FD8;
 extern int D_80154834;
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_kboat_OnCreate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_kboat_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_kboat_OnUpdate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_kboat_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_kboat_OnCollide);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_kboat_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_kbgen_OnCreate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_kbgen_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_kbgen_OnUpdate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_kbgen_OnUpdate);
 
 void kungfu_spray_OnCreate(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_80159B1C_A8D3C);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_80159B1C_A8D3C);
 
-INCLUDE_RODATA("asm/nonmatchings/kungfu_code", D_801626C0_B18E0);
+INCLUDE_RODATA("asm/nonmatchings/level/KUNGFU", D_801626C0_B18E0);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_spray_OnUpdate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_spray_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_spray_OnCollide);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_spray_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_bug_OnCreate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_bug_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_bug_OnUpdate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_bug_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_bug_OnCollide);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_bug_OnCollide);
 
 void kungfu_crawler_OnCreate(Instance* instance)
 {
@@ -89,19 +89,19 @@ void kungfu_crawler_OnCollide(Instance* instance, int* arg1) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_launch_OnCreate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_launch_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_launch_OnUpdate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_launch_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_launch_OnCollide);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_launch_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015AC1C_A9E3C);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015AC1C_A9E3C);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015AC6C_A9E8C);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015AC6C_A9E8C);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015AD44_A9F64);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015AD44_A9F64);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015ADC8_A9FE8);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015ADC8_A9FE8);
 
 void func_8015AE8C_AA0AC(Instance* instance, int _)
 {
@@ -116,71 +116,71 @@ void func_8015AE8C_AA0AC(Instance* instance, int _)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_onoff_OnCreate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_onoff_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_onoff_OnUpdate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_onoff_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_onoff_OnCollide);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_onoff_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_spike_OnCreate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_spike_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_spike_OnUpdate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_spike_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_spike_OnCollide);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_spike_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015B5A8_AA7C8);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015B5A8_AA7C8);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_dragon_OnCreate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_dragon_OnCreate);
 
-INCLUDE_RODATA("asm/nonmatchings/kungfu_code", D_801626DC_B18FC);
+INCLUDE_RODATA("asm/nonmatchings/level/KUNGFU", D_801626DC_B18FC);
 
-INCLUDE_RODATA("asm/nonmatchings/kungfu_code", D_801626E8_B1908);
+INCLUDE_RODATA("asm/nonmatchings/level/KUNGFU", D_801626E8_B1908);
 
-INCLUDE_RODATA("asm/nonmatchings/kungfu_code", D_801626EC_B190C);
+INCLUDE_RODATA("asm/nonmatchings/level/KUNGFU", D_801626EC_B190C);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_dragon_OnUpdate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_dragon_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_dragflm_OnCreate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_dragflm_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_dragflm_OnUpdate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_dragflm_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_dragflm_OnCollide);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_dragflm_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015C884_ABAA4);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015C884_ABAA4);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_dragbod_OnCreate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_dragbod_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_dragbod_OnCollide);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_dragbod_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_dragon_OnCollide);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_dragon_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_cannon_OnCreate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_cannon_OnCreate);
 
-INCLUDE_RODATA("asm/nonmatchings/kungfu_code", D_80162700_B1920);
+INCLUDE_RODATA("asm/nonmatchings/level/KUNGFU", D_80162700_B1920);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_cannon_OnUpdate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_cannon_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_canball_OnCreate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_canball_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_canball_OnUpdate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_canball_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_canball_OnCollide);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_canball_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_cannon_OnCollide);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_cannon_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015D5E8_AC808);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015D5E8_AC808);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015D770_AC990);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015D770_AC990);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_samuri_OnCreate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_samuri_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015DB1C_ACD3C);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015DB1C_ACD3C);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015DB50_ACD70);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015DB50_ACD70);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015DBB0_ACDD0);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015DBB0_ACDD0);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015DC00_ACE20);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015DC00_ACE20);
 
 void func_8015DC9C_ACEBC(Instance* instance)
 {
@@ -188,13 +188,13 @@ void func_8015DC9C_ACEBC(Instance* instance)
     instance->_50[7] = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_samuri_OnUpdate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_samuri_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_samuri_OnCollide);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_samuri_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_boat_OnCreate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_boat_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_boat_OnUpdate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_boat_OnUpdate);
 
 void kungfu_boat_OnCollide(void) {
 }
@@ -231,71 +231,71 @@ void kungfu_slider_OnCollide(Instance* instance, int arg2) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_pend_OnCreate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_pend_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_pend_OnUpdate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_pend_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_pend_OnCollide);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_pend_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_ninja_OnCreate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_ninja_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015F570_AE790);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015F570_AE790);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015F598_AE7B8);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015F598_AE7B8);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015F5D0_AE7F0);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015F5D0_AE7F0);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015F5F4_AE814);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015F5F4_AE814);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015F61C_AE83C);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015F61C_AE83C);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_ninja_OnUpdate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_ninja_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_ninja_OnCollide);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_ninja_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_swing_OnCreate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_swing_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_swing_OnUpdate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_swing_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_swing_OnCollide);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_swing_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_oneway_OnCreate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_oneway_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_oneway_OnUpdate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_oneway_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_oneway_OnCollide);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_oneway_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_80160D4C_AFF6C);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_80160D4C_AFF6C);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_80160E4C_B006C);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_80160E4C_B006C);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_80160F68_B0188);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_80160F68_B0188);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_joyride_OnCreate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_joyride_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8016121C_B043C);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8016121C_B043C);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_joyride_OnUpdate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_joyride_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_joyride_OnCollide);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_joyride_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_leafgen_OnCreate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_leafgen_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_801616D4_B08F4);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_801616D4_B08F4);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_80161944_B0B64);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_80161944_B0B64);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_801619A4_B0BC4);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_801619A4_B0BC4);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_leafgen_OnUpdate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_leafgen_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_leafgen_OnCollide);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_leafgen_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_funplat_OnCreate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_funplat_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_funplat_OnUpdate);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_funplat_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_funplat_OnCollide);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_funplat_OnCollide);
 
 void kungfu_brkbone_OnCreate(void) {
 }
@@ -303,7 +303,7 @@ void kungfu_brkbone_OnCreate(void) {
 void kungfu_brkbone_OnUpdate(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_brkbone_OnCollide);
+INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_brkbone_OnCollide);
 
 void kungfu_btimer_OnCreate(Instance* instance, int* arg1) {
     int var_s0;

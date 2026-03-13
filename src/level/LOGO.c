@@ -148,7 +148,7 @@ void logo_cryslogo_OnUpdate(Instance* instance, int** arg1)
 
     if ((D_800E5DB2 & 0x9000) || (instance->_104 == 0x50))
     {
-        func_800396E0("logo", "logo1", gameTracker);
+        func_800396E0("logo", "logo1", gameTracker8);
     }
 }
 
@@ -170,7 +170,7 @@ void logo_mwgex_OnUpdate(Instance* instance)
     
     if ((D_800E5DB2 & 0x9000) != 0 || instance->_104 == 0)
     {
-        func_800396E0("logo", "logo2", gameTracker);
+        func_800396E0("logo", "logo2", gameTracker8);
     }
     
 }

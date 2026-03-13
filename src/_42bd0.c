@@ -178,7 +178,7 @@ void func_80047768(int* arg0, int arg1, int arg2, int arg3) {
     }
     if (var_a2 != 0) {
         func_80046D04(arg0, func_80047438, var_a2, arg1, arg2);
-        func_80047438(arg0, gameTracker);
+        func_80047438(arg0, gameTracker8);
     }
     else if (arg3 != 0) {
         func_80046D04(arg0, func_80047724, 0, arg1, arg2);
@@ -225,7 +225,7 @@ void func_80047D20(int arg0, int arg1) {
 
     result = D_800785CC[arg0];
     if (arg1 == 0) {
-        temp_v0 = ((G2String******)gameTracker)[3][8][0x4C];
+        temp_v0 = ((G2String******)gameTracker8)[3][8][0x4C];
         result = 0;
         if (temp_v0 != NULL) {
             result = G2String_Compare_EQ(temp_v0[6][8], D_8007E720);
