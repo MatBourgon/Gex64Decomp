@@ -1,14 +1,13 @@
 #include "common.h"
-#include "types/GameTracker.h"
 
-#include "types/Instance.h"
+#include "level/INTRO.h"
 
 extern char* PlayerInstance;
 extern int D_8006CF60;
 extern int D_80154840;
 extern char D_8006FCD2;
 
-void intro_rezzull_OnCreate(Instance* instance, int* arg1) {
+void intro_rezzull_OnCreate(Instance* instance, GameTracker* gameTracker) {
     char remoteData[4];
     int var_a1;
     short* temp_s1;
@@ -40,7 +39,7 @@ void intro_rezzull_OnCreate(Instance* instance, int* arg1) {
     ptr[2] = 300;
     func_8002C1AC(0);
     temp_s1[0xDC/2] = 0;
-    temp_v1 = (short*)arg1[0x8/4];
+    temp_v1 = ((short**)gameTracker)[0x8/4];
     temp_v1[2] += 0xDC;
     ((short*)PlayerInstance)[0x64/2] = 0x11F0;
     ((short*)PlayerInstance)[0x48/2] -= 1100;
@@ -52,7 +51,7 @@ void intro_rezzull_OnCreate(Instance* instance, int* arg1) {
     instance->_40[6] += 900;
 }
 
-void intro_rezzull_OnUpdate(Instance* instance, int* arg1) {
+void intro_rezzull_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     func_8002C1AC(0);
     instance->_104--;
     if (instance->_104 == 0xAF) {
@@ -60,14 +59,14 @@ void intro_rezzull_OnUpdate(Instance* instance, int* arg1) {
         func_80052758();
     }
     if (instance->_104 == 0) {
-        ((short*)arg1)[0x9c/2] = -1;
+        ((short*)gameTracker)[0x9c/2] = -1;
         func_800396E0("map", "map5", gameTracker8);
         ((char*)gameTracker8)[0x4CDC] = 0;
         D_8006CF60 = 0;
     }
 }
 
-void intro_gextext_OnCreate(Instance* instance)
+void intro_gextext_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     instance->_104 = 0xB4;
     instance->_40[4] = 0x1117;
@@ -78,7 +77,7 @@ void intro_gextext_OnCreate(Instance* instance)
     instance->_60[2] = 0;
 }
 
-void intro_gextext_OnUpdate(Instance* instance)
+void intro_gextext_OnUpdate(Instance* instance, GameTracker* gameTracker)
 {
     if (instance->_104)
     {
@@ -95,7 +94,7 @@ void intro_gextext_OnUpdate(Instance* instance)
     }
 }
 
-void intro_enttext_OnCreate(Instance* instance)
+void intro_enttext_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     instance->_104 = 0xD2;
     instance->_40[4] = 0xE56;
@@ -106,10 +105,10 @@ void intro_enttext_OnCreate(Instance* instance)
     instance->_60[2] = 0;
 }
 
-void intro_enttext_OnUpdate(void) {
+void intro_enttext_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 }
 
-void intro_gectext_OnCreate(Instance* instance)
+void intro_gectext_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     instance->_104 = 0xD2;
     instance->_40[4] = 0x13BA;
@@ -120,10 +119,10 @@ void intro_gectext_OnCreate(Instance* instance)
     instance->_60[2] = 0;
 }
 
-void intro_gectext_OnUpdate(void) {
+void intro_gectext_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 }
 
-void intro_remtext_OnCreate(Instance* instance)
+void intro_remtext_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     instance->_104 = 0x12C;
     instance->_40[4] = 0x157C;
@@ -134,10 +133,10 @@ void intro_remtext_OnCreate(Instance* instance)
     instance->_60[2] = 0;
 }
 
-void intro_remtext_OnUpdate(void) {
+void intro_remtext_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 }
 
-void intro_gexcopy_OnCreate(Instance* instance)
+void intro_gexcopy_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     instance->_104 = 0xFA;
     instance->_40[4] = 0x1770;
@@ -148,7 +147,7 @@ void intro_gexcopy_OnCreate(Instance* instance)
     instance->_60[2] = 0;
 }
 
-void intro_gexcopy_OnUpdate(Instance* instance)
+void intro_gexcopy_OnUpdate(Instance* instance, GameTracker* gameTracker)
 {
     if (instance->_104)
     {
