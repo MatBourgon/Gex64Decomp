@@ -1,19 +1,19 @@
 #include "common.h"
 
-#include "types/Instance.h"
+#include "level/LOONEY.h"
 
-void looney_rainbow_OnCreate(void) {
+void looney_rainbow_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
-void looney_rainbow_OnUpdate(void) {
+void looney_rainbow_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 }
 
-void looney_shittrn_OnCreate(void) {
+void looney_shittrn_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_shittrn_OnUpdate);
 
-void looney_shittrn_OnCollide(void) {
+void looney_shittrn_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_bug_OnCreate);
@@ -28,13 +28,13 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_bouncer_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_bouncer_OnCollide);
 
-void looney_crawler_OnCreate(Instance* instance)
+void looney_crawler_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     instance->_F4[0] = 0;
     instance->_4E = 0;
 }
 
-void looney_crawler_OnUpdate(Instance* instance) {
+void looney_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     
     int a0, v0, v1;
 
@@ -58,7 +58,7 @@ void looney_crawler_OnUpdate(Instance* instance) {
     }
 }
 
-void looney_crawler_OnCollide(Instance* instance, int* arg1) {
+void looney_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
     int temp_a3;
     int temp_v1;
     char** temp_a2;
@@ -66,7 +66,7 @@ void looney_crawler_OnCollide(Instance* instance, int* arg1) {
     temp_a2 = ((char***)instance->_70)[2];
     temp_a3 = ((short*)temp_a2)[3];
     if (temp_a3 == 1) {
-        if ((temp_a2[5] == (char*)arg1[12/4]) && (temp_a2[12/4][5] >= 6U)) {
+        if ((temp_a2[5] == ((char**)gameTracker)[12/4]) && (temp_a2[12/4][5] >= 6U)) {
             if (instance->_F4[0] == 0)
             {
                 ((char*)instance->_40)[0xe] = 1;
@@ -79,7 +79,7 @@ void looney_crawler_OnCollide(Instance* instance, int* arg1) {
             {
                 func_80047904(instance, 5, 3, 0);
             }
-        } else if ((((short*)temp_a2)[3] == 1) && (temp_a2[5] == (char*)arg1[12/4]) && ((instance->_F4[0] - 1) >= 2U)) {
+        } else if ((((short*)temp_a2)[3] == 1) && (temp_a2[5] == ((char**)gameTracker)[12/4]) && ((instance->_F4[0] - 1) >= 2U)) {
             func_80022714(instance);
         }
     }
@@ -89,7 +89,7 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_bowling_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_bowling_OnUpdate);
 
-void looney_bowling_OnCollide(void) {
+void looney_bowling_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_doeboy_OnCreate);
@@ -198,7 +198,7 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_8015C6A0_B4950);
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_fallgen_OnUpdate);
 
-void looney_fallgen_OnCollide(void) {
+void looney_fallgen_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_fallobj_OnCreate);
@@ -221,21 +221,21 @@ INCLUDE_RODATA("asm/nonmatchings/level/LOONEY", D_80161DD8_BA088);
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_trapsit_OnUpdate);
 
-void looney_trapsit_OnCollide(void) {
+void looney_trapsit_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_trapmuv_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_trapmuv_OnUpdate);
 
-void looney_trapmuv_OnCollide(void) {
+void looney_trapmuv_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_pusher_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_pusher_OnUpdate);
 
-void looney_pusher_OnCollide(void) {
+void looney_pusher_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_bullet_OnCreate);
@@ -300,7 +300,7 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_80160BDC_B8E8C);
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_fxgen_OnUpdate);
 
-void looney_fxgen_OnCollide(void) {
+void looney_fxgen_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_frocket_OnCreate);
@@ -313,7 +313,7 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_frocket_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_frocket_OnCollide);
 
-void looney_genbrk_OnCreate(void) {
+void looney_genbrk_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_genbrk_OnUpdate);
