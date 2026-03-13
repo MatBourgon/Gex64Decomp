@@ -1,14 +1,16 @@
 #ifndef INTRO_H_
 #define INTRO_H_
 
+#include "Vector.h"
+
 typedef struct
 {
     int* _00;
     int* _04;
-    int* _08;
-    int* _0C;
-    int* _10;
-    int* _14;
+    SVECTOR rotation;
+    short _pad;
+    SVECTOR position;
+    // int* _14; // not used?
     int* _18;
     int _1C;
     int* _20;

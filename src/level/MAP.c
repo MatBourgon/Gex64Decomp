@@ -1417,11 +1417,11 @@ void map_lvltv_OnUpdate(Instance* instance, GameTracker* gameTracker) {
                 temp_v0_3 = (int*)func_80048524(instance, &sp18, &sp1C);
                 if (temp_v0_3[1] != 0) {
                     func_80051C64(temp_v0_3[1], func_800485F8(instance, temp_v0_3, sp18, sp1C), &sp10);
-                    ((short*)instance->intro)[0x8/2] += sp10.x;
-                    ((short*)instance->intro)[0xA/2] += sp10.y;
-                    ((short*)instance->intro)[0xC/2] += sp10.z;
+                    instance->intro->rotation.x += sp10.x;
+                    instance->intro->rotation.y += sp10.y;
+                    instance->intro->rotation.z += sp10.z;
                 }
-                *(SVECTOR*)(&instance->intro->_10) = *(SVECTOR*)&instance->_40[4];
+                instance->intro->position = *(SVECTOR*)&instance->_40[4];
                 instance->intro->multiSpline = 0;
                 instance->flags &= ~1;
             }
@@ -1440,7 +1440,7 @@ void func_8015E274_BECA4(Instance* instance) {
     *(SVECTOR*)&(((short*)gameTracker8)[0x4C66/2]) = *(SVECTOR*)&instance->_40[4];
     ((short*)gameTracker8)[0x4C6A/2] -= 0x20;
     ((short*)gameTracker8)[0x4C6C/2] = instance->_60[2] & 0xFFF;
-    ((short*)gameTracker8)[0x4C6C/2] = (((short*)gameTracker8)[0x4C6C/2] + *(short*)&instance->intro->_0C) & 0xfff;
+    ((short*)gameTracker8)[0x4C6C/2] = (((short*)gameTracker8)[0x4C6C/2] + instance->intro->rotation.z) & 0xfff;
     *(SVECTOR*)(&instance->_40[4]) = temp;
 }
 
