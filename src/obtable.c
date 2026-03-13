@@ -1,7 +1,5 @@
 #include "common.h"
 
-#include "types/GameTracker.h"
-
 #include "types/G2String.h"
 
 #include "types/obtable.h"
