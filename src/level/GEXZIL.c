@@ -1,6 +1,6 @@
 #include "common.h"
 
-#include "types/Instance.h"
+#include "level/GEXZIL.h"
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_bug_OnCreate);
 
@@ -46,7 +46,7 @@ INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_mechjet_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015B460_945E0);
 
-void gexzil_mechjet_OnCollide(void) {
+void gexzil_mechjet_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_mecha_OnCreate);
