@@ -27,7 +27,7 @@ void GenericInit(Instance* instance, GameTracker* gameTracker) {
 
 void GenericProcess(Instance* instance, GameTracker* gameTracker)
 {
-    if (instance->_18[4] != 0)
+    if (instance->object->numAnims != 0)
     {
         func_8002DAF8(instance, -1);
     }

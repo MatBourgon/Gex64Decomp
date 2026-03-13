@@ -50,7 +50,7 @@ void looney_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         func_8002DAF8(instance, -1);
         if ((instance->flags2 & 0x10))
         {
-            a0 = (*(unsigned char*)&instance->_40[7] << 2) + ((int*)(instance->_18 + 4))[0];
+            a0 = (*(unsigned char*)&instance->_40[7] << 2) + instance->object->numAnims;
             instance->_50[7] = ((unsigned short*)(*((int*)a0)))[1] - 1; 
             instance->_F4[0] = 2;
         }
