@@ -1,11 +1,10 @@
 #include "common.h"
-#include "types/GameState.h"
 
 #include <PR/gbi.h>
 #include <PR/mbi.h>
 #include <ultra64.h>
 
-#include "types/Level.h"
+#include "level/LOGO.h"
 
 extern Gfx D_8006D578[];
 extern char D_8014F34C;
@@ -26,13 +25,13 @@ extern char D_8006CF20;
 extern short* PlayerInstance;
 extern unsigned short D_800E5DB2;
 
-void logo_select_OnCreate(Level_t* level, int** arg1)
+void logo_select_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
-    level->flags |= 0xC00;
-    arg1[0xC/4][0x10/4] |= 0x800;
+    instance->flags |= 0xC00;
+    ((int**)gameTracker)[0xC/4][0x10/4] |= 0x800;
 }
 
-void logo_select_OnUpdate()
+void logo_select_OnUpdate(Instance* instance, GameTracker* gameTracker)
 {
     func_8002C1AC(0);
 
@@ -120,43 +119,43 @@ void logo_select_OnUpdate()
     }
 }
 
-void logo_cryslogo_OnCreate(Level_t* level, short** arg1)
+void logo_cryslogo_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     D_8006CF20 = 0;
     D_8006FA54 = 0xD;
-    level->_104 = 0;
-    level->flags |= 0x400;
+    instance->_104 = 0;
+    instance->flags |= 0x400;
     func_8002C1AC(0);
-    arg1[0x8/4][0x30/2] = 0xFA0;
-    level->_60[0] = 0x3FE;
-    level->_60[1] = 0x6E1;
-    level->_60[2] = 1;
-    level->_40[4] = 0x10EC;
-    level->_40[5] = 0x12C0;
-    level->_40[6] = -0x460;
+    ((short**)gameTracker)[0x8/4][0x30/2] = 0xFA0;
+    instance->_60[0] = 0x3FE;
+    instance->_60[1] = 0x6E1;
+    instance->_60[2] = 1;
+    instance->_40[4] = 0x10EC;
+    instance->_40[5] = 0x12C0;
+    instance->_40[6] = -0x460;
 }
 
-void logo_cryslogo_OnUpdate(Level_t* level, int** arg1)
+void logo_cryslogo_OnUpdate(Instance* instance, GameTracker* gameTracker)
 {
     func_8002C1AC(0);
-    arg1[0xC/4][0x10/4] |= 0x800;
+    ((int**)gameTracker)[0xC/4][0x10/4] |= 0x800;
     
-    if (level->_104 < 0x50)
+    if (instance->_104 < 0x50)
     {
-        level->_104++;
+        instance->_104++;
     }
 
-    if ((D_800E5DB2 & 0x9000) || (level->_104 == 0x50))
+    if ((D_800E5DB2 & 0x9000) || (instance->_104 == 0x50))
     {
-        func_800396E0("logo", "logo1", gpGameState8);
+        func_800396E0("logo", "logo1", gameTracker8);
     }
 }
 
-void logo_mwgex_OnCreate(Level_t* level)
+void logo_mwgex_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
-    level->_60[2] = 0xC8;
-    level->_104 = 0x50;
-    level->flags |= 0x400;
+    instance->_60[2] = 0xC8;
+    instance->_104 = 0x50;
+    instance->flags |= 0x400;
 }
 
 FORCE_INLINE void logo_mwgex_OnUpdate_dec(int* a)
@@ -164,55 +163,55 @@ FORCE_INLINE void logo_mwgex_OnUpdate_dec(int* a)
     (*a)--;
 }
 
-void logo_mwgex_OnUpdate(Level_t* level)
+void logo_mwgex_OnUpdate(Instance* instance, GameTracker* gameTracker)
 {
-    logo_mwgex_OnUpdate_dec(&level->_104);
+    logo_mwgex_OnUpdate_dec(&instance->_104);
     
-    if ((D_800E5DB2 & 0x9000) != 0 || level->_104 == 0)
+    if ((D_800E5DB2 & 0x9000) != 0 || instance->_104 == 0)
     {
-        func_800396E0("logo", "logo2", gpGameState8);
+        func_800396E0("logo", "logo2", gameTracker8);
     }
     
 }
 
-void logo_mwlogo_OnCreate(Level_t* level, short** arg1)
+void logo_mwlogo_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
-    level->_60[0] = 0x802;
-    level->_60[1] = -0x400;
-    level->_60[2] = 0;
-    level->_40[4] = arg1[0x8/4][0] + 0x32;
-    level->_40[5] = 0x64;
-    level->_40[6] = 0x64;
+    instance->_60[0] = 0x802;
+    instance->_60[1] = -0x400;
+    instance->_60[2] = 0;
+    instance->_40[4] = ((short**)gameTracker)[0x8/4][0] + 0x32;
+    instance->_40[5] = 0x64;
+    instance->_40[6] = 0x64;
 }
 
-void logo_mwlogo_OnUpdate(void) {
+void logo_mwlogo_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 }
 
-void logo_rtlogor_OnCreate(Level_t* level, short** arg1)
+void logo_rtlogor_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
-    level->_104 = 0;
-    level->flags |= 0x400;
+    instance->_104 = 0;
+    instance->flags |= 0x400;
     func_8002C1AC(0);
-    level->_60[0] = 0x400;
-    level->_60[1] = 0x6D6;
-    level->_40[4] = 0x1306;
-    level->_40[5] = 0x1194;
-    level->_60[2] = 0;
-    level->_40[6] = -0x96;
-    arg1[0x8/4][0x4/2] += 0xE6;
-    arg1[0x8/4][0x2/2] -= 0xC8;
-    arg1[0x8/4][0] = PlayerInstance[0x48/2];
-    level->_4E = 0;
-    level->_50[7] = 0;
+    instance->_60[0] = 0x400;
+    instance->_60[1] = 0x6D6;
+    instance->_40[4] = 0x1306;
+    instance->_40[5] = 0x1194;
+    instance->_60[2] = 0;
+    instance->_40[6] = -0x96;
+    ((short**)gameTracker)[0x8/4][0x4/2] += 0xE6;
+    ((short**)gameTracker)[0x8/4][0x2/2] -= 0xC8;
+    ((short**)gameTracker)[0x8/4][0] = PlayerInstance[0x48/2];
+    instance->_4E = 0;
+    instance->_50[7] = 0;
 }
 
-void logo_rtlogor_OnUpdate(Level_t* level)
+void logo_rtlogor_OnUpdate(Instance* instance, GameTracker* gameTracker)
 {
-    if (level->_104 < 0x50) {
-        level->_104++;
+    if (instance->_104 < 0x50) {
+        instance->_104++;
     }
     
-    if ((D_800E5DB2 & 0x9000) || (level->_104 == 0x50)) {
+    if ((D_800E5DB2 & 0x9000) || (instance->_104 == 0x50)) {
         func_8001A790();
     }
 }

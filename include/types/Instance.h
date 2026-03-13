@@ -1,14 +1,14 @@
-#ifndef LEVEL_H_
-#define LEVEL_H_
+#ifndef INSTANCE_H_
+#define INSTANCE_H_
 
 typedef struct
 {
     int _00[4];
     int flags;
-    int _14;
-    int** _18;
-    int* _1C;
-    int _20[4];
+    int flags2;
+    int** _18; // Object*?
+    int* _1C; // Intro?
+    int _20[4]; // _20 : Data, _24 : IntroData?
     short _30[8];
     short _40[7];
     char _4E;
@@ -41,6 +41,6 @@ typedef struct
     char _113;
     char _114;
     unsigned char _115;
-} Level_t;
+} Instance;
 
 #endif

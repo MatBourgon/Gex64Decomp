@@ -1,4 +1,4 @@
 src/_4a780.c src/_1050.c src/1A6A0.c src/zlib.c src/_31960.c src/_42bd0.c
-src/aztec_code.c src/circuit_code.c src/final_code.c src/gexzil_code.c src/gillig_code.c src/horror_code.c
-src/intro_code.c src/kungfu_code.c src/logo_code.c src/looney_code.c src/map_code.c src/mooshu_code.c src/nypd_code.c src/prehst_code.c
-src/rezop_code.c src/rta_code.c src/scifi_code.c src/spy_code.c src/main.c src/368B0.c
+src/level/AZTEC.c src/level/CIRCUIT.c src/level/FINAL.c src/level/GEXZIL.c src/level/GILLIG.c src/level/HORROR.c
+src/level/INTRO.c src/level/KUNGFU.c src/level/LOGO.c src/level/LOONEY.c src/level/MAP.c src/level/MOOSHU.c src/level/NYPD.c src/level/PREHST.c
+src/level/REZOP.c src/level/RTA.c src/level/SCIFI.c src/level/SPY.c src/main.c src/368B0.c src/3EAA0.c src/obtable.c

@@ -1,0 +1,95 @@
+#ifndef LEVEL_REZOP_H_
+#define LEVEL_REZOP_H_
+
+#include "types/Instance.h"
+#include "types/GameTracker.h"
+
+void rezop_rrdoor_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_rrdoor_OnUpdate(Instance* instance, GameTracker* gameTracker);
+void rezop_rrdoor_OnCollide(Instance* instance, GameTracker* gameTracker);
+void rezop_rrspark_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_rrspark_OnUpdate(Instance* instance, GameTracker* gameTracker);
+void rezop_rrspark_OnCollide(Instance* instance, GameTracker* gameTracker);
+void rezop_rezrat_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_rezrat_OnUpdate(Instance* instance, GameTracker* gameTracker);
+void rezop_rezrat_OnCollide(Instance* instance, GameTracker* gameTracker);
+void rezop_rrgen_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_rrgen_OnUpdate(Instance* instance, GameTracker* gameTracker);
+void rezop_rrgen_OnCollide(Instance* instance, GameTracker* gameTracker);
+void rezop_rrzap_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_rrzap_OnUpdate(Instance* instance, GameTracker* gameTracker);
+void rezop_rrzap_OnCollide(Instance* instance, GameTracker* gameTracker);
+void rezop_rezplat_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_rezplat_OnUpdate(Instance* instance, GameTracker* gameTracker);
+void rezop_rezplat_OnCollide(Instance* instance, GameTracker* gameTracker);
+void rezop_tbbttn_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_tbbttn_OnUpdate(Instance* instance, GameTracker* gameTracker);
+void rezop_tbbttn_OnCollide(Instance* instance, GameTracker* gameTracker);
+void rezop_tbplat_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_tbplat_OnUpdate(Instance* instance, GameTracker* gameTracker);
+void rezop_tbplat_OnCollide(Instance* instance, GameTracker* gameTracker);
+void rezop_rezfan_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_rezfan_OnUpdate(Instance* instance, GameTracker* gameTracker);
+void rezop_rezfan_OnCollide(Instance* instance, GameTracker* gameTracker);
+void rezop_simontv_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_simontv_OnUpdate(Instance* instance, GameTracker* gameTracker);
+void rezop_simontv_OnCollide(Instance* instance, GameTracker* gameTracker);
+void rezop_simon_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_simon_OnUpdate(Instance* instance, GameTracker* gameTracker);
+void rezop_simon_OnCollide(Instance* instance, GameTracker* gameTracker);
+void rezop_rezbot_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_rezbot_OnUpdate(Instance* instance, GameTracker* gameTracker);
+void rezop_rezbot_OnCollide(Instance* instance, GameTracker* gameTracker);
+void rezop_crnkplt_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_crnkplt_OnUpdate(Instance* instance, GameTracker* gameTracker);
+void rezop_crnkplt_OnCollide(Instance* instance, GameTracker* gameTracker);
+void rezop_rezcrnk_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_rezcrnk_OnUpdate(Instance* instance, GameTracker* gameTracker);
+void rezop_rezcrnk_OnCollide(Instance* instance, GameTracker* gameTracker);
+void rezop_snkplat_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_snkplat_OnUpdate(Instance* instance, GameTracker* gameTracker);
+void rezop_snkplat_OnCollide(Instance* instance, GameTracker* gameTracker);
+void rezop_rezbull_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_rezbull_OnUpdate(Instance* instance, GameTracker* gameTracker);
+void rezop_rezbull_OnCollide(Instance* instance, GameTracker* gameTracker);
+void rezop_srchlit_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_srchlit_OnUpdate(Instance* instance, GameTracker* gameTracker);
+void rezop_srchlit_OnCollide(Instance* instance, GameTracker* gameTracker);
+void rezop_spotlit_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_spotlit_OnUpdate(Instance* instance, GameTracker* gameTracker);
+void rezop_spotlit_OnCollide(Instance* instance, GameTracker* gameTracker);
+void rezop_spnplat_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_spnplat_OnUpdate(Instance* instance, GameTracker* gameTracker);
+void rezop_spnplat_OnCollide(Instance* instance, GameTracker* gameTracker);
+void rezop_mutant_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_mutant_OnUpdate(Instance* instance, GameTracker* gameTracker);
+void rezop_mutant_OnCollide(Instance* instance, GameTracker* gameTracker);
+void rezop_mtntsht_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_mtntsht_OnUpdate(Instance* instance, GameTracker* gameTracker);
+void rezop_mtntsht_OnCollide(Instance* instance, GameTracker* gameTracker);
+void rezop_rebggen_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_rebggen_OnUpdate(Instance* instance, GameTracker* gameTracker);
+void rezop_rebggen_OnCollide(Instance* instance, GameTracker* gameTracker);
+void rezop_rbmastr_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_rbmastr_OnUpdate(Instance* instance, GameTracker* gameTracker);
+void rezop_rbmastr_OnCollide(Instance* instance, GameTracker* gameTracker);
+void rezop_rebug_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_rebug_OnUpdate(Instance* instance, GameTracker* gameTracker);
+void rezop_rebug_OnCollide(Instance* instance, GameTracker* gameTracker);
+void rezop_iris_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_iris_OnUpdate(Instance* instance, GameTracker* gameTracker);
+void rezop_iris_OnCollide(Instance* instance, GameTracker* gameTracker);
+void rezop_tvgen_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_tvgen_OnUpdate(Instance* instance, GameTracker* gameTracker);
+void rezop_tvgurny_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_tvgurny_OnUpdate(Instance* instance, GameTracker* gameTracker);
+void rezop_tvgurny_OnCollide(Instance* instance, GameTracker* gameTracker);
+void rezop_gas_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_gas_OnUpdate(Instance* instance, GameTracker* gameTracker);
+void rezop_gas_OnCollide(Instance* instance, GameTracker* gameTracker);
+void rezop_btimer_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker);
+void rezop_markey_OnCreate(Instance* instance, GameTracker* gameTracker);
+void rezop_markey_OnUpdate(Instance* instance, GameTracker* gameTracker);
+
+#endif
