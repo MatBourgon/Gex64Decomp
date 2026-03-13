@@ -1,6 +1,6 @@
 #include "common.h"
 
-#include "types/Instance.h"
+#include "level/GILLIG.h"
 
 INCLUDE_ASM("asm/nonmatchings/level/GILLIG", gillig_couldrn_OnCreate);
 
@@ -8,7 +8,7 @@ INCLUDE_RODATA("asm/nonmatchings/level/GILLIG", D_8015A920_9CF00);
 
 INCLUDE_ASM("asm/nonmatchings/level/GILLIG", gillig_couldrn_OnUpdate);
 
-void gillig_couldrn_OnCollide(void) {
+void gillig_couldrn_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/GILLIG", gillig_tikifb_OnCreate);
