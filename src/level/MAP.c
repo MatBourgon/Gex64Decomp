@@ -1,13 +1,13 @@
 #include "common.h"
 
+#include "level/MAP.h"
+
 #include <PR/gbi.h>
 #include <PR/mbi.h>
 #include <compiler/gcc/string.h>
 #include <ultra64.h>
 
-#include "types/Instance.h"
 #include "types/TVTextData.h"
-#include "types/GameTracker.h"
 #include "types/G2String.h"
 #include "types/Vector.h"
 
@@ -105,21 +105,21 @@ extern SAVEFILE_ALT_t D_800E5DDE[];
 
 extern int D_80078594[];
 
-void map_remrlow_OnCreate(void) {
+void map_remrlow_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
-void map_remrlow_OnUpdate(Instance* instance)
+void map_remrlow_OnUpdate(Instance* instance, GameTracker* gameTracker)
 {
     instance->_D0[0]++;
 }
 
-void map_remrlow_OnCollide(void) {
+void map_remrlow_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-void map_dish_OnCreate(void) {
+void map_dish_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
-void map_dish_OnUpdate(Instance* instance) {
+void map_dish_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     if ((instance->_18)[0x1C/4] != 0) {
         instance->_60[2] += (0x1000 / *(instance->_18)[0x1C/4]);
     } else {
@@ -129,10 +129,10 @@ void map_dish_OnUpdate(Instance* instance) {
     instance->_60[2] &= 0xFFF;
 }
 
-void map_dish_OnCollide(void) {
+void map_dish_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-void map_temptv_OnCreate(Instance* instance)
+void map_temptv_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     if (!instance->_1C[1])
         return;
@@ -169,8 +169,8 @@ INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_801611F8_C1C28);
 
 INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_80161208_C1C38);
 
-void map_temptv_OnUpdate(Instance* instance, int* arg1) {
-    int* arg2 = arg1 + 0x18/4;
+void map_temptv_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    int* arg2 = ((int*)gameTracker) + 0x18/4;
     if (instance->_1C[1] != 0) {
         instance->_50[3] = instance->_F4[2] * 2;
         
@@ -178,13 +178,13 @@ void map_temptv_OnUpdate(Instance* instance, int* arg1) {
             instance->_50[3] |= 1;
         }
         
-        if (!(((GameTracker*)arg1)->gameFlags & 1)) {
-            if ((arg1[0x1C/4] & 0x10) && (instance->_F4[0] == 1)) {
-                func_800396E0("prehst", "prehst1", arg1);
+        if (!(((GameTracker*)gameTracker)->gameFlags & 1)) {
+            if ((((int*)gameTracker)[0x1C/4] & 0x10) && (instance->_F4[0] == 1)) {
+                func_800396E0("prehst", "prehst1", gameTracker);
             }
             else
             {
-                if ((arg2[0] & 4) || (arg1[0x4C/4] < -0x20)) {
+                if ((arg2[0] & 4) || (((int*)gameTracker)[0x4C/4] < -0x20)) {
                     if (instance->_F4[2] == 0) {
                         instance->_F4[0] = 1;
                     }
@@ -193,7 +193,7 @@ void map_temptv_OnUpdate(Instance* instance, int* arg1) {
                         instance->_F4[0] = 0;
                     }
                 }
-                else if ((arg2[0] & 8) || (arg1[0x4C/4] >= 0x21)) {
+                else if ((arg2[0] & 8) || (((int*)gameTracker)[0x4C/4] >= 0x21)) {
                     if (instance->_F4[2] == 1) {
                         instance->_F4[0] = instance->_F4[2];
                     }
@@ -207,10 +207,10 @@ void map_temptv_OnUpdate(Instance* instance, int* arg1) {
     }
 }
 
-void map_temptv_OnCollide(void) {
+void map_temptv_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-void map_intro_OnCreate(Instance* instance, int* arg1) {
+void map_intro_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int* temp_s1;
     int* temp_v0;
     int** temp_a1;
@@ -221,42 +221,42 @@ void map_intro_OnCreate(Instance* instance, int* arg1) {
         temp_a1 = ((int****)instance->_1C)[1][1];
         temp_a2 = ((int****)instance->_1C)[1][2];
         instance->flags |= 0xC00;
-        ((int**)arg1)[3][0x10/4] |= 0x400;
-        ((int**)arg1)[3][0x10/4] |= 0x100;
+        ((int**)gameTracker)[3][0x10/4] |= 0x400;
+        ((int**)gameTracker)[3][0x10/4] |= 0x100;
         if ((temp_a1 != 0) && (temp_a2 != 0)) {
             temp_v0 = temp_a1[0x28/4];
             temp_s1 = temp_a2[0x28/4];
             temp_v0_2 = (short*)func_80051638(*temp_v0, temp_v0 + 4);
             if (temp_v0_2 != 0) {
-                ((short**)arg1)[2][0] = temp_v0_2[0];
-                ((short**)arg1)[2][1] = temp_v0_2[1];
-                ((short**)arg1)[2][2] = temp_v0_2[2];
+                ((short**)gameTracker)[2][0] = temp_v0_2[0];
+                ((short**)gameTracker)[2][1] = temp_v0_2[1];
+                ((short**)gameTracker)[2][2] = temp_v0_2[2];
             }
-            func_80003A68(arg1[2], func_80051638(*temp_s1, temp_s1 + 4));
-            func_80001408(arg1[2], 8);
+            func_80003A68(((int*)gameTracker)[2], func_80051638(*temp_s1, temp_s1 + 4));
+            func_80001408(((int*)gameTracker)[2], 8);
         }
-        ((GameTracker*)arg1)->gameFlags |= 1;
+        ((GameTracker*)gameTracker)->gameFlags |= 1;
     }
 }
 
-void map_intro_OnUpdate(int* instance, int* arg1) {
+void map_intro_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int *v0, *v1;
     int *s1, *s2;
     int *s3;
     int *s4, *s5;
-    s3 = (int*)instance[0x24/4];
+    s3 = (int*)((int*)instance)[0x24/4];
 
     
-    if (((int*)instance[0x1C/4])[1] == 0)
+    if (((int*)((int*)instance)[0x1C/4])[1] == 0)
         return;
     
     ((short*)PlayerInstance)[0x64/2] = -0x200;
-    ((int**)arg1)[0xC/4][0x10/4] |= 0x100;
-    v0 = (((int**)instance[0x1C/4])[1]);
+    ((int**)gameTracker)[0xC/4][0x10/4] |= 0x100;
+    v0 = (((int**)((int*)instance)[0x1C/4])[1]);
     s4 = (int*)v0[0x4/4];
     s5 = (int*)v0[0x8/4];
     
-    if (instance[0xF8/4])
+    if (((int*)instance)[0xF8/4])
         return;
     
     s1 = (int*)s4[0x28/4];
@@ -265,28 +265,28 @@ void map_intro_OnUpdate(int* instance, int* arg1) {
     
     if (v1 != 0)
     {
-        if ((arg1[0x40/4] & 0x8010) == 0)
+        if ((((int*)gameTracker)[0x40/4] & 0x8010) == 0)
         {
-            ((GameTracker*)arg1)->gameFlags |= 1; // d0
-            ((SVECTOR*)arg1[0x8/4])->x = ((SVECTOR*)v1)->x;
-            ((SVECTOR*)arg1[0x8/4])->y = ((SVECTOR*)v1)->y;
-            ((SVECTOR*)arg1[0x8/4])->z = ((SVECTOR*)v1)->z;
+            ((GameTracker*)gameTracker)->gameFlags |= 1; // d0
+            ((SVECTOR*)((int*)gameTracker)[0x8/4])->x = ((SVECTOR*)v1)->x;
+            ((SVECTOR*)((int*)gameTracker)[0x8/4])->y = ((SVECTOR*)v1)->y;
+            ((SVECTOR*)((int*)gameTracker)[0x8/4])->z = ((SVECTOR*)v1)->z;
             goto _1d8;
         } // 104
         else
         {
             v1 = (int*)func_800516E0(s1[0], s1 + 0x10/4);
-            ((SVECTOR*)arg1[0x8/4])->x = ((SVECTOR*)v1)->x;
-            ((SVECTOR*)arg1[0x8/4])->y = ((SVECTOR*)v1)->y;
-            ((SVECTOR*)arg1[0x8/4])->z = ((SVECTOR*)v1)->z;
-            func_80003A68(arg1[0x8/4], func_800516E0(s2[0], s2 + 0x10/4)); // 150
-            func_80001408(arg1[0x8/4], 8); // 170
+            ((SVECTOR*)((int*)gameTracker)[0x8/4])->x = ((SVECTOR*)v1)->x;
+            ((SVECTOR*)((int*)gameTracker)[0x8/4])->y = ((SVECTOR*)v1)->y;
+            ((SVECTOR*)((int*)gameTracker)[0x8/4])->z = ((SVECTOR*)v1)->z;
+            func_80003A68(((int*)gameTracker)[0x8/4], func_800516E0(s2[0], s2 + 0x10/4)); // 150
+            func_80001408(((int*)gameTracker)[0x8/4], 8); // 170
         }
     } // 17c
-    instance[0xF8/4] = 1;
-    ((int*)arg1[0x4/4])[0x74/4] &= -2;
+    ((int*)instance)[0xF8/4] = 1;
+    ((int**)gameTracker)[0x4/4][0x74/4] &= -2;
 
-    ((GameTracker*)arg1)->gameFlags &= -2;
+    ((GameTracker*)gameTracker)->gameFlags &= -2;
     if (s3 != 0)
     {
         if (s3[0] & 1)
@@ -295,19 +295,19 @@ void map_intro_OnUpdate(int* instance, int* arg1) {
         } // 1c8
     } // 1c8
     
-    func_8001A94C(arg1); // 1c8
+    func_8001A94C(gameTracker); // 1c8
     return;
 
     _1d8:
-    func_80003A68(arg1[0x8/4], func_80051734(s2[0], s2 + 0x10/4));
-    func_80001408(arg1[0x8/4], 8);
+    func_80003A68(((int*)gameTracker)[0x8/4], func_80051734(s2[0], s2 + 0x10/4));
+    func_80001408(((int*)gameTracker)[0x8/4], 8);
     
 }
 
-void map_intro_OnCollide(void) {
+void map_intro_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-void map_angel_OnCreate(Instance* instance) {
+void map_angel_OnCreate(Instance* instance, GameTracker* gameTracker) {
     ((short*)&instance->_100)[1] = -0x1000;
     instance->flags |= 0xC00;
     if ((instance->_18)[0x1C/4] != 0) {
@@ -315,19 +315,19 @@ void map_angel_OnCreate(Instance* instance) {
     }
 }
 
-void map_angel_OnUpdate(Instance* instance, int* arg1) {
+void map_angel_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int* temp_v0;
     short* temp_s2;
     short* temp_s3;
 
     temp_v0 = (int*)instance->_1C[0x20/4];
-    temp_s3 = (short*)arg1[3];
+    temp_s3 = (short*)((int*)gameTracker)[3];
     temp_s2 = (short*)&instance->_F4[2];
 
     if (instance->_F4[0] == 1)
     {
         if ((temp_v0 != 0) && (*temp_v0 != 0)) {
-            func_800257B4(arg1[3]);
+            func_800257B4(((int*)gameTracker)[3]);
         }
         goto block_10;
     
@@ -339,7 +339,7 @@ void map_angel_OnUpdate(Instance* instance, int* arg1) {
         if ( temp_s3[0x4C/2] <= ((short*)&instance->_100)[1]) {
             func_8004A5B4(instance, 0x1000);
             instance->_F4[0] = 1;
-            ((GameTracker*)arg1)->gameFlags |= 1;
+            ((GameTracker*)gameTracker)->gameFlags |= 1;
             (*(short*)&instance->_104) = 0x5A;
             instance->_40[6] -= 0x400;
             instance->flags &= ~0x800;
@@ -369,8 +369,8 @@ block_11:
     if (temp_s2[4] > 0) {
         temp_s2[4]--;
         if ((temp_s2[4] << 0x10) <= 0) {
-            ((GameTracker*)arg1)->gameFlags &= ~1;
-            func_8001C978(temp_s3, arg1[1] + 0x2C, arg1);
+            ((GameTracker*)gameTracker)->gameFlags &= ~1;
+            func_8001C978(temp_s3, ((int*)gameTracker)[1] + 0x2C, gameTracker);
             instance->_F4[0] = 0;
             instance->flags |= 0x800;
             func_8004A54C(instance, 0x1000);
@@ -378,14 +378,14 @@ block_11:
     }
 }
 
-void map_angel_OnCollide(Instance* instance) {
+void map_angel_OnCollide(Instance* instance, GameTracker* gameTracker) {
     if (instance->_F4[0] == 1) {
         instance->_F4[0] = 2;
         ((short*)&instance->_104)[1] = 0x1E;
     }
 }
 
-void map_lktorch_OnCreate(Instance* instance)
+void map_lktorch_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     *((short*)&instance->_F4[2]) = 1;
     *(((short*)&instance->_F4[2]) + 1) = 1;
@@ -396,17 +396,17 @@ INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_80161230_C1C60);
 
 INCLUDE_ASM("asm/nonmatchings/level/MAP", map_lktorch_OnUpdate);
 
-void map_lktorch_OnCollide(void) {
+void map_lktorch_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-void map_lkdoor_OnCreate(Instance* instance)
+void map_lkdoor_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     *(((short*)&instance->_F4[2]) + 1) = 1;
     instance->flags |= 0x400;
     *((short*)&instance->_100) = instance->_60[2];
 }
 
-void map_lkdoor_OnUpdate(Instance* instance) {
+void map_lkdoor_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int var_s2;
     int var_v1;
     short* temp_s1;
@@ -487,23 +487,23 @@ void map_lkdoor_OnUpdate(Instance* instance) {
     }
 }
 
-void map_lkdoor_OnCollide(void) {
+void map_lkdoor_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-void map_qmark_OnCreate(Instance* instance)
+void map_qmark_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     instance->_104 = 0;
     instance->_F4[2] = 0x40;
     instance->_100 = 0;
 }
 
-void map_qmark_OnUpdate(Instance* instance, GameTracker* arg1) {
+void map_qmark_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int* temp_s0;
     short* temp_t0;
     
     temp_t0 = (short*)instance->_20[1];
     temp_s0 = &instance->_F4[2];
-    if (((*(int*)&instance->_10C) != 0) && !(arg1->gameFlags & 0x2000)) {
+    if (((*(int*)&instance->_10C) != 0) && !(gameTracker->gameFlags & 0x2000)) {
         func_8003F6CC(temp_t0[0], temp_t0[1], temp_t0[2], temp_t0[3], temp_t0[5], temp_t0 + 6);
     }
     switch (temp_s0[2])
@@ -536,7 +536,7 @@ void map_qmark_OnUpdate(Instance* instance, GameTracker* arg1) {
     instance->_60[2] = ((instance->_60[2] + temp_s0[0]) & 0xFFF);
 }
 
-void map_qmark_OnCollide(Instance* instance) {
+void map_qmark_OnCollide(Instance* instance, GameTracker* gameTracker) {
     short* temp_s1;
 
     temp_s1 = (short*)instance->_20[1];
@@ -548,7 +548,7 @@ void map_qmark_OnCollide(Instance* instance) {
     }
 }
 
-void func_8015A854_BB284(int arg0, short arg1) {
+void func_8015A854_BB284(char* arg0, short arg1) {
     char buffer[40];
     int var_a0;
     char* bufferPtr;
@@ -578,7 +578,7 @@ void func_8015A854_BB284(int arg0, short arg1) {
     } while (last_char != 0);
 }
 
-void map_speaker_OnCreate(Instance* instance) {
+void map_speaker_OnCreate(Instance* instance, GameTracker* gameTracker) {
     s32 var_a1;
     short* temp_s0;
     int* temp_s0_2;
@@ -624,7 +624,7 @@ void map_speaker_OnCreate(Instance* instance) {
 
 INCLUDE_ASM("asm/nonmatchings/level/MAP", map_speaker_OnUpdate);
 
-void map_start_OnCreate(Instance* instance, int** arg1) {
+void map_start_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int* temp_a1;
     int* temp_a2;
     short* temp_s4;
@@ -637,7 +637,7 @@ void map_start_OnCreate(Instance* instance, int** arg1) {
     temp_s4 = (short*)PlayerInstance[0x20/4];
     ptr = (char*)&instance->_F4[2];
     if (!(instance->flags & 0x20000)) {
-        temp_a2 = (int*)arg1[1][0x90/4];
+        temp_a2 = ((int***)gameTracker)[1][0x90/4];
         
         if (G2String_Compare_NEQ(D_801612C0_C1CF0, temp_a2))
         {
@@ -653,18 +653,18 @@ void map_start_OnCreate(Instance* instance, int** arg1) {
         ((int*)gameTracker8)[0x4C5C/4] = 0x7A;
         ((char*)gameTracker8)[0x4C62] = 1;
         instance->flags |= 0x10C00;
-        temp_v1 = arg1[0xC/4];
+        temp_v1 = ((int**)gameTracker)[0xC/4];
         temp_v1[0x10/4] = (temp_v1[0x10/4] | 0x800);
-        temp_v1_2 = arg1[0xC/4];
+        temp_v1_2 = ((int**)gameTracker)[0xC/4];
         temp_v1_2[0x10/4] = (temp_v1_2[0x10/4] | 0x400);
         temp_s4[0xDC/2] = 0;
-        temp_v1_3 = arg1[0xC/4];
+        temp_v1_3 = ((int**)gameTracker)[0xC/4];
         temp_v1_3[0xFC/4] = (temp_v1_3[0xFC/4] | 0x1000);
         temp_s4[0x12C/2] = 0;
         ((char*)PlayerInstance)[0x4E] = 0;
         PlayerInstance[0xF8/4] = 1;
         PlayerInstance[0xF4/4] = 0;
-        arg1[0xC/4][0xF4/4] = 5;
+        ((int**)gameTracker)[0xC/4][0xF4/4] = 5;
         func_80052F58();
         ((int*)instance->_D0)[0] = 0x258;
         ((int*)instance->_D0)[2] = 0;
@@ -673,7 +673,7 @@ void map_start_OnCreate(Instance* instance, int** arg1) {
 
 INCLUDE_ASM("asm/nonmatchings/level/MAP", map_start_OnUpdate);
 
-void map_bobbox_OnCreate(Instance* instance)
+void map_bobbox_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     instance->flags |= 0xC00;
 }
@@ -702,7 +702,7 @@ INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_80161300_C1D30);
 
 INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_80161308_C1D38);
 
-void map_bobbox_OnUpdate(int arg1, int*** arg3) {
+void map_bobbox_OnUpdate(Instance* arg1, GameTracker* gameTracker) {
     short var_a2;
     short var_s0;
     int var_a1;
@@ -711,14 +711,14 @@ void map_bobbox_OnUpdate(int arg1, int*** arg3) {
     int* temp_a0;
 
     var_s2 = 0;
-    temp_a0 = (int*)arg3[0x8/4];
+    temp_a0 = ((int**)gameTracker)[0x8/4];
     
     var_a1 =     temp_a0[0x14C/4] == 5
               && temp_a0[0x480/4] != 0
               && temp_a0[0x484/4] != 0;
     
     if (var_a1 != 0) {
-        temp_a0 = (int*)*arg3[0x8/4][0x480/4];
+        temp_a0 = (int*)*((int***)gameTracker)[0x8/4][0x480/4];
         
         
         var_s0 = var_a2 = 0;
@@ -732,7 +732,7 @@ void map_bobbox_OnUpdate(int arg1, int*** arg3) {
             }
         }
         
-        if ((func_800512BC(temp_a0, arg3[0x8/4][0x480/4] + 0x10/4) & 0xFFFF) >= (var_s0 - 1))
+        if ((func_800512BC(temp_a0, ((int***)gameTracker)[0x8/4][0x480/4] + 0x10/4) & 0xFFFF) >= (var_s0 - 1))
         {
             var_s2 = 1;
         }
@@ -740,20 +740,20 @@ void map_bobbox_OnUpdate(int arg1, int*** arg3) {
         var_s2 = 1;
     }
     
-    if ((int)arg3[0x44/4] & 0x4000) {
+    if ((int)((int**)gameTracker)[0x44/4] & 0x4000) {
         var_s2 = 1;
     }
     
     if (var_s2 != 0) {
-        arg3[0xC/4][0xF4/4] = 0;
-        (int)arg3[0xC/4][0xFC/4] &= ~0x1000;
-        func_800396E0("map", D_80161314_C1D44, arg3);
+        ((int**)gameTracker)[0xC/4][0xF4/4] = 0;
+        ((int**)gameTracker)[0xC/4][0xFC/4] &= ~0x1000;
+        func_800396E0("map", D_80161314_C1D44, gameTracker);
     }
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/MAP", func_8015B96C_BC39C);
 
-void func_8015BED0_BC900(Instance* instance, void* unused) {
+void func_8015BED0_BC900(Instance* instance, GameTracker* gameTracker) {
     int temp_t0;
     int i;
     int*** temp_a0;
@@ -780,7 +780,7 @@ void func_8015BED0_BC900(Instance* instance, void* unused) {
     }
 }
 
-void func_8015BFE0_BCA10(Instance* instance, int* arg1) {
+void func_8015BFE0_BCA10(Instance* instance, GameTracker* gameTracker) {
     int count;
     int var_a2;
     int i;
@@ -799,7 +799,7 @@ void func_8015BFE0_BCA10(Instance* instance, int* arg1) {
         }
     }
     
-    if (var_a2 == 0 && (arg1[0x11] & 0x4000)) {
+    if (var_a2 == 0 && (((int*)gameTracker)[0x11] & 0x4000)) {
         var_a2 = 1;
     }
     
@@ -841,7 +841,7 @@ void func_8015C110_BCB40(Instance* instance, short** arg1) {
     }
 }
 
-void map_tvmenu_OnCreate(Instance* instance, char** arg1) {
+void map_tvmenu_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int temp_s2;
     int var_s1;
     int** var_s0;
@@ -860,7 +860,7 @@ void map_tvmenu_OnCreate(Instance* instance, char** arg1) {
             var_s0[var_s1][7] &= ~8;
         }
     } else {
-        arg1[3][0x4E] = 0;
+        ((char**)gameTracker)[3][0x4E] = 0;
         instance->flags |= 0x10000;
     }
 }
@@ -892,7 +892,7 @@ int func_8015C63C_BD06C(int arg0) {
     return var_s1;
 }
 
-void map_tvbutn_OnCreate(Instance* instance) {
+void map_tvbutn_OnCreate(Instance* instance, GameTracker* gameTracker) {
     char temp_v0;
     int* temp_s1;
     char* s2;
@@ -940,7 +940,7 @@ void map_tvbutn_OnCreate(Instance* instance) {
     instance->_50[3] = s2[0x13];
 }
 
-void map_tvbutn_OnUpdate(Instance* instance, int* arg1) {
+void map_tvbutn_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     s16 sp10[2];
     int temp_a1;
     int temp_a0;
@@ -968,7 +968,7 @@ void map_tvbutn_OnUpdate(Instance* instance, int* arg1) {
             instance->_50[3] = instance->_10C;
         }
         if (instance->_F4[0] == 3) {
-            func_8015BFE0_BCA10(instance, arg1);
+            func_8015BFE0_BCA10(instance, gameTracker);
             return;
         }
         if (instance->_F4[0] == 2) {
@@ -991,7 +991,7 @@ block_12:
             }
         } else if (instance->_F4[0] == 2) {
             if ((temp_s0 != NULL) && (((char*)temp_s0)[0x8] >= 0x62) && (instance->flags & 0x200)) {
-                func_8003EA60(arg1, instance, 0, &sp10);
+                func_8003EA60(gameTracker, instance, 0, &sp10);
                 func_80037B24(sp10[0], sp10[1]);
             }
             
@@ -1011,13 +1011,13 @@ block_12:
                     ((char*)temp_s2)[0x12] = 1;
                 }
                 
-                if ((arg1[0x28/4] != 0) || (arg1[0x24/4] != 0)) {
+                if ((((int*)gameTracker)[0x28/4] != 0) || (((int*)gameTracker)[0x24/4] != 0)) {
                     
-                    if (abs(arg1[0x28/4]) >= abs(arg1[0x24/4])) {
-                        var_v0 = arg1[0x28/4] < 1;
+                    if (abs(((int*)gameTracker)[0x28/4]) >= abs(((int*)gameTracker)[0x24/4])) {
+                        var_v0 = ((int*)gameTracker)[0x28/4] < 1;
                     } else {
                         var_v0 = 3;
-                        if ( arg1[0x24/4] > 0) {
+                        if ( ((int*)gameTracker)[0x24/4] > 0) {
                             var_v0 = 2;
                         }
                     }
@@ -1049,7 +1049,7 @@ block_12:
                     if ((temp_v1 != NULL) && ((temp_v1[0x102/2] == 0) || (((char*)temp_v1)[0x10F] == 0))) {
                         var_a0 = 0;
                     }
-                    if ((var_a0 != 0) && (arg1[0x44/4] & 0x80)) {
+                    if ((var_a0 != 0) && (((int*)gameTracker)[0x44/4] & 0x80)) {
                         if ( ((char*)temp_s2)[0xE] == 1) {
                             ((char*)temp_s2)[0xE] = 0;
                         } else if (((char*)temp_s2)[0xE] == 0) {
@@ -1076,22 +1076,22 @@ block_12:
             }
         }
         if (instance->_1C[0x1C/4] & 0x80) {
-            func_8015BED0_BC900(instance, arg1);
+            func_8015BED0_BC900(instance, gameTracker);
         }
     }
 }
 
-void map_tvbutn_OnCollide(void) {
+void map_tvbutn_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-void map_loadtv_OnCreate(void) {
+void map_loadtv_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
-void map_loadtv_OnUpdate(Instance* instance, int* arg1)
+void map_loadtv_OnUpdate(Instance* instance, GameTracker* gameTracker)
 {
     int* a1;
     a1 = ((int*)instance->_20[1]);
-    if ((arg1[0x44/4] & 0x10) == 0)
+    if ((((int*)gameTracker)[0x44/4] & 0x10) == 0)
         return;
     
     if (a1[1])
@@ -1100,7 +1100,7 @@ void map_loadtv_OnUpdate(Instance* instance, int* arg1)
     }
 }
 
-void map_ctrlbutn_OnCreate(Instance* instance) {
+void map_ctrlbutn_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int temp_a1;
     SVECTOR* temp_v0;
 
@@ -1124,7 +1124,7 @@ INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_80161324_C1D54);
 
 INCLUDE_ASM("asm/nonmatchings/level/MAP", map_ctrlbutn_OnUpdate);
 
-void map_mapgate_OnCreate(Instance* instance)
+void map_mapgate_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     instance->_100 = 0xC8;
     if (D_800785CC[((int*)instance->_20[1])[0]] != 3)
@@ -1134,7 +1134,7 @@ void map_mapgate_OnCreate(Instance* instance)
     instance->flags |= 0x100000;
 }
 
-int map_mapgate_OnUpdate(Instance* instance) {
+void map_mapgate_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int v0;
 
     if (instance->_100 != 0) {
@@ -1163,7 +1163,7 @@ int map_mapgate_OnUpdate(Instance* instance) {
     }
 }
 
-void map_mapgate_OnCollide(Instance* instance) {
+void map_mapgate_OnCollide(Instance* instance, GameTracker* gameTracker) {
     int temp_v1;
 
     temp_v1 = *(int*)instance->_20[1];
@@ -1173,7 +1173,7 @@ void map_mapgate_OnCollide(Instance* instance) {
     }
 }
 
-void func_8015D52C_BDF5C(Instance* instance, GameTracker* gs) {
+void func_8015D52C_BDF5C(Instance* instance, GameTracker* gameTracker) {
     char buffer[0x10];
     char* v1;
     
@@ -1195,7 +1195,7 @@ void func_8015D52C_BDF5C(Instance* instance, GameTracker* gs) {
     *((void**)instance->_B0 + 1) = func_8015D5E4_BE014;
 }
 
-void map_lvllabl_OnUpdate(void) {
+void map_lvllabl_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 }
 
 void func_8015D5E4_BE014(int* arg0, Instance* instance) {
@@ -1280,7 +1280,7 @@ void func_8015DB54_BE584(Instance* instance) {
     }
 }
 
-void map_lvltv_OnCreate(Instance* instance) {
+void map_lvltv_OnCreate(Instance* instance, GameTracker* gameTracker) {
     char sp10[0x10];
     short temp_a2;
     int var_a0;
@@ -1360,7 +1360,7 @@ void map_lvltv_OnCreate(Instance* instance) {
     }
 }
 
-void map_lvltv_OnUpdate(Instance* instance) {
+void map_lvltv_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     SVECTOR sp10;
     int sp18;
     int sp1C;
@@ -1444,7 +1444,7 @@ void func_8015E274_BECA4(Instance* instance) {
     *(SVECTOR*)(&instance->_40[4]) = temp;
 }
 
-void map_lvltv_OnCollide(Instance* instance, int arg1) {
+void map_lvltv_OnCollide(Instance* instance, GameTracker* gameTracker) {
     char sp10[0x10];
     int* temp_a0;
     int* temp_s2;
@@ -1459,7 +1459,7 @@ void map_lvltv_OnCollide(Instance* instance, int arg1) {
         }
         PlayerInstance[0x10/4] &= ~0x800;
         sprintf(sp10, (char*)&D_80161394_C1DC4, temp_s2 + 1, ((short*)temp_s2)[1]);
-        func_800396E0(temp_s2 + 1, &sp10, arg1);
+        func_800396E0(temp_s2 + 1, &sp10, gameTracker);
         return;
     }
     
@@ -1492,7 +1492,7 @@ void map_lvltv_OnCollide(Instance* instance, int arg1) {
             }
             
             ((int*)var_s0)[0x48/4] = ((short*)instance->_20[2])[0x56/2];
-            if (func_8000C8E8(instance, arg1) != 0) {
+            if (func_8000C8E8(instance, gameTracker) != 0) {
                 func_8015E274_BECA4(instance);
             }
             ((short*)instance->_20[2])[0x56/2] = ((int*)var_s0)[0x48/4];
@@ -1521,7 +1521,7 @@ void func_8015E630_BF060(int arg0, int arg1, int arg2, int arg3) {
     func_80037B34(&sp10, 0);
 }
 
-void func_8015E674_BF0A4(char* arg0, int* arg1, int* arg2) {
+void func_8015E674_BF0A4(char* arg0, int* arg1, GameTracker* gameTracker) {
     int temp_a0;
     int temp_s0;
     int var_a1;
@@ -1530,13 +1530,13 @@ void func_8015E674_BF0A4(char* arg0, int* arg1, int* arg2) {
 
     if (D_80078640 == 0) {
         GetRemoteCount(arg0 + 8);
-        var_s0 = func_8001A1D8(arg0 + 8) & ~arg2[0x4C9C/4];
+        var_s0 = func_8001A1D8(arg0 + 8) & ~((int*)gameTracker)[0x4C9C/4];
         if (D_8006FCD2 != 0) {
             var_s0 &= ~0x2000;
         }
         if (var_s0 != 0) {
             if (*arg0 != 6) {
-                SIGNAL_HandleSignal(arg2[3], arg1[2] + 4, 0);
+                SIGNAL_HandleSignal(((int*)gameTracker)[3], arg1[2] + 4, 0);
             }
             *arg0 = 6;
             var_s1 = 0;
@@ -1558,27 +1558,27 @@ countbits:
                 }
             }
             temp_a0 = (1 << var_s1);
-            arg2[0x4C9C/4] |= (1 << var_s1);
+            ((int*)gameTracker)[0x4C9C/4] |= (1 << var_s1);
 
             if (temp_a0 & 0xF800) {
-                SIGNAL_HandleSignal(arg2[3], arg1[4] + 4, 0);
+                SIGNAL_HandleSignal(((int*)gameTracker)[3], arg1[4] + 4, 0);
             }
             else if (temp_a0 & 0x780) {
-                SIGNAL_HandleSignal(arg2[3], arg1[5] + 4, 0);
+                SIGNAL_HandleSignal(((int*)gameTracker)[3], arg1[5] + 4, 0);
             }
             else if (temp_a0 & 0x7F) {
-                SIGNAL_HandleSignal(arg2[3], arg1[7] + 4, 0);
+                SIGNAL_HandleSignal(((int*)gameTracker)[3], arg1[7] + 4, 0);
             }
         }
         else if (*arg0 == 6)
         {
-            SIGNAL_HandleSignal(arg2[3], arg1[3] + 4, 0);
+            SIGNAL_HandleSignal(((int*)gameTracker)[3], arg1[3] + 4, 0);
             *arg0 = 0;
         }
     }
 }
 
-void map_select_OnCreate(Instance* instance, int** arg1) {
+void map_select_OnCreate(Instance* instance, GameTracker* gameTracker) {
     SVECTOR sp10;
     SVECTOR sp18;
     char* temp_s6;
@@ -1594,7 +1594,7 @@ void map_select_OnCreate(Instance* instance, int** arg1) {
     temp_a3 = (int*)PlayerInstance[0x8];
     instance->flags |= 0xC00;
     temp_s4 = (int*)instance->_20[1];
-    arg1[3][0x4] &= ~0x800;
+    ((int**)gameTracker)[3][0x4] &= ~0x800;
     ((short*)temp_a3)[0xDC/2] = 0;
     ((char*)instance->_D0)[0] = 0;
     GetRemoteCount(&instance->_D0[2]);
@@ -1637,7 +1637,7 @@ void map_select_OnCreate(Instance* instance, int** arg1) {
             temp_s0_2[7] =  (int*)((int)temp_s0_2[7] & ~0x100);
         }
     }
-    if (arg1[0x4BF4/4] == 0) {
+    if (((int*)gameTracker)[0x4BF4/4] == 0) {
         func_80032F30();
         func_80040170(0xF);
         D_8006FC69 = 0;
@@ -1645,10 +1645,10 @@ void map_select_OnCreate(Instance* instance, int** arg1) {
         ((short*)gameTracker8)[0x4C68/2] = 0;
     }
     else
-        func_8015E674_BF0A4(temp_s6, temp_s4, (int*)arg1);
+        func_8015E674_BF0A4(temp_s6, temp_s4, gameTracker);
 }
 
-void map_select_OnUpdate(Instance* instance, int* arg1) {
+void map_select_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     SVECTOR sp10;
     SVECTOR sp18;
     int* temp_a1;
@@ -1658,15 +1658,15 @@ void map_select_OnUpdate(Instance* instance, int* arg1) {
 
     temp_s2 = (short*)PlayerInstance[0x20/4];
     temp_a1 = (int*)instance->_20[1];
-    ((GameTracker*)arg1)->gameFlags &= ~0x2000;
-    temp_a2 = (int*)arg1[0xC/4];
+    ((GameTracker*)gameTracker)->gameFlags &= ~0x2000;
+    temp_a2 = (int*)((int*)gameTracker)[0xC/4];
     temp_s0 = (short*)&instance->_D0;
     
     if (!(temp_a2[0xFC/4] & 0x02000000)) {
         if ((PlayerInstance[0xF4/4] == 0) && (PlayerInstance[0xF8/4] == 1)) {
             temp_a2[0x104/4]++;
         } else {
-            ((int**)arg1)[0xC/4][0x104/4] = 0;
+            ((int**)gameTracker)[0xC/4][0x104/4] = 0;
         }
         ((short**)PlayerInstance)[0x20/4][0xDC/2] = 5;
         if (temp_s0[0x6/2] != 0) {
@@ -1699,7 +1699,7 @@ void map_select_OnUpdate(Instance* instance, int* arg1) {
                 sp18.x = ((short*)PlayerInstance)[0x48/2] - sp10.x;
                 sp18.y = ((short*)PlayerInstance)[0x4A/2] - sp10.y;
                 sp18.z = ((short*)PlayerInstance)[0x4C/2] - sp10.z;
-                func_80012BD0(PlayerInstance, &sp18, arg1);
+                func_80012BD0(PlayerInstance, &sp18, gameTracker);
                 func_80001DF4((s16) ((short*)PlayerInstance)[0x64/2]);
                 ((short*)gameTracker8)[0x4C66/2] = 0;
                 ((short*)gameTracker8)[0x4C68/2] = 0;
@@ -1716,20 +1716,20 @@ void map_select_OnUpdate(Instance* instance, int* arg1) {
                     ((u8*)PlayerInstance)[0x4E] = 0;
                 }
                 D_80161670_C20A0 = 0;
-                ((char*)arg1)[0x4CDC] = 0;
+                ((char*)gameTracker)[0x4CDC] = 0;
                 return;
             }
             break;
         case 4:
             if (D_8006CF58 != 0) {
-                if ((arg1[0x18/4] != 0) || (arg1[0x24/4] != 0) || (arg1[0x28/4] != 0)) {
+                if ((((int*)gameTracker)[0x18/4] != 0) || (((int*)gameTracker)[0x24/4] != 0) || (((int*)gameTracker)[0x28/4] != 0)) {
                     D_80161670_C20A0 = 0;
                     return;
                 }
-                if (((short*)arg1)[0x4C12/2] != 6) {
+                if (((short*)gameTracker)[0x4C12/2] != 6) {
                     D_80161670_C20A0++;
                     if (D_80161670_C20A0 >= 0x4B1) {
-                        ((short*)arg1)[0x4C12/2] = 0;
+                        ((short*)gameTracker)[0x4C12/2] = 0;
                         D_80078170 = 1;
                         func_8001A854();
                         D_8014F358 = 0;
@@ -1739,28 +1739,28 @@ void map_select_OnUpdate(Instance* instance, int* arg1) {
             }
             break;
         case 6:
-            func_8015E674_BF0A4((char*)temp_s0, temp_a1, arg1);
+            func_8015E674_BF0A4((char*)temp_s0, temp_a1, gameTracker);
             break;
         }
     }
 }
 
-void map_password_OnCreate(void) {
+void map_password_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
-void map_password_OnUpdate(void) {
+void map_password_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 }
 
-void map_markey_OnCreate(void) {
+void map_markey_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
-void map_markey_OnUpdate(void) {
+void map_markey_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 }
 
-void func_8015EEC8_BF8F8(void) {
+void func_8015EEC8_BF8F8(Instance* instance, GameTracker* gameTracker) {
 }
 
-void func_8015EED0_BF900(void) {
+void func_8015EED0_BF900(Instance* instance, GameTracker* gameTracker) {
 }
 
 void func_8015EED8_BF908(int* arg0) {
