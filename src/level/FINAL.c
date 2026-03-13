@@ -1,6 +1,6 @@
 #include "common.h"
 
-#include "types/Instance.h"
+#include "level/FINAL.h"
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_oldpoptv_OnCreate);
 
@@ -26,41 +26,41 @@ INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_80161558_926F8);
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_oldpoptv_OnUpdate);
 
-void final_oldpoptv_OnCollide(void) {
+void final_oldpoptv_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_lectro_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_lectro_OnUpdate);
 
-void final_lectro_OnCollide(void) {
+void final_lectro_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-void final_probe_OnCreate(Instance* instance)
+void final_probe_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     instance->flags |= 0x400;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_probe_OnUpdate);
 
-void final_probe_OnCollide(void) {
+void final_probe_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_reztvex_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_reztvex_OnUpdate);
 
-void final_reztvex_OnCollide(void) {
+void final_reztvex_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_rezxpl_OnCreate);
 
-void func_80159CBC_8AE5C(void) {
+void func_80159CBC_8AE5C(Instance* instance, GameTracker* gameTracker) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_rezxpl_OnUpdate);
 
-void final_rezxpl_OnCollide(void) {
+void final_rezxpl_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_80161588_92728);
@@ -85,7 +85,7 @@ INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015A78C_8B92C);
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_rezbomb_OnUpdate);
 
-void final_rezbomb_OnCollide(void) {
+void final_rezbomb_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015A9F0_8BB90);
@@ -218,7 +218,7 @@ INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_rezcam_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_rezcam_OnUpdate);
 
-void final_rezcam_OnCollide(void) {
+void final_rezcam_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_finplat_OnCreate);
