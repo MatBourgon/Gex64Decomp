@@ -4,6 +4,7 @@
 
 #include "types/GameTracker.h"
 #include "types/TVTextData.h"
+#include "types/Instance.h"
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_80049B80);
 
@@ -29,7 +30,14 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A4E4);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A54C);
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A5B4);
+void func_8004A5B4(Instance* instance, int arg1) {
+    int temp_s0;
+
+    instance->flags &= ~arg1;
+    temp_s0 = func_8002CBE0(instance);
+    func_800300BC(instance);
+    func_80030090(((int**)gameTracker8)[4] + ((temp_s0 * 2) + 3), instance);
+}
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A61C);
 
