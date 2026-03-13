@@ -9,9 +9,9 @@ void GenericInit(Instance* instance, GameTracker* gameTracker) {
     spline = NULL;
     
     if (instance != NULL) {
-        if (instance->_1C != NULL) { // instance->intro
-            if (instance->_1C[0x28/4] != NULL) { // instance->intro->multiSpline
-                spline = ((void***)instance->_1C)[0x28/4][0]; // instance->intro->multiSpline->position
+        if (instance->intro != NULL) {
+            if (instance->intro[0x28/4] != NULL) { // instance->intro->multiSpline
+                spline = ((void***)instance->intro)[0x28/4][0]; // instance->intro->multiSpline->position
             }
         }
     }

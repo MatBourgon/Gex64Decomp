@@ -115,7 +115,7 @@ void nypd_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
                 ((short*)temp_s2)[0xC/2] = 0;
             }
         }
-        if ((((short*)((int**)gameTracker))[0x4C12/2] == 0) && (var_v1 != 0) && (instance->_1C[0x2C/4] == 0)) {
+        if ((((short*)((int**)gameTracker))[0x4C12/2] == 0) && (var_v1 != 0) && (instance->intro[0x2C/4] == 0)) {
             temp_s2[0x8/4] -= D_800E5FD8;
         }
         if (((((int**)gameTracker)[0xC/4][0xFC/4] & 0x600000) == 0x600000) && (instance->_F4[1] == 0)) {

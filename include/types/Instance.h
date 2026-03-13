@@ -7,7 +7,7 @@ typedef struct
     int flags;
     int flags2;
     int** _18; // Object*?
-    int* _1C; // Intro?
+    int* intro; // Intro?
     int _20[4]; // _20 : Data, _24 : IntroData?
     short _30[8];
     short _40[7];
