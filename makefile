@@ -76,6 +76,6 @@ makedirs:
 	$(shell mkdir -p $(dir $(BUILDTREE)))
 
 cleanc:
-	rm -rf build/src/*.o
+	rm -rf build/src
 
 .PHONY: all clean default split build diff

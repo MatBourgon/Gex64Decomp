@@ -93,7 +93,7 @@ segments:
       - [0x19BD0, asm]
       - [0x1A6A0, c]
       - [0x1AFE0, asm, _1afe0]
-      - [0x1B8A0, asm, _1ba60]
+      - [0x1B8A0, c, GENERIC]
       - [0x1BA60, asm]
       - [0x1F5F0, asm]
       - [0x23DE0, asm, _23de0]

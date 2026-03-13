@@ -1,13 +1,16 @@
 #ifndef INSTANCE_H_
 #define INSTANCE_H_
 
+#include "Intro.h"
+#include "Object.h"
+
 typedef struct
 {
     int _00[4];
     int flags;
     int flags2;
-    int** _18; // Object*?
-    int* _1C; // Intro?
+    Object* object; // Object*?
+    Intro* intro; // Intro?
     int _20[4]; // _20 : Data, _24 : IntroData?
     short _30[8];
     short _40[7];

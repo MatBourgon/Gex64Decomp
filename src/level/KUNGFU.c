@@ -55,7 +55,7 @@ void kungfu_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         func_8002DAF8(instance, -1);
         if ((instance->flags2 & 0x10))
         {
-            a0 = (*(unsigned char*)&instance->_40[7] << 2) + ((int*)(instance->_18 + 4))[0];
+            a0 = (*(unsigned char*)&instance->_40[7] << 2) + instance->object->numAnims;
             instance->_50[7] = ((unsigned short*)(*((int*)a0)))[1] - 1; 
             instance->_F4[0] = 2;
         }
@@ -368,7 +368,7 @@ void kungfu_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
                 ((short*)temp_s2)[0xC/2] = 0;
             }
         }
-        if ((((short*)((int**)gameTracker))[0x4C12/2] == 0) && (var_v1 != 0) && (instance->_1C[0x2C/4] == 0)) {
+        if ((((short*)((int**)gameTracker))[0x4C12/2] == 0) && (var_v1 != 0) && (instance->intro->_2C == 0)) {
             temp_s2[0x8/4] -= D_800E5FD8;
         }
         if (((((int**)gameTracker)[0xC/4][0xFC/4] & 0x600000) == 0x600000) && (instance->_F4[1] == 0)) {
