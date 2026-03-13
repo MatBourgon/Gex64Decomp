@@ -218,8 +218,8 @@ void map_intro_OnCreate(Instance* instance, GameTracker* gameTracker) {
     short* temp_v0_2;
 
     if (instance->intro->_04 != 0) {
-        temp_a1 = ((int****)instance->intro)[1][1];
-        temp_a2 = ((int****)instance->intro)[1][2];
+        temp_a1 = ((int***)instance->intro->_04)[1];
+        temp_a2 = ((int***)instance->intro->_04)[2];
         instance->flags |= 0xC00;
         ((int**)gameTracker)[3][0x10/4] |= 0x400;
         ((int**)gameTracker)[3][0x10/4] |= 0x100;
@@ -1075,7 +1075,7 @@ block_12:
                 }
             }
         }
-        if (instance->intro->_1C & 0x80) {
+        if (instance->intro->flags & 0x80) {
             func_8015BED0_BC900(instance, gameTracker);
         }
     }
@@ -1342,7 +1342,7 @@ void map_lvltv_OnCreate(Instance* instance, GameTracker* gameTracker) {
             instance->_50[3] = *(u8*)&instance->_110;
         }
     }
-    if (instance->intro->_1C & 0x80) {
+    if (instance->intro->flags & 0x80) {
         instance->flags |= 0x800;
     }
     else

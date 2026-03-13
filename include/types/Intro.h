@@ -12,7 +12,7 @@ typedef struct
     SVECTOR position;
     // int* _14; // not used?
     int* _18;
-    int _1C;
+    int flags;
     int* _20;
     int* _24;
     void* multiSpline; // 0x28
