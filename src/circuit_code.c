@@ -1,8 +1,8 @@
 #include "common.h"
 
-#include "types/Level.h"
+#include "types/Instance.h"
 
-#include "types/GameState.h"
+#include "types/GameTracker.h"
 
 #include "types/Vector.h"
 extern int* PlayerInstance;
@@ -13,73 +13,73 @@ INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_plat_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_plat_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_plat_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_plat_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_bug_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_bug_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_bug_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_bug_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_bouncer_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_bouncer_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_bouncer_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_bouncer_OnCollide);
 
-void circuit_crawler_OnCreate(Level_t* level)
+void circuit_crawler_OnCreate(Instance* instance)
 {
-    level->_F4[0] = 0;
-    level->_4E = 0;
+    instance->_F4[0] = 0;
+    instance->_4E = 0;
 }
 
-void circuit_crawler_OnUpdate(Level_t* level) {
+void circuit_crawler_OnUpdate(Instance* instance) {
     int a0, v0, v1;
 
-    level->_14 &= ~0x10;
-    if (level->_F4[0] == 0)
+    instance->flags2 &= ~0x10;
+    if (instance->_F4[0] == 0)
     {
-        v1 = level->_50[0];
-        v0 = level->_50[1];
-        level->_60[2] = func_80030538(v0 - level->_40[5], v1 - level->_40[4]) - 0x400;
-        func_8002DAF8(level, -1);
+        v1 = instance->_50[0];
+        v0 = instance->_50[1];
+        instance->_60[2] = func_80030538(v0 - instance->_40[5], v1 - instance->_40[4]) - 0x400;
+        func_8002DAF8(instance, -1);
     }
-    else if (level->_F4[0] == 1)
+    else if (instance->_F4[0] == 1)
     {
-        func_8002DAF8(level, -1);
-        if ((level->_14 & 0x10))
+        func_8002DAF8(instance, -1);
+        if ((instance->flags2 & 0x10))
         {
-            a0 = (*(unsigned char*)&level->_40[7] << 2) + ((int*)(level->_18 + 4))[0];
-            level->_50[7] = ((unsigned short*)(*((int*)a0)))[1] - 1; 
-            level->_F4[0] = 2;
+            a0 = (*(unsigned char*)&instance->_40[7] << 2) + ((int*)(instance->_18 + 4))[0];
+            instance->_50[7] = ((unsigned short*)(*((int*)a0)))[1] - 1; 
+            instance->_F4[0] = 2;
         }
         
     }
 }
 
-void circuit_crawler_OnDestroy(Level_t* level, int* arg1) {
+void circuit_crawler_OnCollide(Instance* instance, int* arg1) {
     int temp_a3;
     int temp_v1;
     char** temp_a2;
 
-    temp_a2 = ((char***)level->_70)[2];
+    temp_a2 = ((char***)instance->_70)[2];
     temp_a3 = ((short*)temp_a2)[3];
     if (temp_a3 == 1) {
         if ((temp_a2[5] == (char*)arg1[12/4]) && (temp_a2[12/4][5] >= 6U)) {
-            if (level->_F4[0] == 0)
+            if (instance->_F4[0] == 0)
             {
-                ((char*)level->_40)[0xe] = 1;
-                level->_F4[0] = temp_a3;
-                level->_50[7] = 0;
-                level->_14 &= ~0x10;
-                level->flags |= 0x100000;
+                ((char*)instance->_40)[0xe] = 1;
+                instance->_F4[0] = temp_a3;
+                instance->_50[7] = 0;
+                instance->flags2 &= ~0x10;
+                instance->flags |= 0x100000;
             }
-            else if (level->_F4[0] == 2)
+            else if (instance->_F4[0] == 2)
             {
-                func_80047904(level, 5, 3, 0);
+                func_80047904(instance, 5, 3, 0);
             }
-        } else if ((((short*)temp_a2)[3] == 1) && (temp_a2[5] == (char*)arg1[12/4]) && ((level->_F4[0] - 1) >= 2U)) {
-            func_80022714(level);
+        } else if ((((short*)temp_a2)[3] == 1) && (temp_a2[5] == (char*)arg1[12/4]) && ((instance->_F4[0] - 1) >= 2U)) {
+            func_80022714(instance);
         }
     }
 }
@@ -88,7 +88,7 @@ INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_charger_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_charger_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_charger_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_charger_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_chrganm_OnCreate);
 
@@ -108,13 +108,13 @@ INCLUDE_ASM("asm/nonmatchings/circuit_code", func_8015BA9C_82C7C);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_ebridge_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_ebridge_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_ebridge_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_ebrijac_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_ebrijac_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_ebrijac_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_ebrijac_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", func_8015C18C_8336C);
 
@@ -122,7 +122,7 @@ INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_orbplat_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_orbplat_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_orbplat_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_orbplat_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_orbpole_OnCreate);
 
@@ -130,13 +130,13 @@ INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_orbpole_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", func_8015C9CC_83BAC);
 
-INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_orbpole_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_orbpole_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_launch_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_launch_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_launch_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_launch_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", func_8015D304_844E4);
 
@@ -150,20 +150,20 @@ INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_follow_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_follow_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_follow_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_follow_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", func_8015D780_84960);
 
-void circuit_pball_OnCreate(Level_t* level)
+void circuit_pball_OnCreate(Instance* instance)
 {
-    level->flags |= 0x100000;
+    instance->flags |= 0x100000;
 }
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", func_8015D7F0_849D0);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_pball_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_pball_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_pball_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", func_8015DB80_84D60);
 
@@ -173,7 +173,7 @@ INCLUDE_ASM("asm/nonmatchings/circuit_code", func_8015DD58_84F38);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_ppath_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_ppath_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_ppath_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_fxgen_OnCreate);
 
@@ -183,23 +183,23 @@ INCLUDE_ASM("asm/nonmatchings/circuit_code", func_8015E140_85320);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_fxgen_OnUpdate);
 
-void circuit_fxgen_OnDestroy(void) {
+void circuit_fxgen_OnCollide(void) {
 }
 
-void circuit_qmark_OnCreate(Level_t* level)
+void circuit_qmark_OnCreate(Instance* instance)
 {
-    level->_104 = 0;
-    level->_F4[2] = 0x40;
-    level->_100 = 0;
+    instance->_104 = 0;
+    instance->_F4[2] = 0x40;
+    instance->_100 = 0;
 }
 
-void circuit_qmark_OnUpdate(Level_t* level, GameState* arg1) {
+void circuit_qmark_OnUpdate(Instance* instance, GameTracker* arg1) {
     int* temp_s0;
     short* temp_t0;
     
-    temp_t0 = (short*)level->_20[1];
-    temp_s0 = &level->_F4[2];
-    if (((*(int*)&level->_10C) != 0) && !(arg1->gameFlags & 0x2000)) {
+    temp_t0 = (short*)instance->_20[1];
+    temp_s0 = &instance->_F4[2];
+    if (((*(int*)&instance->_10C) != 0) && !(arg1->gameFlags & 0x2000)) {
         func_8003F6CC(temp_t0[0], temp_t0[1], temp_t0[2], temp_t0[3], temp_t0[5], temp_t0 + 6);
     }
     switch (temp_s0[2])
@@ -207,7 +207,7 @@ void circuit_qmark_OnUpdate(Level_t* level, GameState* arg1) {
         case 0: break;
         
         case 1:
-        if (MATH3D_FastSqrt(SVECTOR_DistanceSquared((SVECTOR*)&level->_40[4], (SVECTOR*)&PlayerInstance[0x48/4]), 0) > 1000
+        if (MATH3D_FastSqrt(SVECTOR_DistanceSquared((SVECTOR*)&instance->_40[4], (SVECTOR*)&PlayerInstance[0x48/4]), 0) > 1000
             || !temp_s0[5])
         {
             temp_s0[2] = 2;
@@ -229,18 +229,18 @@ void circuit_qmark_OnUpdate(Level_t* level, GameState* arg1) {
         break;
     }
     temp_s0[0] += temp_s0[1];
-    level->_60[2] = ((level->_60[2] + temp_s0[0]) & 0xFFF);
+    instance->_60[2] = ((instance->_60[2] + temp_s0[0]) & 0xFFF);
 }
 
-void circuit_qmark_OnDestroy(Level_t* level) {
+void circuit_qmark_OnCollide(Instance* instance) {
     short* temp_s1;
 
-    temp_s1 = (short*)level->_20[1];
-    if (func_80027500(level->_70[2]) != 0) {
-        level->_104 = 1;
-        level->_F4[2] = 0x12C;
-        *((int*)&level->_110) = temp_s1[4];
-        *((int*)&level->_10C) = 1;
+    temp_s1 = (short*)instance->_20[1];
+    if (func_80027500(instance->_70[2]) != 0) {
+        instance->_104 = 1;
+        instance->_F4[2] = 0x12C;
+        *((int*)&instance->_110) = temp_s1[4];
+        *((int*)&instance->_10C) = 1;
     }
 }
 
@@ -250,7 +250,7 @@ INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_reza_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_reza_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_reza_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_reza_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", func_8015F6B8_86898);
 
@@ -274,7 +274,7 @@ INCLUDE_ASM("asm/nonmatchings/circuit_code", func_8015FC70_86E50);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_robo_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_robo_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_robo_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_bomb_OnCreate);
 
@@ -308,14 +308,14 @@ INCLUDE_RODATA("asm/nonmatchings/circuit_code", D_8016361C_8A7FC);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_bomb_OnUpdate);
 
-void circuit_bomb_OnDestroy(void) {
+void circuit_bomb_OnCollide(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_explode_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_explode_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_explode_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_explode_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_pulse_OnCreate);
 
@@ -327,7 +327,7 @@ INCLUDE_RODATA("asm/nonmatchings/circuit_code", D_80163640_8A820);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_pulse_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_pulse_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_pulse_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_resist_OnCreate);
 
@@ -335,25 +335,25 @@ INCLUDE_ASM("asm/nonmatchings/circuit_code", func_801618BC_88A9C);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_resist_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_resist_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_resist_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_babyres_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_babyres_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_babyres_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/circuit_code", circuit_babyres_OnCollide);
 
-void circuit_btimer_OnCreate(Level_t* level, int* arg1) {
+void circuit_btimer_OnCreate(Instance* instance, int* arg1) {
     int var_s0;
     short* temp_a2;
     int* temp_v1;
     int* temp_v1_2;
 
-    temp_a2 = (short*)level->_20[1];
-    level->_104 = (temp_a2[0] * 30);
-    level->_F0[6] = (unsigned short)temp_a2[1];
-    *(short*)&level->_100 = 0;
-    level->flags |= 0xC00;
+    temp_a2 = (short*)instance->_20[1];
+    instance->_104 = (temp_a2[0] * 30);
+    instance->_F0[6] = (unsigned short)temp_a2[1];
+    *(short*)&instance->_100 = 0;
+    instance->flags |= 0xC00;
     temp_v1 = (int*)arg1[3];
     temp_v1[0xFC/4] |= 0x4000;
     temp_v1_2 = (int*)arg1[3];
@@ -362,10 +362,10 @@ void circuit_btimer_OnCreate(Level_t* level, int* arg1) {
     for (var_s0 = 1; var_s0 < 4; var_s0++) {
         func_8002C1AC(var_s0);
     }
-    level->_F4[1] = 0;
+    instance->_F4[1] = 0;
 }
 
-void circuit_btimer_OnUpdate(Level_t* arg0, int** arg1) {
+void circuit_btimer_OnUpdate(Instance* instance, int** arg1) {
     char sp10[0x50];
     int temp_s0;
     int temp_s3_2;
@@ -375,13 +375,13 @@ void circuit_btimer_OnUpdate(Level_t* arg0, int** arg1) {
     int* temp_s3;
 
     var_v1 = 1;
-    temp_s3 = (int*)arg0->_20[1];
-    temp_s2 = &arg0->_F4[2];
-    if (*(short*)&arg0->_100 == 0) {
+    temp_s3 = (int*)instance->_20[1];
+    temp_s2 = &instance->_F4[2];
+    if (*(short*)&instance->_100 == 0) {
         if (((short*)temp_s2)[0] != 0) {
             if ((int)arg1[0x4BFC/4] < arg1[0x4/4][0x34/4]) {
                 if (D_80154834 != 0) {
-                    *(short*)&arg0->_108 = 1;
+                    *(short*)&instance->_108 = 1;
                 }
                 func_80037B00(0x64, 0x69);
                 Print3DTextf("#2COLLECT");
@@ -405,15 +405,15 @@ void circuit_btimer_OnUpdate(Level_t* arg0, int** arg1) {
                 ((short*)temp_s2)[0xC/2] = 0;
             }
         }
-        if ((((short*)arg1)[0x4C12/2] == 0) && (var_v1 != 0) && (arg0->_1C[0x2C/4] == 0)) {
+        if ((((short*)arg1)[0x4C12/2] == 0) && (var_v1 != 0) && (instance->_1C[0x2C/4] == 0)) {
             temp_s2[0x8/4] -= D_800E5FD8;
         }
-        if (((arg1[0xC/4][0xFC/4] & 0x600000) == 0x600000) && (arg0->_F4[1] == 0)) {
+        if (((arg1[0xC/4][0xFC/4] & 0x600000) == 0x600000) && (instance->_F4[1] == 0)) {
             ((short*)temp_s2)[0] = (((unsigned short*)temp_s3)[1] - 1);
             if (temp_s3[0x4/4] == 0x3F2) {
                 SIGNAL_HandleSignal(PlayerInstance, temp_s3[0x8/4] + 4, 0);
             }
-            arg0->_F4[1] = 1;
+            instance->_F4[1] = 1;
             PlayerInstance[0xFC/4] &= 0xFFBFFFFF;
         }
         if ((arg1[0xC/4][0xFC/4] & 0x400000) && ((arg1[0x4C00/4] != 0) || (arg1[0x4C04/4] != 0))) {
@@ -453,8 +453,8 @@ void circuit_btimer_OnUpdate(Level_t* arg0, int** arg1) {
         }
     } else {
         arg1[0xC/4][0x10/4] |= 0x100;
-        if (*(short*)&arg0->_100 == 2) {
-            if (--arg0->_104 < 0) {
+        if (*(short*)&instance->_100 == 2) {
+            if (--instance->_104 < 0) {
                 func_800396E0("map", "map5", arg1);
                 return;
             }

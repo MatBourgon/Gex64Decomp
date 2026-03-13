@@ -1,6 +1,6 @@
 #include "common.h"
 
-#include "types/GameState.h"
+#include "types/GameTracker.h"
 
 #include "types/G2String.h"
 
@@ -53,14 +53,14 @@ void OBTABLE_InstanceInit(void* instance) {
     id = ((short**)instance)[0x18/4][2];
     
     if (id < 0) {
-        GenericInit(instance, gpGameState8);
+        GenericInit(instance, gameTracker);
     } else if (ObjectFunctionTable[id].init != NULL) {
-        ObjectFunctionTable[id].init(instance, gpGameState8);
+        ObjectFunctionTable[id].init(instance, gameTracker);
     }
 
     ((int*)instance)[0x14/4] |= 0x200000;
     if (!(((int*)instance)[0x10/4] & 0x100000)) {
-        SCRIPT_InstanceSplineInit(instance, gpGameState8);
+        SCRIPT_InstanceSplineInit(instance, gameTracker);
     }
 }
 
@@ -123,7 +123,7 @@ void* OBTABLE_FindObject(char* arg0) {
     int** var_a2;
 
     if (arg0 != NULL) {
-        var_a2 = ((int****)gpGameState8)[1][0x10];
+        var_a2 = ((int****)gameTracker)[1][0x10];
         if (*var_a2 != (int*)var_a2) {
             for(temp_t0 = var_a2; *var_a2 != (int*)temp_t0; var_a2++)
             {

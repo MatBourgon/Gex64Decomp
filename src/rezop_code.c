@@ -1,6 +1,6 @@
 #include "common.h"
 
-#include "types/Level.h"
+#include "types/Instance.h"
 extern int* PlayerInstance;
 extern int D_800E5FD8;
 extern int D_80154834;
@@ -10,14 +10,14 @@ void rezop_rrdoor_OnCreate(void) {
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rrdoor_OnUpdate);
 
-void rezop_rrdoor_OnDestroy(void) {
+void rezop_rrdoor_OnCollide(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rrspark_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rrspark_OnUpdate);
 
-void rezop_rrspark_OnDestroy(void) {
+void rezop_rrspark_OnCollide(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rezrat_OnCreate);
@@ -28,54 +28,54 @@ INCLUDE_RODATA("asm/nonmatchings/rezop_code", D_80161558_D9CC8);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rezrat_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rezrat_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rezrat_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rrgen_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rrgen_OnUpdate);
 
-void rezop_rrgen_OnDestroy(void) {
+void rezop_rrgen_OnCollide(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rrzap_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rrzap_OnUpdate);
 
-void rezop_rrzap_OnDestroy(void) {
+void rezop_rrzap_OnCollide(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rezplat_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rezplat_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rezplat_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rezplat_OnCollide);
 
 void rezop_tbbttn_OnCreate(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_tbbttn_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_tbbttn_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_tbbttn_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_tbplat_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_tbplat_OnUpdate);
 
-void rezop_tbplat_OnDestroy(void) {
+void rezop_tbplat_OnCollide(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rezfan_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rezfan_OnUpdate);
 
-void rezop_rezfan_OnDestroy(void) {
+void rezop_rezfan_OnCollide(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_simontv_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_simontv_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_simontv_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_simontv_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_simon_OnCreate);
 
@@ -87,59 +87,59 @@ INCLUDE_ASM("asm/nonmatchings/rezop_code", func_8015BA40_D41B0);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_simon_OnUpdate);
 
-void rezop_simon_OnDestroy(void) {
+void rezop_simon_OnCollide(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rezbot_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rezbot_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rezbot_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rezbot_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_crnkplt_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_crnkplt_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_crnkplt_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_crnkplt_OnCollide);
 
 void rezop_rezcrnk_OnCreate(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rezcrnk_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rezcrnk_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rezcrnk_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_snkplat_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_snkplat_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_snkplat_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_snkplat_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rezbull_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rezbull_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rezbull_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rezbull_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_srchlit_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_srchlit_OnUpdate);
 
-void rezop_srchlit_OnDestroy(void) {
+void rezop_srchlit_OnCollide(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_spotlit_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_spotlit_OnUpdate);
 
-void rezop_spotlit_OnDestroy(void) {
+void rezop_spotlit_OnCollide(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_spnplat_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_spnplat_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_spnplat_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_spnplat_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_mutant_OnCreate);
 
@@ -153,13 +153,13 @@ INCLUDE_RODATA("asm/nonmatchings/rezop_code", D_80161590_D9D00);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_mutant_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_mutant_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_mutant_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_mtntsht_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_mtntsht_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_mtntsht_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_mtntsht_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rebggen_OnCreate);
 
@@ -169,7 +169,7 @@ INCLUDE_RODATA("asm/nonmatchings/rezop_code", D_801615B0_D9D20);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rebggen_OnUpdate);
 
-void rezop_rebggen_OnDestroy(void) {
+void rezop_rebggen_OnCollide(void) {
 }
 
 void rezop_rbmastr_OnCreate(void) {
@@ -177,20 +177,20 @@ void rezop_rbmastr_OnCreate(void) {
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rbmastr_OnUpdate);
 
-void rezop_rbmastr_OnDestroy(void) {
+void rezop_rbmastr_OnCollide(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rebug_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rebug_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rebug_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_rebug_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_iris_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_iris_OnUpdate);
 
-void rezop_iris_OnDestroy(void) {
+void rezop_iris_OnCollide(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_tvgen_OnCreate);
@@ -201,25 +201,25 @@ INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_tvgurny_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_tvgurny_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_tvgurny_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_tvgurny_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_gas_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_gas_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_gas_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_gas_OnCollide);
 
-void rezop_btimer_OnCreate(Level_t* level, int* arg1) {
+void rezop_btimer_OnCreate(Instance* instance, int* arg1) {
     int var_s0;
     short* temp_a2;
     int* temp_v1;
     int* temp_v1_2;
 
-    temp_a2 = (short*)level->_20[1];
-    level->_104 = (temp_a2[0] * 30);
-    level->_F0[6] = (unsigned short)temp_a2[1];
-    *(short*)&level->_100 = 0;
-    level->flags |= 0xC00;
+    temp_a2 = (short*)instance->_20[1];
+    instance->_104 = (temp_a2[0] * 30);
+    instance->_F0[6] = (unsigned short)temp_a2[1];
+    *(short*)&instance->_100 = 0;
+    instance->flags |= 0xC00;
     temp_v1 = (int*)arg1[3];
     temp_v1[0xFC/4] |= 0x4000;
     temp_v1_2 = (int*)arg1[3];
@@ -228,13 +228,13 @@ void rezop_btimer_OnCreate(Level_t* level, int* arg1) {
     for (var_s0 = 1; var_s0 < 4; var_s0++) {
         func_8002C1AC(var_s0);
     }
-    level->_F4[1] = 0;
+    instance->_F4[1] = 0;
 }
 
 // Failing to match due to ro section?
 INCLUDE_ASM("asm/nonmatchings/rezop_code", rezop_btimer_OnUpdate);
 
-/*void rezop_btimer_OnUpdate(Level_t* arg0, int** arg1) {
+/*void rezop_btimer_OnUpdate(Instance* instance, int** arg1) {
     char sp10[0x50];
     int temp_s0;
     int temp_s3_2;

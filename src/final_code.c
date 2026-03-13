@@ -1,6 +1,6 @@
 #include "common.h"
 
-#include "types/Level.h"
+#include "types/Instance.h"
 
 INCLUDE_ASM("asm/nonmatchings/final_code", final_oldpoptv_OnCreate);
 
@@ -26,31 +26,31 @@ INCLUDE_RODATA("asm/nonmatchings/final_code", D_80161558_926F8);
 
 INCLUDE_ASM("asm/nonmatchings/final_code", final_oldpoptv_OnUpdate);
 
-void final_oldpoptv_OnDestroy(void) {
+void final_oldpoptv_OnCollide(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/final_code", final_lectro_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/final_code", final_lectro_OnUpdate);
 
-void final_lectro_OnDestroy(void) {
+void final_lectro_OnCollide(void) {
 }
 
-void final_probe_OnCreate(Level_t* level)
+void final_probe_OnCreate(Instance* instance)
 {
-    level->flags |= 0x400;
+    instance->flags |= 0x400;
 }
 
 INCLUDE_ASM("asm/nonmatchings/final_code", final_probe_OnUpdate);
 
-void final_probe_OnDestroy(void) {
+void final_probe_OnCollide(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/final_code", final_reztvex_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/final_code", final_reztvex_OnUpdate);
 
-void final_reztvex_OnDestroy(void) {
+void final_reztvex_OnCollide(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/final_code", final_rezxpl_OnCreate);
@@ -60,7 +60,7 @@ void func_80159CBC_8AE5C(void) {
 
 INCLUDE_ASM("asm/nonmatchings/final_code", final_rezxpl_OnUpdate);
 
-void final_rezxpl_OnDestroy(void) {
+void final_rezxpl_OnCollide(void) {
 }
 
 INCLUDE_RODATA("asm/nonmatchings/final_code", D_80161588_92728);
@@ -85,7 +85,7 @@ INCLUDE_ASM("asm/nonmatchings/final_code", func_8015A78C_8B92C);
 
 INCLUDE_ASM("asm/nonmatchings/final_code", final_rezbomb_OnUpdate);
 
-void final_rezbomb_OnDestroy(void) {
+void final_rezbomb_OnCollide(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/final_code", func_8015A9F0_8BB90);
@@ -160,7 +160,7 @@ INCLUDE_RODATA("asm/nonmatchings/final_code", D_8016161C_927BC);
 
 INCLUDE_ASM("asm/nonmatchings/final_code", final_rezzull_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/final_code", final_rezzull_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_rezzull_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/final_code", func_8015E788_8F928);
 
@@ -172,13 +172,13 @@ INCLUDE_RODATA("asm/nonmatchings/final_code", D_80161670_92810);
 
 INCLUDE_ASM("asm/nonmatchings/final_code", final_popper_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/final_code", final_popper_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_popper_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/final_code", final_finaltv_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/final_code", final_finaltv_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/final_code", final_finaltv_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_finaltv_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/final_code", func_8015EEF4_90094);
 
@@ -212,20 +212,20 @@ INCLUDE_RODATA("asm/nonmatchings/final_code", D_8016169C_9283C);
 
 INCLUDE_ASM("asm/nonmatchings/final_code", final_frez_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/final_code", final_frez_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_frez_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/final_code", final_rezcam_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/final_code", final_rezcam_OnUpdate);
 
-void final_rezcam_OnDestroy(void) {
+void final_rezcam_OnCollide(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/final_code", final_finplat_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/final_code", final_finplat_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/final_code", final_finplat_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/final_code", final_finplat_OnCollide);
 
 INCLUDE_RODATA("asm/nonmatchings/final_code", D_801616F0_92890);
 

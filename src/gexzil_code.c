@@ -1,12 +1,12 @@
 #include "common.h"
 
-#include "types/Level.h"
+#include "types/Instance.h"
 
 INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_bug_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_bug_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_bug_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_bug_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_80159B8C_92D0C);
 
@@ -26,7 +26,7 @@ INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_bldg_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_bldg_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_bldg_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_bldg_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8015A7F0_93970);
 
@@ -46,7 +46,7 @@ INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_mechjet_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8015B460_945E0);
 
-void gexzil_mechjet_OnDestroy(void) {
+void gexzil_mechjet_OnCollide(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_mecha_OnCreate);
@@ -145,7 +145,7 @@ INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8015FA98_98C18);
 
 INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8015FD80_98F00);
 
-void func_8015FF70_990F0(Level_t* level, short* arg1)
+void func_8015FF70_990F0(Instance* instance, short* arg1)
 {
     arg1[0x28/2] = 0;
     arg1[0x26/2] = 0x23;
@@ -164,7 +164,7 @@ void func_80160344_994C4(void) {
 
 INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_8016034C_994CC);
 
-INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_mecha_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_mecha_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/gexzil_code", func_80160B70_99CF0);
 
@@ -206,13 +206,13 @@ INCLUDE_RODATA("asm/nonmatchings/gexzil_code", D_80162B48_9BCC8);
 
 INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_gas_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_gas_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_gas_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_explode_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_explode_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_explode_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/gexzil_code", gexzil_explode_OnCollide);
 
 INCLUDE_RODATA("asm/nonmatchings/gexzil_code", D_80162B70_9BCF0);
 

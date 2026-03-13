@@ -1,6 +1,6 @@
 #include "common.h"
 
-#include "types/Level.h"
+#include "types/Instance.h"
 
 void looney_rainbow_OnCreate(void) {
 }
@@ -13,74 +13,74 @@ void looney_shittrn_OnCreate(void) {
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_shittrn_OnUpdate);
 
-void looney_shittrn_OnDestroy(void) {
+void looney_shittrn_OnCollide(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_bug_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_bug_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", looney_bug_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_bug_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_bouncer_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_bouncer_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", looney_bouncer_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_bouncer_OnCollide);
 
-void looney_crawler_OnCreate(Level_t* level)
+void looney_crawler_OnCreate(Instance* instance)
 {
-    level->_F4[0] = 0;
-    level->_4E = 0;
+    instance->_F4[0] = 0;
+    instance->_4E = 0;
 }
 
-void looney_crawler_OnUpdate(Level_t* level) {
+void looney_crawler_OnUpdate(Instance* instance) {
     
     int a0, v0, v1;
 
-    if (level->_F4[0] == 0)
+    if (instance->_F4[0] == 0)
     {
-        v1 = level->_50[0];
-        v0 = level->_50[1];
-        level->_60[2] = func_80030538(v0 - level->_40[5], v1 - level->_40[4]) - 0x400;
-        func_8002DAF8(level, -1);
+        v1 = instance->_50[0];
+        v0 = instance->_50[1];
+        instance->_60[2] = func_80030538(v0 - instance->_40[5], v1 - instance->_40[4]) - 0x400;
+        func_8002DAF8(instance, -1);
     }
-    else if (level->_F4[0] == 1)
+    else if (instance->_F4[0] == 1)
     {
-        func_8002DAF8(level, -1);
-        if ((level->_14 & 0x10))
+        func_8002DAF8(instance, -1);
+        if ((instance->flags2 & 0x10))
         {
-            a0 = (*(unsigned char*)&level->_40[7] << 2) + ((int*)(level->_18 + 4))[0];
-            level->_50[7] = ((unsigned short*)(*((int*)a0)))[1] - 1; 
-            level->_F4[0] = 2;
+            a0 = (*(unsigned char*)&instance->_40[7] << 2) + ((int*)(instance->_18 + 4))[0];
+            instance->_50[7] = ((unsigned short*)(*((int*)a0)))[1] - 1; 
+            instance->_F4[0] = 2;
         }
         
     }
 }
 
-void looney_crawler_OnDestroy(Level_t* level, int* arg1) {
+void looney_crawler_OnCollide(Instance* instance, int* arg1) {
     int temp_a3;
     int temp_v1;
     char** temp_a2;
 
-    temp_a2 = ((char***)level->_70)[2];
+    temp_a2 = ((char***)instance->_70)[2];
     temp_a3 = ((short*)temp_a2)[3];
     if (temp_a3 == 1) {
         if ((temp_a2[5] == (char*)arg1[12/4]) && (temp_a2[12/4][5] >= 6U)) {
-            if (level->_F4[0] == 0)
+            if (instance->_F4[0] == 0)
             {
-                ((char*)level->_40)[0xe] = 1;
-                level->_F4[0] = temp_a3;
-                level->_50[7] = 0;
-                level->_14 &= ~0x10;
-                level->flags |= 0x100000;
+                ((char*)instance->_40)[0xe] = 1;
+                instance->_F4[0] = temp_a3;
+                instance->_50[7] = 0;
+                instance->flags2 &= ~0x10;
+                instance->flags |= 0x100000;
             }
-            else if (level->_F4[0] == 2)
+            else if (instance->_F4[0] == 2)
             {
-                func_80047904(level, 5, 3, 0);
+                func_80047904(instance, 5, 3, 0);
             }
-        } else if ((((short*)temp_a2)[3] == 1) && (temp_a2[5] == (char*)arg1[12/4]) && ((level->_F4[0] - 1) >= 2U)) {
-            func_80022714(level);
+        } else if ((((short*)temp_a2)[3] == 1) && (temp_a2[5] == (char*)arg1[12/4]) && ((instance->_F4[0] - 1) >= 2U)) {
+            func_80022714(instance);
         }
     }
 }
@@ -89,14 +89,14 @@ INCLUDE_ASM("asm/nonmatchings/looney_code", looney_bowling_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_bowling_OnUpdate);
 
-void looney_bowling_OnDestroy(void) {
+void looney_bowling_OnCollide(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_doeboy_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_doeboy_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", looney_doeboy_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_doeboy_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_brkblok_OnCreate);
 
@@ -112,7 +112,7 @@ INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015B250_B3500);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015B4BC_B376C);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", looney_brkblok_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_brkblok_OnCollide);
 
 INCLUDE_RODATA("asm/nonmatchings/looney_code", D_80161BD0_B9E80);
 
@@ -176,7 +176,7 @@ INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015BC04_B3EB4);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_leafgen_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", looney_leafgen_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_leafgen_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_funguy_OnCreate);
 
@@ -190,7 +190,7 @@ INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015C2D8_B4588);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_funguy_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", looney_funguy_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_funguy_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_fallgen_OnCreate);
 
@@ -198,7 +198,7 @@ INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015C6A0_B4950);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_fallgen_OnUpdate);
 
-void looney_fallgen_OnDestroy(void) {
+void looney_fallgen_OnCollide(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_fallobj_OnCreate);
@@ -207,13 +207,13 @@ INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015CB5C_B4E0C);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_fallobj_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", looney_fallobj_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_fallobj_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_teeter_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_teeter_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", looney_teeter_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_teeter_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_trapsit_OnCreate);
 
@@ -221,28 +221,28 @@ INCLUDE_RODATA("asm/nonmatchings/looney_code", D_80161DD8_BA088);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_trapsit_OnUpdate);
 
-void looney_trapsit_OnDestroy(void) {
+void looney_trapsit_OnCollide(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_trapmuv_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_trapmuv_OnUpdate);
 
-void looney_trapmuv_OnDestroy(void) {
+void looney_trapmuv_OnCollide(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_pusher_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_pusher_OnUpdate);
 
-void looney_pusher_OnDestroy(void) {
+void looney_pusher_OnCollide(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_bullet_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_bullet_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", looney_bullet_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_bullet_OnCollide);
 
 INCLUDE_RODATA("asm/nonmatchings/looney_code", D_80161E00_BA0B0);
 
@@ -264,7 +264,7 @@ INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015E4C4_B6774);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_hunter_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", looney_hunter_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_hunter_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015F308_B75B8);
 
@@ -274,7 +274,7 @@ INCLUDE_ASM("asm/nonmatchings/looney_code", looney_daisy_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", func_8015FEC8_B8178);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", looney_daisy_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_daisy_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_grrfish_OnCreate);
 
@@ -284,13 +284,13 @@ INCLUDE_ASM("asm/nonmatchings/looney_code", func_80160318_B85C8);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_grrfish_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", looney_grrfish_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_grrfish_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_funplat_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_funplat_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", looney_funplat_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_funplat_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_fxgen_OnCreate);
 
@@ -300,7 +300,7 @@ INCLUDE_ASM("asm/nonmatchings/looney_code", func_80160BDC_B8E8C);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_fxgen_OnUpdate);
 
-void looney_fxgen_OnDestroy(void) {
+void looney_fxgen_OnCollide(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_frocket_OnCreate);
@@ -311,19 +311,19 @@ INCLUDE_ASM("asm/nonmatchings/looney_code", func_80161664_B9914);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_frocket_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", looney_frocket_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_frocket_OnCollide);
 
 void looney_genbrk_OnCreate(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_genbrk_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", looney_genbrk_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_genbrk_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", looney_jimboat_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_jimboat_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/looney_code", looney_colorset_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/looney_code", looney_colorset_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/looney_code", looney_colorset_OnCollide);
 
 INCLUDE_RODATA("asm/nonmatchings/looney_code", D_80161E88_BA138);

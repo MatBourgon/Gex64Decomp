@@ -1,6 +1,6 @@
 #include "common.h"
 
-#include "types/Level.h"
+#include "types/Instance.h"
 
 INCLUDE_ASM("asm/nonmatchings/scifi_code", func_80159720_DF540);
 
@@ -24,59 +24,59 @@ INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_dust_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_dust_OnUpdate);
 
-void scifi_crawler_OnCreate(Level_t* level)
+void scifi_crawler_OnCreate(Instance* instance)
 {
-    level->_F4[0] = 0;
-    level->_4E = 0;
+    instance->_F4[0] = 0;
+    instance->_4E = 0;
 }
 
-void scifi_crawler_OnUpdate(Level_t* level) {
+void scifi_crawler_OnUpdate(Instance* instance) {
     
     int a0, v0, v1;
 
-    if (level->_F4[0] == 0)
+    if (instance->_F4[0] == 0)
     {
-        v1 = level->_50[0];
-        v0 = level->_50[1];
-        level->_60[2] = func_80030538(v0 - level->_40[5], v1 - level->_40[4]) - 0x400;
-        func_8002DAF8(level, -1);
+        v1 = instance->_50[0];
+        v0 = instance->_50[1];
+        instance->_60[2] = func_80030538(v0 - instance->_40[5], v1 - instance->_40[4]) - 0x400;
+        func_8002DAF8(instance, -1);
     }
-    else if (level->_F4[0] == 1)
+    else if (instance->_F4[0] == 1)
     {
-        func_8002DAF8(level, -1);
-        if ((level->_14 & 0x10))
+        func_8002DAF8(instance, -1);
+        if ((instance->flags2 & 0x10))
         {
-            a0 = (*(unsigned char*)&level->_40[7] << 2) + ((int*)(level->_18 + 4))[0];
-            level->_50[7] = ((unsigned short*)(*((int*)a0)))[1] - 1; 
-            level->_F4[0] = 2;
+            a0 = (*(unsigned char*)&instance->_40[7] << 2) + ((int*)(instance->_18 + 4))[0];
+            instance->_50[7] = ((unsigned short*)(*((int*)a0)))[1] - 1; 
+            instance->_F4[0] = 2;
         }
         
     }
 }
 
-void scifi_crawler_OnDestroy(Level_t* level, int* arg1) {
+void scifi_crawler_OnCollide(Instance* instance, int* arg1) {
     int temp_a3;
     int temp_v1;
     char** temp_a2;
 
-    temp_a2 = ((char***)level->_70)[2];
+    temp_a2 = ((char***)instance->_70)[2];
     temp_a3 = ((short*)temp_a2)[3];
     if (temp_a3 == 1) {
         if ((temp_a2[5] == (char*)arg1[12/4]) && (temp_a2[12/4][5] >= 6U)) {
-            if (level->_F4[0] == 0)
+            if (instance->_F4[0] == 0)
             {
-                ((char*)level->_40)[0xe] = 1;
-                level->_F4[0] = temp_a3;
-                level->_50[7] = 0;
-                level->_14 &= ~0x10;
-                level->flags |= 0x100000;
+                ((char*)instance->_40)[0xe] = 1;
+                instance->_F4[0] = temp_a3;
+                instance->_50[7] = 0;
+                instance->flags2 &= ~0x10;
+                instance->flags |= 0x100000;
             }
-            else if (level->_F4[0] == 2)
+            else if (instance->_F4[0] == 2)
             {
-                func_80047904(level, 5, 3, 0);
+                func_80047904(instance, 5, 3, 0);
             }
-        } else if ((((short*)temp_a2)[3] == 1) && (temp_a2[5] == (char*)arg1[12/4]) && ((level->_F4[0] - 1) >= 2U)) {
-            func_80022714(level);
+        } else if ((((short*)temp_a2)[3] == 1) && (temp_a2[5] == (char*)arg1[12/4]) && ((instance->_F4[0] - 1) >= 2U)) {
+            func_80022714(instance);
         }
     }
 }
@@ -89,13 +89,13 @@ INCLUDE_ASM("asm/nonmatchings/scifi_code", func_8015A3F4_E0214);
 
 INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_rocket_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_rocket_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_rocket_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_onoff_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_onoff_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_onoff_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_onoff_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_bub_OnCreate);
 
@@ -103,13 +103,13 @@ INCLUDE_ASM("asm/nonmatchings/scifi_code", func_8015AC28_E0A48);
 
 INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_bub_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_bub_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_bub_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_eel_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_eel_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_eel_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_eel_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_stmvent_OnCreate);
 
@@ -134,7 +134,7 @@ void scifi_genbrk_OnCreate(void) {
 
 INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_genbrk_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_genbrk_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_genbrk_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/scifi_code", func_8015BF08_E1D28);
 
@@ -150,18 +150,18 @@ INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_abubble_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_abubble_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_abubble_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_abubble_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_acrate_OnCreate);
 
 void scifi_acrate_OnUpdate(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_acrate_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_acrate_OnCollide);
 
-void scifi_xa_OnCreate(Level_t* level)
+void scifi_xa_OnCreate(Instance* instance)
 {
-    level->_F4[2] = 0;
+    instance->_F4[2] = 0;
 }
 
 
@@ -173,7 +173,7 @@ INCLUDE_ASM("asm/nonmatchings/scifi_code", func_8015C5CC_E23EC);
 
 INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_apod_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_apod_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_apod_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_alien_OnCreate);
 
@@ -189,13 +189,13 @@ INCLUDE_RODATA("asm/nonmatchings/scifi_code", D_80164EA8_EACC8);
 
 INCLUDE_RODATA("asm/nonmatchings/scifi_code", D_80164EAC_EACCC);
 
-INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_alien_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_alien_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_gas_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_gas_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_gas_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_gas_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_mylot_OnCreate);
 
@@ -223,7 +223,7 @@ INCLUDE_ASM("asm/nonmatchings/scifi_code", func_8015EB98_E49B8);
 
 INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_mylot_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_mylot_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_mylot_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_rt_OnCreate);
 
@@ -243,10 +243,10 @@ INCLUDE_ASM("asm/nonmatchings/scifi_code", func_801621D4_E7FF4);
 
 INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_rt_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_rt_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_rt_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_rtblast_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_rtblast_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_rtblast_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/scifi_code", scifi_rtblast_OnCollide);

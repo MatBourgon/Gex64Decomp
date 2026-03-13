@@ -1,8 +1,8 @@
 #include "common.h"
 
-#include "types/Level.h"
+#include "types/Instance.h"
 
-#include "types/GameState.h"
+#include "types/GameTracker.h"
 
 #include "types/Vector.h"
 extern int* PlayerInstance;
@@ -71,38 +71,38 @@ INCLUDE_RODATA("asm/nonmatchings/rta_code", D_8015EE40_DF4B0);
 
 INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zshark_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zshark_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zshark_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/rta_code", func_8015A2B0_DA920);
 
-void rta_crawler_OnCreate(Level_t* level)
+void rta_crawler_OnCreate(Instance* instance)
 {
-    level->_F4[0] = 0;
-    level->_4E = 0;
+    instance->_F4[0] = 0;
+    instance->_4E = 0;
 }
 
-void rta_crawler_OnUpdate(Level_t* level) {
+void rta_crawler_OnUpdate(Instance* instance) {
     
     int v0, v1;
 
     
-    v1 = level->_50[0];
-    v0 = level->_50[1];
-    level->_60[2] = func_80030538(v0 - level->_40[5], v1 - level->_40[4]) - 0x400;
-    func_8002DAF8(level, -1);
+    v1 = instance->_50[0];
+    v0 = instance->_50[1];
+    instance->_60[2] = func_80030538(v0 - instance->_40[5], v1 - instance->_40[4]) - 0x400;
+    func_8002DAF8(instance, -1);
 }
 
-void rta_crawler_OnDestroy(Level_t* level, int* arg1) {
+void rta_crawler_OnCollide(Instance* instance, int* arg1) {
     char** temp_a2;
 
-    temp_a2 = (char**)level->_70[2];
+    temp_a2 = (char**)instance->_70[2];
     if ((temp_a2[5] == (char*)arg1[12/4]) && (((short*)temp_a2)[3] == 1)) {
         if (temp_a2[12/4][5] >= 6U) {
-            func_80047904(level, 5, 3, 0);
+            func_80047904(instance, 5, 3, 0);
         }
         else
         {
-            func_80022714(level, arg1);
+            func_80022714(instance, arg1);
         }
     }
 }
@@ -112,7 +112,7 @@ INCLUDE_ASM("asm/nonmatchings/rta_code", rta_eel_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/rta_code", rta_eel_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/rta_code", rta_eel_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/rta_code", rta_eel_OnCollide);
 
 void rta_bug_OnCreate(void) {
 }
@@ -120,7 +120,7 @@ void rta_bug_OnCreate(void) {
 void rta_bug_OnUpdate(void) {
 }
 
-void rta_bug_OnDestroy(void) {
+void rta_bug_OnCollide(void) {
 }
 
 void rta_lavadrp_OnCreate(void) {
@@ -129,28 +129,28 @@ void rta_lavadrp_OnCreate(void) {
 void rta_lavadrp_OnUpdate(void) {
 }
 
-void rta_lavadrp_OnDestroy(void) {
+void rta_lavadrp_OnCollide(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zturtle_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zturtle_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zturtle_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zturtle_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zarchsig_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zarchsig_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/rta_code", rta_count_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/rta_code", rta_count_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zcargo_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zcargo_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zwleak_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zwleak_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zwleak_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zwleak_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/rta_code", func_8015B1D4_DB844);
 
@@ -160,7 +160,7 @@ INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zgeyser_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zgeyser_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zgeyser_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zgeyser_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zdoor_OnCreate);
 
@@ -174,7 +174,7 @@ INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zswitch_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zswitch_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zswitch_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zswitch_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zswitchm_OnCreate);
 
@@ -186,21 +186,21 @@ INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zbubgen_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zbubgen_OnUpdate);
 
-void rta_qmark_OnCreate(Level_t* level)
+void rta_qmark_OnCreate(Instance* instance)
 {
-    level->_104 = 0;
-    level->_F4[2] = 0x40;
-    level->_100 = 0;
+    instance->_104 = 0;
+    instance->_F4[2] = 0x40;
+    instance->_100 = 0;
 }
 
-void rta_qmark_OnUpdate(Level_t* level, GameState* arg1) {
+void rta_qmark_OnUpdate(Instance* instance, GameTracker* arg1) {
     int* temp_s0;
     short* temp_t0;
     volatile char _[4];
     
-    temp_t0 = (short*)level->_20[1];
-    temp_s0 = &level->_F4[2];
-    if (((*(int*)&level->_10C) != 0) && !(arg1->gameFlags & 0x2000)) {
+    temp_t0 = (short*)instance->_20[1];
+    temp_s0 = &instance->_F4[2];
+    if (((*(int*)&instance->_10C) != 0) && !(arg1->gameFlags & 0x2000)) {
         func_8003F6CC(temp_t0[0], temp_t0[1], temp_t0[2], temp_t0[3], temp_t0[5], temp_t0 + 6);
     }
     switch (temp_s0[2])
@@ -224,28 +224,28 @@ void rta_qmark_OnUpdate(Level_t* level, GameState* arg1) {
             temp_s0[0] = 0x40;
             temp_s0[1]= 0;
             temp_s0[4] = 0;
-            level->flags &= ~0x400;
+            instance->flags &= ~0x400;
         }
             
         break;
     }
     temp_s0[0] += temp_s0[1];
-    level->_60[2] = ((level->_60[2] + temp_s0[0]) & 0xFFF);
+    instance->_60[2] = ((instance->_60[2] + temp_s0[0]) & 0xFFF);
 }
 
-void rta_qmark_OnDestroy(Level_t* level, int* arg1) {
+void rta_qmark_OnCollide(Instance* instance, int* arg1) {
     short* temp_s2;
-    temp_s2 = (short*)level->_20[1];
+    temp_s2 = (short*)instance->_20[1];
     
-    if (((int*)level->_70[2])[5] == arg1[12/4]) {
-        if (level->_104 != 1) {
-            func_80050508(level, 3, 0, 0x64, 0x1388);
+    if (((int*)instance->_70[2])[5] == arg1[12/4]) {
+        if (instance->_104 != 1) {
+            func_80050508(instance, 3, 0, 0x64, 0x1388);
         }
-        level->_104 = 1;
-        level->_F4[2] = 0x12C;
-         (*(int*)&level->_110) = temp_s2[4];
-        (*(int*)&level->_10C) = 1;
-        level->flags |= 0x400;
+        instance->_104 = 1;
+        instance->_F4[2] = 0x12C;
+         (*(int*)&instance->_110) = temp_s2[4];
+        (*(int*)&instance->_10C) = 1;
+        instance->flags |= 0x400;
     }
 }
 
@@ -272,7 +272,7 @@ INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zstmvent_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/rta_code", func_8015D0B4_DD724);
 
-INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zstmvent_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/rta_code", rta_zstmvent_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/rta_code", func_8015D20C_DD87C);
 

@@ -1,5 +1,5 @@
 #include "common.h"
-#include "types/GameState.h"
+#include "types/GameTracker.h"
 #include "types/G2String.h"
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80041FD0);
@@ -30,7 +30,7 @@ INCLUDE_ASM("asm/nonmatchings/_42bd0", common_ice_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", common_icecube_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", common_icecube_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/_42bd0", common_icecube_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_800444B8);
 
@@ -38,7 +38,7 @@ INCLUDE_ASM("asm/nonmatchings/_42bd0", common_powerbug_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", common_powerbug_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", common_powerbug_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/_42bd0", common_powerbug_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80044B2C);
 
@@ -46,7 +46,7 @@ INCLUDE_ASM("asm/nonmatchings/_42bd0", common_powertv_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", common_powertv_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", common_powertv_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/_42bd0", common_powertv_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", common_remsilv_OnCreate);
 
@@ -56,7 +56,7 @@ INCLUDE_ASM("asm/nonmatchings/_42bd0", func_800454E4);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", common_remsilv_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", common_remsilv_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/_42bd0", common_remsilv_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_800462C0);
 
@@ -116,7 +116,7 @@ INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80047438);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80047724);
 
-extern void func_80047438(int*, GameState*);
+extern void func_80047438(int*, GameTracker*);
 extern void func_80047724();
 
 void func_80047768(int* arg0, int arg1, int arg2, int arg3) {
@@ -178,7 +178,7 @@ void func_80047768(int* arg0, int arg1, int arg2, int arg3) {
     }
     if (var_a2 != 0) {
         func_80046D04(arg0, func_80047438, var_a2, arg1, arg2);
-        func_80047438(arg0, gpGameState8);
+        func_80047438(arg0, gameTracker);
     }
     else if (arg3 != 0) {
         func_80046D04(arg0, func_80047724, 0, arg1, arg2);
@@ -225,7 +225,7 @@ void func_80047D20(int arg0, int arg1) {
 
     result = D_800785CC[arg0];
     if (arg1 == 0) {
-        temp_v0 = ((G2String******)gpGameState8)[3][8][0x4C];
+        temp_v0 = ((G2String******)gameTracker)[3][8][0x4C];
         result = 0;
         if (temp_v0 != NULL) {
             result = G2String_Compare_EQ(temp_v0[6][8], D_8007E720);

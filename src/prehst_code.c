@@ -1,78 +1,78 @@
 #include "common.h"
 
-#include "types/Level.h"
+#include "types/Instance.h"
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_ttplat_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_ttplat_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_ttplat_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_ttplat_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_bug_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_bug_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_bug_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_bug_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_bouncer_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_bouncer_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_bouncer_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_bouncer_OnCollide);
 
-void prehst_crawler_OnCreate(Level_t* level)
+void prehst_crawler_OnCreate(Instance* instance)
 {
-    level->_F4[0] = 0;
-    level->_4E = 0;
+    instance->_F4[0] = 0;
+    instance->_4E = 0;
 }
 
-void prehst_crawler_OnUpdate(Level_t* level) {
+void prehst_crawler_OnUpdate(Instance* instance) {
     
     int a0, v0, v1;
 
-    if (level->_F4[0] == 0)
+    if (instance->_F4[0] == 0)
     {
-        v1 = level->_50[0];
-        v0 = level->_50[1];
-        level->_60[2] = func_80030538(v0 - level->_40[5], v1 - level->_40[4]) - 0x400;
-        func_8002DAF8(level, -1);
+        v1 = instance->_50[0];
+        v0 = instance->_50[1];
+        instance->_60[2] = func_80030538(v0 - instance->_40[5], v1 - instance->_40[4]) - 0x400;
+        func_8002DAF8(instance, -1);
     }
-    else if (level->_F4[0] == 1)
+    else if (instance->_F4[0] == 1)
     {
-        func_8002DAF8(level, -1);
-        if ((level->_14 & 0x10))
+        func_8002DAF8(instance, -1);
+        if ((instance->flags2 & 0x10))
         {
-            a0 = (*(unsigned char*)&level->_40[7] << 2) + ((int*)(level->_18 + 4))[0];
-            level->_50[7] = ((unsigned short*)(*((int*)a0)))[1] - 1; 
-            level->_F4[0] = 2;
+            a0 = (*(unsigned char*)&instance->_40[7] << 2) + ((int*)(instance->_18 + 4))[0];
+            instance->_50[7] = ((unsigned short*)(*((int*)a0)))[1] - 1; 
+            instance->_F4[0] = 2;
         }
         
     }
 }
 
-void prehst_crawler_OnDestroy(Level_t* level, int* arg1) {
+void prehst_crawler_OnCollide(Instance* instance, int* arg1) {
     int temp_a3;
     int temp_v1;
     char** temp_a2;
 
-    temp_a2 = ((char***)level->_70)[2];
+    temp_a2 = ((char***)instance->_70)[2];
     temp_a3 = ((short*)temp_a2)[3];
     if (temp_a3 == 1) {
         if ((temp_a2[5] == (char*)arg1[12/4]) && (temp_a2[12/4][5] >= 6U)) {
-            if (level->_F4[0] == 0)
+            if (instance->_F4[0] == 0)
             {
-                ((char*)level->_40)[0xe] = 1;
-                level->_F4[0] = temp_a3;
-                level->_50[7] = 0;
-                level->_14 &= ~0x10;
-                level->flags |= 0x100000;
+                ((char*)instance->_40)[0xe] = 1;
+                instance->_F4[0] = temp_a3;
+                instance->_50[7] = 0;
+                instance->flags2 &= ~0x10;
+                instance->flags |= 0x100000;
             }
-            else if (level->_F4[0] == 2)
+            else if (instance->_F4[0] == 2)
             {
-                func_80047904(level, 5, 3, 0);
+                func_80047904(instance, 5, 3, 0);
             }
-        } else if ((((short*)temp_a2)[3] == 1) && (temp_a2[5] == (char*)arg1[12/4]) && ((level->_F4[0] - 1) >= 2U)) {
-            func_80022714(level);
+        } else if ((((short*)temp_a2)[3] == 1) && (temp_a2[5] == (char*)arg1[12/4]) && ((instance->_F4[0] - 1) >= 2U)) {
+            func_80022714(instance);
         }
     }
 }
@@ -85,7 +85,7 @@ INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_eel_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_eel_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_eel_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_eel_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_stmvent_OnCreate);
 
@@ -95,14 +95,14 @@ INCLUDE_ASM("asm/nonmatchings/prehst_code", func_8015B5B0_C8E30);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_stmvent_OnUpdate);
 
-void prehst_stmvent_OnDestroy(void) {
+void prehst_stmvent_OnCollide(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_sptball_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_sptball_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_sptball_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_sptball_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_cavegex_OnCreate);
 
@@ -110,19 +110,19 @@ INCLUDE_ASM("asm/nonmatchings/prehst_code", func_8015BAFC_C937C);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_cavegex_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_cavegex_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_cavegex_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_cavetl_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_cavetl_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_cavetl_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_cavetl_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_tricer_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_tricer_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_tricer_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_tricer_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_raptor_OnCreate);
 
@@ -132,13 +132,13 @@ INCLUDE_RODATA("asm/nonmatchings/prehst_code", D_80164518_D1D98);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_raptor_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_raptor_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_raptor_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_zviolet_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_zviolet_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_zviolet_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_zviolet_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", func_8015F1F0_CCA70);
 
@@ -148,7 +148,7 @@ INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_gas_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_gas_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_gas_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_gas_OnCollide);
 
 void prehst_brkbone_OnCreate(void) {
 }
@@ -156,13 +156,13 @@ void prehst_brkbone_OnCreate(void) {
 void prehst_brkbone_OnUpdate(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_brkbone_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_brkbone_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_bldrgen_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_bldrgen_OnUpdate);
 
-void prehst_bldrgen_OnDestroy(void) {
+void prehst_bldrgen_OnCollide(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_boulder_OnCreate);
@@ -173,19 +173,19 @@ INCLUDE_ASM("asm/nonmatchings/prehst_code", func_8015FC2C_CD4AC);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_boulder_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_boulder_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_boulder_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_spitplt_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_spitplt_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_spitplt_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_spitplt_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_ptera_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", func_80160840_CE0C0);
 
-INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_ptera_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_ptera_OnCollide);
 
 INCLUDE_RODATA("asm/nonmatchings/prehst_code", D_80164598_D1E18);
 
@@ -223,4 +223,4 @@ INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_lavadrp_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_lavadrp_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_lavadrp_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/prehst_code", prehst_lavadrp_OnCollide);

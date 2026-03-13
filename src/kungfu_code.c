@@ -1,6 +1,6 @@
 #include "common.h"
 
-#include "types/Level.h"
+#include "types/Instance.h"
 extern int* PlayerInstance;
 extern int D_800E5FD8;
 extern int D_80154834;
@@ -9,7 +9,7 @@ INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_kboat_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_kboat_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_kboat_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_kboat_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_kbgen_OnCreate);
 
@@ -24,67 +24,67 @@ INCLUDE_RODATA("asm/nonmatchings/kungfu_code", D_801626C0_B18E0);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_spray_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_spray_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_spray_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_bug_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_bug_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_bug_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_bug_OnCollide);
 
-void kungfu_crawler_OnCreate(Level_t* level)
+void kungfu_crawler_OnCreate(Instance* instance)
 {
-    level->_F4[0] = 0;
-    level->_4E = 0;
+    instance->_F4[0] = 0;
+    instance->_4E = 0;
 }
 
-void kungfu_crawler_OnUpdate(Level_t* level) {
+void kungfu_crawler_OnUpdate(Instance* instance) {
     
     int a0, v0, v1;
 
-    if (level->_F4[0] == 0)
+    if (instance->_F4[0] == 0)
     {
-        v1 = level->_50[0];
-        v0 = level->_50[1];
-        level->_60[2] = func_80030538(v0 - level->_40[5], v1 - level->_40[4]) - 0x400;
-        func_8002DAF8(level, -1);
+        v1 = instance->_50[0];
+        v0 = instance->_50[1];
+        instance->_60[2] = func_80030538(v0 - instance->_40[5], v1 - instance->_40[4]) - 0x400;
+        func_8002DAF8(instance, -1);
     }
-    else if (level->_F4[0] == 1)
+    else if (instance->_F4[0] == 1)
     {
-        func_8002DAF8(level, -1);
-        if ((level->_14 & 0x10))
+        func_8002DAF8(instance, -1);
+        if ((instance->flags2 & 0x10))
         {
-            a0 = (*(unsigned char*)&level->_40[7] << 2) + ((int*)(level->_18 + 4))[0];
-            level->_50[7] = ((unsigned short*)(*((int*)a0)))[1] - 1; 
-            level->_F4[0] = 2;
+            a0 = (*(unsigned char*)&instance->_40[7] << 2) + ((int*)(instance->_18 + 4))[0];
+            instance->_50[7] = ((unsigned short*)(*((int*)a0)))[1] - 1; 
+            instance->_F4[0] = 2;
         }
         
     }
 }
 
-void kungfu_crawler_OnDestroy(Level_t* level, int* arg1) {
+void kungfu_crawler_OnCollide(Instance* instance, int* arg1) {
     int temp_a3;
     int temp_v1;
     char** temp_a2;
 
-    temp_a2 = ((char***)level->_70)[2];
+    temp_a2 = ((char***)instance->_70)[2];
     temp_a3 = ((short*)temp_a2)[3];
     if (temp_a3 == 1) {
         if ((temp_a2[5] == (char*)arg1[12/4]) && (temp_a2[12/4][5] >= 6U)) {
-            if (level->_F4[0] == 0)
+            if (instance->_F4[0] == 0)
             {
-                ((char*)level->_40)[0xe] = 1;
-                level->_F4[0] = temp_a3;
-                level->_50[7] = 0;
-                level->_14 &= ~0x10;
-                level->flags |= 0x100000;
+                ((char*)instance->_40)[0xe] = 1;
+                instance->_F4[0] = temp_a3;
+                instance->_50[7] = 0;
+                instance->flags2 &= ~0x10;
+                instance->flags |= 0x100000;
             }
-            else if (level->_F4[0] == 2)
+            else if (instance->_F4[0] == 2)
             {
-                func_80047904(level, 5, 3, 0);
+                func_80047904(instance, 5, 3, 0);
             }
-        } else if ((((short*)temp_a2)[3] == 1) && (temp_a2[5] == (char*)arg1[12/4]) && ((level->_F4[0] - 1) >= 2U)) {
-            func_80022714(level);
+        } else if ((((short*)temp_a2)[3] == 1) && (temp_a2[5] == (char*)arg1[12/4]) && ((instance->_F4[0] - 1) >= 2U)) {
+            func_80022714(instance);
         }
     }
 }
@@ -93,7 +93,7 @@ INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_launch_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_launch_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_launch_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_launch_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015AC1C_A9E3C);
 
@@ -103,14 +103,14 @@ INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015AD44_A9F64);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015ADC8_A9FE8);
 
-void func_8015AE8C_AA0AC(Level_t* level, int _)
+void func_8015AE8C_AA0AC(Instance* instance, int _)
 {
-    if (level->_20[1] != 0) {
-        if (((int**)level->_20)[1][0] != 0) {
-            if (((int**)level->_20)[1][0] > 10U) {
-                SIGNAL_HandleSignal(level, ((int**)level->_20)[1][0] + 4, 0);
+    if (instance->_20[1] != 0) {
+        if (((int**)instance->_20)[1][0] != 0) {
+            if (((int**)instance->_20)[1][0] > 10U) {
+                SIGNAL_HandleSignal(instance, ((int**)instance->_20)[1][0] + 4, 0);
             } else {
-                SIGNAL_HandleSignal(level, ((int**)level->_20)[1][1] + 4, 0);
+                SIGNAL_HandleSignal(instance, ((int**)instance->_20)[1][1] + 4, 0);
             }
         }
     }
@@ -120,13 +120,13 @@ INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_onoff_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_onoff_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_onoff_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_onoff_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_spike_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_spike_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_spike_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_spike_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015B5A8_AA7C8);
 
@@ -144,15 +144,15 @@ INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_dragflm_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_dragflm_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_dragflm_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_dragflm_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015C884_ABAA4);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_dragbod_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_dragbod_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_dragbod_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_dragon_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_dragon_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_cannon_OnCreate);
 
@@ -164,9 +164,9 @@ INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_canball_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_canball_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_canball_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_canball_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_cannon_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_cannon_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015D5E8_AC808);
 
@@ -182,45 +182,45 @@ INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015DBB0_ACDD0);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015DC00_ACE20);
 
-void func_8015DC9C_ACEBC(Level_t* level)
+void func_8015DC9C_ACEBC(Instance* instance)
 {
-    level->_4E = 2;
-    level->_50[7] = 0;
+    instance->_4E = 2;
+    instance->_50[7] = 0;
 }
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_samuri_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_samuri_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_samuri_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_boat_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_boat_OnUpdate);
 
-void kungfu_boat_OnDestroy(void) {
+void kungfu_boat_OnCollide(void) {
 }
 
-void kungfu_slider_OnCreate(Level_t* level)
+void kungfu_slider_OnCreate(Instance* instance)
 {
-    level->flags |= 0x100400;
+    instance->flags |= 0x100400;
 }
 
-void kungfu_slider_OnUpdate(Level_t* level)
+void kungfu_slider_OnUpdate(Instance* instance)
 {
-    if (level->_F4[2] > 0)
+    if (instance->_F4[2] > 0)
     {
-        level->_F4[2]--;
+        instance->_F4[2]--;
     }
 }
 
-void kungfu_slider_OnDestroy(Level_t* level, int arg2) {
+void kungfu_slider_OnCollide(Instance* instance, int arg2) {
     int* temp_s1;
 
     temp_s1 = (int*)PlayerInstance[0x20/4];
-    if (!(PlayerInstance[0xFC/4] & 1) && (level->_F4[2] == 0)) {
-        func_8015AE8C_AA0AC(level, arg2);
+    if (!(PlayerInstance[0xFC/4] & 1) && (instance->_F4[2] == 0)) {
+        func_8015AE8C_AA0AC(instance, arg2);
         
-        level->_F4[2] = 0x3C;
-        temp_s1[0xE0/4] = (int)level;
+        instance->_F4[2] = 0x3C;
+        temp_s1[0xE0/4] = (int)instance;
         PlayerInstance[0xFC/4] &= ~2;
         
         func_8002B7CC(PlayerInstance);
@@ -235,7 +235,7 @@ INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_pend_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_pend_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_pend_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_pend_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_ninja_OnCreate);
 
@@ -251,19 +251,19 @@ INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8015F61C_AE83C);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_ninja_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_ninja_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_ninja_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_swing_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_swing_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_swing_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_swing_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_oneway_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_oneway_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_oneway_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_oneway_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_80160D4C_AFF6C);
 
@@ -277,7 +277,7 @@ INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_8016121C_B043C);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_joyride_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_joyride_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_joyride_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_leafgen_OnCreate);
 
@@ -289,13 +289,13 @@ INCLUDE_ASM("asm/nonmatchings/kungfu_code", func_801619A4_B0BC4);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_leafgen_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_leafgen_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_leafgen_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_funplat_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_funplat_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_funplat_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_funplat_OnCollide);
 
 void kungfu_brkbone_OnCreate(void) {
 }
@@ -303,19 +303,19 @@ void kungfu_brkbone_OnCreate(void) {
 void kungfu_brkbone_OnUpdate(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_brkbone_OnDestroy);
+INCLUDE_ASM("asm/nonmatchings/kungfu_code", kungfu_brkbone_OnCollide);
 
-void kungfu_btimer_OnCreate(Level_t* level, int* arg1) {
+void kungfu_btimer_OnCreate(Instance* instance, int* arg1) {
     int var_s0;
     short* temp_a2;
     int* temp_v1;
     int* temp_v1_2;
 
-    temp_a2 = (short*)level->_20[1];
-    level->_104 = (temp_a2[0] * 30);
-    level->_F0[6] = (unsigned short)temp_a2[1];
-    *(short*)&level->_100 = 0;
-    level->flags |= 0xC00;
+    temp_a2 = (short*)instance->_20[1];
+    instance->_104 = (temp_a2[0] * 30);
+    instance->_F0[6] = (unsigned short)temp_a2[1];
+    *(short*)&instance->_100 = 0;
+    instance->flags |= 0xC00;
     temp_v1 = (int*)arg1[3];
     temp_v1[0xFC/4] |= 0x4000;
     temp_v1_2 = (int*)arg1[3];
@@ -324,10 +324,10 @@ void kungfu_btimer_OnCreate(Level_t* level, int* arg1) {
     for (var_s0 = 1; var_s0 < 4; var_s0++) {
         func_8002C1AC(var_s0);
     }
-    level->_F4[1] = 0;
+    instance->_F4[1] = 0;
 }
 
-void kungfu_btimer_OnUpdate(Level_t* arg0, int** arg1) {
+void kungfu_btimer_OnUpdate(Instance* instance, int** arg1) {
     char sp10[0x50];
     int temp_s0;
     int temp_s3_2;
@@ -337,13 +337,13 @@ void kungfu_btimer_OnUpdate(Level_t* arg0, int** arg1) {
     int* temp_s3;
 
     var_v1 = 1;
-    temp_s3 = (int*)arg0->_20[1];
-    temp_s2 = &arg0->_F4[2];
-    if (*(short*)&arg0->_100 == 0) {
+    temp_s3 = (int*)instance->_20[1];
+    temp_s2 = &instance->_F4[2];
+    if (*(short*)&instance->_100 == 0) {
         if (((short*)temp_s2)[0] != 0) {
             if ((int)arg1[0x4BFC/4] < arg1[0x4/4][0x34/4]) {
                 if (D_80154834 != 0) {
-                    *(short*)&arg0->_108 = 1;
+                    *(short*)&instance->_108 = 1;
                 }
                 func_80037B00(0x64, 0x69);
                 Print3DTextf("#2COLLECT");
@@ -367,15 +367,15 @@ void kungfu_btimer_OnUpdate(Level_t* arg0, int** arg1) {
                 ((short*)temp_s2)[0xC/2] = 0;
             }
         }
-        if ((((short*)arg1)[0x4C12/2] == 0) && (var_v1 != 0) && (arg0->_1C[0x2C/4] == 0)) {
+        if ((((short*)arg1)[0x4C12/2] == 0) && (var_v1 != 0) && (instance->_1C[0x2C/4] == 0)) {
             temp_s2[0x8/4] -= D_800E5FD8;
         }
-        if (((arg1[0xC/4][0xFC/4] & 0x600000) == 0x600000) && (arg0->_F4[1] == 0)) {
+        if (((arg1[0xC/4][0xFC/4] & 0x600000) == 0x600000) && (instance->_F4[1] == 0)) {
             ((short*)temp_s2)[0] = (((unsigned short*)temp_s3)[1] - 1);
             if (temp_s3[0x4/4] == 0x3F2) {
                 SIGNAL_HandleSignal(PlayerInstance, temp_s3[0x8/4] + 4, 0);
             }
-            arg0->_F4[1] = 1;
+            instance->_F4[1] = 1;
             PlayerInstance[0xFC/4] &= 0xFFBFFFFF;
         }
         if ((arg1[0xC/4][0xFC/4] & 0x400000) && ((arg1[0x4C00/4] != 0) || (arg1[0x4C04/4] != 0))) {
@@ -415,8 +415,8 @@ void kungfu_btimer_OnUpdate(Level_t* arg0, int** arg1) {
         }
     } else {
         arg1[0xC/4][0x10/4] |= 0x100;
-        if (*(short*)&arg0->_100 == 2) {
-            if (--arg0->_104 < 0) {
+        if (*(short*)&instance->_100 == 2) {
+            if (--instance->_104 < 0) {
                 func_800396E0("map", "map5", arg1);
                 return;
             }

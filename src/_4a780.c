@@ -2,7 +2,7 @@
 #include <compiler/gcc/string.h>
 #include "_4a780.h"
 
-#include "types/GameState.h"
+#include "types/GameTracker.h"
 #include "types/TVTextData.h"
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_80049B80);
@@ -497,7 +497,7 @@ int func_8004D128(int* arg0) {
 
 int func_8004D144(int* arg0, int* arg1)
 {
-    ((int*)gpGameState8)[0x4C14/4] = arg1[1];
+    ((int*)gameTracker)[0x4C14/4] = arg1[1];
     return 1;
 }
 
@@ -664,10 +664,10 @@ int func_8004D8A8(int* arg1, short* arg2) {
 int func_8004D8DC(int* _possiblythis, int* arg2) {
     
     if (arg2[1] == 0xFFFF) {
-        ((char*)gpGameState8)[0x4C60] = 1;
+        ((char*)gameTracker)[0x4C60] = 1;
     } else if (arg2[1] == 0xFFFE) {
         func_800331DC();
-        ((char*)gpGameState8)[0x4C60] = 0;
+        ((char*)gameTracker)[0x4C60] = 0;
     } else {
         func_80050980(arg2[1]);
     }
@@ -788,7 +788,7 @@ int func_8004E568(int* arg1, int* arg2) {
 }             
 
 int func_8004E580(int arg0, char* arg1) {
-    func_80039688(arg1[4], arg1[5], arg1[6], gpGameState8);
+    func_80039688(arg1[4], arg1[5], arg1[6], gameTracker);
     return 1;
 }
 
@@ -924,7 +924,7 @@ void COLLIDE_HandleSignal(void* instance, void* signal, int numSignals, int* arg
     
     loop:
     if (!((D_8007866A[((int*)signal)[0] * 4] == 0 || instance == PlayerInstance || s2 != 0)
-        && ((gpGameState8->gameFlags & 0x40) == 0 || ((((int*)signal)[0] & s4) == 0))
+        && ((gameTracker->gameFlags & 0x40) == 0 || ((((int*)signal)[0] & s4) == 0))
         && (D_80078664[(((int*)signal)[0] & s3) * 2](instance, signal) == 0)))
     {
         v0 = (D_80078668[((int*)signal)[0] * 4] + 1);

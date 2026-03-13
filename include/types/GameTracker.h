@@ -1,5 +1,5 @@
-#ifndef GAMESTATE_H_
-#define GAMESTATE_H_
+#ifndef GAMETRACKER_H_
+#define GAMETRACKER_H_
 
 typedef unsigned char byte;
 typedef unsigned int uint;
@@ -24,10 +24,10 @@ typedef struct
     short   _4CC2;
     char    _4CC4[0x10];
     int     maybeSelectedHintIndex;
-} GameState;
+} GameTracker;
 
-extern GameState* gpGameState4;
-extern GameState* gpGameState8;
-extern GameState gGameState;
+extern GameTracker* gameTracker4;
+extern GameTracker* gameTracker;
+extern GameTracker gameTrackerX;
 
 #endif
