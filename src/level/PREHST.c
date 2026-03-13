@@ -1,6 +1,6 @@
 #include "common.h"
 
-#include "types/Instance.h"
+#include "level/PREHST.h"
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_ttplat_OnCreate);
 
@@ -20,13 +20,13 @@ INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_bouncer_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_bouncer_OnCollide);
 
-void prehst_crawler_OnCreate(Instance* instance)
+void prehst_crawler_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     instance->_F4[0] = 0;
     instance->_4E = 0;
 }
 
-void prehst_crawler_OnUpdate(Instance* instance) {
+void prehst_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     
     int a0, v0, v1;
 
@@ -50,7 +50,7 @@ void prehst_crawler_OnUpdate(Instance* instance) {
     }
 }
 
-void prehst_crawler_OnCollide(Instance* instance, int* arg1) {
+void prehst_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
     int temp_a3;
     int temp_v1;
     char** temp_a2;
@@ -58,7 +58,7 @@ void prehst_crawler_OnCollide(Instance* instance, int* arg1) {
     temp_a2 = ((char***)instance->_70)[2];
     temp_a3 = ((short*)temp_a2)[3];
     if (temp_a3 == 1) {
-        if ((temp_a2[5] == (char*)arg1[12/4]) && (temp_a2[12/4][5] >= 6U)) {
+        if ((temp_a2[5] == ((char**)gameTracker)[12/4]) && (temp_a2[12/4][5] >= 6U)) {
             if (instance->_F4[0] == 0)
             {
                 ((char*)instance->_40)[0xe] = 1;
@@ -71,7 +71,7 @@ void prehst_crawler_OnCollide(Instance* instance, int* arg1) {
             {
                 func_80047904(instance, 5, 3, 0);
             }
-        } else if ((((short*)temp_a2)[3] == 1) && (temp_a2[5] == (char*)arg1[12/4]) && ((instance->_F4[0] - 1) >= 2U)) {
+        } else if ((((short*)temp_a2)[3] == 1) && (temp_a2[5] == ((char**)gameTracker)[12/4]) && ((instance->_F4[0] - 1) >= 2U)) {
             func_80022714(instance);
         }
     }
@@ -95,7 +95,7 @@ INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_8015B5B0_C8E30);
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_stmvent_OnUpdate);
 
-void prehst_stmvent_OnCollide(void) {
+void prehst_stmvent_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_sptball_OnCreate);
@@ -150,10 +150,10 @@ INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_gas_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_gas_OnCollide);
 
-void prehst_brkbone_OnCreate(void) {
+void prehst_brkbone_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
-void prehst_brkbone_OnUpdate(void) {
+void prehst_brkbone_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_brkbone_OnCollide);
@@ -162,7 +162,7 @@ INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_bldrgen_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_bldrgen_OnUpdate);
 
-void prehst_bldrgen_OnCollide(void) {
+void prehst_bldrgen_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_boulder_OnCreate);
