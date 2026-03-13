@@ -1,11 +1,10 @@
 #include "common.h"
-#include "types/GameTracker.h"
 
 #include <PR/gbi.h>
 #include <PR/mbi.h>
 #include <ultra64.h>
 
-#include "types/Instance.h"
+#include "level/LOGO.h"
 
 extern Gfx D_8006D578[];
 extern char D_8014F34C;
@@ -26,13 +25,13 @@ extern char D_8006CF20;
 extern short* PlayerInstance;
 extern unsigned short D_800E5DB2;
 
-void logo_select_OnCreate(Instance* instance, int** arg1)
+void logo_select_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     instance->flags |= 0xC00;
-    arg1[0xC/4][0x10/4] |= 0x800;
+    ((int**)gameTracker)[0xC/4][0x10/4] |= 0x800;
 }
 
-void logo_select_OnUpdate()
+void logo_select_OnUpdate(Instance* instance, GameTracker* gameTracker)
 {
     func_8002C1AC(0);
 
@@ -120,14 +119,14 @@ void logo_select_OnUpdate()
     }
 }
 
-void logo_cryslogo_OnCreate(Instance* instance, short** arg1)
+void logo_cryslogo_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     D_8006CF20 = 0;
     D_8006FA54 = 0xD;
     instance->_104 = 0;
     instance->flags |= 0x400;
     func_8002C1AC(0);
-    arg1[0x8/4][0x30/2] = 0xFA0;
+    ((short**)gameTracker)[0x8/4][0x30/2] = 0xFA0;
     instance->_60[0] = 0x3FE;
     instance->_60[1] = 0x6E1;
     instance->_60[2] = 1;
@@ -136,10 +135,10 @@ void logo_cryslogo_OnCreate(Instance* instance, short** arg1)
     instance->_40[6] = -0x460;
 }
 
-void logo_cryslogo_OnUpdate(Instance* instance, int** arg1)
+void logo_cryslogo_OnUpdate(Instance* instance, GameTracker* gameTracker)
 {
     func_8002C1AC(0);
-    arg1[0xC/4][0x10/4] |= 0x800;
+    ((int**)gameTracker)[0xC/4][0x10/4] |= 0x800;
     
     if (instance->_104 < 0x50)
     {
@@ -152,7 +151,7 @@ void logo_cryslogo_OnUpdate(Instance* instance, int** arg1)
     }
 }
 
-void logo_mwgex_OnCreate(Instance* instance)
+void logo_mwgex_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     instance->_60[2] = 0xC8;
     instance->_104 = 0x50;
@@ -164,7 +163,7 @@ FORCE_INLINE void logo_mwgex_OnUpdate_dec(int* a)
     (*a)--;
 }
 
-void logo_mwgex_OnUpdate(Instance* instance)
+void logo_mwgex_OnUpdate(Instance* instance, GameTracker* gameTracker)
 {
     logo_mwgex_OnUpdate_dec(&instance->_104);
     
@@ -175,20 +174,20 @@ void logo_mwgex_OnUpdate(Instance* instance)
     
 }
 
-void logo_mwlogo_OnCreate(Instance* instance, short** arg1)
+void logo_mwlogo_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     instance->_60[0] = 0x802;
     instance->_60[1] = -0x400;
     instance->_60[2] = 0;
-    instance->_40[4] = arg1[0x8/4][0] + 0x32;
+    instance->_40[4] = ((short**)gameTracker)[0x8/4][0] + 0x32;
     instance->_40[5] = 0x64;
     instance->_40[6] = 0x64;
 }
 
-void logo_mwlogo_OnUpdate(void) {
+void logo_mwlogo_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 }
 
-void logo_rtlogor_OnCreate(Instance* instance, short** arg1)
+void logo_rtlogor_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     instance->_104 = 0;
     instance->flags |= 0x400;
@@ -199,14 +198,14 @@ void logo_rtlogor_OnCreate(Instance* instance, short** arg1)
     instance->_40[5] = 0x1194;
     instance->_60[2] = 0;
     instance->_40[6] = -0x96;
-    arg1[0x8/4][0x4/2] += 0xE6;
-    arg1[0x8/4][0x2/2] -= 0xC8;
-    arg1[0x8/4][0] = PlayerInstance[0x48/2];
+    ((short**)gameTracker)[0x8/4][0x4/2] += 0xE6;
+    ((short**)gameTracker)[0x8/4][0x2/2] -= 0xC8;
+    ((short**)gameTracker)[0x8/4][0] = PlayerInstance[0x48/2];
     instance->_4E = 0;
     instance->_50[7] = 0;
 }
 
-void logo_rtlogor_OnUpdate(Instance* instance)
+void logo_rtlogor_OnUpdate(Instance* instance, GameTracker* gameTracker)
 {
     if (instance->_104 < 0x50) {
         instance->_104++;
