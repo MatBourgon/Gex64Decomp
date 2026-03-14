@@ -3,7 +3,7 @@
 
 typedef struct
 {
-    int _00;
+    int oflags;
     short id;
     short _06;
     int _08;

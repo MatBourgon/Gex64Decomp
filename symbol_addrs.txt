@@ -40,6 +40,12 @@ GenericProcess = 0x8001ACF4; // type:func
 GenericCollide = 0x8001AD48; // type:func
 SCRIPT_InstanceSplineInit = 0x800480F8; // type:func
 INSTANCE_ReallyRemoveInstance = 0x8002CD50; // type:func
+INSTANCE_InsertInstanceGroup = 0x8002CCD4; // type:func
+INSTANCE_InstanceGroupNumber = 0x8002CBE0; // type:func
+INSTANCE_NewInstance = 0x8002CB70; // type:func
+INSTANCE_InitInstanceList = 0x8002CAE0; // type:func
+INSTANCE_CleanUpInstanceList = 0x8002D068; // type:func
+LIST_InsertFunc = 0x80030090; // type:func
 
 
 send_mesg = 0x8005D90C; // type:func

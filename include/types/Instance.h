@@ -4,10 +4,11 @@
 #include "Intro.h"
 #include "Object.h"
 #include "LightInstance.h"
+#include "NodeType.h"
 
 typedef struct Instance_s
 {
-    int _00[2];
+    NodeType node;
     struct Instance_s* next;
     struct Instance_s* prev;
     int flags; // 10
@@ -56,7 +57,12 @@ typedef struct Instance_s
     char _113;
     char _114;
     unsigned char _115;
-} Instance;
+    char _116;
+    char _117;
+    int _118;
+    int _11C;
+    int _120;
+} Instance; // Should be size accurate now
 
 extern Instance* PlayerInstance;
 

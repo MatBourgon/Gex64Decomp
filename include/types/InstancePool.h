@@ -4,7 +4,7 @@
 typedef struct
 {
     int numFreeInstances;
-    unsigned char _[0x66A8]; // Instance[X], unknown total size
+    Instance instance[90];
     Instance* first_free;
 } InstancePool;
 

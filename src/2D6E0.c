@@ -2,17 +2,108 @@
 
 #include "types/InstanceList.h"
 
-INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002CAE0);
+void INSTANCE_InitInstanceList(InstanceList *list, InstancePool *pool) {
+    long i;
 
-INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002CB70);
+    pool->numFreeInstances = 90;
 
-INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002CBE0);
+    for (i = 1; i < 89; i++)
+    {
+        pool->instance[i].next = &pool->instance[i + 1];
+        pool->instance[i].prev = &pool->instance[i - 1];
+    }
 
-INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002CCD4);
+    pool->instance[0].next = &pool->instance[1];
+    pool->instance[0].prev = NULL;
 
-INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002CD1C);
+    pool->instance[89].prev = &pool->instance[88];
+    pool->instance[89].next = NULL;
 
-INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002CD3C);
+    pool->first_free = &pool->instance[0];
+
+    list->pool = pool;
+
+    list->numInstances = 0;
+
+    list->first = NULL;
+
+    for (i = 0; i < 32; i++)
+    {
+        list->group[i].next = NULL;
+        list->group[i].prev = NULL;
+    }
+}
+
+Instance* INSTANCE_NewInstance(InstanceList* list) {
+    Instance* instance;
+    Instance* temp;
+
+    if (list->pool->numFreeInstances != 0) {
+        list->pool->numFreeInstances--;
+        instance = list->pool->first_free;
+        list->pool->first_free = instance->next;
+        temp = list->first;
+        list->first = instance;
+        instance->next = temp;
+        if (instance->next != NULL) {
+            instance->next->prev = instance;
+        }
+        instance->prev = NULL;
+        list->numInstances++;
+        return instance;
+    }
+    return NULL;
+}
+
+int INSTANCE_InstanceGroupNumber(Instance* instance) {
+    int result = 0;
+    
+    if (instance->object->oflags & 0x80 && !(instance->flags & 0x8000)) {
+        result |= 1;
+    }
+    
+    if ((instance->object->oflags & 0x20) && !(instance->flags & 0x2000)) {
+        result |= 2;
+    }
+    
+    if ((instance->object->oflags & 0x40) && !(instance->flags & 0x4000)) {
+        result |= 4;
+    }
+    
+    if ((instance->object->oflags & 0x10) && !(instance->flags & 0x1000)) {
+        result |= 0x10;
+    }
+    
+    if (instance->object->oflags & 1) {
+        result |= 8;
+    } else {
+        result &= ~2;
+        result &= ~1;
+    }
+    
+    return result;
+}
+
+void INSTANCE_InsertInstanceGroup(InstanceList* list, Instance* instance) {
+    LIST_InsertFunc(&list->group[(INSTANCE_InstanceGroupNumber(instance))], &instance->node);
+}
+
+void func_8002CD1C(InstanceList* list, Instance* instance)
+{
+    Instance* temp = list->first;
+    list->first = instance;
+    instance->prev = NULL;
+    instance->next = temp;
+    if (temp != NULL)
+    {
+        temp->prev = instance;
+    }
+}
+
+void func_8002CD3C(InstanceList* list, Instance* instance)
+{
+    instance->flags |= 0x20;
+}
 
 void INSTANCE_ReallyRemoveInstance(InstanceList* list, Instance* instance, int reset) {
     int* temp_v1;
@@ -90,7 +181,36 @@ void INSTANCE_ReallyRemoveInstance(InstanceList* list, Instance* instance, int r
 
 INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002CF4C);
 
-INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002D068);
+void INSTANCE_CleanUpInstanceList(InstanceList* list, int reset) {
+    Instance* next;
+    Instance* instance;
+
+    instance = list->first;
+    
+    while (instance != NULL) {
+        next = instance->next;
+        if (!(instance->flags & 0x400)) {
+            if (instance->flags & 0x20) {
+                func_8002CF4C(list, instance, reset);
+            }
+        } else {
+            if (instance->flags & 0x20) {
+                instance->flags &= ~0x20;
+            }
+        }
+        instance = next;
+    }
+    
+    instance = list->first;
+    
+    while (instance != NULL) {
+        next = instance->next;
+        if (instance->flags & 0x20) {
+            INSTANCE_ReallyRemoveInstance(list, instance, reset);
+        }
+        instance = next;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002D134);
 
