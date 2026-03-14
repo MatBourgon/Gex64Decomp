@@ -14,9 +14,12 @@ typedef struct Instance_s
     struct Instance_s* prev;
     int flags; // 10
     int flags2; // 14
-    Object* object; // 0x18
-    Intro* intro; // 0x1C
-    int _20[4]; // _20 : Data?, _24 : IntroData?
+    Object* object; // 18
+    Intro* intro; // 1C
+    void* data; // 20
+    void* introData; // 24
+    struct Instance_s* parent; // 28
+    void* _2C;
     short _30[8];
     short _40[4];
     SVECTOR position;

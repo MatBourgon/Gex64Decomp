@@ -7,12 +7,12 @@ extern int D_80154834;
 
 void func_80159720_C6800(Instance* instance, GameTracker* gameTracker)
 {
-    if (instance->_20[1] != 0) {
-        if (((int**)instance->_20)[1][0] != 0) {
-            if (((int**)instance->_20)[1][0] > 10U) {
-                SIGNAL_HandleSignal(instance, ((int**)instance->_20)[1][0] + 4, 0);
+    if (instance->introData != 0) {
+        if (((int*)instance->introData)[0] != 0) {
+            if (((int*)instance->introData)[0] > 10U) {
+                SIGNAL_HandleSignal(instance, ((int*)instance->introData)[0] + 4, 0);
             } else {
-                SIGNAL_HandleSignal(instance, ((int**)instance->_20)[1][1] + 4, 0);
+                SIGNAL_HandleSignal(instance, ((int*)instance->introData)[1] + 4, 0);
             }
         }
     }
@@ -34,7 +34,7 @@ void nypd_slider_OnUpdate(Instance* instance, GameTracker* gameTracker)
 void nypd_slider_OnCollide(Instance* instance, GameTracker* gameTracker) {
     int* temp_s1;
 
-    temp_s1 = (int*)PlayerInstance->_20[0];
+    temp_s1 = (int*)PlayerInstance->data;
     if (!(PlayerInstance->_F4[2] & 1) && (instance->_F4[2] == 0)) {
         func_80159720_C6800(instance, gameTracker);
         
@@ -56,7 +56,7 @@ void nypd_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int* temp_v1;
     int* temp_v1_2;
 
-    temp_a2 = (short*)instance->_20[1];
+    temp_a2 = (short*)instance->introData;
     instance->_104 = (temp_a2[0] * 30);
     instance->_F0[6] = (unsigned short)temp_a2[1];
     *(short*)&instance->_100 = 0;
@@ -82,7 +82,7 @@ void nypd_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int* temp_s3;
 
     var_v1 = 1;
-    temp_s3 = (int*)instance->_20[1];
+    temp_s3 = (int*)instance->introData;
     temp_s2 = &instance->_F4[2];
     if (*(short*)&instance->_100 == 0) {
         if (((short*)temp_s2)[0] != 0) {

@@ -194,7 +194,7 @@ void circuit_qmark_OnUpdate(Instance* instance, GameTracker* arg1) {
     int* temp_s0;
     short* temp_t0;
     
-    temp_t0 = (short*)instance->_20[1];
+    temp_t0 = (short*)instance->introData;
     temp_s0 = &instance->_F4[2];
     if (((*(int*)&instance->_10C) != 0) && !(arg1->gameFlags & 0x2000)) {
         func_8003F6CC(temp_t0[0], temp_t0[1], temp_t0[2], temp_t0[3], temp_t0[5], temp_t0 + 6);
@@ -232,7 +232,7 @@ void circuit_qmark_OnUpdate(Instance* instance, GameTracker* arg1) {
 void circuit_qmark_OnCollide(Instance* instance, GameTracker* gameTracker) {
     short* temp_s1;
 
-    temp_s1 = (short*)instance->_20[1];
+    temp_s1 = (short*)instance->introData;
     if (func_80027500(instance->_70[2]) != 0) {
         instance->_104 = 1;
         instance->_F4[2] = 0x12C;
@@ -346,7 +346,7 @@ void circuit_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int* temp_v1;
     int* temp_v1_2;
 
-    temp_a2 = (short*)instance->_20[1];
+    temp_a2 = (short*)instance->introData;
     instance->_104 = (temp_a2[0] * 30);
     instance->_F0[6] = (unsigned short)temp_a2[1];
     *(short*)&instance->_100 = 0;
@@ -372,7 +372,7 @@ void circuit_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int* temp_s3;
 
     var_v1 = 1;
-    temp_s3 = (int*)instance->_20[1];
+    temp_s3 = (int*)instance->introData;
     temp_s2 = &instance->_F4[2];
     if (*(short*)&instance->_100 == 0) {
         if (((short*)temp_s2)[0] != 0) {

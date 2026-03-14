@@ -9,8 +9,8 @@ void final_oldpoptv_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_100 = 1;
     instance->_F4[2] = 0;
     instance->flags |= 0x400;
-    if (instance->_20[1] == NULL) {
-        instance->_20[1] = (int)&D_80161510_926B0;
+    if (instance->introData == NULL) {
+        instance->introData = (int)&D_80161510_926B0;
     }
 }
 
@@ -306,8 +306,8 @@ void final_rezcam_OnCreate(Instance* instance, GameTracker* gameTracker) {
     ptr = &instance->_F4[2];
     instance->flags |= 0x800;
     func_80001408(((int*)gameTracker)[2], 8);
-    if (instance->_20[1] == NULL) {
-        instance->_20[1] = (int)&D_80161558_926F8;
+    if (instance->introData == NULL) {
+        instance->introData = (void*)&D_80161558_926F8;
     }
     func_80005438(ptr, &instance->position, temp_s2);
 }

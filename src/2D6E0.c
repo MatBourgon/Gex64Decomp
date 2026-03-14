@@ -170,7 +170,7 @@ void INSTANCE_ReallyRemoveInstance(InstanceList* list, Instance* instance, int r
         }
     }
                    
-    temp_v1 = (int*)PlayerInstance->_20[0];
+    temp_v1 = (int*)PlayerInstance->data;
 
     if (instance == (Instance*)temp_v1[0x19C/4]) {
         temp_v1[0x19C/4] = NULL;
@@ -232,7 +232,7 @@ void* INSTANCE_BirthObject(Intro* intro) {
                 intro->instance = instance;
                 instance->intro = intro;
                 
-                instance->_20[1] = (int)intro->_20; // intro data?
+                instance->introData = (int)intro->_20; // intro data?
                 
                 instance->position = intro->position;
                 
@@ -294,7 +294,55 @@ INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002D58C); // likely INSTANCE_Process
 
 INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002DAF8);
 
-INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002DEA8);
+Instance* func_8002DEA8(Instance* parent, Object* object) {
+    int temp_a0;
+    Instance* instance;
+
+    if (object == NULL)
+        return NULL;
+    
+    instance = INSTANCE_NewInstance(gameTracker8->instanceList);
+    
+    if (instance != NULL) {
+        INSTANCE_DefaultInit(instance, object);
+        
+        instance->position = parent->position;
+        
+        instance->initialPos = instance->position;
+        instance->oldPos = parent->position;
+        
+        instance->rotation = parent->rotation;
+        instance->oldRotation = parent->oldRotation;
+        
+        instance->_4F = parent->_4F;
+        instance->parent = parent;
+        instance->intro = parent->intro;
+        instance->introData = parent->introData;
+        
+        if (instance->object->oflags & 0x100) {
+            func_8002E0D8(instance);
+        }
+        
+        if (SCRIPT_GetMultiSpline(instance, NULL, NULL) == NULL) {
+            instance->flags |= 0x100000;
+        }
+        
+        INSTANCE_InsertInstanceGroup(gameTracker8->instanceList, instance);
+        OBTABLE_GetInstanceCollideFunc(instance);
+        OBTABLE_GetInstanceProcessFunc(instance);
+        instance->flags |= 2;
+        OBTABLE_InstanceInit(instance);
+        if (object->_06 != -1) {
+            func_80052944(object->_06);
+        }
+        if (parent->flags & 0x20000000) {
+            instance->flags |= 0x20000000;
+        }
+        return instance;
+    }
+    
+    return NULL;
+}
 
 INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002E088);
 
@@ -303,7 +351,7 @@ INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002E0D8);
 void INSTANCE_DefaultInit(Instance* instance, Object* object) {
     memset(&instance->flags, 0, sizeof(Instance) - offsetof(instance, flags));
     instance->object = object;
-    instance->_20[0] = (int)object->_1C; // data?
+    instance->data = (int)object->_1C; // data?
     if (instance->object->oflags & 0x200) {
         instance->flags2 |= 0x40;
     }
