@@ -4,7 +4,8 @@
 typedef struct
 {
     int _00;
-    int* _04;
+    short id;
+    short _06;
     int _08;
     int _0C;
     int numAnims;

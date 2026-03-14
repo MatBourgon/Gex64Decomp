@@ -37,7 +37,7 @@ void func_8003EAA8(void) {
 void OBTABLE_InstanceInit(Instance* instance) {
     int id;
 
-    id = ((short**)instance)[0x18/4][2];
+    id = instance->object->id;
     
     if (id < 0) {
         GenericInit(instance, gameTracker8);
@@ -45,8 +45,8 @@ void OBTABLE_InstanceInit(Instance* instance) {
         ObjectFunctionTable[id].init(instance, gameTracker8);
     }
 
-    ((int*)instance)[0x14/4] |= 0x200000;
-    if (!(((int*)instance)[0x10/4] & 0x100000)) {
+    instance->flags2 |= 0x200000;
+    if (!(instance->flags & 0x100000)) {
         SCRIPT_InstanceSplineInit(instance, gameTracker8);
     }
 }
@@ -54,34 +54,26 @@ void OBTABLE_InstanceInit(Instance* instance) {
 
 void OBTABLE_GetInstanceCollideFunc(Instance* instance)
 {
-    int id;
-
-    id = ((short**)instance)[0x18/4][2];
-
-    if (id >= 0)
+    if (instance->object->id >= 0)
     {
-        ((objFunction*)instance)[0xB0/4] = ObjectFunctionTable[id].collide;
+        instance->collideFunc = ObjectFunctionTable[instance->object->id].collide;
     }
     else
     {
-        ((objFunction*)instance)[0xB0/4] = GenericCollide;
+        instance->collideFunc = GenericCollide;
     }
 }
 
 
 void OBTABLE_GetInstanceProcessFunc(Instance* instance)
 {
-    int id;
-
-    id = ((short**)instance)[0x18/4][2];
-
-    if (id >= 0)
+    if (instance->object->id >= 0)
     {
-        ((objFunction*)instance)[0xAC/4] = ObjectFunctionTable[id].process;
+        instance->processFunc = ObjectFunctionTable[instance->object->id].process;
     }
     else
     {
-        ((objFunction*)instance)[0xAC/4] = GenericProcess;
+        instance->processFunc = GenericProcess;
     }
 }
 

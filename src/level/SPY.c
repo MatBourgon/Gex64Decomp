@@ -65,7 +65,6 @@ INCLUDE_RODATA("asm/nonmatchings/level/SPY", D_8015AE0C_EC4DC);
 
 INCLUDE_RODATA("asm/nonmatchings/level/SPY", D_8015AE10_EC4E0);
 
-extern int* PlayerInstance;
 extern int D_800E5FD8;
 extern int D_80154834;
 
@@ -118,7 +117,7 @@ void spy_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
                 SIGNAL_HandleSignal(PlayerInstance, temp_s3[0x8/4] + 4, 0);
             }
             instance->_F4[1] = 1;
-            PlayerInstance[0xFC/4] &= 0xFFBFFFFF;
+            PlayerInstance->_F4[2] &= 0xFFBFFFFF;
         }
         if ((((int**)gameTracker)[0xC/4][0xFC/4] & 0x400000) && ((((int**)gameTracker)[0x4C00/4] != 0) || (((int**)gameTracker)[0x4C04/4] != 0))) {
             func_8002C18C(5);

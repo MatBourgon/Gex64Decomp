@@ -38,7 +38,7 @@ void scifi_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     {
         v1 = instance->_50[0];
         v0 = instance->_50[1];
-        instance->_60[2] = func_80030538(v0 - instance->_40[5], v1 - instance->_40[4]) - 0x400;
+        instance->_60[2] = func_80030538(v0 - instance->position.y, v1 - instance->position.x) - 0x400;
         func_8002DAF8(instance, -1);
     }
     else if (instance->_F4[0] == 1)

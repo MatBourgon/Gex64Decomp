@@ -3,7 +3,6 @@
 #include "level/CIRCUIT.h"
 
 #include "types/Vector.h"
-extern int* PlayerInstance;
 extern int D_800E5FD8;
 extern int D_80154834;
 
@@ -39,7 +38,7 @@ void circuit_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     {
         v1 = instance->_50[0];
         v0 = instance->_50[1];
-        instance->_60[2] = func_80030538(v0 - instance->_40[5], v1 - instance->_40[4]) - 0x400;
+        instance->_60[2] = func_80030538(v0 - instance->position.y, v1 - instance->position.x) - 0x400;
         func_8002DAF8(instance, -1);
     }
     else if (instance->_F4[0] == 1)
@@ -205,7 +204,7 @@ void circuit_qmark_OnUpdate(Instance* instance, GameTracker* arg1) {
         case 0: break;
         
         case 1:
-        if (MATH3D_FastSqrt(SVECTOR_DistanceSquared((SVECTOR*)&instance->_40[4], (SVECTOR*)&PlayerInstance[0x48/4]), 0) > 1000
+        if (MATH3D_FastSqrt(SVECTOR_DistanceSquared(&instance->position, &PlayerInstance->position), 0) > 1000
             || !temp_s0[5])
         {
             temp_s0[2] = 2;
@@ -412,7 +411,7 @@ void circuit_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
                 SIGNAL_HandleSignal(PlayerInstance, temp_s3[0x8/4] + 4, 0);
             }
             instance->_F4[1] = 1;
-            PlayerInstance[0xFC/4] &= 0xFFBFFFFF;
+            PlayerInstance->_F4[2] &= 0xFFBFFFFF;
         }
         if ((((int**)gameTracker)[0xC/4][0xFC/4] & 0x400000) && ((((int**)gameTracker)[0x4C00/4] != 0) || (((int**)gameTracker)[0x4C04/4] != 0))) {
             func_8002C18C(5);
