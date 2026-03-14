@@ -236,16 +236,16 @@ void* INSTANCE_BirthObject(Intro* intro) {
                 
                 instance->position = intro->position;
                 
-                *(SVECTOR*)&instance->_50[4] = instance->position;
+                instance->initialPos = instance->position;
                 
-                *(SVECTOR*)&instance->_50[0] = intro->position;
+                instance->oldPos = intro->position;
                 
                 if (instance->object->oflags & 0x100) {
                     func_8002E0D8(instance); // build static shadow?
                 }
-                instance->_60[4] = 0x1000;
-                instance->_60[5] = 0x1000;
-                instance->_60[6] = 0x1000;
+                instance->oldRotation.x = 0x1000;
+                instance->oldRotation.y = 0x1000;
+                instance->oldRotation.z = 0x1000;
                 
                 if (intro->flags & 0x200) {
                     instance->flags |= 0x20000000;
@@ -290,7 +290,7 @@ void* INSTANCE_BirthObject(Intro* intro) {
     return intro->instance;
 }
 
-INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002D58C);
+INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002D58C); // likely INSTANCE_ProcessFunctions
 
 INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002DAF8);
 
@@ -316,7 +316,14 @@ INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002E21C);
 
 INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002E294);
 
-INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002E350);
+void func_8002E350(Instance* instance) {
+    instance->flags |= 0x10;
+    instance->flags &= ~0x400;
+    if ((instance->intro != NULL) && (instance->intro->flags & 4)) {
+        func_8004BAAC(instance);
+    }
+    func_8002CD3C((InstanceList*)gameTracker8->instanceList, instance);
+}
 
 INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002E3C4);
 
@@ -324,4 +331,7 @@ INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002E3FC);
 
 INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002E50C);
 
-INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002E704);
+void func_8002E704()
+{
+
+}

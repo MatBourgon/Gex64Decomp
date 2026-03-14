@@ -299,7 +299,7 @@ void horror_qmark_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         break;
     }
     temp_s0[0] += temp_s0[1];
-    instance->_60[2] = ((instance->_60[2] + temp_s0[0]) & 0xFFF);
+    instance->rotation.z = ((instance->rotation.z + temp_s0[0]) & 0xFFF);
 }
 
 void horror_qmark_OnCollide(Instance* instance, GameTracker* gameTracker) {

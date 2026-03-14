@@ -5,6 +5,7 @@
 #include "Object.h"
 #include "LightInstance.h"
 #include "NodeType.h"
+#include "Rotation.h"
 
 typedef struct Instance_s
 {
@@ -21,8 +22,12 @@ typedef struct Instance_s
     SVECTOR position;
     char _4E;
     char _4F;
-    short _50[8];
-    short _60[8];
+    SVECTOR oldPos; // 50, 52, 54
+    short _56;
+    SVECTOR initialPos; // 58, 5A, 5C
+    short _5E;
+    ROTATION rotation; // 60, 62, 64, 66
+    ROTATION oldRotation; // 68, 6A, 6C, 6E
     int _70[4];
     short _80[8];
     short _90[4];

@@ -58,13 +58,13 @@ void final_probe_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 void final_reztvex_OnCreate(Instance* arg0, GameTracker* gameTracker) {
-    arg0->_60[2] = 0;
-    arg0->_60[1] = 0;
-    arg0->_60[0] = 0;
-    arg0->_60[6] = 0x100;
-    arg0->_60[5] = 0x100;
-    arg0->_60[4] = 0x100;
-    arg0->_50[3] = 0;
+    arg0->rotation.z = 0;
+    arg0->rotation.y = 0;
+    arg0->rotation.x = 0;
+    arg0->oldRotation.z = 0x100;
+    arg0->oldRotation.y = 0x100;
+    arg0->oldRotation.x = 0x100;
+    arg0->_56 = 0;
     arg0->flags |= 0x80;
 }
 
@@ -74,13 +74,13 @@ void final_reztvex_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 void final_rezxpl_OnCreate(Instance* arg0, GameTracker* gameTracker) {
-    arg0->_60[2] = 0;
-    arg0->_60[1] = 0;
-    arg0->_60[0] = 0;
-    arg0->_60[6] = 0x100;
-    arg0->_60[5] = 0x100;
-    arg0->_60[4] = 0x100;
-    arg0->_50[3] = 0;
+    arg0->rotation.z = 0;
+    arg0->rotation.y = 0;
+    arg0->rotation.x = 0;
+    arg0->oldRotation.z = 0x100;
+    arg0->oldRotation.y = 0x100;
+    arg0->oldRotation.x = 0x100;
+    arg0->_56 = 0;
     arg0->flags |= 0x80;
 }
 

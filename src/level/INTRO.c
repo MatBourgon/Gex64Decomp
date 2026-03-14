@@ -43,9 +43,9 @@ void intro_rezzull_OnCreate(Instance* instance, GameTracker* gameTracker) {
     ((short*)PlayerInstance)[0x64/2] = 0x11F0;
     ((short*)PlayerInstance)[0x48/2] -= 1100;
     ((short*)PlayerInstance)[0x4A/2] += 2200;
-    instance->_60[0] = 1024;
-    instance->_60[1] = 1750;
-    instance->_60[2] = 0;
+    instance->rotation.x = 1024;
+    instance->rotation.y = 1750;
+    instance->rotation.z = 0;
     instance->_40[5] += 2800;
     instance->_40[6] += 900;
 }
@@ -71,9 +71,9 @@ void intro_gextext_OnCreate(Instance* instance, GameTracker* gameTracker)
     instance->position.x = 4375;
     instance->position.y = 1900;
     instance->position.z = 648;
-    instance->_60[0] = 0x47E;
-    instance->_60[1] = 0x6EA;
-    instance->_60[2] = 0;
+    instance->rotation.x = 0x47E;
+    instance->rotation.y = 0x6EA;
+    instance->rotation.z = 0;
 }
 
 void intro_gextext_OnUpdate(Instance* instance, GameTracker* gameTracker)
@@ -99,9 +99,9 @@ void intro_enttext_OnCreate(Instance* instance, GameTracker* gameTracker)
     instance->position.x = 3670;
     instance->position.y = 1900;
     instance->position.z = 85;
-    instance->_60[0] = 0x400;
-    instance->_60[1] = 0x6D6;
-    instance->_60[2] = 0;
+    instance->rotation.x = 0x400;
+    instance->rotation.y = 0x6D6;
+    instance->rotation.z = 0;
 }
 
 void intro_enttext_OnUpdate(Instance* instance, GameTracker* gameTracker) {
@@ -113,9 +113,9 @@ void intro_gectext_OnCreate(Instance* instance, GameTracker* gameTracker)
     instance->position.x = 5050;
     instance->position.y = 1900;
     instance->position.z = 50;
-    instance->_60[0] = 0x400;
-    instance->_60[1] = 0x6D6;
-    instance->_60[2] = 0;
+    instance->rotation.x = 0x400;
+    instance->rotation.y = 0x6D6;
+    instance->rotation.z = 0;
 }
 
 void intro_gectext_OnUpdate(Instance* instance, GameTracker* gameTracker) {
@@ -127,9 +127,9 @@ void intro_remtext_OnCreate(Instance* instance, GameTracker* gameTracker)
     instance->position.x = 5500;
     instance->position.y = 1800;
     instance->position.z = 85;
-    instance->_60[0] = 0x4B0;
-    instance->_60[1] = 0x6D6;
-    instance->_60[2] = 0;
+    instance->rotation.x = 0x4B0;
+    instance->rotation.y = 0x6D6;
+    instance->rotation.z = 0;
 }
 
 void intro_remtext_OnUpdate(Instance* instance, GameTracker* gameTracker) {
@@ -141,9 +141,9 @@ void intro_gexcopy_OnCreate(Instance* instance, GameTracker* gameTracker)
     instance->position.x = 6000;
     instance->position.y = 3200;
     instance->position.z = -900;
-    instance->_60[0] = 0x4B0;
-    instance->_60[1] = 0x708;
-    instance->_60[2] = 0;
+    instance->rotation.x = 0x4B0;
+    instance->rotation.y = 0x708;
+    instance->rotation.z = 0;
 }
 
 void intro_gexcopy_OnUpdate(Instance* instance, GameTracker* gameTracker)
