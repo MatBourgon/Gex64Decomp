@@ -264,7 +264,7 @@ INCLUDE_ASM("asm/nonmatchings/_42bd0", func_8004848C);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_800484C4);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80048524);
+INCLUDE_ASM("asm/nonmatchings/_42bd0", SCRIPT_GetMultiSpline);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_800485D4);
 

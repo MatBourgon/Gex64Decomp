@@ -215,7 +215,7 @@ void rezop_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int* temp_v1;
     int* temp_v1_2;
 
-    temp_a2 = (short*)instance->_20[1];
+    temp_a2 = (short*)instance->introData;
     instance->_104 = (temp_a2[0] * 30);
     instance->_F0[6] = (unsigned short)temp_a2[1];
     *(short*)&instance->_100 = 0;
@@ -244,7 +244,7 @@ INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_btimer_OnUpdate);
     int* temp_s3;
 
     var_v1 = 1;
-    temp_s3 = (int*)arg0->_20[1];
+    temp_s3 = (int*)arg0->introData;
     temp_s2 = &arg0->_F4[2];
     if (*(short*)&arg0->_100 == 0) {
         if (((short*)temp_s2)[0] != 0) {

@@ -44,9 +44,9 @@ void kungfu_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
     if (instance->_F4[0] == 0)
     {
-        v1 = instance->_50[0];
-        v0 = instance->_50[1];
-        instance->_60[2] = func_80030538(v0 - instance->position.y, v1 - instance->position.x) - 0x400;
+        v1 = instance->oldPos.x;
+        v0 = instance->oldPos.y;
+        instance->rotation.z = func_80030538(v0 - instance->position.y, v1 - instance->position.x) - 0x400;
         func_8002DAF8(instance, -1);
     }
     else if (instance->_F4[0] == 1)
@@ -55,7 +55,7 @@ void kungfu_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         if ((instance->flags2 & 0x10))
         {
             a0 = (*(unsigned char*)&instance->_40[7] << 2) + instance->object->numAnims;
-            instance->_50[7] = ((unsigned short*)(*((int*)a0)))[1] - 1; 
+            instance->_5E = ((unsigned short*)(*((int*)a0)))[1] - 1; 
             instance->_F4[0] = 2;
         }
         
@@ -75,7 +75,7 @@ void kungfu_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
             {
                 ((char*)instance->_40)[0xe] = 1;
                 instance->_F4[0] = temp_a3;
-                instance->_50[7] = 0;
+                instance->_5E = 0;
                 instance->flags2 &= ~0x10;
                 instance->flags |= 0x100000;
             }
@@ -105,12 +105,12 @@ INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015ADC8_A9FE8);
 
 void func_8015AE8C_AA0AC(Instance* instance, GameTracker* gameTracker)
 {
-    if (instance->_20[1] != 0) {
-        if (((int**)instance->_20)[1][0] != 0) {
-            if (((int**)instance->_20)[1][0] > 10U) {
-                SIGNAL_HandleSignal(instance, ((int**)instance->_20)[1][0] + 4, 0);
+    if (instance->introData != 0) {
+        if (((int*)instance->introData)[0] != 0) {
+            if (((int*)instance->introData)[0] > 10U) {
+                SIGNAL_HandleSignal(instance, ((int*)instance->introData)[0] + 4, 0);
             } else {
-                SIGNAL_HandleSignal(instance, ((int**)instance->_20)[1][1] + 4, 0);
+                SIGNAL_HandleSignal(instance, ((int*)instance->introData)[1] + 4, 0);
             }
         }
     }
@@ -185,7 +185,7 @@ INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015DC00_ACE20);
 void func_8015DC9C_ACEBC(Instance* instance, GameTracker* gameTracker)
 {
     instance->_4E = 2;
-    instance->_50[7] = 0;
+    instance->_5E = 0;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_samuri_OnUpdate);
@@ -215,7 +215,7 @@ void kungfu_slider_OnUpdate(Instance* instance, GameTracker* gameTracker)
 void kungfu_slider_OnCollide(Instance* instance, GameTracker* gameTracker) {
     int* temp_s1;
 
-    temp_s1 = (int*)PlayerInstance->_20[0];
+    temp_s1 = (int*)PlayerInstance->data;
     if (!(PlayerInstance->_F4[2] & 1) && (instance->_F4[2] == 0)) {
         func_8015AE8C_AA0AC(instance, gameTracker);
         
@@ -311,7 +311,7 @@ void kungfu_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int* temp_v1;
     int* temp_v1_2;
 
-    temp_a2 = (short*)instance->_20[1];
+    temp_a2 = (short*)instance->introData;
     instance->_104 = (temp_a2[0] * 30);
     instance->_F0[6] = (unsigned short)temp_a2[1];
     *(short*)&instance->_100 = 0;
@@ -337,7 +337,7 @@ void kungfu_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int* temp_s3;
 
     var_v1 = 1;
-    temp_s3 = (int*)instance->_20[1];
+    temp_s3 = (int*)instance->introData;
     temp_s2 = &instance->_F4[2];
     if (*(short*)&instance->_100 == 0) {
         if (((short*)temp_s2)[0] != 0) {

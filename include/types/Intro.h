@@ -4,18 +4,19 @@
 #include "Vector.h"
 #include "Spline.h"
 
+struct Instance_s;
+
 typedef struct
 {
     int* _00;
     int* _04;
-    SVECTOR rotation;
-    short _pad;
-    SVECTOR position;
-    // int* _14; // not used?
+    SVECTOR rotation; // 08, 0A, 0C
+    short _pad; // 0E
+    SVECTOR position; // 10, 12, 14
     int* _18;
     int flags;
-    int* _20;
-    int* _24;
+    int* _20; // intro data?
+    struct Instance_s* instance;
     MultiSpline* multiSpline; // 0x28
     int* _2C;
 } Intro;

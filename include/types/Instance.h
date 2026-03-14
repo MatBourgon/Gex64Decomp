@@ -3,25 +3,39 @@
 
 #include "Intro.h"
 #include "Object.h"
+#include "LightInstance.h"
+#include "NodeType.h"
+#include "Rotation.h"
 
-typedef struct
+typedef struct Instance_s
 {
-    int _00[4];
+    NodeType node;
+    struct Instance_s* next;
+    struct Instance_s* prev;
     int flags; // 10
     int flags2; // 14
-    Object* object; // 0x18
-    Intro* intro; // 0x1C
-    int _20[4]; // _20 : Data?, _24 : IntroData?
+    Object* object; // 18
+    Intro* intro; // 1C
+    void* data; // 20
+    void* introData; // 24
+    struct Instance_s* parent; // 28
+    void* _2C;
     short _30[8];
     short _40[4];
     SVECTOR position;
     char _4E;
     char _4F;
-    short _50[8];
-    short _60[8];
+    SVECTOR oldPos; // 50, 52, 54
+    short _56;
+    SVECTOR initialPos; // 58, 5A, 5C
+    short _5E;
+    ROTATION rotation; // 60, 62, 64, 66
+    ROTATION oldRotation; // 68, 6A, 6C, 6E
     int _70[4];
     short _80[8];
-    short _90[8];
+    short _90[4];
+    LightInstance* shadow0;
+    LightInstance* shadow1;
     int _A0;
     int _A4;
     int _A8;
@@ -51,7 +65,12 @@ typedef struct
     char _113;
     char _114;
     unsigned char _115;
-} Instance;
+    char _116;
+    char _117;
+    int _118;
+    int _11C;
+    int _120;
+} Instance; // Should be size accurate now
 
 extern Instance* PlayerInstance;
 

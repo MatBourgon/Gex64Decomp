@@ -83,9 +83,9 @@ void rta_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int v0, v1;
 
     
-    v1 = instance->_50[0];
-    v0 = instance->_50[1];
-    instance->_60[2] = func_80030538(v0 - instance->position.y, v1 - instance->position.x) - 0x400;
+    v1 = instance->oldPos.x;
+    v0 = instance->oldPos.y;
+    instance->rotation.z = func_80030538(v0 - instance->position.y, v1 - instance->position.x) - 0x400;
     func_8002DAF8(instance, -1);
 }
 
@@ -195,7 +195,7 @@ void rta_qmark_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     short* temp_t0;
     volatile char _[4];
     
-    temp_t0 = (short*)instance->_20[1];
+    temp_t0 = (short*)instance->introData;
     temp_s0 = &instance->_F4[2];
     if (((*(int*)&instance->_10C) != 0) && !(gameTracker->gameFlags & 0x2000)) {
         func_8003F6CC(temp_t0[0], temp_t0[1], temp_t0[2], temp_t0[3], temp_t0[5], temp_t0 + 6);
@@ -227,12 +227,12 @@ void rta_qmark_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         break;
     }
     temp_s0[0] += temp_s0[1];
-    instance->_60[2] = ((instance->_60[2] + temp_s0[0]) & 0xFFF);
+    instance->rotation.z = ((instance->rotation.z + temp_s0[0]) & 0xFFF);
 }
 
 void rta_qmark_OnCollide(Instance* instance, GameTracker* gameTracker) {
     short* temp_s2;
-    temp_s2 = (short*)instance->_20[1];
+    temp_s2 = (short*)instance->introData;
     
     if (((int*)instance->_70[2])[5] == ((int*)gameTracker)[12/4]) {
         if (instance->_104 != 1) {

@@ -34,9 +34,9 @@ void func_8004A5B4(Instance* instance, int arg1) {
     int temp_s0;
 
     instance->flags &= ~arg1;
-    temp_s0 = func_8002CBE0(instance);
+    temp_s0 = INSTANCE_InstanceGroupNumber(instance);
     func_800300BC(instance);
-    func_80030090(((int**)gameTracker8)[4] + ((temp_s0 * 2) + 3), instance);
+    LIST_InsertFunc(((int**)gameTracker8)[4] + ((temp_s0 * 2) + 3), instance);
 }
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A61C);

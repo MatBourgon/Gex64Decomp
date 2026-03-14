@@ -41,7 +41,7 @@ void spy_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int* temp_v1;
     int* temp_v1_2;
 
-    temp_a2 = (short*)instance->_20[1];
+    temp_a2 = (short*)instance->introData;
     instance->_104 = (temp_a2[0] * 30);
     instance->_F0[6] = (unsigned short)temp_a2[1];
     *(short*)&instance->_100 = 0;
@@ -78,7 +78,7 @@ void spy_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int* temp_s3;
 
     var_v1 = 1;
-    temp_s3 = (int*)instance->_20[1];
+    temp_s3 = (int*)instance->introData;
     temp_s2 = &instance->_F4[2];
     if (*(short*)&instance->_100 == 0) {
         if (((short*)temp_s2)[0] != 0) {

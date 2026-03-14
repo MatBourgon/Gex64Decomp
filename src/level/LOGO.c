@@ -126,9 +126,9 @@ void logo_cryslogo_OnCreate(Instance* instance, GameTracker* gameTracker)
     instance->flags |= 0x400;
     func_8002C1AC(0);
     ((short**)gameTracker)[0x8/4][0x30/2] = 0xFA0;
-    instance->_60[0] = 0x3FE;
-    instance->_60[1] = 0x6E1;
-    instance->_60[2] = 1;
+    instance->rotation.x = 0x3FE;
+    instance->rotation.y = 0x6E1;
+    instance->rotation.z = 1;
     instance->position.x = 4332;
     instance->position.y = 4800;
     instance->position.z = -1120;
@@ -152,7 +152,7 @@ void logo_cryslogo_OnUpdate(Instance* instance, GameTracker* gameTracker)
 
 void logo_mwgex_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
-    instance->_60[2] = 0xC8;
+    instance->rotation.z = 0xC8;
     instance->_104 = 0x50;
     instance->flags |= 0x400;
 }
@@ -175,9 +175,9 @@ void logo_mwgex_OnUpdate(Instance* instance, GameTracker* gameTracker)
 
 void logo_mwlogo_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
-    instance->_60[0] = 0x802;
-    instance->_60[1] = -0x400;
-    instance->_60[2] = 0;
+    instance->rotation.x = 0x802;
+    instance->rotation.y = -0x400;
+    instance->rotation.z = 0;
     instance->position.x = ((short**)gameTracker)[0x8/4][0] + 50;
     instance->position.y = 100;
     instance->position.z = 100;
@@ -191,9 +191,9 @@ void logo_rtlogor_OnCreate(Instance* instance, GameTracker* gameTracker)
     instance->_104 = 0;
     instance->flags |= 0x400;
     func_8002C1AC(0);
-    instance->_60[0] = 0x400;
-    instance->_60[1] = 0x6D6;
-    instance->_60[2] = 0;
+    instance->rotation.x = 0x400;
+    instance->rotation.y = 0x6D6;
+    instance->rotation.z = 0;
     instance->position.x = 4870;
     instance->position.y = 4500;
     instance->position.z = -150;
@@ -201,7 +201,7 @@ void logo_rtlogor_OnCreate(Instance* instance, GameTracker* gameTracker)
     ((short**)gameTracker)[0x8/4][0x2/2] -= 200;
     ((short**)gameTracker)[0x8/4][0] = PlayerInstance->position.x;
     instance->_4E = 0;
-    instance->_50[7] = 0;
+    instance->_5E = 0;
 }
 
 void logo_rtlogor_OnUpdate(Instance* instance, GameTracker* gameTracker)

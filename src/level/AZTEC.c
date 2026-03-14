@@ -11,8 +11,8 @@ void aztec_funplat_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     short sp10[6];
 
-    if (instance->_20[1] == 0) {
-        instance->_20[1] = (int)D_8015A090_808B0;
+    if (instance->introData == 0) {
+        instance->introData = (int)D_8015A090_808B0;
     }
     sp10[0] = sp10[4] = instance->position.x;
     sp10[1] = sp10[5] = instance->position.y;
@@ -33,7 +33,7 @@ void aztec_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int* temp_v1;
     int* temp_v1_2;
 
-    temp_a2 = (short*)instance->_20[1];
+    temp_a2 = (short*)instance->introData;
     instance->_104 = (temp_a2[0] * 30);
     instance->_F0[6] = (unsigned short)temp_a2[1];
     *(short*)&instance->_100 = 0;
@@ -59,7 +59,7 @@ void aztec_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int* temp_s3;
 
     var_v1 = 1;
-    temp_s3 = (int*)instance->_20[1];
+    temp_s3 = instance->introData;
     temp_s2 = &instance->_F4[2];
     if (*(short*)&instance->_100 == 0) {
         if (((short*)temp_s2)[0] != 0) {
