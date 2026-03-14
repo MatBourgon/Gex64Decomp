@@ -39,6 +39,7 @@ GenericInit = 0x8001ACA0; // type:func
 GenericProcess = 0x8001ACF4; // type:func
 GenericCollide = 0x8001AD48; // type:func
 SCRIPT_InstanceSplineInit = 0x800480F8; // type:func
+INSTANCE_ReallyRemoveInstance = 0x8002CD50; // type:func
 
 
 send_mesg = 0x8005D90C; // type:func

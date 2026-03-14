@@ -14,6 +14,9 @@ typedef struct
     int* _1C;
     int _20;
     const char* name;
+    int _28;
+    int _2C;
+    int oflags2;
 } Object;
 
 #endif

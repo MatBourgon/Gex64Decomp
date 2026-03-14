@@ -15,7 +15,7 @@ typedef struct
     int* _18;
     int flags;
     int* _20;
-    int* _24;
+    int* instance;
     MultiSpline* multiSpline; // 0x28
     int* _2C;
 } Intro;

@@ -102,7 +102,7 @@ segments:
       - [0x2BA70, asm]
       - [0x2C440, asm]
       - [0x2CD50, asm, _2cd50]
-      - [0x2D6E0, asm]
+      - [0x2D6E0, c]
       - [0x2F310, asm]
       - [0x30630, asm]
       - [0x30C90, asm]

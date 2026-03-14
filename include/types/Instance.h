@@ -3,10 +3,13 @@
 
 #include "Intro.h"
 #include "Object.h"
+#include "LightInstance.h"
 
-typedef struct
+typedef struct Instance_s
 {
-    int _00[4];
+    int _00[2];
+    struct Instance_s* next;
+    struct Instance_s* prev;
     int flags; // 10
     int flags2; // 14
     Object* object; // 0x18
@@ -21,7 +24,9 @@ typedef struct
     short _60[8];
     int _70[4];
     short _80[8];
-    short _90[8];
+    short _90[4];
+    LightInstance* shadow0;
+    LightInstance* shadow1;
     int _A0;
     int _A4;
     int _A8;
