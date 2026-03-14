@@ -2,7 +2,6 @@
 
 #include "level/NYPD.h"
 
-extern int* PlayerInstance;
 extern int D_800E5FD8;
 extern int D_80154834;
 
@@ -35,13 +34,13 @@ void nypd_slider_OnUpdate(Instance* instance, GameTracker* gameTracker)
 void nypd_slider_OnCollide(Instance* instance, GameTracker* gameTracker) {
     int* temp_s1;
 
-    temp_s1 = (int*)PlayerInstance[0x20/4];
-    if (!(PlayerInstance[0xFC/4] & 1) && (instance->_F4[2] == 0)) {
+    temp_s1 = (int*)PlayerInstance->_20[0];
+    if (!(PlayerInstance->_F4[2] & 1) && (instance->_F4[2] == 0)) {
         func_80159720_C6800(instance, gameTracker);
         
         instance->_F4[2] = 0x3C;
         temp_s1[0xE0/4] = (int)instance;
-        PlayerInstance[0xFC/4] &= ~2;
+        PlayerInstance->_F4[2] &= ~2;
         
         func_8002B7CC(PlayerInstance);
 
@@ -124,7 +123,7 @@ void nypd_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
                 SIGNAL_HandleSignal(PlayerInstance, temp_s3[0x8/4] + 4, 0);
             }
             instance->_F4[1] = 1;
-            PlayerInstance[0xFC/4] &= 0xFFBFFFFF;
+            PlayerInstance->_F4[2] &= 0xFFBFFFFF;
         }
         if ((((int**)gameTracker)[0xC/4][0xFC/4] & 0x400000) && ((((int**)gameTracker)[0x4C00/4] != 0) || (((int**)gameTracker)[0x4C04/4] != 0))) {
             func_8002C18C(5);

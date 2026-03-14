@@ -22,7 +22,6 @@ extern int D_80156BDC;
 extern int D_80157034;
 extern int D_801574FC;
 extern char D_8006CF20;
-extern short* PlayerInstance;
 extern unsigned short D_800E5DB2;
 
 void logo_select_OnCreate(Instance* instance, GameTracker* gameTracker)
@@ -130,9 +129,9 @@ void logo_cryslogo_OnCreate(Instance* instance, GameTracker* gameTracker)
     instance->_60[0] = 0x3FE;
     instance->_60[1] = 0x6E1;
     instance->_60[2] = 1;
-    instance->_40[4] = 0x10EC;
-    instance->_40[5] = 0x12C0;
-    instance->_40[6] = -0x460;
+    instance->position.x = 4332;
+    instance->position.y = 4800;
+    instance->position.z = -1120;
 }
 
 void logo_cryslogo_OnUpdate(Instance* instance, GameTracker* gameTracker)
@@ -179,9 +178,9 @@ void logo_mwlogo_OnCreate(Instance* instance, GameTracker* gameTracker)
     instance->_60[0] = 0x802;
     instance->_60[1] = -0x400;
     instance->_60[2] = 0;
-    instance->_40[4] = ((short**)gameTracker)[0x8/4][0] + 0x32;
-    instance->_40[5] = 0x64;
-    instance->_40[6] = 0x64;
+    instance->position.x = ((short**)gameTracker)[0x8/4][0] + 50;
+    instance->position.y = 100;
+    instance->position.z = 100;
 }
 
 void logo_mwlogo_OnUpdate(Instance* instance, GameTracker* gameTracker) {
@@ -194,13 +193,13 @@ void logo_rtlogor_OnCreate(Instance* instance, GameTracker* gameTracker)
     func_8002C1AC(0);
     instance->_60[0] = 0x400;
     instance->_60[1] = 0x6D6;
-    instance->_40[4] = 0x1306;
-    instance->_40[5] = 0x1194;
     instance->_60[2] = 0;
-    instance->_40[6] = -0x96;
-    ((short**)gameTracker)[0x8/4][0x4/2] += 0xE6;
-    ((short**)gameTracker)[0x8/4][0x2/2] -= 0xC8;
-    ((short**)gameTracker)[0x8/4][0] = PlayerInstance[0x48/2];
+    instance->position.x = 4870;
+    instance->position.y = 4500;
+    instance->position.z = -150;
+    ((short**)gameTracker)[0x8/4][0x4/2] += 230;
+    ((short**)gameTracker)[0x8/4][0x2/2] -= 200;
+    ((short**)gameTracker)[0x8/4][0] = PlayerInstance->position.x;
     instance->_4E = 0;
     instance->_50[7] = 0;
 }

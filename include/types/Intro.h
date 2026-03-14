@@ -2,6 +2,7 @@
 #define INTRO_H_
 
 #include "Vector.h"
+#include "Spline.h"
 
 typedef struct
 {
@@ -15,7 +16,7 @@ typedef struct
     int flags;
     int* _20;
     int* _24;
-    void* multiSpline; // 0x28
+    MultiSpline* multiSpline; // 0x28
     int* _2C;
 } Intro;
 

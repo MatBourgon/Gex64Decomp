@@ -2,7 +2,6 @@
 
 #include "level/AZTEC.h"
 
-extern int* PlayerInstance;
 extern int D_800E5FD8;
 extern int D_80154834;
 
@@ -15,9 +14,9 @@ void aztec_funplat_OnCreate(Instance* instance, GameTracker* gameTracker)
     if (instance->_20[1] == 0) {
         instance->_20[1] = (int)D_8015A090_808B0;
     }
-    sp10[0] = sp10[4] = instance->_40[4];
-    sp10[1] = sp10[5] = instance->_40[5];
-    sp10[2] = instance->_E0[2] = instance->_40[6];
+    sp10[0] = sp10[4] = instance->position.x;
+    sp10[1] = sp10[5] = instance->position.y;
+    sp10[2] = instance->_E0[2] = instance->position.z;
 
     // Out of bounds access?
     sp10[6] = instance->_40[6] + 0x80;
@@ -99,7 +98,7 @@ void aztec_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
                 SIGNAL_HandleSignal(PlayerInstance, temp_s3[0x8/4] + 4, 0);
             }
             instance->_F4[1] = 1;
-            PlayerInstance[0xFC/4] &= 0xFFBFFFFF;
+            PlayerInstance->_F4[2] &= 0xFFBFFFFF;
         }
         if ((((int**)gameTracker)[0xC/4][0xFC/4] & 0x400000) && ((((int**)gameTracker)[0x4C00/4] != 0) || (((int**)gameTracker)[0x4C04/4] != 0))) {
             func_8002C18C(5);

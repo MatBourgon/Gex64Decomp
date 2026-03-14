@@ -1,8 +1,19 @@
 #include "common.h"
 
 #include "level/FINAL.h"
+#include "types/G2String.h"
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_oldpoptv_OnCreate);
+extern int D_80161510_926B0;
+
+void final_oldpoptv_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    instance->_100 = 1;
+    instance->_F4[2] = 0;
+    instance->flags |= 0x400;
+    if (instance->_20[1] == NULL) {
+        instance->_20[1] = (int)&D_80161510_926B0;
+    }
+}
+
 
 INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_80161510_926B0);
 
@@ -46,14 +57,32 @@ INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_probe_OnUpdate);
 void final_probe_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_reztvex_OnCreate);
+void final_reztvex_OnCreate(Instance* arg0, GameTracker* gameTracker) {
+    arg0->_60[2] = 0;
+    arg0->_60[1] = 0;
+    arg0->_60[0] = 0;
+    arg0->_60[6] = 0x100;
+    arg0->_60[5] = 0x100;
+    arg0->_60[4] = 0x100;
+    arg0->_50[3] = 0;
+    arg0->flags |= 0x80;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_reztvex_OnUpdate);
 
 void final_reztvex_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_rezxpl_OnCreate);
+void final_rezxpl_OnCreate(Instance* arg0, GameTracker* gameTracker) {
+    arg0->_60[2] = 0;
+    arg0->_60[1] = 0;
+    arg0->_60[0] = 0;
+    arg0->_60[6] = 0x100;
+    arg0->_60[5] = 0x100;
+    arg0->_60[4] = 0x100;
+    arg0->_50[3] = 0;
+    arg0->flags |= 0x80;
+}
 
 void func_80159CBC_8AE5C(Instance* instance, GameTracker* gameTracker) {
 }
@@ -174,7 +203,14 @@ INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_popper_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_popper_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_finaltv_OnCreate);
+void final_finaltv_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    instance->position.x = 11520;
+    instance->position.y = 9850;
+    instance->position.z = 6000;
+    instance->_E0[1] = -10;
+    instance->_F4[-1] = 100;
+    instance->_F4[2] = 30;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_finaltv_OnUpdate);
 
@@ -194,7 +230,23 @@ INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015F480_90620);
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015F818_909B8);
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_frez_OnCreate);
+extern char D_80161588_92728[];
+extern char D_8016166C_9280C[];
+extern void func_8015F200_903A0(void); // unknown
+
+void final_frez_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    if (!(instance->flags & 0x20000)) {
+        instance->_D0[3] = OBTABLE_FindObject(D_80161588_92728);
+        instance->_C0[4] = 0;
+        instance->_C0[5] = 1;
+        instance->_C0[6] = 1;
+        instance->_40[6] -= 0x12C;
+        instance->_E0[2] = OBTABLE_FindObject(D_8016166C_9280C);
+        instance->_B4 = (void*)&func_8015F200_903A0;
+        instance->flags |= 0x10400;
+        instance->flags2 |= 8;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015F964_90B04);
 
@@ -212,20 +264,83 @@ INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_8016169C_9283C);
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_frez_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_frez_OnCollide);
+extern char D_8016166C_9280C[];
+extern char D_801616F0_92890[];
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_rezcam_OnCreate);
+void final_frez_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    int*** temp_a2;
+    short* temp_s1;
+
+    temp_a2 = (int***)instance->_70[2];
+    temp_s1 = &instance->_C0[4];
+    if (G2String_Compare_EQ(temp_a2[0x14/4][0x18/4][0x24/4], D_8016166C_9280C)) {
+        if (instance->_F4[0] != 0) {
+            func_800331BC(instance->_F4[0], gameTracker);
+            instance->_F4[0] = 0;
+        }
+        if (*temp_s1 != 0xB) {
+            ((short*)instance->_D0)[3]++;
+            if (((short*)instance->_D0)[3] >= 3) {
+                *temp_s1 = 0xC;
+            }
+            else
+            {
+                *temp_s1 = 0xB;
+            }
+        }
+        temp_s1[0x2/2] = 1;
+    }
+    else if ((*temp_s1 != 8) && (((short*)temp_a2)[0x6/2] == 1)) {
+        if (G2String_Compare_EQ(temp_a2[0x14/4][0x18/4][0x24/4], D_801616F0_92890) && (func_8002275C(PlayerInstance, gameTracker) == 0)) {
+            temp_s1[0x34/2] = 0;
+        }
+    }
+}
+
+extern int D_80161558_926F8[];
+void final_rezcam_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    int temp_s2;
+    int* ptr;
+
+    temp_s2 = ((int*)gameTracker)[2];
+    ptr = &instance->_F4[2];
+    instance->flags |= 0x800;
+    func_80001408(((int*)gameTracker)[2], 8);
+    if (instance->_20[1] == NULL) {
+        instance->_20[1] = (int)&D_80161558_926F8;
+    }
+    func_80005438(ptr, &instance->position, temp_s2);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_rezcam_OnUpdate);
 
 void final_rezcam_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_finplat_OnCreate);
+void final_finplat_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    int temp_ret;
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_finplat_OnUpdate);
+    func_80000F24(((int*)gameTracker)[2], 213);
+    instance->_F4[2] = (rand() % 120) + 120;
+    GenericInit(instance, gameTracker);
+}
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_finplat_OnCollide);
+void final_finplat_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    
+    if (--instance->_F4[2] <= 0) {
+        if (func_80052FB8() != 0) {
+            func_80052C2C(0x4C);
+        }
+        
+        instance->_F4[2] = (rand() % 120) + 120;
+    }
+    GenericProcess(instance, gameTracker);
+}
+
+void final_finplat_OnCollide(Instance* instance, GameTracker* gameTracker)
+{
+    GenericCollide(instance, gameTracker);
+}
 
 INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_801616F0_92890);
 

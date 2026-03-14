@@ -3,7 +3,6 @@
 #include "level/HORROR.h"
 
 #include "types/Vector.h"
-extern int* PlayerInstance;
 extern int D_800E5FD8;
 extern int D_80154834;
 
@@ -278,7 +277,7 @@ void horror_qmark_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         case 0: break;
         
         case 1:
-        if (MATH3D_FastSqrt(SVECTOR_DistanceSquared((SVECTOR*)&instance->_40[4], (SVECTOR*)&PlayerInstance[0x48/4]), 0) > 1000
+        if (MATH3D_FastSqrt(SVECTOR_DistanceSquared(&instance->position, &PlayerInstance->position), 0) > 1000
             || !temp_s0[5])
         {
             temp_s0[2] = 2;
@@ -402,7 +401,7 @@ void horror_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
                 SIGNAL_HandleSignal(PlayerInstance, temp_s3[0x8/4] + 4, 0);
             }
             instance->_F4[1] = 1;
-            PlayerInstance[0xFC/4] &= 0xFFBFFFFF;
+            PlayerInstance->_F4[2] &= 0xFFBFFFFF;
         }
         if ((((int**)gameTracker)[0xC/4][0xFC/4] & 0x400000) && ((((int**)gameTracker)[0x4C00/4] != 0) || (((int**)gameTracker)[0x4C04/4] != 0))) {
             func_8002C18C(5);

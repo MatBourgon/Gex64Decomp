@@ -553,7 +553,7 @@ int func_8004D2F8(int arg0, _4a780_t* arg1) {
     return 1;
 }
 
-int func_8004D33C(int* arg0, _4a780_t* arg1) {
+int func_8004D33C(Instance* arg0, _4a780_t* arg1) {
     if (D_800785CC[arg1->_0004] != 0) {
         if (arg1->_0008 != 0) {
             SIGNAL_HandleSignal(arg0, arg1->_0008, NULL);
@@ -582,7 +582,7 @@ int func_8004D4B0(int arg0, _4a780_t* arg1) {
     return 1;
 }
 
-int func_8004D4F4(int* arg1, int** arg2) {
+int func_8004D4F4(Instance* arg1, int** arg2) {
     SIGNAL_HandleSignal(arg1, arg2[1], 0);
     return 0;
 }
@@ -683,8 +683,7 @@ int func_8004D8DC(int* _possiblythis, int* arg2) {
 }
 
 int func_8004D944(int* arg0, int* arg1) {
-    (int)arg0 = arg1[1];
-    func_80033334(arg0);
+    func_80033334(arg1[1]);
     return 1;
 }
 
@@ -770,7 +769,7 @@ int func_8004E3E8(void) {
     return 1;
 }
 
-int func_8004E408(int* arg0, int** arg1) {
+int func_8004E408(Instance* arg0, int** arg1) {
     if ((arg1[1] != 0) && (arg1[1][7] & 8)) {
         if (arg1[2] != NULL) {
             SIGNAL_HandleSignal(arg0, arg1[2], 0);
@@ -802,7 +801,7 @@ int func_8004E580(int arg0, char* arg1) {
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004E5B8);
 
-int func_8004E768(int* arg0, _4a780_t* arg1) {
+int func_8004E768(Instance* arg0, _4a780_t* arg1) {
     if (D_800785CC[arg1->_0004] != 0 && arg1->_0008 != 0) {
         SIGNAL_HandleSignal(arg0, arg1->_0008, 0);
         return 0;
@@ -810,7 +809,7 @@ int func_8004E768(int* arg0, _4a780_t* arg1) {
     return 1;
 }
 
-int func_8004E7C8(int* arg0, _4a780_t* arg1) {
+int func_8004E7C8(Instance* arg0, _4a780_t* arg1) {
     if (D_800785CC[arg1->_0004] == 0 && arg1->_0008 != 0) {
         SIGNAL_HandleSignal(arg0, arg1->_0008, 0);
         return 0;
@@ -909,12 +908,11 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004EA2C);
 
 typedef int (*funcdef_8004EA58)(void*, void*);
 
-extern int* PlayerInstance;
 extern funcdef_8004EA58 D_80078664[];
 extern short D_80078668[];
 extern short D_8007866A[];
 
-void COLLIDE_HandleSignal(void* instance, void* signal, int numSignals, int* arg3) {
+void COLLIDE_HandleSignal(Instance* instance, void* signal, int numSignals, int* arg3) {
     int s4, s3;
     int v0;
     int s2 = 0;
@@ -942,7 +940,7 @@ void COLLIDE_HandleSignal(void* instance, void* signal, int numSignals, int* arg
 
 }
 
-void SIGNAL_HandleSignal(void* instance, void* signal, int* arg2) {
+void SIGNAL_HandleSignal(Instance* instance, void* signal, int* arg2) {
     COLLIDE_HandleSignal(instance, signal, 1, arg2);
 }
 

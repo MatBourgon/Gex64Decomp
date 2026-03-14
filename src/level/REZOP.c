@@ -2,7 +2,6 @@
 
 #include "level/REZOP.h"
 
-extern int* PlayerInstance;
 extern int D_800E5FD8;
 extern int D_80154834;
 
@@ -284,7 +283,7 @@ INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_btimer_OnUpdate);
                 SIGNAL_HandleSignal(PlayerInstance, temp_s3[0x8/4] + 4, 0);
             }
             arg0->_F4[1] = 1;
-            PlayerInstance[0xFC/4] &= 0xFFBFFFFF;
+            PlayerInstance->_F4[2] &= 0xFFBFFFFF;
         }
         if ((arg1[0xC/4][0xFC/4] & 0x400000) && ((arg1[0x4C00/4] != 0) || (arg1[0x4C04/4] != 0))) {
             func_8002C18C(5);
