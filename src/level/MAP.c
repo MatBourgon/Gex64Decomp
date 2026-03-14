@@ -1413,7 +1413,7 @@ void map_lvltv_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             }
         } else if (((int*)temp_s2)[0x2C/4] == 0) {
             if (instance->intro->multiSpline != NULL) {
-                temp_v0_3 = (int*)func_80048524(instance, &sp18, &sp1C);
+                temp_v0_3 = (int*)SCRIPT_GetMultiSpline(instance, &sp18, &sp1C);
                 if (temp_v0_3[1] != 0) {
                     func_80051C64(temp_v0_3[1], func_800485F8(instance, temp_v0_3, sp18, sp1C), &sp10);
                     instance->intro->rotation.x += sp10.x;

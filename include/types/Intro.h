@@ -4,6 +4,8 @@
 #include "Vector.h"
 #include "Spline.h"
 
+struct Instance_s;
+
 typedef struct
 {
     int* _00;
@@ -15,7 +17,7 @@ typedef struct
     int* _18;
     int flags;
     int* _20; // intro data?
-    int* instance;
+    struct Instance_s* instance;
     MultiSpline* multiSpline; // 0x28
     int* _2C;
 } Intro;

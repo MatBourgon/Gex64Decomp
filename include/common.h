@@ -3,6 +3,8 @@
 
 #include "include_asm.h"
 
+#define offsetof(object, member) (((int)&object->member) - (int)object)
+
 #ifndef NULL
 #define NULL 0
 #endif

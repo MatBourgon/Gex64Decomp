@@ -1,6 +1,8 @@
 #include "common.h"
 
 #include "types/InstanceList.h"
+#include "types/GameTracker.h"
+
 
 void INSTANCE_InitInstanceList(InstanceList *list, InstancePool *pool) {
     long i;
@@ -214,7 +216,79 @@ void INSTANCE_CleanUpInstanceList(InstanceList* list, int reset) {
 
 INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002D134);
 
-INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002D2C0);
+void INSTANCE_DefaultInit(Instance*, Object*);
+
+void* INSTANCE_BirthObject(Intro* intro) {
+    Object* object;
+    Instance* instance;
+
+    object = (Object*)intro->_00;
+    if (!(intro->flags & 8)) {
+        if (intro->instance == NULL) {
+            intro->flags |= 8;
+            instance = INSTANCE_NewInstance((InstanceList*)gameTracker8->instanceList);
+            if (instance != NULL) {
+                INSTANCE_DefaultInit(instance, object);
+                intro->instance = instance;
+                instance->intro = intro;
+                
+                instance->_20[1] = (int)intro->_20; // intro data?
+                
+                instance->position = intro->position;
+                
+                *(SVECTOR*)&instance->_50[4] = instance->position;
+                
+                *(SVECTOR*)&instance->_50[0] = intro->position;
+                
+                if (instance->object->oflags & 0x100) {
+                    func_8002E0D8(instance); // build static shadow?
+                }
+                instance->_60[4] = 0x1000;
+                instance->_60[5] = 0x1000;
+                instance->_60[6] = 0x1000;
+                
+                if (intro->flags & 0x200) {
+                    instance->flags |= 0x20000000;
+                }
+                if (intro->flags & 0x2000) {
+                    instance->flags |= 0x400;
+                }
+                if (intro->_00[0] & 8) {
+                    instance->flags2 |= 8;
+                }
+                if (intro->_00[0x30/4] & 0x80) {
+                    instance->flags |= 0x800;
+                }
+                if (intro->flags & 0x800) {
+                    if (((short*)intro->_00)[2] == -1) {
+                        func_80048828(instance, (short)func_80048304(instance), 0, 0, 0);
+                        instance->flags ^= 0x01000000;
+                        instance->flags |= 0x100000;
+                    }
+                }
+                if (SCRIPT_GetMultiSpline(instance, NULL, NULL) == NULL) {
+                    instance->flags &= 0xFDFFFFFF;
+                    instance->flags |= 0x100000;
+                }
+                instance->_4F = intro->_pad;
+                INSTANCE_InsertInstanceGroup((InstanceList*)gameTracker8->instanceList, instance);
+                OBTABLE_GetInstanceCollideFunc(instance);
+                OBTABLE_GetInstanceProcessFunc(instance);
+                if (!(intro->flags & 0x10)) {
+                    OBTABLE_InstanceInit(instance);
+                }
+                
+                if (object->_06 != -1) {
+                    func_80052944(object->_06);
+                }
+                return instance;
+            }
+            return NULL;
+        }
+    }
+    
+    return intro->instance;
+}
 
 INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002D58C);
 
@@ -226,7 +300,17 @@ INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002E088);
 
 INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002E0D8);
 
-INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002E180);
+void INSTANCE_DefaultInit(Instance* instance, Object* object) {
+    memset(&instance->flags, 0, sizeof(Instance) - offsetof(instance, flags));
+    instance->object = object;
+    instance->_20[0] = (int)object->_1C; // data?
+    if (instance->object->oflags & 0x200) {
+        instance->flags2 |= 0x40;
+    }
+    if (!(instance->object->oflags & 0x01000800)) {
+        instance->flags |= 0x02000000;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002E21C);
 

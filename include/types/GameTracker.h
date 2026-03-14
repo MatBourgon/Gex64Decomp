@@ -1,13 +1,18 @@
 #ifndef GAMETRACKER_H_
 #define GAMETRACKER_H_
 
+struct InstanceList_s;
+
 typedef unsigned char byte;
 typedef unsigned int uint;
 typedef struct
 {
     int     _0000;
     int*   _0004;
-    char    _0008[0x4BEC];
+    int     _0008;
+    int     _000C;
+    struct InstanceList *instanceList;
+    char    _0014[0x4BE0];
     char    _4BF4[0x14];
     uint    gameFlags;
     int     _4C0C;
