@@ -1105,7 +1105,7 @@ void map_ctrlbutn_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
     ((short*)&instance->_100)[1] = 2;
     instance->_F0[6] = 0x64;
-    temp_a1 = instance->introData;
+    temp_a1 = (int)instance->introData;
     instance->flags |= 0x800;
     if (temp_a1 != 0) {
         temp_v0 = (SVECTOR*)((((short*)&instance->_100)[1] * sizeof(SVECTOR)) + temp_a1 + 4);
@@ -1238,7 +1238,7 @@ void func_8015D9E4_BE414(Instance* instance) {
 
     func_80047E64(instance, -0x14);
     instance->_40[6] += 0x80;
-    instance->_F4[2] = func_8002DEA8(instance, OBTABLE_FindObject("lvllabl_"));
+    instance->_F4[2] = INSTANCE_BirthObject(instance, OBTABLE_FindObject("lvllabl_"));
     instance->position = v;
     instance->flags |= 0x10000;
     ((int*)instance->_F4[2])[0x10/4] |= 0x100000;
@@ -1248,7 +1248,7 @@ void func_8015D9E4_BE414(Instance* instance) {
 }
 
 void func_8015DAC8_BE4F8(Instance* instance) {
-    instance->_100 = func_8002DEA8(instance, OBTABLE_FindObject("etvbutn_" /*etvbutn_*/));
+    instance->_100 = INSTANCE_BirthObject(instance, OBTABLE_FindObject("etvbutn_" /*etvbutn_*/));
     instance->flags |= 0x10000;
     ((int*)instance->_100)[0x10/4] |= 0x100000;
     ((int*)instance->_100)[0x10/4] |= 0x400;

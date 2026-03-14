@@ -218,7 +218,7 @@ INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002D134);
 
 void INSTANCE_DefaultInit(Instance*, Object*);
 
-void* INSTANCE_BirthObject(Intro* intro) {
+void* INSTANCE_BirthObjectFromIntro(Intro* intro) {
     Object* object;
     Instance* instance;
 
@@ -294,8 +294,7 @@ INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002D58C); // likely INSTANCE_Process
 
 INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002DAF8);
 
-Instance* func_8002DEA8(Instance* parent, Object* object) {
-    int temp_a0;
+Instance* INSTANCE_BirthObject(Instance* parent, Object* object) {
     Instance* instance;
 
     if (object == NULL)
