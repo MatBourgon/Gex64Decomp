@@ -95,7 +95,7 @@ void rta_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
     temp_a2 = (char**)instance->_70[2];
     if ((temp_a2[5] == ((char**)gameTracker)[12/4]) && (((short*)temp_a2)[3] == 1)) {
         if (temp_a2[12/4][5] >= 6U) {
-            func_80047904(instance, 5, 3, 0);
+            INSTANCE_PlainDeath(instance, 5, 3, 0);
         }
         else
         {

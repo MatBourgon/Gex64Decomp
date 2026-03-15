@@ -49,7 +49,12 @@ INSTANCE_CleanUpInstanceList = 0x8002D068; // type:func
 INSTANCE_BirthObjectFromIntro = 0x8002D2C0; // type:func
 INSTANCE_BirthObject = 0x8002DEA8; // type:func
 INSTANCE_DefaultInit = 0x8002E180; // type:func
+INSTANCE_ProcessFunctions = 0x8002D58C; // type:func
 LIST_InsertFunc = 0x80030090; // type:func
+SplineIsWhere = 0x800514D0; // type:func
+SplineMultiIsWhere = 0x80051528; // type:func
+INSTANCE_KillInstance = 0x8002E3C4; // type:func
+INSTANCE_PlainDeath = 0x80047904; // type:func
 
 
 send_mesg = 0x8005D90C; // type:func

@@ -14,8 +14,8 @@ typedef struct
     short _pad; // 0E
     SVECTOR position; // 10, 12, 14
     int* _18;
-    int flags;
-    int* _20; // intro data?
+    int flags; // 1C
+    void* data; // 20
     struct Instance_s* instance;
     MultiSpline* multiSpline; // 0x28
     int* _2C;

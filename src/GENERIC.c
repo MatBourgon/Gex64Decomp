@@ -99,7 +99,7 @@ void GenericCollide(Instance* instance, GameTracker* gameTracker) {
     _e4:
     if (t0 != 0)
     {
-        func_8002E3C4(instance, gameTracker);
+        INSTANCE_KillInstance(instance);
     }
     else
     {

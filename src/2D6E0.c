@@ -3,6 +3,8 @@
 #include "types/InstanceList.h"
 #include "types/GameTracker.h"
 
+// Hint: Probably INSTANCE.c
+
 
 void INSTANCE_InitInstanceList(InstanceList *list, InstancePool *pool) {
     long i;
@@ -232,7 +234,7 @@ void* INSTANCE_BirthObjectFromIntro(Intro* intro) {
                 intro->instance = instance;
                 instance->intro = intro;
                 
-                instance->introData = (int)intro->_20; // intro data?
+                instance->introData = intro->data;
                 
                 instance->position = intro->position;
                 
@@ -290,7 +292,159 @@ void* INSTANCE_BirthObjectFromIntro(Intro* intro) {
     return intro->instance;
 }
 
-INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002D58C); // likely INSTANCE_ProcessFunctions
+void INSTANCE_ProcessFunctions(InstanceList* list) {
+    short direction;
+    int scriptIntroData;
+    int isValid;
+    int var_s6;
+    MultiSpline* multi;
+    Instance* instance;
+    
+    var_s6 = 0;
+     for (instance = list->first; instance != NULL; instance = instance->next) {
+        isValid = 1;
+         
+        if (instance == (Instance*)gameTracker8->_000C)
+        {
+            isValid = 0;
+        }
+        if ((instance->intro != NULL) && (instance->intro->flags & 0x100)) {
+            isValid = 0;
+        }
+        if (instance->flags2 & 4) {
+            isValid = 0;
+        }
+        if ((instance->intro != NULL) && (instance->intro->flags & 0x80) && !(instance->flags & 0x402)) {
+            isValid = 0;
+        }
+         
+        if (isValid) {
+            
+            instance->oldPos.x = instance->position.x;
+            instance->oldPos.y = instance->position.y;
+            instance->oldPos.z = instance->position.z;
+            
+            if (!(instance->flags & 0x100000)) {
+                multi = SCRIPT_GetMultiSpline(instance, NULL, NULL);
+                if (multi != NULL) {
+                    if (instance->flags & 0x02000000) {
+                        direction = (instance->flags & 0x01000000) ? -1 : 1;
+                        if (instance->object->oflags & 0x10000000) {
+                            instance->flags |= 0x400;
+    
+                            if ((SplineMultiIsWhere(multi) << 0x10) != 0) {
+                                if (direction > 0) {
+                                    instance->intro->flags |= 0x800;
+                                } else {
+                                    instance->intro->flags &= ~0x800;
+                                }
+                            }
+                        }
+                        
+                        // InstanceSplineProcess
+                        if (func_80048CC8(instance, &multi->curPositional, &multi->curRotational, &multi->curScaling, direction) > 0) {
+                            if (instance->flags2 & 0x10000) {
+                                func_800331BC(instance->_D0[0]);
+                                instance->flags2 &= 0xFFFEFFFF;
+                                instance->flags2 &= 0xFFFDFFFF;
+                            }
+                            if (instance->object->oflags & 0x10000000) {
+                                instance->flags &= ~0x400;
+                                instance->flags &= 0xFDFFFFFF;
+                                instance->flags |= 0x100000;
+                            }
+                            
+                            if (instance->object->oflags & 0x2000) {
+                                instance->flags |= 0x10;
+                                instance->flags |= 0x100000;
+                                INSTANCE_KillInstance(instance);
+                                continue;
+                            } else {
+                                if (instance->object->oflags & 0x1000) {
+                                    instance->flags &= 0xFDFFFFFF;
+                                    if (instance->object->oflags & 0x800000) {
+                                        SCRIPT_InstanceSplineInit(instance, gameTracker8);
+                                    }
+                                } else if (instance->object->oflags & 0x01000000) {
+                                    instance->flags &= 0xFDFFFFFF;
+                                }
+                                
+                                if (multi->positional != NULL)
+                                {
+                                    if (!(multi->positional->flags & 4) && !(instance->object->oflags & 0x800000))
+                                    {
+                                        instance->flags ^= 0x01000000;
+                                    }
+                                }
+                                else if (multi->rotational != NULL)
+                                {
+                                    if (!(multi->rotational->flags & 4) && !(instance->object->oflags & 0x800000))
+                                    {
+                                        instance->flags ^= 0x01000000;
+                                    }
+                                }
+                                
+                                if (instance->object->oflags & 0x200000) {
+                                    if (instance->introData != NULL) {
+                                        scriptIntroData = *(int*)instance->introData;
+                                        if (scriptIntroData != 0) {
+                                            SIGNAL_HandleSignal(instance, scriptIntroData + 4, 0);
+                                        }
+                                    }
+                                }
+                            }
+                        } 
+                    } else {
+                        if ((instance->flags & 0x84000000) == 0x80000000) {
+                            if (instance->object->oflags & 0x800) {
+                                if (!(instance->flags & 0x100000)) {
+                                    if (!(instance->flags2 & 0x10000)) {
+                                        instance->flags2 |= 0x1000;
+                                    }
+                                }
+                                instance->flags |= 0x02000000;
+                            }
+                            var_s6 = 1;
+                        }
+                    }
+                }
+                
+            }
+            if ((instance->flags2 & 1) && (instance->object->oflags & 0x04000000)) {
+                if (instance->introData != NULL) {
+                    scriptIntroData = *(int*)instance->introData;
+                    if (scriptIntroData != 0) {
+                        SIGNAL_HandleSignal(instance, scriptIntroData + 4, 0);
+                    }
+                }
+            }
+            
+            if ((instance->flags2 & 2) && (instance->object->oflags & 0x08000000)) {
+                if (instance->introData != NULL) {
+                    scriptIntroData = *(int*)instance->introData;
+                    if (scriptIntroData != 0) {
+                        SIGNAL_HandleSignal(instance, scriptIntroData + 4, 0);
+                    }
+                }
+            }
+            
+            if ((instance->flags < 0) || (var_s6 != 0)) {
+                instance->flags |= 0x04000000;
+            } else {
+                instance->flags &= 0xFBFFFFFF;
+            }
+            
+            if ( instance->processFunc != NULL) {
+                 instance->processFunc(instance, gameTracker8);
+            }
+            
+            if (instance->object->oflags2 & 4) {
+                func_8004F020(instance);
+            }
+            
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002DAF8);
 
@@ -372,7 +526,13 @@ void func_8002E350(Instance* instance) {
     func_8002CD3C((InstanceList*)gameTracker8->instanceList, instance);
 }
 
-INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002E3C4);
+void INSTANCE_KillInstance(Instance* instance)
+{
+    if (!(instance->flags & 0x20))
+    {
+        INSTANCE_PlainDeath(instance, 1, -1, 0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002E3FC);
 

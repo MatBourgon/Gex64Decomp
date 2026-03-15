@@ -2,6 +2,10 @@
 #include "types/GameTracker.h"
 #include "types/G2String.h"
 
+#include "types/Instance.h"
+
+// Hint: Probably SCRIPT.c
+
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80041FD0);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80042120);
@@ -116,95 +120,95 @@ INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80047438);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80047724);
 
-extern void func_80047438(int*, GameTracker*);
+extern void func_80047438(Instance*, GameTracker*);
 extern void func_80047724();
 
-void func_80047768(int* arg0, int arg1, int arg2, int arg3) {
-    int temp_a0;
-    int* temp_a1;
+void func_80047768(Instance* instance, int arg1, int arg2, int arg3) {
+    Object* temp_a1 = instance->object;
     int var_a2 = 0;
 
-    temp_a1 = ((int*)arg0[0x18/4]);
-    temp_a0 = temp_a1[0x30/4];
     
-    if ((temp_a0 & 0x400)) 
+    if ((temp_a1->oflags2 & 0x400)) 
     {
         var_a2 |= 0x40;
         var_a2 |= 0x8;
         var_a2 |= 0x1;
     }
     
-    if (temp_a0 & 0x20000) {
+    if (temp_a1->oflags2 & 0x20000) {
         var_a2 |= 0xC1;
     }
-    if (temp_a0 & 0x1000) {
+
+    if (temp_a1->oflags2 & 0x1000) {
         var_a2 |= 0x14;
     }
-    if (temp_a0 & 0x800) {
+
+    if (temp_a1->oflags2 & 0x800) {
         var_a2 |= 3;
     }
-    if (temp_a0 & 0x2000) {
+
+    if (temp_a1->oflags2 & 0x2000) {
         var_a2 |= 0x21;
     }
+
     if (var_a2 == 0) {
-        if (arg0[0x14/4] & 1) {
+        if (instance->flags2 & 1) {
             var_a2 = 3;
         }
-        if (arg0[0x14/4] & 2) {
+
+        if (instance->flags2 & 2) {
             var_a2 |= 0x10;
-            if (temp_a0 & 0x10000) {
-                var_a2 |= 0x48;
-            } else {
-                var_a2 |= 4;
-            }
+            var_a2 |= ((temp_a1->oflags2 & 0x10000) ? 0x48 : 4);
         }
-        if (arg0[0x14/4] & 0x01000000) {
+
+        if (instance->flags2 & 0x01000000) {
             var_a2 |= 0x49;
         }
     }
-    if (arg0[0x14/4] & 0x01000000) {
+
+    if (instance->flags2 & 0x01000000) {
         var_a2 |= 0x100;
     }
     
-    if (temp_a1[0x30/4] & 0x4000) {
+    if (temp_a1->oflags2 & 0x4000) {
         var_a2 &= 0x11;
         if (var_a2 == 0) {
             var_a2 = 1;
         }
         var_a2 |= 0x40;
-    } else if (temp_a1[0x30/4] & 0x8000) {
+    } else if (temp_a1->oflags2 & 0x8000) {
         var_a2 &= ~0x1;
         var_a2 &= ~0x10;
     }
     if (var_a2 != 0) {
-        func_80046D04(arg0, func_80047438, var_a2, arg1, arg2);
-        func_80047438(arg0, gameTracker8);
+        func_80046D04(instance, func_80047438, var_a2, arg1, arg2);
+        func_80047438(instance, gameTracker8);
     }
     else if (arg3 != 0) {
-        func_80046D04(arg0, func_80047724, 0, arg1, arg2);
+        func_80046D04(instance, func_80047724, 0, arg1, arg2);
     }
     else
-        func_800473A4(arg0, arg1, arg2);
+        func_800473A4(instance, arg1, arg2);
 }
 
-void func_80047904(int** arg0, int arg1, int arg2) {
-    int* iVar1;
+void INSTANCE_PlainDeath(Instance* instance, int arg1, int arg2, int arg3) {
+    Object* object;
 
-    iVar1 = arg0[6];
-    func_80046CB0();
+    object = instance->object;
+    func_80046CB0(instance);
 
-    if (iVar1[12] & 0x100)
+    if (object->oflags2 & 0x100)
     {
-        func_800473A4(arg0, arg1, arg2);
+        func_800473A4(instance, arg1, arg2);
     }
-    else if (iVar1[12] & 0x200)
+    else if (object->oflags2 & 0x200)
     {
-        func_80046AA0(arg0, arg2);
-        func_80046CE4(arg0);
+        func_80046AA0(instance, arg2);
+        func_80046CE4(instance);
     }
     else
     {
-        func_80047768((int*)arg0, arg1, arg2, 1);
+        func_80047768(instance, arg1, arg2, 1);
     }
     
 }
@@ -264,7 +268,44 @@ INCLUDE_ASM("asm/nonmatchings/_42bd0", func_8004848C);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_800484C4);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", SCRIPT_GetMultiSpline);
+MultiSpline* SCRIPT_GetMultiSpline(Instance *instance, unsigned long *isParent, unsigned long *isClass)
+{
+    MultiSpline *multi;
+
+    multi = NULL;
+
+    if (isParent != NULL)
+    {
+        *isParent = 0;
+    }
+
+    if (isClass != NULL)
+    {
+        *isClass = 0;
+    }
+
+    if ((instance != NULL) && (instance->intro != NULL) && (instance->intro->multiSpline != NULL))
+    {
+        multi = instance->intro->multiSpline;
+
+        if (((instance->flags & 0x100002) == 0x2) && (isParent != NULL))
+        {
+            *isParent = 1;
+        }
+    }
+
+    if ((multi == NULL) && (instance->object->modelList[0] != NULL))
+    {
+        multi = instance->object->modelList[0]->multiSpline;
+
+        if (isClass != NULL)
+        {
+            *isClass = 1;
+        }
+    }
+
+    return multi;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_800485D4);
 
