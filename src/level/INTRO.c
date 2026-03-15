@@ -16,7 +16,7 @@ void intro_rezzull_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
     ptr = &instance->_F4[2];
     var_a1 = 0;
-    temp_s1 = ((short**)PlayerInstance)[0x20/4];
+    temp_s1 = PlayerInstance->data;
     instance->flags |= 0x400;
     gameTracker8->gameFlags &= ~0x10;
     D_8006FCD2 = 0;
@@ -40,9 +40,9 @@ void intro_rezzull_OnCreate(Instance* instance, GameTracker* gameTracker) {
     temp_s1[0xDC/2] = 0;
     temp_v1 = ((short**)gameTracker)[0x8/4];
     temp_v1[2] += 0xDC;
-    ((short*)PlayerInstance)[0x64/2] = 0x11F0;
-    ((short*)PlayerInstance)[0x48/2] -= 1100;
-    ((short*)PlayerInstance)[0x4A/2] += 2200;
+    PlayerInstance->rotation.z = 0x11F0;
+    PlayerInstance->position.x -= 1100;
+    PlayerInstance->position.y += 2200;
     instance->rotation.x = 1024;
     instance->rotation.y = 1750;
     instance->rotation.z = 0;

@@ -232,7 +232,7 @@ void* INSTANCE_BirthObjectFromIntro(Intro* intro) {
                 intro->instance = instance;
                 instance->intro = intro;
                 
-                instance->introData = (int)intro->_20; // intro data?
+                instance->introData = intro->data;
                 
                 instance->position = intro->position;
                 

@@ -9,7 +9,7 @@ typedef struct
 {
     int     _0000;
     int*   _0004;
-    int     _0008;
+    int     _0008; // Might be player instance*
     int     _000C;
     struct InstanceList *instanceList;
     char    _0014[0x4BE0];
