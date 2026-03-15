@@ -290,7 +290,7 @@ void map_intro_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     {
         if (s3[0] & 1)
         {
-            func_8002E3C4(instance);
+            INSTANCE_KillInstance(instance);
         } // 1c8
     } // 1c8
     
@@ -1262,7 +1262,7 @@ void func_8015DB54_BE584(Instance* instance) {
     var_s0 = (int**)instance->_D0;
     if (instance->_F4[2] != 0) {
         ((int*)instance->_F4[2])[0x10/4] &= ~0x400;
-        func_80047904(instance->_F4[2], -1, 0, 0);
+        INSTANCE_PlainDeath(instance->_F4[2], -1, 0, 0);
     }
     if (instance->_100 != 0) {
         ((int*)instance->_100)[0x10/4] &= ~0x400;
