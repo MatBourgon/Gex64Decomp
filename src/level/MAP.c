@@ -1361,8 +1361,8 @@ void map_lvltv_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 void map_lvltv_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     SVECTOR sp10;
-    int sp18;
-    int sp1C;
+    int isParent;
+    int isClass;
     short* temp_s1;
     Instance* temp_a2;
     u8* temp_s2;
@@ -1413,9 +1413,9 @@ void map_lvltv_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             }
         } else if (((int*)temp_s2)[0x2C/4] == 0) {
             if (instance->intro->multiSpline != NULL) {
-                multi = (MultiSpline*)SCRIPT_GetMultiSpline(instance, &sp18, &sp1C);
+                multi = (MultiSpline*)SCRIPT_GetMultiSpline(instance, &isParent, &isClass);
                 if (multi->rotational != 0) {
-                    func_80051C64(multi->rotational, func_800485F8(instance, multi, sp18, sp1C), &sp10);
+                    func_80051C64(multi->rotational, func_800485F8(instance, multi, isParent, isClass), &sp10);
                     instance->intro->rotation.x += sp10.x;
                     instance->intro->rotation.y += sp10.y;
                     instance->intro->rotation.z += sp10.z;

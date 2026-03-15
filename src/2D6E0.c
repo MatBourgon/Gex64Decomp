@@ -3,6 +3,8 @@
 #include "types/InstanceList.h"
 #include "types/GameTracker.h"
 
+// Hint: Probably INSTANCE.c
+
 
 void INSTANCE_InitInstanceList(InstanceList *list, InstancePool *pool) {
     long i;

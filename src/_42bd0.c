@@ -4,6 +4,8 @@
 
 #include "types/Instance.h"
 
+// Hint: Probably SCRIPT.c
+
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80041FD0);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80042120);

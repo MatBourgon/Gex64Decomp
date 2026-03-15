@@ -2,6 +2,8 @@
 
 #include "types/Spline.h"
 
+// Hint: Partially probably SPLINE.c
+
 INCLUDE_RODATA("asm/nonmatchings/_4f810", D_8007EAC0);
 
 INCLUDE_RODATA("asm/nonmatchings/_4f810", D_8007EAC8);
