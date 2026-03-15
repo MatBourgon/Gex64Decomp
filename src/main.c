@@ -86,7 +86,90 @@ void func_8003B5F8(void* arg0) {
     while(1);
 }
 
-INCLUDE_ASM("asm/nonmatchings/main", func_8003B804);
+extern int D_800BFE24;
+extern int D_80070130;
+extern int D_80070138;
+extern int D_8006FA50;
+extern unsigned int D_80154690;
+extern int D_800E5FD8;
+extern int D_800E5CD8;
+extern int D_80156BE0;
+extern int D_800E5CD0;
+extern int D_800B83B8;
+extern int D_801539D8;
+
+void func_8003B804(void* arg0) {
+    OSMesg msgType;
+    int var_s1;
+    int temp_a0;
+    int temp_a1;
+
+    var_s1 = 0;
+    msgType = NULL;
+    func_8003BAF8();
+    while(1)
+    {
+        osRecvMesg(&D_800E9748, &msgType, 1);
+
+        switch(*(short*)msgType)
+        {
+            case 1:
+                {
+                    D_800BFE24++;
+                    if (D_80070138 != 0)
+                    {
+                        func_80032BD0(gameTracker8->levelIdToLoad);
+                    }
+                    else
+                    {
+                        if ((D_80070130 < 2U) && (D_80154690 >= 2U)) {
+                            if ((D_8006FA50 != 0) && (var_s1 == 0)) {
+                                var_s1 = 1;
+                                D_801539D8 += 1;
+                                osSendMesg(&gGlobalMessageBuffer, 0, 0);
+                            }
+                            temp_a0 = D_800E5FD8;
+                            temp_a1 = (D_80154690 >> 1);
+                            D_800E5FD8 = temp_a1;
+                            D_800E5CD8 += temp_a1;
+                            D_80154690 &= 1;
+
+                            D_80156BE0 = (temp_a0 == 1)
+                                ? ((temp_a1 == 1) ? 0x1000 : 0x1400)
+                                : ((temp_a1 == 1) ? 0x1400 : 0x1600)
+                                ;
+                            
+                            func_8003BB78();
+                        }
+                        D_80154690++;
+                    }
+                }
+            break;
+
+            case 2:
+                D_80070130--;
+                break;
+            
+            case 5:
+                D_800E5CD0++;
+                var_s1 = 0;
+                func_80035A3C();
+                break;
+
+            case 4:
+                if (D_800B83B8 != 2) {
+                    int x = 10;
+                    ((short*)gameTracker8)[0x9C/2] = x;
+                    x = 20;
+                    ((short*)gameTracker8)[0x98/2] = x;
+                    ((short*)gameTracker8)[0x9A/2] = x;
+                    func_80039600();
+                }
+                D_80070138 = 1;
+            break;
+        }
+    }
+}
 
 void func_8003BA7C(unsigned int devAddr, void* dramAddr, unsigned int size) {
     OSIoMesg ioMesg;
