@@ -197,7 +197,7 @@ void func_8003BFB8(void* arg0) {
     while(1)
     {
         osRecvMesg(&D_800AF010, &mesg, 1);
-        D_800EB7F4 = (void*)0x8024B000; // Where level data is stored
+        D_800EB7F4 = LEVEL_DATA_ADDRESS; // Where level data is stored
         func_8003B54C();
         D_8006FCCC = func_8003B300(gameTracker8->levelIdToLoad); // Unpack level?
         func_8003B198(D_8006FCCC);

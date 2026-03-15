@@ -34,4 +34,7 @@
 }                                                   \
 pkt++;
 
+#define LEVEL_DATA_ADDRESS ((void*)0x8024B000)
+#define LEVEL_CODE_ADDRESS ((void*)0x80159720)
+
 #endif
