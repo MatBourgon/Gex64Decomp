@@ -29,7 +29,7 @@ INCLUDE_ASM("asm/nonmatchings/12D70", func_80012C74);
 
 INCLUDE_ASM("asm/nonmatchings/12D70", func_80012D20);
 
-void common_remred_OnCreate(void) {
+void common_remred_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
 extern char D_8007B97C[];
@@ -64,10 +64,10 @@ void common_remred_OnUpdate(Instance* arg0, GameTracker* gameTracker) {
     }
 }
 
-void common_remred_OnCollide(void) {
+void common_remred_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-void common_tvscrho_OnCreate(void) {
+void common_tvscrho_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
 void common_tvscrho_OnUpdate(Instance* instance, GameTracker* gameTracker)
@@ -75,14 +75,14 @@ void common_tvscrho_OnUpdate(Instance* instance, GameTracker* gameTracker)
     instance->_D0[0]++;
 }
 
-void common_tvscrho_OnCollide(void) {
+void common_tvscrho_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/12D70", common_kgateop_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/12D70", common_kgateop_OnUpdate);
 
-void common_kgateop_OnCollide(void) {
+void common_kgateop_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/12D70", common_tailpuf_OnCreate);
@@ -101,14 +101,14 @@ INCLUDE_ASM("asm/nonmatchings/12D70", func_800135C4);
 
 INCLUDE_ASM("asm/nonmatchings/12D70", common_proxsig_OnUpdate);
 
-void common_proxsig_OnCollide(void) {
+void common_proxsig_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/12D70", common_animseq_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/12D70", common_animseq_OnUpdate);
 
-void common_animseq_OnCollide(void) {
+void common_animseq_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/12D70", common_gengen_OnCreate);

@@ -19,41 +19,121 @@ INCLUDE_RODATA("asm/nonmatchings/_be60", D_8007B920);
 
 INCLUDE_ASM("asm/nonmatchings/_be60", func_8000B778);
 
-INCLUDE_ASM("asm/nonmatchings/_be60", func_8000B968);
+void func_8000B968(Instance* instance, GameTracker* gameTracker) {
+    Object* object;
+
+    object = NULL;
+    
+    *(short*)&instance->_110 = -0x7D00;
+    instance->flags |= 0x80;
+    instance->_F4[2] &= ~1;
+    
+    if (instance->parent != 0) {
+        instance->flags |= 0x100000;
+    }
+    
+    *(int*)&instance->_30[4] = 0;
+    
+    instance->flags |= 0x40;
+    
+    if (*(int*)&instance->_108 == 0)
+        object = (Object*)OBTABLE_FindObject(gameTracker8->_0004[0x94/4]); // CollectibleCountA
+    else if (*(int*)&instance->_108 == 1)
+        object = (Object*)OBTABLE_FindObject(gameTracker8->_0004[0x98/4]); // CollectibleCountB
+    else if (*(int*)&instance->_108 == 2)
+        object = (Object*)OBTABLE_FindObject(gameTracker8->_0004[0x9C/4]); // CollectibleCountC
+    
+    if (object != NULL) {
+        instance->object->modelList = object->modelList;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/_be60", func_8000BA70);
 
-INCLUDE_ASM("asm/nonmatchings/_be60", common_cola_OnCollide);
+void common_cola_OnCollide(Instance* instance, GameTracker* gameTracker)
+{
+    func_8000BA70(instance, gameTracker);
+}
 
 INCLUDE_ASM("asm/nonmatchings/_be60", func_8000BB88);
 
-INCLUDE_ASM("asm/nonmatchings/_be60", common_cola_OnCreate);
+void common_cola_OnCreate(Instance* instance, GameTracker* gameTracker)
+{
+    *(int*)&instance->_108 = 0;
+    func_8000B968(instance, gameTracker);
+}
 
-INCLUDE_ASM("asm/nonmatchings/_be60", common_cola_OnUpdate);
+void common_cola_OnUpdate(Instance* instance, GameTracker* gameTracker)
+{
+    func_8000BB88(instance, gameTracker);
+}
 
-INCLUDE_ASM("asm/nonmatchings/_be60", common_colb_OnCreate);
+void common_colb_OnCreate(Instance* instance, GameTracker* gameTracker)
+{
+    *(int*)&instance->_108 = 1;
+    func_8000B968(instance, gameTracker);
+}
 
-INCLUDE_ASM("asm/nonmatchings/_be60", common_colb_OnUpdate);
+void common_colb_OnUpdate(Instance* instance, GameTracker* gameTracker)
+{
+    func_8000BB88(instance, gameTracker);
+}
 
-INCLUDE_ASM("asm/nonmatchings/_be60", common_colb_OnCollide);
+void common_colb_OnCollide(Instance* instance, GameTracker* gameTracker)
+{
+    func_8000BA70(instance, gameTracker);
+}
 
-INCLUDE_ASM("asm/nonmatchings/_be60", common_colc_OnCreate);
+void common_colc_OnCreate(Instance* instance, GameTracker* gameTracker)
+{
+    *(int*)&instance->_108 = 2;
+    func_8000B968(instance, gameTracker);
+}
 
-INCLUDE_ASM("asm/nonmatchings/_be60", common_colc_OnUpdate);
+void common_colc_OnUpdate(Instance* instance, GameTracker* gameTracker)
+{
+    func_8000BB88(instance, gameTracker);
+}
 
-INCLUDE_ASM("asm/nonmatchings/_be60", common_colc_OnCollide);
+void common_colc_OnCollide(Instance* instance, GameTracker* gameTracker)
+{
+    func_8000BA70(instance, gameTracker);
+}
 
-INCLUDE_ASM("asm/nonmatchings/_be60", common_cold_OnCreate);
+void common_cold_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    int* temp_a2;
+    int* temp_a3;
 
-INCLUDE_ASM("asm/nonmatchings/_be60", common_cold_OnUpdate);
+    temp_a2 = gameTracker->_0004;
+    temp_a3 = &instance->_F4[2];
+    if (((int*)gameTracker)[0x4C00/4] >= temp_a2[0x38/4]) {  // CollectibleCType*
+        *(int*)&instance->_108 = 2;
+    } else if (((int*)gameTracker)[0x4BFC/4] >= temp_a2[0x34/4]) { // CollectibleBType*
+        *(int*)&instance->_108 = 1;
+    } else {
+        *(int*)&instance->_108 = 0;
+    }
+    if ((((unsigned char*)gameTracker)[0x4CA1] - 0xE) < 7U) {
+        temp_a3[3] = 0;
+    }
+    func_8000B968(instance, gameTracker);
+}
 
-INCLUDE_ASM("asm/nonmatchings/_be60", common_cold_OnCollide);
+void common_cold_OnUpdate(Instance* instance, GameTracker* gameTracker)
+{
+    func_8000BB88(instance, gameTracker);
+}
+
+void common_cold_OnCollide(Instance* instance, GameTracker* gameTracker)
+{
+    func_8000BA70(instance, gameTracker);
+}
 
 INCLUDE_ASM("asm/nonmatchings/_be60", common_derez_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/_be60", common_derez_OnUpdate);
 
-void common_derez_OnCollide(void) {
+void common_derez_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 Instance* CreateRemRedInstance(Instance* instance, Object* object) {
