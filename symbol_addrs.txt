@@ -20,6 +20,20 @@ GetRemoteCount = 0x8001A310; // type:func
 PlayerInstance = 0x8006CFA0;
 ObjectFunctionTable = 0x80076990; // size:0x1770
 objectAccess = 0x800767E0; //
+gLevelMetadata = 0x8006FCE0;
+gLevelCodeStart = 0x80159720;
+LoadLevelCode = 0x8003B484; // type:func
+LoadLevelData = 0x8003B300; // type:func
+LoadZlib = 0x8003B54C; // type:func
+LevelDataPtr = 0x8006FCCC; // type:u32
+LoadObjects = 0x8003B198; // type:func
+LoadObjectData = 0x8003AF10; // type:func
+GetObjectDataFromName = 0x8003AEA0; // type:func
+DMATransferData = 0x8003BA7C; // type:func
+LoadGexObject = 0x8003B3D4; // type:func
+
+GexDataStart = 0x49D870;
+GexDataEnd = 0x4B5750;
 
 strcmp = 0x8003E9E0; // type:func
 strcpy = 0x8003EA34; // type:func
@@ -100,6 +114,9 @@ inflate_fixed_bl = 0x801DDA30; // type:u32 segment:zlib
 inflate_fixed_bd = 0x801ED0D8; // type:u32 segment:zlib
 inflate_fixed_tl = 0x801DCCEC; // type:u32 segment:zlib
 inflate_fixed_td = 0x801DCCE8; // type:u32 segment:zlib
+
+pZlibStart = 0xED0F0;
+pZlibEnd = 0xEF120;
 
 inflate_codesState = 0x801E4BC0; // size:0x1C
 

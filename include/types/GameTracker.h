@@ -1,7 +1,7 @@
 #ifndef GAMETRACKER_H_
 #define GAMETRACKER_H_
 
-struct InstanceList_s;
+struct InstanceList;
 
 typedef unsigned char byte;
 typedef unsigned int uint;

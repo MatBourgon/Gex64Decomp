@@ -4,7 +4,7 @@
 #include "zlib/zlib.h"
 
 extern char D_801E0BC0;
-int inflate(z_stream* z, int compressedDataStart, int compressedDataSize) {
+int inflate(z_stream* z, char* compressedDataStart, int compressedDataSize) {
     int blockSize;
     int comnpressedBytesRemaining;
     int dataOffset;
@@ -21,7 +21,7 @@ int inflate(z_stream* z, int compressedDataStart, int compressedDataSize) {
                 blockSize = comnpressedBytesRemaining;
             }
             if (blockSize != 0) {
-                func_8003BA7C(compressedDataStart + dataOffset, &D_801E0BC0, (blockSize + 7) & ~7);
+                DMATransferData(compressedDataStart + dataOffset, &D_801E0BC0, (blockSize + 7) & ~7);
                 comnpressedBytesRemaining -= blockSize;
                 dataOffset += blockSize;
                 z->avail_in = blockSize;
