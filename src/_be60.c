@@ -129,7 +129,10 @@ void common_cold_OnCollide(Instance* instance, GameTracker* gameTracker)
     func_8000BA70(instance, gameTracker);
 }
 
-INCLUDE_ASM("asm/nonmatchings/_be60", common_derez_OnCreate);
+void common_derez_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    instance->flags |= 0x100080;
+    instance->_56 = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_be60", common_derez_OnUpdate);
 
