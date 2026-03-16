@@ -125,7 +125,7 @@ void common_tvend_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 typedef struct
 {
-    short rotScale[3][3];
+    short rotScale[9];
     short scaleFlag;
     short _[6];
 } common_tvend_OnUpdate_struct; // Some kind of matrix maybe?
