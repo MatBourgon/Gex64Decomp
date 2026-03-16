@@ -117,7 +117,7 @@ segments:
       - [0x3D2B0, asm]
       - [0x3EAA0, c]
       - [0x3F660, c, obtable]
-      - [0x3FB20, asm]
+      - [0x3FB20, c]
       - [0x405D0, asm]
       - [0x40D70, asm, _40d70]
       - [0x42BD0, c, _42bd0]
