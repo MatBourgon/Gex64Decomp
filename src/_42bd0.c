@@ -1,6 +1,7 @@
 #include "common.h"
 #include "types/GameTracker.h"
 #include "types/G2String.h"
+#include "types/intro/PowerTV.h"
 
 #include "types/Instance.h"
 
@@ -30,6 +31,10 @@ INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80043958);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", common_colfire_OnUpdate);
 
+INCLUDE_RODATA("asm/nonmatchings/_42bd0", D_8007E510);
+
+INCLUDE_RODATA("asm/nonmatchings/_42bd0", jtbl_8007E518);
+
 INCLUDE_ASM("asm/nonmatchings/_42bd0", common_ice_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", common_icecube_OnUpdate);
@@ -44,19 +49,230 @@ INCLUDE_ASM("asm/nonmatchings/_42bd0", common_powerbug_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", common_powerbug_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80044B2C);
+void func_80044B2C(Instance* instance) {
+    int temp_v1;
+    int* temp_a2;
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", common_powertv_OnCreate);
+    temp_a2 = ((((int***)instance->object->modelList)[instance->_C0[1]]))[0x20/4];
+    temp_v1 = (instance->_F0[6] * 3);
+    ((short*)&instance->_100)[0] = ((temp_v1 + 1) * temp_a2[3]);
+    ((short*)&instance->_100)[1] = (((temp_v1 + 4) * temp_a2[3]) - 1);
+    *(short*)&instance->_104 = -1;
+    instance->_56 = *(short*)&instance->_100;
+}
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", common_powertv_OnUpdate);
+void common_powertv_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    int temp_v1;
+    Intro* temp_a1;
+    PowerTVIntro* intro;
 
+    if (instance->intro->flags & 0x1000) {
+        instance->intro->flags &= ~0x800;
+        return;
+    }
+    
+    intro = (PowerTVIntro*)instance->introData;
+    
+    instance->_4E = 0U;
+    instance->_5E = 0;
+    instance->flags |= 0x80;
+    
+    if (intro != NULL) {
+        instance->_F0[6] = intro->type;
+        instance->_F0[7] = intro->respawns;
+    } else {
+        instance->_F0[6] = 0U;
+    }
+    
+    instance->_F4[0] = 0;
+    
+    if (instance->intro->flags & 0x800) {
+        instance->_F4[0] = 2;
+        instance->_5E = ((((short**)instance->object->animList)[instance->_4E])[1] - 1);
+        instance->_56 = 0;
+    }
+    else
+    {
+        func_80044B2C(instance);
+    }
+}
+
+void common_powertv_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    int var_a1;
+    short temp_a2;
+    short var_s2;
+    short var_v0;
+    int temp_v0_4;
+    int temp_v1;
+    int var_a0;
+    short temp_v0;
+    short* temp_s1;
+
+    temp_v1 = instance->_F4[0];
+    temp_s1 = &instance->_F0[6];
+    if ((temp_v1 - 1) >= 2U) {
+        temp_v0 = instance->_56 + 1;
+        instance->_56 = temp_v0;
+        if (((short*)&instance->_100)[1] < (short) temp_v0) {
+            instance->_56 = *(short*)&instance->_100;
+        }
+    }
+    else if (temp_v1 == 1) {
+        temp_v0 = ((short*)&instance->_104)[1];
+        if (temp_v0 > 0) {
+            temp_v0 = temp_v0 - 1;
+            ((short*)&instance->_104)[1] = temp_v0;
+            if ((temp_v0 << 0x10) == 0) {
+                instance->_56 = ((short*)&instance->_100)[0];
+                goto block_7;
+            }
+        }
+        else
+        {
+block_7:
+            func_8002DAF8(instance, ((short*)&instance->_104)[0]);
+            if ((((short*)&instance->_104)[0] == -0x3E9) && (instance->_5E == 0x1A)) {
+                instance->flags2 = (int) (instance->flags2 | 0x10);
+            }
+            if (instance->flags2 & 0x10) {
+                if (temp_s1[1] & 1) {
+                    if (temp_s1[4] == -0x3E9) {
+                        instance->_F4[0] = 0;
+                        instance->_5E = 0;
+                        temp_s1[4] = -1;
+                        return;
+                    }
+                    temp_s1[5] = 0x1E;
+                    temp_s1[4] = -0x3E9;
+                    func_8002DAF8(instance, -0x3E9);
+                    instance->flags2 = (int) (instance->flags2 & ~0x10);
+                }
+                else
+                {
+                    instance->_F4[0] = 2;
+                    func_8002DAF8(instance, -0x3E9);
+                }
+                func_80050508(instance, 0x10, (short) ((rand() & 0x1F) - 0xF), 0x6E, 0x9C4);
+                switch (*temp_s1) {
+                case 0:
+                    var_s2 = 0;
+                    break;
+                case 1:
+                    var_s2 = 1;
+                    break;
+                case 2:
+                    var_s2 = 2;
+                    break;
+                case 3:
+                    var_s2 = 3;
+                    break;
+                case 4:
+                    var_s2 = 4;
+                    break;
+                case 5:
+                    var_s2 = 5;
+                    break;
+                }
+                if (var_s2 != 5) {
+                    instance->position.x = (instance->position.x - 0x8C);
+                    instance->position.z = (instance->position.z + 0x8C);
+                    temp_v0_4 = func_8002E088(instance, 0x1F);
+                    instance->position.x = (instance->position.x + 0x8C);
+                    instance->position.z = (instance->position.z - 0x8C);
+                    if (temp_v0_4 != 0) {
+                        func_800444B8(temp_v0_4, var_s2);
+                        func_80050508(instance, 9, (short) ((rand() & 0x1F) - 0xF), 0x50, 0x9C4);
+                    }
+                }
+            }
+            
+        }
+    }
+    
+    if (instance->_F4[1] == 1) {
+        var_a0 = (temp_s1[6] + 1) * 0x55;
+        if (var_a0 >= 0x100) {
+            var_a0 = 0xFF;
+        }
+        var_a0 = (var_a0 << 0x18) | (var_a0 << 0x10) | (var_a0 << 8) | 0x7F;
+        if (temp_s1[6] < 3) {
+            temp_s1[6] =  temp_s1[6] + 1;
+        } else {
+            instance->_F4[1] = 2;
+            temp_s1[6] = 0x33;
+        }
+        func_8003F748(var_a0, 0);
+    }
+    else if (instance->_F4[1] == 2) {
+        var_a1 = 0;
+        var_a0 = temp_s1[6] * 5;
+        if (var_a0 >= 0x100) {
+            var_a0 = 0xFF;
+        }
+        var_a0 = (var_a0 << 0x18) | (var_a0 << 0x10) | (var_a0 << 8) | 0x7F;
+        if (temp_s1[6] > 0) {
+            var_v0 = temp_s1[6] - 1;
+            temp_s1[6] = var_v0;
+            if (var_v0 >= 0xA) {
+                var_a1 = 1;
+            }
+        } else {
+            instance->_F4[1] = 0;
+        }
+        func_8003F748(var_a0, var_a1);
+    }
+}
 INCLUDE_ASM("asm/nonmatchings/_42bd0", common_powertv_OnCollide);
+/*void common_powertv_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    int temp_a2;
+    int temp_a1;
+    int* temp_a0;
+    short* temp_s2;
+    int** temp_s3;
+    int* temp_s5;
+    PowerTVIntro* intro;
+    Intro* temp_v1;
+    int* temp_v1_2;
+
+    temp_a0 = (int*)gameTracker->_000C;
+    temp_s3 = (int**)instance->_70[2];
+    temp_a2 = temp_a0[0xF4/4] == 6;
+    intro = instance->introData;
+    temp_a1 = ((unsigned char*)temp_s3[3])[5];
+    temp_s5 = (int*)temp_a0[0x20/4];
+    temp_s2 = &instance->_F0[6];
+    if ((instance->_F4[0] == 0) && (((((short*)temp_s3)[3] == 1) && (temp_a1 >= 8)) || ((temp_s3[0x14/4] == temp_a0) && (temp_a2 != 0)))) {
+        if (!(temp_s2[1] & 1)) {
+            instance->intro->flags |= 0x800;
+        }
+        instance->_F4[0] = 1;
+        instance->_56 = 0;
+        instance->flags2 &= ~0x10;
+        func_80050508(instance, 0x11, (short) ((rand(temp_a0) & 0x1F) - 0xF), 0x6E, 0x9C4);
+        if ((*temp_s2 == 5) && (instance->_F4[1] == 0)) {
+            func_8004AAA8(instance, 0x84, 0);
+            instance->_F4[1] = 1;
+            temp_s2[6] = 0;
+            ((short*)gameTracker->_0004)[0x2C/2] = (instance->position.x + ((func_8003A6AC(instance->intro->rotation.z) << 0x10) >> 0x14));
+            ((short*)gameTracker->_0004)[0x2E/2] = (instance->position.y + ((func_8003A4E0(instance->intro->rotation.z) << 0x10) >> 0x14));
+            ((short*)gameTracker->_0004)[0x30/2] = instance->position.z;
+            gameTracker->_0004[0x78/4] = intro->unk;
+        }
+        if (temp_s5[0x138/4] != 0) {
+            if (temp_s3[0x14/4] == (((int**)gameTracker))[3]) {
+                temp_s3[0x14/4][0xFC/4] |= 0x800;
+            }
+        }
+    }
+}*/
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", common_remsilv_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80045320);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_800454E4);
+
+INCLUDE_RODATA("asm/nonmatchings/_42bd0", D_8007E5C0);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", common_remsilv_OnUpdate);
 
@@ -84,9 +300,9 @@ INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80046C48);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80046CB0);
 
-void func_80046CE4()
+void func_80046CE4(Instance* instance)
 {
-    func_8002E350();
+    func_8002E350(instance);
 }
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80046D04);
@@ -109,6 +325,8 @@ INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80047058);
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80047240);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_800472A4);
+
+INCLUDE_RODATA("asm/nonmatchings/_42bd0", D_8007E6C0);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_800472F0);
 
@@ -343,3 +561,11 @@ INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80049684);
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80049810);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80049A58);
+
+INCLUDE_RODATA("asm/nonmatchings/_42bd0", D_8007E720);
+
+INCLUDE_RODATA("asm/nonmatchings/_42bd0", D_8007E724);
+
+INCLUDE_RODATA("asm/nonmatchings/_42bd0", D_8007E72C);
+
+INCLUDE_RODATA("asm/nonmatchings/_42bd0", D_8007E734);
