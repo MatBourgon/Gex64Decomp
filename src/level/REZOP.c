@@ -1,6 +1,7 @@
 #include "common.h"
 
 #include "level/REZOP.h"
+#include "types/intro/BTimer.h"
 
 extern int D_800E5FD8;
 extern int D_80154834;
@@ -211,20 +212,20 @@ INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_gas_OnCollide);
 
 void rezop_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int var_s0;
-    short* temp_a2;
+    BTimerIntro* intro;
     int* temp_v1;
     int* temp_v1_2;
 
-    temp_a2 = (short*)instance->introData;
-    instance->_104 = (temp_a2[0] * 30);
-    instance->_F0[6] = (unsigned short)temp_a2[1];
+    intro = (BTimerIntro*)instance->introData;
+    instance->_104 = (intro->missionTime * 30);
+    instance->_F0[6] = intro->cutsceneTime;
     *(short*)&instance->_100 = 0;
     instance->flags |= 0xC00;
     temp_v1 = ((int**)gameTracker)[3];
     temp_v1[0xFC/4] |= 0x4000;
     temp_v1_2 = ((int**)gameTracker)[3];
     temp_v1_2[4] |= 0x100;
-    func_8002CA2C(4, temp_a2[1], temp_a2);
+    func_8002CA2C(4, intro->cutsceneTime, intro);
     for (var_s0 = 1; var_s0 < 4; var_s0++) {
         func_8002C1AC(var_s0);
     }
@@ -234,30 +235,30 @@ void rezop_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
 // Failing to match due to ro section?
 INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_btimer_OnUpdate);
 
-/*void rezop_btimer_OnUpdate(Instance* instance, int** arg1) {
+/*void rezop_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     char sp10[0x50];
     int temp_s0;
     int temp_s3_2;
     int temp_s6;
     int var_v1;
     int* temp_s2;
-    int* temp_s3;
+    BTimerIntro* intro;
 
     var_v1 = 1;
-    temp_s3 = (int*)arg0->introData;
-    temp_s2 = &arg0->_F4[2];
-    if (*(short*)&arg0->_100 == 0) {
+    intro = instance->introData;
+    temp_s2 = &instance->_F4[2];
+    if (*(short*)&instance->_100 == 0) {
         if (((short*)temp_s2)[0] != 0) {
-            if ((int)arg1[0x4BFC/4] < arg1[0x4/4][0x34/4]) {
+            if ((int)(((int**)gameTracker))[0x4BFC/4] < ((int**)gameTracker)[0x4/4][0x34/4]) {
                 if (D_80154834 != 0) {
-                    *(short*)&arg0->_108 = 1;
+                    *(short*)&instance->_108 = 1;
                 }
                 func_80037B00(0x64, 0x69);
                 Print3DTextf("#2COLLECT");
-                sprintf(sp10, "%2d", arg1[0x4/4][0x34/4]);
+                sprintf(sp10, "%2d", ((int**)gameTracker)[0x4/4][0x34/4]);
                 func_80037B00(0x8C, 0x91);
                 Print3DTextf(sp10);
-                arg1[0xC/4][0x10/4] |= 0x100;
+                ((int**)gameTracker)[0xC/4][0x10/4] |= 0x100;
             } else {
                 func_8002C18C(4);
                 func_80037B00(0x64, 0x64);
@@ -274,29 +275,29 @@ INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_btimer_OnUpdate);
                 ((short*)temp_s2)[0xC/2] = 0;
             }
         }
-        if ((((short*)arg1)[0x4C12/2] == 0) && (var_v1 != 0) && (arg0->intro->_2C == 0)) {
+        if ((((short*)((int**)gameTracker))[0x4C12/2] == 0) && (var_v1 != 0) && (instance->intro->_2C == 0)) {
             temp_s2[0x8/4] -= D_800E5FD8;
         }
-        if (((arg1[0xC/4][0xFC/4] & 0x600000) == 0x600000) && (arg0->_F4[1] == 0)) {
-            ((short*)temp_s2)[0] = (((unsigned short*)temp_s3)[1] - 1);
-            if (temp_s3[0x4/4] == 0x3F2) {
-                SIGNAL_HandleSignal(PlayerInstance, temp_s3[0x8/4] + 4, 0);
+        if (((((int**)gameTracker)[0xC/4][0xFC/4] & 0x600000) == 0x600000) && (instance->_F4[1] == 0)) {
+            ((short*)temp_s2)[0] = (intro->cutsceneTime - 1);
+            if (intro->collectType == EBTIMER_COLLECTTYPE_CUTSCENE) {
+                SIGNAL_HandleSignal(PlayerInstance, intro->b + 4, 0);
             }
-            arg0->_F4[1] = 1;
+            instance->_F4[1] = 1;
             PlayerInstance->_F4[2] &= 0xFFBFFFFF;
         }
-        if ((arg1[0xC/4][0xFC/4] & 0x400000) && ((arg1[0x4C00/4] != 0) || (arg1[0x4C04/4] != 0))) {
+        if ((((int**)gameTracker)[0xC/4][0xFC/4] & 0x400000) && ((((int**)gameTracker)[0x4C00/4] != 0) || (((int**)gameTracker)[0x4C04/4] != 0))) {
             func_8002C18C(5);
             temp_s2[0x8/4] = 0x3C;
             ((short*)temp_s2)[2] = 1;
-            arg1[0xC/4][0x10/4] |= 0x100;
+            ((int**)gameTracker)[0xC/4][0x10/4] |= 0x100;
         }
-        if ((temp_s2[0x8/4] < 0) && (arg1[0x4C00/4] == 0) && (arg1[0x4C04/4] == 0)) {
-            arg1[0x4BFC/4] = 0;
+        if ((temp_s2[0x8/4] < 0) && (((int**)gameTracker)[0x4C00/4] == 0) && (((int**)gameTracker)[0x4C04/4] == 0)) {
+            ((int**)gameTracker)[0x4BFC/4] = 0;
             func_8002C18C(5);
             temp_s2[0x8/4] = 0x3C;
             ((short*)temp_s2)[2] = 2;
-            arg1[0xC/4][0x10/4] |= 0x100;
+            ((int**)gameTracker)[0xC/4][0x10/4] |= 0x100;
         }
         if (((short*)temp_s2)[2] == 0) {
             temp_s0 = temp_s2[0x8/4];
@@ -314,17 +315,17 @@ INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_btimer_OnUpdate);
                 sprintf(sp10, "%2d", temp_s6 + 0x64);
                 Print3DTextf(&sp10[1]);
             }
-            if ((((short*)temp_s2)[0] == 0) && ((int)arg1[0x4BFC/4] < arg1[0x4/4][0x34/4])) {
+            if ((((short*)temp_s2)[0] == 0) && ((int)((int**)gameTracker)[0x4BFC/4] < ((int**)gameTracker)[0x4/4][0x34/4])) {
                 func_80037B00(0xF0, 0xC8);
-                sprintf(sp10, "%2d", arg1[0x4/4][0x34/4] - (int)arg1[0x4BFC/4]);
+                sprintf(sp10, "%2d", ((int**)gameTracker)[0x4/4][0x34/4] - (int)((int**)gameTracker)[0x4BFC/4]);
                 Print3DTextf(sp10);
             }
         }
     } else {
-        arg1[0xC/4][0x10/4] |= 0x100;
-        if (*(short*)&arg0->_100 == 2) {
-            if (--arg0->_104 < 0) {
-                func_800396E0("map", "map5", arg1);
+        ((int**)gameTracker)[0xC/4][0x10/4] |= 0x100;
+        if (*(short*)&instance->_100 == 2) {
+            if (--instance->_104 < 0) {
+                func_800396E0("map", "map5", ((int**)gameTracker));
                 return;
             }
             func_80037B00(0x64, 0x64);

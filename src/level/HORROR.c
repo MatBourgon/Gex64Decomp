@@ -1,6 +1,7 @@
 #include "common.h"
 
 #include "level/HORROR.h"
+#include "types/intro/QMark.h"
 
 #include "types/Vector.h"
 extern int D_800E5FD8;
@@ -265,12 +266,12 @@ void horror_qmark_OnCreate(Instance* instance, GameTracker* gameTracker)
 
 void horror_qmark_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int* temp_s0;
-    short* temp_t0;
+    QMarkIntro* intro;
     
-    temp_t0 = (short*)instance->introData;
+    intro = (QMarkIntro*)instance->introData;
     temp_s0 = &instance->_F4[2];
     if (((*(int*)&instance->_10C) != 0) && !(gameTracker->gameFlags & 0x2000)) {
-        func_8003F6CC(temp_t0[0], temp_t0[1], temp_t0[2], temp_t0[3], temp_t0[5], temp_t0 + 6);
+        func_8003F6CC(intro->x, intro->y, intro->w, intro->h, intro->numMessages, intro->messages);
     }
     switch (temp_s0[2])
     {
@@ -303,13 +304,13 @@ void horror_qmark_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 }
 
 void horror_qmark_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    short* temp_s1;
+    QMarkIntro* intro;
 
-    temp_s1 = (short*)instance->introData;
+    intro = (QMarkIntro*)instance->introData;
     if (func_80027500(instance->_70[2]) != 0) {
         instance->_104 = 1;
         instance->_F4[2] = 0x12C;
-        *((int*)&instance->_110) = temp_s1[4];
+        *((int*)&instance->_110) = intro->time;
         *((int*)&instance->_10C) = 1;
     }
 }

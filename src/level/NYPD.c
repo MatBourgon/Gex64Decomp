@@ -1,6 +1,7 @@
 #include "common.h"
 
 #include "level/NYPD.h"
+#include "types/intro/BTimer.h"
 
 extern int D_800E5FD8;
 extern int D_80154834;
@@ -52,20 +53,20 @@ void nypd_slider_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 void nypd_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int var_s0;
-    short* temp_a2;
+    BTimerIntro* intro;
     int* temp_v1;
     int* temp_v1_2;
 
-    temp_a2 = (short*)instance->introData;
-    instance->_104 = (temp_a2[0] * 30);
-    instance->_F0[6] = (unsigned short)temp_a2[1];
+    intro = (BTimerIntro*)instance->introData;
+    instance->_104 = (intro->missionTime * 30);
+    instance->_F0[6] = intro->cutsceneTime;
     *(short*)&instance->_100 = 0;
     instance->flags |= 0xC00;
     temp_v1 = ((int**)gameTracker)[3];
     temp_v1[0xFC/4] |= 0x4000;
     temp_v1_2 = ((int**)gameTracker)[3];
     temp_v1_2[4] |= 0x100;
-    func_8002CA2C(4, temp_a2[1], temp_a2);
+    func_8002CA2C(4, intro->cutsceneTime, intro);
     for (var_s0 = 1; var_s0 < 4; var_s0++) {
         func_8002C1AC(var_s0);
     }
@@ -79,10 +80,10 @@ void nypd_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int temp_s6;
     int var_v1;
     int* temp_s2;
-    int* temp_s3;
+    BTimerIntro* intro;
 
     var_v1 = 1;
-    temp_s3 = (int*)instance->introData;
+    intro = (BTimerIntro*)instance->introData;
     temp_s2 = &instance->_F4[2];
     if (*(short*)&instance->_100 == 0) {
         if (((short*)temp_s2)[0] != 0) {
@@ -118,9 +119,9 @@ void nypd_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             temp_s2[0x8/4] -= D_800E5FD8;
         }
         if (((((int**)gameTracker)[0xC/4][0xFC/4] & 0x600000) == 0x600000) && (instance->_F4[1] == 0)) {
-            ((short*)temp_s2)[0] = (((unsigned short*)temp_s3)[1] - 1);
-            if (temp_s3[0x4/4] == 0x3F2) {
-                SIGNAL_HandleSignal(PlayerInstance, temp_s3[0x8/4] + 4, 0);
+            ((short*)temp_s2)[0] = (intro->cutsceneTime - 1);
+            if (intro->collectType == EBTIMER_COLLECTTYPE_CUTSCENE) {
+                SIGNAL_HandleSignal(PlayerInstance, intro->b + 4, 0);
             }
             instance->_F4[1] = 1;
             PlayerInstance->_F4[2] &= 0xFFBFFFFF;
