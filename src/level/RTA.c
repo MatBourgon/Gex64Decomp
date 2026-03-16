@@ -1,6 +1,7 @@
 #include "common.h"
 
 #include "level/RTA.h"
+#include "types/intro/QMark.h"
 
 #include "types/Vector.h"
 
@@ -192,13 +193,13 @@ void rta_qmark_OnCreate(Instance* instance, GameTracker* gameTracker)
 
 void rta_qmark_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int* temp_s0;
-    short* temp_t0;
+    QMarkIntro* intro;
     volatile char _[4];
     
-    temp_t0 = (short*)instance->introData;
+    intro = (QMarkIntro*)instance->introData;
     temp_s0 = &instance->_F4[2];
     if (((*(int*)&instance->_10C) != 0) && !(gameTracker->gameFlags & 0x2000)) {
-        func_8003F6CC(temp_t0[0], temp_t0[1], temp_t0[2], temp_t0[3], temp_t0[5], temp_t0 + 6);
+        func_8003F6CC(intro->x, intro->y, intro->w, intro->h, intro->numMessages, intro->messages);
     }
     switch (temp_s0[2])
     {
@@ -231,8 +232,8 @@ void rta_qmark_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 }
 
 void rta_qmark_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    short* temp_s2;
-    temp_s2 = (short*)instance->introData;
+    QMarkIntro* intro;
+    intro = (QMarkIntro*)instance->introData;
     
     if (((int*)instance->_70[2])[5] == ((int*)gameTracker)[12/4]) {
         if (instance->_104 != 1) {
@@ -240,7 +241,7 @@ void rta_qmark_OnCollide(Instance* instance, GameTracker* gameTracker) {
         }
         instance->_104 = 1;
         instance->_F4[2] = 0x12C;
-         (*(int*)&instance->_110) = temp_s2[4];
+         (*(int*)&instance->_110) = intro->time;
         (*(int*)&instance->_10C) = 1;
         instance->flags |= 0x400;
     }

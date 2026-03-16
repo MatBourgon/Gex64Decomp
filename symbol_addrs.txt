@@ -32,6 +32,8 @@ GetObjectDataFromName = 0x8003AEA0; // type:func
 DMATransferData = 0x8003BA7C; // type:func
 LoadGexObject = 0x8003B3D4; // type:func
 
+CreateRemRedInstance = 0x8000C384; // type:func
+
 GexDataStart = 0x49D870;
 GexDataEnd = 0x4B5750;
 

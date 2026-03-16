@@ -8,7 +8,7 @@ typedef unsigned int uint;
 typedef struct
 {
     int     _0000;
-    int*   _0004;
+    int*   _0004; // Might might level*, see collectible code
     int     _0008; // Might be player instance*
     int     _000C;
     struct InstanceList *instanceList;

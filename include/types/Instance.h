@@ -22,7 +22,7 @@ typedef struct Instance_s
     void* _2C;
     short _30[8];
     short _40[4];
-    SVECTOR position;
+    SVECTOR position; // 48, 4A, 4C
     unsigned char _4E;
     char _4F;
     SVECTOR oldPos; // 50, 52, 54
