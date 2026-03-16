@@ -9,12 +9,12 @@ typedef struct
     short id;
     short _06;
     int _08;
-    Model** modelList;
-    int numAnims;
+    Model** modelList; // 0C
+    int animList; // 10
     int _14;
     int _18;
     int* _1C;
-    int _20;
+    const char* parentName;
     const char* name;
     int _28;
     int _2C;

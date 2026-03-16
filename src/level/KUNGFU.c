@@ -56,7 +56,7 @@ void kungfu_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         func_8002DAF8(instance, -1);
         if ((instance->flags2 & 0x10))
         {
-            a0 = (*(unsigned char*)&instance->_40[7] << 2) + instance->object->numAnims;
+            a0 = (*(unsigned char*)&instance->_40[7] << 2) + instance->object->animList;
             instance->_5E = ((unsigned short*)(*((int*)a0)))[1] - 1; 
             instance->_F4[0] = 2;
         }

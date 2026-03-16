@@ -3,6 +3,7 @@
 #include "types/GameTracker.h"
 #include "types/Instance.h"
 #include "types/intro/TVEnd.h"
+#include "types/G2String.h"
 
 extern int D_800785CC[];
 extern const char D_8007B944[];
@@ -152,21 +153,21 @@ Instance* CreateRemRedInstance(Instance* instance, Object* object) {
 }
 
 void common_tvend_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    Object* oEvtvbtn;
+    Object* oEtvbtn;
     Object* oRemred;
     Instance* iRemred;
-    Instance* iEvtvbtn;
+    Instance* iEtvbtn;
     TVEndIntro* intro;
 
     intro = (TVEndIntro*)instance->introData;
     
     if (!(instance->flags & 0x20000)) {
-        oEvtvbtn = (Object*)OBTABLE_FindObject("etvbutn_");
+        oEtvbtn = (Object*)OBTABLE_FindObject("etvbutn_");
         oRemred = (Object*)OBTABLE_FindObject(D_8007B944);
-        if (oEvtvbtn != 0) {
-            iEvtvbtn = (Instance*)INSTANCE_BirthObject(instance, oEvtvbtn);
-            instance->_F4[2] = (int)iEvtvbtn;
-            iEvtvbtn->flags |= 0x400;
+        if (oEtvbtn != 0) {
+            iEtvbtn = (Instance*)INSTANCE_BirthObject(instance, oEtvbtn);
+            instance->_F4[2] = (int)iEtvbtn;
+            iEtvbtn->flags |= 0x400;
         }
         instance->_56 = 1;
         intro->condition = 1;
@@ -193,11 +194,11 @@ void common_tvend_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
     else
     {
-        iEvtvbtn = (Instance*)instance->_F4[2];
+        iEtvbtn = (Instance*)instance->_F4[2];
         iRemred = (Instance*)instance->_100;
-        if (iEvtvbtn != NULL) {
-            (iEvtvbtn)->flags &= ~0x400;
-            func_8002E350(iEvtvbtn);
+        if (iEtvbtn != NULL) {
+            (iEtvbtn)->flags &= ~0x400;
+            func_8002E350(iEtvbtn);
         }
         if (iRemred != NULL) {
             iRemred->flags &= ~0x400;
@@ -263,7 +264,57 @@ void common_tvend_OnUpdate(Instance* instance, Object* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/_be60", func_8000C8E8);
+
+typedef struct
+{
+    short x;
+} ETVButnIntro;
+
+extern char D_8006FC69;
+extern int D_800EB8A0;
+extern char D_8007B970[]; // "tvend___"
+int func_8000C8E8(Instance* instance, GameTracker* gameTracker) {
+    ETVButnIntro* intro;
+    int var_a1;
+    unsigned char temp_v1;
+    unsigned char** temp_a0;
+    char* temp_a0_3;
+    int* temp_a0_4;
+    Instance* temp_s2;
+    int* temp_s4;
+
+    intro = instance->introData;
+    temp_a0 = (unsigned char**)instance->_70[2];
+    var_a1 = 0;
+    if (((((unsigned char*)gameTracker))[0x4CA1] == 2) || ((((short*)temp_a0)[3] != 1))) {
+        temp_s2 = (Instance*)instance->parent->_100;
+        if (temp_a0[2][2] == 1 && temp_s2 != NULL && !(instance->parent->intro->flags & 0x100) && instance->parent->_F4[1] == 0) {
+            temp_s4 = ((int**)gameTracker->_000C)[0x20/4];
+            func_80018B60(gameTracker->_000C, D_800EB8A0, temp_s2->position.x, temp_s2->position.y, temp_s2->position.z + 0x40);
+            func_80050508(instance, 3, -0x64, 0x7F, 0x5DC);
+            temp_a0_3 = instance->parent->object->parentName;
+            if (G2String_Compare_EQ(temp_a0_3, D_8007B970)) {
+                INSTANCE_KillInstance(temp_s2);
+            }
+            temp_v1 = (((unsigned char*)gameTracker))[0x4CA1];
+            if (temp_v1 < 0x1FU) {
+                (&((char*)gameTracker)[temp_v1])[0x4C6E] |= (1 << intro->x);
+                (((short*)gameTracker))[0x4DA2/2] = intro->x;
+                D_8006FC69 = 1;
+            }
+            instance->parent->_F4[1] = 1;
+            instance->_C0[1] = 1;
+            temp_a0_4 = (int*)gameTracker->_000C;
+            temp_a0_4[0xFC/4] |= 0x02000000;
+            temp_s4[0x178/4] = (int)instance->parent;
+            (((int*)gameTracker))[0x4C08/4] |= 0x80;
+            var_a1 = 1;
+        }
+    }
+    else
+        return 1;
+    return var_a1;
+}
 
 void common_etvbutn_OnCollide(Instance* instance, GameTracker* gameTracker)
 {

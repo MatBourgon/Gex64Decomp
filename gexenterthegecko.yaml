@@ -294,6 +294,7 @@ segments:
       - [0x7CAC0, rodata, _2cd50]
       - [0x7CAE0, .rodata, _31960]
       - [0x7EF80, rodata, _40d70]
+      - [0x7F110, .rodata, _42bd0]
       - [0x7F340, .rodata, _4a780]
       - [0x7F6C0, .rodata, _4f810]
       - [0x7F700, .rodata, _52ee0]
