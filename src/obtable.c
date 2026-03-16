@@ -87,18 +87,18 @@ void OBTABLE_ClearObjectReferences(void) {
     }
 }
 
-void* OBTABLE_FindObject(char* arg0) {
-    int** temp_t0;
-    int** var_a2;
+Object* OBTABLE_FindObject(char* name) {
+    Object** listStart;
+    Object** objectPtr;
 
-    if (arg0 != NULL) {
-        var_a2 = ((int****)gameTracker8)[1][0x10];
-        if (*var_a2 != (int*)var_a2) {
-            for(temp_t0 = var_a2; *var_a2 != (int*)temp_t0; var_a2++)
+    if (name != NULL) {
+        objectPtr = (Object**)((int****)gameTracker8)[1][0x10];
+        if ((void*)*objectPtr != (void*)objectPtr) {
+            for(listStart = objectPtr; (void*)*objectPtr != (void*)listStart; objectPtr++)
             {
-                if (*var_a2 != NULL && G2String_Compare_EQ(arg0, (*var_a2)[0x24/4]))
+                if (*objectPtr != NULL && G2String_Compare_EQ(name, (*objectPtr)->name))
                 {
-                    return *var_a2;
+                    return (Object*)*objectPtr;
                 }
             }
         }
