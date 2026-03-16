@@ -1280,24 +1280,31 @@ void func_8015DB54_BE584(Instance* instance) {
     }
 }
 
+typedef struct
+{
+    short screenType;
+    short levelNum;
+    const char levelType[8];
+} LevelTVIntro;
+
 void map_lvltv_OnCreate(Instance* instance, GameTracker* gameTracker) {
     char sp10[0x10];
     short temp_a2;
     int var_a0;
     int var_a1;
     int var_s3;
-    short* temp_s1;
+    LevelTVIntro* intro;
     u8* temp_s2;
     u8* ptr;
 
     char sp20[4] = {0x00, 0x03, 0x04, 0x00 };
-    temp_s1 = (short*)instance->introData;
+    intro = (LevelTVIntro*)instance->introData;
     temp_s2 = (u8*)instance->_D0;
     if (instance->flags & 0x20000) {
         func_8015DB54_BE584(instance); // shouldn't need a second argument?
         return;
     }
-    sprintf(sp10, (char*)&D_80161394_C1DC4, (temp_s1 + 2), temp_s1[0x2/2]);
+    sprintf(sp10, (char*)&D_80161394_C1DC4, intro->levelType, intro->levelNum);
     
     instance->_112 = GetLevelIndexFromId(&sp10);
     if (instance->_112 < 0x15U) {
@@ -1310,14 +1317,14 @@ void map_lvltv_OnCreate(Instance* instance, GameTracker* gameTracker) {
         if ((D_80078594[instance->_112]) == 2) {
             instance->_113 = 1;
             instance->_F4[1] = 0;
-            instance->_111 = instance->_110 = (temp_s1[0x0/4] * 9) + 7;
+            instance->_111 = instance->_110 = (intro->screenType * 9) + 7;
         } else {
             goto skip;
         }
     } else {
         instance->_F4[1] = 0;
         instance->_113 = 1;
-        temp_a2 = temp_s1[0x0/4];
+        temp_a2 = intro->screenType;
         var_a1 = 0;
         if (temp_a2 >= 0) {
             var_a0 = var_s3 - 1;
@@ -1364,16 +1371,16 @@ void map_lvltv_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     SVECTOR sp10;
     int isParent;
     int isClass;
-    short* temp_s1;
+    LevelTVIntro* intro;
     Instance* temp_a2;
     u8* temp_s2;
     MultiSpline* multi;
 
     instance->flags &= ~0x800;
-    temp_s1 = (short*)instance->introData;
+    intro = (LevelTVIntro*)instance->introData;
     temp_s2 = (u8*)&instance->_D0;
     if (instance->_113 != 0) {
-        instance->_56 = ((*temp_s1 * 9) + 7);
+        instance->_56 = ((intro->screenType * 9) + 7);
         if ((instance->_112 >= 0x15U) && (instance->_D0[0] == 0)) {
             func_8015D6F0_BE120(instance, 1);
         }
@@ -1385,7 +1392,7 @@ void map_lvltv_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             instance->_115 = 0x69U;
         }
         if ((rand() % ((instance->_115 >> 3) + 1)) == 0) {
-            instance->_111 = instance->_110 = (*temp_s1 * 9) + 7;
+            instance->_111 = instance->_110 = (intro->screenType * 9) + 7;
         } else {
             instance->_110 = 7;
             instance->_111 = 0x2A;
@@ -1395,7 +1402,7 @@ void map_lvltv_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             temp_s2[0x43] = 1;
             instance->_F4[1] = 0;
             D_80078594[temp_s2[0x42]] = 2;
-            instance->_56 = ((*temp_s1 * 9) + 7);
+            instance->_56 = ((intro->screenType * 9) + 7);
         }
     }
     instance->_56 += 9;
@@ -1447,10 +1454,10 @@ void func_8015E274_BECA4(Instance* instance) {
 void map_lvltv_OnCollide(Instance* instance, GameTracker* gameTracker) {
     char sp10[0x10];
     int* temp_a0;
-    int* temp_s2;
+    LevelTVIntro* intro;
     char* var_s0;
 
-    temp_s2 = (int*)instance->introData;
+    intro = (LevelTVIntro*)instance->introData;
     var_s0 = (char*)&instance->_D0;
     if (G2String_Compare_EQ(instance->object->name, "bobbox__")) {
         PlayerInstance->flags |= 0x800;
@@ -1458,8 +1465,8 @@ void map_lvltv_OnCollide(Instance* instance, GameTracker* gameTracker) {
             func_80052814();
         }
         PlayerInstance->flags &= ~0x800;
-        sprintf(sp10, (char*)D_80161394_C1DC4, temp_s2 + 1, ((short*)temp_s2)[1]);
-        func_800396E0(temp_s2 + 1, &sp10, gameTracker);
+        sprintf(sp10, (char*)D_80161394_C1DC4, intro->levelType, intro->levelNum);
+        func_800396E0(intro->levelType, &sp10, gameTracker);
         return;
     }
     
@@ -1467,7 +1474,7 @@ void map_lvltv_OnCollide(Instance* instance, GameTracker* gameTracker) {
         if (G2String_Compare_EQ(instance->object->name, "etvbutn_")) {
             var_s0 = (char*)(instance->parent->_D0);
         }
-        if ((temp_s2 != 0) && (var_s0[0x43] != 0)) {
+        if ((intro != NULL) && (var_s0[0x43] != 0)) {
             if ((((u8*)var_s0)[0x44] == 0) && PlayerInstance->_4E == 0xB) {
                 var_s0[0x44] = 1U;
 
@@ -1501,7 +1508,7 @@ void map_lvltv_OnCollide(Instance* instance, GameTracker* gameTracker) {
             temp_a0 = (int*)instance->_70[2];
             if ((((short*)temp_a0)[0x6/2] == 1) && ((u8) ((u8*)temp_a0[0xC/4])[0x5] >= 7U)) {
                 var_s0[0x43] = 1;
-                var_s0[0x41] = var_s0[0x40] = (((short*)temp_s2)[0x0/2] * 9) + 7;
+                var_s0[0x41] = var_s0[0x40] = (intro->screenType * 9) + 7;
                 ((int*)instance->parent)[0xF8/4] = 0;
             }
         }
