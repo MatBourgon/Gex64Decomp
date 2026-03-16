@@ -112,7 +112,7 @@ segments:
       - [0x345E0, asm]
       - [0x368B0, c]
       - [0x3AF50, asm]
-      - [0x3BAA0, asm]
+      - [0x3BAA0, c]
       - [0x3C190, c, main]
       - [0x3D2B0, asm]
       - [0x3EAA0, c]
@@ -594,6 +594,11 @@ segments:
   - name: n64_ptr_tables_v2_9
     type: databin
     start: 0x4973A0
+
+  # Surprise gex appearance
+  - name: gex.actor
+    type: databin
+    start: 0x49D870
     
   # Levels
   - name: aztec16.level

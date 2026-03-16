@@ -18,6 +18,6 @@ typedef struct
     unsigned long reserved;
 } z_stream;
 
-int inflate(z_stream* z, int compressedDataStart, int compressedDataSize);
+int inflate(z_stream* z, char* compressedDataStart, int compressedDataSize);
 
 #endif

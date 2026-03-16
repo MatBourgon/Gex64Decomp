@@ -171,7 +171,8 @@ void func_8003B804(void* arg0) {
     }
 }
 
-void func_8003BA7C(unsigned int devAddr, void* dramAddr, unsigned int size) {
+// Transfer data
+void DMATransferData(unsigned int devAddr, void* dramAddr, unsigned int size) {
     OSIoMesg ioMesg;
     OSMesg mesg;
 
@@ -187,23 +188,22 @@ INCLUDE_ASM("asm/nonmatchings/main", func_8003BB78);
 INCLUDE_ASM("asm/nonmatchings/main", func_8003BEF4);
 
 extern void* D_800EB7F4;
-extern int D_8006FCCC;
+extern void* LevelDataPtr; // Likely to be uncompressed level data
 extern int D_80070134;
 
 void func_8003BFB8(void* arg0) {
     OSMesg mesg;
 
-    // Seems very related to file 3BAA0
     while(1)
     {
         osRecvMesg(&D_800AF010, &mesg, 1);
         D_800EB7F4 = LEVEL_DATA_ADDRESS; // Where level data is stored
-        func_8003B54C();
-        D_8006FCCC = func_8003B300(gameTracker8->levelIdToLoad); // Unpack level?
-        func_8003B198(D_8006FCCC);
-        func_8003B484(gameTracker8->levelIdToLoad); // Load level overlay?
+        LoadZlib();
+        LevelDataPtr = LoadLevelData(gameTracker8->levelIdToLoad); // Unpack level
+        LoadObjects(LevelDataPtr); // Unpack & prepare models
+        LoadLevelCode(gameTracker8->levelIdToLoad); // Load level code
         func_80030BA0();
-        PlayerInstance->object = (Object*)func_8003B3D4();
+        PlayerInstance->object = (Object*)LoadGexObject();
         D_80070134 = 2;
     }
 }
