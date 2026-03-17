@@ -92,7 +92,17 @@ void looney_bowling_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_bowling_OnUpdate);
+void looney_bowling_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    if (instance->parent == NULL) {
+        INSTANCE_KillInstance(instance);
+    }
+    if (func_80048CC8(instance, &instance->_F4[2], &instance->_104, 0, 1) > 0) {
+        INSTANCE_PlainDeath(instance, 5, -1, 0);
+    }
+    if (++(*(int*)&instance->_110) == 0x50) {
+        instance->flags &= ~0x400;
+    }
+}
 
 void looney_bowling_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
