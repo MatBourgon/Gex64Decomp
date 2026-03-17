@@ -75,7 +75,11 @@ clean:
 makedirs:
 	$(shell mkdir -p $(dir $(BUILDTREE)))
 
+genctx:
+	$(shell cd tools && python3 genctxheader.py && python3 m2ctx.py ../ctx.h)
+	rm ctx.h
+
 cleanc:
 	rm -rf build/src
 
-.PHONY: all clean default split build diff
+.PHONY: all clean default split build diff genctx
