@@ -85,7 +85,12 @@ void looney_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_bowling_OnCreate);
+void looney_bowling_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    if ((instance->parent != NULL) && (instance->parent->intro != NULL)) {
+        instance->flags |= 0x100400;
+        *(MultiSpline**)&instance->_10C = instance->parent->intro->multiSpline;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_bowling_OnUpdate);
 

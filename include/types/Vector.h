@@ -1,6 +1,8 @@
 #ifndef VECTOR_H_
 #define VECTOR_H_
 
+#include "common.h" // FORCE_INLINE
+
 typedef struct
 {
     short x, y, z;
