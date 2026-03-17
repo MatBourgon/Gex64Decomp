@@ -3,6 +3,7 @@
 #include "types/G2String.h"
 
 #include "types/obtable.h"
+#include "OBTABLE.h"
 
 void func_8003EA60(void) {
 }
