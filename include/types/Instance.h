@@ -34,8 +34,8 @@ typedef struct Instance_s
     int _70[4];
     short _80[8];
     short _90[4];
-    LightInstance* shadow0;
-    LightInstance* shadow1;
+    LightInstance* shadow0; // 98
+    LightInstance* shadow1; // 9C
     int _A0;
     int _A4;
     int _A8;

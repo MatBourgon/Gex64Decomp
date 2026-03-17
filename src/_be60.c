@@ -7,6 +7,7 @@
 
 extern int D_800785CC[];
 extern const char D_8007B944[];
+extern const char D_8007B920[];
 
 INCLUDE_ASM("asm/nonmatchings/_be60", func_8000B260);
 
@@ -18,7 +19,57 @@ INCLUDE_ASM("asm/nonmatchings/_be60", func_8000B3B4);
 
 INCLUDE_RODATA("asm/nonmatchings/_be60", D_8007B920);
 
-INCLUDE_ASM("asm/nonmatchings/_be60", func_8000B778);
+void* func_8000B778(Instance* arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6) {
+    Object* object;
+    int* temp_a0;
+    Instance* instance;
+    int *ptr;
+
+    if (13 < gameTracker8->levelIdToLoad && gameTracker8->levelIdToLoad < 21) {
+        object = (Object*)OBTABLE_FindObject("cola____");
+    }
+    else
+    {
+        object = (Object*)OBTABLE_FindObject(D_8007B920); // cold____
+    }
+    
+    arg0->position.z += 0x80;
+    instance = (Instance*)INSTANCE_BirthObject(arg0, object);
+    arg0->position.z -= 0x80;
+    
+    if (instance != NULL) {
+        ptr = &instance->_F4[2];
+        instance->intro = NULL;
+        instance->oldRotation.x = 0x1000;
+        instance->oldRotation.y = 0x1000;
+        instance->oldRotation.z = 0x1000;
+        if ((arg1 != 0) || (arg2 != 0) || (arg3 != 0) || (arg4 != 0) || (arg5 != 0) || (arg6 != 0)) {
+            instance->_D0[0] = arg1;
+            instance->_D0[3] = arg4;
+            instance->_D0[1] = arg2;
+            instance->_E0[0] = arg5;
+            instance->_D0[2] = arg3;
+            instance->_E0[1] = arg6;
+            if (instance->object->oflags & 0x100) {
+                if (instance->shadow0 != NULL) {
+                    instance->shadow0->radius = 0;
+                    instance->shadow0 = NULL;
+                }
+                if (instance->shadow1 != NULL) {
+                    instance->shadow1->radius = 0;
+                    instance->shadow1 = NULL;
+                }
+            }
+            instance->flags2 |= 0x40;
+            ptr[0] |= 2;
+        }
+        instance->flags2 |= 0x80000;
+        ptr[0x10/4] = 0x1C2;
+        ptr[0] |= 4;
+        (((int*****)instance->object->modelList)[0][0x1C/4])[0x14/4][0xC/4][0] &= ~0x2000;
+    }
+    return instance;
+}
 
 void func_8000B968(Instance* instance, GameTracker* gameTracker) {
     Object* object;
@@ -278,7 +329,6 @@ int func_8000C8E8(Instance* instance, GameTracker* gameTracker) {
     int var_a1;
     unsigned char temp_v1;
     unsigned char** temp_a0;
-    char* temp_a0_3;
     int* temp_a0_4;
     Instance* temp_s2;
     int* temp_s4;
@@ -292,8 +342,7 @@ int func_8000C8E8(Instance* instance, GameTracker* gameTracker) {
             temp_s4 = ((int**)gameTracker->_000C)[0x20/4];
             func_80018B60(gameTracker->_000C, D_800EB8A0, temp_s2->position.x, temp_s2->position.y, temp_s2->position.z + 0x40);
             func_80050508(instance, 3, -0x64, 0x7F, 0x5DC);
-            temp_a0_3 = instance->parent->object->parentName;
-            if (G2String_Compare_EQ(temp_a0_3, D_8007B970)) {
+            if (G2String_Compare_EQ(instance->parent->object->parentName, D_8007B970)) {
                 INSTANCE_KillInstance(temp_s2);
             }
             temp_v1 = (((unsigned char*)gameTracker))[0x4CA1];
