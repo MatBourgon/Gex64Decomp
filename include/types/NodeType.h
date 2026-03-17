@@ -1,5 +1,5 @@
-#ifndef NODETYPE_H_
-#define NODETYPE_H_
+#ifndef TNODETYPE_H_
+#define TNODETYPE_H_
 
 typedef struct NodeType_s
 {

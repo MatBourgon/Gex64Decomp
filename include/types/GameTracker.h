@@ -1,5 +1,5 @@
-#ifndef GAMETRACKER_H_
-#define GAMETRACKER_H_
+#ifndef TGAMETRACKER_H_
+#define TGAMETRACKER_H_
 
 struct InstanceList;
 

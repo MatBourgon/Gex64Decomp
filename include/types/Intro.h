@@ -1,5 +1,5 @@
-#ifndef INTRO_H_
-#define INTRO_H_
+#ifndef TINTRO_H_
+#define TINTRO_H_
 
 #include "Vector.h"
 #include "Spline.h"

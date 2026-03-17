@@ -1,5 +1,5 @@
-#ifndef INSTANCE_H_
-#define INSTANCE_H_
+#ifndef TINSTANCE_H_
+#define TINSTANCE_H_
 
 #include "Intro.h"
 #include "Object.h"

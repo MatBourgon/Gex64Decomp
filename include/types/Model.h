@@ -1,5 +1,5 @@
-#ifndef MODEL_H_
-#define MODEL_H_
+#ifndef TMODEL_H_
+#define TMODEL_H_
 
 #include "Spline.h"
 

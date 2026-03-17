@@ -1,5 +1,5 @@
-#ifndef LIGHTINSTANCE_H_
-#define LIGHTINSTANCE_H_
+#ifndef TLIGHTINSTANCE_H_
+#define TLIGHTINSTANCE_H_
 
 typedef struct
 {

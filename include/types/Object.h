@@ -1,5 +1,5 @@
-#ifndef OBJECT_H_
-#define OBJECT_H_
+#ifndef TOBJECT_H_
+#define TOBJECT_H_
 
 #include "Model.h"
 

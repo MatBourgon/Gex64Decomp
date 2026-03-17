@@ -1,5 +1,5 @@
-#ifndef OBJECTFUNCTIONS_H_
-#define OBJECTFUNCTIONS_H_
+#ifndef TOBJECTFUNCTIONS_H_
+#define TOBJECTFUNCTIONS_H_
 
 #include "types/Instance.h"
 #include "types/GameTracker.h"

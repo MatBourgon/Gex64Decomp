@@ -1,5 +1,7 @@
-#ifndef INSTANCEPOOL_H_
-#define INSTANCEPOOL_H_
+#ifndef TINSTANCEPOOL_H_
+#define TINSTANCEPOOL_H_
+
+#include "types/Instance.h"
 
 typedef struct
 {

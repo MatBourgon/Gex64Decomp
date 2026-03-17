@@ -1,5 +1,5 @@
-#ifndef INSTANCELIST_H_
-#define INSTANCELIST_H_
+#ifndef TINSTANCELIST_H_
+#define TINSTANCELIST_H_
 
 #include "Instance.h"
 #include "InstancePool.h"

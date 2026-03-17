@@ -1,5 +1,5 @@
-#ifndef ROTATION_H_
-#define ROTATION_H_
+#ifndef TROTATION_H_
+#define TROTATION_H_
 
 typedef struct
 {

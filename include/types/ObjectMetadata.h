@@ -1,5 +1,5 @@
-#ifndef OBJECTMETADATA_H_
-#define OBJECTMETADATA_H_
+#ifndef TOBJECTMETADATA_H_
+#define TOBJECTMETADATA_H_
 
 typedef struct
 {
