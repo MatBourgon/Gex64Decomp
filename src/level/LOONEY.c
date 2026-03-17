@@ -107,11 +107,60 @@ void looney_bowling_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 void looney_bowling_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_doeboy_OnCreate);
+void looney_doeboy_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    instance->flags &= 0xFDFFFFFF;
+}
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_doeboy_OnUpdate);
+void looney_doeboy_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    Intro* intro;
+    short* temp_v1;
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_doeboy_OnCollide);
+    if (instance->_F4[0] == 0) {
+        intro = instance->intro;
+        temp_v1 = (short*)intro->_2C;
+        if (temp_v1 != NULL) {
+            instance->_F4[2] = ((int*)intro->data)[1];
+            if (temp_v1[0] != 0) {
+                instance->_4E = temp_v1[1];
+            }
+            instance->_F4[0] = 1;
+            instance->intro->_2C = NULL;
+        } else if (instance->flags & 0x02000000) {
+            instance->_F4[0] = 1;
+        }
+    }
+    
+    if (instance->_F4[0] != 0) {
+        func_8002DAF8(instance, -1);
+        if (instance->flags2 & 0x10) {
+            instance->flags2 &= ~0x10;
+            instance->_F4[0] = 0;
+            instance->flags &= 0xFDFFFFFF;
+            instance->intro->_2C = NULL;
+        }
+    }
+    
+    func_8001DA8C(instance, gameTracker);
+    
+    if (instance->_F4[2] > 0) {
+        instance->_F4[2]--;
+    }
+}
+
+void looney_doeboy_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    void* temp_a1;
+    void* intro;
+
+    if ((func_80027500(instance->_70[2]) != 0) && (instance->_F4[2] == 0)) {
+        intro = instance->introData;
+        if (intro != NULL) {
+            temp_a1 = *(void**)intro;
+            if (temp_a1 != 0) {
+                SIGNAL_HandleSignal(instance, temp_a1 + 4, NULL);
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_brkblok_OnCreate);
 
