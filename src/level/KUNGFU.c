@@ -91,7 +91,42 @@ void kungfu_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_launch_OnCreate);
+void kungfu_launch_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    short* objData;
+    int* intro;
+
+    objData = instance->object->data;
+    intro = instance->introData;
+    
+    *(int*)&instance->_108 = 0;
+    instance->initialPos.x = instance->position.x;
+    instance->initialPos.y = instance->position.y;
+    instance->initialPos.z = instance->position.z;
+    instance->_11C = 0;
+    instance->flags |= 0x800;
+    *(int*)&instance->_10C = 0x500;
+    *(int*)&instance->_110 = 0x80;
+    instance->_120 = 0x1000;
+    instance->_100 = 4;
+    instance->_104 = 0x14;
+    
+    if (intro != NULL) {
+        *(int*)&instance->_10C = intro[0];
+    } else if (objData != NULL) {
+        *(int*)&instance->_10C = objData[0];
+        *(int*)&instance->_110 = objData[1];
+        instance->_11C = *(int*)&objData[2];
+        if (instance->_11C & 2) {
+            instance->_118 = 0x200;
+            instance->flags &= ~0x800;
+        }
+        if (instance->_11C & 0x10) {
+            instance->_120 = objData[8];
+        }
+    }
+    
+    instance->_D0[0] = *(short*)&instance->_112;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_launch_OnUpdate);
 
