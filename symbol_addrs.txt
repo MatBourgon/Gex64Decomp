@@ -44,6 +44,7 @@ GetRedRemotesForLevel = 0x8004B5D4; // type:func
 DrawTextToScreen = 0x80030DD8; // type:func
 // See KAIN
 MATH3D_FastSqrt = 0x80030840; // type:func
+SVECTOR_Length = 0x800135C4; // type:func
 SIGNAL_HandleSignal = 0x8004EBAC; // type:func
 COLLIDE_HandleSignal = 0x8004EA58; // type:func
 OBTABLE_InstanceInit = 0x8003EAB0; // type:func

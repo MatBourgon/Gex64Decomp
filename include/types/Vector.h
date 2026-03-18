@@ -8,14 +8,21 @@ typedef struct
     short x, y, z;
 } SVECTOR;
 
+FORCE_INLINE void SVECTOR_Subtract(SVECTOR* lhs, SVECTOR* rhs, SVECTOR* out)
+{
+    out->x = lhs->x - rhs->x;
+    out->y = lhs->y - rhs->y;
+    out->z = lhs->z - rhs->z;
+}
+
 FORCE_INLINE int SVECTOR_DistanceSquared(SVECTOR* v1, SVECTOR* v2)
 {
     SVECTOR d;
-    d.x = (v1->x - v2->x);
-    d.y = (v1->y - v2->y);
-    d.z = (v1->z - v2->z);
+    SVECTOR_Subtract(v1, v2, &d);
 
     return d.x * d.x + d.y * d.y + d.z * d.z;
 }
+
+extern int SVECTOR_Length(SVECTOR* v);
 
 #endif 

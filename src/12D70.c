@@ -95,11 +95,49 @@ INCLUDE_ASM("asm/nonmatchings/12D70", common_magic_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/12D70", common_magic_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/12D70", common_proxsig_OnCreate);
+void common_proxsig_OnCreate(Instance* instance, GameTracker* gameTracker)
+{
+    instance->flags |= 0x800;
+}
 
-INCLUDE_ASM("asm/nonmatchings/12D70", func_800135C4);
+int SVECTOR_Length(SVECTOR* pos) {
+    return MATH3D_FastSqrt(pos->x * pos->x + pos->y * pos->y + pos->z * pos->z, 0);
+}
 
-INCLUDE_ASM("asm/nonmatchings/12D70", common_proxsig_OnUpdate);
+typedef struct
+{
+    short distMin;
+    short distMax;
+    void* signal;
+} Proxy;
+
+typedef struct
+{
+    int numSignals;
+    Proxy proxies[0];
+} ProxSigIntro;
+
+void common_proxsig_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    SVECTOR dpos;
+    Proxy* proxy;
+    int distance;
+    ProxSigIntro* intro;
+    Proxy* pEnd;
+
+    intro = (ProxSigIntro*)instance->introData;
+    if ((instance->intro->_2C != NULL) && (intro != NULL)) {
+        SVECTOR_Subtract(&instance->position, &PlayerInstance->position, &dpos);
+        distance = SVECTOR_Length(&dpos);
+        
+        pEnd = &intro->proxies[intro->numSignals];
+        
+        for (proxy = intro->proxies; proxy < pEnd; ++proxy) {
+            if (proxy->distMin <= distance && distance < proxy->distMax) {
+                SIGNAL_HandleSignal(PlayerInstance, proxy->signal + 4, NULL);
+            }
+        }
+    }
+}
 
 void common_proxsig_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
