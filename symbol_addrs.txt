@@ -58,6 +58,7 @@ SCRIPT_InstanceSplineInit = 0x800480F8; // type:func
 SCRIPT_GetMultiSpline = 0x80048524; // type:func
 INSTANCE_ReallyRemoveInstance = 0x8002CD50; // type:func
 INSTANCE_InsertInstanceGroup = 0x8002CCD4; // type:func
+INSTANCE_InsertInstanceWithFlagsSet = 0x8004A54C; // type:func
 INSTANCE_InsertInstanceWithFlagsCleared = 0x8004A5B4; // type:func
 INSTANCE_InstanceGroupNumber = 0x8002CBE0; // type:func
 INSTANCE_NewInstance = 0x8002CB70; // type:func

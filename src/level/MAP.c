@@ -373,7 +373,7 @@ block_11:
             func_8001C978(temp_s3, &gameTracker->level->spawnPosition, gameTracker);
             instance->_F4[0] = 0;
             instance->flags |= 0x800;
-            func_8004A54C(instance, 0x1000);
+            INSTANCE_InsertInstanceWithFlagsSet(instance, 0x1000);
         }
     }
 }
@@ -964,7 +964,7 @@ void map_tvbutn_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         var_s5 = (int*)temp_v0[0x24/4];
     }
     if (instance->_F4[0] != 0) {
-        func_8004A54C(instance, 0x5000);
+        INSTANCE_InsertInstanceWithFlagsSet(instance, 0x5000);
         if (instance->_56 < instance->_10C) {
             instance->_56 = instance->_10C;
         }
