@@ -182,11 +182,50 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_bug_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_bug_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_bouncer_OnCreate);
+void horror_bouncer_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    short* intro;
+    int* fc;
+    
+    intro = instance->introData;
+    fc = &instance->_F4[2];
+    
+    if (intro != NULL) {
+        ((short*)&instance->_100)[1] = intro[0];
+        ((short*)&instance->_104)[0] = intro[1];
+    } else {
+        ((short*)&instance->_100)[1] = 0U;
+        ((short*)&instance->_104)[0] = 0U;
+    }
+    fc[3] = instance->intro->position.x;
+    fc[4] = instance->intro->position.y;
+    ((short*)fc)[5] = 6;
+    instance->intro->rotation.z = instance->intro->rotation.z & 0xFFF;
+    instance->_F4[0] = 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_bouncer_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_bouncer_OnCollide);
+void horror_bouncer_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    unsigned char** temp_a2 = (unsigned char**)instance->_70[2];
+    if ((((short*)temp_a2)[3] == 1)
+        && (temp_a2[0x14/4] == (void*)gameTracker->_000C)
+        && (temp_a2[2][4] < 2U)
+        && (temp_a2[3][5] >= 6U)
+        && (
+            (*(short*)&instance->_104 != 3)
+            || ((instance->_F4[0] - 2) < 2U)
+            || (instance->_F4[0] == 4)
+        )) {
+            INSTANCE_PlainDeath(instance, 5, 3, 0);
+    }
+    else if ((((short*)temp_a2)[3] == 1)
+             && (temp_a2[5] == (void*)gameTracker->_000C)
+             && (
+                 (temp_a2[2][4] == 0) || (temp_a2[2][4] == 2)
+             )) {
+        func_80022714(instance);
+    }
+}
 
 void horror_flasher_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }

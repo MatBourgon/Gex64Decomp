@@ -1,10 +1,7 @@
 #include "common.h"
 
-#include "types/InstanceList.h"
+#include "INSTANCE.h"
 #include "types/GameTracker.h"
-
-// Hint: Probably INSTANCE.c
-
 
 void INSTANCE_InitInstanceList(InstanceList *list, InstancePool *pool) {
     long i;
@@ -325,7 +322,7 @@ void INSTANCE_ProcessFunctions(InstanceList* list) {
             instance->oldPos.z = instance->position.z;
             
             if (!(instance->flags & 0x100000)) {
-                multi = SCRIPT_GetMultiSpline(instance, NULL, NULL);
+                multi = (MultiSpline*)SCRIPT_GetMultiSpline(instance, NULL, NULL);
                 if (multi != NULL) {
                     if (instance->flags & 0x02000000) {
                         direction = (instance->flags & 0x01000000) ? -1 : 1;
@@ -454,7 +451,7 @@ Instance* INSTANCE_BirthObject(Instance* parent, Object* object) {
     if (object == NULL)
         return NULL;
     
-    instance = INSTANCE_NewInstance(gameTracker8->instanceList);
+    instance = INSTANCE_NewInstance((InstanceList*)gameTracker8->instanceList);
     
     if (instance != NULL) {
         INSTANCE_DefaultInit(instance, object);
@@ -480,7 +477,7 @@ Instance* INSTANCE_BirthObject(Instance* parent, Object* object) {
             instance->flags |= 0x100000;
         }
         
-        INSTANCE_InsertInstanceGroup(gameTracker8->instanceList, instance);
+        INSTANCE_InsertInstanceGroup((InstanceList*)gameTracker8->instanceList, instance);
         OBTABLE_GetInstanceCollideFunc(instance);
         OBTABLE_GetInstanceProcessFunc(instance);
         instance->flags |= 2;
@@ -504,7 +501,7 @@ INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002E0D8);
 void INSTANCE_DefaultInit(Instance* instance, Object* object) {
     memset(&instance->flags, 0, sizeof(Instance) - offsetof(instance, flags));
     instance->object = object;
-    instance->data = (int)object->_1C; // data?
+    instance->data = object->data; // data?
     if (instance->object->oflags & 0x200) {
         instance->flags2 |= 0x40;
     }

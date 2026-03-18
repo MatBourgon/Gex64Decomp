@@ -1,5 +1,5 @@
-#ifndef INSTANCE_H_
-#define INSTANCE_H_
+#ifndef TINSTANCE_H_
+#define TINSTANCE_H_
 
 #include "Intro.h"
 #include "Object.h"
@@ -9,9 +9,9 @@
 
 typedef struct Instance_s
 {
-    NodeType node;
-    struct Instance_s* next;
-    struct Instance_s* prev;
+    NodeType node; // 00 (prev), 04 (next)
+    struct Instance_s* next; // 08
+    struct Instance_s* prev; // 0C
     int flags; // 10
     int flags2; // 14
     Object* object; // 18
@@ -34,8 +34,8 @@ typedef struct Instance_s
     int _70[4];
     short _80[8];
     short _90[4];
-    LightInstance* shadow0;
-    LightInstance* shadow1;
+    LightInstance* shadow0; // 98
+    LightInstance* shadow1; // 9C
     int _A0;
     int _A4;
     int _A8;

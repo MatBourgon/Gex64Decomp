@@ -1,5 +1,5 @@
-#ifndef LEVELMETADATA_H_
-#define LEVELMETADATA_H_
+#ifndef TLEVELMETADATA_H_
+#define TLEVELMETADATA_H_
 
 typedef struct
 {

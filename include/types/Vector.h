@@ -1,5 +1,5 @@
-#ifndef VECTOR_H_
-#define VECTOR_H_
+#ifndef TVECTOR_H_
+#define TVECTOR_H_
 
 #include "common.h" // FORCE_INLINE
 

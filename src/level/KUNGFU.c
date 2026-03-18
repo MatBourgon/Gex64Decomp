@@ -72,7 +72,7 @@ void kungfu_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
     temp_a2 = ((char***)instance->_70)[2];
     temp_a3 = ((short*)temp_a2)[3];
     if (temp_a3 == 1) {
-        if ((temp_a2[5] == ((char**)gameTracker)[12/4]) && (temp_a2[12/4][5] >= 6U)) {
+        if ((temp_a2[5] == ((char*)gameTracker->_000C)) && (temp_a2[12/4][5] >= 6U)) {
             if (instance->_F4[0] == 0)
             {
                 ((char*)instance->_40)[0xe] = 1;
@@ -91,11 +91,65 @@ void kungfu_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_launch_OnCreate);
+void kungfu_launch_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    short* objData;
+    int* intro;
+
+    objData = instance->object->data;
+    intro = instance->introData;
+    
+    *(int*)&instance->_108 = 0;
+    instance->initialPos.x = instance->position.x;
+    instance->initialPos.y = instance->position.y;
+    instance->initialPos.z = instance->position.z;
+    instance->_11C = 0;
+    instance->flags |= 0x800;
+    *(int*)&instance->_10C = 0x500;
+    *(int*)&instance->_110 = 0x80;
+    instance->_120 = 0x1000;
+    instance->_100 = 4;
+    instance->_104 = 0x14;
+    
+    if (intro != NULL) {
+        *(int*)&instance->_10C = intro[0];
+    } else if (objData != NULL) {
+        *(int*)&instance->_10C = objData[0];
+        *(int*)&instance->_110 = objData[1];
+        instance->_11C = *(int*)&objData[2];
+        if (instance->_11C & 2) {
+            instance->_118 = 0x200;
+            instance->flags &= ~0x800;
+        }
+        if (instance->_11C & 0x10) {
+            instance->_120 = objData[8];
+        }
+    }
+    
+    instance->_D0[0] = *(short*)&instance->_112;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_launch_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_launch_OnCollide);
+void kungfu_launch_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    int temp_a0;
+    unsigned char** temp_a1;
+    char var_a2;
+
+    temp_a1 = (unsigned char**)instance->_70[2];
+    temp_a0 = gameTracker->_000C;
+    
+    var_a2 = (((short*)temp_a1)[3] == 1) ? temp_a1[3][5] : -1;
+    
+    if (((instance->_F4[0] - 1) >= 2U) && (*(int*)&instance->_108 == 0) && (temp_a1[0x14/4] == (void*)temp_a0) && (((short*)temp_a1)[2] == 5) && (var_a2 < 8) && ((temp_a1)[2][2] == 0)) {
+        if (instance->_11C & 0x10) {
+            ((int*)temp_a0)[0xFC/4] |= 0x200;
+            instance->_11C |= 0x20;
+        }
+        else if ((((func_80025798(temp_a0, temp_a1) != 0) && (instance->_11C == 0)) || (instance->_11C & 1)) && (func_8015AC6C_A9E8C(instance, gameTracker) == 0)) {
+            func_8015ADC8_A9FE8(instance, gameTracker);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015AC1C_A9E3C);
 

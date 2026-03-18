@@ -1,5 +1,5 @@
-#ifndef OBJECT_H_
-#define OBJECT_H_
+#ifndef TOBJECT_H_
+#define TOBJECT_H_
 
 #include "Model.h"
 
@@ -13,7 +13,7 @@ typedef struct
     int animList; // 10
     int _14;
     int _18;
-    int* _1C;
+    void* data;
     const char* parentName;
     const char* name;
     int _28;

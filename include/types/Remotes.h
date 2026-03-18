@@ -1,5 +1,5 @@
-#ifndef REMOTES_H_
-#define REMOTES_H_
+#ifndef TREMOTES_H_
+#define TREMOTES_H_
 
 typedef struct
 {

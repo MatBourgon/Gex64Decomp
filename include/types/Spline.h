@@ -1,5 +1,5 @@
-#ifndef SPLINE_H_
-#define SPLINE_H_
+#ifndef TSPLINE_H_
+#define TSPLINE_H_
 
 typedef struct
 {

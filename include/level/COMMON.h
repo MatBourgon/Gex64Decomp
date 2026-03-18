@@ -64,5 +64,9 @@ void common_starz_OnUpdate(Instance* instance, GameTracker* gameTracker);
 void common_remsilv_OnCreate(Instance* instance, GameTracker* gameTracker);
 void common_remsilv_OnUpdate(Instance* instance, GameTracker* gameTracker);
 void common_remsilv_OnCollide(Instance* instance, GameTracker* gameTracker);
+void GenericInit(Instance* instance, GameTracker* gameTracker);
+void GenericProcess(Instance* instance, GameTracker* gameTracker);
+void GenericCollide(Instance* instance, GameTracker* gameTracker);
+
 
 #endif

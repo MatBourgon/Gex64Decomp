@@ -1,5 +1,5 @@
-#ifndef G2STRING_H_
-#define G2STRING_H_
+#ifndef TG2STRING_H_
+#define TG2STRING_H_
 
 typedef union
 {

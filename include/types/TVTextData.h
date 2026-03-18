@@ -1,5 +1,5 @@
-#ifndef TVTEXTDATA_H_
-#define TVTEXTDATA_H_
+#ifndef TTVTEXTDATA_H_
+#define TTVTEXTDATA_H_
 
 enum ETVScreenType
 {
