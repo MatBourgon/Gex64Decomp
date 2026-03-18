@@ -12,6 +12,7 @@ typedef union
 #define G2String_Compare_EQ(a, b) (G2STRING(a)->raw[0] == G2STRING(b)->raw[0] && G2STRING(a)->raw[1] == G2STRING(b)->raw[1])
 #define G2String_Compare_NEQ(a, b) (G2STRING(a)->raw[0] != G2STRING(b)->raw[0] || G2STRING(a)->raw[1] != G2STRING(b)->raw[1])
 
+// Rotating/playful animated text, like "CATCH THE TRAIN"
 #define ANIMATED_3DTEXT(x) ("#2"x)
 
 #endif
