@@ -32,4 +32,6 @@ void func_8002E350(Instance* instance);
 
 void INSTANCE_KillInstance(Instance* instance);
 
+void INSTANCE_PlainDeath(Instance* instance, int arg1, int arg2, int arg3);
+
 #endif

@@ -1,7 +1,7 @@
 #ifndef TGAMETRACKER_H_
 #define TGAMETRACKER_H_
 
-struct InstanceList;
+#include "types/InstanceList.h"
 
 typedef unsigned char byte;
 typedef unsigned int uint;
@@ -11,7 +11,7 @@ typedef struct
     int*   _0004; // Might might level*, see collectible code
     int     _0008; // Might be player instance*
     int     _000C;
-    struct InstanceList *instanceList;
+    InstanceList *instanceList;
     char    _0014[0x4BE0];
     char    _4BF4[0x14];
     uint    gameFlags;

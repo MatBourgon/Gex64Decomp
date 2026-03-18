@@ -5,6 +5,9 @@
 
 #include "types/Instance.h"
 
+#include "level/COMMON.h"
+#include "INSTANCE.h"
+
 // Hint: Probably SCRIPT.c
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80041FD0);
