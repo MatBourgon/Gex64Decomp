@@ -25,6 +25,7 @@ void* INSTANCE_BirthObjectFromIntro(Intro* intro);
 void INSTANCE_ProcessFunctions(InstanceList* list);
 
 Instance* INSTANCE_BirthObject(Instance* parent, Object* object);
+Instance* INSTANCE_BirthCachedObject(Instance* parent, int objectTypeId);
 
 void INSTANCE_DefaultInit(Instance* instance, Object* object);
 

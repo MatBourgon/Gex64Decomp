@@ -66,6 +66,7 @@ INSTANCE_InitInstanceList = 0x8002CAE0; // type:func
 INSTANCE_CleanUpInstanceList = 0x8002D068; // type:func
 INSTANCE_BirthObjectFromIntro = 0x8002D2C0; // type:func
 INSTANCE_BirthObject = 0x8002DEA8; // type:func
+INSTANCE_BirthCachedObject = 0x8002E088; // type:func
 INSTANCE_DefaultInit = 0x8002E180; // type:func
 INSTANCE_ProcessFunctions = 0x8002D58C; // type:func
 LIST_InsertFunc = 0x80030090; // type:func
