@@ -2,13 +2,14 @@
 #define TGAMETRACKER_H_
 
 #include "types/InstanceList.h"
+#include "types/Level.h"
 
 typedef unsigned char byte;
 typedef unsigned int uint;
 typedef struct
 {
     int     _0000;
-    int*   _0004; // Might might level*, see collectible code
+    Level*  level;
     int     _0008; // Might be player instance*
     int     _000C;
     InstanceList *instanceList;

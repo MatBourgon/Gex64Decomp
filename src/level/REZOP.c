@@ -249,13 +249,13 @@ INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_btimer_OnUpdate);
     temp_s2 = &instance->_F4[2];
     if (*(short*)&instance->_100 == 0) {
         if (((short*)temp_s2)[0] != 0) {
-            if ((int)(((int**)gameTracker))[0x4BFC/4] < ((int*)gameTracker->_0004)[0x34/4]) {
+            if ((int)(((int**)gameTracker))[0x4BFC/4] < gameTracker->level->collectibleCountA) {
                 if (D_80154834 != 0) {
                     *(short*)&instance->_108 = 1;
                 }
                 Set3DTextPosition(0x64, 0x69);
                 Print3DTextf(ANIMATED_3DTEXT("COLLECT"));
-                sprintf(sp10, "%2d", ((int*)gameTracker->_0004)[0x34/4]);
+                sprintf(sp10, "%2d", gameTracker->level->collectibleCountA);
                 Set3DTextPosition(0x8C, 0x91);
                 Print3DTextf(sp10);
                 ((int**)gameTracker)[0xC/4][0x10/4] |= 0x100;
@@ -315,9 +315,9 @@ INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_btimer_OnUpdate);
                 sprintf(sp10, "%2d", temp_s6 + 0x64);
                 Print3DTextf(&sp10[1]);
             }
-            if ((((short*)temp_s2)[0] == 0) && ((int)((int**)gameTracker)[0x4BFC/4] < ((int*)gameTracker->_0004)[0x34/4])) {
+            if ((((short*)temp_s2)[0] == 0) && ((int)((int**)gameTracker)[0x4BFC/4] < gameTracker->level->collectibleCountA)) {
                 Set3DTextPosition(0xF0, 0xC8);
-                sprintf(sp10, "%2d", ((int*)gameTracker->_0004)[0x34/4] - (int)((int**)gameTracker)[0x4BFC/4]);
+                sprintf(sp10, "%2d", gameTracker->level->collectibleCountA - (int)((int**)gameTracker)[0x4BFC/4]);
                 Print3DTextf(sp10);
             }
         }

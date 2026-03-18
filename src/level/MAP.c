@@ -284,7 +284,7 @@ void map_intro_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         }
     } // 17c
     instance->_F4[1] = 1;
-    ((int*)gameTracker->_0004)[0x74/4] &= -2;
+    gameTracker->level->deathZ &= -2;
 
     gameTracker->gameFlags &= -2;
     if (s3 != 0)
@@ -370,7 +370,7 @@ block_11:
         temp_s2[4]--;
         if ((temp_s2[4] << 0x10) <= 0) {
             gameTracker->gameFlags &= ~1;
-            func_8001C978(temp_s3, &gameTracker->_0004[0x2C/4], gameTracker);
+            func_8001C978(temp_s3, &gameTracker->level->spawnPosition, gameTracker);
             instance->_F4[0] = 0;
             instance->flags |= 0x800;
             func_8004A54C(instance, 0x1000);
@@ -626,7 +626,6 @@ INCLUDE_ASM("asm/nonmatchings/level/MAP", map_speaker_OnUpdate);
 
 void map_start_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int* temp_a1;
-    int* temp_a2;
     short* temp_s4;
     int* temp_v1;
     int* temp_v1_2;
@@ -637,12 +636,14 @@ void map_start_OnCreate(Instance* instance, GameTracker* gameTracker) {
     temp_s4 = (short*)PlayerInstance->data;
     ptr = (char*)&instance->_F4[2];
     if (!(instance->flags & 0x20000)) {
-        temp_a2 = ((int**)gameTracker->_0004)[0x90/4];
         
-        if (G2String_Compare_NEQ(D_801612C0_C1CF0, temp_a2))
+        
+        if (G2String_Compare_NEQ(D_801612C0_C1CF0, gameTracker->level->levelType))
         {
+            // if (level type is not credits)
             SIGNAL_HandleSignal(PlayerInstance, temp_a1[0] + 4, 0);
         } else {
+            // if (level type is credits)
             SIGNAL_HandleSignal(PlayerInstance, temp_a1[1] + 4, 0);
         }
         

@@ -256,10 +256,11 @@ INCLUDE_ASM("asm/nonmatchings/_42bd0", common_powertv_OnCollide);
             func_8004AAA8(instance, 0x84, 0);
             instance->_F4[1] = 1;
             temp_s2[6] = 0;
-            ((short*)gameTracker->_0004)[0x2C/2] = (instance->position.x + ((func_8003A6AC(instance->intro->rotation.z) << 0x10) >> 0x14));
-            ((short*)gameTracker->_0004)[0x2E/2] = (instance->position.y + ((func_8003A4E0(instance->intro->rotation.z) << 0x10) >> 0x14));
-            ((short*)gameTracker->_0004)[0x30/2] = instance->position.z;
-            gameTracker->_0004[0x78/4] = intro->unk;
+            // set new spawn position and script, this is most likely a checkpoint box
+            gameTracker->level->spawnPosition.x = (instance->position.x + ((func_8003A6AC(instance->intro->rotation.z) << 0x10) >> 0x14));
+            gameTracker->level->spawnPosition.y = (instance->position.y + ((func_8003A4E0(instance->intro->rotation.z) << 0x10) >> 0x14));
+            gameTracker->level->spawnPosition.z = instance->position.z;
+            gameTracker->level->startSignal = intro->unk;
         }
         if (temp_s5[0x138/4] != 0) {
             if (temp_s3[0x14/4] == (((int**)gameTracker))[3]) {
