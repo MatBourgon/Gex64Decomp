@@ -337,7 +337,7 @@ void map_angel_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         instance->position = *(SVECTOR*)&temp_s3[0x48/2];
         instance->_40[6] = (s16) ((u16) instance->_40[6] + 0x400);
         if ( temp_s3[0x4C/2] <= ((short*)&instance->_100)[1]) {
-            func_8004A5B4(instance, 0x1000);
+            INSTANCE_InsertInstanceWithFlagsCleared(instance, 0x1000);
             instance->_F4[0] = 1;
             gameTracker->gameFlags |= 1;
             (*(short*)&instance->_104) = 0x5A;
@@ -901,7 +901,7 @@ void map_tvbutn_OnCreate(Instance* instance, GameTracker* gameTracker) {
     temp_s1 = (int*)instance->introData;
     instance->flags |= 0x80;
     s2 = (u8*)(instance->_F0 + 6);
-    func_8004A5B4(instance, 0x4000);
+    INSTANCE_InsertInstanceWithFlagsCleared(instance, 0x4000);
     instance->_10D = 5U;
     instance->_10C = 5U;
     if (temp_s1 != 0) {
