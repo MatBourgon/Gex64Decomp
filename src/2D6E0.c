@@ -2,6 +2,7 @@
 
 #include "INSTANCE.h"
 #include "types/GameTracker.h"
+#include "types/obtable.h"
 
 void INSTANCE_InitInstanceList(InstanceList *list, InstancePool *pool) {
     long i;
@@ -494,7 +495,14 @@ Instance* INSTANCE_BirthObject(Instance* parent, Object* object) {
     return NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002E088);
+Instance* INSTANCE_BirthCachedObject(Instance* parent, int objectTypeId) {
+    // Yeah guys, let's do the boundary check after indexing the array
+    Object* object = objectAccess[objectTypeId].object;
+    if ((objectTypeId < EOBJECT_COUNT) && (object != NULL)) {
+        return INSTANCE_BirthObject(parent, object);
+    }
+    return NULL;
+}
 
 INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002E0D8);
 

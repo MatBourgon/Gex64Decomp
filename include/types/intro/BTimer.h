@@ -3,10 +3,10 @@
 
 typedef struct
 {
+    short exitTime;
     short missionTime;
-    short cutsceneTime;
     int collectType;
-    int b;
+    int b; // may be cutscene signal?
 } BTimerIntro;
 
 #define EBTIMER_COLLECTTYPE_CUTSCENE 0x3F2

@@ -145,7 +145,7 @@ INCLUDE_ASM("asm/nonmatchings/_1050", func_80005864);
 
 void func_800058E4(int* arg0, int* arg1)
 {
-    func_8000F0B0(gameTracker8->_0004[0], arg0, arg1, 0);
+    func_8000F0B0(gameTracker8->level->segmentAddress, arg0, arg1, 0);
 }
 
 INCLUDE_ASM("asm/nonmatchings/_1050", func_80005920);

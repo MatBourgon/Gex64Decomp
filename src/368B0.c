@@ -38,7 +38,14 @@ INCLUDE_ASM("asm/nonmatchings/368B0", func_80037ACC);
 
 INCLUDE_ASM("asm/nonmatchings/368B0", func_80037AE0);
 
-INCLUDE_ASM("asm/nonmatchings/368B0", func_80037B00);
+extern int D_800BDEE8;
+extern int D_800BDEEC;
+
+void Set3DTextPosition(short x, short y)
+{
+    D_800BDEE8 = x;
+    D_800BDEEC = y;
+}
 
 void func_80037B24(void) {
 }

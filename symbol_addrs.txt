@@ -58,12 +58,15 @@ SCRIPT_InstanceSplineInit = 0x800480F8; // type:func
 SCRIPT_GetMultiSpline = 0x80048524; // type:func
 INSTANCE_ReallyRemoveInstance = 0x8002CD50; // type:func
 INSTANCE_InsertInstanceGroup = 0x8002CCD4; // type:func
+INSTANCE_InsertInstanceWithFlagsSet = 0x8004A54C; // type:func
+INSTANCE_InsertInstanceWithFlagsCleared = 0x8004A5B4; // type:func
 INSTANCE_InstanceGroupNumber = 0x8002CBE0; // type:func
 INSTANCE_NewInstance = 0x8002CB70; // type:func
 INSTANCE_InitInstanceList = 0x8002CAE0; // type:func
 INSTANCE_CleanUpInstanceList = 0x8002D068; // type:func
 INSTANCE_BirthObjectFromIntro = 0x8002D2C0; // type:func
 INSTANCE_BirthObject = 0x8002DEA8; // type:func
+INSTANCE_BirthCachedObject = 0x8002E088; // type:func
 INSTANCE_DefaultInit = 0x8002E180; // type:func
 INSTANCE_ProcessFunctions = 0x8002D58C; // type:func
 LIST_InsertFunc = 0x80030090; // type:func
@@ -158,10 +161,11 @@ __rmonUtilityBuffer = 0x800EB8A8; // size:256
 __rmonRcpAtBreak = 0x801574DC;
 osViModeTable = 0x800799B0;
 
-Print3DTextf = 0x80038BA0;
-vPrint3DTextf = 0x800387F0;
-memset = 0x80069F50;
-setmem = 0x80069FF0;
+Print3DTextf = 0x80038BA0; // type:func
+vPrint3DTextf = 0x800387F0; // type:func
+Set3DTextPosition = 0x80037B00; // type:func
+memset = 0x80069F50; // type:func
+setmem = 0x80069FF0; // type:func
 
 // == Segments ==
 

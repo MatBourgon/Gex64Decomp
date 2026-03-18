@@ -4,6 +4,7 @@
 #include "types/intro/PowerTV.h"
 
 #include "types/Instance.h"
+#include "types/obtable.h"
 
 #include "level/COMMON.h"
 #include "INSTANCE.h"
@@ -84,7 +85,7 @@ void common_powertv_OnCreate(Instance* instance, GameTracker* gameTracker) {
         instance->_F0[6] = intro->type;
         instance->_F0[7] = intro->respawns;
     } else {
-        instance->_F0[6] = 0U;
+        instance->_F0[6] = EPTV_HEALTH;
     }
     
     instance->_F4[0] = 0;
@@ -103,29 +104,22 @@ void common_powertv_OnCreate(Instance* instance, GameTracker* gameTracker) {
 void common_powertv_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int var_a1;
     short temp_a2;
-    short var_s2;
-    short var_v0;
-    int temp_v0_4;
-    int temp_v1;
+    short tvType;
+    Instance* flyInstance;
     int var_a0;
-    short temp_v0;
     short* temp_s1;
 
-    temp_v1 = instance->_F4[0];
     temp_s1 = &instance->_F0[6];
-    if ((temp_v1 - 1) >= 2U) {
-        temp_v0 = instance->_56 + 1;
-        instance->_56 = temp_v0;
-        if (((short*)&instance->_100)[1] < (short) temp_v0) {
+    if ((instance->_F4[0] - 1) >= 2U) {
+        instance->_56++;
+        if (((short*)&instance->_100)[1] < instance->_56) {
             instance->_56 = *(short*)&instance->_100;
         }
     }
-    else if (temp_v1 == 1) {
-        temp_v0 = ((short*)&instance->_104)[1];
-        if (temp_v0 > 0) {
-            temp_v0 = temp_v0 - 1;
-            ((short*)&instance->_104)[1] = temp_v0;
-            if ((temp_v0 << 0x10) == 0) {
+    else if (instance->_F4[0] == 1) {
+        if (((short*)&instance->_104)[1] > 0) {
+            ((short*)&instance->_104)[1]--;
+            if ((((short*)&instance->_104)[1] << 0x10) == 0) {
                 instance->_56 = ((short*)&instance->_100)[0];
                 goto block_7;
             }
@@ -135,7 +129,7 @@ void common_powertv_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 block_7:
             func_8002DAF8(instance, ((short*)&instance->_104)[0]);
             if ((((short*)&instance->_104)[0] == -0x3E9) && (instance->_5E == 0x1A)) {
-                instance->flags2 = (int) (instance->flags2 | 0x10);
+                instance->flags2 |= 0x10;
             }
             if (instance->flags2 & 0x10) {
                 if (temp_s1[1] & 1) {
@@ -156,34 +150,35 @@ block_7:
                     func_8002DAF8(instance, -0x3E9);
                 }
                 func_80050508(instance, 0x10, (short) ((rand() & 0x1F) - 0xF), 0x6E, 0x9C4);
-                switch (*temp_s1) {
-                case 0:
-                    var_s2 = 0;
+                // type
+                switch (temp_s1[0]) {
+                case EPTV_HEALTH:
+                    tvType = EPTV_HEALTH;
                     break;
-                case 1:
-                    var_s2 = 1;
+                case EPTV_FIRE:
+                    tvType = EPTV_FIRE;
                     break;
-                case 2:
-                    var_s2 = 2;
+                case EPTV_ICE:
+                    tvType = EPTV_ICE;
                     break;
-                case 3:
-                    var_s2 = 3;
+                case EPTV_UNUSED:
+                    tvType = EPTV_UNUSED;
                     break;
-                case 4:
-                    var_s2 = 4;
+                case EPTV_LIFE:
+                    tvType = EPTV_LIFE;
                     break;
-                case 5:
-                    var_s2 = 5;
+                case EPTV_CHECKPOINT:
+                    tvType = EPTV_CHECKPOINT;
                     break;
                 }
-                if (var_s2 != 5) {
+                if (tvType != EPTV_CHECKPOINT) {
                     instance->position.x = (instance->position.x - 0x8C);
                     instance->position.z = (instance->position.z + 0x8C);
-                    temp_v0_4 = func_8002E088(instance, 0x1F);
+                    flyInstance = (Instance*)INSTANCE_BirthCachedObject(instance, EOBJECT_PTBUG);
                     instance->position.x = (instance->position.x + 0x8C);
                     instance->position.z = (instance->position.z - 0x8C);
-                    if (temp_v0_4 != 0) {
-                        func_800444B8(temp_v0_4, var_s2);
+                    if (flyInstance != NULL) {
+                        func_800444B8(flyInstance, tvType);
                         func_80050508(instance, 9, (short) ((rand() & 0x1F) - 0xF), 0x50, 0x9C4);
                     }
                 }
@@ -199,7 +194,7 @@ block_7:
         }
         var_a0 = (var_a0 << 0x18) | (var_a0 << 0x10) | (var_a0 << 8) | 0x7F;
         if (temp_s1[6] < 3) {
-            temp_s1[6] =  temp_s1[6] + 1;
+            temp_s1[6] = temp_s1[6] + 1;
         } else {
             instance->_F4[1] = 2;
             temp_s1[6] = 0x33;
@@ -214,9 +209,8 @@ block_7:
         }
         var_a0 = (var_a0 << 0x18) | (var_a0 << 0x10) | (var_a0 << 8) | 0x7F;
         if (temp_s1[6] > 0) {
-            var_v0 = temp_s1[6] - 1;
-            temp_s1[6] = var_v0;
-            if (var_v0 >= 0xA) {
+            temp_s1[6]--;
+            if (temp_s1[6] >= 0xA) {
                 var_a1 = 1;
             }
         } else {
@@ -256,10 +250,11 @@ INCLUDE_ASM("asm/nonmatchings/_42bd0", common_powertv_OnCollide);
             func_8004AAA8(instance, 0x84, 0);
             instance->_F4[1] = 1;
             temp_s2[6] = 0;
-            ((short*)gameTracker->_0004)[0x2C/2] = (instance->position.x + ((func_8003A6AC(instance->intro->rotation.z) << 0x10) >> 0x14));
-            ((short*)gameTracker->_0004)[0x2E/2] = (instance->position.y + ((func_8003A4E0(instance->intro->rotation.z) << 0x10) >> 0x14));
-            ((short*)gameTracker->_0004)[0x30/2] = instance->position.z;
-            gameTracker->_0004[0x78/4] = intro->unk;
+            // set new spawn position and script, this is most likely a checkpoint box
+            gameTracker->level->spawnPosition.x = (instance->position.x + ((func_8003A6AC(instance->intro->rotation.z) << 0x10) >> 0x14));
+            gameTracker->level->spawnPosition.y = (instance->position.y + ((func_8003A4E0(instance->intro->rotation.z) << 0x10) >> 0x14));
+            gameTracker->level->spawnPosition.z = instance->position.z;
+            gameTracker->level->startSignal = intro->unk;
         }
         if (temp_s5[0x138/4] != 0) {
             if (temp_s3[0x14/4] == (((int**)gameTracker))[3]) {

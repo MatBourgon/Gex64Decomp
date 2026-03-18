@@ -5,12 +5,24 @@
 
 typedef struct
 {
-    char _00[0x40];
-    void* objectNameList;
-    char _44[0x38];
-    int numIntros;
-    Intro* introList;
-    char _74[0x64];
+    void* segmentAddress;
+    char _04[0x28];
+    SVECTOR spawnPosition;
+    int collectibleCountA;
+    int collectibleCountB;
+    int collectibleCountC;
+    void* objectNameList; // 0x40
+    char _44[0x30];
+    int deathZ;
+    void* startSignal;
+    int numIntros; // 7C
+    Intro* introList; // 80
+    char _84[0x8];
+    int _8C;
+    const char* levelType;
+    const char* collectibleTypeA; // 94
+    const char* collectibleTypeB; // 98
+    const char* collectibleTypeC; // 9C
 } Level;
 
 #endif

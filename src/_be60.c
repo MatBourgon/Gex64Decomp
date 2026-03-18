@@ -89,11 +89,11 @@ void func_8000B968(Instance* instance, GameTracker* gameTracker) {
     instance->flags |= 0x40;
     
     if (*(int*)&instance->_108 == 0)
-        object = (Object*)OBTABLE_FindObject(gameTracker8->_0004[0x94/4]); // CollectibleCountA
+        object = (Object*)OBTABLE_FindObject(gameTracker8->level->collectibleTypeA);
     else if (*(int*)&instance->_108 == 1)
-        object = (Object*)OBTABLE_FindObject(gameTracker8->_0004[0x98/4]); // CollectibleCountB
+        object = (Object*)OBTABLE_FindObject(gameTracker8->level->collectibleTypeB);
     else if (*(int*)&instance->_108 == 2)
-        object = (Object*)OBTABLE_FindObject(gameTracker8->_0004[0x9C/4]); // CollectibleCountC
+        object = (Object*)OBTABLE_FindObject(gameTracker8->level->collectibleTypeC);
     
     if (object != NULL) {
         instance->object->modelList = object->modelList;
@@ -153,14 +153,12 @@ void common_colc_OnCollide(Instance* instance, GameTracker* gameTracker)
 }
 
 void common_cold_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    int* temp_a2;
     int* temp_a3;
 
-    temp_a2 = gameTracker->_0004;
     temp_a3 = &instance->_F4[2];
-    if (((int*)gameTracker)[0x4C00/4] >= temp_a2[0x38/4]) {  // CollectibleCType*
+    if (((int*)gameTracker)[0x4C00/4] >= gameTracker->level->collectibleCountB) {
         *(int*)&instance->_108 = 2;
-    } else if (((int*)gameTracker)[0x4BFC/4] >= temp_a2[0x34/4]) { // CollectibleBType*
+    } else if (((int*)gameTracker)[0x4BFC/4] >= gameTracker->level->collectibleCountA) {
         *(int*)&instance->_108 = 1;
     } else {
         *(int*)&instance->_108 = 0;
