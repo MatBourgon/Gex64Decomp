@@ -213,19 +213,15 @@ INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_gas_OnCollide);
 void rezop_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int var_s0;
     BTimerIntro* intro;
-    int* temp_v1;
-    int* temp_v1_2;
 
     intro = (BTimerIntro*)instance->introData;
-    instance->_104 = (intro->missionTime * 30);
-    instance->_F0[6] = intro->cutsceneTime;
+    instance->_104 = (intro->exitTime * 30);
+    instance->_F0[6] = intro->missionTime;
     *(short*)&instance->_100 = 0;
     instance->flags |= 0xC00;
-    temp_v1 = ((int**)gameTracker)[3];
-    temp_v1[0xFC/4] |= 0x4000;
-    temp_v1_2 = ((int**)gameTracker)[3];
-    temp_v1_2[4] |= 0x100;
-    func_8002CA2C(4, intro->cutsceneTime, intro);
+    ((int*)gameTracker->_000C)[0xFC/4] |= 0x4000;
+    ((int*)gameTracker->_000C)[0x10/4] |= 0x100;
+    func_8002CA2C(4, intro->missionTime, intro);
     for (var_s0 = 1; var_s0 < 4; var_s0++) {
         func_8002C1AC(var_s0);
     }
@@ -236,100 +232,104 @@ void rezop_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
 INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_btimer_OnUpdate);
 
 /*void rezop_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
-    char sp10[0x50];
-    int temp_s0;
-    int temp_s3_2;
-    int temp_s6;
+    char buffer[0x50];
+    int timeLeft;
+    int minutesLeft;
+    int secondsLeft;
     int var_v1;
-    int* temp_s2;
+    short* temp_s2;
     BTimerIntro* intro;
 
     var_v1 = 1;
     intro = instance->introData;
-    temp_s2 = &instance->_F4[2];
+    temp_s2 = &instance->_F0[6];
     if (*(short*)&instance->_100 == 0) {
-        if (((short*)temp_s2)[0] != 0) {
+        if (temp_s2[0] != 0) {
             if ((int)(((int**)gameTracker))[0x4BFC/4] < gameTracker->level->collectibleCountA) {
                 if (D_80154834 != 0) {
                     *(short*)&instance->_108 = 1;
                 }
                 Set3DTextPosition(0x64, 0x69);
                 Print3DTextf(ANIMATED_3DTEXT("COLLECT"));
-                sprintf(sp10, "%2d", gameTracker->level->collectibleCountA);
+                sprintf(buffer, "%2d", gameTracker->level->collectibleCountA);
                 Set3DTextPosition(0x8C, 0x91);
-                Print3DTextf(sp10);
+                Print3DTextf(buffer);
                 ((int**)gameTracker)[0xC/4][0x10/4] |= 0x100;
             } else {
                 func_8002C18C(4);
                 Set3DTextPosition(0x64, 0x64);
                 Print3DTextf(ANIMATED_3DTEXT("GET THE"));
-                func_8002CA2C(5, ((short*)temp_s2)[0]);
+                func_8002CA2C(5, temp_s2[0]);
             }
             var_v1 = 0;
-            ((short*)temp_s2)[0]--;
+            temp_s2[0]--;
         }
-        if (((short*)temp_s2)[0xC/2] != 0) {
+        if (temp_s2[6] != 0) {
             if (D_80154834 != 0) {
                 var_v1 = 0;
             } else {
-                ((short*)temp_s2)[0xC/2] = 0;
+                temp_s2[6] = 0;
             }
         }
         if ((((short*)((int**)gameTracker))[0x4C12/2] == 0) && (var_v1 != 0) && (instance->intro->_2C == 0)) {
-            temp_s2[0x8/4] -= D_800E5FD8;
+            ((int*)temp_s2)[0x8/4] -= D_800E5FD8;
         }
-        if (((((int**)gameTracker)[0xC/4][0xFC/4] & 0x600000) == 0x600000) && (instance->_F4[1] == 0)) {
-            ((short*)temp_s2)[0] = (intro->cutsceneTime - 1);
+        if (((((int*)gameTracker->_000C)[0xFC/4] & 0x600000) == 0x600000) && (instance->_F4[1] == 0)) {
+            temp_s2[0] = (intro->missionTime - 1);
             if (intro->collectType == EBTIMER_COLLECTTYPE_CUTSCENE) {
                 SIGNAL_HandleSignal(PlayerInstance, intro->b + 4, 0);
             }
             instance->_F4[1] = 1;
             PlayerInstance->_F4[2] &= 0xFFBFFFFF;
         }
-        if ((((int**)gameTracker)[0xC/4][0xFC/4] & 0x400000) && ((((int**)gameTracker)[0x4C00/4] != 0) || (((int**)gameTracker)[0x4C04/4] != 0))) {
+        if ((((int*)gameTracker->_000C)[0xFC/4] & 0x400000) && ((((int**)gameTracker)[0x4C00/4] != 0) || (((int**)gameTracker)[0x4C04/4] != 0))) {
             func_8002C18C(5);
-            temp_s2[0x8/4] = 0x3C;
-            ((short*)temp_s2)[2] = 1;
-            ((int**)gameTracker)[0xC/4][0x10/4] |= 0x100;
+            ((int*)temp_s2)[0x8/4] = 0x3C;
+            temp_s2[2] = 1;
+            ((int*)gameTracker->_000C)[0x10/4] |= 0x100;
         }
-        if ((temp_s2[0x8/4] < 0) && (((int**)gameTracker)[0x4C00/4] == 0) && (((int**)gameTracker)[0x4C04/4] == 0)) {
+        if ((((int*)temp_s2)[0x8/4] < 0) && (((int**)gameTracker)[0x4C00/4] == 0) && (((int**)gameTracker)[0x4C04/4] == 0)) {
             ((int**)gameTracker)[0x4BFC/4] = 0;
             func_8002C18C(5);
-            temp_s2[0x8/4] = 0x3C;
-            ((short*)temp_s2)[2] = 2;
-            ((int**)gameTracker)[0xC/4][0x10/4] |= 0x100;
+            ((int*)temp_s2)[0x8/4] = 0x3C;
+            temp_s2[2] = 2;
+            ((int*)gameTracker->_000C)[0x10/4] |= 0x100;
         }
-        if (((short*)temp_s2)[2] == 0) {
-            temp_s0 = temp_s2[0x8/4];
-            temp_s3_2 = temp_s2[0x8/4] / 1800;
-            temp_s6 = (temp_s2[0x8/4] % 1800) / 30;
-            if ((temp_s0 >= 0x12D) || ((temp_s2[0x8/4] % 15) >= 5)) {
+        if (temp_s2[2] == 0) {
+            timeLeft = ((int*)temp_s2)[0x8/4];
+            minutesLeft = timeLeft / 1800;
+            secondsLeft = (timeLeft % 1800) / 30;
+            // Show text unless < 10s and blinking
+            if ((timeLeft > 300) || ((timeLeft % 15) >= 5)) {
                 Set3DTextPosition(0x2D, 0xC8);
-                if ((temp_s0 % 30) >= 0xF) {
-                    sprintf(sp10, "%d", temp_s3_2);
+                if ((timeLeft % 30) >= 15) {
+                    sprintf(buffer, "%d", minutesLeft);
                 } else {
-                    sprintf(sp10, "%d.", temp_s3_2);
+                    sprintf(buffer, "%d.", minutesLeft);
                 }
-                Print3DTextf(sp10);
+                Print3DTextf(buffer);
                 Set3DTextPosition(0x53, 0xC8);
-                sprintf(sp10, "%2d", temp_s6 + 0x64);
-                Print3DTextf(&sp10[1]);
+                sprintf(buffer, "%2d", secondsLeft + 100);
+                Print3DTextf(&buffer[1]);
             }
-            if ((((short*)temp_s2)[0] == 0) && ((int)((int**)gameTracker)[0x4BFC/4] < gameTracker->level->collectibleCountA)) {
+            if ((temp_s2[0] == 0) && ((int)((int**)gameTracker)[0x4BFC/4] < gameTracker->level->collectibleCountA)) {
                 Set3DTextPosition(0xF0, 0xC8);
-                sprintf(sp10, "%2d", gameTracker->level->collectibleCountA - (int)((int**)gameTracker)[0x4BFC/4]);
-                Print3DTextf(sp10);
+                sprintf(buffer, "%2d", gameTracker->level->collectibleCountA - (int)((int**)gameTracker)[0x4BFC/4]);
+                Print3DTextf(buffer);
             }
         }
     } else {
         ((int**)gameTracker)[0xC/4][0x10/4] |= 0x100;
         if (*(short*)&instance->_100 == 2) {
+            // Delay map load
             if (--instance->_104 < 0) {
                 func_800396E0("map", "map5", ((int**)gameTracker));
-                return;
             }
-            Set3DTextPosition(0x64, 0x64);
-            Print3DTextf("TIME UP!");
+            else
+            {
+                Set3DTextPosition(0x64, 0x64);
+                Print3DTextf("TIME UP!");
+            }
         }
     }
 }*/
