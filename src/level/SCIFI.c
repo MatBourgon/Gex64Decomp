@@ -62,7 +62,7 @@ void scifi_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
     temp_a2 = ((char***)instance->_70)[2];
     temp_a3 = ((short*)temp_a2)[3];
     if (temp_a3 == 1) {
-        if ((temp_a2[5] == ((char**)gameTracker)[12/4]) && (temp_a2[12/4][5] >= 6U)) {
+        if ((temp_a2[5] == ((char*)gameTracker->_000C)) && (temp_a2[12/4][5] >= 6U)) {
             if (instance->_F4[0] == 0)
             {
                 ((char*)instance->_40)[0xe] = 1;
