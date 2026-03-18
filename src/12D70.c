@@ -133,7 +133,7 @@ void common_proxsig_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         
         for (proxy = intro->proxies; proxy < pEnd; ++proxy) {
             if (proxy->distMin <= distance && distance < proxy->distMax) {
-                SIGNAL_HandleSignal(PlayerInstance, proxy->signal + 4, NULL);
+                SIGNAL_HandleSignal(PlayerInstance, proxy->signal + 4, 0);
             }
         }
     }

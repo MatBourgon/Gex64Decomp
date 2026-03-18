@@ -544,7 +544,7 @@ int SIGNAL_LogicXor(Instance* instance, void* signal) {
 int SIGNAL_LogicTrue(Instance* instance, void* signal) {
     if (D_800785CC[((unsigned char*)signal)[4]] != 0) {
         if (((int**)signal)[2] != 0) {
-            SIGNAL_HandleSignal(instance, ((int**)signal)[2], NULL);
+            SIGNAL_HandleSignal(instance, ((int**)signal)[2], 0);
             return 0;
         }
     }
@@ -868,20 +868,19 @@ int SIGNAL_8004E9F8(Instance* instance, void* signal) {
         }
     } 
     
-    
     return 1;
 }
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", SIGNAL_8004EA2C);
 
-void COLLIDE_HandleSignal(Instance* instance, void* signal, int numSignals, int* arg3) {
+void COLLIDE_HandleSignal(Instance* instance, void* signal, int numSignals, int arg3) {
     int s4, s3;
     int v0;
     int s2 = 0;
 
-    if (arg3 == (void*)1 || arg3 == 0)
+    if (arg3 == 1U || arg3 == 0)
         s2 = 1;
-    else if (arg3[4] >= 2U)
+    else if (*(int*)(arg3+16) >= 2U) // Doesn't make sense
         return;
 
     if (numSignals == 0)
@@ -900,7 +899,7 @@ void COLLIDE_HandleSignal(Instance* instance, void* signal, int numSignals, int*
 
 }
 
-void SIGNAL_HandleSignal(Instance* instance, void* signal, int* arg2) {
+void SIGNAL_HandleSignal(Instance* instance, void* signal, int arg2) {
     COLLIDE_HandleSignal(instance, signal, 1, arg2);
 }
 

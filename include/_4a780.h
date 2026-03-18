@@ -8,8 +8,8 @@ int GetLevelIndexFromId(const char* targetLevelId);
 short GetRedRemotesForLevel(unsigned int levelIndex);
 void func_8004C43C();
 int func_8004C66C(void);
-void SIGNAL_HandleSignal(Instance* instance, void* signal, int* arg2);
-void COLLIDE_HandleSignal(Instance* instance, void* signal, int numSignals, int* arg3);
+void SIGNAL_HandleSignal(Instance* instance, void* signal, int arg2);
+void COLLIDE_HandleSignal(Instance* instance, void* signal, int numSignals, int arg3);
 
 int SIGNAL_HideObject(Instance* instance, void* signal);
 int SIGNAL_UnhideObject(Instance* instance, void* signal);
