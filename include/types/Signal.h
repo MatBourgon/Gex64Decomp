@@ -1,5 +1,5 @@
-#ifndef SIGNAL_H_
-#define SIGNAL_H_
+#ifndef TSIGNAL_H_
+#define TSIGNAL_H_
 
 struct Instance_s;
 

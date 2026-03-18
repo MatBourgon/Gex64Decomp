@@ -1,5 +1,5 @@
-#ifndef _4A780_H_
-#define _4A780_H_
+#ifndef SIGNAL_H_
+#define SIGNAL_H_
 
 #include "types/Instance.h"
 
