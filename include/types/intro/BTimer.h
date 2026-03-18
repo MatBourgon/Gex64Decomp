@@ -6,7 +6,7 @@ typedef struct
     short exitTime;
     short missionTime;
     int collectType;
-    int b;
+    int b; // may be cutscene signal?
 } BTimerIntro;
 
 #define EBTIMER_COLLECTTYPE_CUTSCENE 0x3F2
