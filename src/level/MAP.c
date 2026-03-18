@@ -572,7 +572,7 @@ void func_8015A854_BB284(char* arg0, short arg1) {
         }
         
         Set3DTextPosition((temp_a0 << 0x10) >> 0x10, arg1);
-        Print3DTextf("#2%s", var_s1);
+        Print3DTextf(ANIMATED_3DTEXT("%s"), var_s1);
         var_s1 = bufferPtr + 1;
         arg1 += 0x1E;
     } while (last_char != 0);
@@ -1977,7 +1977,7 @@ void func_8015F678_C00A8(short* arg0) {
     char* var_v1;
 
     Set3DTextPosition(0x46, 0x6E);
-    Print3DTextf("#2GAME OVER");
+    Print3DTextf(ANIMATED_3DTEXT("GAME OVER"));
     gSPDisplayList(D_80157050++, D_8006D578);
     DrawTextToScreen("PRESS A TO START NEW GAME", 0x2D, 0xB4, 1);
     gDPPipeSync2(D_80157050);
@@ -2576,7 +2576,7 @@ void func_80160DF0_C1820(void* arg0) {
 
 void func_801610B8_C1AE8(short* arg0) {
     Set3DTextPosition(0x50, 0x6E);
-    Print3DTextf("#2DATA SAVED");
+    Print3DTextf(ANIMATED_3DTEXT("DATA SAVED"));
     if (++D_8014F34C >= 0x1F) {
         arg0[0x4C12/2] = 0;
         func_80032F90();

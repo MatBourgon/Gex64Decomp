@@ -3,6 +3,8 @@
 #include "level/AZTEC.h"
 #include "types/intro/BTimer.h"
 
+#include "types/G2String.h"
+
 extern int D_800E5FD8;
 extern int D_80154834;
 
@@ -69,7 +71,7 @@ void aztec_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
                     *(short*)&instance->_108 = 1;
                 }
                 Set3DTextPosition(0x64, 0x69);
-                Print3DTextf("#2COLLECT");
+                Print3DTextf(ANIMATED_3DTEXT("COLLECT"));
                 sprintf(sp10, "%2d", ((int*)gameTracker->_0004)[0x34/4]);
                 Set3DTextPosition(0x8C, 0x91);
                 Print3DTextf(sp10);
@@ -77,7 +79,7 @@ void aztec_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             } else {
                 func_8002C18C(4);
                 Set3DTextPosition(0x64, 0x64);
-                Print3DTextf("#2GET THE");
+                Print3DTextf(ANIMATED_3DTEXT("GET THE"));
                 func_8002CA2C(5, ((short*)temp_s2)[0]);
             }
             var_v1 = 0;
