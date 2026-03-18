@@ -501,7 +501,7 @@ INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002E0D8);
 void INSTANCE_DefaultInit(Instance* instance, Object* object) {
     memset(&instance->flags, 0, sizeof(Instance) - offsetof(instance, flags));
     instance->object = object;
-    instance->data = (void*)object->_1C; // data?
+    instance->data = object->data; // data?
     if (instance->object->oflags & 0x200) {
         instance->flags2 |= 0x40;
     }

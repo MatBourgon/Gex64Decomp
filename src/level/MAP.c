@@ -120,8 +120,8 @@ void map_dish_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
 void map_dish_OnUpdate(Instance* instance, GameTracker* gameTracker) {
-    if (instance->object->_1C != 0) {
-        instance->rotation.z += (0x1000 / *instance->object->_1C);
+    if (instance->object->data != 0) {
+        instance->rotation.z += (0x1000 / ((int*)instance->object->data)[0]);
     } else {
         instance->rotation.z += 0x3C;
     }
@@ -310,8 +310,8 @@ void map_intro_OnCollide(Instance* instance, GameTracker* gameTracker) {
 void map_angel_OnCreate(Instance* instance, GameTracker* gameTracker) {
     ((short*)&instance->_100)[1] = -0x1000;
     instance->flags |= 0xC00;
-    if (instance->object->_1C != 0) {
-        ((short*)&instance->_100)[1] = *instance->object->_1C;
+    if (instance->object->data != 0) {
+        ((short*)&instance->_100)[1] = ((int*)instance->object->data)[0];
     }
 }
 
