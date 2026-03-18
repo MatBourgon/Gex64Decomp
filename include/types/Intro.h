@@ -18,7 +18,7 @@ typedef struct
     void* data; // 20
     struct Instance_s* instance;
     MultiSpline* multiSpline; // 0x28
-    int* _2C;
+    int* _2C; // Maybe dsignal?
 } Intro;
 
 #endif
