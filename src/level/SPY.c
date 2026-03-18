@@ -49,7 +49,26 @@ void spy_launch_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/SPY", spy_launch_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/SPY", spy_launch_OnCollide);
+void spy_launch_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    int temp_a0;
+    unsigned char** temp_a1;
+    char var_a2;
+
+    temp_a1 = (unsigned char**)instance->_70[2];
+    temp_a0 = gameTracker->_000C;
+    
+    var_a2 = (((short*)temp_a1)[3] == 1) ? temp_a1[3][5] : -1;
+    
+    if (((instance->_F4[0] - 1) >= 2U) && (*(int*)&instance->_108 == 0) && (temp_a1[0x14/4] == (void*)temp_a0) && (((short*)temp_a1)[2] == 5) && (var_a2 < 8) && ((temp_a1)[2][2] == 0)) {
+        if (instance->_11C & 0x10) {
+            ((int*)temp_a0)[0xFC/4] |= 0x200;
+            instance->_11C |= 0x20;
+        }
+        else if ((((func_80025798(temp_a0, temp_a1) != 0) && (instance->_11C == 0)) || (instance->_11C & 1)) && (func_80159F3C_EB60C(instance, gameTracker) == 0)) {
+            func_8015A098_EB768(instance, gameTracker);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/SPY", func_80159EEC_EB5BC);
 

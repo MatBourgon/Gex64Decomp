@@ -9,9 +9,9 @@
 
 typedef struct Instance_s
 {
-    NodeType node;
-    struct Instance_s* next;
-    struct Instance_s* prev;
+    NodeType node; // 00 (prev), 04 (next)
+    struct Instance_s* next; // 08
+    struct Instance_s* prev; // 0C
     int flags; // 10
     int flags2; // 14
     Object* object; // 18
