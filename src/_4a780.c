@@ -325,13 +325,13 @@ void func_8004C43C() {
         D_8007864C[i-0x20] = 0;
 }
 
-int SIGNAL_HideObject(int** arg1, int** arg2) {
-    arg2[1][7] |= 0x80;                    
+int SIGNAL_HideObject(Instance* instance, void* signal) {
+    ((int**)signal)[1][7] |= 0x80;                    
     return 1;     
 }
 
-int SIGNAL_UnhideObject(int* arg1, int** arg2) {
-    arg2[1][7] &= ~0x80;
+int SIGNAL_UnhideObject(Instance* instance, void* signal) {
+    ((int**)signal)[1][7] &= ~0x80;
     return 1;
 }
 
@@ -343,72 +343,66 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", SIGNAL_Frame);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", SIGNAL_StartSpline);
 
-int SIGNAL_StopSpline(int* arg1, int* arg2) {
-    int* var1;
-    int* var2;
-    
-    var1 = (int*)arg2[1]; 
-    arg1 = (int*)var1[9];
+int SIGNAL_StopSpline(Instance* instance, void* signal) {
+    int* var1 = ((int**)signal)[1]; 
 
-     if (arg1 != 0) {
-        (int)arg2 = arg1[4] &= 0xFDFFFFFF;
+     if (((Instance*)var1[9]) != 0) {
+        ((Instance*)var1[9])->flags &= 0xFDFFFFFF;
     }
     return 1;
 }
 
-int SIGNAL_StartAniTex(void) {
+int SIGNAL_StartAniTex(Instance* instance, void* signal) {
     return 1;
 }
 
-int SIGNAL_StopAniTex(void) {
+int SIGNAL_StopAniTex(Instance* instance, void* signal) {
     return 1;
 }
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", SIGNAL_GotoFrame);
 
-int SIGNAL_ChangeModel(int* arg1, int* arg2) {
-    int* temp_v0 = (int*)arg2[1];
+int SIGNAL_ChangeModel(Instance* instance, void* signal) {
+    int* temp_v0 = ((int**)signal)[1];
     short* temp_v1  = (short*)temp_v0[9];
     
     if (temp_v1 != 0) {
-        temp_v1[97] = arg2[2];
+        temp_v1[97] = ((int*)signal)[2];
     }
     return 1;
 }
 
-int SIGNAL_DSignal(int* arg1, int* arg2) {
-    int* var1;
+int SIGNAL_DSignal(Instance* instance, void* signal) {
+    int var1;
     int* var2;
 
 
-    (int)var2 = arg2[1];
+    var2 = ((int**)signal)[1];
     
     if (var2 != 0) 
     {
-        (int)var1 = var2[2];
-        var2[11] = arg2[2];
+        var2[11] = ((int*)signal)[2];
          
     }
     return 1;
 }
 
-int SIGNAL_GSignal(void) {
+int SIGNAL_GSignal(Instance* instance, void* signal) {
     return 1;
 }
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", SIGNAL_DeathZ);
 
-int SIGNAL_LightGroup(char* arg0, int* arg1) {
-    arg0[79] = arg1[1];
+int SIGNAL_LightGroup(Instance* instance, void* signal) {
+    instance->_4F = ((int*)signal)[1];
     
     return 1;
 }
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", SIGNAL_CameraAdjust);
 
-int SIGNAL_Camera(int* arg1, int* arg2) {
-    arg1 = (int*)arg2[1];
-    func_80003D4C(arg1);
+int SIGNAL_Camera(Instance* instance, void* signal) {
+    func_80003D4C(((int*)signal)[1]);
     return 1;
 }
 
@@ -436,13 +430,13 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", SIGNAL_FarPlane);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", SIGNAL_SoundStartSequence);
 
-int SIGNAL_SoundStopSlot(int* arg1, int** arg2) {
+int SIGNAL_SoundStopSlot(Instance* instance, void* signal) {
     int* var1[5];
 
-    var1[1] = arg2[0];
-    var1[2] = arg2[1];
+    var1[1] = ((int**)signal)[0];
+    var1[2] = ((int**)signal)[1];
 
-    func_80050854(arg1, var1);
+    func_80050854(instance, var1);
 
     return 1;
 }
@@ -455,9 +449,9 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", SIGNAL_SoundMuteChannel);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", SIGNAL_SoundUnmuteChannel);
 
-int SIGNAL_Times(int* arg1, int* arg2) {
-    if (arg2[1] > 0) {
-        --arg2[1];
+int SIGNAL_Times(Instance* instance, void* signal) {
+    if (((int*)signal)[1] > 0) {
+        --((int*)signal)[1];
         return 1;
     }
    
@@ -480,8 +474,8 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", SIGNAL_HideBG);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", SIGNAL_UnhideBG);
 
-int SIGNAL_HideBGObject(int* arg1, int* arg2) {
-    short unsigned* temp_v1 = (short*)arg2[1];
+int SIGNAL_HideBGObject(Instance* instance, void* signal) {
+    short* temp_v1 = ((short**)signal)[1];
         
     if (temp_v1 != 0) {
         *temp_v1 |= 1;
@@ -489,31 +483,28 @@ int SIGNAL_HideBGObject(int* arg1, int* arg2) {
     return 1;
 }
 
-int SIGNAL_UnhideBGObject(int* arg1, int* arg2) {
-    short* temp_v0 = (short*)arg2[1];
- 
-    if (temp_v0 != 0) {
-        *temp_v0 &= 0xFFFE;
+int SIGNAL_UnhideBGObject(Instance* instance, void* signal) {
+    short* temp_v1 = ((short**)signal)[1];
+        
+    if (temp_v1 != 0) {
+        *temp_v1 &= ~1;
     }
     return 1;
 }
 
-int SIGNAL_Mirror(int* arg0) {
-    int value = arg0[4];
-    int value2 = 0x20000000;
-    value = value | value2;
-    arg0[4] = value;
+int SIGNAL_Mirror(Instance* instance, void* signal) {
+    instance->flags |= 0x20000000;
     return 1;
 }
 
-int SIGNAL_Unmirror(int* arg0) {
-    arg0[4] &= 0xDFFFFFFF;
+int SIGNAL_Unmirror(Instance* instance, void* signal) {
+    instance->flags &= ~0x20000000;
     return 1;
 }
 
-int SIGNAL_SetMirror(int* arg0, int* arg1)
+int SIGNAL_SetMirror(Instance* instance, void* signal)
 {
-    ((int*)gameTracker8)[0x4C14/4] = arg1[1];
+    ((int*)gameTracker8)[0x4C14/4] = ((int*)signal)[1];
     return 1;
 }
 
@@ -521,30 +512,21 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", SIGNAL_FogNear);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", SIGNAL_FogFar);
 
-int SIGNAL_StartVertexMorph(int* arg1, int* arg2) {
-    *(int*)arg2[1] &= ~2;
+int SIGNAL_StartVertexMorph(Instance* instance, void* signal) {
+    ((int**)signal)[1][0] &= ~2;
     return 1;
 }
 
-int SIGNAL_StopVertexMorph(int* arg1, int* arg2) {
-    *(int*)arg2[1] |= 2;
+int SIGNAL_StopVertexMorph(Instance* instance, void* signal) {
+    ((int**)signal)[1][0] |= 2;
     return 1;
 }
-
-typedef struct
-{
-    int _0000; // Subject to change, this is here to pad 32 bits at the start of the struct
-    unsigned char _0004;
-    unsigned char _0005;
-    unsigned char _0006;
-    int* _0008;
-} _4a780_t;
 
 extern int D_800785CC[];
 
-int SIGNAL_LogicValue(int* arg0, int* arg2)
+int SIGNAL_LogicValue(Instance* instance, void* signal)
 {
-    D_800785CC[arg2[1]] = arg2[2];
+    D_800785CC[((int*)signal)[1]] = ((int*)signal)[2];
     return 1;
 }
 
@@ -554,19 +536,19 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", SIGNAL_LogicAnd);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", SIGNAL_LogicOr);
 
-int SIGNAL_LogicXor(int arg0, _4a780_t* arg1) {
-    D_800785CC[arg1->_0004] = D_800785CC[arg1->_0005] ^ D_800785CC[arg1->_0006];
+int SIGNAL_LogicXor(Instance* instance, void* signal) {
+    D_800785CC[((unsigned char*)signal)[4]] = D_800785CC[((unsigned char*)signal)[5]] ^ D_800785CC[((unsigned char*)signal)[6]];
     return 1;
 }
 
-int SIGNAL_LogicTrue(Instance* arg0, _4a780_t* arg1) {
-    if (D_800785CC[arg1->_0004] != 0) {
-        if (arg1->_0008 != 0) {
-            SIGNAL_HandleSignal(arg0, arg1->_0008, NULL);
+int SIGNAL_LogicTrue(Instance* instance, void* signal) {
+    if (D_800785CC[((unsigned char*)signal)[4]] != 0) {
+        if (((int**)signal)[2] != 0) {
+            SIGNAL_HandleSignal(instance, ((int**)signal)[2], NULL);
             return 0;
         }
     }
-    else if (arg1->_0008 == NULL) {
+    else if (((int**)signal)[2] == NULL) {
         return 0;
     }
     return 1;
@@ -578,26 +560,26 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", SIGNAL_CallSignal);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", SIGNAL_Offset);
 
-int SIGNAL_LogicAdd(int arg0, _4a780_t* arg1) {
-    D_800785CC[arg1->_0004] = D_800785CC[arg1->_0005] + D_800785CC[arg1->_0006];
+int SIGNAL_LogicAdd(Instance* instance, void* signal) {
+    D_800785CC[((unsigned char*)signal)[4]] = D_800785CC[((unsigned char*)signal)[5]] + D_800785CC[((unsigned char*)signal)[6]];
     return 1;
 }
 
-int SIGNAL_LogicSub(int arg0, _4a780_t* arg1) {
-    D_800785CC[arg1->_0004] = D_800785CC[arg1->_0005] - D_800785CC[arg1->_0006];
+int SIGNAL_LogicSub(Instance* instance, void* signal) {
+    D_800785CC[((unsigned char*)signal)[4]] = D_800785CC[((unsigned char*)signal)[5]] - D_800785CC[((unsigned char*)signal)[6]];
     return 1;
 }
 
-int SIGNAL_Goto(Instance* arg1, int** arg2) {
-    SIGNAL_HandleSignal(arg1, arg2[1], 0);
+int SIGNAL_Goto(Instance* instance, void* signal) {
+    SIGNAL_HandleSignal(instance, ((int**)signal)[1], 0);
     return 0;
 }
 
-int SIGNAL_Label(void) {
+int SIGNAL_Label(Instance* instance, void* signal) {
     return 1;
 }
 
-int SIGNAL_End(void) {
+int SIGNAL_End(Instance* instance, void* signal) {
     return 0;
 }
 
@@ -611,7 +593,7 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004D5A4);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", SIGNAL_SetPlayerControl);
 
-int SIGNAL_Launch(void) {
+int SIGNAL_Launch(Instance* instance, void* signal) {
     func_80027468();
     return 1;
 }
@@ -630,25 +612,16 @@ typedef struct
 
 extern func_8004D83C_t_1 D_800EB9B0[];
 
-typedef struct
-{
-    int _;
-    short unk4;
-    short unk6;
-    int unk8;
-    int unkC;
-} func_8004D83C_t_2;
-
-int SIGNAL_SetZSignal(int* arg1, func_8004D83C_t_2* arg2) {
+int SIGNAL_SetZSignal(Instance* instance, void* signal) {
     int temp_a0;
     int temp_a2;
     short temp_v2;
     short temp_v0;
 
-    temp_v0 = arg2->unk4;
-    temp_a0 = arg2->unk8;
-    temp_a2 = arg2->unkC;
-    temp_v2 = arg2->unk6;
+    temp_v0 = ((short*)signal)[2];
+    temp_a0 = ((int*)signal)[2];
+    temp_a2 = ((int*)signal)[3];
+    temp_v2 = ((short*)signal)[3];
     
     if (temp_v0 < 0x10U) {
         (D_800EB9B0)[temp_v0].a = temp_v2;
@@ -662,12 +635,11 @@ int SIGNAL_SetZSignal(int* arg1, func_8004D83C_t_2* arg2) {
     return 1;
 }
 
-
 extern int D_800EB9B4[];
 extern int D_800EB9B8[];
 
-int SIGNAL_ResetZSignal(int* arg1, short* arg2) {
-    int i = arg2[2] * 3;
+int SIGNAL_ResetZSignal(Instance* instance, void* signal) {
+    int i = ((short*)signal)[2] * 3;
 
     D_800EB9B4[i] = 0;
     D_800EB9B8[i] = 0;
@@ -675,21 +647,21 @@ int SIGNAL_ResetZSignal(int* arg1, short* arg2) {
     return 1;
 }
 
-int SIGNAL_SoundEffect(int* _possiblythis, int* arg2) {
+int SIGNAL_SoundEffect(Instance* instance, void* signal) {
     
-    if (arg2[1] == 0xFFFF) {
+    if (((int*)signal)[1] == 0xFFFF) {
         ((char*)gameTracker8)[0x4C60] = 1;
-    } else if (arg2[1] == 0xFFFE) {
+    } else if (((int*)signal)[1] == 0xFFFE) {
         func_800331DC();
         ((char*)gameTracker8)[0x4C60] = 0;
     } else {
-        func_80050980(arg2[1]);
+        func_80050980(((int*)signal)[1]);
     }
     return 1;
 }
 
-int SIGNAL_MusicControl(int* arg0, int* arg1) {
-    func_80033334(arg1[1]);
+int SIGNAL_MusicControl(Instance* instance, void* signal) {
+    func_80033334(((int*)signal)[1]);
     return 1;
 }
 
@@ -697,27 +669,26 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", SIGNAL_SetMusicVariable);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", SIGNAL_LevelChange);
 
-int SIGNAL_VoiceControl(void) {
+int SIGNAL_VoiceControl(Instance* instance, void* signal) {
     return 1;
 }
 
-int SIGNAL_BankChange(void) {
+int SIGNAL_BankChange(Instance* instance, void* signal) {
     return 1;
 }
-int SIGNAL_GameLoadSave(void) {
+int SIGNAL_GameLoadSave(Instance* instance, void* signal) {
     return 1;
 }
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", SIGNAL_HideObjectGroup);
 
-// Future note: arg1 may be [this], arg2 may be a nested struct
-int SIGNAL_UnhideObjectGroup(void* arg1, int** arg2) {
+int SIGNAL_UnhideObjectGroup(Instance* instance, void* signal) {
     int length;
     int index;
     int** ptr;
 
-    length = arg2[1][0];
-    ptr = ((int**)&arg2[1][1]);
+    length = ((int**)signal)[1][0];
+    ptr = &(((int***)signal)[1][1]);
     
     for (index = 0; index < length; ++index) {
         ptr[index][7] = (ptr[index][7] & ~0x80);
@@ -736,49 +707,45 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", SIGNAL_CameraSpline);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", SIGNAL_ScreenWipe);
 
-int SIGNAL_VoiceQueue(int* arg1, int* arg2) {
-    (int)arg1 = arg2[1];
-    func_80052944((int)arg1);
+int SIGNAL_VoiceQueue(Instance* instance, void* signal) {
+    func_80052944(((int*)signal)[1]);
     return 1;
 }
 
-int SIGNAL_VoiceUnQueue(int* arg1, int* arg2) {
-    (int)arg1 = arg2[1];
-    func_8005294C((int)arg1);
+int SIGNAL_VoiceUnQueue(Instance* instance, void* signal) {
+    func_8005294C(((int*)signal)[1]);
     return 1;
 }
 
-int SIGNAL_VoiceRequest(int arg1, int* arg2) {
-    arg1 = arg2[1];
-    func_80052A7C(arg1);
+int SIGNAL_VoiceRequest(Instance* instance, void* signal) {
+    func_80052A7C(((int*)signal)[1]);
     return 1;
 }
 
-int SIGNAL_VoiceForce(int* arg1, int* arg2) {
-    (int)arg1 = arg2[1];
-    func_80052AA8((int*)arg1);
+int SIGNAL_VoiceForce(Instance* instance, void* signal) {
+    func_80052AA8(((int*)signal)[1]);
     return 1;
 }
 
-int SIGNAL_VoiceClearQueue(void) {
+int SIGNAL_VoiceClearQueue(Instance* instance, void* signal) {
     func_80052954();
     return 1;
 }
 
-int SIGNAL_VoiceDisable(void) {
+int SIGNAL_VoiceDisable(Instance* instance, void* signal) {
     func_80052F58();
     return 1;
 }
 
-int SIGNAL_VoiceReEnable(void) {
+int SIGNAL_VoiceReEnable(Instance* instance, void* signal) {
     func_80052F7C();
     return 1;
 }
 
-int SIGNAL_IntroActive(Instance* arg0, int** arg1) {
-    if ((arg1[1] != 0) && (arg1[1][7] & 8)) {
-        if (arg1[2] != NULL) {
-            SIGNAL_HandleSignal(arg0, arg1[2], 0);
+int SIGNAL_IntroActive(Instance* instance, void* signal) {
+    if ((((int**)signal)[1] != 0) && (((int**)signal)[1][7] & 8)) {
+        if (((int*)signal)[2] != NULL) {
+            SIGNAL_HandleSignal(instance, ((int**)signal)[2], 0);
             return 0;
         }
     }
@@ -793,31 +760,29 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", SIGNAL_BlendStart);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", SIGNAL_MiscValue);
 
-int SIGNAL_SetTimes(int* arg1, int* arg2) {
-    int* temp1 = (int*)arg2[1];
-    int temp2 = arg2[2];
-    temp1[1] = temp2; 
+int SIGNAL_SetTimes(Instance* instance, void* signal) {
+    ((int**)signal)[1][1] = ((int*)signal)[2]; 
     return 1;
 }             
 
-int SIGNAL_ScreenWipeColor(int arg0, char* arg1) {
-    func_80039688(arg1[4], arg1[5], arg1[6], gameTracker8);
+int SIGNAL_ScreenWipeColor(Instance* instance, void* signal) {
+    func_80039688(((char*)signal)[4], ((char*)signal)[5], ((char*)signal)[6], gameTracker8);
     return 1;
 }
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", SIGNAL_Relocate);
 
-int SIGNAL_LogicTrueElse(Instance* arg0, _4a780_t* arg1) {
-    if (D_800785CC[arg1->_0004] != 0 && arg1->_0008 != 0) {
-        SIGNAL_HandleSignal(arg0, arg1->_0008, 0);
+int SIGNAL_LogicTrueElse(Instance* instance, void* signal) {
+    if (D_800785CC[((unsigned char*)signal)[4]] != 0 && ((int**)signal)[2] != 0) {
+        SIGNAL_HandleSignal(instance, ((int**)signal)[2], 0);
         return 0;
     }
     return 1;
 }
 
-int SIGNAL_LogicFalseElse(Instance* arg0, _4a780_t* arg1) {
-    if (D_800785CC[arg1->_0004] == 0 && arg1->_0008 != 0) {
-        SIGNAL_HandleSignal(arg0, arg1->_0008, 0);
+int SIGNAL_LogicFalseElse(Instance* instance, void* signal) {
+    if (D_800785CC[((unsigned char*)signal)[4]] == 0 && ((int**)signal)[2] != 0) {
+        SIGNAL_HandleSignal(instance, ((int**)signal)[2], 0);
         return 0;
     }
     return 1;
@@ -827,16 +792,16 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", SIGNAL_Print);
 
 extern short D_8007865C;
 
-int SIGNAL_TagTimer(void) {
+int SIGNAL_TagTimer(Instance* instance, void* signal) {
     D_8007865C = 1;
     return 1;
 }
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", SIGNAL_SetNoRemove);
 
-int ResetNoRemove(int* arg1, int **arg2) {
+int SIGNAL_ResetNoRemove(Instance* instance, void* signal) {
     
-    int* a2ptr = arg2[1];
+    int* a2ptr = ((int**)signal)[1];
     if (a2ptr) {
         
         int* ptr = (int*)a2ptr[9];
@@ -850,8 +815,8 @@ int ResetNoRemove(int* arg1, int **arg2) {
     return 1;
 }
 
-int SIGNAL_8004E95C(int* arg1, int* arg2) {
-    int temp_v1 = arg2[1];
+int SIGNAL_8004E95C(Instance* instance, void* signal) {
+    int temp_v1 = ((int*)signal)[1];
     
     if ((temp_v1 != 0) && (temp_v1 == 1)) {
         func_8015E228();
@@ -863,45 +828,42 @@ int SIGNAL_8004E95C(int* arg1, int* arg2) {
 
 extern int D_8015EE24;
 
-int SIGNAL_8004E9A8(int* arg1, int* arg2) {
-    int* var0 = (int*)arg2[1];
-    D_8015EE24 = (int)var0;
+int SIGNAL_8004E9A8(Instance* instance, void* signal) {
+    D_8015EE24 = ((int*)signal)[1];
     return 1;
 }
 
 extern int D_8015EE28;
 
-int SIGNAL_8004E9BC(int* arg1, int* arg2) {
-    int var1 = arg2[1];
-    D_8015EE28 = var1;
+int SIGNAL_8004E9BC(Instance* instance, void* signal) {
+    D_8015EE28 = ((int*)signal)[1];
     return 1;
 }
 
 extern int D_8015EE2C;
 
-int SIGNAL_8004E9D0(int* arg1, int* arg2) {
-    D_8015EE2C = arg2[1];
+int SIGNAL_8004E9D0(Instance* instance, void* signal) {
+    D_8015EE2C = ((int*)signal)[1];
     return 1;
 }
 
 extern int D_8015EE30;
 
-int SIGNAL_8004E9E4(int arg1, int* arg2) {
-    int temp_v0 = arg2[1];
-    D_8015EE30 = temp_v0;
+int SIGNAL_8004E9E4(Instance* instance, void* signal) {
+    D_8015EE30 = ((int*)signal)[1];
     return 1;
 }
 
-int SIGNAL_8004E9F8(int* arg1, int* arg2) {
+int SIGNAL_8004E9F8(Instance* instance, void* signal) {
     int* temp_v0;
     int* temp_v1;
 
-    temp_v1 = (int*)arg2[2];
+    temp_v1 = ((int**)signal)[2];
     if (temp_v1 != 0) {
         temp_v0 = (int*)temp_v1[9];
         
         if (temp_v0 != 0) {
-        temp_v1 =  (int*)arg2[1];
+        temp_v1 =  ((int**)signal)[1];
         (int*)temp_v0[72] = temp_v1;
         }
     } 
