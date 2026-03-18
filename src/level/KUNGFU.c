@@ -397,19 +397,19 @@ void kungfu_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     temp_s2 = &instance->_F4[2];
     if (*(short*)&instance->_100 == 0) {
         if (((short*)temp_s2)[0] != 0) {
-            if ((int)(((int**)gameTracker))[0x4BFC/4] < ((int**)gameTracker)[0x4/4][0x34/4]) {
+            if ((int)(((int**)gameTracker))[0x4BFC/4] < ((int*)gameTracker->_0004)[0x34/4]) {
                 if (D_80154834 != 0) {
                     *(short*)&instance->_108 = 1;
                 }
-                func_80037B00(0x64, 0x69);
+                Set3DTextPosition(0x64, 0x69);
                 Print3DTextf("#2COLLECT");
-                sprintf(sp10, "%2d", ((int**)gameTracker)[0x4/4][0x34/4]);
-                func_80037B00(0x8C, 0x91);
+                sprintf(sp10, "%2d", ((int*)gameTracker->_0004)[0x34/4]);
+                Set3DTextPosition(0x8C, 0x91);
                 Print3DTextf(sp10);
                 ((int**)gameTracker)[0xC/4][0x10/4] |= 0x100;
             } else {
                 func_8002C18C(4);
-                func_80037B00(0x64, 0x64);
+                Set3DTextPosition(0x64, 0x64);
                 Print3DTextf("#2GET THE");
                 func_8002CA2C(5, ((short*)temp_s2)[0]);
             }
@@ -452,20 +452,20 @@ void kungfu_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             temp_s3_2 = temp_s2[0x8/4] / 1800;
             temp_s6 = (temp_s2[0x8/4] % 1800) / 30;
             if ((temp_s0 >= 0x12D) || ((temp_s2[0x8/4] % 15) >= 5)) {
-                func_80037B00(0x2D, 0xC8);
+                Set3DTextPosition(0x2D, 0xC8);
                 if ((temp_s0 % 30) >= 0xF) {
                     sprintf(sp10, "%d", temp_s3_2);
                 } else {
                     sprintf(sp10, "%d.", temp_s3_2);
                 }
                 Print3DTextf(sp10);
-                func_80037B00(0x53, 0xC8);
+                Set3DTextPosition(0x53, 0xC8);
                 sprintf(sp10, "%2d", temp_s6 + 0x64);
                 Print3DTextf(&sp10[1]);
             }
-            if ((((short*)temp_s2)[0] == 0) && ((int)((int**)gameTracker)[0x4BFC/4] < ((int**)gameTracker)[0x4/4][0x34/4])) {
-                func_80037B00(0xF0, 0xC8);
-                sprintf(sp10, "%2d", ((int**)gameTracker)[0x4/4][0x34/4] - (int)((int**)gameTracker)[0x4BFC/4]);
+            if ((((short*)temp_s2)[0] == 0) && ((int)((int**)gameTracker)[0x4BFC/4] < ((int*)gameTracker->_0004)[0x34/4])) {
+                Set3DTextPosition(0xF0, 0xC8);
+                sprintf(sp10, "%2d", ((int*)gameTracker->_0004)[0x34/4] - (int)((int**)gameTracker)[0x4BFC/4]);
                 Print3DTextf(sp10);
             }
         }
@@ -476,7 +476,7 @@ void kungfu_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
                 func_800396E0("map", "map5", ((int**)gameTracker));
                 return;
             }
-            func_80037B00(0x64, 0x64);
+            Set3DTextPosition(0x64, 0x64);
             Print3DTextf("TIME UP!");
         }
     }

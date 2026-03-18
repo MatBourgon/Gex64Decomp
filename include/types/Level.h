@@ -6,10 +6,10 @@
 typedef struct
 {
     char _00[0x40];
-    void* objectNameList;
+    void* objectNameList; // 0x40
     char _44[0x38];
-    int numIntros;
-    Intro* introList;
+    int numIntros; // 7C
+    Intro* introList; // 80
     char _74[0x64];
 } Level;
 

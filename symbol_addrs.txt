@@ -158,10 +158,11 @@ __rmonUtilityBuffer = 0x800EB8A8; // size:256
 __rmonRcpAtBreak = 0x801574DC;
 osViModeTable = 0x800799B0;
 
-Print3DTextf = 0x80038BA0;
-vPrint3DTextf = 0x800387F0;
-memset = 0x80069F50;
-setmem = 0x80069FF0;
+Print3DTextf = 0x80038BA0; // type:func
+vPrint3DTextf = 0x800387F0; // type:func
+Set3DTextPosition = 0x80037B00; // type:func
+memset = 0x80069F50; // type:func
+setmem = 0x80069FF0; // type:func
 
 // == Segments ==
 

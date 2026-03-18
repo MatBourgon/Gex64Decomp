@@ -284,7 +284,7 @@ void map_intro_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         }
     } // 17c
     instance->_F4[1] = 1;
-    ((int**)gameTracker)[0x4/4][0x74/4] &= -2;
+    ((int*)gameTracker->_0004)[0x74/4] &= -2;
 
     gameTracker->gameFlags &= -2;
     if (s3 != 0)
@@ -370,7 +370,7 @@ block_11:
         temp_s2[4]--;
         if ((temp_s2[4] << 0x10) <= 0) {
             gameTracker->gameFlags &= ~1;
-            func_8001C978(temp_s3, ((int*)gameTracker)[1] + 0x2C, gameTracker);
+            func_8001C978(temp_s3, &gameTracker->_0004[0x2C/4], gameTracker);
             instance->_F4[0] = 0;
             instance->flags |= 0x800;
             func_8004A54C(instance, 0x1000);
@@ -571,7 +571,7 @@ void func_8015A854_BB284(char* arg0, short arg1) {
             temp_a0 = 0x28;
         }
         
-        func_80037B00((temp_a0 << 0x10) >> 0x10, arg1);
+        Set3DTextPosition((temp_a0 << 0x10) >> 0x10, arg1);
         Print3DTextf("#2%s", var_s1);
         var_s1 = bufferPtr + 1;
         arg1 += 0x1E;
@@ -637,7 +637,7 @@ void map_start_OnCreate(Instance* instance, GameTracker* gameTracker) {
     temp_s4 = (short*)PlayerInstance->data;
     ptr = (char*)&instance->_F4[2];
     if (!(instance->flags & 0x20000)) {
-        temp_a2 = ((int***)gameTracker)[1][0x90/4];
+        temp_a2 = ((int**)gameTracker->_0004)[0x90/4];
         
         if (G2String_Compare_NEQ(D_801612C0_C1CF0, temp_a2))
         {
@@ -1803,7 +1803,7 @@ void func_8015EED8_BF908(int* arg0) {
         D_8014F34C = 2;
     }
     
-    func_80037B00(0x5F, 0x4B);
+    Set3DTextPosition(0x5F, 0x4B);
     if (D_8014F34C == 0) {
         sprintf(sp10, "%s%s", &D_80078184, D_801611C0_C1BF0);
         Print3DTextf(sp10);
@@ -1811,7 +1811,7 @@ void func_8015EED8_BF908(int* arg0) {
         Print3DTextf(D_801611C0_C1BF0);
     }
     
-    func_80037B00(0x53, 0x6E);
+    Set3DTextPosition(0x53, 0x6E);
     if (D_8014F34C == 1) {
         sprintf(sp10, "%s%s", &D_80078184, D_801611CC_C1BFC);
         Print3DTextf(sp10);
@@ -1819,7 +1819,7 @@ void func_8015EED8_BF908(int* arg0) {
         Print3DTextf(D_801611CC_C1BFC);
     }
     
-    func_80037B00(0x64, 0x91);
+    Set3DTextPosition(0x64, 0x91);
     if (D_8014F34C == 2) {
         sprintf(sp10, "%s%s", &D_80078184, D_80078190);
         Print3DTextf(sp10);
@@ -1868,7 +1868,7 @@ void func_8015F228_BFC58(int* arg0) {
         D_8014F34C = 5;
     }
     
-    func_80037B00(0x69, 0x32);
+    Set3DTextPosition(0x69, 0x32);
     
     if (D_8014F34C == 0) {
         sprintf(sp10, "%s%s", D_80078184, D_80078188);
@@ -1877,7 +1877,7 @@ void func_8015F228_BFC58(int* arg0) {
         Print3DTextf(D_80078188);
     }
     
-    func_80037B00(0x5F, 0x4B);
+    Set3DTextPosition(0x5F, 0x4B);
     
     if (D_8014F34C == 1) {
         sprintf(sp10, "%s%s", D_80078184, D_801611C0_C1BF0);
@@ -1886,7 +1886,7 @@ void func_8015F228_BFC58(int* arg0) {
         Print3DTextf(D_801611C0_C1BF0);
     }
     
-    func_80037B00(0x53, 0x64);
+    Set3DTextPosition(0x53, 0x64);
     
     if (D_8014F34C == 2) {
         sprintf(sp10, "%s%s", D_80078184, D_801611CC_C1BFC);
@@ -1895,7 +1895,7 @@ void func_8015F228_BFC58(int* arg0) {
         Print3DTextf(D_801611CC_C1BFC);
     }
     
-    func_80037B00(0x52, 0x7D);
+    Set3DTextPosition(0x52, 0x7D);
     
     if (D_8014F34C == 3) {
         sprintf(sp10, "%s%s", D_80078184, D_801611B4_C1BE4);
@@ -1904,7 +1904,7 @@ void func_8015F228_BFC58(int* arg0) {
         Print3DTextf(D_801611B4_C1BE4);
     }
     
-    func_80037B00(0x64, 0x96);
+    Set3DTextPosition(0x64, 0x96);
     
     if (D_8014F34C == 4) {
         sprintf(sp10, "%s%s", D_80078184, D_80078190);
@@ -1913,7 +1913,7 @@ void func_8015F228_BFC58(int* arg0) {
         Print3DTextf(D_80078190);
     }
     
-    func_80037B00(0x6E, 0xAF);
+    Set3DTextPosition(0x6E, 0xAF);
     
     if (D_8014F34C == 5) {
         sprintf(sp10, "%s%s", D_80078184, D_800781B8);
@@ -1976,7 +1976,7 @@ void func_8015F678_C00A8(short* arg0) {
     int var_a0;
     char* var_v1;
 
-    func_80037B00(0x46, 0x6E);
+    Set3DTextPosition(0x46, 0x6E);
     Print3DTextf("#2GAME OVER");
     gSPDisplayList(D_80157050++, D_8006D578);
     DrawTextToScreen("PRESS A TO START NEW GAME", 0x2D, 0xB4, 1);
@@ -2005,9 +2005,9 @@ void func_8015F678_C00A8(short* arg0) {
 void func_8015F770_C01A0(void) {
     if (D_80161680_C20B0 < 0x3C) {
         D_80161680_C20B0 += 1;
-        func_80037B00(0x5A, 0x50);
+        Set3DTextPosition(0x5A, 0x50);
         Print3DTextf("GAME LOAD");
-        func_80037B00(0x6E, 0x6E);
+        Set3DTextPosition(0x6E, 0x6E);
         Print3DTextf("FAILED");
     } else {
         func_80040170(4);
@@ -2059,9 +2059,9 @@ void func_8015F804_C0234(short* arg0) {
     }
     buffer[i] = 0;
     
-    func_80037B00(0x73, 0x46);
+    Set3DTextPosition(0x73, 0x46);
     Print3DTextf("ENTER");
-    func_80037B00(0x62, 0x64);
+    Set3DTextPosition(0x62, 0x64);
     Print3DTextf(D_801611D8_C1C08);
     gSPDisplayList(D_80157050++, D_8006D578);
     DrawTextToScreen(buffer, 0x50, 0x8C, 1);
@@ -2096,7 +2096,7 @@ void func_8015F804_C0234(short* arg0) {
 
 void func_8015FBBC_C05EC(short* arg0) {
 
-    func_80037B00(0x3C, 0x5F);
+    Set3DTextPosition(0x3C, 0x5F);
     Print3DTextf("PASSWORD IS");
     gSPDisplayList(D_80157050++, D_8006D578);
     DrawTextToScreen(D_800E5D00, 0x50, 0x82, 1);
@@ -2124,16 +2124,16 @@ void func_8015FC88_C06B8(int* arg0) {
         D_8014F34C = 1;
     }
     
-    func_80037B00(0x37, 0x32);
+    Set3DTextPosition(0x37, 0x32);
     Print3DTextf(&D_801611E4_C1C14);
-    func_80037B00(0x62, 0x64);
+    Set3DTextPosition(0x62, 0x64);
     if (D_8014F34C == 0) {
         sprintf(sp10, "%s%s", &D_80078184, &D_801611D8_C1C08);
         Print3DTextf(&sp10);
     } else {
         Print3DTextf(&D_801611D8_C1C08);
     }
-    func_80037B00(0x32, 0x8C);
+    Set3DTextPosition(0x32, 0x8C);
     if (D_8014F34C == 1) {
         sprintf(sp10, "%s%s", &D_80078184, &D_80078198);
         Print3DTextf(&sp10);
@@ -2184,16 +2184,16 @@ void func_8015FF60_C0990(int* arg0) {
     if (D_8014F34C > 1) {
         D_8014F34C = 1;
     }
-    func_80037B00(0x46, 0x32);
+    Set3DTextPosition(0x46, 0x32);
     Print3DTextf(&D_801611F8_C1C28);
-    func_80037B00(0x62, 0x64);
+    Set3DTextPosition(0x62, 0x64);
     if (D_8014F34C == 0) {
         sprintf(sp10, "%s%s", &D_80078184, &D_801611D8_C1C08);
         Print3DTextf(&sp10);
     } else {
         Print3DTextf(&D_801611D8_C1C08);
     }
-    func_80037B00(0x32, 0x8C);
+    Set3DTextPosition(0x32, 0x8C);
     if (D_8014F34C == 1) {
         sprintf(sp10, "%s%s", &D_80078184, &D_80078198);
         Print3DTextf(&sp10);
@@ -2575,7 +2575,7 @@ void func_80160DF0_C1820(void* arg0) {
 }
 
 void func_801610B8_C1AE8(short* arg0) {
-    func_80037B00(0x50, 0x6E);
+    Set3DTextPosition(0x50, 0x6E);
     Print3DTextf("#2DATA SAVED");
     if (++D_8014F34C >= 0x1F) {
         arg0[0x4C12/2] = 0;
