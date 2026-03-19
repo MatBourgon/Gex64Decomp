@@ -81,7 +81,7 @@ void looney_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     {
         v1 = instance->oldPos.x;
         v0 = instance->oldPos.y;
-        instance->rotation.z = func_80030538(v0 - instance->position.y, v1 - instance->position.x) - 0x400;
+        instance->rotation.z = ratan2(v0 - instance->position.y, v1 - instance->position.x) - 0x400;
         func_8002DAF8(instance, -1);
     }
     else if (instance->_F4[0] == 1)

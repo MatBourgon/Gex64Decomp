@@ -80,7 +80,7 @@ void circuit_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     {
         v1 = instance->oldPos.x;
         v0 = instance->oldPos.y;
-        instance->rotation.z = func_80030538(v0 - instance->position.y, v1 - instance->position.x) - 0x400;
+        instance->rotation.z = ratan2(v0 - instance->position.y, v1 - instance->position.x) - 0x400;
         func_8002DAF8(instance, -1);
     }
     else if (instance->_F4[0] == 1)
@@ -300,7 +300,7 @@ void circuit_qmark_OnUpdate(Instance* instance, GameTracker* arg1) {
         case 0: break;
         
         case 1:
-        if (MATH3D_FastSqrt(SVECTOR_DistanceSquared(&instance->position, &PlayerInstance->position), 0) > 1000
+        if (MATH3D_FastSqrt2(SVECTOR_DistanceSquared(&instance->position, &PlayerInstance->position), 0) > 1000
             || !temp_s0[5])
         {
             temp_s0[2] = 2;

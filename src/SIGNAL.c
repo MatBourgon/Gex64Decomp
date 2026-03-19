@@ -591,8 +591,7 @@ typedef struct
 
 s32 SIGNAL_Teleport(Instance* instance, void* signal) {
     SVECTOR sp10;
-    _Matrix sp18;
-    SVECTOR sp28;
+    MATRIX sp18;
     SVECTOR deltaPosition;
     TeleportSignal* tpSignal = signal;
 
@@ -600,9 +599,9 @@ s32 SIGNAL_Teleport(Instance* instance, void* signal) {
     deltaPosition.y = instance->position.y - tpSignal->entryLocation.y;
     deltaPosition.z = instance->position.z - tpSignal->entryLocation.z;
     // Probably some kind of matrix being built to rotate the instance after teleportation
-    MATH3D_IdentityMatrix(&sp18); // int vector? [1 0 0] [0 1 0] [1 0 0]
-    MATH3D_RotateMatrix(tpSignal->r, &sp18); // rotate
-    MATH3D_ApplyMatrix(&sp18, &deltaPosition, &sp10); // (Matrix x Vector) -> Vector
+    MATH3D_SetUnityMatrix(&sp18); // int vector? [1 0 0] [0 1 0] [1 0 0]
+    RotMatrixZ(tpSignal->r, &sp18); // rotate
+    MATH3D_ApplyMatrixSV(&sp18, &deltaPosition, &sp10); // (Matrix x Vector) -> Vector
     instance->_80[6] = tpSignal->exitLocation.x - deltaPosition.x;
     instance->_80[7] = tpSignal->exitLocation.y - deltaPosition.y;
     instance->_90[0] = tpSignal->exitLocation.z - deltaPosition.z;

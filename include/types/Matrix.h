@@ -4,6 +4,7 @@
 typedef struct
 {
     short m[3][3];
-} _Matrix;
+    long l[3];
+} MATRIX;
 
 #endif

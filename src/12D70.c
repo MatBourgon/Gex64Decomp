@@ -101,7 +101,7 @@ void common_proxsig_OnCreate(Instance* instance, GameTracker* gameTracker)
 }
 
 int SVECTOR_Length(SVECTOR* pos) {
-    return MATH3D_FastSqrt(pos->x * pos->x + pos->y * pos->y + pos->z * pos->z, 0);
+    return MATH3D_FastSqrt2(pos->x * pos->x + pos->y * pos->y + pos->z * pos->z, 0);
 }
 
 typedef struct

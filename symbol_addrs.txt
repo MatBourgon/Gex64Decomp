@@ -43,7 +43,13 @@ GetLevelIndexFromId = 0x8004B520; // type:func
 GetRedRemotesForLevel = 0x8004B5D4; // type:func
 DrawTextToScreen = 0x80030DD8; // type:func
 // See KAIN
-MATH3D_FastSqrt = 0x80030840; // type:func
+MATH3D_FastSqrt2 = 0x80030840; // type:func
+MATH3D_FastSqrt = 0x80030758; // type:func
+MATH3D_RotMatAboutVec = 0x80030A2C; // type:func
+MATH3D_SetIdentityQuat = 0x80030B88; // type:func
+MulMatrix2 = 0x8003C368; // type:func
+RotMatrix = 0x8003DEA0; // type:func
+ratan2 = 0x80030538; // type:func
 SVECTOR_Length = 0x800135C4; // type:func
 SIGNAL_HandleSignal = 0x8004EBAC; // type:func
 COLLIDE_HandleSignal = 0x8004EA58; // type:func
@@ -201,9 +207,12 @@ ctoupper = 0x8006A4D0; // type:func
 
 TVTextInformation = 0x800782A8; // size:0x2E8
 
-MATH3D_ApplyMatrix = 0x80032340; // type:func
-MATH3D_IdentityMatrix = 0x80030B5C; // type:func
-MATH3D_RotateMatrix = 0x8003E1B4; // type:func
+MATH3D_ApplyMatrix = 0x80032170; // type:func
+MATH3D_ApplyMatrixSV = 0x80032340; // type:func
+MATH3D_ApplyMatrixLV = 0x80032258; // type:func
+MATH3D_SetUnityMatrix = 0x80030B5C; // type:func
+MATH3D_AngleBetweenVectors = 0x80030938; // type:func
+RotMatrixZ = 0x8003E1B4; // type:func
 
 gameTracker4 = 0x8006FCC4; // type:GameTracker*
 gameTracker8 = 0x8006FCC8; // type:GameTracker*
