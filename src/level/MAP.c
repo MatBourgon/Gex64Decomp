@@ -618,7 +618,7 @@ void map_speaker_OnCreate(Instance* instance, GameTracker* gameTracker) {
         }
     }
     temp_s0_2 = ((int**)(*(((s32) ((instance->_C0[1] | 1) << 0x10) >> 0x10) + (int*)instance->object->modelList)))[0x2C/4];
-    func_80051360(temp_s0_2[2], &temp_s1[4], ((temp_s1[0xE/2] << 8) / 127) & 0xFFFF);
+    SplineSetDef2FrameNumber(temp_s0_2[2], &temp_s1[4], ((temp_s1[0xE/2] << 8) / 127) & 0xFFFF);
     func_80048A4C(instance, temp_s0_2, 0, 0, &temp_s1[4], 0, 1);
 }
 
@@ -1131,7 +1131,7 @@ void map_mapgate_OnCreate(Instance* instance, GameTracker* gameTracker)
     if (D_800785CC[((int*)instance->introData)[0]] != 3)
         return;
 
-    func_80048828(instance, -1, 0, 0, 0);
+    SCRIPT_InstanceSplineSet(instance, -1, 0, 0, 0);
     instance->flags |= 0x100000;
 }
 
@@ -1424,7 +1424,7 @@ void map_lvltv_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             if (instance->intro->multiSpline != NULL) {
                 multi = (MultiSpline*)SCRIPT_GetMultiSpline(instance, &isParent, &isClass);
                 if (multi->rotational != 0) {
-                    func_80051C64(multi->rotational, func_800485F8(instance, multi, isParent, isClass), &sp10);
+                    SplineGetData(multi->rotational, SCRIPT_GetRotSplineDef(instance, multi, isParent, isClass), &sp10);
                     instance->intro->rotation.x += sp10.x;
                     instance->intro->rotation.y += sp10.y;
                     instance->intro->rotation.z += sp10.z;
@@ -1632,10 +1632,10 @@ void map_select_OnCreate(Instance* instance, GameTracker* gameTracker) {
         } else {
             temp_s0_2 = (int**)(&temp_s4[var_s1])[0x34/4];
             func_800516E0(((int*)temp_s0_2[10])[0], &sp10);
-            func_80051C64(((int*)temp_s0_2[10])[0], &sp10, temp_s0_2 + 4);
+            SplineGetData(((int*)temp_s0_2[10])[0], &sp10, temp_s0_2 + 4);
             if (((int*)temp_s0_2[10])[1] != 0) {
                 func_800516E0(((int*)temp_s0_2[10])[1], &sp10);
-                func_80051C64(((int*)temp_s0_2[10])[1], &sp10, &sp18);
+                SplineGetData(((int*)temp_s0_2[10])[1], &sp10, &sp18);
                 ((short*)temp_s0_2)[4] += sp18.x;
                 ((short*)temp_s0_2)[5] += sp18.y;
                 ((short*)temp_s0_2)[6] += sp18.z;

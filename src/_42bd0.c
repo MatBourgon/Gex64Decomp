@@ -476,7 +476,7 @@ INCLUDE_ASM("asm/nonmatchings/_42bd0", func_800480AC);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", SCRIPT_InstanceSplineInit);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80048304);
+INCLUDE_ASM("asm/nonmatchings/_42bd0", SCRIPT_CountFramesInSpline);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80048454);
 
@@ -523,15 +523,68 @@ MultiSpline* SCRIPT_GetMultiSpline(Instance *instance, unsigned long *isParent, 
     return multi;
 }
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_800485D4);
+INCLUDE_ASM("asm/nonmatchings/_42bd0", SCRIPT_GetPosSplineDef);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_800485F8);
+INCLUDE_ASM("asm/nonmatchings/_42bd0", SCRIPT_GetRotSplineDef);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_8004861C);
+INCLUDE_ASM("asm/nonmatchings/_42bd0", SCRIPT_GetScaleSplineDef);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80048640);
+INCLUDE_ASM("asm/nonmatchings/_42bd0", SCRIPT_RelativisticSpline);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80048828);
+void SCRIPT_InstanceSplineSet(Instance* instance, short frameNum, SplineDef* splineDef, SplineDef* rsplineDef, SplineDef* ssplineDef) {
+    Spline* spline;
+    Spline* rspline;
+    RSpline* sspline;
+    MultiSpline* multi;
+    int isClass;
+    int isParent;
+    SVECTOR point;
+
+    multi = SCRIPT_GetMultiSpline(instance, &isParent, &isClass);
+    if (multi != NULL) {
+        if (frameNum == -1) {
+            frameNum = SCRIPT_CountFramesInSpline(instance);
+        }
+        if ((isParent != 0) || (isClass != 0) || ((splineDef == 0) && (rsplineDef == 0) && (ssplineDef == 0))) {
+            splineDef = SCRIPT_GetPosSplineDef(instance, multi, isParent, isClass);
+            rsplineDef = SCRIPT_GetRotSplineDef(instance, multi, isParent, isClass);
+            ssplineDef = SCRIPT_GetScaleSplineDef(instance, multi, isParent, isClass);
+        }
+        
+        spline = multi->positional;
+        rspline = multi->rotational;
+        sspline = multi->scaling;
+        
+        if ((splineDef != 0) && (spline != 0)) {
+            SplineSetDef2FrameNumber(spline, splineDef, frameNum & 0xFFFF);
+            SplineGetData(spline, splineDef, &point);
+            
+            if (isClass != 0) {
+                SCRIPT_RelativisticSpline(instance, &point);
+            } else {
+                instance->position.x = point.x;
+                instance->position.y = point.y;
+                instance->position.z = point.z;
+            }
+        }
+        
+        if ((rsplineDef != 0) && (rspline != 0)) {
+            SplineSetDef2FrameNumber(rspline, rsplineDef, frameNum & 0xFFFF);
+            SplineGetData(rspline, rsplineDef, &instance->rotation);
+        }
+        
+        if ((ssplineDef != 0) && (sspline != 0)) {
+            
+            SVECTOR scale;
+            
+            SplineSetDef2FrameNumber(sspline, ssplineDef, frameNum & 0xFFFF);
+            SplineGetData(sspline, ssplineDef, &scale);
+            instance->oldRotation.x = scale.x;
+            instance->oldRotation.y = scale.z;
+            instance->oldRotation.z = scale.y;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80048A4C);
 

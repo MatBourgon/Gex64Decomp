@@ -261,7 +261,7 @@ void* INSTANCE_BirthObjectFromIntro(Intro* intro) {
                 }
                 if (intro->flags & 0x800) {
                     if (((short*)intro->_00)[2] == -1) {
-                        func_80048828(instance, (short)func_80048304(instance), 0, 0, 0);
+                        SCRIPT_InstanceSplineSet(instance, (short)SCRIPT_CountFramesInSpline(instance), 0, 0, 0);
                         instance->flags ^= 0x01000000;
                         instance->flags |= 0x100000;
                     }

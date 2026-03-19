@@ -80,7 +80,7 @@ INCLUDE_ASM("asm/nonmatchings/_4f810", func_80050F98);
 
 INCLUDE_ASM("asm/nonmatchings/_4f810", func_800512BC);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80051360);
+INCLUDE_ASM("asm/nonmatchings/_4f810", SplineSetDef2FrameNumber);
 
 
 int SplineIsWhere(Spline* spline, SplineDef* def) {
@@ -147,7 +147,7 @@ INCLUDE_ASM("asm/nonmatchings/_4f810", func_8005178C);
 
 INCLUDE_ASM("asm/nonmatchings/_4f810", func_800517E4);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_80051C64);
+INCLUDE_ASM("asm/nonmatchings/_4f810", SplineGetData);
 
 INCLUDE_ASM("asm/nonmatchings/_4f810", func_80051ED8);
 
