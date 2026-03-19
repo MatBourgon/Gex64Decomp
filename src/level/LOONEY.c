@@ -195,7 +195,7 @@ void looney_doeboy_OnCollide(Instance* instance, GameTracker* gameTracker) {
         if (intro != NULL) {
             temp_a1 = *(void**)intro;
             if (temp_a1 != 0) {
-                SIGNAL_HandleSignal(instance, temp_a1 + 4, NULL);
+                SIGNAL_HandleSignal(instance, temp_a1 + 4, 0);
             }
         }
     }

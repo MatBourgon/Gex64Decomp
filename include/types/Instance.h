@@ -24,7 +24,7 @@ typedef struct Instance_s
     short _40[4];
     SVECTOR position; // 48, 4A, 4C
     unsigned char _4E;
-    char _4F;
+    char lightGroup;
     SVECTOR oldPos; // 50, 52, 54
     short _56;
     SVECTOR initialPos; // 58, 5A, 5C

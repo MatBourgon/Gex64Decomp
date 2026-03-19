@@ -11,14 +11,14 @@ typedef struct
     int* _00;
     int* _04;
     SVECTOR rotation; // 08, 0A, 0C
-    short _pad; // 0E
+    short lightGroup; // 0E
     SVECTOR position; // 10, 12, 14
     int* _18;
     int flags; // 1C
     void* data; // 20
     struct Instance_s* instance;
     MultiSpline* multiSpline; // 0x28
-    int* _2C;
+    int* _2C; // Maybe dsignal?
 } Intro;
 
 #endif

@@ -1,0 +1,135 @@
+#ifndef SIGNAL_H_
+#define SIGNAL_H_
+
+#include <PR/ultratypes.h>
+#include "types/Instance.h"
+
+int func_8004AADC(void);
+int GetLevelIndexFromId(const char* targetLevelId);
+short GetRedRemotesForLevel(unsigned int levelIndex);
+void func_8004C43C();
+int func_8004C66C(void);
+void SIGNAL_HandleSignal(Instance* instance, void* signal, int arg2);
+
+typedef struct
+{
+    int id;
+} BaseSignal;
+void COLLIDE_HandleSignal(Instance* instance, BaseSignal* signal, int numSignals, int arg3);
+
+s32 SIGNAL_HideObject(Instance* instance, void* signal);
+s32 SIGNAL_UnhideObject(Instance* instance, void* signal);
+s32 SIGNAL_Timer(Instance* instance, void* signal);
+s32 SIGNAL_GotoFrame(Instance* instance, void* signal);
+s32 SIGNAL_ChangeModel(Instance* instance, void* signal);
+s32 SIGNAL_StartAniTex(Instance* instance, void* signal);
+s32 SIGNAL_StopAniTex(Instance* instance, void* signal);
+s32 SIGNAL_StartSpline(Instance* instance, void* signal);
+s32 SIGNAL_StopSpline(Instance* instance, void* signal);
+s32 SIGNAL_DeathZ(Instance* instance, void* signal);
+s32 SIGNAL_DSignal(Instance* instance, void* signal);
+s32 SIGNAL_GSignal(Instance* instance, void* signal);
+s32 SIGNAL_LightGroup(Instance* instance, void* signal);
+s32 SIGNAL_CameraAdjust(Instance* instance, void* signal);
+s32 SIGNAL_CameraMode(Instance* instance, void* signal);
+s32 SIGNAL_Camera(Instance* instance, void* signal);
+s32 SIGNAL_CameraTimer(Instance* instance, void* signal);
+s32 SIGNAL_CameraSmooth(Instance* instance, void* signal);
+s32 SIGNAL_CameraValue(Instance* instance, void* signal);
+s32 SIGNAL_CameraLock(Instance* instance, void* signal);
+s32 SIGNAL_CameraUnlock(Instance* instance, void* signal);
+s32 SIGNAL_CameraSave(Instance* instance, void* signal);
+s32 SIGNAL_CameraRestore(Instance* instance, void* signal);
+s32 SIGNAL_Teleport(Instance* instance, void* signal);
+s32 SIGNAL_FarPlane(Instance* instance, void* signal);
+s32 SIGNAL_SoundStartSequence(Instance* instance, void* signal);
+s32 SIGNAL_SoundStopSlot(Instance* instance, void* signal);
+s32 SIGNAL_SoundPauseSlot(Instance* instance, void* signal);
+s32 SIGNAL_SoundResumeSlot(Instance* instance, void* signal);
+s32 SIGNAL_SoundMuteChannel(Instance* instance, void* signal);
+s32 SIGNAL_SoundUnmuteChannel(Instance* instance, void* signal);
+s32 SIGNAL_Times(Instance* instance, void* signal);
+s32 SIGNAL_Freeze(Instance* instance, void* signal);
+s32 SIGNAL_UnFreeze(Instance* instance, void* signal);
+s32 SIGNAL_FreezeAll(Instance* instance, void* signal);
+s32 SIGNAL_UnfreezeAll(Instance* instance, void* signal);
+s32 SIGNAL_HideBG(Instance* instance, void* signal);
+s32 SIGNAL_UnhideBG(Instance* instance, void* signal);
+s32 SIGNAL_HideBGObject(Instance* instance, void* signal);
+s32 SIGNAL_UnhideBGObject(Instance* instance, void* signal);
+s32 SIGNAL_Mirror(Instance* instance, void* signal);
+s32 SIGNAL_Unmirror(Instance* instance, void* signal);
+s32 SIGNAL_SetMirror(Instance* instance, void* signal);
+s32 SIGNAL_FogNear(Instance* instance, void* signal);
+s32 SIGNAL_FogFar(Instance* instance, void* signal);
+s32 SIGNAL_StartVertexMorph(Instance* instance, void* signal);
+s32 SIGNAL_StopVertexMorph(Instance* instance, void* signal);
+s32 SIGNAL_LogicValue(Instance* instance, void* signal);
+s32 SIGNAL_CameraShake(Instance* instance, void* signal);
+s32 SIGNAL_LogicAnd(Instance* instance, void* signal);
+s32 SIGNAL_LogicOr(Instance* instance, void* signal);
+s32 SIGNAL_LogicXor(Instance* instance, void* signal);
+s32 SIGNAL_LogicTrue(Instance* instance, void* signal);
+s32 SIGNAL_LogicFalse(Instance* instance, void* signal);
+s32 SIGNAL_CallSignal(Instance* instance, void* signal);
+s32 SIGNAL_Offset(Instance* instance, void* signal);
+s32 SIGNAL_LogicAdd(Instance* instance, void* signal);
+s32 SIGNAL_LogicSub(Instance* instance, void* signal);
+s32 SIGNAL_Goto(Instance* instance, void* signal);
+s32 SIGNAL_Label(Instance* instance, void* signal);
+s32 SIGNAL_End(Instance* instance, void* signal);
+s32 SIGNAL_GoSub(Instance* instance, void* signal);
+s32 SIGNAL_StopPlayerControl(Instance* instance, void* signal);
+s32 SIGNAL_StartPlayerControl(Instance* instance, void* signal);
+s32 SIGNAL_SetPlayerControl(Instance* instance, void* signal);
+s32 SIGNAL_Launch(Instance* instance, void* signal);
+s32 SIGNAL_CostumeChange(Instance* instance, void* signal);
+s32 SIGNAL_GameValue(Instance* instance, void* signal);
+s32 SIGNAL_SetZSignal(Instance* instance, void* signal);
+s32 SIGNAL_ResetZSignal(Instance* instance, void* signal);
+s32 SIGNAL_SoundEffect(Instance* instance, void* signal);
+s32 SIGNAL_MusicControl(Instance* instance, void* signal);
+s32 SIGNAL_LevelChange(Instance* instance, void* signal);
+s32 SIGNAL_VoiceControl(Instance* instance, void* signal);
+s32 SIGNAL_BankChange(Instance* instance, void* signal);
+s32 SIGNAL_GameLoadSave(Instance* instance, void* signal);
+s32 SIGNAL_HideObjectGroup(Instance* instance, void* signal);
+s32 SIGNAL_UnhideObjectGroup(Instance* instance, void* signal);
+s32 SIGNAL_Shards(Instance* instance, void* signal);
+s32 SIGNAL_CameraSpline(Instance* instance, void* signal);
+s32 SIGNAL_ScreenWipe(Instance* instance, void* signal);
+s32 SIGNAL_VoiceQueue(Instance* instance, void* signal);
+s32 SIGNAL_VoiceUnQueue(Instance* instance, void* signal);
+s32 SIGNAL_VoiceRequest(Instance* instance, void* signal);
+s32 SIGNAL_VoiceClearQueue(Instance* instance, void* signal);
+s32 SIGNAL_VoiceForce(Instance* instance, void* signal);
+s32 SIGNAL_SetMusicVariable(Instance* instance, void* signal);
+s32 SIGNAL_IntroActive(Instance* instance, void* signal);
+s32 SIGNAL_IntroFX(Instance* instance, void* signal);
+s32 SIGNAL_GotoPos(Instance* instance, void* signal);
+s32 SIGNAL_Frame(Instance* instance, void* signal);
+s32 SIGNAL_BirthObject(Instance* instance, void* signal);
+s32 SIGNAL_BlendStart(Instance* instance, void* signal);
+s32 SIGNAL_MiscValue(Instance* instance, void* signal);
+s32 SIGNAL_VoiceDisable(Instance* instance, void* signal);
+s32 SIGNAL_VoiceReEnable(Instance* instance, void* signal);
+s32 SIGNAL_SetTimes(Instance* instance, void* signal);
+s32 SIGNAL_ScreenWipeColor(Instance* instance, void* signal);
+s32 SIGNAL_Relocate(Instance* instance, void* signal);
+s32 SIGNAL_LogicTrueElse(Instance* instance, void* signal);
+s32 SIGNAL_LogicFalseElse(Instance* instance, void* signal);
+s32 SIGNAL_Print(Instance* instance, void* signal);
+s32 SIGNAL_TagTimer(Instance* instance, void* signal);
+s32 SIGNAL_SetNoRemove(Instance* instance, void* signal);
+s32 SIGNAL_ResetNoRemove(Instance* instance, void* signal);
+s32 SIGNAL_8004E95C(Instance* instance, void* signal);
+s32 SIGNAL_8004C844(Instance* instance, void* signal);
+s32 SIGNAL_8004CFC8(Instance* instance, void* signal);
+s32 SIGNAL_8004E9A8(Instance* instance, void* signal);
+s32 SIGNAL_8004E9BC(Instance* instance, void* signal);
+s32 SIGNAL_8004E9D0(Instance* instance, void* signal);
+s32 SIGNAL_8004E9E4(Instance* instance, void* signal);
+s32 SIGNAL_8004E9F8(Instance* instance, void* signal);
+s32 SIGNAL_8004EA2C(Instance* instance, void* signal);
+
+#endif

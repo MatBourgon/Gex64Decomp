@@ -284,7 +284,7 @@ void map_intro_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         }
     } // 17c
     instance->_F4[1] = 1;
-    gameTracker->level->deathZ &= -2;
+    gameTracker->level->flags &= -2;
 
     gameTracker->gameFlags &= -2;
     if (s3 != 0)
