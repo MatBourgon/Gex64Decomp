@@ -210,4 +210,4 @@ void func_8003BFB8(void* arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/main", func_8003C070);
 
-INCLUDE_ASM("asm/nonmatchings/main", func_8003C368);
+INCLUDE_ASM("asm/nonmatchings/main", MulMatrix2);

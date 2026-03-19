@@ -40,9 +40,9 @@ void* func_8000B778(Instance* arg0, int arg1, int arg2, int arg3, int arg4, int 
     if (instance != NULL) {
         ptr = &instance->_F4[2];
         instance->intro = NULL;
-        instance->oldRotation.x = 0x1000;
-        instance->oldRotation.y = 0x1000;
-        instance->oldRotation.z = 0x1000;
+        instance->scale.x = 0x1000;
+        instance->scale.y = 0x1000;
+        instance->scale.z = 0x1000;
         if ((arg1 != 0) || (arg2 != 0) || (arg3 != 0) || (arg4 != 0) || (arg5 != 0) || (arg6 != 0)) {
             instance->_D0[0] = arg1;
             instance->_D0[3] = arg4;
@@ -280,9 +280,9 @@ void common_tvend_OnUpdate(Instance* instance, Object* gameTracker) {
             if (oRemred != 0) {
                 iRemred = (Instance*)CreateRemRedInstance(instance, oRemred);
                 instance->_100 = (int)iRemred;
-                ((Instance*)instance->_100)->oldRotation.x = 1;
-                ((Instance*)instance->_100)->oldRotation.y = 1;
-                ((Instance*)instance->_100)->oldRotation.z = 1;
+                ((Instance*)instance->_100)->scale.x = 1;
+                ((Instance*)instance->_100)->scale.y = 1;
+                ((Instance*)instance->_100)->scale.z = 1;
                 instance->_F4[1] = 3;
                 intro->condition = 1;
                 (*(int*)&instance->_10C) = 0x10;
@@ -305,9 +305,9 @@ void common_tvend_OnUpdate(Instance* instance, Object* gameTracker) {
                 instance->_F4[1] = 0;
             }
             else if (temp_a0 < 0x10) {
-                iRemred2->oldRotation.x = ((short*)&sp18)[0x10 - (*(int*)&instance->_10C)];
-                iRemred2->oldRotation.y = ((short*)&sp18)[0x10 - (*(int*)&instance->_10C)];
-                iRemred2->oldRotation.z = ((short*)&sp18)[0x10 - (*(int*)&instance->_10C)];
+                iRemred2->scale.x = ((short*)&sp18)[0x10 - (*(int*)&instance->_10C)];
+                iRemred2->scale.y = ((short*)&sp18)[0x10 - (*(int*)&instance->_10C)];
+                iRemred2->scale.z = ((short*)&sp18)[0x10 - (*(int*)&instance->_10C)];
             }
         }
     }

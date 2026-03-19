@@ -319,7 +319,7 @@ void horror_qmark_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         case 0: break;
         
         case 1:
-        if (MATH3D_FastSqrt(SVECTOR_DistanceSquared(&instance->position, &PlayerInstance->position), 0) > 1000
+        if (MATH3D_FastSqrt2(SVECTOR_DistanceSquared(&instance->position, &PlayerInstance->position), 0) > 1000
             || !temp_s0[5])
         {
             temp_s0[2] = 2;

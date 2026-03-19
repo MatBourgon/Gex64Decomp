@@ -2,13 +2,13 @@
 
 #include "types/Matrix.h"
 
-INCLUDE_ASM("asm/nonmatchings/3EAA0", func_8003DEA0);
+INCLUDE_ASM("asm/nonmatchings/3EAA0", RotMatrix);
 
 INCLUDE_ASM("asm/nonmatchings/3EAA0", func_8003DF24);
 
 INCLUDE_ASM("asm/nonmatchings/3EAA0", func_8003E06C);
 
-_Matrix* MATH3D_RotateMatrix(int angle, _Matrix* mat) {
+MATRIX* RotMatrixZ(int angle, MATRIX* mat) {
     short temp_s0;
     short temp_v0;
     

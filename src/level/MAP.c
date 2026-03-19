@@ -226,13 +226,13 @@ void map_intro_OnCreate(Instance* instance, GameTracker* gameTracker) {
         if ((temp_a1 != 0) && (temp_a2 != 0)) {
             temp_v0 = temp_a1[0x28/4];
             temp_s1 = temp_a2[0x28/4];
-            temp_v0_2 = (short*)func_80051638(*temp_v0, temp_v0 + 4);
+            temp_v0_2 = (short*)SplineGetFirstPoint(*temp_v0, temp_v0 + 4);
             if (temp_v0_2 != 0) {
                 ((short**)gameTracker)[2][0] = temp_v0_2[0];
                 ((short**)gameTracker)[2][1] = temp_v0_2[1];
                 ((short**)gameTracker)[2][2] = temp_v0_2[2];
             }
-            func_80003A68(((int*)gameTracker)[2], func_80051638(*temp_s1, temp_s1 + 4));
+            func_80003A68(((int*)gameTracker)[2], SplineGetFirstPoint(*temp_s1, temp_s1 + 4));
             func_80001408(((int*)gameTracker)[2], 8);
         }
         gameTracker->gameFlags |= 1;
@@ -261,7 +261,7 @@ void map_intro_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     
     s1 = (int*)s4[0x28/4];
     s2 = (int*)s5[0x28/4];
-    v1 = (int*)func_80051734(s1[0], s1 + 0x10/4);
+    v1 = (int*)SplineGetNextPoint(s1[0], s1 + 0x10/4);
     
     if (v1 != 0)
     {
@@ -299,7 +299,7 @@ void map_intro_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     return;
 
     _1d8:
-    func_80003A68(((int*)gameTracker)[0x8/4], func_80051734(s2[0], s2 + 0x10/4));
+    func_80003A68(((int*)gameTracker)[0x8/4], SplineGetNextPoint(s2[0], s2 + 0x10/4));
     func_80001408(((int*)gameTracker)[0x8/4], 8);
     
 }
@@ -511,7 +511,7 @@ void map_qmark_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         case 0: break;
         
         case 1:
-        if (MATH3D_FastSqrt(SVECTOR_DistanceSquared(&instance->position, &PlayerInstance->position), 0) > 1000
+        if (MATH3D_FastSqrt2(SVECTOR_DistanceSquared(&instance->position, &PlayerInstance->position), 0) > 1000
             || !temp_s0[5])
         {
             temp_s0[2] = 2;
@@ -618,7 +618,7 @@ void map_speaker_OnCreate(Instance* instance, GameTracker* gameTracker) {
         }
     }
     temp_s0_2 = ((int**)(*(((s32) ((instance->_C0[1] | 1) << 0x10) >> 0x10) + (int*)instance->object->modelList)))[0x2C/4];
-    func_80051360(temp_s0_2[2], &temp_s1[4], ((temp_s1[0xE/2] << 8) / 127) & 0xFFFF);
+    SplineSetDef2FrameNumber(temp_s0_2[2], &temp_s1[4], ((temp_s1[0xE/2] << 8) / 127) & 0xFFFF);
     func_80048A4C(instance, temp_s0_2, 0, 0, &temp_s1[4], 0, 1);
 }
 
@@ -733,7 +733,7 @@ void map_bobbox_OnUpdate(Instance* arg1, GameTracker* gameTracker) {
             }
         }
         
-        if ((func_800512BC(temp_a0, ((int***)gameTracker)[0x8/4][0x480/4] + 0x10/4) & 0xFFFF) >= (var_s0 - 1))
+        if ((SplineGetFrameNumber(temp_a0, ((int***)gameTracker)[0x8/4][0x480/4] + 0x10/4) & 0xFFFF) >= (var_s0 - 1))
         {
             var_s2 = 1;
         }
@@ -1131,7 +1131,7 @@ void map_mapgate_OnCreate(Instance* instance, GameTracker* gameTracker)
     if (D_800785CC[((int*)instance->introData)[0]] != 3)
         return;
 
-    func_80048828(instance, -1, 0, 0, 0);
+    SCRIPT_InstanceSplineSet(instance, -1, 0, 0, 0);
     instance->flags |= 0x100000;
 }
 
@@ -1424,7 +1424,7 @@ void map_lvltv_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             if (instance->intro->multiSpline != NULL) {
                 multi = (MultiSpline*)SCRIPT_GetMultiSpline(instance, &isParent, &isClass);
                 if (multi->rotational != 0) {
-                    func_80051C64(multi->rotational, func_800485F8(instance, multi, isParent, isClass), &sp10);
+                    SplineGetData(multi->rotational, SCRIPT_GetRotSplineDef(instance, multi, isParent, isClass), &sp10);
                     instance->intro->rotation.x += sp10.x;
                     instance->intro->rotation.y += sp10.y;
                     instance->intro->rotation.z += sp10.z;
@@ -1632,10 +1632,10 @@ void map_select_OnCreate(Instance* instance, GameTracker* gameTracker) {
         } else {
             temp_s0_2 = (int**)(&temp_s4[var_s1])[0x34/4];
             func_800516E0(((int*)temp_s0_2[10])[0], &sp10);
-            func_80051C64(((int*)temp_s0_2[10])[0], &sp10, temp_s0_2 + 4);
+            SplineGetData(((int*)temp_s0_2[10])[0], &sp10, temp_s0_2 + 4);
             if (((int*)temp_s0_2[10])[1] != 0) {
                 func_800516E0(((int*)temp_s0_2[10])[1], &sp10);
-                func_80051C64(((int*)temp_s0_2[10])[1], &sp10, &sp18);
+                SplineGetData(((int*)temp_s0_2[10])[1], &sp10, &sp18);
                 ((short*)temp_s0_2)[4] += sp18.x;
                 ((short*)temp_s0_2)[5] += sp18.y;
                 ((short*)temp_s0_2)[6] += sp18.z;
