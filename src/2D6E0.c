@@ -270,7 +270,7 @@ void* INSTANCE_BirthObjectFromIntro(Intro* intro) {
                     instance->flags &= 0xFDFFFFFF;
                     instance->flags |= 0x100000;
                 }
-                instance->_4F = intro->_pad;
+                instance->lightGroup = intro->lightGroup;
                 INSTANCE_InsertInstanceGroup((InstanceList*)gameTracker8->instanceList, instance);
                 OBTABLE_GetInstanceCollideFunc(instance);
                 OBTABLE_GetInstanceProcessFunc(instance);
@@ -465,7 +465,7 @@ Instance* INSTANCE_BirthObject(Instance* parent, Object* object) {
         instance->rotation = parent->rotation;
         instance->oldRotation = parent->oldRotation;
         
-        instance->_4F = parent->_4F;
+        instance->lightGroup = parent->lightGroup;
         instance->parent = parent;
         instance->intro = parent->intro;
         instance->introData = parent->introData;
