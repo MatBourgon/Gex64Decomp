@@ -14,6 +14,14 @@
 
 MultiSpline* SCRIPT_GetMultiSpline(Instance *instance, int *isParent, int *isClass);
 
+extern short SplineSetDef2FrameNumber(Spline *spline, SplineDef *def, unsigned short frame_number);
+extern SplineDef *SCRIPT_GetPosSplineDef(Instance *instance, MultiSpline *multi, int isParent, int isClass);
+extern SplineDef *SCRIPT_GetRotSplineDef(Instance *instance, MultiSpline *multi, int isParent, int isClass);
+extern SplineDef *SCRIPT_GetScaleSplineDef(Instance *instance, MultiSpline *multi, int isParent, int isClass);
+
+Spline *ScriptGetPosSpline(Instance *instance);
+RSpline *ScriptGetRotSpline(Instance *instance);
+
 // Hint: Probably SCRIPT.c
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80041FD0);
@@ -477,7 +485,7 @@ int func_80047DF4(SVECTOR v1, SVECTOR v2, int distance) {
 
 extern const ROTATION D_8007E72C; // zero-matrix
 
-void func_80047E64(Instance* arg0, short axis) {
+void func_80047E64(Instance* instance, short axis) {
     ROTATION sp10;
     ROTATION sp18;
     MATRIX mat;
@@ -487,14 +495,14 @@ void func_80047E64(Instance* arg0, short axis) {
     sp18 = D_8007E72C;
     sp10.y = -axis;
     MATH3D_SetUnityMatrix(&mat);
-    angle = arg0->rotation.z;
-    if (arg0->intro != NULL) {
-        angle += arg0->intro->rotation.z;
+    angle = instance->rotation.z;
+    if (instance->intro != NULL) {
+        angle += instance->intro->rotation.z;
     }
     RotMatrixZ(angle, &mat);
     MATH3D_ApplyMatrixSV(&mat, (SVECTOR*)&sp10, (SVECTOR*)&sp18);
-    arg0->position.x += sp18.x;
-    arg0->position.y += sp18.y;
+    instance->position.x += sp18.x;
+    instance->position.y += sp18.y;
 }
 
 void func_80047F5C(Instance* instance, short yDirection) {
@@ -527,7 +535,58 @@ void func_800480AC(SVECTOR* arg0, SVECTOR* arg1, int arg2) {
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", SCRIPT_InstanceSplineInit);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", SCRIPT_CountFramesInSpline);
+short SCRIPT_CountFramesInSpline(Instance *instance)
+{
+
+    SplineKey *key;
+    Spline *spline;
+    RSpline *rspline;
+    short kf;
+    short frames;
+
+    kf = 0;
+    frames = 0;
+
+    spline = ScriptGetPosSpline(instance);
+
+    if (spline != NULL)
+    {
+        for (key = spline->key; kf < spline->numkeys; kf++, key++)
+        {
+            frames += key->count;
+        }
+    }
+    else
+    {
+
+        SplineRotKey *rkey;
+
+        rspline = ScriptGetRotSpline(instance);
+        if (rspline != NULL)
+        {
+            for (rkey = rspline->key; kf < rspline->numkeys; kf++, rkey++)
+            {
+                frames += rkey->count;
+            }
+        }
+        else
+        {
+
+            MultiSpline *multi;
+            multi = SCRIPT_GetMultiSpline(instance, 0, 0);
+
+            if (multi != NULL)
+            {
+                spline = multi->scaling;
+                for (key = spline->key; kf < spline->numkeys; kf++, key++)
+                {
+                    frames += key->count;
+                }
+            }
+        }
+    }
+    return frames;
+}
 
 Spline *ScriptGetPosSpline(Instance *instance)
 {
@@ -703,11 +762,6 @@ void SCRIPT_RelativisticSpline(Instance *instance, SVECTOR *point)
     }
 }
 
-extern short SplineSetDef2FrameNumber(Spline *spline, SplineDef *def, unsigned short frame_number);
-extern SplineDef *SCRIPT_GetPosSplineDef(Instance *instance, MultiSpline *multi, int isParent, int isClass);
-extern SplineDef *SCRIPT_GetRotSplineDef(Instance *instance, MultiSpline *multi, int isParent, int isClass);
-extern SplineDef *SCRIPT_GetScaleSplineDef(Instance *instance, MultiSpline *multi, int isParent, int isClass);
-
 void SCRIPT_InstanceSplineSet(Instance* instance, short frameNum, SplineDef* splineDef, SplineDef* rsplineDef, SplineDef* ssplineDef) {
     Spline* spline;
     RSpline* rspline;
@@ -795,7 +849,6 @@ int func_80048A4C(Instance* instance, MultiSpline* multi, int arg2, int rsplineD
         }
         if (point != NULL) {
             retVal = 0;
-            // scale?
             instance->scale.x = point->x;
             instance->scale.y = point->z;
             instance->scale.z = point->y;
@@ -815,7 +868,7 @@ int func_80048A4C(Instance* instance, MultiSpline* multi, int arg2, int rsplineD
         if (retVal == 0) {
             if (instance->flags & 1) {
                 if (SplineGetQuatData(rspline, rsplineDef, &data.q) != 0) {
-                    func_800158BC(&((int*)multi)[0x20/4], &data.q); // cutRotMatrix, G2Quat_ToMatrix_S?
+                    G2Quat_ToMatrix_S(&((int*)multi)[0x20/4], &data.q); // cutRotMatrix, G2Quat_ToMatrix_S?
                 } else {
                     retVal = 1;
                 }

@@ -226,13 +226,13 @@ void map_intro_OnCreate(Instance* instance, GameTracker* gameTracker) {
         if ((temp_a1 != 0) && (temp_a2 != 0)) {
             temp_v0 = temp_a1[0x28/4];
             temp_s1 = temp_a2[0x28/4];
-            temp_v0_2 = (short*)func_80051638(*temp_v0, temp_v0 + 4);
+            temp_v0_2 = (short*)SplineGetFirstPoint(*temp_v0, temp_v0 + 4);
             if (temp_v0_2 != 0) {
                 ((short**)gameTracker)[2][0] = temp_v0_2[0];
                 ((short**)gameTracker)[2][1] = temp_v0_2[1];
                 ((short**)gameTracker)[2][2] = temp_v0_2[2];
             }
-            func_80003A68(((int*)gameTracker)[2], func_80051638(*temp_s1, temp_s1 + 4));
+            func_80003A68(((int*)gameTracker)[2], SplineGetFirstPoint(*temp_s1, temp_s1 + 4));
             func_80001408(((int*)gameTracker)[2], 8);
         }
         gameTracker->gameFlags |= 1;
