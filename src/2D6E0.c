@@ -243,9 +243,9 @@ void* INSTANCE_BirthObjectFromIntro(Intro* intro) {
                 if (instance->object->oflags & 0x100) {
                     func_8002E0D8(instance); // build static shadow?
                 }
-                instance->oldRotation.x = 0x1000;
-                instance->oldRotation.y = 0x1000;
-                instance->oldRotation.z = 0x1000;
+                instance->scale.x = 0x1000;
+                instance->scale.y = 0x1000;
+                instance->scale.z = 0x1000;
                 
                 if (intro->flags & 0x200) {
                     instance->flags |= 0x20000000;
@@ -463,7 +463,7 @@ Instance* INSTANCE_BirthObject(Instance* parent, Object* object) {
         instance->oldPos = parent->position;
         
         instance->rotation = parent->rotation;
-        instance->oldRotation = parent->oldRotation;
+        instance->scale = parent->scale;
         
         instance->lightGroup = parent->lightGroup;
         instance->parent = parent;

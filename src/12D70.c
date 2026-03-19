@@ -146,7 +146,7 @@ void common_tailpuf_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
 void common_magic_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
-    instance->oldRotation.z = instance->oldRotation.y = instance->oldRotation.x = 1;
+    instance->scale.z = instance->scale.y = instance->scale.x = 1;
 }
 
 INCLUDE_ASM("asm/nonmatchings/12D70", common_magic_OnUpdate);

@@ -269,7 +269,7 @@ void MATH3D_RotMatAboutVec(SVECTOR* vec, MATRIX* mat, short angle) {
     MATRIX mat2;
 
     if (angle != 0) {
-        length = MATH3D_FastSqrt((MATH3D_SquareLength(0, vec->y, vec->z) + 2048) >> 0xC);
+        length = MATH3D_FastSqrt(((int)MATH3D_SquareLength(0, vec->y, vec->z) + 2048) >> 0xC);
         rot_angs.x = -ratan2(vec->y, vec->z);
         rot_angs.y = ratan2(vec->x, length);
         rot_angs.z = 0;

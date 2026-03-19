@@ -261,7 +261,7 @@ void map_intro_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     
     s1 = (int*)s4[0x28/4];
     s2 = (int*)s5[0x28/4];
-    v1 = (int*)func_80051734(s1[0], s1 + 0x10/4);
+    v1 = (int*)SplineGetNextPoint(s1[0], s1 + 0x10/4);
     
     if (v1 != 0)
     {
@@ -299,7 +299,7 @@ void map_intro_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     return;
 
     _1d8:
-    func_80003A68(((int*)gameTracker)[0x8/4], func_80051734(s2[0], s2 + 0x10/4));
+    func_80003A68(((int*)gameTracker)[0x8/4], SplineGetNextPoint(s2[0], s2 + 0x10/4));
     func_80001408(((int*)gameTracker)[0x8/4], 8);
     
 }
@@ -733,7 +733,7 @@ void map_bobbox_OnUpdate(Instance* arg1, GameTracker* gameTracker) {
             }
         }
         
-        if ((func_800512BC(temp_a0, ((int***)gameTracker)[0x8/4][0x480/4] + 0x10/4) & 0xFFFF) >= (var_s0 - 1))
+        if ((SplineGetFrameNumber(temp_a0, ((int***)gameTracker)[0x8/4][0x480/4] + 0x10/4) & 0xFFFF) >= (var_s0 - 1))
         {
             var_s2 = 1;
         }

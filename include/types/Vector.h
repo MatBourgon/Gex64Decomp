@@ -3,7 +3,7 @@
 
 #include "common.h" // FORCE_INLINE
 
-FORCE_INLINE int MATH3D_SquareLength(int x, int y, int z) // eventually move into MATH3D.h
+FORCE_INLINE unsigned int MATH3D_SquareLength(int x, int y, int z) // eventually move into MATH3D.h
 {
     return x * x + y * y + z * z;
 }
@@ -12,6 +12,12 @@ typedef struct
 {
     short x, y, z;
 } SVECTOR;
+
+typedef struct
+{
+    short x, y, z;
+    short pad;
+} SVector; // Required padding difference
 
 typedef struct
 {

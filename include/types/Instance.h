@@ -30,7 +30,7 @@ typedef struct Instance_s
     SVECTOR initialPos; // 58, 5A, 5C
     short _5E;
     ROTATION rotation; // 60, 62, 64, 66
-    ROTATION oldRotation; // 68, 6A, 6C, 6E
+    SVector scale; // 68, 6A, 6C, 6E
     int _70[4];
     short _80[8];
     short _90[4];
@@ -39,8 +39,8 @@ typedef struct Instance_s
     int _A0;
     int _A4;
     int _A8;
-    void (*processFunc)();
-    void (*collideFunc)();
+    void (*processFunc)(void*,void*);
+    void (*collideFunc)(void*,void*);
     void* _B4;
     int _B8;
     int _BC;
