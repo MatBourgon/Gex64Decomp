@@ -172,11 +172,11 @@ block_7:
                     break;
                 }
                 if (tvType != EPTV_CHECKPOINT) {
-                    instance->position.x = (instance->position.x - 0x8C);
-                    instance->position.z = (instance->position.z + 0x8C);
+                    instance->position.x -= 0x8C;
+                    instance->position.z += 0x8C;
                     flyInstance = (Instance*)INSTANCE_BirthCachedObject(instance, EOBJECT_PTBUG);
-                    instance->position.x = (instance->position.x + 0x8C);
-                    instance->position.z = (instance->position.z - 0x8C);
+                    instance->position.x += 0x8C;
+                    instance->position.z -= 0x8C;
                     if (flyInstance != NULL) {
                         func_800444B8(flyInstance, tvType);
                         func_80050508(instance, 9, (short) ((rand() & 0x1F) - 0xF), 0x50, 0x9C4);
