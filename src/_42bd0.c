@@ -484,7 +484,7 @@ INCLUDE_ASM("asm/nonmatchings/_42bd0", func_8004848C);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_800484C4);
 
-MultiSpline* SCRIPT_GetMultiSpline(Instance *instance, unsigned long *isParent, unsigned long *isClass)
+MultiSpline* SCRIPT_GetMultiSpline(Instance *instance, int *isParent, int *isClass)
 {
     MultiSpline *multi;
 
@@ -531,10 +531,16 @@ INCLUDE_ASM("asm/nonmatchings/_42bd0", SCRIPT_GetScaleSplineDef);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", SCRIPT_RelativisticSpline);
 
+
+extern short SplineSetDef2FrameNumber(Spline *spline, SplineDef *def, unsigned short frame_number);
+extern SplineDef *SCRIPT_GetPosSplineDef(Instance *instance, MultiSpline *multi, int isParent, int isClass);
+extern SplineDef *SCRIPT_GetRotSplineDef(Instance *instance, MultiSpline *multi, int isParent, int isClass);
+extern SplineDef *SCRIPT_GetScaleSplineDef(Instance *instance, MultiSpline *multi, int isParent, int isClass);
+
 void SCRIPT_InstanceSplineSet(Instance* instance, short frameNum, SplineDef* splineDef, SplineDef* rsplineDef, SplineDef* ssplineDef) {
     Spline* spline;
-    Spline* rspline;
-    RSpline* sspline;
+    RSpline* rspline;
+    Spline* sspline;
     MultiSpline* multi;
     int isClass;
     int isParent;
@@ -556,7 +562,7 @@ void SCRIPT_InstanceSplineSet(Instance* instance, short frameNum, SplineDef* spl
         sspline = multi->scaling;
         
         if ((splineDef != 0) && (spline != 0)) {
-            SplineSetDef2FrameNumber(spline, splineDef, frameNum & 0xFFFF);
+            SplineSetDef2FrameNumber(spline, splineDef, frameNum);
             SplineGetData(spline, splineDef, &point);
             
             if (isClass != 0) {
@@ -569,7 +575,7 @@ void SCRIPT_InstanceSplineSet(Instance* instance, short frameNum, SplineDef* spl
         }
         
         if ((rsplineDef != 0) && (rspline != 0)) {
-            SplineSetDef2FrameNumber(rspline, rsplineDef, frameNum & 0xFFFF);
+            SplineSetDef2FrameNumber((Spline*)rspline, rsplineDef, frameNum);
             SplineGetData(rspline, rsplineDef, &instance->rotation);
         }
         
@@ -577,7 +583,7 @@ void SCRIPT_InstanceSplineSet(Instance* instance, short frameNum, SplineDef* spl
             
             SVECTOR scale;
             
-            SplineSetDef2FrameNumber(sspline, ssplineDef, frameNum & 0xFFFF);
+            SplineSetDef2FrameNumber(sspline, ssplineDef, frameNum);
             SplineGetData(sspline, ssplineDef, &scale);
             instance->oldRotation.x = scale.x;
             instance->oldRotation.y = scale.z;
