@@ -6,6 +6,7 @@
 #include "types/TVTextData.h"
 #include "types/Instance.h"
 #include "types/Signal.h"
+#include "types/Matrix.h"
 
 INCLUDE_ASM("asm/nonmatchings/SIGNAL", func_80049B80);
 
@@ -142,165 +143,258 @@ short GetRedRemotesForLevel(unsigned int levelIndex) {
     return TVTextInformation[levelIndex].nRedRemotes;
 }
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E740);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E740); // logo1
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E748);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E748); // logo2
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E750);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E750); // logo3
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E758);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E758); // logo4
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E760);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E760); // intro1
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E768);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E768); // map5
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E770);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E770); // CHANNEL Z
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E77C);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E77C); // final01
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E784);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E784); // MECHAREZ
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E790);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E790); // GEXZILLA VS.
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E7A0);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E7A0); // gexzil9
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E7A8);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E7A8); // MOOSHOO PORK
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E7B8);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E7B8); // mooshu1
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E7C0);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E7C0); // BOSS
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E7C8);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E7C8); // GILLIGEX ISLE
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E7D8);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E7D8); // gillig1 
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E7E0);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E7E0); // CHIPS AND DIPS
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E7F0);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E7F0); // circuit0
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E7FC);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E7FC); // BUGGED OUT
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E808);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E808); // rezop2
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E810);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E810); // CHINA SHOP
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E81C);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E81C); // LIZARD IN A
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E828);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E828); // kungfu4
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E830);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E830); // LOVED HIMSELF
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E840);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E840); // THE SPY WHO
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E84C);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E84C); // spy2
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E854);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E854); // IN DRAG NET
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E860);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E860); // nypd01
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E868);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E868); // THURSDAY THE 12TH
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E87C);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E87C); // horror6
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E884);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E884); // BONANZA
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E88C);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E88C); // BONUS
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E894);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E894); // AZTEC 2 STEP
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E8A4);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E8A4); // aztec16
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E8AC);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E8AC); // REZOPOLIS
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E8B8);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E8B8); // AND A FUNERAL
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E8C8);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E8C8); // NO WEDDINGS
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E8D4);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E8D4); // rezop3
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E8DC);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E8DC); // SAMURAI NIGHT FEVER
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E8F0);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E8F0); // kungfu1
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E8F8);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E8F8); // ASTEROIDS
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E904);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E904); // PAIN IN THE
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E910);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E910); // scifi14
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E918);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E918); // THE GECKO
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E924);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E924); // HONEY I SHRUNK
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E934);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E934); // circuit9
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E940);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E940); // THIS OLD CAVE
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E950);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E950); // prehst2
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E958);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E958); // FINE TOONING
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E968);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E968); // looney69
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E974);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E974); // PRE-HISTORY
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E980);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E980); // PANGAEA 90210
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E990);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E990); // prehst1
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E998);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E998); // CHANNEL
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E9A0);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E9A0); // ROCKET
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E9A8);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E9A8); // STRIKES OUT
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E9B4);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E9B4); // THE UMPIRE
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E9C0);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E9C0); // scifi10
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E9C8);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E9C8); // THEATRE
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E9D0);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E9D0); // KUNG-FU
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E9D8);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E9D8); // MAO TSE TONGUE
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E9E8);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E9E8); // kungfu02
 
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E9F4);
-
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E9FC);
-
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA04);
-
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA14);
-
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA20);
-
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA34);
-
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA3C);
-
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA44);
-
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA48);
-
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA5C);
-
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA64);
-
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA6C);
-
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA78);
-
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA80);
-
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA84);
-
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA8C);
-
-INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA98);
-
-INCLUDE_ASM("asm/nonmatchings/SIGNAL", func_8004B604);
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E9F4); // CENTRAL
+
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E9FC); // CIRCUIT
+
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA04); // WWW.DOTCOM.COM
+
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA14); // circuit5
+
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA20); // FRANKENSTEINFELD
+
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA34); // horror2
+
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA3C); // SPAN
+
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA44); // SEA
+
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA48); // GECQUES COUSTEAU
+
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA5C); // rta1
+
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA64); // SCREAM
+
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA6C); // SMELLRAISER
+
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA78); // horror4
+
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA80); // TV
+
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA84); // TOON
+
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA8C); // OUT OF TOON
+
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007EA98); // looney30
+
+extern u32 D_800AF060;
+extern u32 D_800AF064;
+extern u32 D_800AF068;
+extern s32 D_800AF06C;
+
+void func_8004B604(int* arg0, char** strs, s32 arg2, s32* arg3, s32* flagsOut, s32 arg5) {
+    char* var_a0;
+    s32 temp_v1;
+    s32 i;
+    s32 var_s2;
+    s32 flags;
+    s32 temp_v0;
+
+    flags = 0;
+    
+    var_s2 = arg5;
+    if (var_s2 == -1) {
+        var_s2 = 0x2D;
+    } else if (var_s2 == 0) {
+        var_s2 = 0x1E;
+    }
+    
+    for (i = 0; i < arg2; i++) {
+        Set3DTextPosition((s32) ((0x140 - ((strlen(strs[i]) - 1) * 0x14)) << 0xF) >> 0x10, (s16) var_s2);
+        if (i == *arg3) {
+            Print3DTextf("#2%s", strs[i]);
+        } else {
+            Print3DTextf("#0%s", strs[i]);
+        }
+        var_s2 += 0x1E;
+    }
+    
+    D_800AF064++;
+    if ((D_800AF068 + D_800AF064) < ((int*)gameTracker8)[0xE0/4]) {
+        D_800AF068 = ((int*)gameTracker8)[0xE0/4];
+        D_800AF064 = 0;
+        D_800AF060 = 1;
+        D_800AF06C = 0;
+    }
+    if ((u32) D_800AF064 >= 0x10U) {
+        if (arg0[0x11] & 0x80) {
+            D_800AF06C |= 1;
+        }
+        if (arg0[0x11] & 0x40) {
+            D_800AF06C |= 2;
+        }
+        if (arg0[0x11] & 0x20) {
+            D_800AF06C |= 4;
+        }
+        if (arg0[0x11] & 0x10) {
+            D_800AF06C |= 8;
+        }
+        if (arg0[0x12] & 0x80) {
+            flags |= 1;
+        }
+        if (arg0[0x12] & 0x40) {
+            flags |= 2;
+        }
+        if (arg0[0x12] & 0x20) {
+            flags |= 4;
+        }
+        if (arg0[0x12] & 0x10) {
+            flags |= 8;
+        }
+        if (flags & D_800AF06C) {
+            *flagsOut = flags;
+            D_800AF068 = 0;
+            return;
+        }
+        if (D_800AF060 == 0) {
+            if (arg0[10] < 0) {
+                if (--*arg3 < 0) {
+                    *arg3 = 0;
+                } else {
+                    D_800AF060 = 1;
+                }
+            } else if (arg0[10] > 0) {
+                if (++*arg3 >= arg2) {
+                    *arg3 = arg2 - 1;
+                } else {
+                    D_800AF060 = 1;
+                }
+            }
+            if (D_800AF060 != 0) {
+                func_800509E0(0x81, 0x7A, 0x40, 0);
+            }
+        } else {
+            D_800AF060++;
+            if (D_800AF060 >= 4U) {
+                D_800AF060 = 0;
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/SIGNAL", func_8004B968);
 
@@ -407,7 +501,6 @@ s32 SIGNAL_DSignal(Instance* instance, void* signal) {
     int var1;
     int* var2;
 
-
     var2 = ((int**)signal)[1];
     
     if (var2 != 0) 
@@ -498,9 +591,7 @@ typedef struct
 
 s32 SIGNAL_Teleport(Instance* instance, void* signal) {
     SVECTOR sp10;
-    SVECTOR sp18;
-    SVECTOR sp20;
-    SVECTOR sp24;
+    _Matrix sp18;
     SVECTOR sp28;
     SVECTOR deltaPosition;
     TeleportSignal* tpSignal = signal;
@@ -509,9 +600,9 @@ s32 SIGNAL_Teleport(Instance* instance, void* signal) {
     deltaPosition.y = instance->position.y - tpSignal->entryLocation.y;
     deltaPosition.z = instance->position.z - tpSignal->entryLocation.z;
     // Probably some kind of matrix being built to rotate the instance after teleportation
-    func_80030B5C(&sp18);
-    func_8003E1B4(tpSignal->r, &sp18);
-    func_80032340(&sp18, &deltaPosition, &sp10);
+    MATH3D_IdentityMatrix(&sp18); // int vector? [1 0 0] [0 1 0] [1 0 0]
+    MATH3D_RotateMatrix(tpSignal->r, &sp18); // rotate
+    MATH3D_ApplyMatrix(&sp18, &deltaPosition, &sp10); // (Matrix x Vector) -> Vector
     instance->_80[6] = tpSignal->exitLocation.x - deltaPosition.x;
     instance->_80[7] = tpSignal->exitLocation.y - deltaPosition.y;
     instance->_90[0] = tpSignal->exitLocation.z - deltaPosition.z;
@@ -1309,8 +1400,8 @@ s32 SIGNAL_8004EA2C(Instance* instance, void* signal) {
     s32* temp_v0;
     short* temp_v1;
 
-    temp_v0 = gameTracker8->_000C;
-    temp_v1 = temp_v0[0x20/4];
+    temp_v0 = (s32*)gameTracker8->_000C;
+    temp_v1 = (short*)temp_v0[0x20/4];
     ((short*)temp_v0)[0x64/2] = 0;
     temp_v1[0x82/2] = 0;
     temp_v1[0x84/2] = 0;

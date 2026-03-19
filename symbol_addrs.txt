@@ -201,6 +201,10 @@ ctoupper = 0x8006A4D0; // type:func
 
 TVTextInformation = 0x800782A8; // size:0x2E8
 
+MATH3D_ApplyMatrix = 0x80032340; // type:func
+MATH3D_IdentityMatrix = 0x80030B5C; // type:func
+MATH3D_RotateMatrix = 0x8003E1B4; // type:func
+
 gameTracker4 = 0x8006FCC4; // type:GameTracker*
 gameTracker8 = 0x8006FCC8; // type:GameTracker*
 gameTrackerX = 0x800C0AC0; // size:0x4cd8 segment:main
