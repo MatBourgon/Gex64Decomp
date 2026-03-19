@@ -1,12 +1,47 @@
 #include "common.h"
 
+#include "types/Matrix.h"
+
 INCLUDE_ASM("asm/nonmatchings/3EAA0", func_8003DEA0);
 
 INCLUDE_ASM("asm/nonmatchings/3EAA0", func_8003DF24);
 
 INCLUDE_ASM("asm/nonmatchings/3EAA0", func_8003E06C);
 
-INCLUDE_ASM("asm/nonmatchings/3EAA0", func_8003E1B4);
+_Matrix* MATH3D_RotateMatrix(int angle, _Matrix* mat) {
+    short temp_s0;
+    short temp_v0;
+    
+    int x1;
+    int x2;
+    int y1;
+    int y2;
+    int z1;
+    int z2;
+
+    temp_s0 = func_8003A4E0(angle); // probably sin
+    temp_v0 = func_8003A6AC(angle); // probably cos
+    
+    x1 = mat->m[0][0];
+    x2 = mat->m[1][0];
+    
+    y1 = mat->m[0][1];
+    y2 = mat->m[1][1];
+    
+    z1 = mat->m[0][2];
+    z2 = mat->m[1][2];
+    
+    mat->m[0][0] = (((x1 * temp_v0) - (x2 * temp_s0)) >> 0xC);
+    mat->m[1][0] = (((x1 * temp_s0) + (x2 * temp_v0)) >> 0xC);
+    
+    mat->m[0][1] = (((y1 * temp_v0) - (y2 * temp_s0)) >> 0xC);
+    mat->m[1][1] = (((y1 * temp_s0) + (y2 * temp_v0)) >> 0xC);
+    
+    mat->m[0][2] = (((z1 * temp_v0) - (z2 * temp_s0)) >> 0xC);
+    mat->m[1][2] = (((z1 * temp_s0) + (z2 * temp_v0)) >> 0xC);
+
+    return mat;
+}
 
 INCLUDE_ASM("asm/nonmatchings/3EAA0", func_8003E2FC);
 
