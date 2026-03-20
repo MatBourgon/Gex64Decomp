@@ -43,8 +43,8 @@ typedef struct Instance_s
     void (*collideFunc)(void*,void*);
     void* _B4;
     int _B8;
-    int _BC;
-    short _C0[8];
+    SVECTOR shadowPosition;
+    short _C0[7];
     int _D0[4];
     int _E0[4];
     short _F0[2];

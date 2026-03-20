@@ -72,7 +72,7 @@ void func_80044B2C(Instance* instance) {
     int temp_v1;
     int* temp_a2;
 
-    temp_a2 = ((((int***)instance->object->modelList)[instance->_C0[1]]))[0x20/4];
+    temp_a2 = ((((int***)instance->object->modelList)[instance->_C0[0]]))[0x20/4];
     temp_v1 = (instance->_F0[6] * 3);
     ((short*)&instance->_100)[0] = ((temp_v1 + 1) * temp_a2[3]);
     ((short*)&instance->_100)[1] = (((temp_v1 + 4) * temp_a2[3]) - 1);

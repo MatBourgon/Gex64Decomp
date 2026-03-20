@@ -287,7 +287,7 @@ void common_tvend_OnUpdate(Instance* instance, Object* gameTracker) {
                 intro->condition = 1;
                 (*(int*)&instance->_10C) = 0x10;
                 if (((&((unsigned char*)gameTracker)[((unsigned char*)gameTracker)[0x4CA1]])[0x4C6E] >> intro->remoteId) & 1) {
-                    ((Instance*)instance->_100)->_C0[1] = 1;
+                    ((Instance*)instance->_100)->_C0[0] = 1;
                 }
                 func_80050508(gameTracker8->_000C, 0x7A, -0x190, 0x64, 0x5DC);
             }
@@ -350,7 +350,7 @@ int func_8000C8E8(Instance* instance, GameTracker* gameTracker) {
                 D_8006FC69 = 1;
             }
             instance->parent->_F4[1] = 1;
-            instance->_C0[1] = 1;
+            instance->_C0[0] = 1;
             temp_a0_4 = (int*)gameTracker->_000C;
             temp_a0_4[0xFC/4] |= 0x02000000;
             temp_s4[0x178/4] = (int)instance->parent;

@@ -587,7 +587,7 @@ void map_speaker_OnCreate(Instance* instance, GameTracker* gameTracker) {
     temp_s0 = (short*)instance->introData;
     temp_s1 = (short*)&instance->_F4[2];
     if (temp_s0 != 0) {
-        instance->_C0[1] = (temp_s0[2] * 2);
+        instance->_C0[0] = (temp_s0[2] * 2);
     }
     instance->flags |= 0x100000;
     func_80048DE4(instance, temp_s1, &instance->_100, &instance->_104);
@@ -617,7 +617,7 @@ void map_speaker_OnCreate(Instance* instance, GameTracker* gameTracker) {
             break;
         }
     }
-    temp_s0_2 = ((int**)(*(((s32) ((instance->_C0[1] | 1) << 0x10) >> 0x10) + (int*)instance->object->modelList)))[0x2C/4];
+    temp_s0_2 = ((int**)(*(((s32) ((instance->_C0[0] | 1) << 0x10) >> 0x10) + (int*)instance->object->modelList)))[0x2C/4];
     SplineSetDef2FrameNumber(temp_s0_2[2], &temp_s1[4], ((temp_s1[0xE/2] << 8) / 127) & 0xFFFF);
     SCRIPT_SplineProcess(instance, temp_s0_2, 0, 0, &temp_s1[4], 0, 1);
 }
@@ -905,7 +905,7 @@ void map_tvbutn_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_10D = 5U;
     instance->_10C = 5U;
     if (temp_s1 != 0) {
-        instance->_C0[1] = (temp_s1[1] * 2);
+        instance->_C0[0] = (temp_s1[1] * 2);
     }
     instance->_10E = 1;
 
@@ -973,14 +973,14 @@ void map_tvbutn_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             return;
         }
         if (instance->_F4[0] == 2) {
-            temp_a0 = ((instance->_C0[1] ^ 1) & 1);
+            temp_a0 = ((instance->_C0[0] ^ 1) & 1);
             if (instance->_10B == 1) {
                 if (temp_a0 == instance->_10B) {
                     goto block_12;
                 }
             } else if (temp_a0 == 0) {
 block_12:
-                instance->_C0[1] = (u16) (instance->_C0[1] ^ 1);
+                instance->_C0[0] = (u16) (instance->_C0[0] ^ 1);
             }
         }
         if (instance->_F4[0] == 1) {
@@ -1003,9 +1003,9 @@ block_12:
             }
             if ((((char*)temp_s2)[0xF] == 1) && (((short*)var_s4)[0x6/2] != 0)) {
                 if (((int*)gameTracker8)[0xE0/4] & 8) {
-                    instance->_C0[1] = (instance->_C0[1] ^ 1);
+                    instance->_C0[0] = (instance->_C0[0] ^ 1);
                 }
-                if (instance->_C0[1] & 1) {
+                if (instance->_C0[0] & 1) {
                     ((char*)temp_s2)[0x17]++;
                 }
                 if ((((char*)temp_s2)[0x17] >= 8) && ((((char*)temp_s2)[0x17] = 0U, (var_s5 == NULL)) || (((short*)var_s5)[0x16/2] == 0))) {
@@ -1043,7 +1043,7 @@ block_12:
                     }
                 } else {
                     var_a0 = 1;
-                    if (instance->_C0[1] & 1) {
+                    if (instance->_C0[0] & 1) {
                         ((char*)temp_s2)[0x12] = 1;
                     }
                     temp_v1 = ((short**)temp_s2)[0];
