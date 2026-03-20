@@ -82,9 +82,9 @@ void SplineSetDefDenom(Spline* spline, SplineDef* def, int denomFlag) {
     if (def->denomFlag != denomFlag) {
         if (def->fracCurr != 0) {
             if (spline->type == 1) {
-                denom = ((RSpline*)spline)->key[def->currkey].count;
+                denom = RSPLINE_COUNT(spline);
             } else {
-                denom = spline->key[def->currkey].count;
+                denom = SPLINE_COUNT(spline);
             }
             
             if (denom == 0) {
@@ -340,9 +340,9 @@ int SplineGetData(Spline* spline, SplineDef* def, void* p) {
             
             if (!(def->denomFlag)) {
                 if (spline->type == 1) {
-                    count = ((RSpline*)spline)->key[def->currkey].count;
+                    count = RSPLINE_COUNT(spline);
                 } else {
-                    count = spline->key[def->currkey].count;
+                    count = SPLINE_COUNT(spline);
                 }
             }
             
@@ -383,7 +383,7 @@ int SplineGetQuatData(Spline* spline, SplineDef* def, void* p) {
             if (def->currkey < spline->numkeys && def->currkey >= 0) {
                 gotDataOk = 1;
                 if (!(def->denomFlag)) {
-                    count = ((RSpline*)spline)->key[def->currkey].count;
+                    count = RSPLINE_COUNT(spline);
                 }
                 if ((count != 0) && (def->fracCurr != 0)) {
                     G2Quat_Slerp_VM((def->fracCurr << 0xC) / count, &((RSpline*)spline)->key[def->currkey].q, (G2Quat*)((&((RSpline*)spline)->key[def->currkey].q.z) + 3), &quat, 0);
@@ -409,9 +409,9 @@ int SplineGetNext(Spline* spline, SplineDef* def) {
             movedSplineOk = 1;
             
             if (isRot != 0) {
-                count = ((RSpline*)spline)->key[def->currkey].count;
+                count = RSPLINE_COUNT(spline);
             } else {
-                count = spline->key[def->currkey].count;
+                count = SPLINE_COUNT(spline);
             }
             
             SplineSetDefDenom(spline, def, 0);
@@ -462,11 +462,11 @@ int SplineGetPrev(Spline* spline, SplineDef* def) {
                 if ((spline->flags & 4) || (spline->flags & 2)) {
                     def->currkey = spline->numkeys - 2;
                     if (isRot != 0) {
-                        count = ((RSpline*)spline)->key[def->currkey].count;
+                        count = RSPLINE_COUNT(spline);
                     }
                     else
                     {
-                        count = spline->key[def->currkey].count;
+                        count = SPLINE_COUNT(spline);
                     }
                     def->fracCurr = count - 1;
                 }
@@ -480,9 +480,9 @@ int SplineGetPrev(Spline* spline, SplineDef* def) {
                 def->currkey--;
                 
                 if (isRot != 0) {
-                    count = ((RSpline*)spline)->key[def->currkey].count;
+                    count = RSPLINE_COUNT(spline);
                 } else {
-                    count = spline->key[def->currkey].count;
+                    count = SPLINE_COUNT(spline);
                 }
                 def->fracCurr = count - 1;
             }
