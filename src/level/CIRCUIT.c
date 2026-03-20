@@ -73,7 +73,8 @@ void circuit_crawler_OnCreate(Instance* instance, GameTracker* gameTracker)
 }
 
 void circuit_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
-    int a0, v0, v1;
+    int** a0;
+    int v0, v1;
 
     instance->flags2 &= ~0x10;
     if (instance->_F4[0] == 0)
@@ -88,8 +89,7 @@ void circuit_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         func_8002DAF8(instance, -1);
         if ((instance->flags2 & 0x10))
         {
-            a0 = (*(unsigned char*)&instance->_40[7] << 2) + instance->object->animList;
-            instance->_5E = ((unsigned short*)(*((int*)a0)))[1] - 1; 
+            instance->_5E = ((unsigned short*)(instance->object->animList[(*(unsigned char*)&instance->_40[7])]))[1] - 1; 
             instance->_F4[0] = 2;
         }
         
@@ -503,7 +503,7 @@ void circuit_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
                 SIGNAL_HandleSignal(PlayerInstance, intro->b + 4, 0);
             }
             instance->_F4[1] = 1;
-            PlayerInstance->_F4[2] &= 0xFFBFFFFF;
+            PlayerInstance->_F4[2] &= ~0x400000;
         }
         if ((((int*)gameTracker->_000C)[0xFC/4] & 0x400000) && ((((int**)gameTracker)[0x4C00/4] != 0) || (((int**)gameTracker)[0x4C04/4] != 0))) {
             func_8002C18C(5);

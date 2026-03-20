@@ -74,8 +74,7 @@ void looney_crawler_OnCreate(Instance* instance, GameTracker* gameTracker)
 }
 
 void looney_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
-    
-    int a0, v0, v1;
+    int v0, v1;
 
     if (instance->_F4[0] == 0)
     {
@@ -89,8 +88,7 @@ void looney_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         func_8002DAF8(instance, -1);
         if ((instance->flags2 & 0x10))
         {
-            a0 = (*(unsigned char*)&instance->_40[7] << 2) + instance->object->animList;
-            instance->_5E = ((unsigned short*)(*((int*)a0)))[1] - 1; 
+            instance->_5E = ((unsigned short*)(instance->object->animList[(*(unsigned char*)&instance->_40[7])]))[1] - 1; 
             instance->_F4[0] = 2;
         }
         
@@ -135,7 +133,7 @@ void looney_bowling_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     if (instance->parent == NULL) {
         INSTANCE_KillInstance(instance);
     }
-    if (func_80048CC8(instance, &instance->_F4[2], &instance->_104, 0, 1) > 0) {
+    if (SCRIPT_InstanceSplineProcess(instance, &instance->_F4[2], &instance->_104, 0, 1) > 0) {
         INSTANCE_PlainDeath(instance, 5, -1, 0);
     }
     if (++(*(int*)&instance->_110) == 0x50) {
@@ -147,7 +145,7 @@ void looney_bowling_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 void looney_doeboy_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    instance->flags &= 0xFDFFFFFF;
+    instance->flags &= ~0x2000000;
 }
 
 void looney_doeboy_OnUpdate(Instance* instance, GameTracker* gameTracker) {
@@ -164,7 +162,7 @@ void looney_doeboy_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             }
             instance->_F4[0] = 1;
             instance->intro->_2C = NULL;
-        } else if (instance->flags & 0x02000000) {
+        } else if (instance->flags & 0x2000000) {
             instance->_F4[0] = 1;
         }
     }
@@ -174,7 +172,7 @@ void looney_doeboy_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         if (instance->flags2 & 0x10) {
             instance->flags2 &= ~0x10;
             instance->_F4[0] = 0;
-            instance->flags &= 0xFDFFFFFF;
+            instance->flags &= ~0x2000000;
             instance->intro->_2C = NULL;
         }
     }

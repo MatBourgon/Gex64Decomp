@@ -619,7 +619,7 @@ void map_speaker_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
     temp_s0_2 = ((int**)(*(((s32) ((instance->_C0[1] | 1) << 0x10) >> 0x10) + (int*)instance->object->modelList)))[0x2C/4];
     SplineSetDef2FrameNumber(temp_s0_2[2], &temp_s1[4], ((temp_s1[0xE/2] << 8) / 127) & 0xFFFF);
-    func_80048A4C(instance, temp_s0_2, 0, 0, &temp_s1[4], 0, 1);
+    SCRIPT_SplineProcess(instance, temp_s0_2, 0, 0, &temp_s1[4], 0, 1);
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/MAP", map_speaker_OnUpdate);

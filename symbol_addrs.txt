@@ -81,10 +81,14 @@ SCRIPT_GetPosSplineDef = 0x800485D4; // type:func
 SCRIPT_GetRotSplineDef = 0x800485F8; // type:func
 SCRIPT_GetScaleSplineDef = 0x8004861C; // type:func
 SCRIPT_RelativisticSpline = 0x80048640; // type:func
+SCRIPT_InstanceSplineProcess = 0x80048CC8; // type:func
+SCRIPT_SplineProcess = 0x80048A4C; // type:func
 SplineSetDef2FrameNumber = 0x80051360; // type:func
 SplineGetData = 0x80051C64; // type:func
 _SplineS2Pos = 0x80050C80; // type:func
 G2Quat_Slerp_VM = 0x800159C8; // type:func
+SplineSetDefDenom = 0x80050EA0; // type:func
+
 
 SCRIPT_GetMultiSpline = 0x80048524; // type:func
 INSTANCE_ReallyRemoveInstance = 0x8002CD50; // type:func
@@ -101,6 +105,11 @@ INSTANCE_BirthCachedObject = 0x8002E088; // type:func
 INSTANCE_DefaultInit = 0x8002E180; // type:func
 INSTANCE_ProcessFunctions = 0x8002D58C; // type:func
 LIST_InsertFunc = 0x80030090; // type:func
+LIST_DeleteFunc = 0x800300BC; // type:func
+LIST_GetFunc = 0x8003012C; // type:func
+LIST_CompareFunc = 0x80030164; // type:func
+LIST_CountFunc = 0x800301D4; // type:func
+LIST_AppendFunc = 0x800301FC; // type:func
 SplineIsWhere = 0x800514D0; // type:func
 SplineMultiIsWhere = 0x80051528; // type:func
 INSTANCE_KillInstance = 0x8002E3C4; // type:func

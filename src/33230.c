@@ -114,7 +114,7 @@ int func_80033220()
 }
 
 void func_80033228(void) {
-    func_80054164();
+    func_80054164(); // needs two arguments
 }
 
 void func_80033248(void* arg)

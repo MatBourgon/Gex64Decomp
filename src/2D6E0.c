@@ -141,7 +141,7 @@ void INSTANCE_ReallyRemoveInstance(InstanceList* list, Instance* instance, int r
         temp->prev = instance;
     }
                    
-    func_800300BC(instance);
+    LIST_DeleteFunc(&instance->node);
                    
     if (instance->flags & 0x10000) {
         instance->flags |= 0x20000;
@@ -165,8 +165,8 @@ void INSTANCE_ReallyRemoveInstance(InstanceList* list, Instance* instance, int r
         }
         if (instance->flags2 & 0x10000) {
             func_800331BC(((int*)instance->_D0)[0]);
-            instance->flags2 &= 0xFFFEFFFF;
-            instance->flags2 &= 0xFFFDFFFF;
+            instance->flags2 &= ~0x10000;
+            instance->flags2 &= ~0x20000;
         }
     }
                    
@@ -267,7 +267,7 @@ void* INSTANCE_BirthObjectFromIntro(Intro* intro) {
                     }
                 }
                 if (SCRIPT_GetMultiSpline(instance, NULL, NULL) == NULL) {
-                    instance->flags &= 0xFDFFFFFF;
+                    instance->flags &= ~0x2000000;
                     instance->flags |= 0x100000;
                 }
                 instance->lightGroup = intro->lightGroup;
@@ -339,16 +339,15 @@ void INSTANCE_ProcessFunctions(InstanceList* list) {
                             }
                         }
                         
-                        // InstanceSplineProcess
-                        if (func_80048CC8(instance, &multi->curPositional, &multi->curRotational, &multi->curScaling, direction) > 0) {
+                        if (SCRIPT_InstanceSplineProcess(instance, &multi->curPositional, &multi->curRotational, &multi->curScaling, direction) > 0) {
                             if (instance->flags2 & 0x10000) {
                                 func_800331BC(instance->_D0[0]);
-                                instance->flags2 &= 0xFFFEFFFF;
-                                instance->flags2 &= 0xFFFDFFFF;
+                                instance->flags2 &= ~0x10000;
+                                instance->flags2 &= ~0x20000;
                             }
                             if (instance->object->oflags & 0x10000000) {
                                 instance->flags &= ~0x400;
-                                instance->flags &= 0xFDFFFFFF;
+                                instance->flags &= ~0x2000000;
                                 instance->flags |= 0x100000;
                             }
                             
@@ -359,12 +358,12 @@ void INSTANCE_ProcessFunctions(InstanceList* list) {
                                 continue;
                             } else {
                                 if (instance->object->oflags & 0x1000) {
-                                    instance->flags &= 0xFDFFFFFF;
+                                    instance->flags &= ~0x2000000;
                                     if (instance->object->oflags & 0x800000) {
                                         SCRIPT_InstanceSplineInit(instance, gameTracker8);
                                     }
                                 } else if (instance->object->oflags & 0x01000000) {
-                                    instance->flags &= 0xFDFFFFFF;
+                                    instance->flags &= ~0x2000000;
                                 }
                                 
                                 if (multi->positional != NULL)
@@ -429,7 +428,7 @@ void INSTANCE_ProcessFunctions(InstanceList* list) {
             if ((instance->flags < 0) || (var_s6 != 0)) {
                 instance->flags |= 0x04000000;
             } else {
-                instance->flags &= 0xFBFFFFFF;
+                instance->flags &= ~0x04000000;
             }
             
             if ( instance->processFunc != NULL) {
@@ -445,6 +444,131 @@ void INSTANCE_ProcessFunctions(InstanceList* list) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002DAF8);
+/*extern s32 D_800E5FD8;
+#define SWAP(b, a)\
+{\
+    a ^= b;\
+    b ^= a;\
+    a ^= b;\
+}
+
+FORCE_INLINE short MATH3D_LengthXYZ(LVECTOR sp10)
+{
+    int x, y, z;
+    x = sp10.x;
+    if (sp10.x < 0) {
+        x = -x;
+    }
+    
+    y = sp10.y;
+    if (sp10.y < 0) {
+        y = -y;
+    }
+    
+    z = sp10.z;
+    if (sp10.z < 0) {
+        z = -z;
+    }
+    
+    if (x < y) {
+        if (z < x) {
+            SWAP(x, z);
+            SWAP(y, z);
+        }
+        else if (z < y) {
+            SWAP(y, z);
+        }
+    } else if (z < y) {
+        SWAP(x, z);
+        
+    } else if (z < x) {
+        SWAP(x, y);
+        SWAP(y, z);
+    } else {
+        SWAP(x, y);
+    }
+    return (short)((((z * 30) + (y * 0xC) + (x * 9))) >> 5);
+}
+
+s32 func_8002DAF8(Instance* instance, s32 arg1) {
+    LVECTOR sp10;
+    LVECTOR sp20;
+    s32 temp_lo;
+    s32 temp_v0;
+    s32 temp_v0_2;
+    s32 temp_v0_3;
+    s32 x;
+    s32 y;
+    s32 z;
+    s32 var_a1_2;
+    s32 var_s1;
+    s32 var_s2;
+    s32 var_v0;
+    s32 var_v1;
+    u16 temp_v1;
+    u16 temp_v1_2;
+    u8 temp_s3;
+
+    var_s1 = arg1;
+    var_s2 = 1;
+    
+    if (abs(var_s1) > 1000) {
+        if (var_s1 > 0) {
+            var_s1 -= 1000;
+        } else {
+            var_s1 += 1000;
+        }
+        var_s2 = -1;
+    }
+    
+    temp_s3 = ((char*)&instance->_5E)[1];
+    
+    if (var_s1 > 0) {
+        sp20.x = instance->position.x - instance->oldPos.x;
+        sp20.y = instance->position.y - instance->oldPos.y;
+        sp20.z = instance->position.z - instance->oldPos.z;
+        
+        (*(int*)&instance->_30[2]) += MATH3D_LengthXYZ(sp20);
+        
+        while ((var_s1 < (*(int*)&instance->_30[2]))) {
+            instance->_5E += (var_s2 * D_800E5FD8);
+            if (instance->_5E >= ((short*)instance->object->animList[instance->_4E])[1]) {
+                instance->_5E = 0U;
+                instance->flags2 |= 0x10;
+            }
+            if (instance->_5E < 0) {
+                instance->_5E = (((short*)instance->object->animList[instance->_4E])[1] - 1);
+                instance->flags2 |= 0x10;
+            }
+            (*(int*)&instance->_30[2]) -= var_s1;
+            if (instance->object->oflags2 & 8) {
+                func_80050400(instance, temp_s3);
+            }
+        }
+    } else {
+        (*(int*)&instance->_30[2])--;
+        if ( (*(int*)&instance->_30[2]) > 0) {
+            (*(int*)&instance->_30[2]) = 0;
+        }
+        if (var_s1 >= (*(int*)&instance->_30[2])) {
+            instance->_5E += var_s2 * D_800E5FD8;
+            if (instance->_5E >= ((short*)instance->object->animList[instance->_4E])[1]) {
+                instance->_5E = 0;
+                instance->flags2 |= 0x10;
+            }
+            if (instance->_5E < 0) {
+                instance->_5E = (((short*)instance->object->animList[instance->_4E])[1] - 1);
+                instance->flags2 |= 0x10;
+            }
+            (*(int*)&instance->_30[2]) = 0;
+            if (instance->object->oflags2 & 8) {
+                func_80050400(instance, temp_s3);
+            }
+        }
+    }
+    
+    return instance->flags2 & 0x10;
+}*/
 
 Instance* INSTANCE_BirthObject(Instance* parent, Object* object) {
     Instance* instance;
