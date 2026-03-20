@@ -427,7 +427,7 @@ void kungfu_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
                 SIGNAL_HandleSignal(PlayerInstance, intro->b + 4, 0);
             }
             instance->_F4[1] = 1;
-            PlayerInstance->_F4[2] &= 0xFFBFFFFF;
+            PlayerInstance->_F4[2] &= ~0x400000;
         }
         if ((((int*)gameTracker->_000C)[0xFC/4] & 0x400000) && ((((int**)gameTracker)[0x4C00/4] != 0) || (((int**)gameTracker)[0x4C04/4] != 0))) {
             func_8002C18C(5);

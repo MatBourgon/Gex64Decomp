@@ -165,8 +165,8 @@ void INSTANCE_ReallyRemoveInstance(InstanceList* list, Instance* instance, int r
         }
         if (instance->flags2 & 0x10000) {
             func_800331BC(((int*)instance->_D0)[0]);
-            instance->flags2 &= 0xFFFEFFFF;
-            instance->flags2 &= 0xFFFDFFFF;
+            instance->flags2 &= ~0x10000;
+            instance->flags2 &= ~0x20000;
         }
     }
                    
@@ -267,7 +267,7 @@ void* INSTANCE_BirthObjectFromIntro(Intro* intro) {
                     }
                 }
                 if (SCRIPT_GetMultiSpline(instance, NULL, NULL) == NULL) {
-                    instance->flags &= 0xFDFFFFFF;
+                    instance->flags &= ~0x2000000;
                     instance->flags |= 0x100000;
                 }
                 instance->lightGroup = intro->lightGroup;
@@ -342,12 +342,12 @@ void INSTANCE_ProcessFunctions(InstanceList* list) {
                         if (SCRIPT_InstanceSplineProcess(instance, &multi->curPositional, &multi->curRotational, &multi->curScaling, direction) > 0) {
                             if (instance->flags2 & 0x10000) {
                                 func_800331BC(instance->_D0[0]);
-                                instance->flags2 &= 0xFFFEFFFF;
-                                instance->flags2 &= 0xFFFDFFFF;
+                                instance->flags2 &= ~0x10000;
+                                instance->flags2 &= ~0x20000;
                             }
                             if (instance->object->oflags & 0x10000000) {
                                 instance->flags &= ~0x400;
-                                instance->flags &= 0xFDFFFFFF;
+                                instance->flags &= ~0x2000000;
                                 instance->flags |= 0x100000;
                             }
                             
@@ -358,12 +358,12 @@ void INSTANCE_ProcessFunctions(InstanceList* list) {
                                 continue;
                             } else {
                                 if (instance->object->oflags & 0x1000) {
-                                    instance->flags &= 0xFDFFFFFF;
+                                    instance->flags &= ~0x2000000;
                                     if (instance->object->oflags & 0x800000) {
                                         SCRIPT_InstanceSplineInit(instance, gameTracker8);
                                     }
                                 } else if (instance->object->oflags & 0x01000000) {
-                                    instance->flags &= 0xFDFFFFFF;
+                                    instance->flags &= ~0x2000000;
                                 }
                                 
                                 if (multi->positional != NULL)
@@ -428,7 +428,7 @@ void INSTANCE_ProcessFunctions(InstanceList* list) {
             if ((instance->flags < 0) || (var_s6 != 0)) {
                 instance->flags |= 0x04000000;
             } else {
-                instance->flags &= 0xFBFFFFFF;
+                instance->flags &= ~0x04000000;
             }
             
             if ( instance->processFunc != NULL) {

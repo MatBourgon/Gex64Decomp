@@ -464,7 +464,7 @@ s32 SIGNAL_StopSpline(Instance* instance, void* signal) {
     int* var1 = ((int**)signal)[1]; 
 
      if (((Instance*)var1[9]) != 0) {
-        ((Instance*)var1[9])->flags &= 0xFDFFFFFF;
+        ((Instance*)var1[9])->flags &= ~0x2000000;
     }
     return 1;
 }
@@ -721,8 +721,8 @@ s32 SIGNAL_Freeze(Instance* instance, void* signal) {
         if (frInstance != NULL) {
             if (frInstance->flags2 & 0x10000) {
                 func_800331BC(frInstance->_D0[0]);
-                frInstance->flags2 &= 0xFFFEFFFF;
-                frInstance->flags2 &= 0xFFFDFFFF;
+                frInstance->flags2 &= ~0x10000;
+                frInstance->flags2 &= ~0x20000;
             }
         }
     }
@@ -739,7 +739,7 @@ s32 SIGNAL_UnFreeze(Instance* instance, void* signal) {
         frSignal->intro->flags &= ~0x100;
         inst = frSignal->intro->instance;
         if (inst != NULL) {
-            inst->flags &= 0xFF7FFFFF;
+            inst->flags &= ~0x800000;
             if (!(inst->flags & 0x100000)) {
                 if (!(inst->flags2 & 0x10000)) {
                     inst->flags2 |= 0x1000;
@@ -786,7 +786,7 @@ INCLUDE_ASM("asm/nonmatchings/SIGNAL", SIGNAL_UnfreezeAll);
         temp_a0_3 = temp_v1->instance;
         if (temp_a0_3 != NULL)
         {
-            temp_a0_3->flags &= 0xFF7FFFFF;
+            temp_a0_3->flags &= ~0x800000;
             if (!(temp_a0_3->flags & 0x100000) && !(temp_a0_3->flags2 & 0x10000))
             {
                 temp_a0_3->flags2 |= 0x1000;

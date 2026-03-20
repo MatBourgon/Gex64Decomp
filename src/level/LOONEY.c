@@ -145,7 +145,7 @@ void looney_bowling_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 void looney_doeboy_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    instance->flags &= 0xFDFFFFFF;
+    instance->flags &= ~0x2000000;
 }
 
 void looney_doeboy_OnUpdate(Instance* instance, GameTracker* gameTracker) {
@@ -162,7 +162,7 @@ void looney_doeboy_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             }
             instance->_F4[0] = 1;
             instance->intro->_2C = NULL;
-        } else if (instance->flags & 0x02000000) {
+        } else if (instance->flags & 0x2000000) {
             instance->_F4[0] = 1;
         }
     }
@@ -172,7 +172,7 @@ void looney_doeboy_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         if (instance->flags2 & 0x10) {
             instance->flags2 &= ~0x10;
             instance->_F4[0] = 0;
-            instance->flags &= 0xFDFFFFFF;
+            instance->flags &= ~0x2000000;
             instance->intro->_2C = NULL;
         }
     }
