@@ -12,6 +12,8 @@
 #include "level/COMMON.h"
 #include "INSTANCE.h"
 
+#include "SPLINE.h"
+
 MultiSpline* SCRIPT_GetMultiSpline(Instance *instance, int *isParent, int *isClass);
 
 extern short SplineSetDef2FrameNumber(Spline *spline, SplineDef *def, unsigned short frame_number);
@@ -801,7 +803,7 @@ void SCRIPT_InstanceSplineSet(Instance* instance, short frameNum, SplineDef* spl
         
         if ((rsplineDef != 0) && (rspline != 0)) {
             SplineSetDef2FrameNumber((Spline*)rspline, rsplineDef, frameNum);
-            SplineGetData(rspline, rsplineDef, &instance->rotation);
+            SplineGetData((Spline*)rspline, rsplineDef, &instance->rotation);
         }
         
         if ((ssplineDef != 0) && (sspline != 0)) {
@@ -817,7 +819,7 @@ void SCRIPT_InstanceSplineSet(Instance* instance, short frameNum, SplineDef* spl
     }
 }
 
-int func_80048A4C(Instance* instance, MultiSpline* multi, int arg2, int rsplineDef, int ssplineDef, int direction, int isClass) {
+int SCRIPT_SplineProcess(Instance* instance, MultiSpline* multi, SplineDef* splineDef, SplineDef* rsplineDef, SplineDef* ssplineDef, int direction, int isClass) {
     SVECTOR rot;
     SVECTOR temp;
     Spline* sspline;
@@ -841,9 +843,9 @@ int func_80048A4C(Instance* instance, MultiSpline* multi, int arg2, int rsplineD
     
     if (sspline != 0) {
         if (direction > 0) {
-            point = (SVECTOR*)SplineGetNextPoint(sspline, ssplineDef);
+            point = SplineGetNextPoint(sspline, ssplineDef);
         } else if (direction < 0) {
-            point = (SVECTOR*)SplineGetPreviousPoint(sspline, ssplineDef);
+            point = SplineGetPreviousPoint(sspline, ssplineDef);
         } else if (SplineGetData(sspline, ssplineDef, &temp) != 0) {
             point = &temp;
         }
@@ -860,19 +862,19 @@ int func_80048A4C(Instance* instance, MultiSpline* multi, int arg2, int rsplineD
     if (rspline != 0) {
         retVal = 0;
         if (direction > 0) {
-            retVal = SplineGetOffsetNext(rspline, rsplineDef) == 0;
+            retVal = SplineGetOffsetNext((Spline*)rspline, rsplineDef) == 0;
         } else if ((direction < 0) && (SplineGetOffsetPrev(rspline, rsplineDef) == 0)) {
             retVal = 1;
         }
         
         if (retVal == 0) {
             if (instance->flags & 1) {
-                if (SplineGetQuatData(rspline, rsplineDef, &data.q) != 0) {
+                if (SplineGetQuatData((Spline*)rspline, rsplineDef, &data.q) != 0) {
                     G2Quat_ToMatrix_S(&((int*)multi)[0x20/4], &data.q); // cutRotMatrix, G2Quat_ToMatrix_S?
                 } else {
                     retVal = 1;
                 }
-            } else if (SplineGetData(rspline, rsplineDef, &rot) != 0) {
+            } else if (SplineGetData((Spline*)rspline, rsplineDef, &rot) != 0) {
                 instance->rotation.x = rot.x;
                 instance->rotation.y = rot.y;
                 instance->rotation.z = rot.z;
@@ -885,10 +887,10 @@ int func_80048A4C(Instance* instance, MultiSpline* multi, int arg2, int rsplineD
     if (spline != 0) {
         
         if (direction > 0) {
-            point = (SVECTOR*)SplineGetNextPoint(spline, arg2);
+            point = (SVECTOR*)SplineGetNextPoint(spline, splineDef);
         } else if (direction < 0) {
-            point = (SVECTOR*)SplineGetPreviousPoint(spline, arg2);
-        } else if (SplineGetData(spline, arg2, &data.v) != 0) {
+            point = (SVECTOR*)SplineGetPreviousPoint(spline, splineDef);
+        } else if (SplineGetData(spline, splineDef, &data.v) != 0) {
             point = &data.v;
         }
         
@@ -914,7 +916,23 @@ int func_80048A4C(Instance* instance, MultiSpline* multi, int arg2, int rsplineD
     return retVal;
 }
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80048CC8);
+int SCRIPT_InstanceSplineProcess(Instance* instance, SplineDef* splineDef, SplineDef* rsplineDef, SplineDef* ssplineDef, int direction) {
+    MultiSpline* multi;
+    int isParent;
+    int isClass;
+
+    multi = SCRIPT_GetMultiSpline(instance, &isParent, &isClass);
+    if (multi != 0) {
+        if ((isParent != 0 || isClass != 0) || (splineDef == NULL && rsplineDef == NULL && ssplineDef == NULL)) {
+            splineDef = SCRIPT_GetPosSplineDef(instance, multi, isParent, isClass);
+            rsplineDef = SCRIPT_GetRotSplineDef(instance, multi, isParent, isClass);
+            ssplineDef = SCRIPT_GetScaleSplineDef(instance, multi, isParent, isClass);
+        }
+    
+        return SCRIPT_SplineProcess(instance, multi, splineDef, rsplineDef, ssplineDef, direction, isClass);
+    }
+    return -1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80048DE4);
 

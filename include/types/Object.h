@@ -10,7 +10,7 @@ typedef struct
     short _06;
     int _08;
     Model** modelList; // 0C
-    int animList; // 10
+    int** animList; // 10
     int _14;
     int _18;
     void* data;
