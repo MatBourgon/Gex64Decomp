@@ -4,9 +4,9 @@
 #include "types/GameTracker.h"
 #include "types/PCollideInfo.h"
 
-INCLUDE_ASM("asm/nonmatchings/30630", func_8002FA30);
+INCLUDE_ASM("asm/nonmatchings/LIGHT3D", LIGHT_DrawShadow);
 
-void func_8002FDB0(GameTracker* gameTracker) {
+void LIGHT_CalcShadowPositions(GameTracker* gameTracker) {
     PCollideInfo collideInfo;
     SVECTOR newPos;
     SVECTOR oldPos;

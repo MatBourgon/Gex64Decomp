@@ -4,7 +4,7 @@
 #include "types/Matrix.h"
 #include "types/Quat.h"
 
-INCLUDE_ASM("asm/nonmatchings/30E70", func_80030270);
+INCLUDE_ASM("asm/nonmatchings/30E70", MATH3D_FastAtan2);
 
 INCLUDE_ASM("asm/nonmatchings/30E70", ratan2);
 
