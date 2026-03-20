@@ -39,6 +39,16 @@ typedef struct
     const char* collectibleTypeA; // 94
     const char* collectibleTypeB; // 98
     const char* collectibleTypeC; // 9C
+    const char* collectibleTypeD; // collectibleTypeD ? always defaults to where A points
+    int _A4; // null
+    int _A8; // pointer
+    int _AC; // Paired might be rotation
+    int _B0; // 
+    void* targetDestroyedScript[3];
+    void* hintCutscene[3];
+    int targetCount[3];
+    const char* targetId[3];
+    void* creditsScript; // Play the secret remote hint cutscene for the credits
 } Level;
 
 #endif

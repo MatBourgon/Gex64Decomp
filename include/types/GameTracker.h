@@ -13,7 +13,9 @@ typedef struct
     int     _0008; // Might be player instance*
     int     _000C;
     InstanceList *instanceList;
-    char    _0014[0x4BE0];
+    int    _0014[0x15];
+    long   overrideData[2][5];
+    int    _0051[0x12F8-0x15-10];
     char    _4BF4[0x14];
     uint    gameFlags;
     int     _4C0C;
