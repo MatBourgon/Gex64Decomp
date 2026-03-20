@@ -438,10 +438,8 @@ int SplineGetNext(Spline* spline, SplineDef* def) {
     return movedSplineOk;
 }
 
-INCLUDE_ASM("asm/nonmatchings/SPLINE", SplineGetPrev);
-/*
 int SplineGetPrev(Spline* spline, SplineDef* def) {
-    unsigned int movedSplineOk;
+    int movedSplineOk;
     int isRot;
     int count;
 
@@ -452,11 +450,13 @@ int SplineGetPrev(Spline* spline, SplineDef* def) {
         
         if (def->currkey < spline->numkeys) {
             
-            movedSplineOk = 1;
             
             if (def->fracCurr) {
+                movedSplineOk = 1;
                 def->fracCurr--;
-            }
+                __asm("j .+0xC4"); // Hack
+            } else
+                movedSplineOk = 1;
             
             if (def->currkey <= 0) {
                 if ((spline->flags & 4) || (spline->flags & 2)) {
@@ -490,4 +490,3 @@ int SplineGetPrev(Spline* spline, SplineDef* def) {
     }
     return movedSplineOk;
 }
-*/
