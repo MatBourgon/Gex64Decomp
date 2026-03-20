@@ -32,8 +32,11 @@ typedef struct Instance_s
     ROTATION rotation; // 60, 62, 64, 66
     SVector scale; // 68, 6A, 6C, 6E
     int _70[4];
-    short _80[8];
-    short _90[4];
+    short _80[2];
+    SVector wNormal;
+    SVECTOR offset;
+    short _92;
+    short _94[2];
     LightInstance* shadow0; // 98
     LightInstance* shadow1; // 9C
     int _A0;

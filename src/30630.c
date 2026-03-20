@@ -61,15 +61,15 @@ void func_8002FDB0(GameTracker* gameTracker) {
                         instance->flags &= 0xFFDFFFFF;
                     }
                     
-                    instance->_80[2] = collideInfo.wNormal.x;
-                    instance->_80[3] = collideInfo.wNormal.y;
-                    instance->_80[4] = collideInfo.wNormal.z;
+                    instance->wNormal.x = collideInfo.wNormal.x;
+                    instance->wNormal.y = collideInfo.wNormal.y;
+                    instance->wNormal.z = collideInfo.wNormal.z;
                 }
                 else
                 {
-                    instance->_80[2] = 0;
-                    instance->_80[3] = 0;
-                    instance->_80[4] = 0x1000;
+                    instance->wNormal.x = 0;
+                    instance->wNormal.y = 0;
+                    instance->wNormal.z = 0x1000;
                 }
             }
             
