@@ -105,7 +105,7 @@ segments:
       - [0x2D6E0, c]
       - [0x2F310, asm]
       - [0x30630, asm]
-      - [0x30C90, asm]
+      - [0x30C90, c, LIST]
       - [0x30E70, c]
       - [0x31960, c, _31960]
       - [0x32D70, c, MATRIX]

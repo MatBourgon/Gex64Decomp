@@ -35,7 +35,7 @@ void INSTANCE_InsertInstanceWithFlagsSet(Instance* instance, int flags) {
 
     instance->flags |= flags;
     groupId = INSTANCE_InstanceGroupNumber(instance);
-    func_800300BC(instance);
+    LIST_DeleteFunc(&instance->node);
     LIST_InsertFunc(&gameTracker8->instanceList->group[groupId], &instance->node);
 }
 
@@ -44,7 +44,7 @@ void INSTANCE_InsertInstanceWithFlagsCleared(Instance* instance, int flags) {
 
     instance->flags &= ~flags;
     groupId = INSTANCE_InstanceGroupNumber(instance);
-    func_800300BC(instance);
+    LIST_DeleteFunc(&instance->node);
     LIST_InsertFunc(&gameTracker8->instanceList->group[groupId], &instance->node);
 }
 

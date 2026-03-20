@@ -141,7 +141,7 @@ void INSTANCE_ReallyRemoveInstance(InstanceList* list, Instance* instance, int r
         temp->prev = instance;
     }
                    
-    func_800300BC(instance);
+    LIST_DeleteFunc(&instance->node);
                    
     if (instance->flags & 0x10000) {
         instance->flags |= 0x20000;
