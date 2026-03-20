@@ -47,7 +47,8 @@ typedef struct Instance_s
     void* _B4;
     int _B8;
     SVECTOR shadowPosition;
-    short _C0[7];
+    short currentModel;
+    short _C0[6];
     int _D0[4];
     int _E0[4];
     short _F0[2];

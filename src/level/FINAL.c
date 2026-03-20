@@ -237,9 +237,9 @@ extern void func_8015F200_903A0(void); // unknown
 void final_frez_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if (!(instance->flags & 0x20000)) {
         instance->_D0[3] = OBTABLE_FindObject(D_80161588_92728);
-        instance->_C0[3] = 0;
+        instance->_C0[2] = 0;
+        instance->_C0[3] = 1;
         instance->_C0[4] = 1;
-        instance->_C0[5] = 1;
         instance->_40[6] -= 0x12C;
         instance->_E0[2] = OBTABLE_FindObject(D_8016166C_9280C);
         instance->_B4 = (void*)&func_8015F200_903A0;
@@ -272,7 +272,7 @@ void final_frez_OnCollide(Instance* instance, GameTracker* gameTracker) {
     short* temp_s1;
 
     temp_a2 = (int***)instance->_70[2];
-    temp_s1 = &instance->_C0[3];
+    temp_s1 = &instance->_C0[2];
     if (G2String_Compare_EQ(temp_a2[0x14/4][0x18/4][0x24/4], D_8016166C_9280C)) {
         if (instance->_F4[0] != 0) {
             func_800331BC(instance->_F4[0], gameTracker);
