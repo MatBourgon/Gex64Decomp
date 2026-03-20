@@ -862,8 +862,8 @@ int SCRIPT_SplineProcess(Instance* instance, MultiSpline* multi, SplineDef* spli
     if (rspline != 0) {
         retVal = 0;
         if (direction > 0) {
-            retVal = SplineGetOffsetNext((Spline*)rspline, rsplineDef) == 0;
-        } else if ((direction < 0) && (SplineGetOffsetPrev(rspline, rsplineDef) == 0)) {
+            retVal = SplineGetNext((Spline*)rspline, rsplineDef) == 0;
+        } else if ((direction < 0) && (SplineGetPrev(rspline, rsplineDef) == 0)) {
             retVal = 1;
         }
         

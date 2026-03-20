@@ -303,7 +303,7 @@ extern SVECTOR D_800AF070; // static in SplineGetNextPoint
 
 SVECTOR* SplineGetNextPoint(Spline* spline, SplineDef* def) {
 
-    if ((SplineGetOffsetNext(spline, def) != 0) && ((SplineGetData(spline, def, &D_800AF070) != 0))) {
+    if ((SplineGetNext(spline, def) != 0) && ((SplineGetData(spline, def, &D_800AF070) != 0))) {
         return &D_800AF070;
     }
     return NULL;
@@ -313,7 +313,7 @@ extern SVECTOR D_800AF078; // static in SplineGetPreviousPoint
 
 SVECTOR *SplineGetPreviousPoint(Spline *spline, SplineDef *def)
 {
-    if ((SplineGetOffsetPrev(spline, def) != 0) && (SplineGetData(spline, def, &D_800AF078) != 0))
+    if ((SplineGetPrev(spline, def) != 0) && (SplineGetData(spline, def, &D_800AF078) != 0))
     {
         return &D_800AF078;
     }
@@ -397,7 +397,7 @@ int SplineGetQuatData(Spline* spline, SplineDef* def, void* p) {
     return gotDataOk;
 }
 
-int SplineGetOffsetNext(Spline* spline, SplineDef* def) {
+int SplineGetNext(Spline* spline, SplineDef* def) {
     int count;
     int movedSplineOk;
     int isRot;
@@ -438,9 +438,9 @@ int SplineGetOffsetNext(Spline* spline, SplineDef* def) {
     return movedSplineOk;
 }
 
-INCLUDE_ASM("asm/nonmatchings/SPLINE", SplineGetOffsetPrev);
+INCLUDE_ASM("asm/nonmatchings/SPLINE", SplineGetPrev);
 /*
-int SplineGetOffsetPrev(Spline* spline, SplineDef* def) {
+int SplineGetPrev(Spline* spline, SplineDef* def) {
     unsigned int movedSplineOk;
     int isRot;
     int count;
