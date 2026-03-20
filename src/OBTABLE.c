@@ -78,7 +78,7 @@ void OBTABLE_GetInstanceProcessFunc(Instance* instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/obtable", func_8003EBF4);
+INCLUDE_ASM("asm/nonmatchings/OBTABLE", func_8003EBF4);
 
 void OBTABLE_ClearObjectReferences(void) {
     int i;

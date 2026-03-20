@@ -31,9 +31,9 @@ void func_80019AA0(void) {
     func_80030C50(0x10);
 }
 
-INCLUDE_ASM("asm/nonmatchings/1A6A0", func_80019B1C);
+INCLUDE_ASM("asm/nonmatchings/GAMELOOP", func_80019B1C);
 
-INCLUDE_ASM("asm/nonmatchings/1A6A0", func_80019F18);
+INCLUDE_ASM("asm/nonmatchings/GAMELOOP", GAMELOOP_Process);
 
 int func_8001A1D8(unsigned char* remoteData) {
     int i;

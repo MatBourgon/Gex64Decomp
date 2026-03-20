@@ -91,6 +91,7 @@ G2Quat_Slerp_VM = 0x800159C8; // type:func
 SplineSetDefDenom = 0x80050EA0; // type:func
 LIGHT_DrawShadow = 0x8002FA30; // type:func
 LIGHT_CalcShadowPositions = 0x8002FDB0; // type:func
+GAMELOOP_Process = 0x80019F18; // type:func
 
 SCRIPT_GetMultiSpline = 0x80048524; // type:func
 INSTANCE_ReallyRemoveInstance = 0x8002CD50; // type:func
