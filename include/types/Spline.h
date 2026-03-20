@@ -59,4 +59,7 @@ typedef struct
     SplineDef curScaling;
 } MultiSpline;
 
+#define SPLINE_COUNT(spline) ((spline)->key[def->currkey].count)
+#define RSPLINE_COUNT(spline) (SPLINE_COUNT((RSpline*)spline))
+
 #endif

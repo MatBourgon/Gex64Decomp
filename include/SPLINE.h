@@ -32,6 +32,6 @@ int SplineGetData(Spline* spline, SplineDef* def, void* p);
 
 int SplineGetQuatData(Spline* spline, SplineDef* def, void* p);
 
-int SplineGetOffsetNext(Spline* spline, SplineDef* def);
+int SplineGetNext(Spline* spline, SplineDef* def);
 
 #endif

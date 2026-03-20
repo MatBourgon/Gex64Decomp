@@ -47,7 +47,7 @@ void common_remred_OnUpdate(Instance* arg0, GameTracker* gameTracker) {
 
 
     temp_v0 = (Object*)OBTABLE_FindObject(&D_8007B97C);
-    if (temp_v0 == NULL || (arg0->_C0[1] == 1)) return;
+    if (temp_v0 == NULL || (arg0->currentModel == 1)) return;
 
     model = temp_v0->modelList[0];
     pos.x = arg0->position.x;

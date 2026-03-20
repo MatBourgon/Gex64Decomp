@@ -602,15 +602,15 @@ s32 SIGNAL_Teleport(Instance* instance, void* signal) {
     MATH3D_SetUnityMatrix(&sp18); // int vector? [1 0 0] [0 1 0] [1 0 0]
     RotMatrixZ(tpSignal->r, &sp18); // rotate
     MATH3D_ApplyMatrixSV(&sp18, &deltaPosition, &sp10); // (Matrix x Vector) -> Vector
-    instance->_80[6] = tpSignal->exitLocation.x - deltaPosition.x;
-    instance->_80[7] = tpSignal->exitLocation.y - deltaPosition.y;
-    instance->_90[0] = tpSignal->exitLocation.z - deltaPosition.z;
-    instance->_80[6] += sp10.x;
-    instance->_80[7] += sp10.y;
-    instance->_90[0] += sp10.z;
-    instance->_90[1] = tpSignal->r;
-    ((short*)gameTracker8->_0008)[0x140/2] += instance->_90[0];
-    ((short*)gameTracker8->_0008)[0x142/2] += instance->_90[0];
+    instance->offset.x = tpSignal->exitLocation.x - deltaPosition.x;
+    instance->offset.y = tpSignal->exitLocation.y - deltaPosition.y;
+    instance->offset.z = tpSignal->exitLocation.z - deltaPosition.z;
+    instance->offset.x += sp10.x;
+    instance->offset.y += sp10.y;
+    instance->offset.z += sp10.z;
+    instance->_92 = tpSignal->r;
+    ((short*)gameTracker8->_0008)[0x140/2] += instance->offset.z;
+    ((short*)gameTracker8->_0008)[0x142/2] += instance->offset.z;
     ((int*)gameTracker8->_0008)[0x450/4] = 1;
     ((short*)gameTracker8->_0008)[0x16/2] = 3;
     ((short*)gameTracker8->_0008)[0x17A/2] = ((short*)gameTracker8->_0008)[6] + tpSignal->r;
@@ -958,7 +958,7 @@ s32 SIGNAL_CallSignal(Instance* instance, void* signal)
 }
 
 s32 SIGNAL_Offset(Instance* instance, void* signal) {
-    *(ROTATION*)&instance->_80[6] =  *(ROTATION*)&(((short*)signal)[2]);
+    *(SVector*)&instance->offset.x =  *(SVector*)&(((short*)signal)[2]);
     return 1;
 }
 
@@ -1235,9 +1235,9 @@ s32 SIGNAL_IntroFX(Instance* instance, void* signal) {
 }
 
 s32 SIGNAL_GotoPos(Instance* instance, void* signal) {
-    instance->_80[6] = ((short*)signal)[2] - instance->position.x;
-    instance->_80[7] = ((short*)signal)[3] - instance->position.y;
-    instance->_90[0] = ((short*)signal)[4] - instance->position.z;
+    instance->offset.x = ((short*)signal)[2] - instance->position.x;
+    instance->offset.y = ((short*)signal)[3] - instance->position.y;
+    instance->offset.z = ((short*)signal)[4] - instance->position.z;
     ((short*)gameTracker8->_0008)[3] = 3;
     return 1;
 }
