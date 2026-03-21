@@ -454,7 +454,7 @@ int SplineGetPrev(Spline* spline, SplineDef* def) {
                 movedSplineOk = 1;
             if (def->fracCurr) {
                 def->fracCurr--;
-            } else if (movedSplineOk && def->currkey <= 0) {
+            } else if (def->currkey <= 0) {
                 if ((spline->flags & 4) || (spline->flags & 2)) {
                     def->currkey = spline->numkeys - 2;
                     if (isRot != 0)
