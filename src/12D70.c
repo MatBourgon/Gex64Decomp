@@ -237,12 +237,11 @@ int COLLIDE_ClosestPointInBoxToPoint(SVector* outPoint, HBox* box, SVector* poin
     return inside;
 }
 
-void func_80012A1C(SVector* pNormal, SVector* point0, SVector* point1, SVector* point2) {
+void _COLLIDE_MakeNormal(SVector* pNormal, SVector* point0, SVector* point1, SVector* point2) {
     LVECTOR delta;
     int dLength;
     int normal;
     int a, b;
-    
 
     delta.x = point1->x - point0->x;
     delta.y = point1->y - point0->y;
