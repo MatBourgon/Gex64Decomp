@@ -3,4 +3,4 @@ src/level/AZTEC.c src/level/CIRCUIT.c src/level/FINAL.c src/level/GEXZIL.c src/l
 src/level/INTRO.c src/level/KUNGFU.c src/level/LOGO.c src/level/LOONEY.c src/level/MAP.c src/level/MOOSHU.c src/level/NYPD.c src/level/PREHST.c
 src/level/REZOP.c src/level/RTA.c src/level/SCIFI.c src/level/SPY.c src/main.c src/368B0.c src/3EAA0.c src/OBTABLE.c src/GENERIC.c src/2D6E0.c
 src/_4f810.c src/3BAA0.c src/3FB20.c src/_be60.c src/12D70.c src/30E70.c src/MATRIX.c src/33230.c src/SPLINE.c src/LIST.c src/LIGHT3D.c
-src/345E0.c
+src/345E0.c src/161C0.c src/19BD0.c src/103F0.c

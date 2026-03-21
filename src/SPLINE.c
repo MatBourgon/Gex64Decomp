@@ -450,18 +450,15 @@ int SplineGetPrev(Spline* spline, SplineDef* def) {
         
         if (def->currkey < spline->numkeys) {
             
-            
+            if (0) while(1);
+                movedSplineOk = 1;
             if (def->fracCurr) {
-                movedSplineOk = 1;
                 def->fracCurr--;
-                __asm("j .+0xC4"); // Hack
-            } else
-                movedSplineOk = 1;
-            
-            if (def->currkey <= 0) {
+            } else if (def->currkey <= 0) {
                 if ((spline->flags & 4) || (spline->flags & 2)) {
                     def->currkey = spline->numkeys - 2;
-                    if (isRot != 0) {
+                    if (isRot != 0)
+                    {
                         count = RSPLINE_COUNT(spline);
                     }
                     else
@@ -478,10 +475,12 @@ int SplineGetPrev(Spline* spline, SplineDef* def) {
                 }
             } else {
                 def->currkey--;
-                
-                if (isRot != 0) {
+                if (isRot != 0)
+                {
                     count = RSPLINE_COUNT(spline);
-                } else {
+                }
+                else
+                {
                     count = SPLINE_COUNT(spline);
                 }
                 def->fracCurr = count - 1;

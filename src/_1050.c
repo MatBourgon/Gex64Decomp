@@ -1,6 +1,7 @@
 #include "common.h"
 
 #include "types/GameTracker.h"
+#include "types/Vector.h"
 
 INCLUDE_ASM("asm/nonmatchings/_1050", func_80000450);
 
@@ -143,9 +144,9 @@ INCLUDE_ASM("asm/nonmatchings/_1050", func_800056B8);
 
 INCLUDE_ASM("asm/nonmatchings/_1050", func_80005864);
 
-void func_800058E4(int* arg0, int* arg1)
+void func_800058E4(SVECTOR* newPoint, SVECTOR* oldPoint)
 {
-    func_8000F0B0(gameTracker8->level->segmentAddress, arg0, arg1, 0);
+    COLLIDE_PointAndTerrain(gameTracker8->level->segmentAddress, newPoint, oldPoint, NULL);
 }
 
 INCLUDE_ASM("asm/nonmatchings/_1050", func_80005920);
@@ -168,9 +169,9 @@ void func_800064A0(int* arg0)
     arg0[0x1FC/4] = arg0[0x3A0/4];
 }
 
-void func_800064D0(int* arg0, int* arg1)
+void func_800064D0(SVECTOR* newPoint, SVECTOR* oldPoint)
 {
-    func_800058E4(arg0, arg1);
+    func_800058E4(newPoint, oldPoint);
 }
 
 INCLUDE_ASM("asm/nonmatchings/_1050", func_800064F0);

@@ -32,6 +32,16 @@ GetObjectDataFromName = 0x8003AEA0; // type:func
 DMATransferData = 0x8003BA7C; // type:func
 LoadGexObject = 0x8003B3D4; // type:func
 
+stat_clddyna = 0x8006CE90; // type:s32 size:0x20 
+dyna_clddyna = 0x8006CEB0; // type:s32 size:0x20 
+dyna_cldstat = 0x8006CED0; // type:s32 size:0x20 
+collide_t0 = 0x800E5B90;
+collide_t1 = 0x800B83C4;
+collide_point0 = 0x800EB89C;
+collide_point1 = 0x800EB9A8;
+collide_normal0 = 0x80156B08;
+collide_normal1 = 0x800E5FE0;
+
 CreateRemRedInstance = 0x8000C384; // type:func
 
 GexDataStart = 0x49D870;
@@ -92,6 +102,7 @@ SplineSetDefDenom = 0x80050EA0; // type:func
 LIGHT_DrawShadow = 0x8002FA30; // type:func
 LIGHT_CalcShadowPositions = 0x8002FDB0; // type:func
 GAMELOOP_Process = 0x80019F18; // type:func
+GAMELOOP_InitGameTracker = 0x80019B1C; // type:func
 
 SCRIPT_GetMultiSpline = 0x80048524; // type:func
 INSTANCE_ReallyRemoveInstance = 0x8002CD50; // type:func
@@ -105,8 +116,10 @@ INSTANCE_CleanUpInstanceList = 0x8002D068; // type:func
 INSTANCE_BirthObjectFromIntro = 0x8002D2C0; // type:func
 INSTANCE_BirthObject = 0x8002DEA8; // type:func
 INSTANCE_BirthCachedObject = 0x8002E088; // type:func
+INSTANCE_IntroObject = 0x8002E294; // type:func
 INSTANCE_DefaultInit = 0x8002E180; // type:func
 INSTANCE_ProcessFunctions = 0x8002D58C; // type:func
+INSTANCE_InitIntroList = 0x8002E50C; // type:func
 LIST_InsertFunc = 0x80030090; // type:func
 LIST_DeleteFunc = 0x800300BC; // type:func
 LIST_GetFunc = 0x8003012C; // type:func
@@ -117,6 +130,14 @@ SplineIsWhere = 0x800514D0; // type:func
 SplineMultiIsWhere = 0x80051528; // type:func
 INSTANCE_KillInstance = 0x8002E3C4; // type:func
 INSTANCE_PlainDeath = 0x80047904; // type:func
+COLLIDE_PointAndWorld = 0x8000F7F0; // type:func
+COLLIDE_PointAndTerrain = 0x8000F0B0; // type:func
+COLLIDE_GetNormal = 0x80012170; // type:func
+COLLIDE_PointAndInstanceTrivialReject = 0x8000EF6C; // type:func
+COLLIDE_WithinYZBounds = 0x8001233C; // type:func
+COLLIDE_WithinXZBounds = 0x80012398; // type:func
+COLLIDE_WithinXYBounds = 0x800123F4; // type:func
+COLLIDE_IntersectLineAndBox = 0x80012594; // type:func
 
 // Signal handlers
 SIGNAL_HideObject = 0x8004C464; // type:func
