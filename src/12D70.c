@@ -22,57 +22,58 @@ void COLLIDE_GetNormal(short nNum, short* nrmlArray, SVECTOR* nrml) {
     }
 }
 
-void func_800121F8(SVECTOR* v0, SVECTOR* v1, int* arg2, SVECTOR* v2, SVECTOR* v3, int* arg5, SVECTOR* v4, SVECTOR* v5, int* arg8) {
-    if (*arg2 < *arg5) {
-        v4->x = v2->x;
-        v4->y = v2->y;
-        v4->z = v2->z;
-        v5->x = v3->x;
-        v5->y = v3->y;
-        v5->z = v3->z;
+void _COLLIDE_LineWithBoxFace_AssignFunc( SVector* point, SVector* normal, int* dist,
+                    SVector* collidePoint0, SVector* normal0, int* collideT0,
+                    SVector* collidePoint1, SVector* normal1, int* collideT1)
+{
+    if (*dist < *collideT0) {
+        collidePoint1->x = collidePoint0->x;
+        collidePoint1->y = collidePoint0->y;
+        collidePoint1->z = collidePoint0->z;
+        normal1->x = normal0->x;
+        normal1->y = normal0->y;
+        normal1->z = normal0->z;
         
-        *arg8 = *arg5;
-        v2->x = v0->x;
-        v2->y = v0->y;
-        v2->z = v0->z;
-        v3->x = v1->x;
-        v3->y = v1->y;
-        v3->z = v1->z;
-        *arg5 = *arg2;
+        *collideT1 = *collideT0;
+        collidePoint0->x = point->x;
+        collidePoint0->y = point->y;
+        collidePoint0->z = point->z;
+        normal0->x = normal->x;
+        normal0->y = normal->y;
+        normal0->z = normal->z;
+        *collideT0 = *dist;
     }
-    else if (*arg2 < *arg8) {
-        v4->x = v0->x;
-        v4->y = v0->y;
-        v4->z = v0->z;
-        v5->x = v1->x;
-        v5->y = v1->y;
-        v5->z = v1->z;
-        *arg8 = *arg2;
+    else if (*dist < *collideT1) {
+        collidePoint1->x = point->x;
+        collidePoint1->y = point->y;
+        collidePoint1->z = point->z;
+        normal1->x = normal->x;
+        normal1->y = normal->y;
+        normal1->z = normal->z;
+        *collideT1 = *dist;
     }
 }
 
-int COLLIDE_WithinYZBounds(SVECTOR* point, HBox* hbox) {
+int COLLIDE_WithinYZBounds(SVector* point, HBox* hbox) {
     return point->y >= hbox->minY
         && point->y <= hbox->maxY
         && point->z >= hbox->minZ
         && point->z <= hbox->maxZ;
 }
 
-int COLLIDE_WithinXZBounds(SVECTOR* point, HBox* hbox) {
+int COLLIDE_WithinXZBounds(SVector* point, HBox* hbox) {
     return point->x >= hbox->minX
         && point->x <= hbox->maxX
         && point->z >= hbox->minZ
         && point->z <= hbox->maxZ;
 }
 
-int COLLIDE_WithinXYBounds(SVECTOR* point, HBox* hbox) {
+int COLLIDE_WithinXYBounds(SVector* point, HBox* hbox) {
     return point->x >= hbox->minX
         && point->x <= hbox->maxX
         && point->y >= hbox->minY
         && point->y <= hbox->maxY;
 }
-
-INCLUDE_ASM("asm/nonmatchings/12D70", func_80012450);
 
 extern int collide_t1; // collide_t0?
 extern int collide_t0; // collide_t1?
@@ -81,8 +82,28 @@ extern SVector* collide_point0;
 extern SVector* collide_point1;
 extern SVector* collide_normal0;
 
-// Required to match
-void func_80012450(short, long, short, SVector*, LVECTOR*, HBox*, void*, SVector*);
+typedef int(*CollisionFunction)(SVector*, HBox*);
+void COLLIDE_LineWithBoxFace(short startDist, long lineDist, short planeDist, SVector* start, LVECTOR* line, HBox* hbox, CollisionFunction collideBoundFunc, SVector* normal) {
+    SVector point;
+    int dist;
+
+    if (lineDist == 0)
+        return;
+    
+    dist = -((startDist - planeDist) << 12) / lineDist;
+    
+    if (dist < 0 || dist > 0x1000)
+        return;
+        
+    point.x = start->x + ((line->x * dist) >> 12);
+    point.y = start->y + ((line->y * dist) >> 12);
+    point.z = start->z + ((line->z * dist) >> 12);
+    
+    if (collideBoundFunc(&point, hbox) != 0) {
+        _COLLIDE_LineWithBoxFace_AssignFunc(&point, normal, &dist, collide_point0, collide_normal0, &collide_t0, collide_point1, collide_normal1, &collide_t1);
+    }
+}
+
 int COLLIDE_IntersectLineAndBox(SVector* point0, SVector* normal0, SVector* point1, SVector* normal1, SVector* end, SVector* start, HBox* hbox) {
     SVector normal;
     LVECTOR line;
@@ -104,37 +125,37 @@ int COLLIDE_IntersectLineAndBox(SVector* point0, SVector* normal0, SVector* poin
     normal.y = 0;
     normal.z = 0;
     
-    func_80012450(-start->x, -line.x, -hbox->minX, start, &line, hbox, COLLIDE_WithinYZBounds, &normal);
+    COLLIDE_LineWithBoxFace(-start->x, -line.x, -hbox->minX, start, &line, hbox, COLLIDE_WithinYZBounds, &normal);
     
     normal.x = 0x1000;
     normal.y = 0;
     normal.z = 0;
     
-    func_80012450(start->x, line.x, hbox->maxX, start, &line, hbox, COLLIDE_WithinYZBounds, &normal);
+    COLLIDE_LineWithBoxFace(start->x, line.x, hbox->maxX, start, &line, hbox, COLLIDE_WithinYZBounds, &normal);
     
     normal.x = 0;
     normal.y = -0x1000;
     normal.z = 0;
     
-    func_80012450(-start->y, (short)-line.y, -hbox->minY, start, &line, hbox, COLLIDE_WithinXZBounds, &normal);
+    COLLIDE_LineWithBoxFace(-start->y, (short)-line.y, -hbox->minY, start, &line, hbox, COLLIDE_WithinXZBounds, &normal);
     
     normal.x = 0;
     normal.y = 0x1000;
     normal.z = 0;
     
-    func_80012450(start->y, line.y, hbox->maxY, start, &line, hbox, COLLIDE_WithinXZBounds, &normal);
+    COLLIDE_LineWithBoxFace(start->y, line.y, hbox->maxY, start, &line, hbox, COLLIDE_WithinXZBounds, &normal);
     
     normal.x = 0;
     normal.y = 0;
     normal.z = -0x1000;
     
-    func_80012450(-start->z, (short)-line.z, -hbox->minZ, start, &line, hbox, COLLIDE_WithinXYBounds, &normal);
+    COLLIDE_LineWithBoxFace(-start->z, (short)-line.z, -hbox->minZ, start, &line, hbox, COLLIDE_WithinXYBounds, &normal);
     
     normal.x = 0;
     normal.y = 0;
     normal.z = 0x1000;
     
-    func_80012450(start->z, line.z, hbox->maxZ, start, &line, hbox, COLLIDE_WithinXYBounds, &normal);
+    COLLIDE_LineWithBoxFace(start->z, line.z, hbox->maxZ, start, &line, hbox, COLLIDE_WithinXYBounds, &normal);
     
     if (collide_t1 != 0x1001)
     {
