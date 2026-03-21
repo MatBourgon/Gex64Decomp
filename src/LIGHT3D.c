@@ -22,9 +22,9 @@ void LIGHT_CalcShadowPositions(GameTracker* gameTracker) {
         )
         {
             if (instance->flags & 0x10000000) {
-                oldPos.x = newPos.x = ((short*)instance->_2C)[0x36/2]; // matrix[1].l[n] ?
-                oldPos.y = newPos.y = ((short*)instance->_2C)[0x3A/2];
-                oldPos.z = newPos.z = ((short*)instance->_2C)[0x3E/2];
+                oldPos.x = newPos.x = (instance->matrix[1]).l[0]; // matrix[1].l[n] ?
+                oldPos.y = newPos.y = (instance->matrix[1]).l[1];
+                oldPos.z = newPos.z = (instance->matrix[1]).l[2];
             } else {
                 newPos = instance->position;
                 oldPos = instance->position;

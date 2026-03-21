@@ -6,6 +6,7 @@
 #include "LightInstance.h"
 #include "NodeType.h"
 #include "Rotation.h"
+#include "Matrix.h"
 
 typedef struct Instance_s
 {
@@ -19,7 +20,7 @@ typedef struct Instance_s
     void* data; // 20
     void* introData; // 24
     struct Instance_s* parent; // 28
-    void* _2C;
+    MATRIX* matrix;
     short _30[8];
     short _40[4];
     SVECTOR position; // 48, 4A, 4C

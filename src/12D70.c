@@ -5,6 +5,7 @@
 #include "types/obtable.h"
 #include "types/Vector.h"
 #include "types/HBox.h"
+#include "types/HInfo.h"
 
 void COLLIDE_GetNormal(short nNum, short* nrmlArray, SVECTOR* nrml) {
     short* nrmls;
@@ -170,11 +171,100 @@ int COLLIDE_IntersectLineAndBox(SVector* point0, SVector* normal0, SVector* poin
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/12D70", func_80012834);
+HBox* _COLLIDE_IntersectLineAndBoxList(SVector* end, SVector* start, HInfo* hinfo, SVector* normal) {
+    SVector point0;
+    SVector point1;
+    SVector normal0;
+    SVector normal1;
+    HBox* hboxEnd;
+    HBox* hboxItr;
+    HBox* lastHitBox;
 
-INCLUDE_ASM("asm/nonmatchings/12D70", func_8001293C);
+    hboxItr = hinfo->hboxList;
+    hboxEnd = hinfo->hboxList + hinfo->numHBoxes;
+    lastHitBox = 0;
+    for (; hboxItr < hboxEnd; hboxItr++) {
+        if ((hboxItr->flags & 0x2000))
+        {
+            if ((COLLIDE_IntersectLineAndBox(&point0, &normal0, &point1, &normal1, end, start, hboxItr))) {
+                end->x = point0.x;
+                end->y = point0.y;
+                end->z = point0.z;
+                normal->x = normal0.x;
+                normal->y = normal0.y;
+                normal->z = normal0.z;
+                lastHitBox = hboxItr;
+            }
+        }
+    }
+    return lastHitBox;
+}
 
-INCLUDE_ASM("asm/nonmatchings/12D70", func_80012A1C);
+int COLLIDE_ClosestPointInBoxToPoint(SVector* outPoint, HBox* box, SVector* point) {
+
+    int inside = 1;
+    
+    if (point->x < box->minX) {
+        outPoint->x =  box->minX;
+        inside = 0;
+    } else if ((((box->maxX < point->x) != 0))) {
+        outPoint->x = box->maxX;
+        inside = 0;
+    } else {
+        outPoint->x = point->x;
+    }
+    
+    if (point->y < box->minY) {
+        outPoint->y = box->minY;
+        inside = 0;
+    } else if ((((box->maxY < point->y) != 0))) {
+        outPoint->y = box->maxY;
+        inside = 0;
+    } else {
+        outPoint->y = point->y;
+    }
+    
+    if (point->z < box->minZ) {
+        outPoint->z = box->minZ;
+        inside = 0;
+    } else if ((((box->maxZ < point->z) != 0))) {
+        outPoint->z = box->maxZ;
+        inside = 0;
+    } else {
+        outPoint->z = point->z;
+    }
+    
+    return inside;
+}
+
+void func_80012A1C(SVector* pNormal, SVector* point0, SVector* point1, SVector* point2) {
+    LVECTOR delta;
+    int dLength;
+    int normal;
+    int a, b;
+    
+
+    delta.x = point1->x - point0->x;
+    delta.y = point1->y - point0->y;
+    delta.z = point1->z - point0->z;
+
+    dLength = ((delta.x * delta.x) + (delta.y * delta.y) + (delta.z * delta.z)) >> 0xC;
+    normal = ((((delta.x * point0->x) + (delta.y * point0->y) + (delta.z * point0->z)) >> 0xC) - (((delta.x * point2->x) + (delta.y * point2->y) + (delta.z * point2->z)) >> 0xC)) << 0xC;
+    
+    if (dLength != 0) {
+        normal = -normal / dLength;
+    }
+    
+    if (normal < 0) {
+        normal = 0;
+    } else if (normal > 0x1000) {
+        normal = 0x1000;
+    }
+    
+    pNormal->x = (point0->x + ((delta.x * normal) >> 0xC));
+    pNormal->y = (point0->y + ((delta.y * normal) >> 0xC));
+    pNormal->z = (point0->z + ((delta.z * normal) >> 0xC));
+}
 
 INCLUDE_ASM("asm/nonmatchings/12D70", func_80012BD0);
 
