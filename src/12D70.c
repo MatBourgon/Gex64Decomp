@@ -22,7 +22,7 @@ void COLLIDE_GetNormal(short nNum, short* nrmlArray, SVECTOR* nrml) {
     }
 }
 
-void _COLLIDE_LineWithBoxFace_AssignFunc( SVector* point, SVector* normal, int* dist,
+void COLLIDE_InsertPoint( SVector* point, SVector* normal, int* dist,
                     SVector* collidePoint0, SVector* normal0, int* collideT0,
                     SVector* collidePoint1, SVector* normal1, int* collideT1)
 {
@@ -100,7 +100,7 @@ void COLLIDE_LineWithBoxFace(short startDist, long lineDist, short planeDist, SV
     point.z = start->z + ((line->z * dist) >> 12);
     
     if (collideBoundFunc(&point, hbox) != 0) {
-        _COLLIDE_LineWithBoxFace_AssignFunc(&point, normal, &dist, collide_point0, collide_normal0, &collide_t0, collide_point1, collide_normal1, &collide_t1);
+        COLLIDE_InsertPoint(&point, normal, &dist, collide_point0, collide_normal0, &collide_t0, collide_point1, collide_normal1, &collide_t1);
     }
 }
 
