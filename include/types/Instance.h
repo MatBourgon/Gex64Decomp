@@ -21,7 +21,8 @@ typedef struct Instance_s
     void* introData; // 24
     struct Instance_s* parent; // 28
     MATRIX* matrix;
-    short _30[8];
+    MATRIX* oldMatrix;
+    short _34[6];
     short _40[4];
     SVECTOR position; // 48, 4A, 4C
     unsigned char _4E;
