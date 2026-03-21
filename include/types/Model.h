@@ -5,7 +5,15 @@
 
 typedef struct
 {
-    char _[0x24]; // probably matches 1:1 to KAIN's
+    int _00;
+    int _04;
+    int _08;
+    int _0C;
+    int _10;
+    int _14;
+    int numSegments;
+    int _1C;
+    int _20;
     short maxRad;
     short _26;
     int _28;

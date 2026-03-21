@@ -266,7 +266,23 @@ void func_80012A1C(SVector* pNormal, SVector* point0, SVector* point1, SVector* 
     pNormal->z = (point0->z + ((delta.z * normal) >> 0xC));
 }
 
-INCLUDE_ASM("asm/nonmatchings/12D70", func_80012BD0);
+void COLLIDE_UpdateAllTransforms(Instance* instance, SVECTOR* arg1, GameTracker* gameTracker) {
+    MATRIX* matrix;
+    MATRIX* lastMatrix;
+    int numMatrices;
+
+    if (instance->matrix != 0) {
+        matrix = instance->matrix;
+        numMatrices = instance->object->modelList[instance->currentModel]->numSegments;
+        lastMatrix = &instance->matrix[numMatrices];
+        while (matrix < lastMatrix) {
+            matrix->l[0] += arg1->x;
+            matrix->l[1] += arg1->y;
+            matrix->l[2] += arg1->z;
+            matrix++;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/12D70", func_80012C74);
 

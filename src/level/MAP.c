@@ -1707,7 +1707,7 @@ void map_select_OnUpdate(Instance* instance, GameTracker* gameTracker) {
                 sp18.x = PlayerInstance->position.x - sp10.x;
                 sp18.y = PlayerInstance->position.y - sp10.y;
                 sp18.z = PlayerInstance->position.z - sp10.z;
-                func_80012BD0(PlayerInstance, &sp18, gameTracker);
+                COLLIDE_UpdateAllTransforms(PlayerInstance, &sp18, gameTracker);
                 func_80001DF4(PlayerInstance->rotation.z);
                 ((short*)gameTracker8)[0x4C66/2] = 0;
                 ((short*)gameTracker8)[0x4C68/2] = 0;
