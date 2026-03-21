@@ -32,6 +32,16 @@ GetObjectDataFromName = 0x8003AEA0; // type:func
 DMATransferData = 0x8003BA7C; // type:func
 LoadGexObject = 0x8003B3D4; // type:func
 
+stat_clddyna = 0x8006CE90; // type:s32 size:0x20 
+dyna_clddyna = 0x8006CEB0; // type:s32 size:0x20 
+dyna_cldstat = 0x8006CED0; // type:s32 size:0x20 
+collide_t0 = 0x800E5B90;
+collide_t1 = 0x800B83C4;
+collide_point0 = 0x800EB89C;
+collide_point1 = 0x800EB9A8;
+collide_normal0 = 0x80156B08;
+collide_normal1 = 0x800E5FE0;
+
 CreateRemRedInstance = 0x8000C384; // type:func
 
 GexDataStart = 0x49D870;
@@ -124,6 +134,10 @@ COLLIDE_PointAndWorld = 0x8000F7F0; // type:func
 COLLIDE_PointAndTerrain = 0x8000F0B0; // type:func
 COLLIDE_GetNormal = 0x80012170; // type:func
 COLLIDE_PointAndInstanceTrivialReject = 0x8000EF6C; // type:func
+COLLIDE_WithinYZBounds = 0x8001233C; // type:func
+COLLIDE_WithinXZBounds = 0x80012398; // type:func
+COLLIDE_WithinXYBounds = 0x800123F4; // type:func
+COLLIDE_IntersectLineAndBox = 0x80012594; // type:func
 
 // Signal handlers
 SIGNAL_HideObject = 0x8004C464; // type:func

@@ -84,7 +84,7 @@ segments:
       - [0xDC40, asm]
       - [0xF3D0, asm]
       - [0xFCB0, asm]
-      - [0x103F0, c]
+      - [0x103F0, c] # Part of COLLIDE
       - [0x10640, asm]
       - [0x10F50, asm]
       - [0x12720, asm]

@@ -3,20 +3,151 @@
 #include "types/Instance.h"
 #include "types/GameTracker.h"
 #include "types/obtable.h"
+#include "types/Vector.h"
+#include "types/HBox.h"
 
-INCLUDE_ASM("asm/nonmatchings/12D70", COLLIDE_GetNormal);
+void COLLIDE_GetNormal(short nNum, short* nrmlArray, SVECTOR* nrml) {
+    short* nrmls;
 
-INCLUDE_ASM("asm/nonmatchings/12D70", func_800121F8);
+    if (nNum >= 0) {
+        nrmls = &nrmlArray[nNum * 3];
+        nrml->x = *nrmls++;
+        nrml->y = *nrmls++;
+        nrml->z = *nrmls;
+    } else {
+        nrmls = &nrmlArray[-nNum * 3];
+        nrml->x = -*nrmls++;
+        nrml->y = -*nrmls++;
+        nrml->z = -*nrmls;
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/12D70", func_8001233C);
+void func_800121F8(SVECTOR* v0, SVECTOR* v1, int* arg2, SVECTOR* v2, SVECTOR* v3, int* arg5, SVECTOR* v4, SVECTOR* v5, int* arg8) {
+    if (*arg2 < *arg5) {
+        v4->x = v2->x;
+        v4->y = v2->y;
+        v4->z = v2->z;
+        v5->x = v3->x;
+        v5->y = v3->y;
+        v5->z = v3->z;
+        
+        *arg8 = *arg5;
+        v2->x = v0->x;
+        v2->y = v0->y;
+        v2->z = v0->z;
+        v3->x = v1->x;
+        v3->y = v1->y;
+        v3->z = v1->z;
+        *arg5 = *arg2;
+    }
+    else if (*arg2 < *arg8) {
+        v4->x = v0->x;
+        v4->y = v0->y;
+        v4->z = v0->z;
+        v5->x = v1->x;
+        v5->y = v1->y;
+        v5->z = v1->z;
+        *arg8 = *arg2;
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/12D70", func_80012398);
+int COLLIDE_WithinYZBounds(SVECTOR* point, HBox* hbox) {
+    return point->y >= hbox->minY
+        && point->y <= hbox->maxY
+        && point->z >= hbox->minZ
+        && point->z <= hbox->maxZ;
+}
 
-INCLUDE_ASM("asm/nonmatchings/12D70", func_800123F4);
+int COLLIDE_WithinXZBounds(SVECTOR* point, HBox* hbox) {
+    return point->x >= hbox->minX
+        && point->x <= hbox->maxX
+        && point->z >= hbox->minZ
+        && point->z <= hbox->maxZ;
+}
+
+int COLLIDE_WithinXYBounds(SVECTOR* point, HBox* hbox) {
+    return point->x >= hbox->minX
+        && point->x <= hbox->maxX
+        && point->y >= hbox->minY
+        && point->y <= hbox->maxY;
+}
 
 INCLUDE_ASM("asm/nonmatchings/12D70", func_80012450);
 
-INCLUDE_ASM("asm/nonmatchings/12D70", func_80012594);
+extern int collide_t1; // collide_t0?
+extern int collide_t0; // collide_t1?
+extern SVector* collide_normal1;
+extern SVector* collide_point0;
+extern SVector* collide_point1;
+extern SVector* collide_normal0;
+
+// Required to match
+void func_80012450(short, long, short, SVector*, LVECTOR*, HBox*, void*, SVector*);
+int COLLIDE_IntersectLineAndBox(SVector* point0, SVector* normal0, SVector* point1, SVector* normal1, SVector* end, SVector* start, HBox* hbox) {
+    SVector normal;
+    LVECTOR line;
+
+    collide_t0 = 0x1001;
+    collide_t1 = 0x1001;
+    
+    collide_point0 = point0;
+    collide_point1 = point1;
+    
+    collide_normal0 = normal0;
+    collide_normal1 = normal1;
+    
+    line.x = end->x - start->x;
+    line.y = end->y - start->y;
+    line.z = end->z - start->z;
+    
+    normal.x = -0x1000;
+    normal.y = 0;
+    normal.z = 0;
+    
+    func_80012450(-start->x, -line.x, -hbox->minX, start, &line, hbox, COLLIDE_WithinYZBounds, &normal);
+    
+    normal.x = 0x1000;
+    normal.y = 0;
+    normal.z = 0;
+    
+    func_80012450(start->x, line.x, hbox->maxX, start, &line, hbox, COLLIDE_WithinYZBounds, &normal);
+    
+    normal.x = 0;
+    normal.y = -0x1000;
+    normal.z = 0;
+    
+    func_80012450(-start->y, (short)-line.y, -hbox->minY, start, &line, hbox, COLLIDE_WithinXZBounds, &normal);
+    
+    normal.x = 0;
+    normal.y = 0x1000;
+    normal.z = 0;
+    
+    func_80012450(start->y, line.y, hbox->maxY, start, &line, hbox, COLLIDE_WithinXZBounds, &normal);
+    
+    normal.x = 0;
+    normal.y = 0;
+    normal.z = -0x1000;
+    
+    func_80012450(-start->z, (short)-line.z, -hbox->minZ, start, &line, hbox, COLLIDE_WithinXYBounds, &normal);
+    
+    normal.x = 0;
+    normal.y = 0;
+    normal.z = 0x1000;
+    
+    func_80012450(start->z, line.z, hbox->maxZ, start, &line, hbox, COLLIDE_WithinXYBounds, &normal);
+    
+    if (collide_t1 != 0x1001)
+    {
+        return 2;
+    }
+
+    if (collide_t0 != 0x1001)
+    {
+        return 1;
+    }
+    
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/12D70", func_80012834);
 
@@ -113,7 +244,7 @@ void common_tailpuf_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     SVECTOR sp10;
     SVECTOR sp18;
     Instance* temp_a3;
-    s32 temp_v1;
+    int temp_v1;
     s8* temp_s1;
     int* temp_s0;
     Instance* temp_v0;
@@ -296,8 +427,8 @@ void common_gengen_OnUpdate(Instance* instance, GameTracker* gameTracker) {
                 obj->oflags |= 0x2000;
                 inst->introData = NULL;
                 if (instance->object->oflags & 0x400) {
-                    inst->processFunc = GenericProcess;
-                    inst->collideFunc = GenericCollide;
+                    inst->processFunc = (void*)GenericProcess;
+                    inst->collideFunc = (void*)GenericCollide;
                     if ((intro->_10 & 4) && (*(int*)&instance->_108 == 0)) {
                         *(int*)&instance->_108 = 1;
                         SCRIPT_InstanceSplineSet(inst, intro->_06, 0, 0, 0);

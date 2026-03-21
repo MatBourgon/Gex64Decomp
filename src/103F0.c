@@ -4,9 +4,9 @@
 #include "types/GameTracker.h"
 #include "types/Face.h"
 
-extern int D_8006CE90[8]; // stat_clddyna
-extern int D_8006CEB0[8]; // dyna_clddyna
-extern int D_8006CED0[8]; // dyna_cldstat
+extern int stat_clddyna[8];
+extern int dyna_clddyna[8];
+extern int dyna_cldstat[8];
 
 void COLLIDE_PointAndWorld(PCollideInfo* pcollideInfo, GameTracker* gameTracker) {
     InstanceList* instanceList;
@@ -50,7 +50,7 @@ void COLLIDE_PointAndWorld(PCollideInfo* pcollideInfo, GameTracker* gameTracker)
         {
             for (i = 0; i < 8; ++i)
             {
-                for(instance = (Instance*)(&instanceList->group[D_8006CEB0[i]])->next;
+                for(instance = (Instance*)(&instanceList->group[dyna_clddyna[i]])->next;
                     instance != NULL;
                     instance = (Instance*)instance->node.next)
                 {
@@ -63,7 +63,7 @@ void COLLIDE_PointAndWorld(PCollideInfo* pcollideInfo, GameTracker* gameTracker)
         {
             for (i = 0; i < 8; ++i)
             {                
-                for(instance = (Instance*)(&instanceList->group[D_8006CE90[i]])->next;
+                for(instance = (Instance*)(&instanceList->group[stat_clddyna[i]])->next;
                     instance != NULL;
                     instance = (Instance*)instance->node.next)
                 {
@@ -76,7 +76,7 @@ void COLLIDE_PointAndWorld(PCollideInfo* pcollideInfo, GameTracker* gameTracker)
     } else if (pcollideInfo->collideType & 4) {
         for (i = 0; i < 8; ++i)
             {
-                for(instance = (Instance*)(&instanceList->group[D_8006CED0[i]])->next;
+                for(instance = (Instance*)(&instanceList->group[dyna_cldstat[i]])->next;
                     instance != NULL;
                     instance = (Instance*)instance->node.next)
                 {
