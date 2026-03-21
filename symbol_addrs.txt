@@ -92,6 +92,7 @@ SplineSetDefDenom = 0x80050EA0; // type:func
 LIGHT_DrawShadow = 0x8002FA30; // type:func
 LIGHT_CalcShadowPositions = 0x8002FDB0; // type:func
 GAMELOOP_Process = 0x80019F18; // type:func
+GAMELOOP_InitGameTracker = 0x80019B1C; // type:func
 
 SCRIPT_GetMultiSpline = 0x80048524; // type:func
 INSTANCE_ReallyRemoveInstance = 0x8002CD50; // type:func
@@ -105,8 +106,10 @@ INSTANCE_CleanUpInstanceList = 0x8002D068; // type:func
 INSTANCE_BirthObjectFromIntro = 0x8002D2C0; // type:func
 INSTANCE_BirthObject = 0x8002DEA8; // type:func
 INSTANCE_BirthCachedObject = 0x8002E088; // type:func
+INSTANCE_IntroObject = 0x8002E294; // type:func
 INSTANCE_DefaultInit = 0x8002E180; // type:func
 INSTANCE_ProcessFunctions = 0x8002D58C; // type:func
+INSTANCE_InitIntroList = 0x8002E50C; // type:func
 LIST_InsertFunc = 0x80030090; // type:func
 LIST_DeleteFunc = 0x800300BC; // type:func
 LIST_GetFunc = 0x8003012C; // type:func
@@ -117,6 +120,10 @@ SplineIsWhere = 0x800514D0; // type:func
 SplineMultiIsWhere = 0x80051528; // type:func
 INSTANCE_KillInstance = 0x8002E3C4; // type:func
 INSTANCE_PlainDeath = 0x80047904; // type:func
+COLLIDE_PointAndWorld = 0x8000F7F0; // type:func
+COLLIDE_PointAndTerrain = 0x8000F0B0; // type:func
+COLLIDE_GetNormal = 0x80012170; // type:func
+COLLIDE_PointAndInstanceTrivialReject = 0x8000EF6C; // type:func
 
 // Signal handlers
 SIGNAL_HideObject = 0x8004C464; // type:func

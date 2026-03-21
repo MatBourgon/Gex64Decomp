@@ -11,11 +11,12 @@ typedef struct
     int _08;
     Model** modelList; // 0C
     int** animList; // 10
-    int _14;
+    short _14;
+    short introDist;
     int _18;
-    void* data;
-    const char* parentName;
-    const char* name;
+    void* data; // 1C
+    const char* parentName; // 20
+    const char* name; // 24
     int _28;
     int _2C;
     int oflags2;

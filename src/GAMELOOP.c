@@ -18,6 +18,7 @@ extern int D_800EB8A0;
 extern int D_8014F35C;
 extern int D_801539BC;
 extern int D_80153A54;
+
 void func_80019AA0(void) {
     int temp_v0;
 
@@ -31,7 +32,7 @@ void func_80019AA0(void) {
     func_80030C50(0x10);
 }
 
-INCLUDE_ASM("asm/nonmatchings/GAMELOOP", func_80019B1C);
+INCLUDE_ASM("asm/nonmatchings/GAMELOOP", GAMELOOP_InitGameTracker);
 
 INCLUDE_ASM("asm/nonmatchings/GAMELOOP", GAMELOOP_Process);
 

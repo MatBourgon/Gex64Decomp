@@ -48,7 +48,7 @@ void LIGHT_CalcShadowPositions(GameTracker* gameTracker) {
             collideInfo.oldPoint = &oldPos;
             
             instance->flags |= 0x40;
-            func_8000F7F0(&collideInfo, gameTracker8); // COLLIDE_PointAndWorld?
+            COLLIDE_PointAndWorld(&collideInfo, gameTracker8);
             instance->flags &= ~0x40;
 
             if (collideInfo.type)

@@ -3,12 +3,13 @@
 
 #include "Vector.h"
 #include "Spline.h"
+#include "Object.h"
 
 struct Instance_s;
 
 typedef struct
 {
-    int* _00;
+    Object* object;
     int* _04;
     SVECTOR rotation; // 08, 0A, 0C
     short lightGroup; // 0E

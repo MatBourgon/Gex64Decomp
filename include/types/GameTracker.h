@@ -31,7 +31,7 @@ typedef struct
     char    _4CA5[0x1D];
     short   _4CC2;
     char    _4CC4[0x10];
-    int     maybeSelectedHintIndex;
+    int     selectedHintIndex;
 } GameTracker;
 
 extern GameTracker* gameTracker4;

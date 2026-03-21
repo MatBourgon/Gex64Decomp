@@ -3,6 +3,7 @@
 #include "INSTANCE.h"
 #include "types/GameTracker.h"
 #include "types/obtable.h"
+#include "types/G2String.h"
 
 void INSTANCE_InitInstanceList(InstanceList *list, InstancePool *pool) {
     long i;
@@ -222,7 +223,7 @@ void* INSTANCE_BirthObjectFromIntro(Intro* intro) {
     Object* object;
     Instance* instance;
 
-    object = (Object*)intro->_00;
+    object = intro->object;
     if (!(intro->flags & 8)) {
         if (intro->instance == NULL) {
             intro->flags |= 8;
@@ -253,14 +254,14 @@ void* INSTANCE_BirthObjectFromIntro(Intro* intro) {
                 if (intro->flags & 0x2000) {
                     instance->flags |= 0x400;
                 }
-                if (intro->_00[0] & 8) {
+                if (intro->object->oflags & 8) {
                     instance->flags2 |= 8;
                 }
-                if (intro->_00[0x30/4] & 0x80) {
+                if (intro->object->oflags2 & 0x80) {
                     instance->flags |= 0x800;
                 }
                 if (intro->flags & 0x800) {
-                    if (((short*)intro->_00)[2] == -1) {
+                    if (intro->object->id == -1) {
                         SCRIPT_InstanceSplineSet(instance, (short)SCRIPT_CountFramesInSpline(instance), 0, 0, 0);
                         instance->flags ^= 0x01000000;
                         instance->flags |= 0x100000;
@@ -643,8 +644,55 @@ void INSTANCE_DefaultInit(Instance* instance, Object* object) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002E21C);
+/*typedef struct
+{
+    int count;
+    Intro* introList[0];
+} IntroList;
 
-INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002E294);
+void func_8002E21C(Intro* arg0) {
+    Intro* temp_a0;
+    Intro** var_s0;
+    s32 var_s1;
+    IntroList* temp_v1;
+    
+    temp_v1 = (IntroList*)arg0->_04;
+        
+
+    if (temp_v1 == NULL) {
+        INSTANCE_BirthObjectFromIntro(arg0);
+        return;
+    }
+    
+    var_s1 = temp_v1->count;
+    var_s0 = temp_v1->introList;
+        
+    while (var_s1 != 0)
+    {
+        if (*var_s0 != NULL) {
+            INSTANCE_BirthObjectFromIntro(*var_s0);
+        }
+        var_s1 -= 1;
+        var_s0 += 1;
+    }
+}*/
+
+Instance* INSTANCE_IntroObject(Object* target, GameTracker* gameTracker) {
+    Intro* intro;
+    short i;
+    int* segmentAddress;
+
+    segmentAddress = gameTracker->level->segmentAddress;
+    intro = (Intro*)segmentAddress[0x14/4];
+    for (i = 0; i < ((int*)gameTracker->level->segmentAddress)[0x10/4]; i++, intro++){
+        if (intro->object != NULL) {
+            if (G2String_Compare_EQ(target->name, intro->object->name)) {
+                return INSTANCE_BirthObjectFromIntro(intro);
+            }
+        }
+    }
+    return NULL;
+}
 
 void func_8002E350(Instance* instance) {
     instance->flags |= 0x10;
@@ -663,9 +711,68 @@ void INSTANCE_KillInstance(Instance* instance)
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002E3FC);
+void func_8002E3FC(Intro* intro, SVECTOR* target) {
+    SVector sp10;
+    SVector distance;
+    int distSquared;
+    Object* object;
+    
 
-INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002E50C);
+    object = intro->object;
+    memset(&distance, 0, 8);
+    distance.x = intro->position.x - target->x;
+    distance.y = intro->position.y - target->y;
+    distance.z = intro->position.z - target->z;
+    sp10 = distance;
+    distSquared = (sp10.x * sp10.x) + (sp10.y * sp10.y) + (sp10.z * sp10.z);
+    if (object != NULL) {
+        if (distSquared < (object->introDist * object->introDist)) {
+            func_8002E21C(intro);
+        }
+    }
+}
+
+void INSTANCE_InitIntroList(Intro* introList, int introCount) {
+    Instance localInstance;
+    Instance* pNext;
+    Instance* pInstance;
+    Intro* pIntroListEnd;
+    Intro* intro;
+    int objectId;
+    
+    pInstance = gameTracker8->instanceList->first;
+    pIntroListEnd = introList + introCount;
+    
+    for (intro = introList; intro < pIntroListEnd; intro++) {
+        if (intro->flags & 0x800) {
+            if (!(intro->object->oflags2 & 0x10)) {
+                objectId = intro->object->id;
+                if (objectId > 0) {
+                    intro->flags |= 0x1000;
+                    if (((ObjectFunctionTable[objectId].init) != 0) && (((short*)gameTracker8)[0x4C12/2] != 6)) {
+                        localInstance.intro = intro;
+                        (ObjectFunctionTable[objectId].init)(&localInstance, gameTracker8);
+                    }
+                    intro->flags &= ~0x1000;
+                } else {
+                    intro->flags &= ~0x800;
+                }
+            }
+        }
+        if (((intro->object != NULL) && !(intro->object->oflags2 & 2)) || (intro->instance != NULL)) {
+            intro->flags &= ~8;
+        }
+    }
+    while (pInstance != NULL) {
+        pNext = pInstance->next;
+        if (pInstance != (Instance*)gameTracker8->_000C) {
+            pInstance->flags |= 0x10;
+            pInstance->flags &= ~0x400;
+            func_8002CD3C(gameTracker8->instanceList, pInstance);
+        }
+        pInstance = pNext;
+    }
+}
 
 void func_8002E704()
 {

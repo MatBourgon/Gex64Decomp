@@ -12,18 +12,19 @@ const int D_8015A090_808B0[4] = { 0x02000014, 0, 0, 0 };
 
 void aztec_funplat_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
-    short sp10[6];
+    SVector newPoint;
+    SVector oldPoint;
 
     if (instance->introData == 0) {
         instance->introData = (void*)D_8015A090_808B0;
     }
-    sp10[0] = sp10[4] = instance->position.x;
-    sp10[1] = sp10[5] = instance->position.y;
-    sp10[2] = instance->_E0[2] = instance->position.z;
+    newPoint.x = oldPoint.x = instance->position.x;
+    newPoint.y = oldPoint.y = instance->position.y;
+    newPoint.z = instance->_E0[2] = instance->position.z;
 
     // Out of bounds access?
-    sp10[6] = instance->_40[6] + 0x80;
-    func_8000F0B0(gameTracker8->level->segmentAddress, &sp10[0], &sp10[4], instance);
+    oldPoint.z = instance->_40[6] + 0x80;
+    COLLIDE_PointAndTerrain(gameTracker8->level->segmentAddress, (SVECTOR*)&newPoint, (SVECTOR*)&oldPoint, instance);
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/AZTEC", aztec_funplat_OnUpdate);

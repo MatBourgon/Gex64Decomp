@@ -4,7 +4,7 @@
 #include "types/GameTracker.h"
 #include "types/obtable.h"
 
-INCLUDE_ASM("asm/nonmatchings/12D70", func_80012170);
+INCLUDE_ASM("asm/nonmatchings/12D70", COLLIDE_GetNormal);
 
 INCLUDE_ASM("asm/nonmatchings/12D70", func_800121F8);
 
