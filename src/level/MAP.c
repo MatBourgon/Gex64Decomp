@@ -1193,7 +1193,7 @@ void func_8015D52C_BDF5C(Instance* instance, GameTracker* gameTracker) {
         ((char**)instance->object->modelList[0])[5] = 0;
     }
     
-    instance->_B4 = func_8015D5E4_BE014;
+    instance->additionalDrawFunc = func_8015D5E4_BE014;
 }
 
 void map_lvllabl_OnUpdate(Instance* instance, GameTracker* gameTracker) {

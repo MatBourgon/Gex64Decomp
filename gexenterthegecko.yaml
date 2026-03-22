@@ -114,7 +114,7 @@ segments:
       - [0x3AF50, asm]
       - [0x3BAA0, c]
       - [0x3C190, c, main]
-      - [0x3D2B0, asm]
+      - [0x3D2B0, c, PIPE3D]
       - [0x3EAA0, c]
       - [0x3F660, c, OBTABLE]
       - [0x3FB20, c]

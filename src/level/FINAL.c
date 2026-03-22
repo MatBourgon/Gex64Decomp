@@ -242,7 +242,7 @@ void final_frez_OnCreate(Instance* instance, GameTracker* gameTracker) {
         instance->_C0[4] = 1;
         instance->_40[6] -= 0x12C;
         instance->_E0[2] = OBTABLE_FindObject(D_8016166C_9280C);
-        instance->_B4 = (void*)&func_8015F200_903A0;
+        instance->additionalDrawFunc = (void*)&func_8015F200_903A0;
         instance->flags |= 0x10400;
         instance->flags2 |= 8;
     }
