@@ -45,11 +45,11 @@ void circuit_bouncer_OnCreate(Instance* instance, GameTracker* gameTracker) {
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_bouncer_OnUpdate);
 
 void circuit_bouncer_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    unsigned char** temp_a2 = (unsigned char**)instance->bspTree;
-    if ((((short*)temp_a2)[3] == 1)
-        && (temp_a2[0x14/4] == (void*)gameTracker->player)
-        && (temp_a2[2][4] < 2U)
-        && (temp_a2[3][5] >= 6U)
+    BSPTree* bsp = instance->bspTree;
+    if ((bsp->_06 == 1)
+        && (bsp->instanceSpline == (void*)gameTracker->player)
+        && (bsp->_08[4] < 2U)
+        && (bsp->_0C[5] >= 6U)
         && (
             (*(short*)&instance->_104 != 3)
             || ((instance->_F4[0] - 2) < 2U)
@@ -57,10 +57,10 @@ void circuit_bouncer_OnCollide(Instance* instance, GameTracker* gameTracker) {
         )) {
             INSTANCE_PlainDeath(instance, 5, 3, 0);
     }
-    else if ((((short*)temp_a2)[3] == 1)
-             && (temp_a2[5] == (void*)gameTracker->player)
+    else if ((bsp->_06 == 1)
+             && (bsp->instanceSpline == (void*)gameTracker->player)
              && (
-                 (temp_a2[2][4] == 0) || (temp_a2[2][4] == 2)
+                 (bsp->_08[4] == 0) || (bsp->_08[4] == 2)
              )) {
         func_80022714(instance);
     }
@@ -99,12 +99,12 @@ void circuit_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 void circuit_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
     int temp_a3;
     int temp_v1;
-    BSPTree* temp_a2;
+    BSPTree* bsp;
 
-    temp_a2 = instance->bspTree;
-    temp_a3 = ((short*)temp_a2)[3];
+    bsp = instance->bspTree;
+    temp_a3 = bsp->_06;
     if (temp_a3 == 1) {
-        if ((temp_a2->instanceSpline == ((char*)gameTracker->player)) && (temp_a2->_0C[5] >= 6U)) {
+        if ((bsp->instanceSpline == gameTracker->player) && (bsp->_0C[5] >= 6U)) {
             if (instance->_F4[0] == 0)
             {
                 ((char*)instance->_40)[0xe] = 1;
@@ -117,7 +117,7 @@ void circuit_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
             {
                 INSTANCE_PlainDeath(instance, 5, 3, 0);
             }
-        } else if ((temp_a2->_06 == 1) && (temp_a2->instanceSpline == (void*)(gameTracker->player)) && ((instance->_F4[0] - 1) >= 2U)) {
+        } else if ((bsp->_06 == 1) && (bsp->instanceSpline == (void*)(gameTracker->player)) && ((instance->_F4[0] - 1) >= 2U)) {
             func_80022714(instance);
         }
     }
@@ -212,20 +212,20 @@ INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_launch_OnUpdate);
 
 void circuit_launch_OnCollide(Instance* instance, GameTracker* gameTracker) {
     Instance* temp_a0;
-    BSPTree* temp_a1;
+    BSPTree* bsp;
     char var_a2;
 
-    temp_a1 = instance->bspTree;
+    bsp = instance->bspTree;
     temp_a0 = gameTracker->player;
     
-    var_a2 = (temp_a1->_06 == 1) ? temp_a1->_0C[5] : -1;
+    var_a2 = (bsp->_06 == 1) ? bsp->_0C[5] : -1;
     
-    if (((instance->_F4[0] - 1) >= 2U) && (*(int*)&instance->_108 == 0) && (temp_a1->instanceSpline == (void*)temp_a0) && (temp_a1->_04 == 5) && (var_a2 < 8) && (temp_a1->_08[2] == 0)) {
+    if (((instance->_F4[0] - 1) >= 2U) && (*(int*)&instance->_108 == 0) && (bsp->instanceSpline == (void*)temp_a0) && (bsp->_04 == 5) && (var_a2 < 8) && (bsp->_08[2] == 0)) {
         if (instance->_11C & 0x10) {
             temp_a0->_F4[2] |= 0x200;
             instance->_11C |= 0x20;
         }
-        else if ((((func_80025798(temp_a0, temp_a1) != 0) && (instance->_11C == 0)) || (instance->_11C & 1)) && (func_8015D354_84534(instance, gameTracker) == 0)) {
+        else if ((((func_80025798(temp_a0, bsp) != 0) && (instance->_11C == 0)) || (instance->_11C & 1)) && (func_8015D354_84534(instance, gameTracker) == 0)) {
             func_8015D4B0_84690(instance, gameTracker);
         }
     }

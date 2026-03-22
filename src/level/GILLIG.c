@@ -44,11 +44,11 @@ void gillig_tikifir_OnCreate(Instance* instance, GameTracker* gameTracker) {
 INCLUDE_ASM("asm/nonmatchings/level/GILLIG", gillig_tikifir_OnUpdate);
 
 void gillig_tikifir_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    BSPTree* temp_a0;
+    BSPTree* bsp;
 
-    temp_a0 = instance->bspTree;
-    if ((temp_a0->_06 == 1) && (temp_a0->instanceSpline == (int)gameTracker->player)
-        && ((temp_a0->_0C[5] < 6U) && (PlayerInstance->_F4[1] != 0x200000))) {
+    bsp = instance->bspTree;
+    if ((bsp->_06 == 1) && (bsp->instanceSpline == gameTracker->player)
+        && ((bsp->_0C[5] < 6U) && (PlayerInstance->_F4[1] != 0x200000))) {
         func_800223F8(gameTracker8, 0x64, 0);
     }
 }

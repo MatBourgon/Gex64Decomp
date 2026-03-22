@@ -66,12 +66,12 @@ void kungfu_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 void kungfu_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
     int temp_a3;
     int temp_v1;
-    BSPTree* temp_a2;
+    BSPTree* bsp;
 
-    temp_a2 = instance->bspTree;
-    temp_a3 = temp_a2->_06;
+    bsp = instance->bspTree;
+    temp_a3 = bsp->_06;
     if (temp_a3 == 1) {
-        if ((temp_a2->instanceSpline == gameTracker->player) && (temp_a2->_0C[5] >= 6U)) {
+        if ((bsp->instanceSpline == gameTracker->player) && (bsp->_0C[5] >= 6U)) {
             if (instance->_F4[0] == 0)
             {
                 ((char*)instance->_40)[0xe] = 1;
@@ -84,7 +84,7 @@ void kungfu_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
             {
                 INSTANCE_PlainDeath(instance, 5, 3, 0);
             }
-        } else if ((temp_a2->_06 == 1) && (temp_a2->instanceSpline == (void*)(gameTracker->player)) && ((instance->_F4[0] - 1) >= 2U)) {
+        } else if ((bsp->_06 == 1) && (bsp->instanceSpline == (void*)(gameTracker->player)) && ((instance->_F4[0] - 1) >= 2U)) {
             func_80022714(instance);
         }
     }
@@ -131,20 +131,20 @@ INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_launch_OnUpdate);
 
 void kungfu_launch_OnCollide(Instance* instance, GameTracker* gameTracker) {
     Instance* temp_a0;
-    BSPTree* temp_a1;
+    BSPTree* bsp;
     char var_a2;
 
-    temp_a1 = instance->bspTree;
+    bsp = instance->bspTree;
     temp_a0 = gameTracker->player;
     
-    var_a2 = (temp_a1->_06 == 1) ? temp_a1->_0C[5] : -1;
+    var_a2 = (bsp->_06 == 1) ? bsp->_0C[5] : -1;
     
-    if (((instance->_F4[0] - 1) >= 2U) && (*(int*)&instance->_108 == 0) && (temp_a1->instanceSpline == (void*)temp_a0) && (temp_a1->_04 == 5) && (var_a2 < 8) && (temp_a1->_08[2] == 0)) {
+    if (((instance->_F4[0] - 1) >= 2U) && (*(int*)&instance->_108 == 0) && (bsp->instanceSpline == (void*)temp_a0) && (bsp->_04 == 5) && (var_a2 < 8) && (bsp->_08[2] == 0)) {
         if (instance->_11C & 0x10) {
             temp_a0->_F4[2] |= 0x200;
             instance->_11C |= 0x20;
         }
-        else if ((((func_80025798(temp_a0, temp_a1) != 0) && (instance->_11C == 0)) || (instance->_11C & 1)) && (func_8015AC6C_A9E8C(instance, gameTracker) == 0)) {
+        else if ((((func_80025798(temp_a0, bsp) != 0) && (instance->_11C == 0)) || (instance->_11C & 1)) && (func_8015AC6C_A9E8C(instance, gameTracker) == 0)) {
             func_8015ADC8_A9FE8(instance, gameTracker);
         }
     }

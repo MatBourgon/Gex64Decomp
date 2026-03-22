@@ -52,20 +52,20 @@ INCLUDE_ASM("asm/nonmatchings/level/SPY", spy_launch_OnUpdate);
 
 void spy_launch_OnCollide(Instance* instance, GameTracker* gameTracker) {
     Instance* temp_a0;
-    BSPTree* temp_a1;
+    BSPTree* bsp;
     char var_a2;
 
-    temp_a1 = instance->bspTree;
+    bsp = instance->bspTree;
     temp_a0 = gameTracker->player;
     
-    var_a2 = (temp_a1->_06 == 1) ? temp_a1->_0C[5] : -1;
+    var_a2 = (bsp->_06 == 1) ? bsp->_0C[5] : -1;
     
-    if (((instance->_F4[0] - 1) >= 2U) && (*(int*)&instance->_108 == 0) && (temp_a1->instanceSpline == (void*)temp_a0) && (temp_a1->_04 == 5) && (var_a2 < 8) && (temp_a1->_08[2] == 0)) {
+    if (((instance->_F4[0] - 1) >= 2U) && (*(int*)&instance->_108 == 0) && (bsp->instanceSpline == (void*)temp_a0) && (bsp->_04 == 5) && (var_a2 < 8) && (bsp->_08[2] == 0)) {
         if (instance->_11C & 0x10) {
             temp_a0->_F4[2] |= 0x200;
             instance->_11C |= 0x20;
         }
-        else if ((((func_80025798(temp_a0, temp_a1) != 0) && (instance->_11C == 0)) || (instance->_11C & 1)) && (func_80159F3C_EB60C(instance, gameTracker) == 0)) {
+        else if ((((func_80025798(temp_a0, bsp) != 0) && (instance->_11C == 0)) || (instance->_11C & 1)) && (func_80159F3C_EB60C(instance, gameTracker) == 0)) {
             func_8015A098_EB768(instance, gameTracker);
         }
     }

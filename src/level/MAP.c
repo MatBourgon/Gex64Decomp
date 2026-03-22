@@ -1456,7 +1456,7 @@ void func_8015E274_BECA4(Instance* instance) {
 
 void map_lvltv_OnCollide(Instance* instance, GameTracker* gameTracker) {
     char sp10[0x10];
-    BSPTree* temp_a0;
+    BSPTree* bsp;
     LevelTVIntro* intro;
     char* var_s0;
 
@@ -1508,8 +1508,8 @@ void map_lvltv_OnCollide(Instance* instance, GameTracker* gameTracker) {
             ((short*)instance->parent)[0x56/2] = ((int*)var_s0)[0x48/4];
         }
         else if (!(((int*)gameTracker8)[0x90/4] & 0x40000) && (var_s0[0x43] == 0)) {
-            temp_a0 = instance->bspTree;
-            if ((temp_a0->_06 == 1) && (temp_a0->_0C[0x5] >= 7U)) {
+            bsp = instance->bspTree;
+            if ((bsp->_06 == 1) && (bsp->_0C[0x5] >= 7U)) {
                 var_s0[0x43] = 1;
                 var_s0[0x41] = var_s0[0x40] = (intro->screenType * 9) + 7;
                 ((int*)instance->parent)[0xF8/4] = 0;

@@ -55,12 +55,12 @@ void scifi_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 void scifi_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
     int temp_a3;
     int temp_v1;
-    BSPTree* temp_a2;
+    BSPTree* bsp;
 
-    temp_a2 = instance->bspTree;
-    temp_a3 = ((short*)temp_a2)[3];
+    bsp = instance->bspTree;
+    temp_a3 = bsp->_06;
     if (temp_a3 == 1) {
-        if ((temp_a2->instanceSpline == ((char*)gameTracker->player)) && (temp_a2->_0C[5] >= 6U)) {
+        if ((bsp->instanceSpline == gameTracker->player) && (bsp->_0C[5] >= 6U)) {
             if (instance->_F4[0] == 0)
             {
                 ((char*)instance->_40)[0xe] = 1;
@@ -73,7 +73,7 @@ void scifi_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
             {
                 INSTANCE_PlainDeath(instance, 5, 3, 0);
             }
-        } else if ((temp_a2->_06 == 1) && (temp_a2->instanceSpline == (void*)(gameTracker->player))&& ((instance->_F4[0] - 1) >= 2U)) {
+        } else if ((bsp->_06 == 1) && (bsp->instanceSpline == gameTracker->player)&& ((instance->_F4[0] - 1) >= 2U)) {
             func_80022714(instance);
         }
     }

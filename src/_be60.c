@@ -327,17 +327,17 @@ int func_8000C8E8(Instance* instance, GameTracker* gameTracker) {
     ETVButnIntro* intro;
     int var_a1;
     unsigned char temp_v1;
-    BSPTree* temp_a0;
+    BSPTree* bsp;
     Instance* temp_a0_4;
     Instance* temp_s2;
     int* temp_s4;
 
     intro = instance->introData;
-    temp_a0 = instance->bspTree;
+    bsp = instance->bspTree;
     var_a1 = 0;
-    if (((((unsigned char*)gameTracker))[0x4CA1] == 2) || ((temp_a0->_06 != 1))) {
+    if (((((unsigned char*)gameTracker))[0x4CA1] == 2) || ((bsp->_06 != 1))) {
         temp_s2 = (Instance*)instance->parent->_100;
-        if (temp_a0->_08[2] == 1 && temp_s2 != NULL && !(instance->parent->intro->flags & 0x100) && instance->parent->_F4[1] == 0) {
+        if (bsp->_08[2] == 1 && temp_s2 != NULL && !(instance->parent->intro->flags & 0x100) && instance->parent->_F4[1] == 0) {
             temp_s4 = (int*)gameTracker->player->data;
             func_80018B60(gameTracker->player, D_800EB8A0, temp_s2->position.x, temp_s2->position.y, temp_s2->position.z + 0x40);
             func_80050508(instance, 3, -0x64, 0x7F, 0x5DC);
@@ -352,8 +352,7 @@ int func_8000C8E8(Instance* instance, GameTracker* gameTracker) {
             }
             instance->parent->_F4[1] = 1;
             instance->currentModel = 1;
-            temp_a0_4 = gameTracker->player;
-            temp_a0_4->_F4[2] |= 0x02000000;
+            gameTracker->player->_F4[2] |= 0x02000000;
             temp_s4[0x178/4] = (int)instance->parent;
             (((int*)gameTracker))[0x4C08/4] |= 0x80;
             var_a1 = 1;

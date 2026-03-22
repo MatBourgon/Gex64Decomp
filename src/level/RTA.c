@@ -91,11 +91,11 @@ void rta_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 }
 
 void rta_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    BSPTree* temp_a2;
+    BSPTree* bsp;
 
-    temp_a2 = instance->bspTree;
-    if ((temp_a2->instanceSpline == ((char*)gameTracker->player)) && (temp_a2->_06 == 1)) {
-        if (temp_a2->_0C[5] >= 6U) {
+    bsp = instance->bspTree;
+    if ((bsp->instanceSpline == gameTracker->player) && (bsp->_06 == 1)) {
+        if (bsp->_0C[5] >= 6U) {
             INSTANCE_PlainDeath(instance, 5, 3, 0);
         }
         else
