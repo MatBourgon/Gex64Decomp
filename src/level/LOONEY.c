@@ -48,7 +48,7 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_bouncer_OnUpdate);
 void looney_bouncer_OnCollide(Instance* instance, GameTracker* gameTracker) {
     unsigned char** temp_a2 = (unsigned char**)instance->_70[2];
     if ((((short*)temp_a2)[3] == 1)
-        && (temp_a2[0x14/4] == (void*)gameTracker->_000C)
+        && (temp_a2[0x14/4] == (void*)gameTracker->player)
         && (temp_a2[2][4] < 2U)
         && (temp_a2[3][5] >= 6U)
         && (
@@ -59,7 +59,7 @@ void looney_bouncer_OnCollide(Instance* instance, GameTracker* gameTracker) {
             INSTANCE_PlainDeath(instance, 5, 3, 0);
     }
     else if ((((short*)temp_a2)[3] == 1)
-             && (temp_a2[5] == (void*)gameTracker->_000C)
+             && (temp_a2[5] == (void*)gameTracker->player)
              && (
                  (temp_a2[2][4] == 0) || (temp_a2[2][4] == 2)
              )) {
@@ -103,7 +103,7 @@ void looney_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
     temp_a2 = ((char***)instance->_70)[2];
     temp_a3 = ((short*)temp_a2)[3];
     if (temp_a3 == 1) {
-        if ((temp_a2[5] == ((char*)gameTracker->_000C)) && (temp_a2[12/4][5] >= 6U)) {
+        if ((temp_a2[5] == ((char*)gameTracker->player)) && (temp_a2[12/4][5] >= 6U)) {
             if (instance->_F4[0] == 0)
             {
                 ((char*)instance->_40)[0xe] = 1;

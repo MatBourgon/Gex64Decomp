@@ -289,7 +289,7 @@ void common_tvend_OnUpdate(Instance* instance, Object* gameTracker) {
                 if (((&((unsigned char*)gameTracker)[((unsigned char*)gameTracker)[0x4CA1]])[0x4C6E] >> intro->remoteId) & 1) {
                     ((Instance*)instance->_100)->currentModel = 1;
                 }
-                func_80050508(gameTracker8->_000C, 0x7A, -0x190, 0x64, 0x5DC);
+                func_80050508(gameTracker8->player, 0x7A, -0x190, 0x64, 0x5DC);
             }
         }
     }
@@ -322,12 +322,13 @@ typedef struct
 extern char D_8006FC69;
 extern int D_800EB8A0;
 extern char D_8007B970[]; // "tvend___"
+
 int func_8000C8E8(Instance* instance, GameTracker* gameTracker) {
     ETVButnIntro* intro;
     int var_a1;
     unsigned char temp_v1;
     unsigned char** temp_a0;
-    int* temp_a0_4;
+    Instance* temp_a0_4;
     Instance* temp_s2;
     int* temp_s4;
 
@@ -337,8 +338,8 @@ int func_8000C8E8(Instance* instance, GameTracker* gameTracker) {
     if (((((unsigned char*)gameTracker))[0x4CA1] == 2) || ((((short*)temp_a0)[3] != 1))) {
         temp_s2 = (Instance*)instance->parent->_100;
         if (temp_a0[2][2] == 1 && temp_s2 != NULL && !(instance->parent->intro->flags & 0x100) && instance->parent->_F4[1] == 0) {
-            temp_s4 = ((int**)gameTracker->_000C)[0x20/4];
-            func_80018B60(gameTracker->_000C, D_800EB8A0, temp_s2->position.x, temp_s2->position.y, temp_s2->position.z + 0x40);
+            temp_s4 = (int*)gameTracker->player->data;
+            func_80018B60(gameTracker->player, D_800EB8A0, temp_s2->position.x, temp_s2->position.y, temp_s2->position.z + 0x40);
             func_80050508(instance, 3, -0x64, 0x7F, 0x5DC);
             if (G2String_Compare_EQ(instance->parent->object->parentName, D_8007B970)) {
                 INSTANCE_KillInstance(temp_s2);
@@ -351,8 +352,8 @@ int func_8000C8E8(Instance* instance, GameTracker* gameTracker) {
             }
             instance->parent->_F4[1] = 1;
             instance->currentModel = 1;
-            temp_a0_4 = (int*)gameTracker->_000C;
-            temp_a0_4[0xFC/4] |= 0x02000000;
+            temp_a0_4 = gameTracker->player;
+            temp_a0_4->_F4[2] |= 0x02000000;
             temp_s4[0x178/4] = (int)instance->parent;
             (((int*)gameTracker))[0x4C08/4] |= 0x80;
             var_a1 = 1;

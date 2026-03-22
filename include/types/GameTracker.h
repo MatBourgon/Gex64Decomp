@@ -3,6 +3,7 @@
 
 #include "types/InstanceList.h"
 #include "types/Level.h"
+#include "types/Camera.h"
 
 typedef unsigned char byte;
 typedef unsigned int uint;
@@ -10,8 +11,8 @@ typedef struct
 {
     int     _0000;
     Level*  level;
-    int     _0008; // Might be player instance*
-    int     _000C;
+    Camera*    camera;
+    Instance* player;
     InstanceList *instanceList;
     int    _0014[0x15];
     long   overrideData[2][5];

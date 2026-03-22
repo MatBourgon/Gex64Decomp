@@ -224,7 +224,7 @@ block_7:
 void common_powertv_OnCollide(Instance* instance, GameTracker* gameTracker) {
     int temp_a2;
     int temp_a1;
-    int* temp_a0;
+    Instance* temp_a0;
     short* temp_s2;
     int** temp_s3;
     int* temp_s5;
@@ -232,12 +232,12 @@ void common_powertv_OnCollide(Instance* instance, GameTracker* gameTracker) {
     Intro* temp_v1;
     int* temp_v1_2;
 
-    temp_a0 = (int*)gameTracker->_000C;
+    temp_a0 = (int*)gameTracker->player;
     temp_s3 = (int**)instance->_70[2];
-    temp_a2 = temp_a0[0xF4/4] == 6;
+    temp_a2 = temp_a0->_F4[0] == 6;
     intro = instance->introData;
     temp_a1 = ((unsigned char*)temp_s3[3])[5];
-    temp_s5 = (int*)temp_a0[0x20/4];
+    temp_s5 = (int*)temp_a0->data;
     temp_s2 = &instance->_F0[6];
     if ((instance->_F4[0] == 0) && (((((short*)temp_s3)[3] == 1) && (temp_a1 >= 8)) || ((temp_s3[0x14/4] == temp_a0) && (temp_a2 != 0)))) {
         if (!(temp_s2[1] & 1)) {
@@ -246,7 +246,7 @@ void common_powertv_OnCollide(Instance* instance, GameTracker* gameTracker) {
         instance->_F4[0] = 1;
         instance->_56 = 0;
         instance->flags2 &= ~0x10;
-        func_80050508(instance, 0x11, (short) ((rand(temp_a0) & 0x1F) - 0xF), 0x6E, 0x9C4);
+        func_80050508(instance, 0x11, (short) ((rand() & 0x1F) - 0xF), 0x6E, 0x9C4);
         if ((*temp_s2 == 5) && (instance->_F4[1] == 0)) {
             func_8004AAA8(instance, 0x84, 0);
             instance->_F4[1] = 1;

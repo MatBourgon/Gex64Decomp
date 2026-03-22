@@ -303,7 +303,7 @@ void INSTANCE_ProcessFunctions(InstanceList* list) {
      for (instance = list->first; instance != NULL; instance = instance->next) {
         isValid = 1;
          
-        if (instance == (Instance*)gameTracker8->_000C)
+        if (instance == gameTracker8->player)
         {
             isValid = 0;
         }
@@ -765,7 +765,7 @@ void INSTANCE_InitIntroList(Intro* introList, int introCount) {
     }
     while (pInstance != NULL) {
         pNext = pInstance->next;
-        if (pInstance != (Instance*)gameTracker8->_000C) {
+        if (pInstance != gameTracker8->player) {
             pInstance->flags |= 0x10;
             pInstance->flags &= ~0x400;
             func_8002CD3C(gameTracker8->instanceList, pInstance);
