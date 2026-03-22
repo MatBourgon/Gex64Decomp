@@ -8,6 +8,8 @@
 #include "types/Signal.h"
 #include "types/Matrix.h"
 
+INCLUDE_RODATA("asm/nonmatchings/SIGNAL", D_8007E730);
+
 INCLUDE_ASM("asm/nonmatchings/SIGNAL", func_80049B80);
 
 INCLUDE_ASM("asm/nonmatchings/SIGNAL", func_8004A2A4);
