@@ -10,7 +10,7 @@ void final_oldpoptv_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_F4[2] = 0;
     instance->flags |= 0x400;
     if (instance->introData == NULL) {
-        instance->introData = (int)&D_80161510_926B0;
+        instance->introData = (void*)&D_80161510_926B0;
     }
 }
 
@@ -64,7 +64,7 @@ void final_reztvex_OnCreate(Instance* arg0, GameTracker* gameTracker) {
     arg0->scale.z = 0x100;
     arg0->scale.y = 0x100;
     arg0->scale.x = 0x100;
-    arg0->_56 = 0;
+    arg0->currentTextureAnimFrame = 0;
     arg0->flags |= 0x80;
 }
 
@@ -80,7 +80,7 @@ void final_rezxpl_OnCreate(Instance* arg0, GameTracker* gameTracker) {
     arg0->scale.z = 0x100;
     arg0->scale.y = 0x100;
     arg0->scale.x = 0x100;
-    arg0->_56 = 0;
+    arg0->currentTextureAnimFrame = 0;
     arg0->flags |= 0x80;
 }
 
@@ -268,14 +268,14 @@ extern char D_8016166C_9280C[];
 extern char D_801616F0_92890[];
 
 void final_frez_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    int*** temp_a2;
+    BSPTree* bsp;
     short* temp_s1;
 
-    temp_a2 = (int***)instance->_70[2];
+    bsp = instance->bspTree;
     temp_s1 = &instance->_C0[2];
-    if (G2String_Compare_EQ(temp_a2[0x14/4][0x18/4][0x24/4], D_8016166C_9280C)) {
+    if (G2String_Compare_EQ(bsp->instanceSpline->object->name, D_8016166C_9280C)) {
         if (instance->_F4[0] != 0) {
-            func_800331BC(instance->_F4[0], gameTracker);
+            func_800331BC(instance->_F4[0]);
             instance->_F4[0] = 0;
         }
         if (*temp_s1 != 0xB) {
@@ -290,8 +290,8 @@ void final_frez_OnCollide(Instance* instance, GameTracker* gameTracker) {
         }
         temp_s1[0x2/2] = 1;
     }
-    else if ((*temp_s1 != 8) && (((short*)temp_a2)[0x6/2] == 1)) {
-        if (G2String_Compare_EQ(temp_a2[0x14/4][0x18/4][0x24/4], D_801616F0_92890) && (func_8002275C(PlayerInstance, gameTracker) == 0)) {
+    else if ((*temp_s1 != 8) && (bsp->_06 == 1)) {
+        if (G2String_Compare_EQ(bsp->instanceSpline->object->name, D_801616F0_92890) && (func_8002275C(PlayerInstance, gameTracker) == 0)) {
             temp_s1[0x34/2] = 0;
         }
     }
@@ -299,13 +299,13 @@ void final_frez_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 extern int D_80161558_926F8[];
 void final_rezcam_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    int temp_s2;
+    Camera* temp_s2;
     int* ptr;
 
-    temp_s2 = ((int*)gameTracker)[2];
+    temp_s2 = gameTracker->camera;
     ptr = &instance->_F4[2];
     instance->flags |= 0x800;
-    func_80001408(((int*)gameTracker)[2], 8);
+    func_80001408(gameTracker->camera, 8);
     if (instance->introData == NULL) {
         instance->introData = (void*)&D_80161558_926F8;
     }
@@ -320,7 +320,7 @@ void final_rezcam_OnCollide(Instance* instance, GameTracker* gameTracker) {
 void final_finplat_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int temp_ret;
 
-    func_80000F24(((int*)gameTracker)[2], 213);
+    func_80000F24(gameTracker->camera, 213);
     instance->_F4[2] = (rand() % 120) + 120;
     GenericInit(instance, gameTracker);
 }

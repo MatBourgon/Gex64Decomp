@@ -76,7 +76,7 @@ INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015A2B0_DA920);
 void rta_crawler_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     instance->_F4[0] = 0;
-    instance->_4E = 0;
+    instance->currentModelAnim = 0;
 }
 
 void rta_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
@@ -91,11 +91,11 @@ void rta_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 }
 
 void rta_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    char** temp_a2;
+    BSPTree* bsp;
 
-    temp_a2 = (char**)instance->_70[2];
-    if ((temp_a2[5] == ((char*)gameTracker->_000C)) && (((short*)temp_a2)[3] == 1)) {
-        if (temp_a2[12/4][5] >= 6U) {
+    bsp = instance->bspTree;
+    if ((bsp->instanceSpline == gameTracker->player) && (bsp->_06 == 1)) {
+        if (bsp->_0C[5] >= 6U) {
             INSTANCE_PlainDeath(instance, 5, 3, 0);
         }
         else
@@ -235,7 +235,7 @@ void rta_qmark_OnCollide(Instance* instance, GameTracker* gameTracker) {
     QMarkIntro* intro;
     intro = (QMarkIntro*)instance->introData;
     
-    if (((int*)instance->_70[2])[5] == ((int*)gameTracker)[12/4]) {
+    if (instance->bspTree->instanceSpline == gameTracker->player) {
         if (instance->_104 != 1) {
             func_80050508(instance, 3, 0, 0x64, 0x1388);
         }

@@ -7,6 +7,7 @@
 #include "NodeType.h"
 #include "Rotation.h"
 #include "Matrix.h"
+#include "BSPTree.h"
 
 typedef void (*AdditionalDrawFunc)(void*, struct Instance_s*, void* /*unused*/, void* /*unused*/, void* /*unused*/);
 
@@ -27,15 +28,18 @@ typedef struct Instance_s
     short _34[6];
     short _40[4];
     SVECTOR position; // 48, 4A, 4C
-    unsigned char _4E;
+    unsigned char currentModelAnim;
     char lightGroup;
     SVECTOR oldPos; // 50, 52, 54
-    short _56;
+    short currentTextureAnimFrame;
     SVECTOR initialPos; // 58, 5A, 5C
     short _5E;
     ROTATION rotation; // 60, 62, 64, 66
     SVector scale; // 68, 6A, 6C, 6E
-    int _70[4];
+    int _70;
+    int _74;
+    BSPTree* bspTree;
+    int _7C;
     short _80[2];
     SVector wNormal;
     SVECTOR offset;
@@ -48,7 +52,7 @@ typedef struct Instance_s
     int _A8;
     void (*processFunc)(void*,void*);
     void (*collideFunc)(void*,void*);
-    AdditionalDrawFunc* additionalDrawFunc;
+    AdditionalDrawFunc additionalDrawFunc;
     int _B8;
     SVECTOR shadowPosition;
     short currentModel;

@@ -8,12 +8,12 @@ INCLUDE_ASM("asm/nonmatchings/_1050", func_80000450);
 extern int D_800B83B0;
 extern int D_800E8EC8;
 
-void func_80000F24(int* arg0, int arg1)
+void func_80000F24(Camera* camera, int arg1)
 {
     D_800B83B0 = arg1;
     D_800E8EC8 = arg1 / 2;
-    arg0[0x10] = arg1;
-    func_80000450();
+    camera->cameraCore._08[14] = arg1;
+    func_80000450(camera);
 }
 
 INCLUDE_ASM("asm/nonmatchings/_1050", func_80000F60);
@@ -40,7 +40,7 @@ INCLUDE_ASM("asm/nonmatchings/_1050", func_800018F0);
 
 void func_80001DF4(short arg0)
 {
-    short* ptr = ((short**)gameTracker8)[0x8/4];
+    short* ptr = (short*)gameTracker8->camera;
     ptr[0x180/2] = arg0;
     ptr[0x34/2] = arg0;
     ptr[0x3C/2] = arg0;
@@ -115,7 +115,7 @@ INCLUDE_ASM("asm/nonmatchings/_1050", func_80003B1C);
 
 void func_80003D4C(int arg0)
 {
-    ((int**)gameTracker8)[2][0x148/4] = arg0;
+    ((int*)gameTracker8->camera)[0x148/4] = arg0;
 }
 
 INCLUDE_ASM("asm/nonmatchings/_1050", func_80003D68);

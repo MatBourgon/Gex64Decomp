@@ -181,7 +181,7 @@ void common_cold_OnCollide(Instance* instance, GameTracker* gameTracker)
 
 void common_derez_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->flags |= 0x100080;
-    instance->_56 = 0;
+    instance->currentTextureAnimFrame = 0;
 }
 
 INCLUDE_ASM("asm/nonmatchings/_be60", common_derez_OnUpdate);
@@ -218,11 +218,11 @@ void common_tvend_OnCreate(Instance* instance, GameTracker* gameTracker) {
             instance->_F4[2] = (int)iEtvbtn;
             iEtvbtn->flags |= 0x400;
         }
-        instance->_56 = 1;
+        instance->currentTextureAnimFrame = 1;
         intro->condition = 1;
         if ((intro->_04 != 0) && ((D_800785CC[intro->_04]) == 0)) {
             if (!(((&((unsigned char*)gameTracker)[((unsigned char*)gameTracker)[0x4CA1]])[0x4C6E] >> intro->remoteId) & 1)) {
-                instance->_56 = 0;
+                instance->currentTextureAnimFrame = 0;
             }
             intro->condition = 0;
         }
@@ -274,7 +274,7 @@ void common_tvend_OnUpdate(Instance* instance, Object* gameTracker) {
 
     intro = instance->introData;
     if ((intro->condition == 0) && (D_800785CC[intro->_04] != 0)) {
-        instance->_56 = 1;
+        instance->currentTextureAnimFrame = 1;
         if ((instance->_100 == NULL) && (D_800785CC[intro->_04] >= 2)) {
             oRemred = (Object*)OBTABLE_FindObject(&D_8007B944);
             if (oRemred != 0) {
@@ -289,7 +289,7 @@ void common_tvend_OnUpdate(Instance* instance, Object* gameTracker) {
                 if (((&((unsigned char*)gameTracker)[((unsigned char*)gameTracker)[0x4CA1]])[0x4C6E] >> intro->remoteId) & 1) {
                     ((Instance*)instance->_100)->currentModel = 1;
                 }
-                func_80050508(gameTracker8->_000C, 0x7A, -0x190, 0x64, 0x5DC);
+                func_80050508(gameTracker8->player, 0x7A, -0x190, 0x64, 0x5DC);
             }
         }
     }
@@ -322,23 +322,24 @@ typedef struct
 extern char D_8006FC69;
 extern int D_800EB8A0;
 extern char D_8007B970[]; // "tvend___"
+
 int func_8000C8E8(Instance* instance, GameTracker* gameTracker) {
     ETVButnIntro* intro;
     int var_a1;
     unsigned char temp_v1;
-    unsigned char** temp_a0;
-    int* temp_a0_4;
+    BSPTree* bsp;
+    Instance* temp_a0_4;
     Instance* temp_s2;
     int* temp_s4;
 
     intro = instance->introData;
-    temp_a0 = (unsigned char**)instance->_70[2];
+    bsp = instance->bspTree;
     var_a1 = 0;
-    if (((((unsigned char*)gameTracker))[0x4CA1] == 2) || ((((short*)temp_a0)[3] != 1))) {
+    if (((((unsigned char*)gameTracker))[0x4CA1] == 2) || ((bsp->_06 != 1))) {
         temp_s2 = (Instance*)instance->parent->_100;
-        if (temp_a0[2][2] == 1 && temp_s2 != NULL && !(instance->parent->intro->flags & 0x100) && instance->parent->_F4[1] == 0) {
-            temp_s4 = ((int**)gameTracker->_000C)[0x20/4];
-            func_80018B60(gameTracker->_000C, D_800EB8A0, temp_s2->position.x, temp_s2->position.y, temp_s2->position.z + 0x40);
+        if (bsp->_08[2] == 1 && temp_s2 != NULL && !(instance->parent->intro->flags & 0x100) && instance->parent->_F4[1] == 0) {
+            temp_s4 = (int*)gameTracker->player->data;
+            func_80018B60(gameTracker->player, D_800EB8A0, temp_s2->position.x, temp_s2->position.y, temp_s2->position.z + 0x40);
             func_80050508(instance, 3, -0x64, 0x7F, 0x5DC);
             if (G2String_Compare_EQ(instance->parent->object->parentName, D_8007B970)) {
                 INSTANCE_KillInstance(temp_s2);
@@ -351,8 +352,7 @@ int func_8000C8E8(Instance* instance, GameTracker* gameTracker) {
             }
             instance->parent->_F4[1] = 1;
             instance->currentModel = 1;
-            temp_a0_4 = (int*)gameTracker->_000C;
-            temp_a0_4[0xFC/4] |= 0x02000000;
+            gameTracker->player->_F4[2] |= 0x02000000;
             temp_s4[0x178/4] = (int)instance->parent;
             (((int*)gameTracker))[0x4C08/4] |= 0x80;
             var_a1 = 1;

@@ -528,7 +528,7 @@ s32 SIGNAL_LightGroup(Instance* instance, void* signal) {
 }
 
 s32 SIGNAL_CameraAdjust(Instance* instance, void* signal) {
-    func_80003B1C(gameTracker8->_0008, ((int*)signal)[1]);
+    func_80003B1C(gameTracker8->camera, ((int*)signal)[1]);
     return 1;
 }
 
@@ -538,48 +538,48 @@ s32 SIGNAL_Camera(Instance* instance, void* signal) {
 }
 
 s32 SIGNAL_CameraMode(Instance* instance, void* signal) {
-    func_80001408(gameTracker8->_0008, ((int*)signal)[1]);
+    func_80001408(gameTracker8->camera, ((int*)signal)[1]);
     return 1;
 }
 
 s32 SIGNAL_CameraLock(Instance* instance, void* signal) {
-    func_80003118(gameTracker8->_0008, ((int*)signal)[1]);
+    func_80003118(gameTracker8->camera, ((int*)signal)[1]);
     return 1;
 }
 
 s32 SIGNAL_CameraUnlock(Instance* instance, void* signal) {
-    func_8000312C(gameTracker8->_0008, ((int*)signal)[1]);
+    func_8000312C(gameTracker8->camera, ((int*)signal)[1]);
     return 1;
 }
 
 s32 SIGNAL_CameraSmooth(Instance* instance, void* signal) {
-    func_80003140(gameTracker8->_0008, ((int*)signal)[1]);
+    func_80003140(gameTracker8->camera, ((int*)signal)[1]);
     return 1;
 }
 
 s32 SIGNAL_8004C844(Instance* instance, void* signal)
 {
-    ((short*)gameTracker8->_0008)[0x16/2] = ((int*)signal)[1];
+    ((short*)gameTracker8->camera)[0x16/2] = ((int*)signal)[1];
     return 1;
 }
 
 s32 SIGNAL_CameraTimer(Instance* instance, void* signal) {
-    func_800039E8(gameTracker8->_0008, ((int*)signal)[1]);
+    func_800039E8(gameTracker8->camera, ((int*)signal)[1]);
     return 1;
 }
 
 s32 SIGNAL_CameraSave(Instance* instance, void* signal) {
-    func_80003148(gameTracker8->_0008, ((int*)signal)[1]);
+    func_80003148(gameTracker8->camera, ((int*)signal)[1]);
     return 1;
 }
 
 s32 SIGNAL_CameraRestore(Instance* instance, void* signal) {
-    func_80003910(gameTracker8->_0008, ((int*)signal)[1]);
+    func_80003910(gameTracker8->camera, ((int*)signal)[1]);
     return 1;
 }
 
 s32 SIGNAL_CameraValue(Instance* instance, void* signal) {
-    func_80002198(gameTracker8->_0008, ((int*)signal)[1], ((int*)signal)[2]);
+    func_80002198(gameTracker8->camera, ((int*)signal)[1], ((int*)signal)[2]);
     return 1;
 }
 
@@ -611,16 +611,16 @@ s32 SIGNAL_Teleport(Instance* instance, void* signal) {
     instance->offset.y += sp10.y;
     instance->offset.z += sp10.z;
     instance->_92 = tpSignal->r;
-    ((short*)gameTracker8->_0008)[0x140/2] += instance->offset.z;
-    ((short*)gameTracker8->_0008)[0x142/2] += instance->offset.z;
-    ((int*)gameTracker8->_0008)[0x450/4] = 1;
-    ((short*)gameTracker8->_0008)[0x16/2] = 3;
-    ((short*)gameTracker8->_0008)[0x17A/2] = ((short*)gameTracker8->_0008)[6] + tpSignal->r;
+    ((short*)gameTracker8->camera)[0x140/2] += instance->offset.z;
+    ((short*)gameTracker8->camera)[0x142/2] += instance->offset.z;
+    ((int*)gameTracker8->camera)[0x450/4] = 1;
+    ((short*)gameTracker8->camera)[0x16/2] = 3;
+    ((short*)gameTracker8->camera)[0x17A/2] = ((short*)gameTracker8->camera)[6] + tpSignal->r;
     return 1;
 }
 
 s32 SIGNAL_FarPlane(Instance* instance, void* signal) {
-    ((int*)gameTracker8->_0008)[0x5C/4] = ((int*)signal)[1];
+    gameTracker8->camera->cameraCore.farPlane = ((int*)signal)[1];
     return 1;
 }
 
@@ -710,7 +710,7 @@ s32 SIGNAL_Freeze(Instance* instance, void* signal) {
         n = PlayerInstance->_F4[0];
         if (n != 5) {
             if (n == 4) {
-                func_8000B054(gameTracker8->_0008);
+                func_8000B054(gameTracker8->camera);
             }
             D_800785C8 = PlayerInstance->_F4[0];
         } else {
@@ -908,7 +908,7 @@ s32 SIGNAL_LogicValue(Instance* instance, void* signal)
 }
 
 s32 SIGNAL_CameraShake(Instance* instance, void* signal) {
-    func_80003D68(gameTracker8->_0008, ((int*)signal)[1], ((int*)signal)[2]);
+    func_80003D68(gameTracker8->camera, ((int*)signal)[1], ((int*)signal)[2]);
     return 1;
 }
 
@@ -1022,7 +1022,7 @@ s32 SIGNAL_Launch(Instance* instance, void* signal) {
 }
 
 s32 SIGNAL_CostumeChange(Instance* instance, void* signal) {
-    func_80023828(gameTracker8->_000C, gameTracker8, signal + 4 /* i think this was a char* on n64 */);
+    func_80023828(gameTracker8->player, gameTracker8, signal + 4 /* i think this was a char* on n64 */);
     return 1;
 }
 
@@ -1240,7 +1240,7 @@ s32 SIGNAL_GotoPos(Instance* instance, void* signal) {
     instance->offset.x = ((short*)signal)[2] - instance->position.x;
     instance->offset.y = ((short*)signal)[3] - instance->position.y;
     instance->offset.z = ((short*)signal)[4] - instance->position.z;
-    ((short*)gameTracker8->_0008)[3] = 3;
+    ((short*)gameTracker8->camera)[3] = 3;
     return 1;
 }
 
@@ -1398,12 +1398,12 @@ s32 SIGNAL_8004E9F8(Instance* instance, void* signal) {
 }
 
 s32 SIGNAL_8004EA2C(Instance* instance, void* signal) {
-    s32* temp_v0;
+    Instance* temp_v0;
     short* temp_v1;
 
-    temp_v0 = (s32*)gameTracker8->_000C;
-    temp_v1 = (short*)temp_v0[0x20/4];
-    ((short*)temp_v0)[0x64/2] = 0;
+    temp_v0 = (Instance*)gameTracker8->player;
+    temp_v1 = (short*)temp_v0->data;
+    temp_v0->rotation.z = 0;
     temp_v1[0x82/2] = 0;
     temp_v1[0x84/2] = 0;
     return 1;

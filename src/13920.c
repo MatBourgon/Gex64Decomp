@@ -96,7 +96,7 @@ void common_tailpuf_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     Instance* temp_v0;
     int* temp_v1_2;
 
-    temp_a3 = gameTracker->_000C;
+    temp_a3 = gameTracker->player;
     if (((temp_a3->_F4[1] == 0x10) || (temp_a3->_F4[1] == 0x2000)) && (instance->_100 != 0)) {
         instance->position = temp_a3->position;
         temp_v1_2 = ((int*)temp_a3->_2C) + ((instance->_F4[2] << 3) + 0x480/4);
@@ -130,7 +130,7 @@ INCLUDE_ASM("asm/nonmatchings/13920", common_magic_OnUpdate);
 
 void common_magic_OnCollide(Instance* instance, GameTracker* gameTracker)
 {
-    if (((int**)instance->_70[2])[0x14/4] == (void*)gameTracker->_000C)
+    if (instance->bspTree->instanceSpline == (void*)gameTracker->player)
     {
         instance->_F4[0] = 1;
     }

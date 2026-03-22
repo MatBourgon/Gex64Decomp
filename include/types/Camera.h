@@ -24,7 +24,15 @@ typedef struct
 
 typedef struct
 {
+    SVECTOR position;
+    short _pad;
+    int _08[0x54/4];
+    int farPlane;
+} CameraCore;
 
+typedef struct
+{
+    CameraCore cameraCore;
 } Camera;
 
 #endif
