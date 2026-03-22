@@ -286,13 +286,13 @@ void circuit_qmark_OnCreate(Instance* instance, GameTracker* gameTracker)
     instance->_100 = 0;
 }
 
-void circuit_qmark_OnUpdate(Instance* instance, GameTracker* arg1) {
+void circuit_qmark_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int* temp_s0;
     QMarkIntro* intro;
     
     intro = (QMarkIntro*)instance->introData;
     temp_s0 = &instance->_F4[2];
-    if (((*(int*)&instance->_10C) != 0) && !(arg1->gameFlags & 0x2000)) {
+    if (((*(int*)&instance->_10C) != 0) && !(gameTracker->gameFlags & 0x2000)) {
         func_8003F6CC(intro->x, intro->y, intro->w, intro->h, intro->numMessages, intro->messages);
     }
     switch (temp_s0[2])
@@ -329,7 +329,7 @@ void circuit_qmark_OnCollide(Instance* instance, GameTracker* gameTracker) {
     QMarkIntro* intro;
 
     intro = (QMarkIntro*)instance->introData;
-    if (func_80027500(instance->bspTree) != 0) {
+    if (func_80027500(instance->bspTree, gameTracker) != 0) {
         instance->_104 = 1;
         instance->_F4[2] = 0x12C;
         *((int*)&instance->_110) = intro->time;

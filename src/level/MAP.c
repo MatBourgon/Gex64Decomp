@@ -545,7 +545,7 @@ void map_qmark_OnCollide(Instance* instance, GameTracker* gameTracker) {
     QMarkIntro* intro;
 
     intro = (QMarkIntro*)instance->introData;
-    if (func_80027500(instance->bspTree) != 0) {
+    if (func_80027500(instance->bspTree, gameTracker) != 0) {
         instance->_104 = 1;
         instance->_F4[2] = 0x12C;
         *((int*)&instance->_110) = intro->time;

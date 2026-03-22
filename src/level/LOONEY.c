@@ -188,7 +188,7 @@ void looney_doeboy_OnCollide(Instance* instance, GameTracker* gameTracker) {
     void* temp_a1;
     void* intro;
 
-    if ((func_80027500(instance->bspTree) != 0) && (instance->_F4[2] == 0)) {
+    if ((func_80027500(instance->bspTree, gameTracker) != 0) && (instance->_F4[2] == 0)) {
         intro = instance->introData;
         if (intro != NULL) {
             temp_a1 = *(void**)intro;
