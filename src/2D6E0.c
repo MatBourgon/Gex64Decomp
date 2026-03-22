@@ -161,8 +161,8 @@ void INSTANCE_ReallyRemoveInstance(InstanceList* list, Instance* instance, int r
     if (instance->object->oflags2 & 4) {
         if (instance->flags2 & 0x2000) {
             instance->flags2 &= ~0x2000;
-            func_800331BC(((int*)instance->_30)[3]);
-            ((int*)instance->_30)[3] = 0;
+            func_800331BC(((int*)instance->_34)[2]);
+            ((int*)instance->_34)[2] = 0;
         }
         if (instance->flags2 & 0x10000) {
             func_800331BC(((int*)instance->_D0)[0]);

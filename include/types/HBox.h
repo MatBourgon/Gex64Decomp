@@ -8,7 +8,8 @@ typedef struct
     char rank;
     short minX, minY, minZ;
     short maxX, maxY, maxZ;
-    // maybe refMin/Max also
+    short refMinX, refMinY, refMinZ;
+    short refMaxX, refMaxY, refMaxZ;
 } HBox;
 
 #endif

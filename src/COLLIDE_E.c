@@ -1,8 +1,11 @@
 #include "common.h"
 
-#include "types/PCollideInfo.h"
+#include "types/Instance.h"
 #include "types/GameTracker.h"
-#include "types/Face.h"
+#include "types/Vector.h"
+#include "types/HBox.h"
+#include "types/HInfo.h"
+#include "types/PCollideInfo.h"
 
 extern int stat_clddyna[8];
 extern int dyna_clddyna[8];

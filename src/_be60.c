@@ -84,7 +84,7 @@ void func_8000B968(Instance* instance, GameTracker* gameTracker) {
         instance->flags |= 0x100000;
     }
     
-    *(int*)&instance->_30[4] = 0;
+    *(int*)&instance->_34[2] = 0;
     
     instance->flags |= 0x40;
     
