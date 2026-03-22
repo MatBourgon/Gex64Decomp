@@ -21,8 +21,9 @@ short SplineMultiIsWhere(MultiSpline* multi);
 int func_800515B4(Spline* spline, SplineDef* def);
 
 G2Quat* SplineGetFirstRot(RSpline* rspline, SplineDef* def);
-
 SVECTOR* SplineGetFirstPoint(Spline* spline, SplineDef* def);
+G2Quat* SplineGetLastRot(RSpline* rspline, SplineDef* def);
+SVECTOR* SplineGetLastPoint(Spline* spline, SplineDef* def);
 
 SVECTOR* SplineGetNextPoint(Spline* spline, SplineDef* def);
 

@@ -294,10 +294,25 @@ SVECTOR* SplineGetFirstPoint(Spline* spline, SplineDef* def) {
     return &spline->key->point;
 }
 
-INCLUDE_ASM("asm/nonmatchings/SPLINE", func_8005167C);
+G2Quat* SplineGetLastRot(RSpline* spline, SplineDef* def) {
+    if (spline == NULL) return NULL;
+    
+    def->fracCurr = 0;
+    def->currkey = (spline->numkeys - 1);
+    def->denomFlag = 0;
+    
+    return &spline->key[def->currkey].q;
+}
 
-INCLUDE_ASM("asm/nonmatchings/SPLINE", func_800516E0);
-
+SVECTOR* SplineGetLastPoint(Spline* spline, SplineDef* def) {
+    if (spline == NULL) return NULL;
+    
+    def->fracCurr = 0;
+    def->currkey = spline->numkeys - 1;
+    def->denomFlag = 0;
+    
+    return &spline->key[def->currkey].point;
+}
 
 extern SVECTOR D_800AF070; // static in SplineGetNextPoint
 

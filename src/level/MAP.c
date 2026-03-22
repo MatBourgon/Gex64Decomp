@@ -280,11 +280,11 @@ void map_intro_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         } // 104
         else
         {
-            v1 = (SVECTOR*)func_800516E0(s1[0], s1 + 0x10/4); // hint: Spline*, SplineDef*. GetPreviousPoint?
+            v1 = SplineGetLastPoint((Spline*)s1[0], (SplineDef*)(s1 + 4));
             gameTracker->camera->cameraCore.position.x = v1->x;
             gameTracker->camera->cameraCore.position.y = v1->y;
             gameTracker->camera->cameraCore.position.z = v1->z;
-            func_80003A68(gameTracker->camera, func_800516E0(s2[0], s2 + 0x10/4)); // 150
+            func_80003A68(gameTracker->camera, SplineGetLastPoint((Spline*)s2[0], (SplineDef*)(s2 + 4))); // 150
             func_80001408(gameTracker->camera, 8); // 170
         }
     } // 17c
@@ -1633,10 +1633,10 @@ void map_select_OnCreate(Instance* instance, GameTracker* gameTracker) {
                 (*(int**)temp_v1_3)[7] |= 0x80;
         } else {
             temp_s0_2 = (int**)(&temp_s4[var_s1])[0x34/4];
-            func_800516E0(((int*)temp_s0_2[10])[0], &sp10);
+            SplineGetLastPoint((Spline*)((int*)temp_s0_2[10])[0], &sp10);
             SplineGetData(((Spline**)temp_s0_2[10])[0], &sp10, temp_s0_2 + 4);
             if (((int*)temp_s0_2[10])[1] != 0) {
-                func_800516E0(((int*)temp_s0_2[10])[1], &sp10);
+                SplineGetLastPoint((Spline*)((int*)temp_s0_2[10])[1], &sp10);
                 SplineGetData(((Spline**)temp_s0_2[10])[1], &sp10, &sp18);
                 ((short*)temp_s0_2)[4] += sp18.x;
                 ((short*)temp_s0_2)[5] += sp18.y;
