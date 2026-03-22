@@ -52,15 +52,15 @@ INCLUDE_ASM("asm/nonmatchings/level/SPY", spy_launch_OnUpdate);
 
 void spy_launch_OnCollide(Instance* instance, GameTracker* gameTracker) {
     Instance* temp_a0;
-    unsigned char** temp_a1;
+    BSPTree* temp_a1;
     char var_a2;
 
-    temp_a1 = (unsigned char**)instance->_70[2];
+    temp_a1 = instance->bspTree;
     temp_a0 = gameTracker->player;
     
-    var_a2 = (((short*)temp_a1)[3] == 1) ? temp_a1[3][5] : -1;
+    var_a2 = (temp_a1->_06 == 1) ? temp_a1->_0C[5] : -1;
     
-    if (((instance->_F4[0] - 1) >= 2U) && (*(int*)&instance->_108 == 0) && (temp_a1[0x14/4] == (void*)temp_a0) && (((short*)temp_a1)[2] == 5) && (var_a2 < 8) && ((temp_a1)[2][2] == 0)) {
+    if (((instance->_F4[0] - 1) >= 2U) && (*(int*)&instance->_108 == 0) && (temp_a1->instanceSpline == (void*)temp_a0) && (temp_a1->_04 == 5) && (var_a2 < 8) && (temp_a1->_08[2] == 0)) {
         if (instance->_11C & 0x10) {
             temp_a0->_F4[2] |= 0x200;
             instance->_11C |= 0x20;

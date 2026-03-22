@@ -130,7 +130,7 @@ INCLUDE_ASM("asm/nonmatchings/13920", common_magic_OnUpdate);
 
 void common_magic_OnCollide(Instance* instance, GameTracker* gameTracker)
 {
-    if (((int**)instance->_70[2])[0x14/4] == (void*)gameTracker->player)
+    if (instance->bspTree->instanceSpline == (void*)gameTracker->player)
     {
         instance->_F4[0] = 1;
     }

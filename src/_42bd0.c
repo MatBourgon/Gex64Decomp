@@ -226,20 +226,20 @@ void common_powertv_OnCollide(Instance* instance, GameTracker* gameTracker) {
     int temp_a1;
     Instance* temp_a0;
     short* temp_s2;
-    int** temp_s3;
+    BSPTree* bsp;
     int* temp_s5;
     PowerTVIntro* intro;
     Intro* temp_v1;
     int* temp_v1_2;
 
-    temp_a0 = (int*)gameTracker->player;
-    temp_s3 = (int**)instance->_70[2];
+    temp_a0 = gameTracker->player;
+    bsp = instance->bspTree;
     temp_a2 = temp_a0->_F4[0] == 6;
     intro = instance->introData;
-    temp_a1 = ((unsigned char*)temp_s3[3])[5];
+    temp_a1 = bsp->_0C[5];
     temp_s5 = (int*)temp_a0->data;
     temp_s2 = &instance->_F0[6];
-    if ((instance->_F4[0] == 0) && (((((short*)temp_s3)[3] == 1) && (temp_a1 >= 8)) || ((temp_s3[0x14/4] == temp_a0) && (temp_a2 != 0)))) {
+    if ((instance->_F4[0] == 0) && (((bsp->_06 == 1) && (temp_a1 >= 8)) || ((bsp->instanceSpline == temp_a0) && (temp_a2 != 0)))) {
         if (!(temp_s2[1] & 1)) {
             instance->intro->flags |= 0x800;
         }
@@ -257,8 +257,8 @@ void common_powertv_OnCollide(Instance* instance, GameTracker* gameTracker) {
             gameTracker->level->startSignal = intro->checkpointStartSignal;
         }
         if (temp_s5[0x138/4] != 0) {
-            if (temp_s3[0x14/4] == (((int**)gameTracker))[3]) {
-                temp_s3[0x14/4][0xFC/4] |= 0x800;
+            if (bsp->instanceSpline == gameTracker->player) {
+                bsp->instanceSpline->_F4[2] |= 0x800;
             }
         }
     }

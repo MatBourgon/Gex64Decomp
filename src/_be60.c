@@ -327,17 +327,17 @@ int func_8000C8E8(Instance* instance, GameTracker* gameTracker) {
     ETVButnIntro* intro;
     int var_a1;
     unsigned char temp_v1;
-    unsigned char** temp_a0;
+    BSPTree* temp_a0;
     Instance* temp_a0_4;
     Instance* temp_s2;
     int* temp_s4;
 
     intro = instance->introData;
-    temp_a0 = (unsigned char**)instance->_70[2];
+    temp_a0 = instance->bspTree;
     var_a1 = 0;
-    if (((((unsigned char*)gameTracker))[0x4CA1] == 2) || ((((short*)temp_a0)[3] != 1))) {
+    if (((((unsigned char*)gameTracker))[0x4CA1] == 2) || ((temp_a0->_06 != 1))) {
         temp_s2 = (Instance*)instance->parent->_100;
-        if (temp_a0[2][2] == 1 && temp_s2 != NULL && !(instance->parent->intro->flags & 0x100) && instance->parent->_F4[1] == 0) {
+        if (temp_a0->_08[2] == 1 && temp_s2 != NULL && !(instance->parent->intro->flags & 0x100) && instance->parent->_F4[1] == 0) {
             temp_s4 = (int*)gameTracker->player->data;
             func_80018B60(gameTracker->player, D_800EB8A0, temp_s2->position.x, temp_s2->position.y, temp_s2->position.z + 0x40);
             func_80050508(instance, 3, -0x64, 0x7F, 0x5DC);

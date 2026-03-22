@@ -207,11 +207,11 @@ void horror_bouncer_OnCreate(Instance* instance, GameTracker* gameTracker) {
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_bouncer_OnUpdate);
 
 void horror_bouncer_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    unsigned char** temp_a2 = (unsigned char**)instance->_70[2];
-    if ((((short*)temp_a2)[3] == 1)
-        && (temp_a2[0x14/4] == (void*)gameTracker->player)
-        && (temp_a2[2][4] < 2U)
-        && (temp_a2[3][5] >= 6U)
+    BSPTree* temp_a2 = instance->bspTree;
+    if ((temp_a2->_06 == 1)
+        && (temp_a2->instanceSpline == (void*)gameTracker->player)
+        && (temp_a2->_08[4] < 2U)
+        && (temp_a2->_0C[5] >= 6U)
         && (
             (*(short*)&instance->_104 != 3)
             || ((instance->_F4[0] - 2) < 2U)
@@ -219,10 +219,10 @@ void horror_bouncer_OnCollide(Instance* instance, GameTracker* gameTracker) {
         )) {
             INSTANCE_PlainDeath(instance, 5, 3, 0);
     }
-    else if ((((short*)temp_a2)[3] == 1)
-             && (temp_a2[5] == (void*)gameTracker->player)
+    else if ((temp_a2->_06 == 1)
+             && (temp_a2->instanceSpline == (void*)gameTracker->player)
              && (
-                 (temp_a2[2][4] == 0) || (temp_a2[2][4] == 2)
+                 (temp_a2->_08[4] == 0) || (temp_a2->_08[4] == 2)
              )) {
         func_80022714(instance);
     }
@@ -348,7 +348,7 @@ void horror_qmark_OnCollide(Instance* instance, GameTracker* gameTracker) {
     QMarkIntro* intro;
 
     intro = (QMarkIntro*)instance->introData;
-    if (func_80027500(instance->_70[2]) != 0) {
+    if (func_80027500(instance->bspTree) != 0) {
         instance->_104 = 1;
         instance->_F4[2] = 0x12C;
         *((int*)&instance->_110) = intro->time;

@@ -91,11 +91,11 @@ void rta_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 }
 
 void rta_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    char** temp_a2;
+    BSPTree* temp_a2;
 
-    temp_a2 = (char**)instance->_70[2];
-    if ((temp_a2[5] == ((char*)gameTracker->player)) && (((short*)temp_a2)[3] == 1)) {
-        if (temp_a2[12/4][5] >= 6U) {
+    temp_a2 = instance->bspTree;
+    if ((temp_a2->instanceSpline == ((char*)gameTracker->player)) && (temp_a2->_06 == 1)) {
+        if (temp_a2->_0C[5] >= 6U) {
             INSTANCE_PlainDeath(instance, 5, 3, 0);
         }
         else
@@ -235,7 +235,7 @@ void rta_qmark_OnCollide(Instance* instance, GameTracker* gameTracker) {
     QMarkIntro* intro;
     intro = (QMarkIntro*)instance->introData;
     
-    if (((Instance**)instance->_70[2])[5] == gameTracker->player) {
+    if (instance->bspTree->instanceSpline == gameTracker->player) {
         if (instance->_104 != 1) {
             func_80050508(instance, 3, 0, 0x64, 0x1388);
         }

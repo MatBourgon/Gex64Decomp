@@ -35,26 +35,28 @@ void GenericProcess(Instance* instance, GameTracker* gameTracker)
 }
 
 void GenericCollide(Instance* instance, GameTracker* gameTracker) {
-    int a0, a2, a3;
+    int a0, a3;
     int v0, v1;
     int t0;
 
-    a2 = instance->_70[2];
+    BSPTree* a2;
+
+    a2 = instance->bspTree;
 
     t0 = 0;
-    if (((Instance**)a2)[0x14/4] != PlayerInstance) {
+    if (a2->instanceSpline != PlayerInstance) {
         v1 = ((short*)a2)[6/2];
         a3 = 5;
         if (v1 == a3 || v1 == 1) {
                     
-            if (((short*)a2)[4/2] != a3)
+            if (a2->_04 != a3)
             {
-                if (((short*)a2)[4/2] == 1) goto _78; // 4c, 50
+                if (a2->_04 == 1) goto _78; // 4c, 50
                 goto _e4; // 54, 58
             }
             else
             {
-                v0 = ((int*)a2)[8/4];
+                v0 = a2->_08;
                 v1 = ((short*)v0)[0];
                 a3 = ((unsigned char*)v0)[3];
                 v1 &= 0x8000;
@@ -62,7 +64,7 @@ void GenericCollide(Instance* instance, GameTracker* gameTracker) {
             }
         
             _78:
-            v0 = ((int*)a2)[8/4];
+            v0 = a2->_08;
             v1 = ((int*)v0)[0];
             a3 = ((unsigned char*)v0)[5];
             v1 &= 0x8000;
@@ -74,16 +76,16 @@ void GenericCollide(Instance* instance, GameTracker* gameTracker) {
             }
             else
             {
-                if (((short*)a2)[6/2] == 5)
+                if (a2->_06 == 5)
                 {
-                    v0 = ((int*)a2)[12/4];
+                    v0 = a2->_0C;
                     v0 = ((unsigned char*)v0)[3];
                 
                     v0 = a3 < v0;
                 }
                 else
                 {
-                    v0 = ((int*)a2)[12/4];
+                    v0 = a2->_0C;
                     v0 = ((unsigned char*)v0)[5];
                     v0 = a3 < v0;
                 }

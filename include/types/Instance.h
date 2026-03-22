@@ -7,6 +7,7 @@
 #include "NodeType.h"
 #include "Rotation.h"
 #include "Matrix.h"
+#include "BSPTree.h"
 
 typedef void (*AdditionalDrawFunc)(void*, struct Instance_s*, void* /*unused*/, void* /*unused*/, void* /*unused*/);
 
@@ -35,7 +36,10 @@ typedef struct Instance_s
     short _5E;
     ROTATION rotation; // 60, 62, 64, 66
     SVector scale; // 68, 6A, 6C, 6E
-    int _70[4];
+    int _70;
+    int _74;
+    BSPTree* bspTree;
+    int _7C;
     short _80[2];
     SVector wNormal;
     SVECTOR offset;

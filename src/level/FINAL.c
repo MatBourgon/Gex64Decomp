@@ -268,12 +268,12 @@ extern char D_8016166C_9280C[];
 extern char D_801616F0_92890[];
 
 void final_frez_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    int*** temp_a2;
+    BSPTree* temp_a2;
     short* temp_s1;
 
-    temp_a2 = (int***)instance->_70[2];
+    temp_a2 = instance->bspTree;
     temp_s1 = &instance->_C0[2];
-    if (G2String_Compare_EQ(temp_a2[0x14/4][0x18/4][0x24/4], D_8016166C_9280C)) {
+    if (G2String_Compare_EQ(temp_a2->instanceSpline->object->name, D_8016166C_9280C)) {
         if (instance->_F4[0] != 0) {
             func_800331BC(instance->_F4[0], gameTracker);
             instance->_F4[0] = 0;
@@ -290,8 +290,8 @@ void final_frez_OnCollide(Instance* instance, GameTracker* gameTracker) {
         }
         temp_s1[0x2/2] = 1;
     }
-    else if ((*temp_s1 != 8) && (((short*)temp_a2)[0x6/2] == 1)) {
-        if (G2String_Compare_EQ(temp_a2[0x14/4][0x18/4][0x24/4], D_801616F0_92890) && (func_8002275C(PlayerInstance, gameTracker) == 0)) {
+    else if ((*temp_s1 != 8) && (temp_a2->_06 == 1)) {
+        if (G2String_Compare_EQ(temp_a2->instanceSpline->object->name, D_801616F0_92890) && (func_8002275C(PlayerInstance, gameTracker) == 0)) {
             temp_s1[0x34/2] = 0;
         }
     }
