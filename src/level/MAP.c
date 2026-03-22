@@ -1218,9 +1218,9 @@ void func_8015D5E4_BE014(int* arg0, Instance* instance) {
         *((int*)a0) = ((int*)(instance->_F4[2] * 4 + (int)a0))[0x1C/4];
     }
     
-    ((char**)instance->object->modelList[0])[0x14/4] = D_80161684_C20B4;
+    instance->object->modelList[0]->_14 = D_80161684_C20B4;
     func_8003D698(instance, arg0, 0);
-    ((char**)instance->object->modelList[0])[0x14/4] = 0;
+    instance->object->modelList[0]->_14 = NULL;
 }
 
 INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_8016136C_C1D9C);
