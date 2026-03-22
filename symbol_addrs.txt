@@ -141,7 +141,10 @@ COLLIDE_WithinXYBounds = 0x800123F4; // type:func
 COLLIDE_LineWithBoxFace = 0x80012450; // type:func
 COLLIDE_IntersectLineAndBox = 0x80012594; // type:func
 COLLIDE_UpdateAllTransforms = 0x80012BD0; // type:func
+COLLIDE_UpdateAllOldTransforms = 0x80012C74; // type:func
 COLLIDE_ClosestPointInBoxToPoint = 0x8001293C; // type:func
+COLLIDE_InstanceList = 0x8000E724; // type:func
+COLLIDE_Instances = 0x8000E334; // type:func
 _COLLIDE_MakeNormal = 0x80012A1C; // type:func
 _COLLIDE_IntersectLineAndBoxList = 0x80012834; // type:func
 
