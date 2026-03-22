@@ -78,7 +78,7 @@ segments:
     bss_size: 0xDA3E0
     subsegments:
       - [0x1050, c, _1050]
-      - [0x7FB0, asm, _7fb0]
+      - [0x7FB0, c, _7fb0]
       - [0xBE60, c, _be60]
       - [0xD6F0, c, COLLIDE_A] # Collides may be split across more files
       - [0xDC40, c, COLLIDE_B]
@@ -287,7 +287,7 @@ segments:
       - [0x6B6F0, textbin]
       - [0x6B920, data]
       - [0x7C040, .rodata, _1050]
-      - [0x7C3B0, rodata, _7fb0]
+      - [0x7C3B0, .rodata, _7fb0]
       - [0x7C4F0, .rodata, _be60]
       - [0x7C8F0, rodata, _1afe0]
       - [0x7C9E0, rodata, _24cf0]

@@ -1,11 +1,6 @@
 #include "common.h"
 
-#include "types/Instance.h"
-#include "types/GameTracker.h"
-#include "types/Vector.h"
-#include "types/HBox.h"
-#include "types/HInfo.h"
-#include "types/PCollideInfo.h"
+#include "COLLIDE.h"
 
 INCLUDE_ASM("asm/nonmatchings/COLLIDE_B", func_8000D040);
 
