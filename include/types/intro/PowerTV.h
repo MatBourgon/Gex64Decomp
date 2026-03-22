@@ -15,7 +15,7 @@ typedef struct
 {
     short type;
     short respawns;
-    int unk; // maybe fly pointer?
+    void* checkpointStartSignal;
 } PowerTVIntro;
 
 #endif
