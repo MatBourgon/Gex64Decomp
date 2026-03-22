@@ -1,5 +1,8 @@
 #include "common.h"
 
+#include "SPLINE.h"
+#include "SCRIPT.h"
+
 #include "level/MAP.h"
 
 #include <PR/gbi.h>
@@ -215,35 +218,37 @@ void map_intro_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int* temp_v0;
     int** temp_a1;
     int** temp_a2;
-    short* temp_v0_2;
+    SVECTOR* temp_v0_2;
 
     if (instance->intro->_04 != 0) {
-        temp_a1 = ((int***)instance->intro->_04)[1];
+        temp_a1 = ((int***)instance->intro->_04)[1]; // Cinematic array?
         temp_a2 = ((int***)instance->intro->_04)[2];
         instance->flags |= 0xC00;
-        ((int**)gameTracker)[3][0x10/4] |= 0x400;
-        ((int**)gameTracker)[3][0x10/4] |= 0x100;
+        gameTracker->player->flags |= 0x400;
+        gameTracker->player->flags |= 0x100;
         if ((temp_a1 != 0) && (temp_a2 != 0)) {
-            temp_v0 = temp_a1[0x28/4];
+            temp_v0 = temp_a1[0x28/4]; // Cinematic.posSpline
             temp_s1 = temp_a2[0x28/4];
-            temp_v0_2 = (short*)SplineGetFirstPoint(*temp_v0, temp_v0 + 4);
+                                        // ->positional        &->curPositional
+            temp_v0_2 = SplineGetFirstPoint((Spline*)*temp_v0, (SplineDef*)(temp_v0 + 4));
             if (temp_v0_2 != 0) {
-                ((short**)gameTracker)[2][0] = temp_v0_2[0];
-                ((short**)gameTracker)[2][1] = temp_v0_2[1];
-                ((short**)gameTracker)[2][2] = temp_v0_2[2];
+                gameTracker->camera->cameraCore.position.x = temp_v0_2->x;
+                gameTracker->camera->cameraCore.position.y = temp_v0_2->y;
+                gameTracker->camera->cameraCore.position.z = temp_v0_2->z;
             }
-            func_80003A68(((int*)gameTracker)[2], SplineGetFirstPoint(*temp_s1, temp_s1 + 4));
-            func_80001408(((int*)gameTracker)[2], 8);
+            func_80003A68(gameTracker->camera, SplineGetFirstPoint((Spline*)*temp_s1, (SplineDef*)(temp_s1 + 4)));
+            func_80001408(gameTracker->camera, 8);
         }
         gameTracker->gameFlags |= 1;
     }
 }
 
 void map_intro_OnUpdate(Instance* instance, GameTracker* gameTracker) {
-    int *v0, *v1;
+    int *v0;
     int *s1, *s2;
     int *s3;
     int *s4, *s5;
+    SVECTOR* v1;
     s3 = (int*)instance->introData;
 
     
@@ -261,24 +266,24 @@ void map_intro_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     
     s1 = (int*)s4[0x28/4];
     s2 = (int*)s5[0x28/4];
-    v1 = (int*)SplineGetNextPoint(s1[0], s1 + 0x10/4);
+    v1 = SplineGetNextPoint((Spline*)s1[0], (SplineDef*)(s1 + 4));
     
     if (v1 != 0)
     {
         if ((((int*)gameTracker)[0x40/4] & 0x8010) == 0)
         {
             gameTracker->gameFlags |= 1; // d0
-            ((SVECTOR*)(gameTracker->camera))->x = ((SVECTOR*)v1)->x;
-            ((SVECTOR*)(gameTracker->camera))->y = ((SVECTOR*)v1)->y;
-            ((SVECTOR*)(gameTracker->camera))->z = ((SVECTOR*)v1)->z;
+            gameTracker->camera->cameraCore.position.x = v1->x;
+            gameTracker->camera->cameraCore.position.y = v1->y;
+            gameTracker->camera->cameraCore.position.z = v1->z;
             goto _1d8;
         } // 104
         else
         {
-            v1 = (int*)func_800516E0(s1[0], s1 + 0x10/4);
-            ((SVECTOR*)(gameTracker->camera))->x = ((SVECTOR*)v1)->x;
-            ((SVECTOR*)(gameTracker->camera))->y = ((SVECTOR*)v1)->y;
-            ((SVECTOR*)(gameTracker->camera))->z = ((SVECTOR*)v1)->z;
+            v1 = (SVECTOR*)func_800516E0(s1[0], s1 + 0x10/4); // hint: Spline*, SplineDef*. GetPreviousPoint?
+            gameTracker->camera->cameraCore.position.x = v1->x;
+            gameTracker->camera->cameraCore.position.y = v1->y;
+            gameTracker->camera->cameraCore.position.z = v1->z;
             func_80003A68(gameTracker->camera, func_800516E0(s2[0], s2 + 0x10/4)); // 150
             func_80001408(gameTracker->camera, 8); // 170
         }
@@ -299,7 +304,7 @@ void map_intro_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     return;
 
     _1d8:
-    func_80003A68(gameTracker->camera, SplineGetNextPoint(s2[0], s2 + 0x10/4));
+    func_80003A68(gameTracker->camera, SplineGetNextPoint((Spline*)s2[0], (SplineDef*)(s2 + 4)));
     func_80001408(gameTracker->camera, 8);
     
 }
@@ -581,7 +586,7 @@ void func_8015A854_BB284(char* arg0, short arg1) {
 void map_speaker_OnCreate(Instance* instance, GameTracker* gameTracker) {
     s32 var_a1;
     short* temp_s0;
-    int* temp_s0_2;
+    MultiSpline* temp_s0_2;
     short* temp_s1;
 
     temp_s0 = (short*)instance->introData;
@@ -617,9 +622,9 @@ void map_speaker_OnCreate(Instance* instance, GameTracker* gameTracker) {
             break;
         }
     }
-    temp_s0_2 = ((int**)(*(((s32) ((instance->currentModel | 1) << 0x10) >> 0x10) + (int*)instance->object->modelList)))[0x2C/4];
-    SplineSetDef2FrameNumber(temp_s0_2[2], &temp_s1[4], ((temp_s1[0xE/2] << 8) / 127) & 0xFFFF);
-    SCRIPT_SplineProcess(instance, temp_s0_2, 0, 0, &temp_s1[4], 0, 1);
+    temp_s0_2 = (MultiSpline*)((int**)(*(((s32) ((instance->currentModel | 1) << 0x10) >> 0x10) + (int*)instance->object->modelList)))[0x2C/4];
+    SplineSetDef2FrameNumber(temp_s0_2->scaling, (SplineDef*)&temp_s1[4], ((temp_s1[0xE/2] << 8) / 127) & 0xFFFF);
+    SCRIPT_SplineProcess(instance, temp_s0_2, 0, 0, (SplineDef*)&temp_s1[4], 0, 1);
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/MAP", map_speaker_OnUpdate);
@@ -730,7 +735,7 @@ void map_bobbox_OnUpdate(Instance* arg1, GameTracker* gameTracker) {
             }
         }
         
-        if ((SplineGetFrameNumber(temp_a0, ((int**)gameTracker->camera)[0x480/4] + 0x10/4) & 0xFFFF) >= (var_s0 - 1))
+        if ((SplineGetFrameNumber((Spline*)temp_a0, (SplineDef*)(((int**)gameTracker->camera)[0x480/4] + 0x10/4)) & 0xFFFF) >= (var_s0 - 1))
         {
             var_s2 = 1;
         }
@@ -1421,7 +1426,7 @@ void map_lvltv_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             if (instance->intro->multiSpline != NULL) {
                 multi = (MultiSpline*)SCRIPT_GetMultiSpline(instance, &isParent, &isClass);
                 if (multi->rotational != 0) {
-                    SplineGetData(multi->rotational, SCRIPT_GetRotSplineDef(instance, multi, isParent, isClass), &sp10);
+                    SplineGetData((Spline*)multi->rotational, SCRIPT_GetRotSplineDef(instance, multi, isParent, isClass), &sp10);
                     instance->intro->rotation.x += sp10.x;
                     instance->intro->rotation.y += sp10.y;
                     instance->intro->rotation.z += sp10.z;
@@ -1584,7 +1589,7 @@ countbits:
 }
 
 void map_select_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    SVECTOR sp10;
+    SplineDef sp10;
     SVECTOR sp18;
     char* temp_s6;
     int var_a1;
@@ -1629,10 +1634,10 @@ void map_select_OnCreate(Instance* instance, GameTracker* gameTracker) {
         } else {
             temp_s0_2 = (int**)(&temp_s4[var_s1])[0x34/4];
             func_800516E0(((int*)temp_s0_2[10])[0], &sp10);
-            SplineGetData(((int*)temp_s0_2[10])[0], &sp10, temp_s0_2 + 4);
+            SplineGetData(((Spline**)temp_s0_2[10])[0], &sp10, temp_s0_2 + 4);
             if (((int*)temp_s0_2[10])[1] != 0) {
                 func_800516E0(((int*)temp_s0_2[10])[1], &sp10);
-                SplineGetData(((int*)temp_s0_2[10])[1], &sp10, &sp18);
+                SplineGetData(((Spline**)temp_s0_2[10])[1], &sp10, &sp18);
                 ((short*)temp_s0_2)[4] += sp18.x;
                 ((short*)temp_s0_2)[5] += sp18.y;
                 ((short*)temp_s0_2)[6] += sp18.z;

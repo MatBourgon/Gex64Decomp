@@ -24,7 +24,9 @@ typedef struct
 
 typedef struct
 {
-    int _00[0x5C/4];
+    SVECTOR position;
+    short _pad;
+    int _08[0x54/4];
     int farPlane;
 } CameraCore;
 

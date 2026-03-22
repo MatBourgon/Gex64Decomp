@@ -8,12 +8,12 @@ INCLUDE_ASM("asm/nonmatchings/_1050", func_80000450);
 extern int D_800B83B0;
 extern int D_800E8EC8;
 
-void func_80000F24(int* arg0, int arg1)
+void func_80000F24(Camera* camera, int arg1)
 {
     D_800B83B0 = arg1;
     D_800E8EC8 = arg1 / 2;
-    arg0[0x10] = arg1;
-    func_80000450();
+    camera->cameraCore._08[14] = arg1;
+    func_80000450(camera);
 }
 
 INCLUDE_ASM("asm/nonmatchings/_1050", func_80000F60);

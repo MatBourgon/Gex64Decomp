@@ -10,7 +10,7 @@ void final_oldpoptv_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_F4[2] = 0;
     instance->flags |= 0x400;
     if (instance->introData == NULL) {
-        instance->introData = (int)&D_80161510_926B0;
+        instance->introData = (void*)&D_80161510_926B0;
     }
 }
 
@@ -299,13 +299,13 @@ void final_frez_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 extern int D_80161558_926F8[];
 void final_rezcam_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    int temp_s2;
+    Camera* temp_s2;
     int* ptr;
 
-    temp_s2 = ((int*)gameTracker)[2];
+    temp_s2 = gameTracker->camera;
     ptr = &instance->_F4[2];
     instance->flags |= 0x800;
-    func_80001408(((int*)gameTracker)[2], 8);
+    func_80001408(gameTracker->camera, 8);
     if (instance->introData == NULL) {
         instance->introData = (void*)&D_80161558_926F8;
     }
@@ -320,7 +320,7 @@ void final_rezcam_OnCollide(Instance* instance, GameTracker* gameTracker) {
 void final_finplat_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int temp_ret;
 
-    func_80000F24(((int*)gameTracker)[2], 213);
+    func_80000F24(gameTracker->camera, 213);
     instance->_F4[2] = (rand() % 120) + 120;
     GenericInit(instance, gameTracker);
 }
