@@ -181,7 +181,7 @@ void common_cold_OnCollide(Instance* instance, GameTracker* gameTracker)
 
 void common_derez_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->flags |= 0x100080;
-    instance->_56 = 0;
+    instance->currentTextureAnimFrame = 0;
 }
 
 INCLUDE_ASM("asm/nonmatchings/_be60", common_derez_OnUpdate);
@@ -218,11 +218,11 @@ void common_tvend_OnCreate(Instance* instance, GameTracker* gameTracker) {
             instance->_F4[2] = (int)iEtvbtn;
             iEtvbtn->flags |= 0x400;
         }
-        instance->_56 = 1;
+        instance->currentTextureAnimFrame = 1;
         intro->condition = 1;
         if ((intro->_04 != 0) && ((D_800785CC[intro->_04]) == 0)) {
             if (!(((&((unsigned char*)gameTracker)[((unsigned char*)gameTracker)[0x4CA1]])[0x4C6E] >> intro->remoteId) & 1)) {
-                instance->_56 = 0;
+                instance->currentTextureAnimFrame = 0;
             }
             intro->condition = 0;
         }
@@ -274,7 +274,7 @@ void common_tvend_OnUpdate(Instance* instance, Object* gameTracker) {
 
     intro = instance->introData;
     if ((intro->condition == 0) && (D_800785CC[intro->_04] != 0)) {
-        instance->_56 = 1;
+        instance->currentTextureAnimFrame = 1;
         if ((instance->_100 == NULL) && (D_800785CC[intro->_04] >= 2)) {
             oRemred = (Object*)OBTABLE_FindObject(&D_8007B944);
             if (oRemred != 0) {

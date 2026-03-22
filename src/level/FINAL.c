@@ -64,7 +64,7 @@ void final_reztvex_OnCreate(Instance* arg0, GameTracker* gameTracker) {
     arg0->scale.z = 0x100;
     arg0->scale.y = 0x100;
     arg0->scale.x = 0x100;
-    arg0->_56 = 0;
+    arg0->currentTextureAnimFrame = 0;
     arg0->flags |= 0x80;
 }
 
@@ -80,7 +80,7 @@ void final_rezxpl_OnCreate(Instance* arg0, GameTracker* gameTracker) {
     arg0->scale.z = 0x100;
     arg0->scale.y = 0x100;
     arg0->scale.x = 0x100;
-    arg0->_56 = 0;
+    arg0->currentTextureAnimFrame = 0;
     arg0->flags |= 0x80;
 }
 

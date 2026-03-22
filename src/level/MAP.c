@@ -175,10 +175,10 @@ INCLUDE_RODATA("asm/nonmatchings/level/MAP", D_80161208_C1C38);
 void map_temptv_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int* arg2 = ((int*)gameTracker) + 0x18/4;
     if (instance->intro->_04 != 0) {
-        instance->_56 = instance->_F4[2] * 2;
+        instance->currentTextureAnimFrame = instance->_F4[2] * 2;
         
         if (!instance->_F4[0]) {
-            instance->_56 |= 1;
+            instance->currentTextureAnimFrame |= 1;
         }
         
         if (!(gameTracker->gameFlags & 1)) {
@@ -940,7 +940,7 @@ void map_tvbutn_OnCreate(Instance* instance, GameTracker* gameTracker) {
         instance->_111 = 0;
         instance->_112 = 0;
     }
-    instance->_56 = s2[0x13];
+    instance->currentTextureAnimFrame = s2[0x13];
 }
 
 void map_tvbutn_OnUpdate(Instance* instance, GameTracker* gameTracker) {
@@ -967,8 +967,8 @@ void map_tvbutn_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     }
     if (instance->_F4[0] != 0) {
         INSTANCE_InsertInstanceWithFlagsSet(instance, 0x5000);
-        if (instance->_56 < instance->_10C) {
-            instance->_56 = instance->_10C;
+        if (instance->currentTextureAnimFrame < instance->_10C) {
+            instance->currentTextureAnimFrame = instance->_10C;
         }
         if (instance->_F4[0] == 3) {
             func_8015BFE0_BCA10(instance, gameTracker);
@@ -986,11 +986,11 @@ block_12:
             }
         }
         if (instance->_F4[0] == 1) {
-            if (instance->_56 >= ((char*)temp_s2)[0x14]) {
-                instance->_56 = ((char*)temp_s2)[0x10];
+            if (instance->currentTextureAnimFrame >= ((char*)temp_s2)[0x14]) {
+                instance->currentTextureAnimFrame = ((char*)temp_s2)[0x10];
                 instance->_F4[0] = 2;
             } else {
-                instance->_56++;
+                instance->currentTextureAnimFrame++;
             }
         } else if (instance->_F4[0] == 2) {
             if ((temp_s0 != NULL) && (((char*)temp_s0)[0x8] >= 0x62) && (instance->flags & 0x200)) {
@@ -998,14 +998,14 @@ block_12:
                 func_80037B24(sp10[0], sp10[1]);
             }
             
-            if (instance->_56 >= ((char*)temp_s2)[0x11]) {
-                instance->_56 = ((char*)temp_s2)[0x10];
+            if (instance->currentTextureAnimFrame >= ((char*)temp_s2)[0x11]) {
+                instance->currentTextureAnimFrame = ((char*)temp_s2)[0x10];
             } else {
-                instance->_56++;
+                instance->currentTextureAnimFrame++;
             }
             if ((((char*)temp_s2)[0xF] == 1) && (((short*)var_s4)[0x6/2] != 0)) {
                 if (((int*)gameTracker8)[0xE0/4] & 8) {
-                    instance->currentModel = (instance->currentModel ^ 1);
+                    instance->currentModel ^= 1;
                 }
                 if (instance->currentModel & 1) {
                     ((char*)temp_s2)[0x17]++;
@@ -1058,7 +1058,7 @@ block_12:
                         } else if (((char*)temp_s2)[0xE] == 0) {
                             ((char*)temp_s2)[0xE] = 1;
                         }
-                        instance->_56 = ((char*)temp_s2)[0x10];
+                        instance->currentTextureAnimFrame = ((char*)temp_s2)[0x10];
                         if (temp_s0 != NULL) {
                             if (temp_s0[0x0/4] != 0) {
                                 SIGNAL_HandleSignal(PlayerInstance, temp_s0[0x0/4] + 4, 0);
@@ -1180,7 +1180,7 @@ void func_8015D52C_BDF5C(Instance* instance, GameTracker* gameTracker) {
     char buffer[0x10];
     char* v1;
     
-    instance->_56 = -1;
+    instance->currentTextureAnimFrame = -1;
     instance->flags |= 0x80;
     
     sprintf(buffer, D_80161394_C1DC4, (short*)instance->introData + 2, ((short*)(instance->introData))[1]);
@@ -1207,7 +1207,7 @@ void func_8015D5E4_BE014(int* arg0, Instance* instance) {
     int* a3;
     char* a0;
 
-    instance->_56 = -1;
+    instance->currentTextureAnimFrame = -1;
     instance->flags |= 0x80;
     a3 = (((int**)instance->object->modelList[0]))[0xF];
     for(i = 0; i < a3[0]; ++i)
@@ -1331,7 +1331,7 @@ void map_lvltv_OnCreate(Instance* instance, GameTracker* gameTracker) {
         var_a1 = 0;
         if (temp_a2 >= 0) {
             var_a0 = var_s3 - 1;
-            instance->_56 = (sp20[var_s3]) + (temp_a2 * 9);
+            instance->currentTextureAnimFrame = (sp20[var_s3]) + (temp_a2 * 9);
             if (var_a0 >= 0) {
                 ptr = (u8*)gameTracker8;
                 ptr = &ptr[instance->_112];
@@ -1343,13 +1343,13 @@ void map_lvltv_OnCreate(Instance* instance, GameTracker* gameTracker) {
                     var_a0 -= 1;
                 }
             }
-            temp_s2[0x40] = instance->_56 = instance->_56 + var_a1;
-            temp_s2[0x41] = instance->_56;
+            temp_s2[0x40] = instance->currentTextureAnimFrame = instance->currentTextureAnimFrame + var_a1;
+            temp_s2[0x41] = instance->currentTextureAnimFrame;
         } else {
             skip:
             *(u8*)&instance->_110 = 7U;
             instance->_111 = 0x2AU;
-            instance->_56 = *(u8*)&instance->_110;
+            instance->currentTextureAnimFrame = *(u8*)&instance->_110;
         }
     }
     if (instance->intro->flags & 0x80) {
@@ -1383,7 +1383,7 @@ void map_lvltv_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     intro = (LevelTVIntro*)instance->introData;
     temp_s2 = (u8*)&instance->_D0;
     if (instance->_113 != 0) {
-        instance->_56 = ((intro->screenType * 9) + 7);
+        instance->currentTextureAnimFrame = ((intro->screenType * 9) + 7);
         if ((instance->_112 >= 0x15U) && (instance->_D0[0] == 0)) {
             func_8015D6F0_BE120(instance, 1);
         }
@@ -1405,15 +1405,15 @@ void map_lvltv_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             temp_s2[0x43] = 1;
             instance->_F4[1] = 0;
             D_80078594[temp_s2[0x42]] = 2;
-            instance->_56 = ((intro->screenType * 9) + 7);
+            instance->currentTextureAnimFrame = ((intro->screenType * 9) + 7);
         }
     }
-    instance->_56 += 9;
-    if (instance->_56 < temp_s2[0x40]) {
-        instance->_56 = temp_s2[0x40];
+    instance->currentTextureAnimFrame += 9;
+    if (instance->currentTextureAnimFrame < temp_s2[0x40]) {
+        instance->currentTextureAnimFrame = temp_s2[0x40];
     }
-    if (instance->_56 > temp_s2[0x41]) {
-        instance->_56 = temp_s2[0x40];
+    if (instance->currentTextureAnimFrame > temp_s2[0x41]) {
+        instance->currentTextureAnimFrame = temp_s2[0x40];
     }
     
     if ((temp_s2[0x42] - 0xE) < 7U) {

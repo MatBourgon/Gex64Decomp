@@ -533,12 +533,12 @@ s32 func_8002DAF8(Instance* instance, s32 arg1) {
         
         while ((var_s1 < (*(int*)&instance->_30[2]))) {
             instance->_5E += (var_s2 * D_800E5FD8);
-            if (instance->_5E >= ((short*)instance->object->animList[instance->_4E])[1]) {
+            if (instance->_5E >= ((short*)instance->object->animList[instance->currentModelAnim])[1]) {
                 instance->_5E = 0U;
                 instance->flags2 |= 0x10;
             }
             if (instance->_5E < 0) {
-                instance->_5E = (((short*)instance->object->animList[instance->_4E])[1] - 1);
+                instance->_5E = (((short*)instance->object->animList[instance->currentModelAnim])[1] - 1);
                 instance->flags2 |= 0x10;
             }
             (*(int*)&instance->_30[2]) -= var_s1;
@@ -553,12 +553,12 @@ s32 func_8002DAF8(Instance* instance, s32 arg1) {
         }
         if (var_s1 >= (*(int*)&instance->_30[2])) {
             instance->_5E += var_s2 * D_800E5FD8;
-            if (instance->_5E >= ((short*)instance->object->animList[instance->_4E])[1]) {
+            if (instance->_5E >= ((short*)instance->object->animList[instance->currentModelAnim])[1]) {
                 instance->_5E = 0;
                 instance->flags2 |= 0x10;
             }
             if (instance->_5E < 0) {
-                instance->_5E = (((short*)instance->object->animList[instance->_4E])[1] - 1);
+                instance->_5E = (((short*)instance->object->animList[instance->currentModelAnim])[1] - 1);
                 instance->flags2 |= 0x10;
             }
             (*(int*)&instance->_30[2]) = 0;

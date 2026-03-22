@@ -28,10 +28,10 @@ typedef struct Instance_s
     short _34[6];
     short _40[4];
     SVECTOR position; // 48, 4A, 4C
-    unsigned char _4E;
+    unsigned char currentModelAnim;
     char lightGroup;
     SVECTOR oldPos; // 50, 52, 54
-    short _56;
+    short currentTextureAnimFrame;
     SVECTOR initialPos; // 58, 5A, 5C
     short _5E;
     ROTATION rotation; // 60, 62, 64, 66
