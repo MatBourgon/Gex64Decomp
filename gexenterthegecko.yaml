@@ -90,7 +90,7 @@ segments:
       - [0x161C0, c]
       - [0x19BD0, c]
       - [0x1A6A0, c, GAMELOOP]
-      - [0x1AFE0, asm, _1afe0]
+      - [0x1AFE0, asm, _1afe0] # GAMEPAD?
       - [0x1B8A0, c, GENERIC]
       - [0x1BA60, asm]
       - [0x1F5F0, asm]
@@ -100,11 +100,11 @@ segments:
       - [0x2BA70, asm]
       - [0x2C440, asm]
       - [0x2CD50, asm, _2cd50]
-      - [0x2D6E0, c]
+      - [0x2D6E0, c] # INSTANCE?
       - [0x2F310, asm]
       - [0x30630, c, LIGHT3D]
       - [0x30C90, c, LIST]
-      - [0x30E70, c]
+      - [0x30E70, c, MATH3D]
       - [0x31960, c, _31960]
       - [0x32D70, c, MATRIX]
       - [0x33230, c]
