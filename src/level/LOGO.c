@@ -27,7 +27,7 @@ extern unsigned short D_800E5DB2;
 void logo_select_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     instance->flags |= 0xC00;
-    ((int**)gameTracker)[0xC/4][0x10/4] |= 0x800;
+    gameTracker->player->flags |= 0x800;
 }
 
 void logo_select_OnUpdate(Instance* instance, GameTracker* gameTracker)
@@ -125,7 +125,7 @@ void logo_cryslogo_OnCreate(Instance* instance, GameTracker* gameTracker)
     instance->_104 = 0;
     instance->flags |= 0x400;
     func_8002C1AC(0);
-    ((short**)gameTracker)[0x8/4][0x30/2] = 0xFA0;
+    ((short*)gameTracker->camera)[0x30/2] = 0xFA0;
     instance->rotation.x = 0x3FE;
     instance->rotation.y = 0x6E1;
     instance->rotation.z = 1;
@@ -137,7 +137,7 @@ void logo_cryslogo_OnCreate(Instance* instance, GameTracker* gameTracker)
 void logo_cryslogo_OnUpdate(Instance* instance, GameTracker* gameTracker)
 {
     func_8002C1AC(0);
-    ((int**)gameTracker)[0xC/4][0x10/4] |= 0x800;
+    gameTracker->player->flags |= 0x800;
     
     if (instance->_104 < 0x50)
     {
@@ -178,7 +178,7 @@ void logo_mwlogo_OnCreate(Instance* instance, GameTracker* gameTracker)
     instance->rotation.x = 0x802;
     instance->rotation.y = -0x400;
     instance->rotation.z = 0;
-    instance->position.x = ((short**)gameTracker)[0x8/4][0] + 50;
+    instance->position.x = ((short*)gameTracker->camera)[0] + 50;
     instance->position.y = 100;
     instance->position.z = 100;
 }
@@ -197,9 +197,9 @@ void logo_rtlogor_OnCreate(Instance* instance, GameTracker* gameTracker)
     instance->position.x = 4870;
     instance->position.y = 4500;
     instance->position.z = -150;
-    ((short**)gameTracker)[0x8/4][0x4/2] += 230;
-    ((short**)gameTracker)[0x8/4][0x2/2] -= 200;
-    ((short**)gameTracker)[0x8/4][0] = PlayerInstance->position.x;
+    ((short*)gameTracker->camera)[0x4/2] += 230;
+    ((short*)gameTracker->camera)[0x2/2] -= 200;
+    ((short*)gameTracker->camera)[0] = PlayerInstance->position.x;
     instance->_4E = 0;
     instance->_5E = 0;
 }

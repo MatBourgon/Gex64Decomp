@@ -48,7 +48,7 @@ typedef struct Instance_s
     int _A8;
     void (*processFunc)(void*,void*);
     void (*collideFunc)(void*,void*);
-    AdditionalDrawFunc* additionalDrawFunc;
+    AdditionalDrawFunc additionalDrawFunc;
     int _B8;
     SVECTOR shadowPosition;
     short currentModel;

@@ -116,7 +116,7 @@ void looney_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
             {
                 INSTANCE_PlainDeath(instance, 5, 3, 0);
             }
-        } else if ((((short*)temp_a2)[3] == 1) && (temp_a2[5] == ((char**)gameTracker)[12/4]) && ((instance->_F4[0] - 1) >= 2U)) {
+        } else if ((((short*)temp_a2)[3] == 1) && (temp_a2[5] == (void*)(gameTracker->player)) && ((instance->_F4[0] - 1) >= 2U)) {
             func_80022714(instance);
         }
     }

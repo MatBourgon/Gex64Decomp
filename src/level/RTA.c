@@ -235,7 +235,7 @@ void rta_qmark_OnCollide(Instance* instance, GameTracker* gameTracker) {
     QMarkIntro* intro;
     intro = (QMarkIntro*)instance->introData;
     
-    if (((int*)instance->_70[2])[5] == ((int*)gameTracker)[12/4]) {
+    if (((Instance**)instance->_70[2])[5] == gameTracker->player) {
         if (instance->_104 != 1) {
             func_80050508(instance, 3, 0, 0x64, 0x1388);
         }

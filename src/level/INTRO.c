@@ -38,7 +38,7 @@ void intro_rezzull_OnCreate(Instance* instance, GameTracker* gameTracker) {
     ptr[2] = 300;
     func_8002C1AC(0);
     temp_s1[0xDC/2] = 0;
-    temp_v1 = ((short**)gameTracker)[0x8/4];
+    temp_v1 = (short*)gameTracker->camera;
     temp_v1[2] += 0xDC;
     PlayerInstance->rotation.z = 0x11F0;
     PlayerInstance->position.x -= 1100;

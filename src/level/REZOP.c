@@ -254,7 +254,7 @@ INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_btimer_OnUpdate);
                 sprintf(buffer, "%2d", gameTracker->level->collectibleCountA);
                 Set3DTextPosition(0x8C, 0x91);
                 Print3DTextf(buffer);
-                ((int**)gameTracker)[0xC/4][0x10/4] |= 0x100;
+                gameTracker->player->flags |= 0x100;
             } else {
                 func_8002C18C(4);
                 Set3DTextPosition(0x64, 0x64);
@@ -319,7 +319,7 @@ INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_btimer_OnUpdate);
             }
         }
     } else {
-        ((int**)gameTracker)[0xC/4][0x10/4] |= 0x100;
+        gameTracker->player->flags |= 0x100;
         if (*(short*)&instance->_100 == 2) {
             // Delay map load
             if (--instance->_104 < 0) {
