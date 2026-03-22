@@ -8,6 +8,8 @@
 #include "Rotation.h"
 #include "Matrix.h"
 
+typedef void (*AdditionalDrawFunc)(void*, struct Instance_s*, void* /*unused*/, void* /*unused*/, void* /*unused*/);
+
 typedef struct Instance_s
 {
     NodeType node; // 00 (prev), 04 (next)
@@ -20,8 +22,8 @@ typedef struct Instance_s
     void* data; // 20
     void* introData; // 24
     struct Instance_s* parent; // 28
-    MATRIX* matrix;
-    MATRIX* oldMatrix;
+    MATRIX* matrix; // 2C
+    MATRIX* oldMatrix; // 30
     short _34[6];
     short _40[4];
     SVECTOR position; // 48, 4A, 4C
@@ -46,7 +48,7 @@ typedef struct Instance_s
     int _A8;
     void (*processFunc)(void*,void*);
     void (*collideFunc)(void*,void*);
-    void* _B4;
+    AdditionalDrawFunc* additionalDrawFunc;
     int _B8;
     SVECTOR shadowPosition;
     short currentModel;

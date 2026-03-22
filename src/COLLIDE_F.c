@@ -1,18 +1,6 @@
 #include "common.h"
 
-#include "types/Instance.h"
-#include "types/GameTracker.h"
-#include "types/Vector.h"
-#include "types/HBox.h"
-#include "types/HInfo.h"
-#include "types/PCollideInfo.h"
-
-extern int collide_t1; // collide_t0?
-extern int collide_t0; // collide_t1?
-extern SVector* collide_normal1;
-extern SVector* collide_point0;
-extern SVector* collide_point1;
-extern SVector* collide_normal0;
+#include "COLLIDE.h"
 
 INCLUDE_ASM("asm/nonmatchings/COLLIDE_F", func_8000FA40);
 
@@ -95,7 +83,6 @@ int COLLIDE_WithinXYBounds(SVector* point, HBox* hbox) {
         && point->y <= hbox->maxY;
 }
 
-typedef int(*CollisionFunction)(SVector*, HBox*);
 void COLLIDE_LineWithBoxFace(short startDist, long lineDist, short planeDist, SVector* start, LVECTOR* line, HBox* hbox, CollisionFunction collideBoundFunc, SVector* normal) {
     SVector point;
     int dist;

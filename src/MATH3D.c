@@ -4,13 +4,13 @@
 #include "types/Matrix.h"
 #include "types/Quat.h"
 
-INCLUDE_ASM("asm/nonmatchings/30E70", MATH3D_FastAtan2);
+INCLUDE_ASM("asm/nonmatchings/MATH3D", MATH3D_FastAtan2);
 
-INCLUDE_ASM("asm/nonmatchings/30E70", ratan2);
+INCLUDE_ASM("asm/nonmatchings/MATH3D", ratan2);
 
-INCLUDE_ASM("asm/nonmatchings/30E70", func_800305FC);
+INCLUDE_ASM("asm/nonmatchings/MATH3D", func_800305FC);
 
-INCLUDE_ASM("asm/nonmatchings/30E70", func_800306DC);
+INCLUDE_ASM("asm/nonmatchings/MATH3D", func_800306DC);
 
 FORCE_INLINE long MATH3D_FastSqrt_Inner(long square)
 {
@@ -301,12 +301,12 @@ void MATH3D_SetIdentityQuat(G2Quat* q)
     q->w = 4096;
 }
 
-INCLUDE_ASM("asm/nonmatchings/30E70", func_80030BA0);
+INCLUDE_ASM("asm/nonmatchings/MATH3D", func_80030BA0);
 
-INCLUDE_ASM("asm/nonmatchings/30E70", func_80030BE0);
+INCLUDE_ASM("asm/nonmatchings/MATH3D", func_80030BE0);
 
-INCLUDE_ASM("asm/nonmatchings/30E70", func_80030C50);
+INCLUDE_ASM("asm/nonmatchings/MATH3D", func_80030C50);
 
-INCLUDE_ASM("asm/nonmatchings/30E70", func_80030CB4);
+INCLUDE_ASM("asm/nonmatchings/MATH3D", func_80030CB4);
 
-INCLUDE_ASM("asm/nonmatchings/30E70", func_80030D34);
+INCLUDE_ASM("asm/nonmatchings/MATH3D", func_80030D34);
