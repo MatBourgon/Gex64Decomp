@@ -44,7 +44,41 @@ INCLUDE_ASM("asm/nonmatchings/_4f810", func_8004F398);
 
 INCLUDE_ASM("asm/nonmatchings/_4f810", func_8004F4D0);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_8004F60C);
+void func_8004F60C(Instance* instance, short* arg1) {
+    if (instance->flags2 & 0x10000) {
+        if (func_80033248(instance->_D0[0]) == 0) {
+            instance->flags2 &= ~0x10000;
+            instance->flags2 &= ~0x20000;
+        }
+        else if (func_80033200(instance->_D0[0]) != 0) {
+            if (instance->flags2 & 0x8000) {
+                instance->flags2 &= ~0x8000;
+                if (func_800506B8(instance, instance->_D0[0], arg1[4], ((unsigned char*)arg1)[6], arg1[2]) == 0) {
+                    func_800331BC(instance->_D0[0]);
+                    instance->flags2 &= ~0x10000;
+                    instance->flags2 &= ~0x20000;
+                }
+            } else {
+                instance->flags2 |= 0x8000;
+            }
+        }
+    } else if (instance->flags2 & 0x20000) {
+        if (instance->flags2 & 0x1000) {
+            if (instance->_D0[1] == 0) {
+                instance->_D0[0] = func_80050508(instance, ((unsigned short*)arg1)[1], arg1[4], ((unsigned char*)arg1)[6], arg1[2]);
+                if (instance->_D0[0] != 0) {
+                    instance->flags2 |= 0x10000;
+                    instance->flags2 &= ~0x1000;
+                }
+            } else {
+                instance->_D0[1]--;
+            }
+        }
+    } else {
+        instance->flags2 |= 0x20000;
+        instance->_D0[1] = ((unsigned char*)arg1)[7];
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/_4f810", func_8004F784);
 
