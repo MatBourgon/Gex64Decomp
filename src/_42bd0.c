@@ -12,20 +12,6 @@
 #include "level/COMMON.h"
 #include "INSTANCE.h"
 
-#include "SPLINE.h"
-
-MultiSpline* SCRIPT_GetMultiSpline(Instance *instance, int *isParent, int *isClass);
-
-extern short SplineSetDef2FrameNumber(Spline *spline, SplineDef *def, unsigned short frame_number);
-extern SplineDef *SCRIPT_GetPosSplineDef(Instance *instance, MultiSpline *multi, int isParent, int isClass);
-extern SplineDef *SCRIPT_GetRotSplineDef(Instance *instance, MultiSpline *multi, int isParent, int isClass);
-extern SplineDef *SCRIPT_GetScaleSplineDef(Instance *instance, MultiSpline *multi, int isParent, int isClass);
-
-Spline *ScriptGetPosSpline(Instance *instance);
-RSpline *ScriptGetRotSpline(Instance *instance);
-
-// Hint: Probably SCRIPT.c
-
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80041FD0);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80042120);
