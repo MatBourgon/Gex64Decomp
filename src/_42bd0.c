@@ -279,6 +279,8 @@ INCLUDE_ASM("asm/nonmatchings/_42bd0", common_powertv_OnCollide);
     }
 }*/
 
+/* -- FILE SPLIT? -- */
+
 INCLUDE_ASM("asm/nonmatchings/_42bd0", common_remsilv_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80045320);
@@ -290,6 +292,8 @@ INCLUDE_RODATA("asm/nonmatchings/_42bd0", D_8007E5C0);
 INCLUDE_ASM("asm/nonmatchings/_42bd0", common_remsilv_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", common_remsilv_OnCollide);
+
+/* -- FILE SPLIT? -- */
 
 INCLUDE_ASM("asm/nonmatchings/_42bd0", func_800462C0);
 
