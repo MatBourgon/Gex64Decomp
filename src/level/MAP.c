@@ -664,7 +664,7 @@ void map_start_OnCreate(Instance* instance, GameTracker* gameTracker) {
         temp_s4[0xDC/2] = 0;
         gameTracker->player->_F4[2] |= 0x1000;
         temp_s4[0x12C/2] = 0;
-        PlayerInstance->_4E = 0;
+        PlayerInstance->currentModelAnim = 0;
         PlayerInstance->_F4[1] = 1;
         PlayerInstance->_F4[0] = 0;
         gameTracker->player->_F4[0] = 5;
@@ -1478,7 +1478,7 @@ void map_lvltv_OnCollide(Instance* instance, GameTracker* gameTracker) {
             var_s0 = (char*)(instance->parent->_D0);
         }
         if ((intro != NULL) && (var_s0[0x43] != 0)) {
-            if ((((u8*)var_s0)[0x44] == 0) && PlayerInstance->_4E == 0xB) {
+            if ((((u8*)var_s0)[0x44] == 0) && PlayerInstance->currentModelAnim == 0xB) {
                 var_s0[0x44] = 1U;
 
                 switch(((u8*)var_s0)[0x42])
@@ -1698,7 +1698,7 @@ void map_select_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             if ((((s8*) temp_s0)[0x20] < 0x43) && (((short*)gameTracker8)[0x4C66/2] != 0) && (((short*)gameTracker8)[0x4C68/2] != 0)) {
                 sp10 = PlayerInstance->position;
                 PlayerInstance->_F4[0] = 5;
-                PlayerInstance->_4E = 0x32;
+                PlayerInstance->currentModelAnim = 0x32;
                 PlayerInstance->position.z = ((short*)gameTracker8)[0x4C6A/2];
                 PlayerInstance->oldPos.z = ((short*)gameTracker8)[0x4C6A/2];
                 PlayerInstance->position.x = ((short*)gameTracker8)[0x4C66/2];
@@ -1723,7 +1723,7 @@ void map_select_OnUpdate(Instance* instance, GameTracker* gameTracker) {
                 ((short*)gameTracker8)[0x4C90/2] &= 0xFFFD;
                 if (PlayerInstance->_F4[0] == 5) {
                     PlayerInstance->_F4[0] = 0;
-                    PlayerInstance->_4E = 0;
+                    PlayerInstance->currentModelAnim = 0;
                 }
                 D_80161670_C20A0 = 0;
                 ((char*)gameTracker)[0x4CDC] = 0;

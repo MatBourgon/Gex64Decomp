@@ -62,7 +62,7 @@ void prehst_bouncer_OnCollide(Instance* instance, GameTracker* gameTracker) {
 void prehst_crawler_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     instance->_F4[0] = 0;
-    instance->_4E = 0;
+    instance->currentModelAnim = 0;
 }
 
 void prehst_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {

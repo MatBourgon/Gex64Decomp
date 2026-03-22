@@ -70,7 +70,7 @@ void looney_bouncer_OnCollide(Instance* instance, GameTracker* gameTracker) {
 void looney_crawler_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     instance->_F4[0] = 0;
-    instance->_4E = 0;
+    instance->currentModelAnim = 0;
 }
 
 void looney_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
@@ -158,7 +158,7 @@ void looney_doeboy_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         if (temp_v1 != NULL) {
             instance->_F4[2] = ((int*)intro->data)[1];
             if (temp_v1[0] != 0) {
-                instance->_4E = temp_v1[1];
+                instance->currentModelAnim = temp_v1[1];
             }
             instance->_F4[0] = 1;
             instance->intro->_2C = NULL;

@@ -76,7 +76,7 @@ INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015A2B0_DA920);
 void rta_crawler_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     instance->_F4[0] = 0;
-    instance->_4E = 0;
+    instance->currentModelAnim = 0;
 }
 
 void rta_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {

@@ -27,7 +27,7 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_dust_OnUpdate);
 void scifi_crawler_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     instance->_F4[0] = 0;
-    instance->_4E = 0;
+    instance->currentModelAnim = 0;
 }
 
 void scifi_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {

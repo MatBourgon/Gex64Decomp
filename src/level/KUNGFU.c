@@ -38,7 +38,7 @@ INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_bug_OnCollide);
 void kungfu_crawler_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     instance->_F4[0] = 0;
-    instance->_4E = 0;
+    instance->currentModelAnim = 0;
 }
 
 void kungfu_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
@@ -239,7 +239,7 @@ INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015DC00_ACE20);
 
 void func_8015DC9C_ACEBC(Instance* instance, GameTracker* gameTracker)
 {
-    instance->_4E = 2;
+    instance->currentModelAnim = 2;
     instance->_5E = 0;
 }
 

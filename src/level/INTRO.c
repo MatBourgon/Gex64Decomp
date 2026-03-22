@@ -89,7 +89,7 @@ void intro_gextext_OnUpdate(Instance* instance, GameTracker* gameTracker)
         {
             instance->_40[6] -= 0x14;
         }
-        PlayerInstance->_4E = 0;
+        PlayerInstance->currentModelAnim = 0;
     }
 }
 

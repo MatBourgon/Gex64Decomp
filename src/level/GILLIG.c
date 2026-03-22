@@ -55,7 +55,7 @@ void gillig_tikifir_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 void gillig_hedhntr_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->intro->flags &= ~0x80;
-    instance->_4E = 4;
+    instance->currentModelAnim = 4;
     instance->_F4[0] = -1;
     instance->flags2 &= ~0x10;
 }
