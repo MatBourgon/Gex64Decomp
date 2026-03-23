@@ -3,6 +3,7 @@
 
 #include "types/Spline.h"
 #include "types/Vector.h"
+#include "types/Rotation.h"
 
 typedef struct
 {

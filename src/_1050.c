@@ -1,7 +1,7 @@
 #include "common.h"
 
+#include "CAMERA.h"
 #include "types/GameTracker.h"
-#include "types/Vector.h"
 
 INCLUDE_ASM("asm/nonmatchings/_1050", func_80000450);
 
