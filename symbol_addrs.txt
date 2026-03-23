@@ -323,9 +323,6 @@ gSchedulerClient = 0x800BF2D8;
 gSchedulerFinishedMessageQueue = 0x800E9748;
 gSchedulerCommandQueue = 0x800B83D8;
 
-dp_busy = 0x80079604;
-dpCount = 0x80079608;
-
 DMAMessageQueue = 0x800AEFF8;
 _potentiallyAudioInfo = 0x8006FA0C; // size:0x30
 

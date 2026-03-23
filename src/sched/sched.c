@@ -115,8 +115,7 @@ void __scMain(void *arg)
     OSMesg msg;
     OSSched *sc = (OSSched *)arg;
     OSScClient *client;
-    extern int count; // [DATA] todo
-    //static int count = 0;
+    static int count = 0;
     
     while (1) {
         
@@ -154,8 +153,8 @@ void __scMain(void *arg)
     }
 }
 
-extern int dp_busy;
-extern int dpCount;
+static int dp_busy = 0;
+static int dpCount = 0;
 
 void __scHandleRetrace(OSSched *sc)
 {
@@ -297,8 +296,7 @@ inline OSScTask *__scTaskReady(OSScTask *t)
 s32 __scTaskComplete(OSSched *sc, OSScTask *t) 
 {
     int rv;
-    //static int firsttime = 1; // [DATA] todo
-    extern int D_8007960C;
+    static int firsttime = 1;
 
     if ((t->state & OS_SC_RCP_MASK) == 0) { /* none of the needs bits set */
 
@@ -315,9 +313,9 @@ s32 __scTaskComplete(OSSched *sc, OSScTask *t)
 
 	if (t->list.t.type == M_GFXTASK) {
             if ((t->flags & OS_SC_SWAPBUFFER) && (t->flags & OS_SC_LAST_TASK)){
-		if (D_8007960C) {
+		if (firsttime) {
     		    osViBlack(FALSE);
-		    D_8007960C = 0;
+		    firsttime = 0;
 		}
                 osViSwapBuffer(t->framebuffer);
 #ifdef SC_LOGGING

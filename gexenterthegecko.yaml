@@ -308,6 +308,8 @@ segments:
 
       # Start of DATA
       - [0x6B920, data]
+      - [0x7A200, .data, sched/sched]
+      - [0x7A210, data]
 
       # Start of RODATA
       - [0x7C040, .rodata, CAMERA]
