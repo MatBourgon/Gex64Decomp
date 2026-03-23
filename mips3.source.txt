@@ -1,6 +1,7 @@
 src/52EE0.c
 src/_532f0.c
-src/_56340.c
+src/libmus/player_commands.c
+src/libmus/player.c
 src/_56790.c
 
 src/gu/mtxutil.c

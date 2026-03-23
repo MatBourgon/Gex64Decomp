@@ -120,6 +120,7 @@ segments:
       - [0x3B0E0, c]
       - [0x3BAA0, c]
       - [0x3C190, c, main]
+      - [0x3CC70, c, MulMatrix2]
       - [0x3D2B0, c, PIPE3D]
       - [0x3EAA0, c]
       - [0x3F660, c, OBTABLE]
@@ -140,7 +141,8 @@ segments:
       # Start of Libraries
       - [0x52EE0, c]
       - [0x532F0, c, _532f0]
-      - [0x56340, c, _56340]
+      - [0x53BD0, c, libmus/player_commands]
+      - [0x55110, c, libmus/player]
       - [0x56790, c, _56790]
       - [0x57220, c, gu/mtxutil]
       - [0x574A0, c, gu/mtxcatf]
@@ -324,6 +326,8 @@ segments:
       - [0x7F330, .rodata, _4a780]
       - [0x7F6C0, .rodata, _4f810]
       - [0x7F700, .rodata, _532f0]
+      - [0x7F750, .rodata, libmus/player_commands]
+      - [0x7F770, .rodata, libmus/player]
       - [0x7F810, .rodata, _56790]
       - [0x7F820, .rodata, gu/perspective]
       - [0x7F8C0, .rodata, audio/synthesizer]
@@ -624,6 +628,26 @@ segments:
   - name: n64_ptr_tables_v2_9
     type: databin
     start: 0x4973A0
+
+  - name: _potential_audio_1
+    type: databin
+    start: 0x497E00
+
+  - name: _potential_audio_2
+    type: databin
+    start: 0x498300
+
+  - name: _potential_audio_3
+    type: databin
+    start: 0x498A50
+
+  - name: _potential_audio_4
+    type: databin
+    start: 0x499550
+
+  - name: _potential_audio_5
+    type: databin
+    start: 0x49A200
 
   # Surprise gex appearance
   - name: gex.actor
