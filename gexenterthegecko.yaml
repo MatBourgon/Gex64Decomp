@@ -136,6 +136,8 @@ segments:
       - [0x4F810, c, _4f810]
       - [0x4FC20, c]
       - [0x51880, c, SPLINE]
+
+      # Start of Libraries
       - [0x52EE0, c]
       - [0x532F0, c, _532f0]
       - [0x56340, c, _56340]
@@ -298,8 +300,14 @@ segments:
       - [0x6AC60, asm, _6ac60]
       - [0x6B0D0, hasm, mmuldi3]
       - [0x6B5F0, asm]
+
+      # text bin
       - [0x6B6F0, textbin]
+
+      # Start of DATA
       - [0x6B920, data]
+
+      # Start of RODATA
       - [0x7C040, .rodata, CAMERA]
       - [0x7C3B0, .rodata, _7fb0]
       - [0x7C4F0, .rodata, _be60]
@@ -335,6 +343,7 @@ segments:
       - [0x7FEB0, rodata, _6ac60]
       - { type: bss, vram: 0x8007F340 }
 
+  # Start of Level code
   - name: aztec_code
     type: code
     start: 0x7FF40
@@ -533,6 +542,7 @@ segments:
       - [0xECE80, .rodata, level/LOGO]
       - { type: bss, 0x8015A2E0 }
 
+  # Zlib
   - name: zlib
     type: code
     start: 0xED0F0
@@ -542,6 +552,7 @@ segments:
       - [0xED0F0, c, zlib]
       - [0xEEE40, .rodata, zlib]
 
+  # Start of music/sound data
   - name: n64_ptr_tables_v2_1
     type: databin
     start: 0xEF120
@@ -744,6 +755,7 @@ segments:
     type: databin
     start: 0xC18BC0
 
+  # Objects
   - name: 10tons.actor
     type: databin
     start: 0xC495B0
