@@ -182,7 +182,7 @@ void INSTANCE_ReallyRemoveInstance(InstanceList* list, Instance* instance, int r
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002CF4C);
+INCLUDE_ASM("asm/nonmatchings/INSTANCE", func_8002CF4C);
 
 void INSTANCE_CleanUpInstanceList(InstanceList* list, int reset) {
     Instance* next;
@@ -215,7 +215,7 @@ void INSTANCE_CleanUpInstanceList(InstanceList* list, int reset) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002D134);
+INCLUDE_ASM("asm/nonmatchings/INSTANCE", func_8002D134);
 
 void INSTANCE_DefaultInit(Instance*, Object*);
 
@@ -444,7 +444,7 @@ void INSTANCE_ProcessFunctions(InstanceList* list) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002DAF8);
+INCLUDE_ASM("asm/nonmatchings/INSTANCE", func_8002DAF8);
 /*extern s32 D_800E5FD8;
 #define SWAP(b, a)\
 {\
@@ -629,7 +629,7 @@ Instance* INSTANCE_BirthCachedObject(Instance* parent, int objectTypeId) {
     return NULL;
 }
 
-INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002E0D8);
+INCLUDE_ASM("asm/nonmatchings/INSTANCE", func_8002E0D8);
 
 void INSTANCE_DefaultInit(Instance* instance, Object* object) {
     memset(&instance->flags, 0, sizeof(Instance) - offsetof(instance, flags));
@@ -643,7 +643,7 @@ void INSTANCE_DefaultInit(Instance* instance, Object* object) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/2D6E0", func_8002E21C);
+INCLUDE_ASM("asm/nonmatchings/INSTANCE", func_8002E21C);
 /*typedef struct
 {
     int count;

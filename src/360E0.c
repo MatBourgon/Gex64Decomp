@@ -1,0 +1,5 @@
+#include "common.h"
+
+INCLUDE_ASM("asm/nonmatchings/360E0", func_800354E0);
+
+INCLUDE_ASM("asm/nonmatchings/360E0", func_80035A3C);
