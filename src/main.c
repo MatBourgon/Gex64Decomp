@@ -50,7 +50,7 @@ extern int D_800AE4C0;
 extern OSThread D_800ABC60;
 
 void func_8003BFB8(void*);
-void func_800354E0(void*);
+void HandleController(void*);
 void func_8003B804(void*);
 
 void func_8003B5F8(void* arg0) {
@@ -71,7 +71,7 @@ void func_8003B5F8(void* arg0) {
     osScAddClient(&D_800E7EF8, &D_800BF2D8, &D_800E9748);
     D_800B83D8 = osScGetCmdQ(&D_800E7EF8);
 
-    osCreateThread(&D_800ABE10, 8, &func_800354E0, 0, &D_800AECC0, 12);
+    osCreateThread(&D_800ABE10, 8, &HandleController, 0, &D_800AECC0, 12);
     osStartThread(&D_800ABE10);
 
     osCreateThread(&D_800ABC60, 7, &func_8003BFB8, 0, &D_800AE4C0, 9);
