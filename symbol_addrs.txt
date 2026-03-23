@@ -303,6 +303,29 @@ gameTracker4 = 0x8006FCC4; // type:GameTracker*
 gameTracker8 = 0x8006FCC8; // type:GameTracker*
 gameTrackerX = 0x800C0AC0; // size:0x4cd8 segment:main
 
+
+HandleLoadLevelThread = 0x800ABC60;
+LoadLevelMessageQueue = 0x800AF010;
+HandleLoadLevel = 0x8003BFB8; // type:func
+HandleLoadLevelStack = 0x800AE4C0;
+
+HandleControllerThread = 0x800ABE10;
+HandleController = 0x800354E0; // type:func
+HandleControllerStack = 0x800AECC0;
+
+HandleMainThread = 0x800AB900;
+HandleMain = 0x8003B804; // type:func
+HandleMainStack = 0x800ADFC0;
+
+gScheduler = 0x800E7EF8;
+gSchedulerStack = 0x80159710;
+gSchedulerClient = 0x800BF2D8;
+gSchedulerFinishedMessageQueue = 0x800E9748;
+gSchedulerCommandQueue = 0x800B83D8;
+
+DMAMessageQueue = 0x800AEFF8;
+_potentiallyAudioInfo = 0x8006FA0C; // size:0x30
+
 gGlobalMessageBuffer = 0x80153A58;
 
 CharacterManipArray_6F078 = 0x8006F078; // type:s8 size:95
@@ -1291,7 +1314,21 @@ Fbendrange = 0x800538FC; // type:func
 Fsweep = 0x80053938; // type:func
 MusInitialize = 0x80053948; // type:func
 MusSetMasterVolume = 0x80053C6C; // type:func
-alSeqpDelete = 0x800543B8; // type:func
+MusPtrBankInitialize = 0x800543B8; // type:func
+MusStartSong = 0x80053C98; // type:func
+MusStartEffect = 0x80053DEC; // type:func
+MusStartEffect2 = 0x80053E98; // type:func
+MusStop = 0x80053FA0; // type:func
+MusAsk = 0x80054020; // type:func
+MusHandleStop = 0x8005409C; // type:func
+MusHandleAsk = 0x8005410C; // type:func
+MusHandleSetVolume = 0x80054164; // type:func
+MusHandleSetPan = 0x800541C4; // type:func
+MusHandleSetFreqOffset = 0x80054234; // type:func
+MusHandleSetTempo = 0x800542A4; // type:func
+MusHandleSetReverb = 0x80054330; // type:func
+mus_channels = 0x800AF0C0; // size:4
+max_channels = 0x800AF0B8; // type:s32
 __MusIntMain = 0x80054510; // type:func
 __MusIntGetNewNote = 0x80054770; // type:func
 __MusIntFlushPending = 0x80054B04; // type:func
@@ -1306,7 +1343,7 @@ __MusIntProcessSweep = 0x800550AC; // type:func
 __MusIntProcessWobble = 0x80055164; // type:func
 __MusIntProcessVibrato = 0x800551BC; // type:func
 __MusIntPowerOf2 = 0x80055414; // type:func
-alSynRemovePlayer = 0x800555A8; // type:func
+__MusIntRemapPtrBank = 0x800555A8; // type:func
 __MusIntInitialiseChannel = 0x800557D4; // type:func
 __MusIntStartEffect = 0x80055AEC; // type:func
 guMtxF2L = 0x80056620; // type:func

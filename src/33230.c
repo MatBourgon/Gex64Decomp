@@ -63,17 +63,17 @@ INCLUDE_ASM("asm/nonmatchings/33230", func_80032FBC);
 extern int D_800BDF08[];
 
 void func_800330DC(int i, void* arg2) {
-    func_8005409C(D_800BDF08[i], arg2);
+    MusHandleStop(D_800BDF08[i], arg2);
 }
 
 extern OSMesgQueue D_800E5FE8;
 
-void func_8003310C(int arg0, void* arg1, int arg2) {
+void func_8003310C(void* arg0, void* arg1, int arg2) {
     OSIoMesg sp20;
     OSMesg msg;
     int var_s0;
     int var_s1;
-    int var_s3;
+    void* var_s3;
     void* var_s2;
 
     var_s3 = arg0;
@@ -85,7 +85,7 @@ void func_8003310C(int arg0, void* arg1, int arg2) {
             var_s0 = 0x4000;
         }
         osInvalDCache(var_s2, var_s0);
-        osPiStartDma(&sp20, 0, 0, var_s3, var_s2, var_s0, &D_800E5FE8);
+        osPiStartDma(&sp20, OS_MESG_PRI_NORMAL, OS_READ, (int)var_s3, var_s2, var_s0, &D_800E5FE8);
         osRecvMesg(&D_800E5FE8, &msg, 1);
         var_s3 += var_s0;
         var_s1 -= var_s0;
@@ -95,17 +95,17 @@ void func_8003310C(int arg0, void* arg1, int arg2) {
 
 void func_800331BC(void* arg0)
 {
-    func_8005409C(arg0, 0);
+    MusHandleStop(arg0, 0);
 }
 
 void func_800331DC()
 {
-    func_80053FA0(1, 0);
+    MusStop(1, 0);
 }
 
 void func_80033200(void* arg)
 {
-    func_8005410C(arg);
+    MusHandleAsk(arg);
 }
 
 int func_80033220()
@@ -114,12 +114,12 @@ int func_80033220()
 }
 
 void func_80033228(void) {
-    func_80054164(); // needs two arguments
+    MusHandleSetVolume(); // needs two arguments
 }
 
 void func_80033248(void* arg)
 {
-    func_8005410C(arg);
+    MusHandleAsk(arg);
 }
 
 int func_80033268()
@@ -141,7 +141,7 @@ void func_80033288(void) {
 
 void func_80033290()
 {
-    func_80053FA0(2, 0);
+    MusStop(2, 0);
 }
 
 void func_800332B4(void) {
@@ -183,22 +183,31 @@ void func_8003334C(void) {
 void func_80033354(void) {
 }
 
-extern int D_8006FA0C[];
-extern int D_8006FA10[];
-extern int D_8006FA14[];
+typedef struct
+{
+    void* addr0;
+    void* addr1;
+    int unk;
+} _PotentiallyAudioInfo;
+
+extern _PotentiallyAudioInfo _potentiallyAudioInfo[4];
 extern int D_800BDF00;
 extern short D_800E5CDC;
 extern char D_800E81D0[];
 
-int func_8003335C(int arg0) {
+// func_8001AE60: ([2, 3], 3)
+// func_8001CE54: ([2,3], 3)
+// func_8002A488: (4, 1)
+// common_remsilv_onupdate: (1, 3)
+
+int func_8003335C(int arg0, int _) {
     int temp_a0;
 
     if (arg0 >= 5) return 0;
-    arg0--;
+    arg0--; // Shift range from [1, 4] to [0, 3] to fit array
     
-    temp_a0 = D_8006FA0C[arg0 * 3];
-    D_800E5CDC = D_8006FA14[arg0 * 3];
-    func_8003310C(temp_a0, D_800E81D0, D_8006FA10[arg0 * 3] - temp_a0);
+    D_800E5CDC = _potentiallyAudioInfo[arg0].unk;
+    func_8003310C(_potentiallyAudioInfo[arg0].addr0, D_800E81D0, _potentiallyAudioInfo[arg0].addr1 - _potentiallyAudioInfo[arg0].addr0);
     D_800BDF00 = 2;
     return 1;
 }

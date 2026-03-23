@@ -80,28 +80,32 @@ segments:
       - [0x1050, c, CAMERA]
       - [0x7FB0, c, _7fb0]
       - [0xBE60, c, _be60]
-      - [0xD6F0, c, COLLIDE_A] # Collides may be split across more files
+      - [0xD6F0, c, COLLIDE_A]
       - [0xDC40, c, COLLIDE_B]
       - [0xF3D0, c, COLLIDE_C]
       - [0xFCB0, c, COLLIDE_D]
       - [0x103F0, c, COLLIDE_E]
       - [0x10640, c, COLLIDE_F]
+      - [0x10F50, c, COLLIDE_G]
+      - [0x12720, c, COLLIDE_H]
+      - [0x12D70, c, COLLIDE_I]
       - [0x13920, c]
+      - [0x14AC0, c]
       - [0x161C0, c]
       - [0x19BD0, c]
       - [0x1A6A0, c, GAMELOOP]
-      - [0x1AFE0, asm, _1afe0] # GAMEPAD?
+      - [0x1AFE0, c, _1afe0] # GAMEPAD?
       - [0x1B8A0, c, GENERIC]
-      - [0x1BA60, asm]
-      - [0x1F5F0, asm]
-      - [0x23DE0, asm, _23de0]
+      - [0x1BA60, c]
+      - [0x1F5F0, c]
+      - [0x23DE0, c, _23de0]
       - [0x24CF0, c, _24cf0]
-      - [0x287A0, asm, _287a0]
-      - [0x2BA70, asm]
-      - [0x2C440, asm]
-      - [0x2CD50, asm, _2cd50]
-      - [0x2D6E0, c] # INSTANCE?
-      - [0x2F310, asm]
+      - [0x287A0, c, _287a0]
+      - [0x2BA70, c]
+      - [0x2C440, c]
+      - [0x2CD50, c, _2cd50]
+      - [0x2D6E0, c, INSTANCE]
+      - [0x2F310, c]
       - [0x30630, c, LIGHT3D]
       - [0x30C90, c, LIST]
       - [0x30E70, c, MATH3D]
@@ -109,26 +113,37 @@ segments:
       - [0x32D70, c, MATRIX]
       - [0x33230, c]
       - [0x345E0, c]
-      - [0x360E0, asm]
+      - [0x360E0, c]
       - [0x368B0, c]
-      - [0x3AF50, asm]
+      - [0x38670, c]
+      - [0x3AF50, c]
+      - [0x3B0E0, c]
       - [0x3BAA0, c]
       - [0x3C190, c, main]
+      - [0x3CC70, c, MulMatrix2]
       - [0x3D2B0, c, PIPE3D]
       - [0x3EAA0, c]
       - [0x3F660, c, OBTABLE]
       - [0x3FB20, c]
-      - [0x405D0, asm]
-      - [0x40D70, asm, _40d70]
-      - [0x42BD0, c, _42bd0]
+      - [0x405D0, c]
+      - [0x40D70, c, _40d70] # SAMPLE?
+      - [0x42BD0, c]
+      - [0x443F0, c, _443f0]
       - [0x45E00, c, _45e00]
       - [0x46EC0, c, _46ec0]
-      - [0x4A780, c, SIGNAL]
+      - [0x47260, c, _47260]
+      - [0x4A780, c, _4a780]
+      - [0x4CF50, c, SIGNAL]
       - [0x4F810, c, _4f810]
       - [0x4FC20, c]
       - [0x51880, c, SPLINE]
-      - [0x52EE0, c, _52ee0]
-      - [0x56340, c, _56340]
+
+      # Start of Libraries
+      - [0x52EE0, c]
+      - [0x532F0, c, _532f0]
+      - [0x53BD0, c, libmus/player_commands]
+      - [0x55110, c, libmus/player]
+      - [0x56790, c, _56790]
       - [0x57220, c, gu/mtxutil]
       - [0x574A0, c, gu/mtxcatf]
       - [0x57630, c, gu/perspective]
@@ -284,27 +299,38 @@ segments:
       - [0x6A990, c, libc/ldiv]
       - [0x6AB50, c, libkmc/memset]
       - [0x6AC20, c, libkmc/rand]
-      - [0x6AC60, asm]
+      - [0x6AC60, asm, _6ac60]
       - [0x6B0D0, hasm, mmuldi3]
       - [0x6B5F0, asm]
+
+      # text bin
       - [0x6B6F0, textbin]
+
+      # Start of DATA
       - [0x6B920, data]
+      - [0x7A200, .data, sched/sched]
+      - [0x7A210, data]
+
+      # Start of RODATA
       - [0x7C040, .rodata, CAMERA]
       - [0x7C3B0, .rodata, _7fb0]
       - [0x7C4F0, .rodata, _be60]
-      - [0x7C8F0, rodata, _1afe0]
+      - [0x7C8F0, .rodata, _1afe0]
       - [0x7C9E0, .rodata, _24cf0]
-      - [0x7CA40, rodata, _287a0]
-      - [0x7CAC0, rodata, _2cd50]
+      - [0x7CA40, .rodata, _287a0]
+      - [0x7CAC0, .rodata, _2cd50]
       - [0x7CAE0, .rodata, _31960]
-      - [0x7EF80, rodata, _40d70]
-      - [0x7F110, .rodata, _42bd0]
+      - [0x7EF80, .rodata, _40d70]
+      - [0x7F110, .rodata, _443f0]
       - [0x7F1C0, .rodata, _45e00]
       - [0x7F1E0, .rodata, _46ec0]
-      - [0x7F330, .rodata, SIGNAL]
+      - [0x7F320, .rodata, _47260]
+      - [0x7F330, .rodata, _4a780]
       - [0x7F6C0, .rodata, _4f810]
-      - [0x7F700, .rodata, _52ee0]
-      - [0x7F810, .rodata, _56340]
+      - [0x7F700, .rodata, _532f0]
+      - [0x7F750, .rodata, libmus/player_commands]
+      - [0x7F770, .rodata, libmus/player]
+      - [0x7F810, .rodata, _56790]
       - [0x7F820, .rodata, gu/perspective]
       - [0x7F8C0, .rodata, audio/synthesizer]
       - [0x7F8E0, .rodata, io/aisetfreq]
@@ -320,9 +346,10 @@ segments:
       - [0x7FC50, .rodata, libc/xprintf]
       - [0x7FDE0, .rodata, libc/xldtob]
       - [0x7FE50, .rodata, rmon/rmonbrk]
-      - [0x7FEB0, rodata]
+      - [0x7FEB0, rodata, _6ac60]
       - { type: bss, vram: 0x8007F340 }
 
+  # Start of Level code
   - name: aztec_code
     type: code
     start: 0x7FF40
@@ -521,6 +548,7 @@ segments:
       - [0xECE80, .rodata, level/LOGO]
       - { type: bss, 0x8015A2E0 }
 
+  # Zlib
   - name: zlib
     type: code
     start: 0xED0F0
@@ -530,6 +558,7 @@ segments:
       - [0xED0F0, c, zlib]
       - [0xEEE40, .rodata, zlib]
 
+  # Start of music/sound data
   - name: n64_ptr_tables_v2_1
     type: databin
     start: 0xEF120
@@ -601,6 +630,26 @@ segments:
   - name: n64_ptr_tables_v2_9
     type: databin
     start: 0x4973A0
+
+  - name: _potential_audio_1
+    type: databin
+    start: 0x497E00
+
+  - name: _potential_audio_2
+    type: databin
+    start: 0x498300
+
+  - name: _potential_audio_3
+    type: databin
+    start: 0x498A50
+
+  - name: _potential_audio_4
+    type: databin
+    start: 0x499550
+
+  - name: _potential_audio_5
+    type: databin
+    start: 0x49A200
 
   # Surprise gex appearance
   - name: gex.actor
@@ -732,6 +781,7 @@ segments:
     type: databin
     start: 0xC18BC0
 
+  # Objects
   - name: 10tons.actor
     type: databin
     start: 0xC495B0

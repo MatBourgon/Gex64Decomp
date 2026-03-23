@@ -97,13 +97,13 @@ extern int D_800BDF08[];
 extern int D_800EB860[];
 extern int D_8014F360[];
 
-void func_80050BC4(int arg0, int arg1, int arg2) {
+void func_80050BC4(int arg0, int volume, int arg2) {
     if (gameTracker8->_4B12[0x4F] != 0) {
         if (D_800EB860[arg0] != 0) {
-            D_800BDF08[arg0] = func_800543D4(D_8014F360, D_800EB860[arg0]);
-            func_80054164(D_800BDF08[arg0], arg1);
+            D_800BDF08[arg0] = func_800543D4(D_8014F360, D_800EB860[arg0]); // MusHandleStartSong?
+            MusHandleSetVolume(D_800BDF08[arg0], volume);
             if (D_8006F5AC[arg2 * 0x24/4] != 0) {
-                func_80054330(D_800BDF08[arg0], D_8006F5AC[arg2 * 0x24/4]);
+                MusHandleSetReverb(D_800BDF08[arg0], D_8006F5AC[arg2 * 0x24/4]);
             }
         }
     }

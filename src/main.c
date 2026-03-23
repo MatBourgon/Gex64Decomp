@@ -24,64 +24,63 @@ void bootproc(void* arg0) {
 }
 
 extern OSMesgQueue D_800AEFE0;
-extern OSMesg D_800AECC0[0xC8];
-extern OSMesgQueue D_800AEFF8;
+extern OSMesg HandleControllerStack[0xC8];
+extern OSMesgQueue DMAMessageQueue;
 extern OSMesg D_800AF028[1];
-extern OSMesgQueue D_800E9748;
+extern OSMesgQueue gSchedulerFinishedMessageQueue;
 extern OSMesg D_800E8188[0x10];
-extern OSMesgQueue D_800AF010;
+extern OSMesgQueue LoadLevelMessageQueue;
 extern OSMesg D_800AF02C[1];
 extern OSMesg D_800AF030[2];
 extern OSMesgQueue D_800E5FE8;
 extern OSMesg D_800E8EF0[8];
 
-extern int D_800ADFC0;
+extern int HandleMainStack[1];
 
-extern OSMesgQueue* D_800B83D8;
-extern OSThread D_800AB900;
+extern OSMesgQueue* gSchedulerCommandQueue;
+extern OSThread HandleMainThread;
 
-extern OSSched D_800E7EF8;
-extern OSScClient D_800BF2D8;
+extern OSSched gScheduler;
+extern OSScClient gSchedulerClient;
 
-extern OSThread D_800ABE10;
-extern char D_80159710[]; // stack memory
+extern OSThread HandleControllerThread;
+extern char gSchedulerStack[]; // stack memory
 
-extern int D_800AE4C0;
-extern OSThread D_800ABC60;
+extern int HandleLoadLevelStack[1];
+extern OSThread HandleLoadLevelThread;
 
-void func_8003BFB8(void*);
-void func_800354E0(void*);
-void func_8003B804(void*);
+void HandleLoadLevel(void*);
+void HandleController(void*);
+void HandleMain(void*);
 
 void func_8003B5F8(void* arg0) {
 
-    osCreatePiManager(OS_PRIORITY_PIMGR, &D_800AEFE0, D_800AECC0, ARRAY_COUNT(D_800AECC0));
-    osCreateMesgQueue(&D_800AEFF8, D_800AF028, ARRAY_COUNT(D_800AF028));
-    osCreateMesgQueue(&D_800E9748, D_800E8188, ARRAY_COUNT(D_800E8188));
-    osCreateMesgQueue(&D_800AF010, D_800AF02C, ARRAY_COUNT(D_800AF02C));
+    osCreatePiManager(OS_PRIORITY_PIMGR, &D_800AEFE0, HandleControllerStack, ARRAY_COUNT(HandleControllerStack));
+    osCreateMesgQueue(&DMAMessageQueue, D_800AF028, ARRAY_COUNT(D_800AF028));
+    osCreateMesgQueue(&gSchedulerFinishedMessageQueue, D_800E8188, ARRAY_COUNT(D_800E8188));
+    osCreateMesgQueue(&LoadLevelMessageQueue, D_800AF02C, ARRAY_COUNT(D_800AF02C));
     osCreateMesgQueue(&gGlobalMessageBuffer, D_800AF030, ARRAY_COUNT(D_800AF030));
     osCreateMesgQueue(&D_800E5FE8, D_800E8EF0, ARRAY_COUNT(D_800E8EF0));
 
     if (osTvType == OS_TV_MPAL) {
-        osCreateScheduler(&D_800E7EF8, D_80159710, 15, OS_VI_MPAL_LAN1, 1);
+        osCreateScheduler(&gScheduler, gSchedulerStack, 15, OS_VI_MPAL_LAN1, 1);
     } else {
-        osCreateScheduler(&D_800E7EF8, D_80159710, 15, OS_VI_NTSC_LAN1, 1);
+        osCreateScheduler(&gScheduler, gSchedulerStack, 15, OS_VI_NTSC_LAN1, 1);
     }
 
-    osScAddClient(&D_800E7EF8, &D_800BF2D8, &D_800E9748);
-    D_800B83D8 = osScGetCmdQ(&D_800E7EF8);
+    osScAddClient(&gScheduler, &gSchedulerClient, &gSchedulerFinishedMessageQueue);
+    gSchedulerCommandQueue = osScGetCmdQ(&gScheduler);
 
-    osCreateThread(&D_800ABE10, 8, &func_800354E0, 0, &D_800AECC0, 12);
-    osStartThread(&D_800ABE10);
+    osCreateThread(&HandleControllerThread, 8, HandleController,   0,      HandleControllerStack, 12);
+    osStartThread(&HandleControllerThread);
 
-    osCreateThread(&D_800ABC60, 7, &func_8003BFB8, 0, &D_800AE4C0, 9);
-    osStartThread(&D_800ABC60);
+    osCreateThread(&HandleLoadLevelThread,  7, HandleLoadLevel,    0,      HandleLoadLevelStack, 9);
+    osStartThread(&HandleLoadLevelThread);
 
-    // Possibly main thread
-    osCreateThread(&D_800AB900, 6, &func_8003B804, arg0, &D_800ADFC0, 10);
-    osStartThread(&D_800AB900);
+    osCreateThread(&HandleMainThread,       6, HandleMain,         arg0,   HandleMainStack, 10);
+    osStartThread(&HandleMainThread);
 
-    osSetThreadPri(0, 0);
+    osSetThreadPri(NULL, OS_PRIORITY_IDLE);
 
     while(1);
 }
@@ -98,7 +97,7 @@ extern int D_800E5CD0;
 extern int D_800B83B8;
 extern int D_801539D8;
 
-void func_8003B804(void* arg0) {
+void HandleMain(void* arg0) {
     OSMesg msgType;
     int var_s1;
     int temp_a0;
@@ -109,7 +108,7 @@ void func_8003B804(void* arg0) {
     func_8003BAF8();
     while(1)
     {
-        osRecvMesg(&D_800E9748, &msgType, 1);
+        osRecvMesg(&gSchedulerFinishedMessageQueue, &msgType, 1);
 
         switch(*(short*)msgType)
         {
@@ -177,8 +176,8 @@ void DMATransferData(unsigned int devAddr, void* dramAddr, unsigned int size) {
     OSMesg mesg;
 
     osInvalDCache(dramAddr, size);
-    osPiStartDma(&ioMesg, /*priority*/ 0, /*direction*/ 0, devAddr, dramAddr, size, &D_800AEFF8);
-    osRecvMesg(&D_800AEFF8, &mesg, 1);
+    osPiStartDma(&ioMesg, OS_MESG_PRI_NORMAL, OS_READ, devAddr, dramAddr, size, &DMAMessageQueue);
+    osRecvMesg(&DMAMessageQueue, &mesg, 1);
 }
 
 INCLUDE_ASM("asm/nonmatchings/main", func_8003BAF8);
@@ -191,15 +190,15 @@ extern void* D_800EB7F4;
 extern void* LevelDataPtr; // Likely to be uncompressed level data
 extern int D_80070134;
 
-void func_8003BFB8(void* arg0) {
+void HandleLoadLevel(void* arg0) {
     OSMesg mesg;
 
     while(1)
     {
-        osRecvMesg(&D_800AF010, &mesg, 1);
+        osRecvMesg(&LoadLevelMessageQueue, &mesg, OS_MESG_BLOCK);
         D_800EB7F4 = LEVEL_DATA_ADDRESS; // Where level data is stored
         LoadZlib();
-        LevelDataPtr = LoadLevelData(gameTracker8->levelIdToLoad); // Unpack level
+        LevelDataPtr = (void*)LoadLevelData(gameTracker8->levelIdToLoad); // Unpack level
         LoadObjects(LevelDataPtr); // Unpack & prepare models
         LoadLevelCode(gameTracker8->levelIdToLoad); // Load level code
         func_80030BA0();
@@ -207,7 +206,3 @@ void func_8003BFB8(void* arg0) {
         D_80070134 = 2;
     }
 }
-
-INCLUDE_ASM("asm/nonmatchings/main", func_8003C070);
-
-INCLUDE_ASM("asm/nonmatchings/main", MulMatrix2);

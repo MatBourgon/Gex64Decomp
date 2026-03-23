@@ -12,47 +12,29 @@
 #include "level/COMMON.h"
 #include "INSTANCE.h"
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80041FD0);
+INCLUDE_ASM("asm/nonmatchings/_443f0", common_fpower_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80042120);
+INCLUDE_ASM("asm/nonmatchings/_443f0", func_80043958);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80042184);
+INCLUDE_ASM("asm/nonmatchings/_443f0", common_colfire_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80042330);
+INCLUDE_RODATA("asm/nonmatchings/_443f0", D_8007E510);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80042674);
+INCLUDE_RODATA("asm/nonmatchings/_443f0", jtbl_8007E518);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80042A4C);
+INCLUDE_ASM("asm/nonmatchings/_443f0", common_ice_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80042CC0);
+INCLUDE_ASM("asm/nonmatchings/_443f0", common_icecube_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_800434BC);
+INCLUDE_ASM("asm/nonmatchings/_443f0", common_icecube_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80043708);
+INCLUDE_ASM("asm/nonmatchings/_443f0", func_800444B8);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", common_fpower_OnUpdate);
+INCLUDE_ASM("asm/nonmatchings/_443f0", common_powerbug_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_80043958);
+INCLUDE_ASM("asm/nonmatchings/_443f0", common_powerbug_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/_42bd0", common_colfire_OnUpdate);
-
-INCLUDE_RODATA("asm/nonmatchings/_42bd0", D_8007E510);
-
-INCLUDE_RODATA("asm/nonmatchings/_42bd0", jtbl_8007E518);
-
-INCLUDE_ASM("asm/nonmatchings/_42bd0", common_ice_OnUpdate);
-
-INCLUDE_ASM("asm/nonmatchings/_42bd0", common_icecube_OnUpdate);
-
-INCLUDE_ASM("asm/nonmatchings/_42bd0", common_icecube_OnCollide);
-
-INCLUDE_ASM("asm/nonmatchings/_42bd0", func_800444B8);
-
-INCLUDE_ASM("asm/nonmatchings/_42bd0", common_powerbug_OnCreate);
-
-INCLUDE_ASM("asm/nonmatchings/_42bd0", common_powerbug_OnUpdate);
-
-INCLUDE_ASM("asm/nonmatchings/_42bd0", common_powerbug_OnCollide);
+INCLUDE_ASM("asm/nonmatchings/_443f0", common_powerbug_OnCollide);
 
 void func_80044B2C(Instance* instance) {
     int temp_v1;

@@ -1,1 +1,2 @@
-src/libkmc/rand.c src/libkmc/memset.c
+src/libkmc/memset.c
+src/libkmc/rand.c
