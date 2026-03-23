@@ -119,6 +119,7 @@ CAMERA_Adjust = 0x80003B1C; // type:func
 CAMERA_LengthSVector = 0x800020D0; // type:func
 CAMERA_AngleDifference = 0x80002600; // type:func
 CAMERA_SaveMode = 0x80000F60; // type:func
+CAMERA_SetShake = 0x80003D68; // type:func
 
 SCRIPT_GetMultiSpline = 0x80048524; // type:func
 INSTANCE_ReallyRemoveInstance = 0x8002CD50; // type:func

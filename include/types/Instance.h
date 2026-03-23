@@ -42,8 +42,7 @@ typedef struct Instance_s
     int _7C;
     short _80[2];
     SVector wNormal;
-    SVECTOR offset;
-    short _92;
+    SVector offset;
     short _94[2];
     LightInstance* shadow0; // 98
     LightInstance* shadow1; // 9C

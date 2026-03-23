@@ -163,7 +163,7 @@ void CAMERA_ChangeTo(CameraKey* key)
     gameTracker8->camera->cameraKey = key;
 }
 
-INCLUDE_ASM("asm/nonmatchings/_1050", func_80003D68);
+INCLUDE_ASM("asm/nonmatchings/_1050", CAMERA_SetShake);
 
 INCLUDE_ASM("asm/nonmatchings/_1050", func_80003DAC);
 

@@ -69,7 +69,10 @@ typedef struct
     int maxFocusDistance;
     int _data5[0x28];
     int timer;
-    int _data9[0x1C];
+    int _data9[0x05];
+    MultiSpline* spline00;
+    MultiSpline* spline01;
+    int _data10[0x15];
     int stack;
 } Camera;
 
