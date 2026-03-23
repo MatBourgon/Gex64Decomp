@@ -17,7 +17,7 @@ src/19BD0.c
 src/GAMELOOP.c
 src/GENERIC.c
 src/_24cf0.c
-src/2D6E0.c
+src/INSTANCE.c
 src/LIGHT3D.c
 src/LIST.c
 src/MATH3D.c
