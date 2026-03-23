@@ -17,8 +17,8 @@ typedef struct
     int* _18;
     int flags; // 1C
     void* data; // 20
-    struct Instance_s* instance;
-    MultiSpline* multiSpline; // 0x28
+    struct Instance_s* instance; // 24
+    MultiSpline* multiSpline; // 28
     int* _2C; // Maybe dsignal?
 } Intro;
 

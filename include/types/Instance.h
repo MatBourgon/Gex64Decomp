@@ -33,7 +33,7 @@ typedef struct Instance_s
     SVECTOR oldPos; // 50, 52, 54
     short currentTextureAnimFrame;
     SVECTOR initialPos; // 58, 5A, 5C
-    short _5E;
+    short currentAnimFrame;
     ROTATION rotation; // 60, 62, 64, 66
     SVector scale; // 68, 6A, 6C, 6E
     int _70;
@@ -42,8 +42,7 @@ typedef struct Instance_s
     int _7C;
     short _80[2];
     SVector wNormal;
-    SVECTOR offset;
-    short _92;
+    SVector offset;
     short _94[2];
     LightInstance* shadow0; // 98
     LightInstance* shadow1; // 9C

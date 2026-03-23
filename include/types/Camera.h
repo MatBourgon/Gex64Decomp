@@ -3,6 +3,7 @@
 
 #include "types/Spline.h"
 #include "types/Vector.h"
+#include "types/Rotation.h"
 
 typedef struct
 {
@@ -24,6 +25,16 @@ typedef struct
 
 typedef struct
 {
+    short x, y, z;
+    short id;
+    short rx, ry, rz;
+    short flags;
+    short tx, ty, tz;
+    short pad;
+} CameraKey;
+
+typedef struct
+{
     SVECTOR position;
     short _pad;
     int _08[0x54/4];
@@ -33,6 +44,37 @@ typedef struct
 typedef struct
 {
     CameraCore cameraCore;
+    int _data[0x3A];
+    CameraKey* cameraKey;
+    int mode;
+    int smooth;
+    int _data2[0x0A];
+    short targetFocusRotationX;
+    short targetFocusRotationZ;
+    short focusRotationX;
+    short focusRotationZ;
+    int _data7[0x1E];
+    int targetFocusDistance;
+    int _data8[4];
+    ROTATION savedFocusRotation;
+    int targetStack;
+    int savedTargetFocusDistance[0x9];
+    int lock;
+    int _data3[0x22];
+    int rotState;
+    int tiltState;
+    int distanceState;
+    int signalFocusDistance;
+    int _data4[0x39];
+    int minFocusDistance;
+    int maxFocusDistance;
+    int _data5[0x28];
+    int timer;
+    int _data9[0x05];
+    MultiSpline* spline00;
+    MultiSpline* spline01;
+    int _data10[0x15];
+    int stack;
 } Camera;
 
 #endif

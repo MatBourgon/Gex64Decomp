@@ -422,12 +422,12 @@ void func_8004C43C() {
 }
 
 s32 SIGNAL_HideObject(Instance* instance, void* signal) {
-    ((int**)signal)[1][7] |= 0x80;                    
+    ((Intro**)signal)[1]->flags |= 0x80;                    
     return 1;     
 }
 
 s32 SIGNAL_UnhideObject(Instance* instance, void* signal) {
-    ((int**)signal)[1][7] &= ~0x80;
+    ((Intro**)signal)[1]->flags &= ~0x80;
     return 1;
 }
 
@@ -463,10 +463,10 @@ s32 SIGNAL_StartSpline(Instance* instance, void* signal) {
 }
 
 s32 SIGNAL_StopSpline(Instance* instance, void* signal) {
-    int* var1 = ((int**)signal)[1]; 
+    Intro* intro = ((Intro**)signal)[1]; 
 
-     if (((Instance*)var1[9]) != 0) {
-        ((Instance*)var1[9])->flags &= ~0x2000000;
+     if (intro->instance != 0) {
+        intro->instance->flags &= ~0x2000000;
     }
     return 1;
 }
@@ -480,21 +480,20 @@ s32 SIGNAL_StopAniTex(Instance* instance, void* signal) {
 }
 
 s32 SIGNAL_GotoFrame(Instance* instance, void* signal) {
-    short* temp_v1;
+    Instance* inst;
 
-    temp_v1 = ((short***)signal)[1][0x24/4];
-    if (temp_v1 != NULL) {
-        temp_v1[0x5E/2] = ((unsigned char*)signal)[11];
+    inst = ((Intro**)signal)[1]->instance;
+    if (inst != NULL) {
+        inst->currentAnimFrame = ((unsigned char*)signal)[11];
     }
     return 1;
 }
 
 s32 SIGNAL_ChangeModel(Instance* instance, void* signal) {
-    int* temp_v0 = ((int**)signal)[1];
-    short* temp_v1  = (short*)temp_v0[9];
+    Instance* inst  = ((Intro**)signal)[1]->instance;
     
-    if (temp_v1 != 0) {
-        temp_v1[97] = ((int*)signal)[2];
+    if (inst != 0) {
+        inst->currentModel = ((int*)signal)[2];
     }
     return 1;
 }
@@ -528,32 +527,32 @@ s32 SIGNAL_LightGroup(Instance* instance, void* signal) {
 }
 
 s32 SIGNAL_CameraAdjust(Instance* instance, void* signal) {
-    func_80003B1C(gameTracker8->camera, ((int*)signal)[1]);
+    CAMERA_Adjust(gameTracker8->camera, ((int*)signal)[1]);
     return 1;
 }
 
 s32 SIGNAL_Camera(Instance* instance, void* signal) {
-    func_80003D4C(((int*)signal)[1]);
+    CAMERA_ChangeTo(((int*)signal)[1]);
     return 1;
 }
 
 s32 SIGNAL_CameraMode(Instance* instance, void* signal) {
-    func_80001408(gameTracker8->camera, ((int*)signal)[1]);
+    CAMERA_SetMode(gameTracker8->camera, ((int*)signal)[1]);
     return 1;
 }
 
 s32 SIGNAL_CameraLock(Instance* instance, void* signal) {
-    func_80003118(gameTracker8->camera, ((int*)signal)[1]);
+    CAMERA_CameraLock(gameTracker8->camera, ((int*)signal)[1]);
     return 1;
 }
 
 s32 SIGNAL_CameraUnlock(Instance* instance, void* signal) {
-    func_8000312C(gameTracker8->camera, ((int*)signal)[1]);
+    CAMERA_CameraUnlock(gameTracker8->camera, ((int*)signal)[1]);
     return 1;
 }
 
 s32 SIGNAL_CameraSmooth(Instance* instance, void* signal) {
-    func_80003140(gameTracker8->camera, ((int*)signal)[1]);
+    CAMERA_SetSmoothValue(gameTracker8->camera, ((int*)signal)[1]);
     return 1;
 }
 
@@ -564,22 +563,22 @@ s32 SIGNAL_8004C844(Instance* instance, void* signal)
 }
 
 s32 SIGNAL_CameraTimer(Instance* instance, void* signal) {
-    func_800039E8(gameTracker8->camera, ((int*)signal)[1]);
+    CAMERA_SetTimer(gameTracker8->camera, ((int*)signal)[1]);
     return 1;
 }
 
 s32 SIGNAL_CameraSave(Instance* instance, void* signal) {
-    func_80003148(gameTracker8->camera, ((int*)signal)[1]);
+    CAMERA_Save(gameTracker8->camera, ((int*)signal)[1]);
     return 1;
 }
 
 s32 SIGNAL_CameraRestore(Instance* instance, void* signal) {
-    func_80003910(gameTracker8->camera, ((int*)signal)[1]);
+    CAMERA_Restore(gameTracker8->camera, ((int*)signal)[1]);
     return 1;
 }
 
 s32 SIGNAL_CameraValue(Instance* instance, void* signal) {
-    func_80002198(gameTracker8->camera, ((int*)signal)[1], ((int*)signal)[2]);
+    CAMERA_SetValue(gameTracker8->camera, ((int*)signal)[1], ((int*)signal)[2]);
     return 1;
 }
 
@@ -593,24 +592,23 @@ typedef struct
 
 s32 SIGNAL_Teleport(Instance* instance, void* signal) {
     SVECTOR sp10;
-    MATRIX sp18;
+    MATRIX matrix;
     SVECTOR deltaPosition;
     TeleportSignal* tpSignal = signal;
 
     deltaPosition.x = instance->position.x - tpSignal->entryLocation.x;
     deltaPosition.y = instance->position.y - tpSignal->entryLocation.y;
     deltaPosition.z = instance->position.z - tpSignal->entryLocation.z;
-    // Probably some kind of matrix being built to rotate the instance after teleportation
-    MATH3D_SetUnityMatrix(&sp18); // int vector? [1 0 0] [0 1 0] [1 0 0]
-    RotMatrixZ(tpSignal->r, &sp18); // rotate
-    MATH3D_ApplyMatrixSV(&sp18, &deltaPosition, &sp10); // (Matrix x Vector) -> Vector
+    MATH3D_SetUnityMatrix(&matrix);
+    RotMatrixZ(tpSignal->r, &matrix);
+    MATH3D_ApplyMatrixSV(&matrix, &deltaPosition, &sp10); 
     instance->offset.x = tpSignal->exitLocation.x - deltaPosition.x;
     instance->offset.y = tpSignal->exitLocation.y - deltaPosition.y;
     instance->offset.z = tpSignal->exitLocation.z - deltaPosition.z;
     instance->offset.x += sp10.x;
     instance->offset.y += sp10.y;
     instance->offset.z += sp10.z;
-    instance->_92 = tpSignal->r;
+    instance->offset.pad = tpSignal->r;
     ((short*)gameTracker8->camera)[0x140/2] += instance->offset.z;
     ((short*)gameTracker8->camera)[0x142/2] += instance->offset.z;
     ((int*)gameTracker8->camera)[0x450/4] = 1;
@@ -653,7 +651,6 @@ s32 SIGNAL_SoundPauseSlot(Instance* instance, void* signal) {
     func_80050854(instance, &sp10);
     return 1;
 }
-
 
 s32 SIGNAL_SoundResumeSlot(Instance* instance, void* signal) {
     int sp10[5];
@@ -908,7 +905,7 @@ s32 SIGNAL_LogicValue(Instance* instance, void* signal)
 }
 
 s32 SIGNAL_CameraShake(Instance* instance, void* signal) {
-    func_80003D68(gameTracker8->camera, ((int*)signal)[1], ((int*)signal)[2]);
+    CAMERA_SetShake(gameTracker8->camera, ((int*)signal)[1], ((int*)signal)[2]);
     return 1;
 }
 
@@ -955,12 +952,12 @@ s32 SIGNAL_LogicFalse(Instance* instance, void* signal) {
 
 s32 SIGNAL_CallSignal(Instance* instance, void* signal)
 {
-    SIGNAL_HandleSignal(instance, ((void**)signal)[1]+4, 0);
+    SIGNAL_HandleSignal(instance, ((void**)signal)[1] + 4, 0);
     return 1;
 }
 
 s32 SIGNAL_Offset(Instance* instance, void* signal) {
-    *(SVector*)&instance->offset.x =  *(SVector*)&(((short*)signal)[2]);
+    instance->offset =  *(SVector*)&(((short*)signal)[2]);
     return 1;
 }
 
@@ -1141,13 +1138,13 @@ s32 SIGNAL_GameLoadSave(Instance* instance, void* signal) {
 s32 SIGNAL_HideObjectGroup(Instance* instance, void* signal) {
     int length;
     int index;
-    int** ptr;
+    Intro** ptr;
 
     length = ((int**)signal)[1][0];
-    ptr = &(((int***)signal)[1][1]);
+    ptr = &(((Intro***)signal)[1][1]);
     
     for (index = 0; index < length; ++index) {
-        ptr[index][7] |= 0x80;
+        ptr[index]->flags |= 0x80;
     }
     return 1;
 }
@@ -1155,13 +1152,13 @@ s32 SIGNAL_HideObjectGroup(Instance* instance, void* signal) {
 s32 SIGNAL_UnhideObjectGroup(Instance* instance, void* signal) {
     int length;
     int index;
-    int** ptr;
+    Intro** ptr;
 
     length = ((int**)signal)[1][0];
-    ptr = &(((int***)signal)[1][1]);
+    ptr = &(((Intro***)signal)[1][1]);
     
     for (index = 0; index < length; ++index) {
-        ptr[index][7] &= ~0x80;
+        ptr[index]->flags &= ~0x80;
     }
     return 1;
 }
@@ -1173,12 +1170,31 @@ INCLUDE_ASM("asm/nonmatchings/SIGNAL", func_8004DD08);
 
 INCLUDE_ASM("asm/nonmatchings/SIGNAL", SIGNAL_Shards);
 
-INCLUDE_ASM("asm/nonmatchings/SIGNAL", SIGNAL_CameraSpline);
+s32 SIGNAL_CameraSpline(Instance* instance, void* signal) {
+
+    switch (((int*)signal)[1]) {
+    case 0:
+        if (((int**)signal)[2] != NULL) {
+            gameTracker8->camera->spline00 = ((Intro**)signal)[2]->multiSpline; // signal->data.cameraSpline.intro->multiSpline
+        } else {
+            gameTracker8->camera->spline00 = 0;
+        }
+        break;
+    case 1:
+        if (((int**)signal)[2] != NULL) {
+            gameTracker8->camera->spline01 = ((Intro**)signal)[2]->multiSpline;
+        } else {
+            gameTracker8->camera->spline01 = 0;
+        }
+        break;
+    }
+    return 1;
+}
 
 s32 SIGNAL_ScreenWipe(Instance* instance, void* signal) {
-    ((short*)gameTracker8)[0x98/2] = (u16) ((short*)signal)[3];
-    ((short*)gameTracker8)[0x9A/2] = abs(((short*)signal)[3]);
-    ((short*)gameTracker8)[0x9C/2] = (u16) ((short*)signal)[2];
+    ((short*)gameTracker8)[0x98/2] = (u16) ((short*)signal)[3]; // wipeTime
+    ((short*)gameTracker8)[0x9A/2] = abs(((short*)signal)[3]); // maxWipeTime
+    ((short*)gameTracker8)[0x9C/2] = (u16) ((short*)signal)[2]; // wipeType
     return 1;
 }
 
@@ -1381,16 +1397,15 @@ s32 SIGNAL_8004E9E4(Instance* instance, void* signal) {
 }
 
 s32 SIGNAL_8004E9F8(Instance* instance, void* signal) {
-    int* temp_v0;
-    int* temp_v1;
+    Instance* inst;
+    Intro* intro;
 
-    temp_v1 = ((int**)signal)[2];
-    if (temp_v1 != 0) {
-        temp_v0 = (int*)temp_v1[9];
+    intro = ((Intro**)signal)[2];
+    if (intro != 0) {
+        inst = intro->instance;
         
-        if (temp_v0 != 0) {
-        temp_v1 =  ((int**)signal)[1];
-        (int*)temp_v0[72] = temp_v1;
+        if (inst != 0) {
+        inst->_120 = ((int*)signal)[1];
         }
     } 
     
@@ -1401,7 +1416,7 @@ s32 SIGNAL_8004EA2C(Instance* instance, void* signal) {
     Instance* temp_v0;
     short* temp_v1;
 
-    temp_v0 = (Instance*)gameTracker8->player;
+    temp_v0 = gameTracker8->player;
     temp_v1 = (short*)temp_v0->data;
     temp_v0->rotation.z = 0;
     temp_v1[0x82/2] = 0;

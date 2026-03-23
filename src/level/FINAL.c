@@ -305,7 +305,7 @@ void final_rezcam_OnCreate(Instance* instance, GameTracker* gameTracker) {
     temp_s2 = gameTracker->camera;
     ptr = &instance->_F4[2];
     instance->flags |= 0x800;
-    func_80001408(gameTracker->camera, 8);
+    CAMERA_SetMode(gameTracker->camera, 8);
     if (instance->introData == NULL) {
         instance->introData = (void*)&D_80161558_926F8;
     }

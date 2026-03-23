@@ -237,7 +237,7 @@ void map_intro_OnCreate(Instance* instance, GameTracker* gameTracker) {
                 gameTracker->camera->cameraCore.position.z = temp_v0_2->z;
             }
             func_80003A68(gameTracker->camera, SplineGetFirstPoint((Spline*)*temp_s1, (SplineDef*)(temp_s1 + 4)));
-            func_80001408(gameTracker->camera, 8);
+            CAMERA_SetMode(gameTracker->camera, 8);
         }
         gameTracker->gameFlags |= 1;
     }
@@ -285,7 +285,7 @@ void map_intro_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             gameTracker->camera->cameraCore.position.y = v1->y;
             gameTracker->camera->cameraCore.position.z = v1->z;
             func_80003A68(gameTracker->camera, SplineGetLastPoint((Spline*)s2[0], (SplineDef*)(s2 + 4))); // 150
-            func_80001408(gameTracker->camera, 8); // 170
+            CAMERA_SetMode(gameTracker->camera, 8); // 170
         }
     } // 17c
     instance->_F4[1] = 1;
@@ -305,7 +305,7 @@ void map_intro_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
     _1d8:
     func_80003A68(gameTracker->camera, SplineGetNextPoint((Spline*)s2[0], (SplineDef*)(s2 + 4)));
-    func_80001408(gameTracker->camera, 8);
+    CAMERA_SetMode(gameTracker->camera, 8);
     
 }
 
