@@ -80,7 +80,7 @@ segments:
       - [0x1050, c, CAMERA]
       - [0x7FB0, c, _7fb0]
       - [0xBE60, c, _be60]
-      - [0xD6F0, c, COLLIDE_A] # Collides may be split across more files
+      - [0xD6F0, c, COLLIDE_A]
       - [0xDC40, c, COLLIDE_B]
       - [0xF3D0, c, COLLIDE_C]
       - [0xFCB0, c, COLLIDE_D]
@@ -88,7 +88,7 @@ segments:
       - [0x10640, c, COLLIDE_F]
       - [0x10F50, c, COLLIDE_G]
       - [0x12720, c, COLLIDE_H]
-      - [0x12D70, c, COLLIDE_J]
+      - [0x12D70, c, COLLIDE_I]
       - [0x13920, c]
       - [0x14AC0, c]
       - [0x161C0, c]
