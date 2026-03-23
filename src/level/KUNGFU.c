@@ -56,7 +56,7 @@ void kungfu_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         func_8002DAF8(instance, -1);
         if ((instance->flags2 & 0x10))
         {
-            instance->_5E = ((unsigned short*)(instance->object->animList[(*(unsigned char*)&instance->_40[7])]))[1] - 1; 
+            instance->currentAnimFrame = ((unsigned short*)(instance->object->animList[(*(unsigned char*)&instance->_40[7])]))[1] - 1; 
             instance->_F4[0] = 2;
         }
         
@@ -76,7 +76,7 @@ void kungfu_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
             {
                 ((char*)instance->_40)[0xe] = 1;
                 instance->_F4[0] = temp_a3;
-                instance->_5E = 0;
+                instance->currentAnimFrame = 0;
                 instance->flags2 &= ~0x10;
                 instance->flags |= 0x100000;
             }
@@ -240,7 +240,7 @@ INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015DC00_ACE20);
 void func_8015DC9C_ACEBC(Instance* instance, GameTracker* gameTracker)
 {
     instance->currentModelAnim = 2;
-    instance->_5E = 0;
+    instance->currentAnimFrame = 0;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_samuri_OnUpdate);

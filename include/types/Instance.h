@@ -33,7 +33,7 @@ typedef struct Instance_s
     SVECTOR oldPos; // 50, 52, 54
     short currentTextureAnimFrame;
     SVECTOR initialPos; // 58, 5A, 5C
-    short _5E;
+    short currentAnimFrame;
     ROTATION rotation; // 60, 62, 64, 66
     SVector scale; // 68, 6A, 6C, 6E
     int _70;

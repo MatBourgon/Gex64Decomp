@@ -201,7 +201,7 @@ void logo_rtlogor_OnCreate(Instance* instance, GameTracker* gameTracker)
     ((short*)gameTracker->camera)[0x2/2] -= 200;
     ((short*)gameTracker->camera)[0] = PlayerInstance->position.x;
     instance->currentModelAnim = 0;
-    instance->_5E = 0;
+    instance->currentAnimFrame = 0;
 }
 
 void logo_rtlogor_OnUpdate(Instance* instance, GameTracker* gameTracker)

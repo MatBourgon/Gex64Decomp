@@ -79,7 +79,7 @@ void common_powertv_OnCreate(Instance* instance, GameTracker* gameTracker) {
     intro = (PowerTVIntro*)instance->introData;
     
     instance->currentModelAnim = 0U;
-    instance->_5E = 0;
+    instance->currentAnimFrame = 0;
     instance->flags |= 0x80;
     
     if (intro != NULL) {
@@ -93,7 +93,7 @@ void common_powertv_OnCreate(Instance* instance, GameTracker* gameTracker) {
     
     if (instance->intro->flags & 0x800) {
         instance->_F4[0] = 2;
-        instance->_5E = ((((short**)instance->object->animList)[instance->currentModelAnim])[1] - 1);
+        instance->currentAnimFrame = ((((short**)instance->object->animList)[instance->currentModelAnim])[1] - 1);
         instance->currentTextureAnimFrame = 0;
     }
     else
@@ -129,14 +129,14 @@ void common_powertv_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         {
 block_7:
             func_8002DAF8(instance, ((short*)&instance->_104)[0]);
-            if ((((short*)&instance->_104)[0] == -0x3E9) && (instance->_5E == 0x1A)) {
+            if ((((short*)&instance->_104)[0] == -0x3E9) && (instance->currentAnimFrame == 0x1A)) {
                 instance->flags2 |= 0x10;
             }
             if (instance->flags2 & 0x10) {
                 if (temp_s1[1] & 1) {
                     if (temp_s1[4] == -0x3E9) {
                         instance->_F4[0] = 0;
-                        instance->_5E = 0;
+                        instance->currentAnimFrame = 0;
                         temp_s1[4] = -1;
                         return;
                     }

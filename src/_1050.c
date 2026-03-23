@@ -16,7 +16,7 @@ void func_80000F24(Camera* camera, int arg1)
     func_80000450(camera);
 }
 
-INCLUDE_ASM("asm/nonmatchings/_1050", func_80000F60);
+INCLUDE_ASM("asm/nonmatchings/_1050", CAMERA_SaveMode);
 
 INCLUDE_RODATA("asm/nonmatchings/_1050", D_8007B440);
 
@@ -34,11 +34,11 @@ BOOL IsLooneyLoading(const GameTracker* gameState)
     return FALSE;
 }
 
-INCLUDE_ASM("asm/nonmatchings/_1050", func_80001408);
+INCLUDE_ASM("asm/nonmatchings/_1050", CAMERA_SetMode);
 
 INCLUDE_ASM("asm/nonmatchings/_1050", func_800018F0);
 
-void func_80001DF4(short arg0)
+void func_80001DF4(short arg0) // set z rot?
 {
     short* ptr = (short*)gameTracker8->camera;
     ptr[0x180/2] = arg0;
@@ -60,13 +60,27 @@ INCLUDE_ASM("asm/nonmatchings/_1050", func_80001E3C);
 
 INCLUDE_ASM("asm/nonmatchings/_1050", func_80001EAC);
 
-INCLUDE_ASM("asm/nonmatchings/_1050", func_800020D0);
+int CAMERA_LengthSVector(SVECTOR* sv) {
+    return (MATH3D_FastSqrt2((sv->x * sv->x + sv->y * sv->y + sv->z * sv->z) << 4, 4) + 8) >> 4;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_1050", func_80002134);
 
-INCLUDE_ASM("asm/nonmatchings/_1050", func_80002198);
+INCLUDE_ASM("asm/nonmatchings/_1050", CAMERA_SetValue);
 
-INCLUDE_ASM("asm/nonmatchings/_1050", func_80002600);
+short CAMERA_AngleDifference(short angle0, short angle1) {
+    angle0 &= 0xFFF;
+    angle1 &= 0xFFF;
+
+    if ((angle1 - angle0) > 2048)
+        angle0 |= 0x1000;
+    else if ((angle0 - angle1) > 2048)
+    {
+        angle1 |= 0x1000;
+    }
+
+    return (angle0 > angle1 ? angle0 : angle1) - (angle0 < angle1 ? angle0 : angle1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/_1050", func_80002678);
 
@@ -80,42 +94,73 @@ INCLUDE_ASM("asm/nonmatchings/_1050", func_80002A88);
 
 INCLUDE_ASM("asm/nonmatchings/_1050", func_80002B18);
 
-int func_80003118(int* arg0, int arg1) {
-    arg0[144] |= arg1;
+int CAMERA_CameraLock(Camera* camera, int arg1) {
+    camera->lock |= arg1;
 }
 
-int func_8000312C(int* arg0, int arg1) {
-    arg0[144] &= ~arg1;
+int CAMERA_CameraUnlock(Camera* camera, int arg1) {
+    camera->lock &= ~arg1;
 }
 
-int func_80003140(int* arg0, int arg1) {
-    arg0[84] = (int)arg1;
+int CAMERA_SetSmoothValue(Camera* camera, int arg1) {
+    camera->smooth = arg1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/_1050", func_80003148);
+void CAMERA_Save(Camera* camera, int save) {
+    int i;
+
+    if (((int*)camera)[0x14C/4] == 0x10) {
+        func_8015E27C();
+        return;
+    }
+    else if (((int*)camera)[0x14C/4] != 2) {
+        if (save & 1) {
+            camera->targetStack++;
+            if (camera->targetStack == 8) {
+                camera->targetStack = 7;
+                
+                for (i = 0; i < 7; i++) {
+                    camera->savedTargetFocusDistance[i] = camera->savedTargetFocusDistance[i + 1];
+                }
+            }
+            camera->savedTargetFocusDistance[camera->targetStack] = camera->targetFocusDistance;
+        }
+        
+        if (save & 2) {
+            camera->savedFocusRotation.x = camera->targetFocusRotationX;
+        }
+        
+        if (save & 4) {
+            camera->savedFocusRotation.z = camera->focusRotationX;
+        }
+    }
+    if (save & 0x100) {
+        CAMERA_SaveMode(camera, ((int*)camera)[0x14C/4], ((int*)camera)[0x43C/4]); // CAMERA_SaveMode, one of these is camera->mode
+    }
+}
 
 void func_8000322C(void) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/_1050", func_80003234);
 
-INCLUDE_ASM("asm/nonmatchings/_1050", func_80003910);
+INCLUDE_ASM("asm/nonmatchings/_1050", CAMERA_Restore);
 
-void func_800039E8(int* arg0, int arg1)
+void CAMERA_SetTimer(Camera* camera, int arg1)
 {
-    arg0[0x468/4] = arg1;
-    func_80003148(arg0, -1);
+    camera->timer = arg1;
+    CAMERA_Save(camera, -1);
 }
 
 INCLUDE_ASM("asm/nonmatchings/_1050", func_80003A0C);
 
 INCLUDE_ASM("asm/nonmatchings/_1050", func_80003A68);
 
-INCLUDE_ASM("asm/nonmatchings/_1050", func_80003B1C);
+INCLUDE_ASM("asm/nonmatchings/_1050", CAMERA_Adjust);
 
-void func_80003D4C(int arg0)
+void CAMERA_ChangeTo(CameraKey* key)
 {
-    ((int*)gameTracker8->camera)[0x148/4] = arg0;
+    gameTracker8->camera->cameraKey = key;
 }
 
 INCLUDE_ASM("asm/nonmatchings/_1050", func_80003D68);

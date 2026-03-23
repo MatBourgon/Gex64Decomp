@@ -528,32 +528,32 @@ s32 SIGNAL_LightGroup(Instance* instance, void* signal) {
 }
 
 s32 SIGNAL_CameraAdjust(Instance* instance, void* signal) {
-    func_80003B1C(gameTracker8->camera, ((int*)signal)[1]);
+    CAMERA_Adjust(gameTracker8->camera, ((int*)signal)[1]);
     return 1;
 }
 
 s32 SIGNAL_Camera(Instance* instance, void* signal) {
-    func_80003D4C(((int*)signal)[1]);
+    CAMERA_ChangeTo(((int*)signal)[1]);
     return 1;
 }
 
 s32 SIGNAL_CameraMode(Instance* instance, void* signal) {
-    func_80001408(gameTracker8->camera, ((int*)signal)[1]);
+    CAMERA_SetMode(gameTracker8->camera, ((int*)signal)[1]);
     return 1;
 }
 
 s32 SIGNAL_CameraLock(Instance* instance, void* signal) {
-    func_80003118(gameTracker8->camera, ((int*)signal)[1]);
+    CAMERA_CameraLock(gameTracker8->camera, ((int*)signal)[1]);
     return 1;
 }
 
 s32 SIGNAL_CameraUnlock(Instance* instance, void* signal) {
-    func_8000312C(gameTracker8->camera, ((int*)signal)[1]);
+    CAMERA_CameraUnlock(gameTracker8->camera, ((int*)signal)[1]);
     return 1;
 }
 
 s32 SIGNAL_CameraSmooth(Instance* instance, void* signal) {
-    func_80003140(gameTracker8->camera, ((int*)signal)[1]);
+    CAMERA_SetSmoothValue(gameTracker8->camera, ((int*)signal)[1]);
     return 1;
 }
 
@@ -564,22 +564,22 @@ s32 SIGNAL_8004C844(Instance* instance, void* signal)
 }
 
 s32 SIGNAL_CameraTimer(Instance* instance, void* signal) {
-    func_800039E8(gameTracker8->camera, ((int*)signal)[1]);
+    CAMERA_SetTimer(gameTracker8->camera, ((int*)signal)[1]);
     return 1;
 }
 
 s32 SIGNAL_CameraSave(Instance* instance, void* signal) {
-    func_80003148(gameTracker8->camera, ((int*)signal)[1]);
+    CAMERA_Save(gameTracker8->camera, ((int*)signal)[1]);
     return 1;
 }
 
 s32 SIGNAL_CameraRestore(Instance* instance, void* signal) {
-    func_80003910(gameTracker8->camera, ((int*)signal)[1]);
+    CAMERA_Restore(gameTracker8->camera, ((int*)signal)[1]);
     return 1;
 }
 
 s32 SIGNAL_CameraValue(Instance* instance, void* signal) {
-    func_80002198(gameTracker8->camera, ((int*)signal)[1], ((int*)signal)[2]);
+    CAMERA_SetValue(gameTracker8->camera, ((int*)signal)[1], ((int*)signal)[2]);
     return 1;
 }
 
