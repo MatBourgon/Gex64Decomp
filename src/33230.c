@@ -63,7 +63,7 @@ INCLUDE_ASM("asm/nonmatchings/33230", func_80032FBC);
 extern int D_800BDF08[];
 
 void func_800330DC(int i, void* arg2) {
-    func_8005409C(D_800BDF08[i], arg2);
+    MusHandleStop(D_800BDF08[i], arg2);
 }
 
 extern OSMesgQueue D_800E5FE8;
@@ -95,17 +95,17 @@ void func_8003310C(void* arg0, void* arg1, int arg2) {
 
 void func_800331BC(void* arg0)
 {
-    func_8005409C(arg0, 0);
+    MusHandleStop(arg0, 0);
 }
 
 void func_800331DC()
 {
-    func_80053FA0(1, 0);
+    MusStop(1, 0);
 }
 
 void func_80033200(void* arg)
 {
-    func_8005410C(arg);
+    MusHandleAsk(arg);
 }
 
 int func_80033220()
@@ -114,12 +114,12 @@ int func_80033220()
 }
 
 void func_80033228(void) {
-    func_80054164(); // needs two arguments
+    MusHandleSetVolume(); // needs two arguments
 }
 
 void func_80033248(void* arg)
 {
-    func_8005410C(arg);
+    MusHandleAsk(arg);
 }
 
 int func_80033268()
@@ -141,7 +141,7 @@ void func_80033288(void) {
 
 void func_80033290()
 {
-    func_80053FA0(2, 0);
+    MusStop(2, 0);
 }
 
 void func_800332B4(void) {

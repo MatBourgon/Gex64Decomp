@@ -2,6 +2,25 @@
 
 #include <audio/player.h>
 
+extern int max_channels;
+
+typedef struct
+{
+    int _00[0x10]; // 00
+    int handle; // 10
+    int _14[0x1F]; // 14
+    unsigned char _c1; // c1
+    unsigned char _c2; // c2
+    unsigned char _c3; // c3
+    unsigned char reverb; // c4
+    unsigned char old_reverb; // c5
+    unsigned char _c6;
+    unsigned char _c7;
+    int _C8[0x16]; // c8
+} c_t;
+
+extern c_t *mus_channels;
+
 INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", Fstop);
 
 INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", Fwave);
@@ -98,47 +117,90 @@ void MusSetMasterVolume(unsigned long flags, int volume)
     mus_master_volume_songs = volume;
 }
 
-INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", func_80053C98);
+INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", MusStartSong);
 
-INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", func_80053DEC);
+INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", MusStartEffect);
 
-INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", func_80053E98);
+INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", MusStartEffect2);
 
-INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", func_80053FA0);
+INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", MusStop);
 
-INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", func_80054020);
+INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", MusAsk);
 
-INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", func_8005409C);
+INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", MusHandleStop);
 
-INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", func_8005410C);
+INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", MusHandleAsk);
 
-INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", func_80054164);
+INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", MusHandleSetVolume);
 
-INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", func_800541C4);
+INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", MusHandleSetPan);
 
-INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", func_80054234);
+INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", MusHandleSetFreqOffset);
 
-INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", func_800542A4);
+INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", MusHandleSetTempo);
 
-INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", func_80054330);
+int MusHandleSetReverb(unsigned long /*mushandle*/ handle, int reverb) {
+    c_t* cp; // channel_t*
+    int i, count;
 
-INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", alSeqpDelete);
+    if (!handle) {
+        return 0;
+    }
+    
+    if (reverb < 0) {
+        reverb = 0;
+    } else if (reverb > 127) {
+        reverb = 127;
+    }
+    
+    for(i = 0, cp=mus_channels, count=0; i < max_channels; ++i, ++cp)
+    {
+        if (cp->handle == handle)
+        {
+            cp->reverb = reverb;
+            cp->old_reverb = 0xff;
+            ++count;
+        }
+    }
+
+    return count;
+}
+
+void MusPtrBankInitialize(void* pbank, void* wbank) {
+    __MusIntRemapPtrBank(pbank, wbank);
+}
 
 extern void* D_800AF0E0;
 extern void* D_800AF0E4;
 
-void* func_800543D4(int* arg0, void* arg1) {
-    void* r;
+unsigned long func_800543D4(int* arg0, void* arg1) {
+    unsigned long r;
     if ((arg0 != NULL) && (arg0[4] < 0)) {
         D_800AF0E0 = arg0;
     }
-    r = (void*)func_80053C98(arg1);
+    r = MusStartSong(arg1);
     D_800AF0E0 = D_800AF0E4;
     return r;
 }
 
-INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", func_80054418);
+unsigned long func_80054418(int* arg0, int arg1) {
+    unsigned long r;
+    if ((arg0 != NULL) && (arg0[4] < 0)) {
+        D_800AF0E0 = arg0;
+    }
+    r = MusStartEffect(arg1);
+    D_800AF0E0 = D_800AF0E4;
+    return r;
+}
 
-INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", func_8005445C);
+unsigned long func_8005445C(int* arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
+    unsigned long r;
+    if ((arg0 != NULL) && (arg0[4] < 0)) {
+        D_800AF0E0 = arg0;
+    }
+    r = MusStartEffect2(arg1, arg2, arg3, arg4, arg5);
+    D_800AF0E0 = D_800AF0E4;
+    return r;
+}
 
 INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", func_800544B4);

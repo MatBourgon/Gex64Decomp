@@ -126,7 +126,7 @@ segments:
       - [0x3F660, c, OBTABLE]
       - [0x3FB20, c]
       - [0x405D0, c]
-      - [0x40D70, c, _40d70]
+      - [0x40D70, c, _40d70] # SAMPLE?
       - [0x42BD0, c]
       - [0x443F0, c, _443f0]
       - [0x45E00, c, _45e00]
