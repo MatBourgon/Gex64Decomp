@@ -34,7 +34,7 @@ $(MIPS1OBJECTS): $(BUILD_DIR)/%.o: %.c
 	$(CC) $(CFLAGS) -O2 -mips1 $< -o $@
 
 $(MIPS3OBJECTS): $(BUILD_DIR)/%.o: %.c
-	$(CC) $(CFLAGS) -O2 -mips3 $< -o $@
+	$(CC) $(CFLAGS) -O3 -mips3 $< -o $@
 
 $(LIBKMCOBJECTS): $(BUILD_DIR)/%.o: %.c
 	$(CC) $(CFLAGS) -O1 -mips3 $< -o $@
