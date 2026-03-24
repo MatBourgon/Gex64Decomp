@@ -31,6 +31,7 @@ LoadObjectData = 0x8003AF10; // type:func
 GetObjectDataFromName = 0x8003AEA0; // type:func
 DMATransferData = 0x8003BA7C; // type:func
 LoadGexObject = 0x8003B3D4; // type:func
+__libm_qnan_f = 0x8007ED30;
 
 stat_clddyna = 0x8006CE90; // type:s32 size:0x20 
 dyna_clddyna = 0x8006CEB0; // type:s32 size:0x20 
