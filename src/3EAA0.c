@@ -5,7 +5,7 @@
 
 MATRIX* RotMatrix(SVECTOR* v, MATRIX* m) {
     if ((v->x != 0) || (v->y != 0) || (v->z != 0)) {
-        func_8003E478(v, m);
+        RotMatrixZYX(v, m);
     }
     else
     {
