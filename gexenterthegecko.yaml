@@ -120,7 +120,7 @@ segments:
       - [0x3B0E0, c]
       - [0x3BAA0, c]
       - [0x3C190, c, main]
-      - [0x3CC70, c, MulMatrix2]
+      - [0x3CC70, c, MulMatrix]
       - [0x3D2B0, c, PIPE3D]
       - [0x3EAA0, c]
       - [0x3F660, c, OBTABLE]

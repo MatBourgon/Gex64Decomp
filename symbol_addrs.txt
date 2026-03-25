@@ -59,6 +59,7 @@ MATH3D_FastSqrt = 0x80030758; // type:func
 MATH3D_FastAtan2 = 0x80030270; // type:func 
 MATH3D_RotMatAboutVec = 0x80030A2C; // type:func
 MATH3D_SetIdentityQuat = 0x80030B88; // type:func
+MulMatrix0 = 0x8003C070; // type:func
 MulMatrix2 = 0x8003C368; // type:func
 RotMatrix = 0x8003DEA0; // type:func
 ratan2 = 0x80030538; // type:func
