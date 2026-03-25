@@ -31,6 +31,7 @@ LoadObjectData = 0x8003AF10; // type:func
 GetObjectDataFromName = 0x8003AEA0; // type:func
 DMATransferData = 0x8003BA7C; // type:func
 LoadGexObject = 0x8003B3D4; // type:func
+__libm_qnan_f = 0x8007ED30;
 
 stat_clddyna = 0x8006CE90; // type:s32 size:0x20 
 dyna_clddyna = 0x8006CEB0; // type:s32 size:0x20 
@@ -58,6 +59,7 @@ MATH3D_FastSqrt = 0x80030758; // type:func
 MATH3D_FastAtan2 = 0x80030270; // type:func 
 MATH3D_RotMatAboutVec = 0x80030A2C; // type:func
 MATH3D_SetIdentityQuat = 0x80030B88; // type:func
+MulMatrix0 = 0x8003C070; // type:func
 MulMatrix2 = 0x8003C368; // type:func
 RotMatrix = 0x8003DEA0; // type:func
 ratan2 = 0x80030538; // type:func
@@ -297,7 +299,10 @@ MATH3D_ApplyMatrixT = 0x80032428; // type:func
 MATH3D_ApplyMatrixSVT = 0x80032528; // type:func
 MATH3D_SetUnityMatrix = 0x80030B5C; // type:func
 MATH3D_AngleBetweenVectors = 0x80030938; // type:func
+RotMatrixX = 0x8003DF24; // type:func
+RotMatrixY = 0x8003E06C; // type:func
 RotMatrixZ = 0x8003E1B4; // type:func
+RotMatrixZYX = 0x8003E478; // type:func
 
 gameTracker4 = 0x8006FCC4; // type:GameTracker*
 gameTracker8 = 0x8006FCC8; // type:GameTracker*
