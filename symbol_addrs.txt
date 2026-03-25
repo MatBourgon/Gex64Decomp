@@ -299,7 +299,10 @@ MATH3D_ApplyMatrixT = 0x80032428; // type:func
 MATH3D_ApplyMatrixSVT = 0x80032528; // type:func
 MATH3D_SetUnityMatrix = 0x80030B5C; // type:func
 MATH3D_AngleBetweenVectors = 0x80030938; // type:func
+RotMatrixX = 0x8003DF24; // type:func
+RotMatrixY = 0x8003E06C; // type:func
 RotMatrixZ = 0x8003E1B4; // type:func
+RotMatrixZYX = 0x8003E478; // type:func
 
 gameTracker4 = 0x8006FCC4; // type:GameTracker*
 gameTracker8 = 0x8006FCC8; // type:GameTracker*
