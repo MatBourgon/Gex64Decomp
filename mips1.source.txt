@@ -43,7 +43,8 @@ src/3BAA0.c
 src/MulMatrix.c
 src/main.c
 src/PIPE3D.c
-src/3EAA0.c
+src/RotMatrix.c
+src/str.c
 src/OBTABLE.c
 src/3FB20.c
 src/405D0.c
