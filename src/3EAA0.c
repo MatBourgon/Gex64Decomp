@@ -137,7 +137,23 @@ INCLUDE_ASM("asm/nonmatchings/3EAA0", func_8003E65C);
 
 INCLUDE_ASM("asm/nonmatchings/3EAA0", func_8003E758);
 
-INCLUDE_ASM("asm/nonmatchings/3EAA0", func_8003E940);
+extern int D_800B83C0;
+extern SVECTOR D_800E5BA4;
+extern int D_800E97D4;
+extern int D_8014F350;
+extern int D_80154828;
+
+void func_8003E940(SVECTOR* v, int* arg1, int* arg2, int* arg3) {
+    char _[8];
+    D_800E5BA4.x = v->x;
+    D_800E5BA4.y = v->y;
+    D_800E5BA4.z = v->z;
+    func_8003A844();
+    *arg1 = D_800B83C0;
+    *arg2 = D_80154828;
+    *arg3 = D_800E97D4;
+    *((int*)_) = D_8014F350; // bad smelly bad bad code
+}
 
 int strcmp(const char* arg0, const char* arg1) {
     while(*arg0 == *arg1 && *arg0 != '\0')
