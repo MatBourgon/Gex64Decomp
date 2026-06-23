@@ -404,7 +404,7 @@ segments:
     subsegments:
       - [0x9BD00, c, level/GILLIG]
       - [0x9CF00, .rodata, level/GILLIG]
-      - { type: bss, 0x8015A970 }
+      - { type: bss, vram: 0x8015A970 }
 
   - name: horror_code
     type: code
@@ -415,7 +415,7 @@ segments:
     subsegments:
       - [0x9CF50, c, level/HORROR]
       - [0xA8460, .rodata, level/HORROR]
-      - { type: bss, 0x80164D20 }
+      - { type: bss, vram: 0x80164D20 }
 
   - name: intro_code
     type: code
@@ -525,7 +525,7 @@ segments:
     subsegments:
       - [0xDF540, c, level/SCIFI]
       - [0xEAC10, .rodata, level/SCIFI]
-      - { type: bss, 0x80164FD0 }
+      - { type: bss, vram: 0x80164FD0 }
 
   - name: spy_code
     type: code
@@ -536,7 +536,7 @@ segments:
     subsegments:
       - [0xEADF0, c, level/SPY]
       - [0xEC440, .rodata, level/SPY]
-      - { type: bss, 0x8015AE60 }
+      - { type: bss, vram: 0x8015AE60 }
 
   - name: logo_code
     type: code
@@ -547,7 +547,7 @@ segments:
     subsegments:
       - [0xEC530, c, level/LOGO]
       - [0xECE80, .rodata, level/LOGO]
-      - { type: bss, 0x8015A2E0 }
+      - { type: bss, vram: 0x8015A2E0 }
 
   # Zlib
   - name: zlib
