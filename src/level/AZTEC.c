@@ -112,7 +112,7 @@ void aztec_funplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
                     instance->_E0[3] = -0x4000;
                 }
 
-                (Instance*)s4[0x28/4] = instanceBsp->instanceSpline;
+                ((Instance**)s4)[0x28/4] = instanceBsp->instanceSpline;
                 GenericCollide(instance, gameTracker);
             }
         }
