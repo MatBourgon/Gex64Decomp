@@ -27,9 +27,97 @@ void aztec_funplat_OnCreate(Instance* instance, GameTracker* gameTracker)
     COLLIDE_PointAndTerrain(gameTracker8->level->segmentAddress, (SVECTOR*)&newPoint, (SVECTOR*)&oldPoint, instance);
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/AZTEC", aztec_funplat_OnUpdate);
+void aztec_funplat_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    short* introData;
+    int* state;
+    int accelX;
+    int accelY;
 
-INCLUDE_ASM("asm/nonmatchings/level/AZTEC", aztec_funplat_OnCollide);
+    introData = (short*)instance->introData;
+    state = instance->_D0;
+    accelX = (-instance->rotation.x << 5) - (instance->_D0[2] >> 6);
+    accelX <<= 1;
+    accelY = ((-instance->rotation.y << 5) - (instance->_D0[3] >> 6));
+    accelY <<= 1;
+
+    if (instance->_F4[1]) {
+        GenericProcess(instance, gameTracker);
+    }
+
+    instance->_D0[2] += accelX + instance->_D0[0];
+    instance->_D0[3] += accelY + instance->_D0[1];
+
+    if (instance->_D0[2] > introData[1] << 12) {
+        instance->_D0[2] = introData[1] << 12;
+    } else if (instance->_D0[2] < -introData[1] << 12) {
+        instance->_D0[2] = -introData[1] << 12;
+    }
+
+    if (state[3] > introData[1] << 12) {
+        state[3] = introData[1] << 12;
+    } else if (state[3] < -introData[1] << 12) {
+        state[3] = -introData[1] << 12;
+    }
+
+    state[4] += state[2];
+    state[5] += state[3];
+
+    if (state[4] > introData[0] << 12) {
+        state[4] = introData[0] << 12;
+    } else if (state[4] < -introData[0] << 12) {
+        state[4] = -introData[0] << 12;
+    }
+
+    if (state[5] > introData[0] << 12) {
+        state[5] = introData[0] << 12;
+    } else if (state[5] < -introData[0] << 12) {
+        state[5] = -introData[0] << 12;
+    }
+
+    instance->rotation.x = (state[4] >> 12);
+    instance->rotation.y = (state[5] >> 12);
+    
+    state[8] += state[7] + ((-state[9] >> 4) - (state[8] >> 6));
+    state[9] += state[8];
+    
+    instance->position.z = state[6] + (state[9] >> 12);
+
+    state[11] = state[10];
+    state[10] = 0;
+    state[0] = 0;
+    state[1] = 0;
+    state[7] = 0;
+}
+
+void aztec_funplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    LVECTOR newPosition;
+    MATRIX transformMatrix;
+
+    BSPTree* instanceBsp = instance->bspTree;
+    int* s4 = ((int*)instance->_D0);
+
+    if (instanceBsp->_06 == 4) {
+        if (instanceBsp->instanceSpline == gameTracker->player) {
+            if (instance->matrix) {
+                
+                func_80041FD0(&transformMatrix, instance->matrix);
+                MATH3D_ApplyMatrixT(&transformMatrix, (SVECTOR*)&((int*)instanceBsp)[0x18/4] /*unknown extra; localOffset?*/, &newPosition);
+
+                instance->_D0[0] = (-newPosition.y) << 6;
+                instance->_D0[1] = newPosition.x << 6;
+
+                if (instance->_F4[2] != 0) {
+                    instance->_E0[3] = -0x1000;
+                } else {
+                    instance->_E0[3] = -0x4000;
+                }
+
+                ((Instance**)s4)[0x28/4] = instanceBsp->instanceSpline;
+                GenericCollide(instance, gameTracker);
+            }
+        }
+    }
+}
 
 void aztec_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int var_s0;
