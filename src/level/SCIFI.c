@@ -89,9 +89,55 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_rocket_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_rocket_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_onoff_OnCreate);
+void scifi_onoff_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    if (instance->intro->flags & 0x1000) {
+        instance->intro->flags &= ~0x800;
+        return;
+    }
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_onoff_OnUpdate);
+    instance->_F4[0] = 0;
+    instance->flags |= 0x80;
+
+    if (instance->introData != NULL && *((int*)instance->introData) & 0x12) {
+        instance->_F4[0] = 1;
+    }
+
+    if (instance->intro->flags & 0x800) {
+        instance->_F4[0] = instance->_F4[0] != 1;
+    }
+
+    if (instance->object->data != NULL && *((int*)instance->object->data) != 0) {
+        instance->_100 = 1;
+    }
+
+    if (instance->_F4[0] == 0 || instance->_100 != 0) {
+        instance->currentAnimFrame = 0;
+    } else if (((short*)&instance->object->_08)[1] != 0) {
+        instance->currentAnimFrame = ((unsigned short*)(instance->object->animList[0]))[1] - 1;
+    }
+}
+
+void scifi_onoff_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    instance->currentTextureAnimFrame = instance->_F4[0] ^ 1;
+
+    if (instance->_F4[1] == 1) {
+        if (instance->_F4[0] == 1 || instance->_100 != 0) {
+            func_8002DAF8(instance, -1);
+        } else {
+            func_8002DAF8(instance, -0x3E9);
+        }
+
+        if (instance->flags2 & 0x10) {
+            instance->flags2 &= ~0x10;
+            instance->_F4[1] = 0;
+            if (instance->_F4[0] == 0 || instance->_100 != 0) {
+                instance->currentAnimFrame = 0;
+            } else if (((short*)&instance->object->_08)[1] != 0) {
+                instance->currentAnimFrame = ((unsigned short*)(instance->object->animList[0]))[1] - 1;
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_onoff_OnCollide);
 

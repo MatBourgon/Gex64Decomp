@@ -2,6 +2,8 @@
 
 #include "level/LOONEY.h"
 
+extern int D_80161BD0_B9E80;
+
 void looney_rainbow_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
@@ -11,7 +13,22 @@ void looney_rainbow_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 void looney_shittrn_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_shittrn_OnUpdate);
+void looney_shittrn_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    SVector pos;
+    SVector randVec;
+    int i;
+
+    pos.x = instance->position.x;
+    pos.y = instance->position.y;
+    pos.z = instance->position.z;
+
+    for (i = 0; i < 2; i++) {
+        randVec.x = rand() % 60 - 30;
+        randVec.y = rand() % 60 - 30;
+        randVec.z = rand() % 30 + 25;
+        func_80019828(&pos, &randVec, &D_80161BD0_B9E80, pos.z);
+    }
+}
 
 void looney_shittrn_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }

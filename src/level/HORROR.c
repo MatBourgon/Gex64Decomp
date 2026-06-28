@@ -8,6 +8,7 @@
 #include "types/Vector.h"
 extern int D_800E5FD8;
 extern int D_80154834;
+extern int D_80164C30_A8460;
 
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_drawer_OnCreate);
@@ -172,7 +173,22 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_spray_OnCollide);
 void horror_shittrn_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_shittrn_OnUpdate);
+void horror_shittrn_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    SVector pos;
+    SVector randVec;
+    int i;
+
+    pos.x = instance->position.x;
+    pos.y = instance->position.y;
+    pos.z = instance->position.z;
+
+    for (i = 0; i < 2; i++) {
+        randVec.x = rand() % 60 - 30;
+        randVec.y = rand() % 60 - 30;
+        randVec.z = rand() % 30 + 25;
+        func_80019828(&pos, &randVec, &D_80164C30_A8460, pos.z);
+    }
+}
 
 void horror_shittrn_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
@@ -259,9 +275,55 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_elevpan_OnUpdate);
 void horror_elevpan_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_onoff_OnCreate);
+void horror_onoff_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    if (instance->intro->flags & 0x1000) {
+        instance->intro->flags &= ~0x800;
+        return;
+    }
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_onoff_OnUpdate);
+    instance->_F4[0] = 0;
+    instance->flags |= 0x80;
+
+    if (instance->introData != NULL && *((int*)instance->introData) & 0x12) {
+        instance->_F4[0] = 1;
+    }
+
+    if (instance->intro->flags & 0x800) {
+        instance->_F4[0] = instance->_F4[0] != 1;
+    }
+
+    if (instance->object->data != NULL && *((int*)instance->object->data) != 0) {
+        instance->_100 = 1;
+    }
+
+    if (instance->_F4[0] == 0 || instance->_100 != 0) {
+        instance->currentAnimFrame = 0;
+    } else if (((short*)&instance->object->_08)[1] != 0) {
+        instance->currentAnimFrame = ((unsigned short*)(instance->object->animList[0]))[1] - 1;
+    }
+}
+
+void horror_onoff_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    instance->currentTextureAnimFrame = instance->_F4[0] ^ 1;
+
+    if (instance->_F4[1] == 1) {
+        if (instance->_F4[0] == 1 || instance->_100 != 0) {
+            func_8002DAF8(instance, -1);
+        } else {
+            func_8002DAF8(instance, -0x3E9);
+        }
+
+        if (instance->flags2 & 0x10) {
+            instance->flags2 &= ~0x10;
+            instance->_F4[1] = 0;
+            if (instance->_F4[0] == 0 || instance->_100 != 0) {
+                instance->currentAnimFrame = 0;
+            } else if (((short*)&instance->object->_08)[1] != 0) {
+                instance->currentAnimFrame = ((unsigned short*)(instance->object->animList[0]))[1] - 1;
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_onoff_OnCollide);
 
