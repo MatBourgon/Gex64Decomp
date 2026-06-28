@@ -10,13 +10,23 @@
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80046660);
 
-INCLUDE_ASM("asm/nonmatchings/_47260", func_80046730);
+extern void func_80046660();
+
+void func_80046730(Instance* instance) {
+    instance->collideFunc = 0;
+    instance->processFunc = (void(*)(void*,void*))func_80046660;
+    func_8004A47C(instance);
+}
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_8004675C);
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80046924);
 
-INCLUDE_ASM("asm/nonmatchings/_47260", func_80046978);
+void INSTANCE_PlainDeath(Instance*, int, int, int);
+
+void func_80046978(Instance* instance) {
+    INSTANCE_PlainDeath(instance, 5, -1, 0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_800469A0);
 

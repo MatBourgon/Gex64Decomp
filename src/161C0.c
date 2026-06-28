@@ -65,7 +65,16 @@ INCLUDE_ASM("asm/nonmatchings/161C0", func_80017768);
 
 INCLUDE_ASM("asm/nonmatchings/161C0", func_8001788C);
 
-INCLUDE_ASM("asm/nonmatchings/161C0", func_80017AB8);
+// arg0 and arg0->next may be Instance*
+void func_80017AB8(short* arg0, short arg1) {
+    if (arg0 != NULL) {
+        arg0[7] = arg1;
+        arg0 = ((short**)arg0)[1];
+        if (arg0 != NULL) {
+            arg0[7] = arg1;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/161C0", func_80017AE0);
 

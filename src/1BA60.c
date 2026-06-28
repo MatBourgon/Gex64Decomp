@@ -72,6 +72,13 @@ INCLUDE_ASM("asm/nonmatchings/1BA60", func_8001E838);
 
 INCLUDE_ASM("asm/nonmatchings/1BA60", func_8001E874);
 
-INCLUDE_ASM("asm/nonmatchings/1BA60", func_8001E980);
+// arg0 may be Instance*
+void func_8001E980(int* arg0, int arg1, unsigned short* arg2) {
+    if (!(arg2[0x45] & 0x10)) {
+        arg0[0x3E] = 0x80000;
+        ((short*)arg0)[0x2F] = 0;
+        ((char*)arg0)[0x4E] = 0x21;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/1BA60", func_8001E9AC);
