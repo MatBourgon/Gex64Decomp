@@ -72,7 +72,19 @@ INCLUDE_ASM("asm/nonmatchings/_287a0", func_8002A488);
 
 INCLUDE_ASM("asm/nonmatchings/_287a0", func_8002ADB4);
 
-INCLUDE_ASM("asm/nonmatchings/_287a0", func_8002AE40);
+void func_8002AE40(int* arg0) {
+    int* data;
+
+    data = ((int*)arg0)[8];
+    arg0[0x3D] = 0;
+    arg0[0x3E] = 1;
+    ((short*)arg0)[0x2F] = 0;
+    ((char*)arg0)[0x4E] = 0;
+    ((short*)data)[0x4E] = 0;
+    ((short*)data)[0x4F] = 0;
+    ((short*)arg0)[0x30] = 0;
+    ((short*)arg0)[0x31] = 0;
+}
 
 INCLUDE_RODATA("asm/nonmatchings/_287a0", D_8007BE7C);
 

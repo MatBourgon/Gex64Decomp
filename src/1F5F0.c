@@ -52,11 +52,17 @@ INCLUDE_ASM("asm/nonmatchings/1F5F0", func_800223F8);
 
 INCLUDE_ASM("asm/nonmatchings/1F5F0", func_800224CC);
 
-INCLUDE_ASM("asm/nonmatchings/1F5F0", func_80022714);
+void func_80022714(void* arg0, int arg1) {
+    func_800224CC(arg0, arg1, 0, 0);
+}
 
-INCLUDE_ASM("asm/nonmatchings/1F5F0", func_80022738);
+void func_80022738(void* arg0, int arg1) {
+    func_800224CC(arg0, arg1, 1, 0);
+}
 
-INCLUDE_ASM("asm/nonmatchings/1F5F0", func_8002275C);
+void func_8002275C(void* arg0, int arg1) {
+    func_800224CC(arg0, arg1, 1, 1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/1F5F0", func_80022780);
 

@@ -115,7 +115,9 @@ INCLUDE_ASM("asm/nonmatchings/_24cf0", func_8002768C);
 
 INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80027770);
 
-INCLUDE_ASM("asm/nonmatchings/_24cf0", func_8002780C);
+void func_8002780C(GameTracker* gameTracker) {
+    func_8002CA2C(6, ((int*)gameTracker)[0x4BF8/4]);
+}
 
 INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80027834);
 

@@ -2,7 +2,11 @@
 
 INCLUDE_ASM("asm/nonmatchings/_2cd50", func_8002C150);
 
-INCLUDE_ASM("asm/nonmatchings/_2cd50", func_8002C18C);
+extern short D_800EB80C;
+
+void func_8002C18C(int arg0) {
+    (&D_800EB80C)[arg0 * 6] = 4;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_2cd50", func_8002C1AC);
 
