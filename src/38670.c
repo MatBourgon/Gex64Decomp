@@ -14,9 +14,15 @@ void func_80037ABC(void) {
 void func_80037AC4(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/38670", func_80037ACC);
+extern int D_8006FA88;
 
-INCLUDE_ASM("asm/nonmatchings/38670", func_80037AE0);
+void func_80037ACC(short arg0) {
+    D_8006FA88 = arg0;
+}
+
+void func_80037AE0(void) {
+    func_80037ACC(0x140);
+}
 
 extern int D_800BDEE8;
 extern int D_800BDEEC;

@@ -21,19 +21,33 @@ INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80024C30);
 
 INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80024C84);
 
-INCLUDE_ASM("asm/nonmatchings/_24cf0", func_8002527C);
+void func_8002527C(short* arg0, short arg1, short arg2, int arg3) {
+    arg0[6] = arg1;
+    arg0[7] = arg2;
+    ((int*)arg0)[4] = arg3;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_24cf0", func_8002528C);
 
 INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80025588);
 
-INCLUDE_ASM("asm/nonmatchings/_24cf0", func_8002569C);
+void func_8002569C(Instance* instance) {
+    instance->_F4[0] = 3;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_24cf0", func_800256A8);
 
 INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80025764);
 
-INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80025798);
+int func_80025798(Instance* instance) {
+    int result;
+
+    result = 0;
+    if (instance->data != NULL) {
+        result = ((short*)instance->data)[0x6F];
+    }
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_24cf0", func_800257B4);
 
@@ -67,7 +81,12 @@ INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80026674);
 
 INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80026768);
 
-INCLUDE_ASM("asm/nonmatchings/_24cf0", func_800269C0);
+void func_800269C0(short* arg0) {
+    arg0[4] = 0;
+    arg0[5] = 0;
+    arg0[3] = 0;
+    arg0[2] = 0;
+}
 
 void func_800269D4(void) {
 }
@@ -88,9 +107,15 @@ INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80027184);
 
 INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80027398);
 
-INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80027400);
+void func_80027400(Instance* instance) {
+    instance->_F4[0] = 4;
+    ((char*)instance->_40)[0xe] = 0;
+}
 
-INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80027410);
+void func_80027410(Instance* instance) {
+    instance->_F4[0] = 0;
+    instance->_B8 = *(int*)instance->data;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80027428);
 
