@@ -177,11 +177,53 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_shittrn_OnUpdate);
 void horror_shittrn_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_bug_OnCreate);
+void horror_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    unsigned short* intro;
+
+    ((short*)&instance->_100)[1] = 0x18;
+    instance->flags |= 0x100000;
+    intro = (unsigned short*)instance->introData;
+
+    if (intro != NULL) {
+        *(short*)&instance->_100 = intro[0];
+        ((short*)&instance->_104)[1] = intro[1];
+        *(short*)&instance->_108 = intro[2];
+        ((short*)&instance->_108)[1] = intro[3];
+        *(short*)&instance->_10C = intro[4];
+        if (((short*)intro)[5] != 0) {
+            ((short*)&instance->_10C)[1] = ((short*)intro)[5];
+        } else {
+            ((short*)&instance->_10C)[1] = 0x40;
+        }
+    } else {
+        *(short*)&instance->_100 = 0x96;
+        ((short*)&instance->_104)[1] = ((unsigned short*)&instance->intro->position)[0] - 0x500;
+        *(short*)&instance->_108 = ((unsigned short*)&instance->intro->position)[1] - 0x780;
+        ((short*)&instance->_108)[1] = ((unsigned short*)&instance->intro->position)[0] + 0x500;
+        *(short*)&instance->_10C = ((unsigned short*)&instance->intro->position)[1] + 0x780;
+        ((short*)&instance->_10C)[1] = 0x40;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_bug_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_bug_OnCollide);
+void horror_bug_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+    short* temp;
+
+    bsp = instance->bspTree;
+    temp = (short*)&instance->_F4[2];
+
+    if (bsp->_06 == 1) {
+        if ((bsp->instanceSpline == gameTracker->player) && (bsp->_08[4] < 2U) && (bsp->_0C[5] >= 6U)) {
+            INSTANCE_PlainDeath(instance, 5, 3, 0);
+        } else if ((bsp->_06 == 1) && (bsp->instanceSpline == gameTracker->player) && ((bsp->_08[4] == 0) || (bsp->_08[4] == 2))) {
+            func_80022714(instance);
+            instance->_F4[0] = 0;
+            temp[4] = 0x5A;
+        }
+    }
+}
 
 void horror_bouncer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     short* intro;
