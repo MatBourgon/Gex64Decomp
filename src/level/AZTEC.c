@@ -157,7 +157,7 @@ void aztec_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
                 }
                 Set3DTextPosition(0x64, 0x69);
                 Print3DTextf(ANIMATED_3DTEXT("COLLECT"));
-                sprintf(buffer, "%2d", gameTracker->level->collectibleCountA);
+                snprintf(buffer, sizeof(buffer), "%2d", gameTracker->level->collectibleCountA);
                 Set3DTextPosition(0x8C, 0x91);
                 Print3DTextf(buffer);
                 gameTracker->player->flags |= 0x100;
@@ -209,18 +209,18 @@ void aztec_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             if ((timeLeft > 300) || ((timeLeft % 15) >= 5)) {
                 Set3DTextPosition(0x2D, 0xC8);
                 if ((timeLeft % 30) >= 15) {
-                    sprintf(buffer, "%d", minutesLeft);
+                    snprintf(buffer, sizeof(buffer), "%d", minutesLeft);
                 } else {
-                    sprintf(buffer, "%d.", minutesLeft);
+                    snprintf(buffer, sizeof(buffer), "%d.", minutesLeft);
                 }
                 Print3DTextf(buffer);
                 Set3DTextPosition(0x53, 0xC8);
-                sprintf(buffer, "%2d", secondsLeft + 100);
+                snprintf(buffer, sizeof(buffer), "%2d", secondsLeft + 100);
                 Print3DTextf(&buffer[1]);
             }
             if ((temp_s2[0] == 0) && ((int)((int**)gameTracker)[0x4BFC/4] < gameTracker->level->collectibleCountA)) {
                 Set3DTextPosition(0xF0, 0xC8);
-                sprintf(buffer, "%2d", gameTracker->level->collectibleCountA - (int)((int**)gameTracker)[0x4BFC/4]);
+                snprintf(buffer, sizeof(buffer), "%2d", gameTracker->level->collectibleCountA - (int)((int**)gameTracker)[0x4BFC/4]);
                 Print3DTextf(buffer);
             }
         }
