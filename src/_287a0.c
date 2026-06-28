@@ -75,15 +75,15 @@ INCLUDE_ASM("asm/nonmatchings/_287a0", func_8002A488);
 INCLUDE_ASM("asm/nonmatchings/_287a0", func_8002ADB4);
 
 void func_8002AE40(Instance* instance) {
-    void* lightGroup;
+    void* data;
 
-    lightGroup = instance->data;
+    data = instance->data;
     instance->_F4[0] = 0;
     instance->_F4[1] = 1;
     instance->currentAnimFrame = 0;
     ((char*)instance->_40)[0xe] = 0;
-    ((short*)lightGroup)[0x4E] = 0;
-    ((short*)lightGroup)[0x4F] = 0;
+    ((short*)data)[0x4E] = 0;
+    ((short*)data)[0x4F] = 0;
     instance->rotation.x = 0;
     instance->rotation.y = 0;
 }
