@@ -1,5 +1,6 @@
 #include "common.h"
 
+#include "INSTANCE.h"
 #include "SCRIPT.h"
 #include "SPLINE.h"
 
@@ -21,8 +22,6 @@ void func_80046730(Instance* instance) {
 INCLUDE_ASM("asm/nonmatchings/_47260", func_8004675C);
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80046924);
-
-void INSTANCE_PlainDeath(Instance*, int, int, int);
 
 void func_80046978(Instance* instance) {
     INSTANCE_PlainDeath(instance, 5, -1, 0);
