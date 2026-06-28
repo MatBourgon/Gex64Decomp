@@ -309,10 +309,4 @@ INCLUDE_ASM("asm/nonmatchings/MATH3D", func_80030C50);
 
 INCLUDE_ASM("asm/nonmatchings/MATH3D", func_80030CB4);
 
-extern int D_800BF1C8;
-
-void func_80030D34(void) {
-    if (D_800BF1C8 != 0) {
-        D_800BF1C8--;
-    }
-}
+INCLUDE_ASM("asm/nonmatchings/MATH3D", func_80030D34);

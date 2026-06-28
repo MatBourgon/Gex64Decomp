@@ -10,9 +10,11 @@
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80046660);
 
+extern void func_80046660();
+
 void func_80046730(Instance* instance) {
-    instance->_B0 = 0;
-    instance->_AC = (int)func_80046660;
+    ((int*)instance)[0x2C] = 0;
+    ((int*)instance)[0x2B] = (int)func_80046660;
     func_8004A47C(instance);
 }
 
