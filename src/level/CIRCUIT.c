@@ -62,7 +62,7 @@ void circuit_bouncer_OnCollide(Instance* instance, GameTracker* gameTracker) {
              && (
                  (bsp->_08[4] == 0) || (bsp->_08[4] == 2)
              )) {
-        func_80022714(instance);
+        func_80022714(instance, gameTracker);
     }
 }
 
@@ -118,7 +118,7 @@ void circuit_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
                 INSTANCE_PlainDeath(instance, 5, 3, 0);
             }
         } else if ((bsp->_06 == 1) && (bsp->instanceSpline == (void*)(gameTracker->player)) && ((instance->_F4[0] - 1) >= 2U)) {
-            func_80022714(instance);
+            func_80022714(instance, gameTracker);
         }
     }
 }

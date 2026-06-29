@@ -1,5 +1,8 @@
 #include "common.h"
 
+#include "types/Instance.h"
+#include "types/GameTracker.h"
+
 INCLUDE_ASM("asm/nonmatchings/1F5F0", func_8001E9F0);
 
 INCLUDE_ASM("asm/nonmatchings/1F5F0", func_8001EF4C);
@@ -52,11 +55,17 @@ INCLUDE_ASM("asm/nonmatchings/1F5F0", func_800223F8);
 
 INCLUDE_ASM("asm/nonmatchings/1F5F0", func_800224CC);
 
-INCLUDE_ASM("asm/nonmatchings/1F5F0", func_80022714);
+void func_80022714(Instance* instance, GameTracker* gameTracker) {
+    func_800224CC(instance, gameTracker, 0, 0);
+}
 
-INCLUDE_ASM("asm/nonmatchings/1F5F0", func_80022738);
+void func_80022738(Instance* instance, GameTracker* gameTracker) {
+    func_800224CC(instance, gameTracker, 1, 0);
+}
 
-INCLUDE_ASM("asm/nonmatchings/1F5F0", func_8002275C);
+void func_8002275C(Instance* instance, GameTracker* gameTracker) {
+    func_800224CC(instance, gameTracker, 1, 1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/1F5F0", func_80022780);
 
