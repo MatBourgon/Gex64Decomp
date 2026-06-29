@@ -111,9 +111,26 @@ INCLUDE_RODATA("asm/nonmatchings/level/GEXZIL", D_80162B28_9BCA8);
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015E8C0_97A40);
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015EA18_97B98);
+void func_8015EA18_97B98(Instance* instance, short* arg1) {
+    instance->flags2 &= ~0x10;
+    func_8015C188_95308(instance, arg1);
+    arg1[0x26/2] = 6;
+    ((int*)arg1)[0x18/4] &= ~4;
+}
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015EA68_97BE8);
+void func_8015EA68_97BE8(Instance* instance, short* arg1) {
+    void* data;
+
+    data = (void*)((int*)instance->intro)[8];
+    arg1[0x26/2] = 9;
+    instance->currentModelAnim = 2;
+    instance->currentAnimFrame = 0;
+    arg1[0x14/2] = 0;
+    instance->flags2 &= ~0x10;
+    arg1[0x12/2] = 0;
+    instance->currentAnimFrame = 0x39;
+    arg1[0x3C/2] = ((unsigned short*)data)[0x92/2];
+}
 
 void func_8015EAB8_97C38(Instance* instance, int* arg1) {
     arg1[0x54/4] = 1;
