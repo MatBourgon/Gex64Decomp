@@ -59,6 +59,7 @@ src/SIGNAL.c
 src/_4f810.c
 src/4FC20.c
 src/SPLINE.c
+src/52EE0.c
 
 src/level/AZTEC.c
 src/level/CIRCUIT.c
