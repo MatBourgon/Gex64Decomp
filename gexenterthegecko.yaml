@@ -138,9 +138,9 @@ segments:
       - [0x4F810, c, _4f810]
       - [0x4FC20, c]
       - [0x51880, c, SPLINE]
+      - [0x52EE0, c]
 
       # Start of Libraries
-      - [0x52EE0, c]
       - [0x532F0, c, _532f0]
       - [0x53BD0, c, libmus/player_commands]
       - [0x55110, c, libmus/player]
