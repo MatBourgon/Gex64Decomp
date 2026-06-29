@@ -170,7 +170,13 @@ INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_orbpole_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_orbpole_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015C9CC_83BAC);
+void func_8015C9CC_83BAC(Instance* instance) {
+    instance->_F4[0] = 2;
+    instance->_F4[1] = 1;
+    instance->currentModelAnim = 1;
+    instance->currentAnimFrame = 0;
+    instance->flags2 &= ~0x10;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_orbpole_OnCollide);
 
