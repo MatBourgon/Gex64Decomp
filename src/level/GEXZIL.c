@@ -188,7 +188,9 @@ INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_80161A18_9AB98);
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_80161B4C_9ACCC);
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_80161EC4_9B044);
+void func_80161EC4_9B044(int arg0, int arg1) {
+    func_80161B4C_9ACCC(arg0, arg1 + 8);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_80161EE4_9B064);
 
