@@ -135,7 +135,7 @@ INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_chrganm_OnUpdate);
 
 void func_8015B548_82728(Instance* instance) {
     instance->scale.y = instance->_F4[2];
-    func_8002E704(instance);
+    func_8002E704();
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015B570_82750);
@@ -364,7 +364,7 @@ void func_8015F708_868E8(Instance* instance) {
 
 void func_8015F720_86900(Instance* instance) {
     if (instance->_F4[2] == 0) {
-        instance->_F4[2] = instance->_F4[0] | (instance->_F4[1] << 16) | (((unsigned char*)instance->_40)[0xe] << 24);
+        instance->_F4[2] = instance->_F4[0] | (instance->_F4[1] << 16) | (instance->currentModelAnim << 24);
     }
 }
 

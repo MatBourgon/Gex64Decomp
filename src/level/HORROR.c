@@ -150,7 +150,7 @@ int* func_8015E220_A1A50(Instance* instance, int arg1) {
     int* result;
 
     result = NULL;
-    list = (int*)((int*)instance->intro)[1];
+    list = ((int**)instance->intro)[1];
     if (list != NULL) {
         if (arg1 < list[0]) {
             result = (int*)list[arg1 + 1];
