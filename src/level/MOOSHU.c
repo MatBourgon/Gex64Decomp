@@ -50,11 +50,25 @@ INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015B2FC_C3C7C);
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015B39C_C3D1C);
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015B4D4_C3E54);
+void func_8015B4D4_C3E54(Instance* instance, short* arg1) {
+    arg1[0x40/2]--;
+    instance->currentModelAnim = 2;
+    instance->currentAnimFrame = 0xE;
+    instance->flags2 &= ~0x10;
+    arg1[6] = 6;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015B510_C3E90);
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015B5C0_C3F40);
+void func_8015B5C0_C3F40(Instance* instance, short* arg1) {
+    short dir;
+
+    dir = 1;
+    if (((Instance*)gameTracker8->player)->position.y > 0) {
+        dir = -1;
+    }
+    arg1[5] = dir;
+}
 
 void func_8015B5F0_C3F70(Instance* instance, short* arg1) {
     instance->currentModelAnim = 0;
