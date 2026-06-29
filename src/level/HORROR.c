@@ -487,7 +487,20 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_80162214_A5A44);
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_801622E4_A5B14);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_801623DC_A5C0C);
+void func_801623DC_A5C0C(int* arg0, short arg1, int arg2, void* arg3) {
+    int* camera;
+
+    camera = (int*)arg0[2];
+    if (!(((unsigned short*)arg3)[0xCC/2] & 0x10)) {
+        if (camera[0x4D4/4] == 0) {
+            ((char*)arg3)[0x120] = 1;
+            camera[0x4D4/4] = (int)arg3;
+            if (camera[0x14C/4] != 2) {
+                func_801622E4_A5B14(arg0, arg1, arg2, arg3);
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_80162438_A5C68);
 

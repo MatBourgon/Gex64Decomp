@@ -186,7 +186,27 @@ INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zswitch_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zswitchm_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015C344_DC9B4);
+int func_8015C344_DC9B4(Instance* instance) {
+    int result;
+    int* object;
+    int* animData;
+
+    result = 0;
+    if (instance != NULL) {
+        object = (int*)instance->object;
+        if (object != NULL) {
+            if (((short*)object)[5] > 0) {
+                animData = (int*)((int*)object[4])[0];
+                if (animData != NULL) {
+                    if (((short*)animData)[1] > 0) {
+                        result = ((short*)animData)[1] - 1;
+                    }
+                }
+            }
+        }
+    }
+    return result;
+}
 
 INCLUDE_RODATA("asm/nonmatchings/level/RTA", D_8015EE74_DF4E4);
 
