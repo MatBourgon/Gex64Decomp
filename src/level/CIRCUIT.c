@@ -395,7 +395,20 @@ void func_8015F720_86900(Instance* instance) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015F75C_8693C);
+void func_8015F75C_8693C(Instance* instance) {
+    unsigned short val0;
+    unsigned char val1;
+    int val2;
+
+    val0 = ((unsigned short*)&instance->_F4[2])[1];
+    val1 = ((unsigned char*)&instance->_F4[2])[1];
+    val2 = ((char*)&instance->_F4[2])[0];
+    instance->currentAnimFrame = 0;
+    instance->_F4[2] = 0;
+    instance->_F4[0] = val0;
+    instance->_F4[1] = val1;
+    instance->currentModelAnim = val2;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015F780_86960);
 
