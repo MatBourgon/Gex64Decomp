@@ -33,7 +33,14 @@ INCLUDE_ASM("asm/nonmatchings/_47260", func_80046A18);
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80046AA0);
 
-INCLUDE_ASM("asm/nonmatchings/_47260", func_80046C48);
+void func_80046C48(Instance* instance) {
+    if (instance->object->animList != NULL) {
+        instance->currentAnimFrame--;
+        if ((short)instance->currentAnimFrame < 0) {
+            instance->currentAnimFrame = ((unsigned short*)(instance->object->animList[instance->currentModelAnim]))[1] - 1;
+        }
+    }
+}
 
 void func_80046CB0(Instance* instance) {
     func_800469A0(instance);
