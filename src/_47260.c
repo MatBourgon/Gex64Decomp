@@ -86,7 +86,21 @@ INCLUDE_ASM("asm/nonmatchings/_47260", func_800472A4);
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_800472F0);
 
-INCLUDE_ASM("asm/nonmatchings/_47260", func_80047344);
+int func_80047344(Instance* instance, int arg1) {
+    Object* object;
+
+    object = instance->object;
+    if (arg1 == 1) {
+        if (object->oflags & 0x8000) {
+            arg1 = 5;
+        } else if (object->oflags & 0x10000) {
+            arg1 = 4;
+        } else if (object->oflags & 0x20000) {
+            arg1 = 3;
+        }
+    }
+    return arg1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_800473A4);
 
