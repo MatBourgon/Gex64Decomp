@@ -24,7 +24,9 @@ INCLUDE_RODATA("asm/nonmatchings/_7fb0", D_8007B7B0);
 
 INCLUDE_ASM("asm/nonmatchings/_7fb0", func_80007D68);
 
-INCLUDE_ASM("asm/nonmatchings/_7fb0", func_8000853C);
+void func_8000853C(int arg0, int arg1, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8) {
+    func_80007D68(arg0, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+}
 
 INCLUDE_ASM("asm/nonmatchings/_7fb0", func_80008580);
 
