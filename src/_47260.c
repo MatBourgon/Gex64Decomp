@@ -664,7 +664,9 @@ INCLUDE_ASM("asm/nonmatchings/_47260", func_80048DE4);
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80048E7C);
 
-INCLUDE_ASM("asm/nonmatchings/_47260", func_80049224);
+void func_80049224(Instance* instance, int arg1, int arg2, int arg3) {
+    func_80048E7C(instance, arg1, arg2, (char*)instance->intro + 0x10, 0x40);
+}
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80049250);
 
