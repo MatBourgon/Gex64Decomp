@@ -35,7 +35,11 @@ INCLUDE_ASM("asm/nonmatchings/_47260", func_80046AA0);
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80046C48);
 
-INCLUDE_ASM("asm/nonmatchings/_47260", func_80046CB0);
+void func_80046CB0(Instance* instance) {
+    func_800469A0(instance);
+    func_80046A18(instance);
+    func_80046C48(instance);
+}
 
 void func_80046CE4(Instance* instance)
 {
