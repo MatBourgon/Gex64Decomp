@@ -493,7 +493,19 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_80162438_A5C68);
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_801624B4_A5CE4);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_80162524_A5D54);
+int func_80162524_A5D54(short* arg0, short* arg1) {
+    int result;
+
+    result = 0;
+    if (arg0[0x3B8/2] == arg1[0]) {
+        if (arg0[0x3BA/2] == arg1[1]) {
+            if (arg0[0x3BE/2] == arg1[0xA]) {
+                result = arg0[0x3BC/2] == arg1[2];
+            }
+        }
+    }
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_8016257C_A5DAC);
 
