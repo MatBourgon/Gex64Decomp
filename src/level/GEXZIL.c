@@ -132,6 +132,7 @@ void func_8015EA68_97BE8(Instance* instance, short* arg1) {
     arg1[0x3C/2] = ((unsigned short*)data)[0x92/2];
 }
 
+
 void func_8015EAB8_97C38(Instance* instance, int* arg1) {
     arg1[0x54/4] = 1;
     ((short*)arg1)[0x26/2] = 0x15;
