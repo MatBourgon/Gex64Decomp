@@ -194,7 +194,10 @@ void func_80161EC4_9B044(int arg0, int arg1) {
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_80161EE4_9B064);
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_80161FF8_9B178);
+void func_80161FF8_9B178(int arg0) {
+    func_80161624_9A7A4(arg0);
+    func_80161EE4_9B064(arg0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_80162024_9B1A4);
 

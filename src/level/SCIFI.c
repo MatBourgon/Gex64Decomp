@@ -182,7 +182,10 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_genbrk_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015BF08_E1D28);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015BFA8_E1DC8);
+void func_8015BFA8_E1DC8(Instance* instance) {
+    instance->flags &= ~0x400;
+    func_8002E350(instance);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015BFD4_E1DF4);
 

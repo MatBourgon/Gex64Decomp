@@ -356,7 +356,11 @@ void func_8015F708_868E8(Instance* instance) {
     instance->currentAnimFrame = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015F720_86900);
+void func_8015F720_86900(Instance* instance) {
+    if (instance->_F4[2] == 0) {
+        instance->_F4[2] = instance->_F4[0] | (instance->_F4[1] << 16) | (((unsigned char*)instance->_40)[0xe] << 24);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015F75C_8693C);
 
