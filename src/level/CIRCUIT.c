@@ -240,7 +240,14 @@ void circuit_launch_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015D304_844E4);
+void func_8015D304_844E4(Instance* instance) {
+    instance->flags &= ~0x800;
+    if (!(instance->_11C & 8)) {
+        instance->_F4[2] = instance->_104;
+        instance->position.x = PlayerInstance->position.x;
+        instance->position.y = PlayerInstance->position.y;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015D354_84534);
 
