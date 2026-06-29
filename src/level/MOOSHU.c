@@ -27,7 +27,16 @@ void func_8015A150_C2AD0(Instance* instance, short arg1, short arg2) {
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015A18C_C2B0C);
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015A1E0_C2B60);
+void func_8015A1E0_C2B60(Instance* instance, int arg1, int arg2, short* arg3) {
+    short angle;
+
+    if (func_8015B9D0_C4350(instance, arg3, &angle) != 0) {
+        instance->rotation.z = angle + 0x400;
+        func_8015BB44_C44C4(instance, arg3);
+    } else {
+        func_8004ACB0(&instance->rotation.z, (short)(angle + 0x400), arg3[8]);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015A258_C2BD8);
 
