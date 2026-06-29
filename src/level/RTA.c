@@ -164,7 +164,17 @@ INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zdoor_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zdoor_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015BD04_DC374);
+void func_8015BD04_DC374(Instance* instance) {
+    if (instance->_F4[0] == ((int*)instance->introData)[0]) {
+        instance->position.x = instance->initialPos.x;
+        instance->position.y = instance->initialPos.y;
+        instance->position.z = instance->initialPos.z;
+    } else {
+        instance->position.x = instance->_F4[2];
+        instance->position.y = instance->_100;
+        instance->position.z = instance->_104;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015BD54_DC3C4);
 
