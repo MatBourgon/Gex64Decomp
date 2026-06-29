@@ -56,7 +56,12 @@ INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015B510_C3E90);
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015B5C0_C3F40);
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015B5F0_C3F70);
+void func_8015B5F0_C3F70(Instance* instance, short* arg1) {
+    instance->currentModelAnim = 0;
+    instance->currentAnimFrame = 0;
+    instance->flags2 &= ~0x10;
+    arg1[6] = 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015B614_C3F94);
 
@@ -64,7 +69,12 @@ INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015B674_C3FF4);
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015B6D4_C4054);
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015B734_C40B4);
+void func_8015B734_C40B4(Instance* instance, short* arg1) {
+    instance->currentModelAnim = 7;
+    instance->currentAnimFrame = 0;
+    instance->flags2 &= ~0x10;
+    arg1[6] = 0xB;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015B75C_C40DC);
 
