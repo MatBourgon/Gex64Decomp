@@ -19,7 +19,11 @@ void func_8015A07C_C29FC(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015A084_C2A04);
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015A150_C2AD0);
+void func_8015A150_C2AD0(Instance* instance, short arg1, short arg2) {
+    if (instance->flags2 & 0x10) {
+        func_8015B39C_C3D1C(instance, arg1, arg2);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015A18C_C2B0C);
 

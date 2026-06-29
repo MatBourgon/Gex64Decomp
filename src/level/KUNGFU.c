@@ -358,7 +358,14 @@ void func_8015F570_AE790(Instance* instance, short* arg1) {
     instance->currentAnimFrame = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015F598_AE7B8);
+void func_8015F598_AE7B8(Instance* instance, short* arg1) {
+    instance->flags2 &= ~0x10;
+    arg1[8] = 1;
+    if (instance->currentModelAnim != 0) {
+        instance->currentModelAnim = 0;
+        instance->currentAnimFrame = 0;
+    }
+}
 
 void func_8015F5D0_AE7F0(Instance* instance, short* arg1) {
     instance->currentModelAnim = 0;
