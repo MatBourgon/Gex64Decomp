@@ -81,7 +81,7 @@ void func_8002AE40(Instance* instance) {
     instance->_F4[0] = 0;
     instance->_F4[1] = 1;
     instance->currentAnimFrame = 0;
-    ((char*)instance->_40)[0xe] = 0;
+    instance->currentModelAnim = 0;
     ((short*)data)[0x4E] = 0;
     ((short*)data)[0x4F] = 0;
     instance->rotation.x = 0;
