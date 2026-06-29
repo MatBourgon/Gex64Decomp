@@ -143,7 +143,19 @@ void horror_polter_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_8015E05C_A188C);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_8015E1A8_A19D8);
+void func_8015E1A8_A19D8(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+
+    bsp = instance->bspTree;
+    if (bsp->_06 == 1) {
+        if (bsp->instanceSpline == gameTracker->player) {
+            if (bsp->_0C[5] >= 6U) {
+                instance->flags |= 0x10;
+                INSTANCE_PlainDeath(instance, 5, 3, 0);
+            }
+        }
+    }
+}
 
 int* func_8015E220_A1A50(Instance* instance, int arg1) {
     int* list;
