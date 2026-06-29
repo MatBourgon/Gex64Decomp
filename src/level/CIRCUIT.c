@@ -142,7 +142,17 @@ INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015B570_82750);
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_ebridge_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015B780_82960);
+void func_8015B780_82960(Instance* instance, GameTracker* gameTracker) {
+    int* camera;
+
+    camera = (int*)gameTracker->camera;
+    if (instance->_120 & 4) {
+        instance->_120 &= ~4;
+        CAMERA_SetSmoothValue(camera, instance->_D0[1]);
+        CAMERA_CameraUnlock(camera, -1);
+        CAMERA_Restore(camera, 1);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015B7E0_829C0);
 
@@ -261,7 +271,17 @@ INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_follow_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_follow_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015D780_84960);
+void func_8015D780_84960(Instance* instance, GameTracker* gameTracker) {
+    if (instance->introData != 0) {
+        if (((int*)instance->introData)[0] != 0) {
+            if (((int*)instance->introData)[0] > 10U) {
+                SIGNAL_HandleSignal(instance, ((int*)instance->introData)[0] + 4, 0);
+            } else {
+                SIGNAL_HandleSignal(instance, ((int*)instance->introData)[1] + 4, 0);
+            }
+        }
+    }
+}
 
 void circuit_pball_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
