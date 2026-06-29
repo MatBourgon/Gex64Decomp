@@ -35,7 +35,11 @@ INCLUDE_ASM("asm/nonmatchings/_47260", func_80046AA0);
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80046C48);
 
-INCLUDE_ASM("asm/nonmatchings/_47260", func_80046CB0);
+void func_80046CB0(Instance* instance) {
+    func_800469A0(instance);
+    func_80046A18(instance);
+    func_80046C48(instance);
+}
 
 void func_80046CE4(Instance* instance)
 {
@@ -44,7 +48,17 @@ void func_80046CE4(Instance* instance)
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80046D04);
 
-INCLUDE_ASM("asm/nonmatchings/_47260", func_80046DA4);
+void func_80046DA4(Instance* instance, int* arg1, int* arg2) {
+    instance->processFunc = (void(*)(void*,void*))instance->_D0[0];
+    *arg2 = ((short*)&instance->_D0[1])[0];
+    *arg1 = ((short*)&instance->_D0[1])[1];
+    instance->_D0[0] = 0;
+    ((short*)&instance->_D0[1])[0] = 0;
+    ((short*)&instance->_D0[1])[1] = 0;
+    ((short*)&instance->_D0[2])[0] = 0;
+    ((short*)&instance->_D0[2])[1] = 0;
+    ((short*)&instance->_D0[3])[0] = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80046DDC);
 
@@ -660,7 +674,9 @@ INCLUDE_ASM("asm/nonmatchings/_47260", func_80048DE4);
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80048E7C);
 
-INCLUDE_ASM("asm/nonmatchings/_47260", func_80049224);
+void func_80049224(Instance* instance, int arg1, int arg2) {
+    func_80048E7C(instance, arg1, arg2, (char*)instance->intro + 0x10, 0x40);
+}
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80049250);
 
