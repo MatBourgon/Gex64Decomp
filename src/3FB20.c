@@ -9,9 +9,37 @@ INCLUDE_ASM("asm/nonmatchings/3FB20", func_8003F334);
 
 INCLUDE_ASM("asm/nonmatchings/3FB20", func_8003F458);
 
-INCLUDE_ASM("asm/nonmatchings/3FB20", func_8003F614);
+extern int D_800EB7F8;
+extern int gameTracker4;
+extern short D_800AF040;
+extern short D_800AF042;
+extern int D_800AF044;
+extern int D_800AF048;
 
-INCLUDE_ASM("asm/nonmatchings/3FB20", func_8003F678);
+void func_8003F614(short arg0, int arg1, short arg2, int arg3) {
+    if (D_800EB7F8 == 0) {
+        if (((short*)gameTracker4)[0x4C12/2] != 6) {
+            *((short*)&D_800AF040) = arg0;
+            D_800AF044 = arg1;
+            D_800AF042 = arg2;
+            D_800AF048 = arg3;
+            D_800EB7F8 = (int)&D_800AF040;
+        }
+    }
+}
+extern int gameTracker4;
+extern short D_80078104;
+extern int D_80078108;
+
+void func_8003F678(short arg0, int arg1) {
+    if (D_800EB7F8 == 0) {
+        if (((short*)gameTracker4)[0x4C12/2] != 6) {
+            D_80078104 = arg0;
+            D_80078108 = arg1;
+            D_800EB7F8 = (int)&D_80078104;
+        }
+    }
+}
 
 extern short D_80078110;
 extern short D_80078112;

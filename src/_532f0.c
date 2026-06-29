@@ -1,6 +1,21 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/_532f0", func_800526F0);
+extern int D_8015483C;
+extern char D_80154833;
+extern int D_80154840;
+extern int D_800E5CE0;
+
+void func_800526F0(void) {
+    D_80154838 = -1;
+    D_8015483C = -1;
+    D_80154833 = 1;
+    D_80154840 = 0;
+    D_80154831 = 0;
+    D_80154830 = 0;
+    D_800E5CE0 = 0;
+    D_80156854 = 0x4B0;
+    func_80052954();
+}
 
 INCLUDE_ASM("asm/nonmatchings/_532f0", func_80052758);
 
@@ -14,13 +29,42 @@ void func_80052944(void) {
 void func_8005294C(void) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/_532f0", func_80052954);
+extern int D_80156854;
+extern int D_80156858;
+extern int D_8015686C;
+extern int D_80156870;
+extern int D_80156874;
+extern int D_80156878;
+extern char D_80154832;
+extern int D_80154838;
+
+void func_80052954(void) {
+    D_80156854 = 0x4B0;
+    D_80154834 = 0;
+    D_80156870 = 0;
+    D_8015686C = 0;
+    D_80156878 = 0;
+    D_80156874 = 0;
+    D_80156858 = 0;
+    D_80154832 = 0;
+    D_80154838 = -1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_532f0", func_800529A8);
 
-INCLUDE_ASM("asm/nonmatchings/_532f0", func_80052A7C);
+extern int D_80154834;
 
-INCLUDE_ASM("asm/nonmatchings/_532f0", func_80052AA8);
+void func_80052A7C(int arg0) {
+    if (D_80154834 == 0) {
+        func_80052D18(arg0, 7);
+    }
+}
+
+void func_80052AA8(int arg0) {
+    if (func_80052FB8() != 0) {
+        func_80052ADC(arg0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/_532f0", func_80052ADC);
 
@@ -68,9 +112,20 @@ INCLUDE_ASM("asm/nonmatchings/_532f0", func_80052C2C);
 
 INCLUDE_ASM("asm/nonmatchings/_532f0", func_80052D18);
 
-INCLUDE_ASM("asm/nonmatchings/_532f0", func_80052F58);
+extern char D_80154831;
 
-INCLUDE_ASM("asm/nonmatchings/_532f0", func_80052F7C);
+void func_80052F58(void) {
+    if (D_80154830 == 0) {
+        D_80154831 = 1;
+    }
+}
+
+void func_80052F7C(void) {
+    if (D_80154830 != 0) {
+        D_80154830 = D_80154830 - 1;
+    }
+    D_80154831 = 0;
+}
 
 extern char D_80154830;
 void func_80052FAC()

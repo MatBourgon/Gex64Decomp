@@ -301,11 +301,55 @@ void MATH3D_SetIdentityQuat(G2Quat* q)
     q->w = 4096;
 }
 
-INCLUDE_ASM("asm/nonmatchings/MATH3D", func_80030BA0);
+extern int D_800E8184;
+extern int D_800BF1C0;
+extern int D_800BF1C4;
+extern int D_800BF1C8;
+extern int D_800BF1CC;
+extern int D_800BF1D0;
+extern int inflate;
 
-INCLUDE_ASM("asm/nonmatchings/MATH3D", func_80030BE0);
+void func_80030BA0(void) {
+    int base;
+    int size;
 
-INCLUDE_ASM("asm/nonmatchings/MATH3D", func_80030C50);
+    base = D_800E8184;
+    size = (int)&inflate - base;
+    D_800BF1C8 = 0;
+    D_800BF1C0 = base;
+    D_800BF1C4 = size;
+    D_800BF1CC = base;
+    D_800BF1D0 = size;
+}
+
+extern int D_800BF2CC;
+
+int func_80030BE0(int arg0) {
+    int idx;
+    int result;
+
+    arg0 = (arg0 + 0xF) & ~0xF;
+    idx = D_800BF1C8;
+    result = D_800BF1CC[idx * 2] + arg0;
+    D_800BF1CC[idx * 2] = result;
+    idx = D_800BF1C8;
+    D_800BF1D0[idx * 2] -= arg0;
+    D_800BF2CC = arg0;
+    return result;
+}
+
+extern int D_800BF1CC[];
+extern int D_800BF1D0[];
+
+void func_80030C50(int arg0) {
+    int idx;
+
+    idx = D_800BF1C8;
+    arg0 &= ~0xF;
+    D_800BF1CC[idx * 2] -= arg0;
+    idx = D_800BF1C8;
+    D_800BF1D0[idx * 2] += arg0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/MATH3D", func_80030CB4);
 

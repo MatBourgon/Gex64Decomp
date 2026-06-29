@@ -1,6 +1,15 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/368B0", func_80035CB0);
+unsigned int func_80035CB0(unsigned int arg0, unsigned int arg1) {
+    unsigned int r;
+    unsigned int g;
+    unsigned int b;
+
+    r = ((arg0 >> 24) * (arg1 >> 24)) >> 8;
+    g = (((arg0 >> 16) & 0xFF) * ((arg1 >> 16) & 0xFF)) >> 8;
+    b = (((arg0 >> 8) & 0xFF) * ((arg1 >> 8) & 0xFF)) & 0xFF00;
+    return (r << 24) + 0xFF + (g << 16) + b;
+}
 
 INCLUDE_ASM("asm/nonmatchings/368B0", func_80035D1C);
 

@@ -82,15 +82,42 @@ void func_800508D4(void) {
     D_80156B14 = (unsigned int*)&gameTracker8->_4B12[0x3E];
 }
 
-INCLUDE_ASM("asm/nonmatchings/4FC20", func_80050930);
+extern int gameTracker8;
 
-INCLUDE_ASM("asm/nonmatchings/4FC20", func_80050980);
+int func_80050930(int arg0) {
+    if (((char*)gameTracker8)[0x4C60] != 0) {
+        if (arg0 != 0 && arg0 < 0x1E7) {
+            return MusStartEffect(arg0);
+        }
+    }
+    return 0;
+}
+
+int func_80050980(int arg0) {
+    if (((short*)gameTracker8)[0x4C12/2] != 6) {
+        if (((char*)gameTracker8)[0x4C60] != 0) {
+            if (arg0 != 0 && arg0 < 0x1E7) {
+                return MusStartEffect(arg0);
+            }
+        }
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/4FC20", func_800509E0);
 
 INCLUDE_ASM("asm/nonmatchings/4FC20", func_80050A80);
 
-INCLUDE_ASM("asm/nonmatchings/4FC20", func_80050B64);
+int func_80050B64(int arg0) {
+    if (((short*)gameTracker8)[0x4C12/2] != 6) {
+        if (((char*)gameTracker8)[0x4C62] != 0) {
+            if (arg0 != 0 && arg0 < 0x1E7) {
+                return MusStartEffect(arg0);
+            }
+        }
+    }
+    return 0;
+}
 
 extern int D_8006F5AC[]; // large and in charge (24 bytes)
 extern int D_800BDF08[];

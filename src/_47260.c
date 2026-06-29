@@ -21,7 +21,17 @@ void func_80046730(Instance* instance) {
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_8004675C);
 
-INCLUDE_ASM("asm/nonmatchings/_47260", func_80046924);
+extern void func_8004675C();
+
+void func_80046924(Instance* instance) {
+    instance->processFunc = (void(*)(void*,void*))func_8004675C;
+    instance->collideFunc = 0;
+    instance->_F4[2] = 0x1000;
+    instance->_100 = (int)func_80015F14(D_800EB8A0);
+    instance->_104 = 0;
+    func_8004A47C(instance);
+}
+
 
 void func_80046978(Instance* instance) {
     INSTANCE_PlainDeath(instance, 5, -1, 0);
@@ -33,9 +43,24 @@ INCLUDE_ASM("asm/nonmatchings/_47260", func_80046A18);
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80046AA0);
 
-INCLUDE_ASM("asm/nonmatchings/_47260", func_80046C48);
+void func_80046C48(Instance* instance) {
+    int* animList;
 
-INCLUDE_ASM("asm/nonmatchings/_47260", func_80046CB0);
+    animList = (int*)instance->object->animList;
+    if (animList != NULL) {
+        instance->currentAnimFrame--;
+        if ((short)instance->currentAnimFrame < 0) {
+            animList = (int*)animList[instance->currentModelAnim];
+            instance->currentAnimFrame = ((unsigned short*)animList[0])[1] - 1;
+        }
+    }
+}
+
+void func_80046CB0(Instance* instance) {
+    func_800469A0(instance);
+    func_80046A18(instance);
+    func_80046C48(instance);
+}
 
 void func_80046CE4(Instance* instance)
 {
@@ -44,7 +69,17 @@ void func_80046CE4(Instance* instance)
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80046D04);
 
-INCLUDE_ASM("asm/nonmatchings/_47260", func_80046DA4);
+void func_80046DA4(Instance* instance, int* arg1, int* arg2) {
+    instance->processFunc = (void(*)(void*,void*))instance->_D0[0];
+    *arg2 = (short)instance->_D0[1];
+    *arg1 = (short)instance->_D0[1 + 1];
+    instance->_D0[0] = 0;
+    ((short*)&instance->_D0[1])[0] = 0;
+    ((short*)&instance->_D0[1])[1] = 0;
+    ((short*)&instance->_D0[2])[0] = 0;
+    ((short*)&instance->_D0[2])[1] = 0;
+    ((short*)&instance->_D0[3])[0] = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80046DDC);
 
@@ -61,20 +96,61 @@ INCLUDE_ASM("asm/nonmatchings/_47260", func_80047058);
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80047240);
 
-INCLUDE_ASM("asm/nonmatchings/_47260", func_800472A4);
+extern int D_800EB8A0;
+extern void func_80016894();
 
-INCLUDE_ASM("asm/nonmatchings/_47260", func_800472F0);
+void func_800472A4(Instance* instance) {
+    func_8001719C(instance, 0, 0, 0, D_800EB8A0, 0, (int)func_80016894, 8);
+}
 
-INCLUDE_ASM("asm/nonmatchings/_47260", func_80047344);
+extern char D_8007E6D4[];
+extern char D_8007E6C8[];
+
+int* func_800472F0(int arg0) {
+    char* name;
+    int* obj;
+
+    if (arg0 == 0) {
+        name = D_8007E6D4;
+    } else {
+        name = D_8007E6C8;
+    }
+    obj = (int*)OBTABLE_FindObject(name);
+    if (obj != NULL) {
+        return (int*)((int*)obj[3])[0];
+    }
+    return NULL;
+}
+
+int func_80047344(Instance* instance, int arg1) {
+    int flags;
+
+    flags = instance->object->oflags2;
+    if (arg1 == 1) {
+        if (flags & 0x8000) {
+            arg1 = 5;
+        } else if (flags & 0x10000) {
+            arg1 = 4;
+        } else if (flags & 0x20000) {
+            arg1 = 3;
+        }
+    }
+    return arg1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_800473A4);
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80047438);
 
-INCLUDE_ASM("asm/nonmatchings/_47260", func_80047724);
+void func_80047724(Instance* instance) {
+    int arg1;
+    int arg2;
+
+    func_80046DA4(instance, &arg1, &arg2);
+    func_80047768(instance, arg1, arg2, 0);
+}
 
 extern void func_80047438(Instance*, GameTracker*);
-extern void func_80047724();
 
 void func_80047768(Instance* instance, int arg1, int arg2, int arg3) {
     Object* temp_a1 = instance->object;
@@ -660,7 +736,9 @@ INCLUDE_ASM("asm/nonmatchings/_47260", func_80048DE4);
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80048E7C);
 
-INCLUDE_ASM("asm/nonmatchings/_47260", func_80049224);
+void func_80049224(Instance* instance, int arg1, int arg2, int arg3) {
+    func_80048E7C(instance, arg1, arg2, (char*)instance->intro + 0x10, 0x40);
+}
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80049250);
 

@@ -28,7 +28,17 @@ INCLUDE_ASM("asm/nonmatchings/_443f0", common_icecube_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/_443f0", common_icecube_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/_443f0", func_800444B8);
+void func_800444B8(Instance* instance, int arg1) {
+    int frameSize;
+    int* data;
+
+    instance->_11C = arg1;
+    data = (int*)((int*)instance->object->animList[0])[0];
+    frameSize = ((int*)data)[3];
+    instance->_D0[0] = arg1 * frameSize * 2;
+    instance->_D0[1] = (arg1 + 1) * frameSize * 2 - 1;
+    instance->currentAnimFrame = instance->_D0[1];
+}
 
 INCLUDE_ASM("asm/nonmatchings/_443f0", common_powerbug_OnCreate);
 

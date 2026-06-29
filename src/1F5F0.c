@@ -13,7 +13,21 @@ INCLUDE_ASM("asm/nonmatchings/1F5F0", func_8001F444);
 
 INCLUDE_ASM("asm/nonmatchings/1F5F0", func_8001F6F4);
 
-INCLUDE_ASM("asm/nonmatchings/1F5F0", func_80020164);
+extern int D_8006D288;
+
+int func_80020164(Instance* instance) {
+    if (instance->_F4[2] & 0x10000000) {
+        return 1;
+    }
+    {
+        int* data;
+        data = (int*)D_8006D288;
+        if (((int*)data)[3] != 0) {
+            return (((unsigned short*)((int*)data)[3])[3] & 2) != 0;
+        }
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/1F5F0", func_800201B4);
 

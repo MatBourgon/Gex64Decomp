@@ -2,7 +2,12 @@
 
 INCLUDE_ASM("asm/nonmatchings/42BD0", func_80041FD0);
 
-INCLUDE_ASM("asm/nonmatchings/42BD0", func_80042120);
+int func_80042120(short* arg0, int arg1) {
+    short* ptr;
+
+    ptr = arg0 + arg1;
+    return MATH3D_FastSqrt(ptr[0] * ptr[0] + ptr[3] * ptr[3] + ptr[6] * ptr[6]) >> 6;
+}
 
 INCLUDE_ASM("asm/nonmatchings/42BD0", func_80042184);
 

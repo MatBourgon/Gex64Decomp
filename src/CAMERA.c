@@ -56,7 +56,11 @@ void func_80001DF4(short arg0) // set z rot?
     ptr[0x260/2] = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/CAMERA", func_80001E3C);
+void func_80001E3C(int* dst, int* src, int factor) {
+    dst[0] = src[0] + ((dst[0] - src[0]) * factor >> 12);
+    dst[1] = src[1] + ((dst[1] - src[1]) * factor >> 12);
+    dst[2] = src[2] + ((dst[2] - src[2]) * factor >> 12);
+}
 
 INCLUDE_ASM("asm/nonmatchings/CAMERA", func_80001EAC);
 
@@ -64,7 +68,9 @@ int CAMERA_LengthSVector(SVECTOR* sv) {
     return (MATH3D_FastSqrt2((sv->x * sv->x + sv->y * sv->y + sv->z * sv->z) << 4, 4) + 8) >> 4;
 }
 
-INCLUDE_ASM("asm/nonmatchings/CAMERA", func_80002134);
+int func_80002134(short* vec) {
+    return (MATH3D_FastSqrt2((vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2]) << 2, 2) + 2) >> 2;
+}
 
 INCLUDE_ASM("asm/nonmatchings/CAMERA", CAMERA_SetValue);
 
@@ -152,7 +158,17 @@ void CAMERA_SetTimer(Camera* camera, int arg1)
     CAMERA_Save(camera, -1);
 }
 
-INCLUDE_ASM("asm/nonmatchings/CAMERA", func_80003A0C);
+void func_80003A0C(int* arg0) {
+    if (arg0[0x2C8/4] != 3) {
+        if (arg0[0x468/4] > 0) {
+            arg0[0x468/4]--;
+            if (arg0[0x468/4] == 0) {
+                CAMERA_Restore(arg0, -1);
+                arg0[0x2C8/4] = 3;
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/CAMERA", func_80003A68);
 
@@ -165,7 +181,14 @@ void CAMERA_ChangeTo(CameraKey* key)
 
 INCLUDE_ASM("asm/nonmatchings/CAMERA", CAMERA_SetShake);
 
-INCLUDE_ASM("asm/nonmatchings/CAMERA", func_80003DAC);
+void func_80003DAC(short* result, SVECTOR* v1, SVECTOR* v2) {
+    SVECTOR diff;
+
+    diff.x = v2->x - v1->x;
+    diff.y = v2->y - v1->y;
+    diff.z = v2->z - v1->z;
+    *result = ratan2(diff.y, diff.x) + 0x400;
+}
 
 INCLUDE_ASM("asm/nonmatchings/CAMERA", func_80003E18);
 
@@ -196,9 +219,32 @@ void func_800058E4(SVECTOR* newPoint, SVECTOR* oldPoint)
 
 INCLUDE_ASM("asm/nonmatchings/CAMERA", func_80005920);
 
-INCLUDE_ASM("asm/nonmatchings/CAMERA", func_80005DB4);
+extern int D_8006CF10;
 
-INCLUDE_ASM("asm/nonmatchings/CAMERA", func_80005E18);
+void func_80005DB4(short arg0, short arg1) {
+    int buf[7];
+
+    buf[0] = arg0;
+    buf[1] = arg1;
+    buf[2] = 0;
+    buf[3] = 0;
+    buf[4] = 0;
+    buf[5] = 0;
+    buf[6] = 0;
+    D_8006CF10 = 0x80;
+    func_80011B20(buf, ((int*)gameTracker8)[1]);
+    D_8006CF10 = 0;
+}
+
+int func_80005E18(int* vec, short angle) {
+    MATRIX mat;
+    int result[3];
+
+    MATH3D_SetUnityMatrix(&mat);
+    RotMatrixZ(-angle, &mat);
+    MATH3D_ApplyMatrix(&mat, vec, result);
+    return -(short)ratan2(result[1], result[2]);
+}
 
 INCLUDE_ASM("asm/nonmatchings/CAMERA", func_80005E8C);
 
@@ -219,7 +265,22 @@ void func_800064D0(SVECTOR* newPoint, SVECTOR* oldPoint)
     func_800058E4(newPoint, oldPoint);
 }
 
-INCLUDE_ASM("asm/nonmatchings/CAMERA", func_800064F0);
+int func_800064F0(int arg0, int arg1) {
+    arg0 &= 0xFFF;
+    arg1 &= 0xFFF;
+    if (arg0 < arg1) {
+        if (arg1 - arg0 < 0x800) {
+            return 1;
+        }
+        return -1;
+    } else if (arg1 < arg0) {
+        if (arg0 - arg1 < 0x800) {
+            return -1;
+        }
+        return 1;
+    }
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/CAMERA", func_80006548);
 
@@ -241,6 +302,17 @@ int func_80007334()
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/CAMERA", func_8000733C);
+void func_8000733C(SVECTOR* result, short arg1) {
+    SVECTOR input;
+    int output[3];
+
+    input.x = 0;
+    input.y = 0;
+    input.z = arg1;
+    MATH3D_ApplyMatrix(((int*)gameTracker8)[2], &input, output);
+    result->x = output[0];
+    result->y = output[1];
+    result->z = output[2];
+}
 
 INCLUDE_RODATA("asm/nonmatchings/CAMERA", D_8007B7A4);

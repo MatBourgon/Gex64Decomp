@@ -18,15 +18,61 @@ int func_8004A344(int*** arg0) {
   return *var_v0[1];
 }
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A368);
+int* func_8004A368(Instance* instance, int arg1) {
+    int* list;
+    int* result;
+
+    result = NULL;
+    list = (int*)((int*)instance->intro)[1];
+    if (list != NULL) {
+        if (arg1 < list[0]) {
+            result = (int*)list[arg1 + 1];
+            result = (int*)((int*)result)[9];
+        }
+    }
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A3B4);
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A420);
+int func_8004A420(Instance* instance, int* list) {
+    int i;
+    int count;
+    int* entries;
+    int result;
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A47C);
+    result = 0;
+    if (instance != NULL && list != NULL) {
+        count = list[0];
+        entries = list + 1;
+        for (i = 0; i < count; i++) {
+            if (instance == (Instance*)((int*)entries[0])[9]) {
+                result = 1;
+                break;
+            }
+            entries++;
+        }
+    }
+    return result;
+}
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A4E4);
+void func_8004A47C(Instance* instance) {
+    int groupId;
+
+    instance->flags |= 0x1000;
+    groupId = INSTANCE_InstanceGroupNumber(instance);
+    LIST_DeleteFunc(instance);
+    LIST_InsertFunc((char*)gameTracker8->instanceList + groupId * 8 + 0xC, instance);
+}
+
+void func_8004A4E4(Instance* instance) {
+    int groupId;
+
+    instance->flags &= ~0x1000;
+    groupId = INSTANCE_InstanceGroupNumber(instance);
+    LIST_DeleteFunc(instance);
+    LIST_InsertFunc((char*)gameTracker8->instanceList + groupId * 8 + 0xC, instance);
+}
 
 void INSTANCE_InsertInstanceWithFlagsSet(Instance* instance, int flags) {
     int groupId;
@@ -46,27 +92,88 @@ void INSTANCE_InsertInstanceWithFlagsCleared(Instance* instance, int flags) {
     LIST_InsertFunc(&gameTracker8->instanceList->group[groupId], &instance->node);
 }
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A61C);
+int func_8004A61C(Instance* instance) {
+    int result;
+    int* object;
+    unsigned char anim;
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A67C);
+    result = -1;
+    if (instance != NULL) {
+        object = (int*)instance->object;
+        if (object != NULL) {
+            anim = ((unsigned char*)instance->_40)[0xe];
+            if (anim < ((short*)object)[5]) {
+                object = (int*)((int*)object)[4];
+                if (object != NULL) {
+                    result = ((short*)((int*)object[anim])[0])[1];
+                }
+            }
+        }
+    }
+    return result;
+}
+
+int func_8004A67C(Instance* instance) {
+    int next;
+    int max;
+
+    next = -1;
+    if (instance != NULL) {
+        next = instance->currentAnimFrame + 1;
+        max = func_8004A61C(instance);
+        if (next >= max) {
+            next = max - 1;
+        }
+    }
+    return next;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A6C8);
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A7B8);
+int func_8004A7B8(Instance* instance, int arg1, int arg2) {
+    int result;
+
+    result = -1;
+    if (instance != NULL) {
+        if (arg1 < ((short*)instance->object)[5]) {
+            result = arg1 & 0xFF;
+            instance->currentModelAnim = arg1;
+            instance->flags2 &= ~0x10;
+            func_8004A6C8(instance, arg2, 0);
+        }
+    }
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A820);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A8A8);
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A98C);
+void func_8004A98C(Instance* instance, short* arg1, unsigned short* arg2, int arg3) {
+    int i;
+
+    instance->_B8 = (int)arg1;
+    for (i = 0; i < arg3; i++) {
+        arg1[3] = arg2[0];
+        arg2++;
+        arg1 += 4;
+    }
+    arg1[3] = -1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A9C8);
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004AA38);
+void func_8004AA38(Instance* instance, SVector pos) {
+    func_8004A9C8(instance, pos.x, pos.y, pos.z, pos.pad);
+}
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004AA70);
+void func_8004AA70(Instance* instance, short* arg1, short arg2) {
+    func_8004A9C8(instance, arg1[0], arg1[1], arg1[2], arg2);
+}
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004AAA8);
+void func_8004AAA8(Instance* instance, unsigned short arg1, short arg2) {
+    func_80050508(instance, arg1, arg2, 0x5A, 0xBB8);
+}
 
 int func_8004AADC(void) {
     return 0;
@@ -93,7 +200,16 @@ int func_8004AC10(int *arg0, int unused, int arg2, int arg3) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004AC78);
+void func_8004AC78(Instance* instance, int arg1) {
+    int* list;
+
+    if (arg1 != 0) {
+        list = (int*)instance->object->animList[instance->currentModel];
+        if (list[0] != arg1) {
+            list[0] = arg1;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004ACB0);
 
@@ -107,9 +223,43 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004B090);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004B23C);
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004B2DC);
+unsigned int func_8004B2DC(unsigned int arg0) {
+    unsigned int result;
+    unsigned int remainder;
+    int i;
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004B32C);
+    result = 0;
+    remainder = 0;
+    for (i = 0xF; i >= 0; i--) {
+        remainder = (remainder << 2) | (arg0 >> 30);
+        arg0 <<= 2;
+        result <<= 1;
+        if (remainder >= (result * 2 + 1)) {
+            remainder -= (result * 2 + 1);
+            result++;
+        }
+    }
+    return result;
+}
+
+unsigned int func_8004B32C(unsigned int arg0, int arg1) {
+    unsigned int result;
+    unsigned int remainder;
+    int i;
+
+    result = 0;
+    remainder = 0;
+    for (i = (arg1 >> 1) + 0xF; i >= 0; i--) {
+        remainder = (remainder << 2) | (arg0 >> 30);
+        arg0 <<= 2;
+        result <<= 1;
+        if (remainder >= (result * 2 + 1)) {
+            remainder -= (result * 2 + 1);
+            result++;
+        }
+    }
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004B380);
 
@@ -403,4 +553,19 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004C040);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004C110);
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004C2F4);
+void func_8004C2F4(Instance* instance) {
+    int* list;
+    int* entry;
+    short i;
+
+    list = (int*)instance->data;
+    if (list != NULL) {
+        entry = list + 1;
+        if (list[0] > 0) {
+            for (i = 0; i < list[0]; i++) {
+                entry[2] = 1;
+                entry += 3;
+            }
+        }
+    }
+}
