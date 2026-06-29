@@ -347,7 +347,11 @@ INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_reza_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015F6B8_86898);
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015F708_868E8);
+void func_8015F708_868E8(Instance* instance) {
+    instance->_F4[0] = 5;
+    instance->currentModelAnim = 7;
+    instance->currentAnimFrame = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015F720_86900);
 
