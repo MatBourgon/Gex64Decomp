@@ -295,7 +295,18 @@ void func_8015DB1C_ACD3C(Instance* instance, short* arg1) {
     instance->currentAnimFrame = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015DB50_ACD70);
+void func_8015DB50_ACD70(Instance* instance, short* arg1) {
+    instance->flags2 &= ~0x10;
+    arg1[0x18/2] = 0;
+    if (arg1[8] == 0) {
+        instance->currentModelAnim = 2;
+        instance->currentAnimFrame = 0;
+    } else {
+        instance->currentModelAnim = 6;
+        instance->currentAnimFrame = 0x3D;
+    }
+    instance->position = instance->initialPos;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015DBB0_ACDD0);
 
