@@ -203,7 +203,20 @@ void func_8015FF70_990F0(Instance* instance, short* arg1)
     arg1[0x26/2] = 0x23;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015FF80_99100);
+void func_8015FF80_99100(Instance* instance, short* arg1) {
+    void* data;
+
+    data = (void*)((int*)instance->intro)[8];
+    if (arg1[0x26/2] != 0x28) {
+        arg1[0x26/2] = 0x28;
+        instance->currentModelAnim = 7;
+        instance->currentAnimFrame = 0;
+        arg1[0x14/2] = 0;
+        instance->flags2 &= ~0x10;
+        arg1[0x12/2] = 0;
+        arg1[0x4C/2] = ((unsigned short*)data)[5];
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015FFDC_9915C);
 
