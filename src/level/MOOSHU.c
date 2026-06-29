@@ -141,7 +141,15 @@ void func_8015C708_C5088(Instance* instance, GameTracker* gameTracker)
     instance->_F4[2] = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015C710_C5090);
+void func_8015C710_C5090(Instance* instance, GameTracker* gameTracker) {
+    instance->_F4[2] = 0;
+    if (instance->_F4[0] == 1) {
+        instance->_104 = 0x10;
+        instance->_F4[1] = 0;
+        instance->_F4[0] = 3;
+        func_80050508(instance, 0x126, (short)((rand() & 0x1F) - 0xF), 0xC8, 0x2710);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015C780_C5100);
 
