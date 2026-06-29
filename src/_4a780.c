@@ -62,11 +62,17 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A98C);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A9C8);
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004AA38);
+void func_8004AA38(Instance* instance, SVector pos) {
+    func_8004A9C8(instance, pos.x, pos.y, pos.z, pos.pad);
+}
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004AA70);
+void func_8004AA70(Instance* instance, short* arg1, short arg2) {
+    func_8004A9C8(instance, arg1[0], arg1[1], arg1[2], arg2);
+}
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004AAA8);
+void func_8004AAA8(Instance* instance, unsigned short arg1, short arg2) {
+    func_80050508(instance, arg1, arg2, 0x5A, 0xBB8);
+}
 
 int func_8004AADC(void) {
     return 0;
