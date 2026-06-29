@@ -145,6 +145,7 @@ void func_8015EAFC_97C7C(Instance* instance, short* arg1) {
     instance->flags2 &= ~0x10;
 }
 
+
 void func_8015EB38_97CB8(Instance* instance, void* arg1) {
     ((int*)arg1)[0x54/4] = 0;
     ((short*)arg1)[0x26/2] = 0xA;
