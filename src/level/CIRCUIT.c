@@ -133,7 +133,10 @@ INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_chrganm_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_chrganm_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015B548_82728);
+void func_8015B548_82728(Instance* instance) {
+    instance->scale.y = instance->_F4[2];
+    func_8002E704(instance);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015B570_82750);
 

@@ -230,7 +230,11 @@ INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_ptera_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_801630A0_D0920);
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_80163138_D09B8);
+int func_80163138_D09B8(Instance* instance) {
+    instance->rotation.x &= 0xFFF;
+    instance->rotation.y &= 0xFFF;
+    return *(int*)&instance->rotation.x == 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_80163160_D09E0);
 
