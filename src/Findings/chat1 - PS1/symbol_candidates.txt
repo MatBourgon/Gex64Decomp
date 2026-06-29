@@ -1,0 +1,1330 @@
+// Gex 2 (SLUS-00598) recovered symbol candidates
+// Derived from debug-string xref correlation + syscall pattern analysis
+// Confidence varies -- verify in Ghidra before fully trusting
+
+0x8001D788  CameraSpline_func
+0x8003DA70  main (game entrypoint / top-level state switch, contains state 1 setup)
+0x800670BC  MemPack
+0x8006BA70  BIOS_TableB_func_0x0D (tentative -- needs ref table verify)
+0x8006BA80  EnterCriticalSection (syscall a0=1, confirmed)
+0x8006BA90  ExitCriticalSection (syscall a0=2, confirmed)
+0x8006BC44  unresolved -- clears bit in word from small lookup table indexed by a0
+0x8006C200  unresolved -- calls VSync x2, likely vsync-wait/frame-pacing wrapper
+0x8006C378  VSync
+0x8006C4B0  unresolved -- indirect call via fnptr struct @0x8007F78C+0x14
+0x8006C514  unresolved -- indirect call via fnptr struct @0x8007F78C+0x10
+0x8006D214  Texture_load_func_1 (tpage debug)
+0x8006D274  Texture_load_func_2 (clut debug)
+0x8006D6F4  Texture_load_func_3 (tpage debug)
+0x8006D8A0  ResetGraph
+0x8006DA70  SetGrapQue
+0x8006DB24  DrawSyncCallback
+0x8006DB84  SetDispMask
+0x8006DC1C  DrawSync
+0x8006E040  ClearOTag
+0x8006E108  ClearOTagR
+0x8006E210  DrawOTag
+0x8006E280  PutDrawEnv
+0x8006E340  DrawOTagEnv
+0x8006E44C  PutDispEnv
+0x8007069C  DrawOTag_wrapper_game_code
+0x80071F30  SPU_timeout_func_1
+0x800721B0  SPU_timeout_func_2
+0x800764D0  CdInit
+0x80076D60  CDROM_ISR
+0x800784C0  CdSearchFile
+0x800787B8  CD_newmedia
+0x80078B20  CD_cachefile
+0x80078E30  CdRead
+0x8007915C  CdRead_retry
+0x8007A408  DMA_ERROR_HANDLER
+
+// --- IntrCtrlBlock (kernel intr.c interrupt control block) ---
+0x8007F76C  IntrCtrlBlock (struct, confirmed via embedded "$Id: intr.c..." module string)
+0x8006C410  IntrCtrlBlock_method_C  (calls +0x0C slot -> 0x8006C5B4)
+0x8006C450  IntrCtrlBlock_method_8  (calls +0x08 slot -> 0x8006C85C)
+0x8006C480  IntrCtrlBlock_method_4  (calls +0x04 slot, NULL in static data -- set at runtime)
+0x8006C4B0  IntrCtrlBlock_method_14_irq4  (calls +0x14 slot with hardcoded a0=4, likely Timer0 IRQ enable/disable)
+0x8006C4E4  IntrCtrlBlock_method_14_passthrough  (calls +0x14 slot, arg passthrough)
+0x8006C514  IntrCtrlBlock_method_10  (calls +0x10 slot -> 0x8006C9A4)
+0x8006C544  IntrCtrlBlock_method_18  (calls +0x18 slot -> 0x8006CA44)
+0x8006C5B4  IntrCtrlBlock_Init  (struct +0x0C slot impl -- resets I_MASK/I_STAT/DPCR, calls CD-init-adjacent func 0x800763F0, POPULATES +0x04 and +0x14 struct fields at runtime)
+0x8006C85C  IntrCtrlBlock_SetHandler  (struct +0x08 slot impl -- registers handler/flag per IRQ index into table @0x8007E708, toggles I_MASK bit; special remap for irq 4/5/6 = Timer0/1/2)
+0x8006C9A4  IntrCtrlBlock_SaveAndDisable  (struct +0x10 slot impl -- saves I_MASK/DPCR to state block @0x8007E704, masks all IRQs, disables all DMA channel enable bits, brackets w/ EnterCriticalSection)
+0x8006CA44  IntrCtrlBlock_RestoreAndEnable  (struct +0x18 slot impl -- inverse of SaveAndDisable; restores I_MASK/DPCR, calls ExitCriticalSection)
+
+// --- Interrupt subsystem state block (referenced via IntrCtrlBlock+0x1C) ---
+0x8007E704  IntrState_block  (flag + saved I_MASK/DPCR + per-IRQ handler table base)
+0x8007E708  IntrState_handler_table  (per-IRQ entries, indexed by irq number)
+
+// --- New leads surfaced while tracing the four slots, not yet examined ---
+0x8006CABC  unexamined (called from IntrCtrlBlock_Init)
+0x800763F0  unexamined (sits immediately before CdInit @0x800764D0 -- likely CD init sequence start)
+0x8006C68C  unexamined (called from IntrCtrlBlock_Init)
+0x8006CB20  unexamined (called from both IntrCtrlBlock_Init and SaveAndDisable/RestoreAndEnable family)
+0x8006CB30  unexamined (called from IntrCtrlBlock_Init)
+0x8006CC50  unexamined (called from IntrCtrlBlock_Init, result stored into struct+0x14)
+0x8006CAE8  unexamined (called from IntrCtrlBlock_Init, result stored into struct+0x04)
+
+// --- setjmp/longjmp and BIOS heap trampolines ---
+0x800763F0  setjmp
+0x8007642C  longjmp
+0x80076470  BIOS_A_malloc    (BIOS Table-A func 0x33)
+0x8007647C  BIOS_A_free      (BIOS Table-A func 0x34)
+0x80076488  BIOS_A_calloc    (BIOS Table-A func 0x37)
+0x80076494  BIOS_A_realloc   (BIOS Table-A func 0x38)
+
+// --- BIOS Table-B event delivery ---
+0x80072A70  BIOS_B_DeliverEvent  (BIOS Table-B func 0x07; called by all three CD callback stubs)
+0x80072A80  IntrCtrlBlock_method4_irq4_wrapper  (separate func packed after BIOS_B_DeliverEvent; calls IntrCtrlBlock_method_4 with hardcoded a0=4)
+
+// --- CdInit support: callback registration and CD probe ---
+0x800764A0  CdReadyCallback_register  (saves two args to 0x800C50F0/F4, calls func_79690)
+0x80079690  CdState_reset  (zeroes CD-ROM state variables at 0x800C50D0-D8, 0x800A00C0, etc; calls 0x800799A0)
+0x8007660C  CdHW_probe  (low-level CD hardware probe; called up to 4 times by CdInit; branches on a0=1 vs a0=2)
+
+// --- CD event callback stubs (function bodies, passed as pointers to callback setters) ---
+0x80076554  CD_callback_stub_A  (calls DeliverEvent(0xF0000003, 0x20) = CD command-acknowledge event)
+0x8007657C  CD_callback_stub_B  (calls DeliverEvent(0xF0000003, 0x40) = CD data-ready event)
+0x800765A4  CD_callback_stub_C  (calls DeliverEvent(0xF0000003, 0x40) = CD data-ready event, second variant)
+
+// --- CD callback getter/setter slots (PsyQ CdReadyCallback / CdReadCallback family) ---
+0x80076754  CdReadyCallback  (get/set slot at 0x80084B24)
+0x80076768  CdReadCallback   (get/set slot at 0x80084B28)
+0x800795A8  CdCallback_set_3 (get/set slot at 0x80084E4C)
+0x800795BC  CdCallback_set_4 (get/set slot at 0x80084E80)
+
+// --- CdHW_probe callees (not yet opened) ---
+0x80077E5C  unexamined (called by CdHW_probe when a0==2, likely CD mode-2 hardware init)
+0x80077EA8  unexamined (main reset/probe body called by CdHW_probe)
+0x80077D6C  unexamined (additional CD setup called by CdHW_probe when a0==1)
+0x800799A0  unexamined (called from CdState_reset with a0=0)
+
+// --- Four CD hardware function leads resolved ---
+0x80077E5C  CD_Reset_short  (clears CD callback slots at 0x80084B24/28/34/38; re-registers CD ISR via IntrCtrlBlock_SetHandler)
+0x80077EA8  CD_Reset_full   (full CD subsystem reset; logs "CD_init:" + "addr=%08x"; busy-waits on STATUS bits; sends init command sequence via CD_SendCommand)
+0x80077D6C  CD_SpeedConfig  (configures drive speed params; writes 0xC001 to speed config reg at struct+0x1AA; sets sector-size fields at +0x180/182/1B0/1B2 to 0x3FFF; programs CD param regs via indirect pointers)
+0x800799A0  SoundChannelArray_clear  (NOT CD code -- zeroes N*32-byte records from sound channel array at *[0x800C50F0]; loop only runs if a1 arg != 0)
+
+// --- CD hardware support functions ---
+0x80077804  CD_SendCommand   (CD-ROM command dispatcher; looks up cmd name in table @0x80084B4C; copies params to @0x80084B40; writes INDEX=0 via indirect ptr @0x80084DEC; stuffs params via @0x80084DF4; writes cmd via @0x80084DF0; then calls VSync-wait 0x8006C200; logs "CD_cw")
+0x800772BC  CD_Sync          (CD synchronization/wait; busy-loops up to 60 iterations; on timeout logs "CD timeout:" + "%s:(%s) Sync=%s, Ready=%s"; fires CdReadyCallback/CdReadCallback via indirect calls; calls CDROM_ISR directly)
+0x80077C98  CD_HW_reset_busy_wait  (write 1 to CD_INDEX via ptr; busy-wait loop on STATUS bits & 0x7; sends reset sequence bytes 1/7/7 via ptrs to CMD/PARAM regs; companion to CD_Reset_full)
+0x8006C574  IntrCtrlBlock_is_enabled  (2-instruction getter: returns lhu from IntrCtrlBlock state block +0x06; used as guard in CD_Sync)
+
+// --- Debug print layer ---
+0x80076390  CD_debug_puts    (walks string char-by-char calling putchar_impl; substitutes "<NULL>" for null ptr)
+0x800758B0  putchar_impl     (per-char output handler: expands tab->spaces, LF->CRLF, manages column tracker; recursive for CR injection; indexes char-class table @0x800849CD)
+0x800759AC  debug_flush      (flushes pending debug buffer to serial/TTY; calls 0x8006BAD0 if buffer count >0; clears buffer count at 0x80084A60)
+0x8006BAD0  unexamined (called from debug_flush with a0=1, a1=ptr to 0x8008C110 region -- likely raw UART/SIO output write)
+
+// --- CD global register pointer table (indirect MMIO access layer) ---
+// All CD register access goes through these pointers, initialized at CdInit time
+// 0x80084DEC -> pointer to CD_INDEX/STATUS  (0x1F801800)
+// 0x80084DF0 -> pointer to CD_CMD           (0x1F801801 write)
+// 0x80084DF4 -> pointer to CD_PARAM_FIFO    (0x1F801802 write)
+// 0x80084DF8 -> pointer to CD_RESPONSE      (0x1F801801 read) or CD_IRQ_FLAGS (0x1F801803)
+// 0x80084DFC -> pointer to CD timing/prescaler value (0x1325 written at init)
+
+// --- CD hardware functions resolved from four-lead chain ---
+0x80077D6C  CdAudio_VolumeInit  (sets SPU CD-audio input volumes to 0x3FFF max; writes CD INDEX/PARAM regs; runs on first probe only)
+0x80077E5C  CdIRQ_reinit        (clears callback slots 0x80084B24/B28/B34/B38; re-registers ISR via IntrCtrlBlock_method_C/8; a0==2 path)
+0x80077EA8  CdHW_reset          (main CD-ROM hardware reset body; logs "CD_init:", clears state, registers IRQ, busy-waits for idle, issues init commands via CdControl)
+0x800799A0  ClearCdSlots        (clears $a1 entries of 32-byte CD request-slot array starting at index $a0; array base ptr at 0x800C50F0)
+
+// --- CD command dispatch and sync ---
+0x80077804  CdControl           (CD command dispatcher; checks verbosity, indexes name table @0x80084B4C and handler table @0x80084D6C; calls CdSync before issuing)
+0x800772BC  CdSync              (waits for pending CD command with 60-tick timeout via VSync; logs "CD_sync"; on timeout prints status and calls CdReset)
+0x80077C98  CdReset             (hardware CD controller reset: INDEX=1, busy-waits on status bits, clears PARAM/DATA/REQUEST regs)
+0x80084B4C  CdCmd_name_table    (array of CD command name string pointers, indexed by command opcode byte)
+0x80084D6C  CdCmd_handler_table (array of CD command handler function pointers, indexed by command opcode byte)
+
+// --- TTY / debug output layer ---
+0x80076390  debug_puts          (puts-style string printer: loops calling tty_putchar per char, calls tty_flush at end; substitutes "<NULL>" for null ptr)
+0x800758B0  tty_putchar         (buffered char output: expands tab, normalises \n to \r\n, maintains col counter @0x80084A5C; flushes 32-char buffer to BIOS TTY via 0x8006BAD0)
+0x800759AC  tty_flush           (flushes pending tty buffer to BIOS TTY via 0x8006BAD0; zeroes col counter @0x80084A60)
+0x8006BAD0  BIOS_tty_write      (BIOS TTY write call -- called by tty_putchar and tty_flush with a0=1 and buffer ptr)
+
+// --- VSync confirmed ---
+0x8006C200  VSync               (full VSync implementation: spins on frame counter, branches on mode arg; calls VSync_wait_primitive @0x8006C378)
+0x8006C378  VSync_wait_primitive (underlying hardware-level VSync wait called by VSync for a0==0/other modes; not yet fully examined)
+
+// --- Global data landmarks identified from CdControl/CdSync ---
+0x8008C148  CdSync_timer        (frame counter snapshot used by CdSync timeout loop)
+0x8008C14C  CdSync_tick_count   (elapsed tick counter for CdSync timeout)
+0x8008C150  CdSync_label_ptr    (debug label ptr, set to "CD_sync" string by CdSync)
+0x80084E00  cdCtrl_ptr          (pointer to main CD control struct, accessed throughout CD module)
+0x80084DEC  CD_INDEX_regptr     (pointer to CD INDEX hardware register 0x1F801800)
+0x80084DF4  CD_PARAM_regptr     (pointer to CD PARAM hardware register 0x1F801802)
+0x80084DF8  CD_STATUS_regptr    (pointer to CD STATUS/REQUEST hardware register 0x1F801803)
+0x80084DFC  CD_DATA_regptr      (pointer to CD DATA FIFO hardware register)
+
+// --- Script engine dispatch table and interpreter ---
+0x80085C00  ScriptOpTable        (105-entry dispatch table; 12 bytes/entry: [+0]=name_ptr, [+4]=handler_ptr, [+8]=arg_info)
+0x80085BFC  ScriptOpTable_header (word before table; 0xFFFF0000 sentinel + nop-stub ptr 0x8005CB50)
+0x80022xxx  ScriptOp_handlers    (105 unique handler functions at word+4 of each table entry, in 0x80022xxx-0x80024xxx range)
+0x8005CB50  nop_stub             (jr $ra; nop -- sentinel "do-nothing" handler)
+
+// ScriptExec calling convention:
+//   ScriptExec(script_obj_ptr $a0, script_pc_ptr $s0, a2=exec_flags, a3=context_or_null)
+//   handler($a0=script_obj_ptr, $a1=script_pc_ptr)
+//   arg_info field: low 16 = arg_count; high 16 = type_flag (1 = takes object ref)
+//   PC advances by (arg_count + 1) * 4 bytes after each handler call
+
+0x80024D30  ScriptExec           (script interpreter loop: reads opcode index from *$s0, multiplies by 12, loads handler via table[i].handler_ptr, jalr's it with $a1=$s0; advances PC by (arg_count+1)*4 and loops)
+0x80024E88  ScriptExec_wrapper   (thin wrapper: calls ScriptExec with $a2 forced to 1)
+0x800228D4  ScriptEngine_reset   (bulk-zeros large BSS regions for script state: 0x80089578-0x800896B8, 0x8008AB00-0x8008ABC0 etc.; copies 8 bytes from struct at 0x80085270 into 0x80085B5C)
+
+// --- level objective description table ---
+0x8007B27C  LevelObjective_table  (18-entry table of level-objective description string pointers)
+
+// --- Confirmed opcode handlers (sample, from table entry word+4) ---
+0x80022A08  op_hideObject         (sets bit 7 in object->flags[0x1C]; arg_info=0x00000001)
+0x80022A28  op_unhideObject       (clears bit 7 in object->flags[0x1C]; arg_info=0x00000001)
+0x80022AC8  op_timer              (sets timer on object; arg_info=0x00010001)
+
+// --- Object struct layout (from handler analysis) ---
+// object[+0x1C] = render/state flags word; bit 7 = hidden flag (set by hideObject, cleared by unhideObject)
+
+// ============================================================================
+// SCRIPT ENGINE - full handler table and subsystem map
+// (See also script_handlers.txt for full per-handler notes)
+// ============================================================================
+0x80085C00  ScriptOpTable             (105-entry dispatch table, 12 bytes/entry)
+0x80024D30  ScriptExec                (interpreter loop: index*12 offset, lw handler, jalr, advance PC)
+0x80024E88  ScriptExec_wrapper        (calls ScriptExec with a2=1)
+0x800228D4  ScriptEngine_reset        (bulk-zeros script BSS state; copies master state from 0x80085270)
+0x80022A48  Script_setTimer           (shared: schedules timed callback; used by timer/frame/setPlayerControl)
+0x80085270  Script_masterState        (global struct; 8 bytes copied to 0x80085B5C by ScriptEngine_reset)
+0x80085B5C  Script_runtimeScratch     (8-byte runtime scratch area populated by ScriptEngine_reset)
+
+// Camera subsystem (0x80015xxx-0x80017xxx)
+0x80015728  Camera_setMode
+0x80016404  Camera_setValue
+0x800173B0  Camera_lock
+0x800173C4  Camera_unlock
+0x800173D8  Camera_setSmooth
+0x800173E0  Camera_save
+0x80017B70  Camera_restore
+0x80017C48  Camera_setTimer
+0x80017D7C  Camera_adjust
+0x80017FA8  Camera_set
+0x80017FC0  Camera_shake
+
+// Sound subsystem (0x8005Cxxx-0x8005Dxxx)
+0x8005CAD4  Sound_command             (shared dispatcher: soundStart/Stop/Pause/Resume/Mute/Unmute/setMusicVariable)
+0x8005D1E0  Music_control
+0x8005D560  SoundEffect_start
+0x8005D5DC  Freeze_soundfx            (pauses sound on frozen objects; called by freeze opcode)
+0x8005D630  SoundEffect_stop
+
+// Voice subsystem (0x80053xxx)
+0x80053644  Voice_queue
+0x8005370C  Voice_unqueue
+0x800537A0  Voice_clearQueue
+0x80053998  Voice_request
+0x80053C4C  Voice_force
+0x80053D24  Voice_disable
+0x80053D48  Voice_reEnable
+
+// Object/level subsystem
+0x80038810  Object_birth              (spawns new object; called by birthObject opcode)
+0x800710C0  Level_coordTransform      (called by teleport+relocate)
+0x80071B30  Level_setPosition         (called by teleport+relocate)
+0x8003E8FC  Level_transition          (called by teleport+relocate -- may trigger zone change)
+0x8001F1F0  Freeze_object             (called by freeze opcode)
+0x800543F8  GameValue_dispatch        (fnptr-table dispatch; called by gameValue opcode)
+0x80011A5C  Launch_func               (called by launch opcode)
+0x80011A7C  CostumeChange_func        (called by costumeChange opcode)
+0x8003AF9C  Fog_update
+0x80070970  Fog_recalc
+0x80074F10  Shards_func               (spawn shard particles; called twice by Shards opcode)
+0x800708D0  Shards_spawn
+
+// Object struct field offsets (inferred from handler disassembly)
+// object+0x1C = render/state flags  (bit7=hidden, others=freeze/noremove)
+// object+0x10 = spline/physics state ptr
+// object+0x14 = motion flags
+// object+0x24 = animation state ptr
+// object+0x5E = animation frame index
+// object+0x6C = death Z threshold
+// object+0x48 = position X (halfword)
+// object+0x4A = position Y (halfword)
+// object+0x50 = blend value
+// object+0x5C = far plane distance
+// object+0xC2 = model/mesh ID
+// object+0x104 = frame counter
+
+// ============================================================================
+// GLOBAL POINTER AND GAMESTATE STRUCT
+// ============================================================================
+0x80085270  g_GameState_ptr      (4-byte global: holds address of GameState singleton)
+0x800896D0  GameState            (main game state singleton struct, statically allocated in binary data section)
+
+// GameState field layout (offsets from 0x800896D0, inferred from write-context analysis):
+// GS[+0x04]  ptr   -- cleared in GameWorld_init (object subsystem ptr A?)
+// GS[+0x08]  ptr   -- cleared in GameWorld_init (object subsystem ptr B?)
+// GS[+0x0C]  ptr   -- cleared in GameWorld_init (object subsystem ptr C?)
+// GS[+0x10]  ptr   -- active object list HEAD (set by init/zone_transition/viewport_setzone)
+// GS[+0x14]  ptr   -- active object list TAIL or count (set by init/zone_transition)
+// GS[+0x18]  ptr   -- BIGFILE handle or path (written by main() with \\BIGFILE.DAT;1 context)
+// GS[+0x1C]  word  -- state/mode flag (zeroed by GameWorld_init)
+// GS[+0x20]  ptr   -- current scene/level handle (set by Scene_load on every scene entry)
+// GS[+0x2C]  word  -- zeroed by GameWorld_init
+// GS[+0x34]  word  -- zeroed by GameWorld_init
+// GS[+0x48]  half  -- viewport/frustum param A (set by GameWorld_init and Viewport_setZone)
+// GS[+0x4A]  half  -- viewport/frustum param B
+// GS[+0x4C]  half  -- viewport/frustum param C
+// GS[+0x4E]  byte  -- transition/loading flag (zeroed on Zone_transition)
+// GS[+0x4F]  byte  -- flag (zeroed by GameWorld_init)
+// GS[+0x50]  half  -- display param D (set by GameWorld_init)
+// GS[+0x52]  half  -- display param E
+// GS[+0x54]  half  -- display param F
+// GS[+0x56]  half  -- zeroed by GameWorld_init
+// GS[+0x5E]  half  -- zeroed by GameWorld_init
+// GS[+0x60]  half  -- zeroed by GameWorld_init (possibly scroll X)
+// GS[+0x62]  half  -- zeroed by GameWorld_init (possibly scroll Y)
+// GS[+0x64]  half  -- set from init arg (camera/display param)
+// GS[+0x68]  half  -- set from init arg (fog param A?)
+// GS[+0x6A]  half  -- set from init arg (fog param B?)
+// GS[+0x6C]  half  -- set from init arg (fog param C?)
+// GS[+0x8C]  half  -- zeroed by GameWorld_init (scroll/layer offset A?)
+// GS[+0x8E]  half  -- zeroed
+// GS[+0x90]  half  -- zeroed
+// GS[+0x92]  half  -- zeroed
+// GS[+0xB0]  ptr   -- subsystem ptr (set from func_4CE44 result group)
+// GS[+0xB4]  ptr   -- subsystem ptr
+// GS[+0xB8]  ptr   -- subsystem ptr
+// GS[+0xBC]  half  -- color/param triple A (set as RGB or XYZ group)
+// GS[+0xBE]  half  -- color/param triple B
+// GS[+0xC0]  half  -- color/param triple C
+// GS[+0xC2]  half  -- zeroed by GameWorld_init
+// GS[+0xD0]  ptr   -- zeroed by GameWorld_init
+// GS[+0xD4]  ptr   -- zeroed
+// GS[+0xD8]  ptr   -- zeroed
+// GS[+0xE4]  ptr   -- zeroed by GameWorld_init, then set to subsystem ptr
+// GS[+0xE8]  ptr   -- subsystem ptr (set from same function as B0/B4/B8 group)
+// GS[+0xEC]  ptr   -- subsystem ptr
+// GS[+0xF0]  ptr   -- subsystem ptr
+// GS[+0xF4]  word  -- object pool count OR update tick counter (zeroed in init; reset on every scene/zone transition; most widely accessed field)
+// GS[+0xF8]  ptr   -- subsystem ptr
+// GS[+0xFC]  ptr   -- object pool base ptr? (set from func_4CE44 return value, first and last write in GameWorld_init)
+
+// Key functions that write GameState fields
+0x8004CF5C  GameWorld_init       (initializes all GameState fields; loads core DRM objects: hud_____, intro___, gexsml__, cheapgx_; queues 4 voice channels)
+0x80033C50  Scene_load           (loads a scene by name; sets GS+0x20 scene handle, GS+0xF4; calls ScriptEngine_reset + ScriptExec; loads intro___ and cold____ DRM objects)
+0x800359DC  Zone_transition      (resets GS+0xF4 object pool, GS+0x4E flag, GS+0x10/14 object lists; calls Voice_force; classic "kill and rebuild" zone-change pattern)
+0x80042814  Viewport_setZone     (calls Level_coordTransform; sets GS+0x10 obj list head; sets GS+0x48/4A/4C viewport/frustum halfwords)
+0x8004CE44  ?ObjectPool_alloc    (called at top of GameWorld_init; result stored into GS+0xFC and used to seed GS+0x10/14/B0-B8/E8-F0)
+0x8005B018  DRM_load             (loads a DRM object file by 8-char name; called by GameWorld_init with hud_____/intro___/gexsml__/cheapgx_ and by Scene_load with intro___/cold____)
+
+// Data: level name strings immediately following g_GameState_ptr in binary
+0x80085284  LevelDebugMenu_page1   (debug level-select strings: "LEVEL SELECT MENU...", "COLLECTABLES MENU...", "SHORT STATS", "DEBUG MENU + CHEATS OFF")
+0x800852EC  LevelName_table_page1  (internal level names page 1: KUNGFU4, KUNGFU02, KUNGFU1, JUNK1, HORROR6, HORROR5, HORROR4, HORROR2, GILLIG1, GEXZIL9, FINAL01, CIRCUIT9, CIRCUIT5, CIRCUIT0, AZTEC16)
+0x8008539C  LevelDebugMenu_page2   ("LEVEL SELECT MENU 2...", "MAIN MENU...")
+0x800853C4  LevelName_table_page2  (REZOP3, REZOP2, REZOP1, SCIFI14, SCIFI10, PREHST3, PREHST2, PREHST1, NYPD01, MOOSHU1, LOST01, LOONEY69, LOONEY30)
+0x8008544C  LevelDebugMenu_page3   ("LEVEL SELECT MENU 3...")
+0x80085464  LevelName_table_page3  (MAP8, TRAIN30)
+
+// ============================================================================
+// MASTER GAME WORLD STRUCT  @ 0x800896D0 (BSS runtime address)
+// Global pointer: mem[0x80085270] = 0x800896D0
+// Accessed everywhere via: lui rX, 0x8008; lw rY, 0x5270(rX); then field access
+// ============================================================================
+
+0x80085270  g_WorldPtr            (global var: pointer to master World struct @ 0x800896D0 in BSS)
+0x80086EA8  g_CameraCtrlPtr       (global var: pointer to camera controller object, accessed alongside WorldPtr)
+0x800896D0  World_struct           (BSS: master game world/level struct -- layout below; NOT visible in static file)
+
+// World struct field layout (offsets from 0x800896D0, inferred from code):
+// +0x00..0x0C  misc counters/flags, zeroed by World_frameBegin
+// +0x10        render/anim flags word  (bit 0x80=freeze-BG, bit 0x100=?, bit 0x480=anim active; ANDed/ORed per frame)
+// +0x14        secondary flags word    (bit 0x48 set by World_frameBegin)
+// +0x18        level/world ref ptr     (set once in main, stable across frames)
+// +0x1C        per-frame state flags   (zeroed each frame by World_frameBegin)
+// +0x2C        signal accumulator      (zeroed each frame)
+// +0x34        some flag               (zeroed by ctor)
+// +0x48        camera target X         (halfword, world-space; written by Camera_* and spline interpolator)
+// +0x4A        camera target Y         (halfword)
+// +0x4C        camera target Z         (halfword)
+// +0x4E        animation bank/page     (byte; set to 8 by World_frameBegin; written by Anim_advance)
+// +0x4F        light group             (byte; written by lightGroup script op)
+// +0x50        camera current X        (halfword; second camera XYZ, for smooth interpolation)
+// +0x52        camera current Y        (halfword)
+// +0x54        camera current Z        (halfword)
+// +0x56        anim loop counter       (halfword; written by Anim_advance and script ops)
+// +0x5E        animation frame index   (halfword; zeroed each frame; written by Anim_advance)
+// +0x60        velocity/delta X        (halfword; zeroed each frame)
+// +0x62        velocity/delta Y        (halfword; zeroed each frame)
+// +0x64        halfword from player/object data (copied in by World_frameBegin from CameraCtrl)
+// +0x68        halfword limit          (set to 0x1000 by World_frameBegin)
+// +0x6A        halfword limit          (set to 0x1000 by World_frameBegin)
+// +0x6C        halfword limit          (set to 0x1000 by World_frameBegin)
+// +0x8C..0x92  four zeroed halfwords   (set to 0 when camera init path taken)
+// +0xB0        update_callback fnptr   (= 0x8004D5DC, set by World_frameBegin)
+// +0xB4        render_callback fnptr   (= 0x800510B0, set by World_frameBegin)
+// +0xB8        data ptr                (from level/script source struct[+0])
+// +0xBC        prev-frame camera X     (halfword; backed up from +0x48 each frame)
+// +0xBE        prev-frame camera Y     (halfword; backed up from +0x4A each frame)
+// +0xC0        prev-frame camera Z     (halfword; backed up from +0x4C each frame)
+// +0xC2        model/mesh ID           (halfword; zeroed by World_frameBegin)
+// +0xD0/D4/D8  object list state       (3 ptrs/counts, zeroed each frame)
+// +0xE4        object list aux         (zeroed each frame)
+// +0xE8/EC     level transition values (computed from level data, stored by World_frameBegin)
+// +0xF0        count from level data   (from level source struct[+0xA])
+// +0xF4        freeze list head        (zeroed = unfrozen; written by freeze/unfreeze ops)
+// +0xF8        freeze depth counter    (initialised to 2 by World_frameBegin)
+// +0xFC        anim step accumulator   (current interpolation step; masked with 0x18004_048F bits)
+// +0x100       anim frame counter      (incremented per step; reset to 0 by Anim_advance)
+// +0x104       anim total duration     (total frames; written by spline update)
+// +0x108       anim start Y            (halfword; start position for interpolation)
+// +0x10C       anim start Z            (halfword; start position for interpolation)
+// +0x110       spline waypoint index   (current node in camera spline array)
+// +0x114       spline flags            (bit0=direction, bit1=loop, bit2=done, bit4=active)
+// +0x118       spline angle            (atan2 result; halfword; written by Camera_splineUpdate)
+// +0x11C       spline node count       (total waypoints)
+
+// World/camera update functions
+0x8004CF5C  World_frameBegin         (per-frame init: copies camera XYZ from CameraCtrl, saves prev, zeros per-frame fields, sets callbacks; NOT a one-time ctor)
+0x8001F3DC  Camera_splineUpdate      (interpolates camera XYZ between spline nodes; writes +0x48/4A/4C; uses +0xFC/100/104/108/10C/110/114/118 as spline state)
+0x80022158  Anim_applyTransition     (small helper: if +0x24 set, saves to +0xFC/100; if +0x20 set, sets bit 0x80 in +0x10, clears +0x108/10C)
+0x80022194  Anim_advance             (animation state machine 0->1->2->0 at world[+0xFC]; writes +0x4E/56/5E; calls 0x8003904C on frame completion)
+0x8003904C  unexamined               (called by Anim_advance on animation completion)
+0x8004D5DC  unexamined               (update callback stored at World+0xB0 by World_frameBegin)
+0x800510B0  unexamined               (render callback stored at World+0xB4 by World_frameBegin)
+
+// CameraCtrl struct (at address held by g_CameraCtrlPtr @ 0x80086EA8)
+// +0x04  sub-ptr (object/entity ref)
+// [+4]+0x28  camera X (halfword); taken when mode bit NOT set
+// [+4]+0x2A  camera Y
+// [+4]+0x2C  camera Z
+// [+4]+0x6F20  camera X (halfword); taken when mode bit IS set (0x8000 bit at +0xA0)
+// [+4]+0x6F22  camera Y
+// [+4]+0x6F24  camera Z
+// +0xA0  mode flags (bit 0x8000 = alternate camera source)
+
+// Data section global strings at GP base (NOT World struct fields):
+// 0x80085280  state_machine_count = 12 (word at GP+0xC)
+// 0x80085284  state_name_0  "LEVEL SELECT MENU..."
+// 0x8008529C  state_name_1  "COLLECTABLES MENU..."
+// 0x800852B4  state_name_2  "SHORT STATS"
+// 0x800852C0  state_name_3  "SHORT (?) STATS"  (partially decoded)
+// 0x800852D4  state_name_4  "DEBUG MENU + CHEATS OFF"
+
+// ============================================================================
+// MASTER GAME CONTEXT STRUCT  @ 0x80090690 (BSS runtime)
+// Global pointer: mem[0x80086EA8] = 0x80090690
+// Accessed from 212 functions -- the most central object in the game
+// ~28KB total size; embeds player entity, camera, sound, level data
+// ============================================================================
+
+0x80086EA8  g_GameCtxPtr          (global var: pointer to master GameContext struct @ 0x80090690 BSS)
+0x80090690  GameCtx_struct        (BSS: master game context -- player + camera + sound + level state)
+
+// GameCtx field layout (offsets from 0x80090690):
+// --- Player / entity header ---
+// +0x04        sub-struct or entity-data ptr   (read by gameValue, screenWipeColor handlers)
+// +0x08        sub-struct ptr (controller/pad) (accessed in input tick; sub[+0x06/0x16] checked)
+// +0x14        current remote/level ID          (written by level-init; indexes sub-struct table)
+// +0x24        level data ptr                   (set by level-init from remote table @0x8008AAE8)
+// +0x48        player/Gex pos X (halfword)      (mirrored from/to World struct)
+// +0x4A        player/Gex pos Y (halfword)
+// +0x4C        player/Gex pos Z (halfword)
+// +0x4E        animation bank/page byte
+// +0x4F        light group byte
+// +0x68/6A/6C  halfwords (angles or look-direction)
+// +0x78        player control disable flags     (bitmask; each bit disables one control; stopPlayerControl sets bits)
+// +0xA0        camera mode flags word           (bit 0x04=player-control-active; bit 0x8000=alt-camera-source; very hot)
+// +0xA4/A5/A6  screen wipe RGB color bytes      (written by screenWipeColor opcode)
+// +0xA8/AA/AC  screen wipe params halfwords     (written by screenWipe opcode)
+// +0xC2        model/mesh ID halfword
+//
+// --- Camera sub-block (embedded at ~+0x4C80) ---
+// +0x4C80      camera sub-ptr                   (loaded by main tick and level-init)
+// +0x4C84      camera data word                 (written by World_frameBegin, level-init)
+// +0x4C88/8C/90 camera init words               (written by World_frameBegin)
+// +0x4C94      camera control flags             (written by Camera_setMode, Camera_setValue, Camera_lock/unlock; bit 0x80=locked)
+//
+// --- State halfword ---
+// +0x4DEE      state code halfword              (set to 6 in input-tick death path; 14 r/w accesses)
+//
+// --- Sound sub-block (embedded at ~+0x4E40) ---
+// +0x4E28      intro-FX state ptr               (set by introFX opcode)
+// +0x4E2C      intro-FX param                   (set by introFX opcode)
+// +0x4E34      music control word               (written by Music_control)
+// +0x4E38      sound sequence ptr               (written by Sound_command)
+// +0x4E3C      sound sequence param             (written by Sound_command)
+// +0x4E40      sound effect state byte          (written by SoundEffect opcode handler; read by many sound funcs)
+// +0x4E41      sound effect param byte
+// +0x4E42      sound bank/channel byte          (read by sound funcs; written by level-init)
+// +0x4E43      sound mode byte                  (read-only from many sound funcs; 9 reads)
+//
+// --- Level / remote data block (embedded at ~+0x6E00) ---
+// +0x6EC2      position halfword                (read by physics/collision funcs)
+// +0x6EFD      active remote index BYTE         (THE hottest field: 34 reads; 0xFF=no remote loaded;
+//                                                other values = current Gex TV-remote/level index)
+// +0x6EFE      remote sub-index byte            (checked against 0x1E=30 in level-init)
+// +0x6EF0/F4   remote data ptrs                 (written by camera-spline init funcs)
+// +0x6F04      intro state word                 (set by introFX opcode)
+// +0x6F08      level data base ptr              (set by level-init: 0x800976A8 + remote_id * 0x1000)
+// +0x6F0C      level sub-ptr                    (set by level-init)
+// +0x6F20      alt-camera X halfword            (read by World_frameBegin when +0xA0 bit 0x8000 set)
+// +0x6F22      alt-camera Y halfword
+// +0x6F24      alt-camera Z halfword
+// +0x6F26      alt-camera flag halfword         (written by World_frameBegin)
+// +0x6F3C      intro-active flag                (cleared by level-init)
+// +0x6F40      some level ptr                   (written by controller-init func)
+// +0x6F44      level flags byte                 (read/written by level transition funcs)
+// +0x6F48      level sub-state words            (written by input tick during level transitions)
+//
+// --- Remote/level sub-struct table ---
+// 0x8008AAE8   remote_table                     (indexed by GameCtx[+0x14]; 12 bytes/entry; holds level sub-struct ptrs)
+// 0x800976A8   level_data_base                  (BSS: base of per-remote level data; offset = remote_id * 0x1000)
+// 0x8007E634   pad_state_table                  (4 entries; each has button mask at [+0xDA] etc; read by input tick)
+
+// GameCtx key functions
+0x800136E8  GameCtx_inputTick     (joypad poll: checks player-control-active, freeze depth, then loops 4 pads; ORs buttons into $gp+0x61E8 accumulator; calls Camera_setMode+sound funcs)
+0x8003C000  Level_remoteInit      (level/remote init: reads GameCtx[+0x14] remote ID, indexes remote_table, sets +0x24/6F08/6F0C; computes level data ptr from 0x800976A8)
+0x80023AF0  op_stopPlayerControl_body  (script handler body for stopPlayerControl: expands bitmask arg into per-bit ORs on GameCtx[+0x78] control-disable flags)
+0x8001527C  unexamined            (called by GameCtx_inputTick after loading sub-struct data -- likely collision/physics dispatch)
+0x80052FB8  unexamined            (called by GameCtx_inputTick with GameCtx ptr -- likely animation update)
+0x80066B08  unexamined            (called by GameCtx_inputTick with GameCtx[+0x4C80] ptr and a0=0 -- camera tick?)
+0x80052F94  unexamined            (called by GameCtx_inputTick with GameCtx ptr)
+0x8005D660  unexamined            (called by GameCtx_inputTick as a sound effect call: a0=0x821 "SFX id?", a2=0x40)
+0x8005D43C  unexamined            (called by GameCtx_inputTick in a wait loop -- sound/streaming sync?)
+0x80068A44  unexamined            (called by GameCtx_inputTick after EnterCriticalSection, a0=1)
+0x80073C60  unexamined            (called by GameCtx_inputTick: a0=0, a1=0xFFFFFFFE -- CD read with mask?)
+0x80031AD8  unexamined            (called by Level_remoteInit; probably level data loader)
+0x8003B23C  unexamined            (called by Level_remoteInit)
+0x8006E108  unexamined            (called by Level_remoteInit; a1=0xC00 -- likely ClearOTagR or similar)
+0x8003CDB0  unexamined            (called by Level_remoteInit with memory range args)
+
+// ============================================================================
+// LEVEL DATA LOADER / CD STREAMING SYSTEM
+// ============================================================================
+
+// Core loader chain
+0x800334F4  Level_parseSectorMap     (interprets level data bytecode stream; ASCII opcodes; two modes: $s6=1=remote, $s6=0=background)
+0x8003CDB0  MemRange_relocate        (copies data via memcpy then relocates embedded pointers: ptr = ptr - old_base + new_base; walks count-indexed sub-entries fixing [+4],[+14],[+1C],[+20])
+0x80074E30  memcpy                   (byte-by-byte: a0=dst, a1=src, a2=count)
+0x80031A1C  StreamQueue_addEntry     (appends 6-byte CD streaming request to queue @0x8008A268; counter @0x8008A888; bit6 of type selects VRAM vs RAM packing)
+0x80075B10  sprintf_impl             (custom sprintf/snprintf: parses %[-+  #0][*|digits][.digits]type format; called by Level_parseSectorMap to build CD filenames)
+0x800333C4  StreamSlot_lookup        (maps resource-type byte to streaming slot index; checks slot limit @0x8008A894 against 0x3F; calls 0x80031B90)
+0x8003336C  StreamPos_advance        (12-instr helper: if type==0x0A, writes counter to *$a1 and increments *$a2 by step)
+0x80032838  Alloc_0x4000             (allocates 0x4000 bytes via Allocator_A; called for Level_parseSectorMap opcode 0x24)
+0x8003286C  Alloc_0x140              (allocates 0x140 bytes via Allocator_B; called for Level_parseSectorMap opcode 0x24)
+0x80032808  Allocator_A              (underlying allocator for Alloc_0x4000; $a0=size)
+0x80032858  Allocator_B              (underlying allocator for Alloc_0x140; $a0=size)
+0x80031B90  unexamined               (called by StreamSlot_lookup when slot limit not reached)
+
+// Level_parseSectorMap ASCII opcode table:
+// 0x09 (TAB)  advance stream position by word count
+// 0x0A (LF)   advance stream position (small step)
+// 0x0D (CR)   set sector read count: $s6=1 -> 0x28/0x1E; $s6=0 -> 0x08/0x0C
+// 0x20 (SPC)  no-op / skip
+// 0x23 ('#')  set mode byte into $s7
+// 0x24 ('$')  initialize object/resource allocators (calls Alloc_0x4000 + Alloc_0x140)
+// 0x25 ('%')  load named resources: iterates string list at 0x8008A868, calls StreamQueue_addEntry + StreamSlot_lookup per name
+// 0x40 ('@')  load resource pair: reads 2 length bytes, calls StreamQueue_addEntry twice
+// 0x5F ('_')  no-op / skip (same as 0x20)
+// 0x64 ('d')  switch resource table pointer to 0x80086734
+// 0x73 ('s')  build CD filename via sprintf_impl into 0x8008A868, then load
+// 0x78 ('x')  same as 0x64 (switch to 0x80086734 resource table)
+// NOTE: format is TEXT-BASED (ASCII opcodes) -- level data files are partly human-readable
+
+// Streaming queue globals
+0x8008A268  stream_request_queue     (6 bytes/entry; format: [halfword type][halfword size][byte raw_type][byte flags])
+0x8008A888  stream_request_count     (count of pending entries in stream_request_queue)
+0x8008A868  stream_filename_buf      (scratch buffer; sprintf_impl builds CD filenames here)
+0x8008A894  stream_slot_count        (number of occupied streaming slots; max 0x3F=63)
+0x8008A878  stream_pos_bg            (streaming position counters for background mode $s6=0)
+0x8008A87C  stream_size_bg
+0x8008A880  stream_pos_remote        (streaming position counters for remote mode $s6=1)
+0x8008A884  stream_size_remote
+
+// Resource table globals (switched by 'd'/'x' opcodes)
+0x80086730  resource_table_A         (primary resource descriptor table)
+0x80086734  resource_table_B         (secondary resource descriptor table; selected by 'd'/'x' opcode)
+
+// MemRange_relocate entry struct layout (5 pointer fields being relocated per entry):
+// entry[+0x00]  entry ptr (in entry pointer array at $s0[+0xC])
+// entry[+0x04]  ptr field 1 (relocated: -= old_base, += new_base)
+// entry[+0x14]  ptr field 2 (relocated)
+// entry[+0x1C]  ptr field 3 (relocated)
+// entry[+0x20]  ptr field 4 (relocated)
+// $s0[+0x08]  entry count (number of entries to process)
+// $s0[+0x0C]  base pointer array (array of entry ptrs, 4 bytes each)
+// $s0[+0x1C]  secondary pointer (also relocated at the header level)
+
+// ============================================================================
+// STREAMING / SECTOR BUDGET SYSTEM -- static data
+// ============================================================================
+
+// Character-to-slot-index converter
+0x80031B90  CharToSlotIndex      (base-62 ASCII→index: 'A'-'Z'→0-25, 'a'-'z'→0-25 (case-insensitive), '0'-'9'→26-35, specials→37-46; maps resource-type chars to streaming slot indices 0-62)
+
+// "Allocators" -- actually sector budget recorders, not heap allocators
+0x80032808  SectorBudget_setMain    (ceil(size/0x1000)→pages stored at 0x80086720; remainder at 0x80086722; called with 0x4000 → 4 pages default)
+0x80032858  SectorBudget_setSub     (stores raw byte count to 0x80086724; called with 0x140 → 320 bytes default)
+0x80032838  SectorBudget_setMain_4K (calls SectorBudget_setMain with a0=0x4000)
+0x8003286C  SectorBudget_setSub_140 (calls SectorBudget_setSub with a0=0x140)
+
+// Sector budget globals (GP-relative, at $gp+0x14B0)
+0x80086720  sector_budget_pages     (halfword: number of 4KB pages for primary asset buffer; default=4)
+0x80086722  sector_budget_remainder (halfword: byte remainder after 4KB alignment; default=0)
+0x80086724  sector_budget_sub_bytes (word: raw byte count for secondary buffer; default=0x140=320)
+
+// Format string table for BIGFILE resource naming
+0x80086730  fmt_resource_decimal    (string: "%d" -- decimal resource ID formatting; resource_table_A)
+0x80086734  fmt_resource_hex        (string: "%x" -- hex resource ID formatting; resource_table_B)
+0x80086738  fmt_resource_named_1    (string: "#1%s" -- named resource type 1 filename template)
+0x80086740  fmt_resource_named_2    (string: "#2%s" -- named resource type 2 filename template)
+0x80086748  resource_type1_max      (word: 12 -- max count for #1%s named resources)
+0x8008674C  resource_type2_max      (word: 12 -- max count for #2%s named resources)
+0x80086754  str_allocation_pct      (string: "Allocation %..." -- error message prefix for alloc failures)
+
+// Hardware register address constants (in static data section)
+0x80086700  ptr_Timer0_CNT          (word: 0x1F800068 = Timer0 counter register address)
+0x80086704  ptr_Timer0_MODE         (word: 0x1F80006C = Timer0 mode register address)
+
+// Pad/controller configuration bytes
+0x80086710  pad_slot_cfg_A          (word: 0x00020100 -- controller slot IDs 0,1,2,0)
+0x80086718  pad_slot_cfg_B          (word: 0x01000201 -- controller slot IDs 1,2,0,1)
+
+// ============================================================================
+// STREAMING SLOT / ASCII-INDEX MAPPER AND BLOCK SIZE CONFIG
+// ============================================================================
+
+// Slot index mapper (NOT a slot allocator)
+0x80031B90  AsciiToSlotIndex   (maps ASCII resource-type char to slot index: A-Z/a-z -> 0-25 case-insensitive; 0-9 -> 26-35; punctuation -> 37-58)
+
+// Block size configuration (NOT memory allocators -- they store parameters to GP globals)
+0x80032808  StreamBlockSize_setPages   (called with a0=0x4000: computes pages=a0>>12=4, remainder=a0%4096=0; stores halfwords to 0x80086720 and 0x80086722)
+0x80032858  StreamBlockSize_setSubBlock (called with a0=0x140: stores 0x140=320 to 0x80086724 as word)
+
+// Streaming block geometry globals (pre-initialized in binary, confirmed by static values)
+// GP base = 0x80085270
+// gp+0x14B0 = 0x80086720  stream_pages      = 4        (halfword: 0x4000 / 4096 = 4 pages per streaming slot)
+// gp+0x14B2 = 0x80086722  stream_remain     = 0        (halfword: byte remainder within last page; 0 = exact)
+// gp+0x14B4 = 0x80086724  stream_subblock   = 0x140    (word: 320-byte secondary block unit; likely metadata/header size)
+// Streaming slot = 0x4000 bytes = 16KB = 8 CD sectors x 2048 bytes
+
+// CORRECTION: "resource_table_A/B" were misidentified -- these are printf format strings
+// used by sprintf_impl when building CD filenames from the level data bytecode
+0x80086730  fmt_decimal    (= "%d\0\0"  -- selected by Level_parseSectorMap opcode 0x64='d')
+0x80086734  fmt_hex        (= "%x\0\0"  -- selected by Level_parseSectorMap opcode 0x78='x')
+0x80086738  fmt_channel    (= "#1%s\0"  -- channel prefix format; used for named channel paths)
+
+// Level bytecode format string mechanics:
+//   opcode 0x64 ('d'): a1 = &fmt_decimal  -- subsequent sprintf uses "%d" for numeric IDs
+//   opcode 0x78 ('x'): a1 = &fmt_hex     -- subsequent sprintf uses "%x" for hex IDs
+//   opcode 0x73 ('s'): calls sprintf_impl(&stream_filename_buf, a1_format, arg_from_stream)
+//                       to build a path like "\gex3d\level\%s\%s%s\%s%s" filled with remote name + sprintf result
+//   The ASCII opcode characters 'd' and 'x' MATCH the printf format specifiers intentionally
+
+// Additional context bytes around streaming config (0x80086710-0x8008671C):
+// 0x80086710: 0x00020100  -- byte pattern: sub-page or channel-count config
+// 0x80086718: 0x01000201  -- byte pattern
+// 0x80086728: 0x01010204  -- byte pattern (pages/channels per slot type?)
+
+// Remote table (for completeness -- to be enumerated)
+// 0x8008AAE8  remote_table   (indexed by GameCtx[+0x14]; 12 bytes/entry; entry count = TBD)
+// 0x800976A8  level_data_base (BSS; per-remote level data; stride = remote_id * 0x1000 = 4KB per remote)
+
+// ============================================================================
+// REMOTE COUNT, CAMERA SYSTEM, SPU BITMASK
+// ============================================================================
+
+// REMOTE COUNT -- confirmed from Anim_cameraDispatch sltiu bound
+// GameCtx[+0x6EFD] = active remote index, valid range 0..25
+// Total remotes = 26 (sltiu $v0, $v0, 0x1A in 0x80052FB8)
+// Known remote names from string scan: gilligex isle, rezop/rezopolis,
+//   gexzilla vs mecharez, poltergex, cavegex, gexeyes (eye/body parts?)
+
+// Remote table layout (BSS, populated at runtime):
+// 0x8008AAE8  remote_current_ptr       (+0x00: word; written by Level_remoteInit with active remote ptr)
+// 0x8008AAEC  remote_current_sub       (+0x04: word; written by Level_remoteInit and func_80033B04)
+// 0x8008AAFA  remote_pos_x             (+0x12: halfword; camera X pos, written by camera functions)
+// 0x8008AAFC  remote_pos_y             (+0x14: halfword; camera Y pos)
+// 0x8008AB00  remote_setZ_target       (+0x18: halfword; setZSignal target)
+// 0x8008AB04  remote_setZ_val1         (+0x1C: word; setZSignal value 1)
+// 0x8008AB08  remote_setZ_val2         (+0x20: word; setZSignal value 2)
+
+// Camera history buffer (embedded in GameCtx / camera controller struct):
+// GameCtx[+0x4DC]  cam_history_slot    (current ring slot index; wraps 0..7; 8 slots total)
+// GameCtx[+0x4E0]  cam_pos_prev_X      (previous frame camera X, shifted in from 0x4E4 each frame)
+// GameCtx[+0x4E4]  cam_pos_curr_X      (current camera X)
+// GameCtx[+0x500]  cam_pos_prev_Y
+// GameCtx[+0x504]  cam_pos_curr_Y
+// GameCtx[+0x530..0x55F] cam_hist_0    (history slot 0: 4 words = 16 bytes)
+// GameCtx[+0x540..0x56F] cam_hist_1
+// ... (7 more slots, stride ~0x60 bytes each)
+// GameCtx[+0x3B8]  gex_pos_X           (halfword, Gex XZ position for mode-2 camera snapshot)
+// GameCtx[+0x3BA]  gex_pos_Z
+// GameCtx[+0x3BC]  gex_pos_W
+// GameCtx[+0x3BE]  gex_pos_Y
+
+// Camera tween/transition slot table:
+// 0x80089520  cam_tween_table         (12 bytes/slot, up to 7 slots indexed by camera mode 1-6)
+//   slot layout: [+0x00] u16 target_val, [+0x02] u16 target2, [+0x04] u16 state,
+//                [+0x06] u16 countdown (starts 0x40 = 64 frames), [+0x08] u16 angle, [+0x0A] u16 misc
+
+// Camera state machine globals:
+// GameCtx[+0x4C84]  cam_slot_6_param  (passed to Camera_tick as $a1 when mode=6)
+// GameCtx[+0x4C88]  cam_slot_1_param  (passed when GameCtx[+0x6F26]==1)
+// GameCtx[+0x4C8C]  cam_slot_2_param  (passed when GameCtx[+0x6F26]==2)
+// GameCtx[+0x4C90]  cam_divisor       (used for modulo in mode 3: divides $a1 by this)
+// GameCtx[+0x6F26]  cam_mode          (halfword; 1/2/3 select different camera behaviours; 0=inactive)
+
+// Corrected function labels (were incorrectly named earlier):
+0x8001527C  Camera_historyPush        (pushes current camera state into 8-slot ring buffer; NOT physics dispatch; increments +0x4DC slot index, copies XY+4 word blocks; mode 2/5 also copy position from +0x3B8)
+0x80052FB8  Camera_stateDispatch      (reads GameCtx[+0x6EFD] for remote validity check <26; dispatches Camera_tick with slot params from +0x4C88/4C8C/4C90 based on +0x6F26 mode; NOT animation update)
+0x80052F94  Camera_triggerSlot6       (loads GameCtx[+0x4C84], calls Camera_tick with $a0=6)
+0x80066B08  Camera_tick               (camera tween state machine: indexes 12-byte slot in cam_tween_table @0x80089520 by $a0*12; state 5=idle, 3/4=transitioning, 1/2=active; state 3 decrements countdown[+6] from 0x40 each tick; modes 4/5 set countdown from $a1*4)
+
+// SPU channel controller:
+0x80073C60  SPU_channelBitmask        (manages SPU channel enable bitmasks; $a0=mode 0/1, $a1=channel bitmask, $a2=hi-word mask; reads/writes 0x80084210 (active bits), 0x80084214 (pending), 0x800841E8 (secondary accumulator), 0x80090678 (pre-GameCtx SPU control block), SPU voice regs via ptr@0x8008465C[+0x188/18A/18C/18E]; called from GameCtx_inputTick as SPU_channelBitmask(0, 0xFFFFFFFE) to disable channel 0)
+
+// SPU / sound state globals:
+// 0x80084210  spu_active_channels     (word bitmask: each bit = one SPU voice active)
+// 0x80084214  spu_pending_channels    (word bitmask: pending enable requests)
+// 0x800841E8  spu_secondary_accum     (secondary channel state accumulator)
+// 0x80084648  spu_mode_flags          (word: bit 0 = double-buffered path selector)
+// 0x8008465C  spu_regblock_ptr        (ptr to SPU register mirror block; [+0x188/0x18A]=voices 12-13 vol, [+0x18C/0x18E]=voices 14-15 vol)
+// 0x80090678  spu_ctrl_block          (BSS: 12-byte block immediately before GameCtx @0x80090690; SPU channel state)
+
+// ============================================================================
+// REMOTE COUNT CONFIRMED -- CROSS-REFERENCED WITH GAME DATA
+// ============================================================================
+
+// ============================================================================
+// COMPLETE LEVEL INVENTORY (sourced from gamechronicles.com/guides/gex2/gex2text.htm)
+// ============================================================================
+//
+// REMOTE TOTALS:
+//   RED:    39 (for Perfect Score)   SILVER: 28 (14 hidden + 14 reward)   GOLD: 12+1*
+//   * Channel Z gives a 13th gold remote but the game prevents saving after it
+//   GATE:   26 red remotes = lion mouth gate to Channel Z (SLUS-00598 confirmed)
+//
+// ENGINE BOUND: GameCtx[+0x6EFD] < 26 (sltiu in Camera_stateDispatch @ 0x80052FB8)
+//   -> This is the GATE THRESHOLD (26), not total count (39)
+//   -> 0x6EFD = level slot ID; 0xFF = sentinel (hub / not in level)
+//   -> 14 regular + 4 bosses + 8 bonus = 26 distinct camera-behaviour environments
+//   -> 3 secret levels likely share camera slots with their parent channels
+//
+// LevelObjective_table @ 0x8007B27C has 18 entries:
+//   likely = 14 regular levels + 4 boss levels = 18 (all levels with unique objectives)
+//
+// REGULAR TV WORLDS -- 14 levels, 14 hidden silver remotes, 35 red remotes total:
+//   Toon TV (5 red):
+//     Fine Tooning          2 missions  (Climb the Tree, Storm the Castle)
+//     Out of Toon           3 missions  (Jump to Teetering Rock, Hunt Two Hunters, Whack Five Mushrooms)
+//   Scream TV (9 red):
+//     Frankensteinfeld      3 missions  (Run Axe Gauntlet, Head Down the Ramp, Stick Across Ceiling Maze)
+//     Poltergex             3 missions  (Ascend Ghost Tower, Reach Top of Morgue, Smash Eight Blood Coolers)
+//     Smellraiser           3 missions  (Survive Haunted Mansion, Smash Five Blood Coolers, Ride Haunted Elevator)
+//   Circuit Central (5 red):
+//     Honey I Shrunk the Gecko  3 missions  (Charge to Top, Find I/O Tower, Charge A.C.T. Steps)
+//     www.dotcom.com            2 missions  (Scale Bionic Launch Tower, Cross Data Bus Bridges)
+//   Kung-Fu Theater (5 red):
+//     Mao Tse Tongue        2 missions  (Defeat Deadly Dragon, Traverse Rocking Pillars)
+//     Samurai Night Fever   3 missions  (Navigate Great Spinner, Ride Swinging Platforms, Climb Towering Temple)
+//   Rocket Channel (5 red):
+//     Pain in the Asteroids 3 missions  (Find Arched Asteroid, Ride Warp Tube, Destroy Five Crystal Power Cells)
+//     The Umpire Strikes Out 2 missions (Ride the Rocket, Enter the Battle Dome)
+//   Pre-History Channel (5 red):
+//     Pangaea 90210         2 missions  (Assault Lava Island, Climb the Volcano)
+//     This Old Cave         3 missions  (Watch for Falling Lava, Dodge Steam Vents, Bounce Up the Flowers)
+//   Rezopolis (1 red, requires 26):
+//     No Weddings and a Funeral  1 mission  (Penetrate Rez's Inner Sanctum)
+//
+// SECRET LEVELS -- 3 PS1-exclusive, 4 red remotes total, each also has a Movie Marker:
+//     Lava Daba Do          1 mission   (Navigate the River of Fire)           -- requires 4 gold
+//     Texas Chainsaw Manicure 1 mission (Ride the Floating Furniture)          -- requires 8 gold
+//     Mazed and Confused    2 missions  (Pass TV Forest, Cross Blue Beams)     -- requires 12 gold
+//
+// BOSS LEVELS (gold remotes, no red):
+//     Gilligex Island       requires 3   (boss: Hit Blue Fireballs, Tiki Brothers)
+//     Mooshoo Pork          requires 9   (boss: Throw the Switch)
+//     Gexzilla vs. Mecharez requires 21  (boss: Defeat Mecharez)
+//     Channel Z             requires 33  (final boss: Defeat Rez)
+//
+// BONUS LEVELS (gold remotes, 8 non-boss, several PS1-only):
+//     Aztec 2 Step          requires 3   (Collect 50 Green Gems in 3 min)
+//     Thursday the 12th     requires 6   (Collect 50 Skulls in 3 min)
+//     In Drag Net           requires 9   (Collect 50 Badges in 3 min)
+//     The Spy Who Loved Himself requires 12 (Collect 35 Briefcases in 3 min)
+//     I've Got the Reruns   requires 15  (Collect 99 TVs in 3 min)       [PS1 only]
+//     Trouble in Uranus     requires 18  (Collect 50 UFOs in 3 min)      [PS1 only]
+//     Lizard in a China Shop requires 21 (Collect 31 Chinese Take-Out boxes in 3 min)
+//     Bugged Out            requires 24  (Collect 70 Radiation Symbols in 2 min)
+//     Chips & Dips          requires 27  (Collect 50 Batteries in 3 min)
+//
+// N64 DIFFERENCES: removes Poltergex, I Got the Reruns, Trouble in Uranus, and all 3 secret levels;
+//   adds Gecques Cousteau (underwater Titanic level) in place of secret level area
+//
+// DEBUG MENU STRINGS (cross-referenced with TCRF):
+//   "SHORT SHORT STATS" = displays Gex X/Y/Z coordinates
+//   "COLLECTABLES MENU" = collectibles management screen
+//   "LEVEL SELECT MENU" = level select; Map8 = hub world (crashes if selected from hub)
+//   "DEBUG MENU + CHEATS OFF" = debug mode status line
+//   Map0..Map7 = 7 TV channels; Map8 = Media Dimension hub
+
+// ============================================================================
+// LEVEL UNLOCK DEPENDENCY TREE (from Gexpedia wiki screenshots)
+// ============================================================================
+//
+// Gate conditions the engine must evaluate per TV slot in the hub:
+//   A) red_remote_count >= N   (thresholds: 14, 26, 33)
+//   B) boss_flag: Tiki Brothers defeated
+//   C) boss_flag: Mooshoo Pork defeated
+//   D) boss_flag: Mecharez (Gexzilla boss) defeated
+//
+// ALWAYS AVAILABLE (no gate):
+//   Out of Toon, Smellraiser
+//   [N64 only: Gecques Cousteau]
+//
+// GATE B (Tiki Brothers defeated):
+//   Frankensteinfeld, www.dotcom.com, Mao Tse Tongue
+//
+// GATE red >= 14:
+//   Poltergex (PS1/PC only), Honey I Shrunk the Gecko, This Old Cave
+//
+// GATE C (Mooshoo Pork defeated):
+//   Fine Tooning, The Umpire Strikes Out, Pangaea 90210
+//
+// GATE D (Mecharez defeated):
+//   Samurai Night Fever, Pain in the Asteroids
+//
+// GATE red >= 26:
+//   No Weddings and a Funeral   (= the sltiu bound in Camera_stateDispatch)
+//
+// GATE red >= 33:
+//   Channel Z (final boss)
+//
+// Boss levels unlock gates, not other bosses:
+//   Gilligex Island (Tiki Brothers) -> unlocks gate B (3 levels)
+//   Mooshoo Pork                    -> unlocks gate C (3 levels)
+//   Gexzilla vs. Mecharez           -> unlocks gate D (2 levels)
+//
+// Implied engine state fields (locations TBD, likely near GameCtx or in BSS):
+//   tiki_brothers_defeated   (bool/flag)
+//   mooshoo_pork_defeated    (bool/flag)
+//   mecharez_defeated        (bool/flag)
+//   red_remote_count         (byte or short, max 39)
+//   gold_remote_count        (byte, gates secret level unlocks at 4/8/12)
+//   silver_remote_count      (byte or short, max 28, gates bonus level unlocks)
+
+// ============================================================================
+// HUB WORLD (MEDIA DIMENSION) GEOGRAPHY -- 5 sections, 4 gates
+// ============================================================================
+//
+// SOUTH SECTION (starting area, always accessible):
+//   Regular levels: Out of Toon, Smellraiser
+//   Boss:           Gilligex Island (Tiki Brothers, req 3 red)
+//   Bonus:          Aztec 2 Step (req 3), Thursday the 12th (req 6)
+//   Gate OUT:       Central gate -- opens on Tiki Brothers defeat
+//
+// CENTRAL SECTION (post-Tiki Brothers):
+//   Regular levels: Frankensteinfeld, www.dotcom.com, Mao Tse Tongue
+//   Boss:           Mooshoo Pork (req 9)
+//   Bonus:          In Drag Net (req 9), The Spy Who Loved Himself (req 12)
+//   Gate OUT-W:     West gate  -- opens on Mooshoo Pork defeat
+//   Gate OUT-E:     East gate  -- opens at 14 red remotes
+//
+// WEST SECTION (post-Mooshoo Pork):
+//   Regular levels: Fine Tooning, The Umpire Strikes Out, Pangaea 90210
+//   Boss:           Gexzilla vs. Mecharez (req 21)
+//   Bonus:          I've Got the Reruns (req 15, PS1 only),
+//                   Trouble in Uranus (req 18, PS1 only),
+//                   Lizard in a China Shop (req 21)
+//   [No gate out -- Mecharez boss is in EAST section, not here]
+//
+// EAST SECTION (post-14 red remotes):
+//   Regular levels: Poltergex (PS1/PC only), Honey I Shrunk the Gecko, This Old Cave
+//   Boss:           Gexzilla vs. Mecharez TV is accessed here (req 21)
+//                   [NOTE: same boss as west section listing -- boss TV may be in east]
+//   Bonus:          Bugged Out (req 24)
+//   Gate OUT:       North gate -- opens on Mecharez defeat
+//
+// NORTH SECTION (post-Mecharez):
+//   Regular levels: Samurai Night Fever, Pain in the Asteroids
+//   Bonus:          Chips & Dips (req 27)
+//   Inner gate:     26-red-remote LION MOUTH GATE -- blocks innermost north area
+//   [Beyond lion gate]:
+//     Regular:      No Weddings and a Funeral (req 26)
+//     Final boss:   Channel Z (req 33)
+//     Secret TVs:   Lava Daba Do (req 4 gold), Texas Chainsaw Manicure (req 8 gold),
+//                   Mazed and Confused (req 12 gold)
+//     [Hidden area behind secret TVs: developer message "Jezza! rich '98, Faith, Hope, Unity"]
+//
+// GATE SUMMARY (4 gates total):
+//   Gate 1 (Central):     condition = Tiki Brothers defeated
+//   Gate 2 (West):        condition = Mooshoo Pork defeated
+//   Gate 3 (East):        condition = red_remote_count >= 14
+//   Gate 4 (North):       condition = Mecharez defeated
+//   Inner gate (N lion):  condition = red_remote_count >= 26
+//
+// Implied hub script opcodes: gate-open animations likely use setZSignal / dsignal /
+//   HideObjectGroup / UnhideObjectGroup on the iron gate objects in the hub level script.
+// Boss defeat flags and remote counts stored in game state (BSS, locations TBD).
+
+
+# === NEW SYMBOLS: CdSearchFile chain & BIGFILE analysis ===
+0x800784C0  CdSearchFile(result_ptr, path_string) -- ISO9660 hierarchical lookup
+0x80078A7C  CdSearchFile_lookup(dir_id, component) -- returns entry_idx+1 or -1
+0x80078798  CdSearchFile_strcmp(entry_fname_ptr, search_str) -- strncmp n=12
+0x800787B8  CD_newmedia() -- reads ISO9660 path table -> 44-byte internal dir @0x8008C768
+0x80078B20  CD_cachefile(file_id) -- reads directory sector -> 24-byte entries @0x8008C160
+0x80078DBC  CdRead_sector(mode, lba, buf) -- seeks to MSF, reads 0x80 units
+0x80076BDC  LBA_to_MSF(lba, dest) -- (lba+150)/75/60 -> 3 bytes M:S:F at dest
+0x80075000  strcmp(a, b) -- char-by-char, returns 0 if equal
+
+# === NEW SYMBOLS: Audio / Geometry loader chain ===
+0x800380B8  Object_alloc(pool_handle) -- dequeues from free-list pool, returns obj ptr
+0x80039698  Object_initFromClass(obj, class_ptr) -- zeroes obj data area 0x114 bytes, links class
+0x80038810  Object_birth(entity_desc) -- spawns game object from entity descriptor + A8AA class
+
+# === NEW SYMBOLS: Level loading chain (discovered this session) ===
+
+# ─── CD Streaming infrastructure ───
+0x80031B10  CD_queue_clear(entry_ptr) -- clears/resets a StreamQueue entry (status 0x20 path)
+0x80031FD4  CD_read_exec(lba_hi_packed, lba_lo_packed) -- executes buffered CD sector read
+0x800331F4  StreamQueue_process(void) -- per-frame dispatcher: walks StreamQueue, calls CD_read_exec
+0x80033338  CD_streamRateSet(rate_lo, rate_hi) -- updates streaming speed parameters
+0x8003339C  CD_queueBlock(count_s16, mode) -- adds a block-read to the stream queue
+0x80033444  CD_streamInfo(resource_ptr) -- queries stream size from resource descriptor
+0x8003336C  CD_streamExtended(...) -- multi-arg extended stream setup (called by %d path)
+0x800333C4  CD_streamFileRef(flag, entry, fp_shift) -- adds file-reference entry to stream
+0x80032838  CD_streamSpeedA(void) -- sets streaming speed variant A
+0x8003286C  CD_streamSpeedB(void) -- sets streaming speed variant B
+0x80032858  CD_sectorRead(sector_count) -- initiates CD read for N sectors
+0x80031AA0  CD_streamFlush(resource_ptr) -- finalises / commits stream for resource
+0x8002BA2C  Stream_poll(handle) -- returns non-zero when stream handle completes (poll loop)
+
+# ─── Level loading state machine ───
+0x8003B23C  CD_streamManager(void) -- CD loading state machine; sentinel 0xABBA1234; 4-slot circular buf
+0x8003CC24  GFX_doubleBuffer(void) -- frame-buffer double-buffer manager during level loading
+0x8003C714  Level_hubBossInit(void) -- special 2-buffer preload sequence for hub/boss environments
+0x8003C51C  Level_beginBossStream(params_ptr, level_res_ptr) -- starts complex streaming for boss/hub
+0x8003BEF0  CD_bufferAlloc(size, align) -- allocates from CD streaming ring buffer
+0x8003B188  CD_streamDrain(ctx, count) -- drains N entries from the streaming ring
+
+# ─── Level resource lookups ───
+0x8005924C  Remote_getResourcePtr(remote_id, out_state) -- returns ptr from g_RemoteResourceTable
+0x80059340  Remote_lookupState(remote_id) -- returns some state value for given remote
+
+# ─── Graphics / rendering (called during loading) ───
+0x8006E108  GFX_setupOTagR(buf_ptr, size) -- calls PutDrawEnv on ordering table region
+0x8006DC1C  GFX_drawSync(mode) -- calls DrawSync on current draw environment
+0x8006E280  GFX_putDrawEnv(render_entry) -- uploads draw environment; copies 0x5C bytes to GPU table
+0x8006E210  GFX_drawOTag(ot_ptr) -- submits ordering table to GPU (DrawOTag wrapper)
+0x8006EC78  GFX_initOTagEntry(ot_slot, render_entry) -- initialises one ordering-table slot
+0x8003C674  GFX_getFrameId(void) -- returns current double-buffer frame index
+0x8003C5D8  GFX_crossfade(old_fid, new_fid, mode, level_bss_ptr) -- handles screen crossfade
+0x800714B0  GFX_checkMode(mode) -- checks/sets display mode (0x140 = some mode constant)
+
+# ─── BSS globals (newly confirmed) ───
+0x8007B204  g_RemoteLevelTable[N]  -- 92-byte entries per remote: level music/streaming resources
+0x8007C2E8  g_RemoteResourceTable  -- pointer table indexed by remote_id (5 ptrs × 4B each)
+0x8008B460  g_RenderTable          -- rendering draw-environment table (92-byte entries × remote_id)
+0x80086750  g_geomLoadedBase       -- base address of currently-loaded geometry block (0x801EEFD0 etc.)
+0x8007F864  g_RenderCtxPtr         -- pointer to current rendering context struct
+0x8007F868  g_debugLogFn           -- vtable ptr: debug print function (NULL in retail)
+0x8007F86E  g_debugLevel           -- debug verbosity byte: ≥2 enables PutDrawEnv/DrawOTag logging
+0x8008A268  g_StreamQueue          -- StreamQueue base: 6-byte entries; count at 0x8008A888
+0x8008A878  g_streamRate0          -- streaming rate parameter 0 (set to 0xA by StreamQueue_process)
+0x8008A87C  g_streamRate1          -- streaming rate parameter 1 (set to 0x10)
+0x8008A880  g_streamRate2          -- streaming rate parameter 2 (set to 0x28)
+0x8008A884  g_streamRate3          -- streaming rate parameter 3 (set to 0x1E)
+0x8008A896  g_streamActiveFlag     -- byte: non-zero while stream is actively transferring
+0x8008A868  g_streamSlotByte       -- current streaming slot byte (modified by %s/%x opcodes)
+0x80086730  g_streamConfigPtrA     -- ptr passed to %x opcode (alternate resource base)
+0x80086734  g_streamConfigPtrB     -- ptr used by %d/%x opcode variants
+0x8008E618  g_CD_statePtr          -- ptr into remote_state_table[3] for CD loading state machine
+0x8008E628  g_CD_readHeadPtr       -- current read-head pointer in the circular CD buffer
+0x8008E62C  g_CD_completionPtr     -- ptr where 0xABBA1234 sentinel is written on completion
+0x8008E634  g_CD_streamCounter     -- count of completed streaming operations
+0x8008E64C  g_CD_bufBase           -- base pointer of CD streaming ring buffer
+0x8008E618  g_CD_nextSlotPtr       -- pointer to next available streaming slot (4-slot ring × 36B)
+
+# ─── GameCtx field annotations (confirmed) ───
+# GameCtx base = mem[g_GameCtxPtr] = mem[0x80086EA8]
+# GameCtx[+0x008] = ptr to rendering sub-struct (has vtable at [+8], frame OT at [+0x18])
+# GameCtx[+0x00C] = ??? 
+# GameCtx[+0x010] = double-buffer selector (0 or 1, toggles each frame)
+# GameCtx[+0x014] = current remote_id / level number (also used as CD loading state)
+# GameCtx[+0x01C] = ???
+# GameCtx[+0x020] = ???
+# GameCtx[+0x024] = streaming buffer ptr (= ptr to remote_table entry)
+# GameCtx[+0x02C] = streaming flags bitfield (bit 0, bit 1 = streaming conditions)
+# GameCtx[+0x054] = mode flags (bit 7 = 0x80 enables loadState update after buffer swap)
+# GameCtx[+0x0F4] = streamB handle (poll with Stream_poll)
+# GameCtx[+0x0F8] = streamA handle (cycled to GameCtx+0x4C24 after loading completes)
+# GameCtx[+0x104] = loadPhase counter (incremented each Level_remoteInit loop pass)
+# GameCtx[+0x4C24] = stream handle A base (used as next streamA after load)
+# GameCtx[+0x4C80] = levelResPtr = currently active remote_id for resource lookup
+# GameCtx[+0x4C94] = savedBSSPtr (temp backup of level BSS ptr during load transitions)
+# GameCtx[+0x6ECC] = remoteState byte array (per-remote, 1 byte each; [activeRemote] = completion)
+# GameCtx[+0x6EF4] = remoteCompletionBits (32-bit bitmask: bit N = remote N is beaten) ← BOSS FLAGS
+# GameCtx[+0x6EFD] = activeRemote index (0-25 = valid, 0xFF = hub/none)
+# GameCtx[+0x6EFE] = levelType byte (0x1E = hub/boss special, others = normal)
+# GameCtx[+0x6F08] = levelDataPtr = per-remote BSS block (0x800976A8 + (1-remote_id)×0x3000)
+# GameCtx[+0x6F3C] = loadState (0=idle, -1=active, >0=frame count from buffer index)
+
+# === Level binary pipeline (confirmed this session) ===
+
+# ─── ScriptExec system (FULLY DECODED) ───
+0x80024D30  ScriptExec(world_obj, script_ptr, max_ops, flags)
+#   Walks a 32-bit-word-aligned array; each record = [opcode_word][arg0_word]...[argN_word]
+#   Advance per step: (opcode_table[op].arg_count + 1) × 4 bytes
+#   Opcode table at 0x80085C00: 105 entries × 12 bytes
+#     [+0]: handler fn ptr
+#     [+4]: handler data ptr (w1)
+#     [+8]: arg_info word: hi16 = world-check flag (1=check, 0=any), lo16 = arg_count
+#   arg_count distribution: 0 (4 ops), 1 (64 ops), 2 (22 ops), 3 (3 ops), 4 (2 ops)
+
+0x80024E88  ScriptExec_step(script_ptr, a1, a2, a3)
+#   Thin wrapper: ScriptExec_step(ptr, a1, a2, a3) = ScriptExec(a0?, ptr, a1→a3 shifted)
+
+# ─── Script handler addresses (from opcode table) ───
+0x80086624  op00_hideObject_handler
+0x80086614  op01_unhideObject_handler
+0x8008650C  op23_teleport_handler       # arg_count=4
+0x800864A8  op29_sfxE_handler           # arg_count=2
+0x800864EC  op25_sfxA_handler           # arg_count=2
+0x8008629C  op72_levelChange_handler    # arg_count=1
+0x80086260  op76_hideObjectGroup_handler
+0x8008619C  op91_birthObject_handler    # arg_count=1
+0x8008632C  op62_stopPlayerCtrl_handler # arg_count=0
+0x80086590  op13_cameraA_handler        # arg_count=1
+0x80086318  op63_handler                # arg_count=0 (freeze-related)
+
+# ─── Game tick / remote object state machine ───
+0x80064A44  Remote_tick(remote_obj, game_ctx)
+#   Per-frame state machine for one TV remote in the game world.
+#   remote_obj.state (at [+0xF8]):
+#     0 = Inactive: loads sounds "remsfx__"/"remgfx__", allocates remote via 0x8006238c
+#     1 = Loaded:   spawns level objects, then calls ScriptExec if script_ptr ready
+#     2 = Active:   handles streaming, position updates, SPU channel management
+#     3 = Transit:  position-delta mode (transitioning between camera nodes)
+#   remote_obj.streamBuf (at [+0x24]) = pointer to streaming control buffer
+#   streaming_buf[0] = pointer to ScriptExec script array (NULL = not ready)
+#   ScriptExec called as: ScriptExec(world_obj, script_ptr+4, *script_ptr, 0)
+#   streaming_buf[0] is SET by the level-load pipeline after binary stream is parsed
+
+0x8006238C  Remote_alloc(params_frame, sound_handle, resource, window)
+#   Calls 0x8005eed8 to look up resource, then 0x80062538 to build remote object
+0x80062538  Remote_build(params, sound, resource, window_s16) → remote_obj
+#   Core allocation; fills in remote object fields and links to script system
+0x8006297C  Remote_setPosA(obj, a, b, c) → sets obj[0x4C,0x4E,0x50] + obj[4] same
+0x800629CC  Remote_setPosB(obj, a, b, c) → sets obj[0x52,0x54,0x56] + obj[4] same
+
+# ─── Game state manager ───
+0x80033C50  Level_startRemote(arg0, game_ctx, level_res)
+#   Post-loading initialization sequence. Loops calling Level_remoteInit(-1) until
+#   GameCtx.loadState != 0, then runs all level setup:
+#     GFX_allocRenderingBuffers, Remote_initScripts, ObjectPool_init, camera/display init,
+#     Sound_load("intro___"), background color, screen resolution, BSS inits.
+0x80033B04  GFX_allocRenderingBuffers()
+#   Allocates GPU rendering memory: OT buffers (0x66B0 bytes each), packet buffers, etc.
+#   Logs "Allocating %d bytes, not %d, allowing us to have %d primitives"
+0x8003BD08  Level_getDescriptor(arg) → remote_descriptor_ptr
+#   Allocates aligned buffer, calls 0x80042118 for pointer relocation,
+#   returns pointer to the remote/level descriptor struct
+0x8003B8E8  Level_streamLoad(level_id) → streaming_buffer_ptr
+#   Polls 0x8009D6AC semaphore; looks up resource from 0x8008E664+s2×24 table;
+#   allocates buffer (0x800670bc), logs "Loading:%s", starts CD read (0x8003b624),
+#   calls Level_remoteInit while data loads; returns loaded buffer
+0x8003B624  CD_beginRead(lba_start, buf, base, sector_count, 1, size, callback_data)
+#   Fills in 36-byte CD_READ_SLOT at (0x8008FF68 + slot×36); uses LBA_to_MSF for seek;
+#   calls CD_streamManager to queue the read; advances circular slot index (mod 4)
+0x80042118  Ptr_relocate(desc, offset_table, base_addr)
+#   Iterates count entries; for each: offset_table[aligned_offset] += base_addr
+0x8003BA80  Level_getStreamIndex(level_id) → stream_slot_index
+0x8003BC90  Level_init_A(arg) → result
+0x8003BD08  Level_getDescriptor(arg) → descriptor_ptr
+0x8005ED5C  Level_init_B(resource_ptr)
+0x80038028  Level_init_C(a, b)
+0x8005AFD0  Level_init_D()
+0x80053D74  Level_init_E()
+
+# ─── Level Section 1 binary format (data, NOT ScriptExec) ───
+#   Level Section 1 (157–447 KB) = environmental/world data in a DIFFERENT binary format:
+#   - Small integers (0x00–0x1F predominantly) encoding node/tile IDs
+#   - Larger values for coordinates, hashes, packed geometry
+#   - ZERO valid 32-bit ScriptExec opcode sequences found in any Section 1 scan
+#   - Most likely: collision tree + camera rail graph + trigger zones (compact binary)
+#   - The ScriptExec script for each remote comes from a DIFFERENT source
+#     (streaming_buf[0] is set by the loading pipeline, not by Section 1 parse)
+
+# ─── Level data table ───
+0x8008E664  g_StreamSlotTable  # per-remote stream control (24-byte entries)
+#   Entry fields: [+0]=???, [+4]=data_size_bytes, [+8]=secondary_size,
+#                 [+C]=LBA_offset, [+10]=callback_data, [+14..17]=???
+0x8008FF68  g_CD_readSlots     # 4-slot circular CD read ring (36 bytes/slot)
+#   Slot fields: [+0]=???, [+4]=buf_ptr, [+8]=base_ptr, [+C]=lba_start,
+#                [+10]=sector_count, [+14]=status (0=free,1=active),
+#                [+18]=callback_data, [+1C]=???,[+18..23]=more params
+
+
+# === g_StreamSlotTable / BIGFILE TOC (corrected) ===
+#
+# BIGFILE FORMAT (corrected from earlier analysis):
+#   Offset 0x0000: n_resources (4 bytes) = 192 (0xC0)
+#   Offset 0x0004: 192 × 24-byte TOC entries
+#   ENTRY STRUCTURE (24 bytes each):
+#     [+0x00]: name_hash — computed by 0x8003BA1C from filename; used as lookup key
+#     [+0x04]: primary_stream_size — bytes loaded in first CD read
+#     [+0x08]: secondary_stream_size — bytes loaded in second CD read
+#     [+0x0C]: bf_byte_offset — byte offset within BIGFILE.DAT for this resource
+#     [+0x10]: crc32 (or secondary identifier)
+#     [+0x14]: additional metadata (file type tag? mission flags?)
+#
+# CORRECTION from prior analysis: entries are 24 bytes (not 16), TOC starts at
+# byte 4 (not byte 16). All prior entry indices [30],[45],[60]... were wrong.
+# Corrected slot → resource mapping (confirmed cross-referenced):
+#   slot[16] = GEOM hub       (bf_off=0x0152F000)
+#   slot[18] = AUDIO hub      (bf_off=0x015F1800)
+#   slot[20] = LEVEL hub .lev (bf_off=0x01667800)
+#   slot[22] = INDEX hub .meta(bf_off=0x01775000)
+#   slot[28] = AUDIO Toon TV  (bf_off=0x01920800)
+#   slot[30] = LEVEL Toon TV  (bf_off=0x019A3000)
+#   slot[32] = INDEX Toon TV  (bf_off=0x01ABB800)
+#   slot[38] = AUDIO Scream TV(bf_off=0x01C55000)
+#   slot[40] = LEVEL Scream TV(bf_off=0x01CCF000)
+#   slot[42] = INDEX Scream TV(bf_off=0x01DCF000)
+#   slot[4]  = VRAM atlas A (7.5MB at bf_off=0x3E000)
+#   slot[5]  = VRAM atlas B (13.4MB at bf_off=0x786000)
+#
+# HASH FUNCTION 0x8003BA1C(filename_str) → name_hash:
+#   For each uppercase char c at position pos (1-indexed):
+#     sum_chars += c
+#     xor_accum ^= (c × pos)
+#   result = (char_count << 24) | (sum_chars << 12) | (xor_accum & 0xFFF)
+#   (Note: first attempt assumed xor_accum not included — WRONG; xor fills bits 0-11)
+
+0x8003B738  BigFile_init(bigfile_path_str)
+#   Locates BIGFILE.DAT via CdSearchFile, seeks to it, reads first 8KB,
+#   copies 192×24-byte TOC to g_StreamSlotTable (0x8008E664),
+#   initializes CD streaming ring (4 slots × 36B at 0x8008FF68),
+#   initializes remote_state_table (0x8008E59C).
+
+0x8003BA1C  BigFile_hashName(name_str) → name_hash
+#   Computes: hash = (len<<24)|(sum_of_uppercase_chars<<12)|(XOR_of_char×pos & 0xFFF)
+#   Result used to look up entries in g_StreamSlotTable.
+
+0x8003BA80  BigFile_lookup(name_str) → slot_index
+#   Calls BigFile_hashName, then linear-scans g_StreamSlotTable for entry[0]==hash.
+#   On miss: logs "CD ERROR: file %s not in bigfile". Returns slot index.
+
+0x80074E70  MemCopy_n(dst, src, n_bytes)
+#   Used by BigFile_init to copy the TOC. May differ from memcpy at 0x80074E30.
+
+# === BIGFILE TOC field decode (w[4] and w[5] resolved) ===
+#
+# BIGFILE TOC ENTRY [+0x10] = word_checksum:
+#   Algorithm: sum of file bytes as LE uint32 words (last partial word zero-padded)
+#   Verified against 21 groups of duplicate-content entries (up to 5 copies each)
+#
+# BIGFILE TOC ENTRY [+0x14] = file_magic:
+#   First 4 bytes of file content stored as LE uint32
+#   Quick type-ID without loading file:
+#     0x3770616D = 'map7' ASCII streaming config
+#     0x001X0000 = binary streaming config (X×64KB buffer required)
+#     0x5F57AAA8 = A8AA geometry (.geom files start with A8 AA 57 5F)
+#     0x00104220 = .lev hub world (variant byte 0x42)
+#     0x00100A20 = .lev standard (variant 0x0A = Circuit/Pre-History)
+#     0x4E440000 = DNSaC audio (\x00\x00DN)
+#
+# BIGFILE format fully decoded:
+#   [0x0000]: n_entries (LE uint32) = 192
+#   [0x0004]: 192 × 24-byte TOC entries:
+#     [+0x00]: name_hash   — lookup key
+#     [+0x04]: primary_sz  — first streaming pass bytes
+#     [+0x08]: secondary_sz— second streaming pass bytes (0 = single-pass)
+#     [+0x0C]: bf_offset   — byte offset in BIGFILE.DAT
+#     [+0x10]: word_chksum — sum of file as LE uint32 words (zero-padded)
+#     [+0x14]: file_magic  — first 4 bytes of file as LE uint32
+#   [0x1204]: resource data (stacked, sector-aligned)
+
+# === BigFile hash function (COMPLETE) ===
+# 0x8003BA1C  BigFile_hashName(a0=name_str) → v0=name_hash
+#   Inner loop at 0x8003BA34, delay-slot at 0x8003BA7C: or v0,v0,t0
+#   Algorithm: (char_count<<24) | (sum_chars<<12) | (xor_products & 0xFFF)
+#     where xor_products = XOR of (char[i] × i) for each char at index i
+#     terminates on NUL (0x00); lowercase a-z → uppercase (& 0xDF)
+#     digits, spaces, punctuation: NOT converted (used as-is)
+#     SPACE does NOT terminate; only NUL terminates
+
+# === Level_streamLoad and BigFile system (finalized) ===
+
+0x8003B8F0  Level_streamLoad(filename_str) → buffer_ptr
+#   a0 = NUL-terminated BIGFILE filename string (used as BigFile_hashName input)
+#   Polls semaphore at 0x8009D6AC via 0x80053D84 until cleared.
+#   Calls BigFile_lookup(filename) → slot index s2
+#   Reads slot[s2]: w1=primary_size, w2=secondary_size, w3=bf_offset, w4=checksum
+#   Allocates buffer: 0x800670BC(ceil(w1/2048)*2048) → s1 = buffer_base
+#   Logs "Loading:%s" via debug_log
+#   Computes: secondary_buf = s1 + (primary_sectors - secondary_sectors)*2048
+#   Calls CD_beginRead(w3>>11, secondary_buf, s1, sec_sectors, 1, w4, w2)
+#     → w4 passed as sp[0x14] to CD_beginRead, stored in CD_READ_SLOT[+0x18]
+#   Calls Level_remoteInit(slot_return_val) to manage GPU while loading
+#   Returns: s1 (allocated buffer containing loaded resource data)
+
+#   w[4] PURPOSE (now confirmed): passed to CD_beginRead as sp[0x14] arg,
+#   stored in CD_READ_SLOT[+0x18]. Most likely: data integrity checksum used
+#   by CD system to verify successful read. Algorithm: UNKNOWN (not CRC32/Adler32).
+#   Content-derived (same for cross-reference duplicate entries).
+
+#   w[5] PURPOSE:
+#   Entries 0-11 (small global files): = first 4 bytes of content as LE uint32.
+#     Used for quick file-type identification (magic bytes) without full load.
+#     Entry 0 (streaming config): w5 = 'map7' as LE = 0x3770616D ✓
+#   Entries 12+ (per-environment resources): content hash, algorithm UNKNOWN.
+#     Same value for cross-reference duplicates → purely content-derived.
+
+# ─── BigFile_hashName: COMPLETE ALGORITHM ────────────────────────────────────
+# Function: 0x8003BA1C (wrapper) calls 0x8003BA34 (inner loop), delay 0x8003BA7C
+# Algorithm:
+#   v1=0 (sum), t0=0 (xor), pos=0
+#   for each byte b in name (STOPS at NUL=0x00, NOT at space):
+#     if ('a'<=b<='z'): c = b & 0xDF  [uppercase]
+#     else: c = b                       [keep as-is]
+#     v1 += c       [sum accumulator]
+#     t0 ^= c*pos   [xor of char×index, where index is 0-based]
+#     pos++
+#   delay_slot: or v0, v0, t0   [at 0x8003BA7C — XOR fills bits 0-11]
+#   return (pos<<24) | (v1<<12) | (t0 & 0xFFF)
+#
+# NOTE: Space (0x20) does NOT terminate; only NUL (0x00) terminates.
+# NOTE: The first character has index 0, so c[0]×0=0 contributes nothing to XOR.
+
+# ─── Streaming config strings found in exe ────────────────────────────────────
+# 0x8007BFE6  streaming_config_A  = b'@\nY\nj\ns\n'
+#   '@' opcode = StreamQueue_addEntry for CD sector reads
+#   Y=0x59, j=0x6A, s=0x73 encode sector offsets after '@'=0x40 baseline
+
+# 0x80086E34  streaming_config_GAMEOVER  = b'$#2\n\n\n GAME OVER'
+#   Used as a0 to Level_dataLoader when GameCtx.loadPhase==0
+#   '$' = speed change, '#2' = set tag=2, '\n' = streaming params
+
+# 0x80086E48  streaming_config_LOADING  = b'$#2\n\n\n LOADING...\n'
+#   Used as a0 to Level_dataLoader when GameCtx.loadPhase!=0
+
+# ─── New globals ──────────────────────────────────────────────────────────────
+0x8009D6AC  g_StreamSemaphore  -- polling semaphore: Level_streamLoad waits while non-zero
+0x80053D84  StreamSemaphore_poll()  -- checks/yields until g_StreamSemaphore clears
+0x80086E34  g_StreamConfig_GameOver -- ASCII streaming config for GAME OVER screen
+0x80086E48  g_StreamConfig_Loading  -- ASCII streaming config for LOADING screen
+0x8007BFE6  g_StreamConfig_A        -- '@'-opcode streaming config (sector reads)
+
+
+# === Camera system (decoded this session) ===
+0x80011C8C  Camera_update(camera_obj, world)
+#   Reads fixed-offset params from camera config file into camera_obj
+#   Dispatches to sub-handlers by obj[0x4DEE] mode byte
+#   buf[0,2,4,0x30,0x32,0x34] → obj[0x120,0x122,0x124,0x128,0x12A,0x12C]
+
+0x80015728  Camera_stateMachine(camera_obj, event_a1)
+#   Large state machine; state = obj[0x14C]
+#   States: 2,5,6=follow,C,D=transition,F
+#   Calls Camera_applyNodeA/B, Camera_behaviorStep
+
+0x8005E1F4  Camera_behaviorStep(camera_obj, ctrl_struct) → int
+#   Single step: calls GetPtr then Traverse
+#   Returns 0 if end-of-sequence, 1 if active
+
+0x8005E754  Camera_behaviorTraverse(camera_obj, ctrl, table_0x800893B0)
+#   Walks node array; stride = 10B (mode A) or 32B (mode B)
+#   camera_obj[+6]=1 → mode A (×10), =0 → mode B (×32)
+
+0x8005EAC4  Camera_behaviorGetPtr(camera_obj, ctrl_struct) → node_ptr
+#   Computes: node_base + index × stride, advances ctrl.index
+
+0x8005D7C8  Camera_applyNodeB(camera_obj, ctrl, node_base)
+#   Applies full 32-byte node (XYZ position + orientation + misc)
+
+0x8005D9D4  Camera_applyNodeA(camera_obj, ctrl_struct)
+#   Applies compact 10-byte node
+
+0x80012504  Camera_modeHandler_1(camera_obj)  # mode 1 handler
+0x80011F48  Camera_modeHandler_4(camera_obj)  # mode 4 handler
+0x80013E28  Camera_modeHandler_6(camera_obj)  # mode 6 handler
+0x80013578  Camera_modeHandler_7(camera_obj)  # mode 7 handler
+0x80031514  Camera_blend(out, src_a, src_b, count=0x15)
+0x8003106C  Camera_interpolate(dst, src, count)
+0x8001527C  Camera_transition(camera_obj, state_a, state_b)
+0x8001F1F0  Camera_followMode(camera_obj)
+0x800151FC  Camera_setState(camera_obj, new_state=0x140)
+
+# ─── Camera globals ──────────────────────────────────────────────────
+0x800893B0  g_CameraBehaviorTable   -- global camera behavior dispatch table
+0x80086748  g_CameraEventStore      -- saved camera event (sw $s1, 0x6748($at))
+
+
+# === ScriptExec opcode handlers (corrected, from disasm) ===
+#
+# OPCODE TABLE LAYOUT CORRECTION:
+#   Each 12-byte entry: [+0]=data_ptr/name_ptr  [+4]=fn_ptr  [+8]=arg_info
+#   ScriptExec reads fn_ptr via: lw v0, 0x5c04($at + opcode*12)
+#   arg_info = (world_check_flag << 16) | arg_count
+#
+0x80022A08  op00_hideObject(world, script_ptr)
+#   arg = script_ptr[+4] = POINTER to entity struct (NOT an integer ID!)
+#   Sets bit 7 of entity_struct[+0x1C] (= marks object as hidden)
+#   NEVER returns 0 — always returns (entity_struct[+0x1C] | 0x80) ≥ 0x80
+#   When called with arg=null (0x00000000): reads from address 0x1C harmlessly
+
+0x80022A28  op01_unhideObject(world, script_ptr)
+#   Symmetric to hideObject; clears the hidden flag
+
+0x80022E7C  op23_teleport(world, script_ptr)          # 4 args, world_check=1
+0x80023AA0  op62_stopPlayerCtrl(world, script_ptr)    # 0 args, world_check=1
+0x80023EF8  op72_levelChange(world, script_ptr)       # 1 arg, world_check=1
+0x80023F18  op76_hideObjectGroup(world, script_ptr)   # 1 arg, world_check=1
+0x800246E4  op81_voiceQueue(world, script_ptr)        # 1 arg, world_check=1
+
+0x8002349C  op91_birthObject(world, script_ptr) → 1
+#   a0 = script_ptr[+4] = entity_descriptor POINTER (not integer)
+#   if a0 != null AND a0[0x1C] & 0x08 == 0 (not already spawned):
+#     call Object_birth(a0)  → spawns the game object
+#   always returns 1 (ScriptExec continues)
+#   THIS IS THE KEY COMMAND for spawning level entities from scripts
+
+0x800247B4  op95_hubWorldInit(world, script_ptr) → 1  # 0 args, world_check=1
+#   calls 0x80053D48 (hub-world initialization)
+#   returns 1 (ScriptExec continues)
+#   Present in hub INDEX script as the first command (max_ops=95)
+
+0x80024CF4  op104_handler(world, script_ptr)          # 1 arg, world_check=1
+
+0x80053D48  HubWorld_init()   # called by op95 handler
+
+# ─── ScriptExec INDEX file script architecture ────────────────────────────
+#
+# CONFIRMED: ScriptExec scripts are embedded in INDEX (.meta) files
+#   at environment-specific byte offsets:
+#     Hub (slots 22,27)   : +0x5930   max_ops=95   (hub has real script)
+#     Scream TV (32,37,42,47): +0xD980  max_ops=0   (inert on disc)
+#     Circuit   (52,57,62): +0x6830   max_ops=0
+#     Kung-Fu   (67,72,77): +0x6130   max_ops=0
+#     Rocket    (82,87,92): +0xD2E0   max_ops=0
+#     PreHist   (97,102)  : +0x7880   max_ops=0
+#     Rezopolis (107,112) : +0xC188   max_ops=0
+#     Boss1     (112,117) : +0x5288   max_ops=0
+#     Boss3     (122)     : +0x5288   max_ops=0
+#
+# Script format: [max_ops: uint32][opcode0: uint32][arg0: uint32][opcode1...]
+#   Advance per step: (arg_count+1) × 4 bytes
+#   ScriptExec exits when: max_ops counter reaches 0 OR handler returns 0
+#
+# Scripts are PRE-ALLOCATED on disc with zeros (max_ops word non-zero for hub).
+# At runtime, entity_descriptor POINTERS are written into arg words for
+# birthObject (op91) and hideObject (op00) commands.
+# streaming_buf[0] is set to point to the INDEX script section when loaded.
+#
+# ARG TYPE: Script args are 32-bit RAM POINTERS to entity descriptor structs.
+#   entity_desc.at[+0x1C] = flags word (bit7=hidden, bit3=spawned_already)
+#   op00 sets bit7, op91 checks bit3 before calling Object_birth
+

@@ -1,0 +1,388 @@
+Gex 64 N64 Level Blob Format — rezop2 Reference Specimen
+Decompressed size: 91732B  |  RDRAM base (w0): 0x80259544
+Collision triangles: 565  |  Collision vertices: 939  |  Tiles: 313
+All internal RDRAM pointers: file_offset = rdram - w0
+ROM mapping (uncompressed code region): rdram = rom_offset + 0x80000000
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DEFINITIVE SECTION MAP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
++0x00000–+0x000E7  (232B)    FILE HEADER
++0x000E0–+0x0018F  (176B)    SURFACE TYPE DESCRIPTOR  #11  ('rezop___')
++0x00190–+0x0032F  (416B)    SURFACE TYPE DESCRIPTOR  #13  ('radiate_')
++0x00330–+0x0054F  (544B)    SURFACE TYPE DESCRIPTOR  #17
++0x00550–+0x0064F  (256B)    SURFACE TYPE DESCRIPTOR  #16  + GBI texture sub-DL
++0x00650–+0x0079F  (336B)    SURFACE TYPE DESCRIPTOR  #10
++0x007A0–+0x0081F  (128B)    SURFACE TYPE DESCRIPTOR   #8
++0x00820–+0x009AF  (400B)    SURFACE TYPE DESCRIPTOR   #9
++0x009B0–+0x00ACF  (288B)    SURFACE TYPE DESCRIPTOR  #18
++0x00AD0–+0x1332F  (2144B)   SURFACE TYPE DESCRIPTOR  #15  (large)
++0x01330–+0x1444F  (288B)    SURFACE TYPE DESCRIPTOR   #2
++0x01450–+0x18BF   (1136B)   SURFACE TYPE DESCRIPTOR  #14
++0x018C0–+0x1B1F   (608B)    SURFACE TYPE DESCRIPTOR  #12
++0x01B20–+0x1C4F   (304B)    SURFACE TYPE DESCRIPTOR  #19
++0x01C50–+0x0E543  (~50KB)   SURFACE TYPE DESCRIPTOR  #20  + embedded CI4 texture data
++0x0E544–+0x0E57F  (60B)     LEVEL DESCRIPTOR BLOCK
++0x0E580–+0x108DF  (9056B)   COLLISION FACE TABLE  (283 × 32B, yields 565 triangles)
++0x108E0–+0x1484F  (15984B)  SPATIAL ACCELERATION INDEX  (999 × 16B AABB cells)
++0x14850–+0x14C27  (984B)    BATCH DESCRIPTOR TABLE  (41 × 24B tile records)
++0x14C28–+0x1659F  (6520B)   GBI DISPLAY LIST  (visual rendering batches)
++0x165A0–+0x16653  (180B)    SECONDARY GBI DISPLAY LIST
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FILE HEADER  (0x00000 – 0x000E7, 232B)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
++0x0000: u32  w0         = 0x80259544  (self RDRAM ptr; used as seg2 base)
++0x0004–0x003F: engine subsystem linked-list nodes (zeroes + small counts)
++0x0040: u32  vtable     = 0x802586D8  (level subsystem vtable)
++0x0060: u32  coll_vtable= 0x8024B1C0  (collision subsystem vtable ptr)
++0x0064: u16  count      = 128
++0x0080: u32  render_fn  = 0x80258460  (level rendering / vertex-buffer setup fn)
+         NOTE: 0x80258460 is in a WORLD CODE OVERLAY loaded before the level.
+               It is NOT at ROM+0x258460 (that's audio data). The overlay is
+               loaded from a separate compressed blob at world-load time.
++0x0090–0x00DC: additional CODE ptrs (0x8024B0E8 etc. — mesh handler vtable chain)
++0x00D8: u32  CODE 0x8024B118
++0x00DC: u32  CODE 0x8024B124
++0x00E0: u32  CODE 0x8024B130  ← start of surface type 11 descriptor
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SURFACE TYPE DESCRIPTOR FORMAT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+The GBI DL identifies each surface type via a SPNOOP command:
+  [0x0002NNNN:u32][RDRAM_ptr:u32]  →  type number = NNNN, ptr → descriptor start
+
+Surface type → file offset mapping (all 14 physical types):
+  Type 11 → +0x000E0   Type 13 → +0x00190   Type 17 → +0x00330
+  Type 16 → +0x00550   Type 10 → +0x00650   Type  8 → +0x007A0
+  Type  9 → +0x00820   Type 18 → +0x009B0   Type 15 → +0x00AD0
+  Type  2 → +0x01330   Type 14 → +0x01450   Type 12 → +0x018C0
+  Type 19 → +0x01B20   Type 20 → +0x01C50
+
+Visual-only surface types (no RDRAM ptr, no collision records): 0, 24, 32, 48, 56
+
+DESCRIPTOR INTERNAL STRUCTURE — example: type 13 ('radiate_', at +0x00190):
+
+  +0x000 (32B): SURFACE PHYSICAL PROPERTIES (8 × u32):
+    [0] flags      = 8        (surface type flags; 0xC000 = ceiling/wall)
+    [1] grip       = 4000     (traction × 1000)
+    [2] friction   = 88
+    [3] elasticity = 100
+    [4] reserved   = 0
+    [5] param5     = 60       (possibly: global tile index of first tile in this type)
+    [6] param6     = 1
+    [7] param7     = 10
+
+  +0x020: u32  render_fn  = 0x802585E0   (tile rendering handler)
+  +0x024: u32  coll_fn    = 0x8024B1BC   (collision response handler)
+  +0x028: u32  count_A    = 60           (total tiles or tile range)
+  +0x02C: u32  count_B    = 1
+
+  +0x030: LOCAL SHAPE DEFINITION (3 × 8B vertex entries with flags=2,0,0):
+    Each 8B entry: [X:i16][Y:i16][Z:i16][flags:u16]
+    flags=2: local offset from tile anchor (relative)
+    flags=0: second/third corner local offset
+    flags=1: world-space anchor (absolute position)
+
+    For type 13 (vertical wall tile facing +X axis):
+      local_vtx[0]: (   0,-1490,  -930) flags=2   corner 0 offset (bottom-front)
+      local_vtx[1]: (   0,    0,  4096) flags=0   corner 1 offset (back point)
+      local_vtx[2]: (   0, 3190,  -930) flags=0   corner 2 offset (top-front)
+
+  +0x048+: PER-BATCH GROUP RECORDS (repeating):
+    Each batch group: [CODE:u32][CODE:u32] followed by tile vertex data
+
+    Tile data block (after code pair):
+      world_anchor: (X,Y,Z) flags=1   → world position of this tile's corner 0
+      companion_1:  (X,Y,Z) flags=0   → world position of corner 1
+      companion_2:  (X,Y,Z) flags=0   → world position of corner 2
+      adj_data:     additional adjacency/neighbour info (flags may be large)
+
+  The descriptor also embeds CI4 texture data for visual rendering of each tile type.
+  CI4 data is identified by repeating nibble patterns (0x2C, 0x44, 0x55 etc.).
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+LEVEL DESCRIPTOR BLOCK  (0x0E544 – 0x0E57F, 60B)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
++0x0E544: u32  RDRAM→+0x062FC      (CI4 texture data region start)
++0x0E548–0x0E553: nulls
++0x0E554: u32  12                  (batch group count)
++0x0E558: u32  CODE 0x80258460     (level render fn — builds seg1 vertex buffer)
++0x0E55C: u32  939                 (n_collision_vertices)
++0x0E560: u32  565                 (n_collision_faces — actual TRIANGLE count)
++0x0E564: u32  200                 (surface-type-related count)
++0x0E568: u32  RDRAM→+0x0239C      (texture setup DL for seg2)
++0x0E56C: u32  RDRAM→+0x00040      (level header node)
++0x0E570: u32  RDRAM→+0x05E4C      (CI4 texture palette / tile data start)
++0x0E574: u32  null
++0x0E578: u32  CODE 0x8024B1F0     (collision mesh vtable)
++0x0E57C: u32  CODE 0x8024B3E8     (collision dispatch handler)
++0x0E580: u32  CODE 0x8024DD50     (surface handler for face record 0)
+
+NOTE: The last field at +0x0E57C is technically the first word of face record 0.
+The face table starts at +0x0E580 but record 0's handler field is at the descriptor's end.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COLLISION FACE TABLE  (0x0E580 – 0x108DF)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+283 records × 32B = 9056 bytes.
+Records yield 565 collision triangles (n_collision_faces from descriptor).
+The last record (index 282) has triA only; triB is padded with 0xCDCD.
+
+32B RECORD LAYOUT:
+
+  Bytes 0–3:   u32   handler_or_adj
+               Record 0: RDRAM code ptr (surface handler fn = 0x8024DD50)
+               Records 1+: packed [adj_c2:i16][adj_c3:i16]
+
+  Bytes 4–5:   u16   vA0     — vertex index for triangle A, corner 0
+  Bytes 6–7:   u16   vA1     — vertex index for triangle A, corner 1
+  Bytes 8–9:   u16   vA2     — vertex index for triangle A, corner 2
+  Bytes 10–11: u16   flags_A — surface flags (0=floor, 0xC000=wall/ceiling)
+  Bytes 12–13: i16   adj_a0  — signed relative offset to neighbor face (edge 0-1)
+  Bytes 14–15: i16   adj_a1  — signed relative offset to neighbor face (edge 1-2)
+  Bytes 16–17: i16   adj_c0  — additional adjacency value
+  Bytes 18–19: i16   adj_c1  — additional adjacency value
+  Bytes 20–21: u16   vB0     — vertex index for triangle B, corner 0
+               0xCDCD in last record = null/unused (triB does not exist)
+  Bytes 22–23: u16   vB1     — vertex index for triangle B, corner 1
+  Bytes 24–25: u16   vB2     — vertex index for triangle B, corner 2
+  Bytes 26–27: u16   flags_B — surface flags for triangle B
+  Bytes 28–29: i16   adj_b0  — signed relative offset to neighbor face (triB edge)
+  Bytes 30–31: i16   adj_b1  — signed relative offset to neighbor face (triB edge)
+
+VERTEX INDEX CONVENTIONS:
+  Valid range:  0..938  (939 unique positions, all used)
+  Mapping:      vtx_idx // 3 = tile_index  (integer division; tiles 0..312)
+                vtx_idx %  3 = corner index  (0=anchor, 1=second, 2=third)
+  Tiles:        313 tiles total (indices 0..312)
+                939 vertices = 313 × 3 per-tile corners
+  Anchors:      tile i's corner 0 (vtx[i*3]) = world position from batch descriptor
+                or from surface type descriptor (for tiles 41–312)
+
+FACE RECORD 0 EXAMPLE:
+  handler = 0x8024DD50 (surface handler code ptr)
+  triA: verts=(0,1,2), flags=0 (floor), adj=(+1,+2), adj_c=(+3,+4)
+  triB: verts=(3,2,1), flags=0 (floor), adj=(+1,-2)
+  → Two triangles forming a planar quad (tile 0, corners 0/1/2 and tile 1/0/2)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SPATIAL ACCELERATION INDEX  (0x108E0 – 0x1484F)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+~999 entries × 16B.  Used by the collision system as a spatial index (AABB cells
+or similar) to quickly narrow the face records to check for a given AABB query.
+
+16B entry format (tentative — not fully decoded):
+  Bytes 0–1:   i16   X_min or corner_X_A
+  Bytes 2–3:   i16   Z_min or corner_Z_A
+  Bytes 4–5:   i16   X_max or corner_X_B
+  Bytes 6–7:   i16   Z_max or corner_Z_B   (0x5656 = unused/empty cell marker)
+  Bytes 8–15:  mixed  face reference range or additional corner data
+  Byte pattern 0x565656FF appears in many entries as a filler/terminator.
+
+Known X/Z values in this structure match tile anchor coordinates, suggesting
+each cell stores a tile's bounding footprint plus references into the face table.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BATCH DESCRIPTOR TABLE  (0x14850 – 0x14C27)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+41 records × 24B.  Each describes one renderable/collidable tile patch.
+These give the KNOWN ANCHOR positions for collision tiles 0–40.
+
+24B RECORD LAYOUT:
+  +0x00: u32  geo_ptr   → RDRAM → CI4 pixel data for this tile's texture
+  +0x04: u32  vtx_ptr   → RDRAM → CI4 palette data for this tile
+  +0x08: i16  X         — world X of this tile's corner 0 (anchor)
+  +0x0A: i16  Y         — world Y (height)
+  +0x0C: i16  Z         — world Z
+  +0x0E: i16  rot_Y     — Y-axis rotation
+  +0x10: i16  enabled   — 1 = active tile
+  +0x12: i16  param1    — tile adjacency link (signed)
+  +0x14: i16  param2    — usually 0
+  +0x16: i16  param3    — signed adjacency link or size hint
+
+KNOWN TILE ANCHORS (vtx[i*3+0] for tiles 0..40):
+  tile  0: (3973,3243,3683)   tile  1: (3996,3270,3705)
+  tile  2: (3604,2789,3749)   tile  3: (3531,2782,3625)
+  tile  4: (3531,2782,3625)   tile  5: (3891,2182,2519)
+  tile  6: (3507,3009,4517)   tile  7: (3636,6049,2977)
+  tile  8: (3868,5500,3007)   tile  9: (3853,5491,2967)
+  tile 10: (2644,5989,2470)   tile 11: (2765,6451,2210)
+  tile 12: (3186,3002,1631)   tile 13: (4637,3074,1678)
+  tile 14: (4564,3088,1678)   tile 15: (4564,3109,1510)
+  tile 16: (5524,3088,1678)   tile 17: (5524, 229,1508)
+  tile 18: (5829,3110,1510)   tile 19: (2013,3007,1631)
+  tile 20: (1684,3089,1658)   tile 21: (1684,3109,1508)
+  tile 22: (2715,3079,1649)   tile 23: (2964, 229,1509)
+  tile 24: (2964,3109,1510)   tile 25: (2942,3044,1502)
+  tile 26: (3407,1825,-1273)  tile 27: (3695, 230,-1376)
+  tile 28: (3604, 229,  976)  tile 29: (3604, 229,  722)
+  tile 30: (3604, 229,  976)  tile 31: (3673, 229,-1772)
+  tile 32: (3604, 229,  596)  tile 33: (3567,2155,  465)
+  tile 34: (2964,2151,  807)  tile 35: (2964,3431,  807)
+  tile 36: (2960,1493,  748)  tile 37: (3956,2161,  462)
+  tile 38: (4244,2151,  808)  tile 39: (3604,2151,  807)
+  tile 40: (1364,1994, 3635)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COLLISION VERTEX POSITIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+939 vertex positions (vtx[0]..vtx[938]) are NOT stored as a standalone XYZ table.
+They exist only in the N64 runtime vertex buffer (seg1), computed by 0x80258460.
+
+VERTEX COMPUTATION FORMULA (inferred):
+  For each tile i (0..312):
+    anchor = tile_anchor_position   (from batch desc or surface type desc)
+    vtx[i*3 + 0] = anchor
+    vtx[i*3 + 1] = anchor + local_shape[1]  (from surface type descriptor)
+    vtx[i*3 + 2] = anchor + local_shape[2]  (from surface type descriptor)
+
+  For surface type 13 (wall tiles):
+    local_shape[1] = (0, 0, 4096)     (Z-axis extension)
+    local_shape[2] = (0, 3190, -930)  (Y/Z corner)
+
+STATIC AVAILABILITY:
+  - Tiles 0..40: anchor from batch descriptor table (41 anchors known)
+  - Tiles 41..312: anchors embedded in surface type descriptors but not
+    directly accessible without full decoder logic
+  - Face records covering tiles 0..40: 283 of 283 records (all 565 triangles
+    involve at least some known-tile vertices; purely-known records: ~283)
+
+RUNTIME EXTRACTION (recommended for port):
+  Method A — Emulator memory dump:
+    1. Run rezop2 in Mupen64Plus or Project64
+    2. After first frame, dump all 8MB RDRAM to a file
+    3. Run:  python3 extract_collision_vertices.py ROM.z64 rdram.bin
+    The script auto-locates the vertex buffer by matching the 41 known anchors,
+    then extracts all 939 positions and writes a C array.
+
+  Method B — Runtime hook in port:
+    After level load, intercept the gSPSegment(1, ptr) call from 0x80258460.
+    Read 939 × 4 bytes from the ptr (4B per vertex, [X:i16][Z:i16] or [X:i16][Y:i16]).
+    The missing coordinate is derived from the corresponding tile anchor.
+
+  Method C — Static reconstruction:
+    For tiles 0..40: use batch descriptor XYZ as anchor + local shape offsets
+    For tiles 41..312: parse surface type descriptor per-batch-group vertex data
+    (see extract_collision_vertices.py for the partial implementation)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+GBI DISPLAY LIST  (0x14C28 – 0x1659F)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Crystal Dynamics batch-based rendering.
+
+SEGMENT SETUP:
+  seg1 = runtime vertex buffer (set by 0x80258460, 4B/vtx, [X:i16][Y_or_Z:i16])
+  seg2 = w0 = 0x80259544  →  seg2:0xNNNN = file+0xNNNN
+  seg3 = texture data region (set separately)
+
+SPNOOP COMMAND VARIANTS (8B each):
+  [0x00000000:u32][0x00000000:u32]          Empty / NOP
+  [0x0000SSSS:u32][0x00000000:u32]          Rendering batch, SSSS = vtx buf bytes
+  [0x0001SSSS:u32][0x00000000:u32]          Extended batch (larger vertex block)
+  [0x0002NNNN:u32][rdram_ptr:u32]           Surface type switch to type NNNN
+
+GBI OPCODE ENCODING (Crystal Dynamics F3D variant):
+  G_VTX (0x04):  bytes[1:3] = n_verts as uint16 big-endian; bytes[4:8] = seg address
+  G_TRI2 (0xB1): vertex cache slots encoded as (byte >> 1)
+  G_DL   (0x06): 4-byte segment address in bytes[4:8]
+  G_POPMTX (0xB8): end-of-batch marker
+  G_SETTILE (0xF5), G_SETTEXTUREIMAGE (0xFD): standard RDP commands (texture setup sub-DLs)
+
+GBI SURFACE TYPE DISTRIBUTION (total 153 rendering batches):
+  Type 16 'main floor':  40 batches  (dominant surface)
+  Type 15:               22 batches
+  Type 14:               15 batches
+  Type 10:               10 batches
+  Type  0 (no type yet):  5 batches
+  Types 9,13,17,18:      5-8 batches each
+  Types 2,8,11,12,19,20: 2-4 batches each
+  Types 24,32,48,56:     visual-only (no collision records)
+
+52 G_VTX commands total, loading 3636 vertices across all batches.
+Max seg1 extent: 0x3924 bytes from seg1 base.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+SCRIPTEXEC DISPATCH TABLE  (ROM+0x06DEC0)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+18 entries × 8B = [exec_fn:u32][init_fn:u32]. ROM mapping: rdram = rom_offset+0x80000000.
+See script_exec_opcodes.c for full opcode semantics and struct field layout.
+
+  op00 ASSERT           0x800284C4  0x80028714
+  op01 TICK             0x80028844  0x800289A4
+  op02 CALL_OBJECT      0x80028AD4  0x80028C68
+  op03 DISPATCH         0x80028F84  0x80028C68  (same init as op02)
+  op04 NOP              0x800290BC  0x800292D4
+  op05 UPDATE           0x80029390  0x80029434
+  op06 SPAWN_ENTITY     0x8002948C  0x800295A0
+  op07 WAIT             0x80029600  0x80029630
+  op08 WAIT_FRAME       0x80029914  0x80029A10
+  op09 INIT_ENTITY      0x80029B1C  0x80029C28
+  op10 COMPLEX_OP       0x80029CC8  0x80029A10  (same init as op08)
+  op11 DISPATCH_ALT     0x80028F84  0x80029E74  (same exec as op03)
+  op12 INIT_SEQUENCE    0x80029FA4  0x8002A0AC
+  op13 ENTITY_INIT2     0x8002A140  0x8002A178
+  op14 SET_ENTITY_STATE 0x8002A274  0x8002A488
+  op15 GET_FIELD        0x8002ADB4  0x80027BA0
+  op16 GET_OPCOUNT      0x80027E7C  0x800280A0  (returns constant 11)
+  op17 CHECK_ENTITY     0x8002829C  0x80028454
+  [18] null terminator  0x00000000  0x8015E038
+  [19] sentinel         0xFFFFFFFF  0x00000000
+
+SCRIPTSTATE STRUCT LAYOUT (confirmed from disassembly):
+  +0:   u32  type_tag     (magic; compared to global registry)
+  +20:  u32  pc           (script instruction / data pointer; updated by DISPATCH)
+  +24:  u32* parent_ptr   (→ entity/object owning this script)
+  +76:  u16  entity_subtype
+  +78:  u8   opcode       (current opcode; ×4 = parent vtable index)
+  +94:  u16  tick_counter (decremented per WAIT/DISPATCH step)
+  +216: s32  timer        (negative → fire callback)
+  +248: u32  flags        (0x00268088 = active, 0x72018000 = render, 0x8000 = link)
+  +252: u32  extra_flags
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KEY ADDRESSES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+ROM INDEX tables:
+  Level INDEX:           ROM+0x0708E0  (31 entries × 32B)
+  ScriptExec dispatch:   ROM+0x06DEC0  (18 entries × 8B)
+
+Game code (RDRAM = ROM + 0x80000000 for uncompressed region):
+  Level render fn:       0x80258460  (world code overlay; NOT at ROM+0x258460)
+  Collision mesh vtable: 0x8024B1F0
+  Collision dispatch:    0x8024B3E8
+  Surface handler floor: 0x8024DD50
+  ScriptExec execute:    0x8002CA2C
+  Entity spawn:          0x800247B4
+  Object dispatch:       0x80023E9C
+
+rezop2 runtime:
+  RDRAM base (w0):       0x80259544
+  ROM compressed:        0x00A4C3E0 – 0x00A57840  (46176B → 91732B)
+  CI4 texture data:      file+0x062FC onward
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TOOLS & OUTPUTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+extract_collision_vertices.py   — extracts the 939 collision vtx positions
+                                  (static: 41 anchors; full: requires RDRAM dump)
+script_exec_opcodes.c           — ScriptExec dispatch table with opcode stubs
+LEVEL_BLOB_FORMAT.txt           — this file
+
+Verified decompilation files (in project):
+  gex2_types.h, gex2_globals.h, bigfile.c, script_exec.c,
+  object.c, camera.c, utils.c, test_bigfile_hash.c
+
+Port framework: LUS / Torch (LibUltraShip), modelled on Ship of Harkinian.

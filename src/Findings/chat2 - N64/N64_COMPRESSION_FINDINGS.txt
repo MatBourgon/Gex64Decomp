@@ -1,0 +1,118 @@
+N64 ASSET COMPRESSION — CONFIRMED FINDINGS
+Gex 64: Enter the Gecko
+============================================================
+
+STATUS: N64 asset data IS compressed with a custom Crystal Dynamics scheme.
+        The decompressor has NOT been located via static analysis alone.
+        Dynamic analysis (N64 emulator + debugger) required to find it.
+
+════════════════════════════════════════════════════════════
+EVIDENCE FOR COMPRESSION
+════════════════════════════════════════════════════════════
+
+1. ENTROPY: All asset blobs have entropy 7.8-7.95 bits/byte (near-theoretical
+   maximum of 8.0). Uncompressed N64 geometry typically has 6.0-7.0.
+
+2. VALUE DISTRIBUTION: 16-bit value histogram across 256 buckets is FLAT
+   (~20 values per bucket out of 5112 total for 'endtvca_').
+   Genuine geometry would cluster in low-value range (vertex coords).
+
+3. ONLY 4.1% of 16-bit values fall in "vertex range" (-1024 to 1024).
+   Genuine vertex data has 60-70% in that range.
+
+4. NO STRUCTURE: No recognizable GBI opcodes, no A8AA magic, no readable headers.
+   Only exception: tiny 80-byte "stub" objects with 0x636060... "header"
+   (possibly uncompressed null-object descriptors).
+
+5. CONSISTENT FORMAT: All large objects (hundreds to thousands of bytes) have
+   the same flat distribution regardless of object type.
+
+════════════════════════════════════════════════════════════
+WHAT WE KNOW ABOUT THE COMPRESSION SCHEME
+════════════════════════════════════════════════════════════
+
+- All object blob SIZES are multiples of 16 bytes (all 735/735).
+  This suggests the DECOMPRESSED output is padded to 16-byte alignment,
+  and the compression preserves this.
+
+- First byte distribution: 0xED (26%), 0xA5 (16%), 0x8D (7%), 0x63 (6%)
+  These are NOT random -- some compression schemes use first byte as type code.
+
+- Multiple objects share identical first 4 bytes (e.g., ED7B795C for all "endtvXX_" objects).
+  This could be a compressed header/magic that remains in the stream.
+
+- Objects with magic '63606060' are small (avg 114B) and seem to be stub/null objects.
+  These might be UNCOMPRESSED (hence readable as 0x63 = 'c' etc.).
+
+════════════════════════════════════════════════════════════
+WHERE THE DECOMPRESSOR IS (INFERENCE)
+════════════════════════════════════════════════════════════
+
+The N64 game uses libultra for DMA (osEPiStartDma via message queue, not direct
+PI register writes). After DMA completion, a callback decompresses the data.
+
+Functions we DID identify that are NEAR the loading path:
+  0x80065A10  __osCartRomRead / PI DMA initiator (waits for PI idle, sets up DMA)
+  0x80057AB0  probably osSendMesg / osJamMesg (posts to PI queue)
+  0x8002CB80  Message builder that references the 0x801DA800 display list buffer
+  0x8003C54C  Small function computing ROM offsets
+
+The decompressor is likely:
+  - Called from a LEVEL LOAD STATE in the game's main state machine
+  - Takes (compressed_buf, decompressed_buf, size) as arguments
+  - Has recognizable LZSS or LZ77 patterns (bit flags + back-references)
+  - Located somewhere in ROM 0x000000-0x0C4000 range
+
+════════════════════════════════════════════════════════════
+RECOMMENDED NEXT STEPS
+════════════════════════════════════════════════════════════
+
+1. DYNAMIC ANALYSIS (most efficient): Run the ROM in mupen64plus with a
+   memory write breakpoint at RDRAM 0x800C0000 (static geometry destination
+   from PS1 analysis). The write will come from the decompressor.
+   Tool: mupen64plus-debugger or m64py with scripting
+
+2. EMULATOR SCRIPTING: Use Mupen64Plus Lua scripting to watch for DMA
+   completion and capture (compressed_ptr, decompressed_ptr, size) arguments.
+
+3. CROSS-REFERENCE WITH GEX 3 N64: Crystal Dynamics released Gex 3 on N64
+   in 1999 with likely the same engine and compressor. If any RE community
+   has worked on Gex 3, the compressor may already be documented.
+
+4. N64 COMPATIBILITY DATABASE: Check the N64 compression database at
+   https://github.com/shygoo/n64crc or similar for the game's compressor.
+
+════════════════════════════════════════════════════════════
+N64 LEVEL INDEX FORMAT — FULLY DECODED
+════════════════════════════════════════════════════════════
+
+The LEVEL INDEX at ROM 0x0708E0 (RDRAM 0x800712E0) has 26 entries × 32 bytes:
+
+  +0x00  4B  uint32 RDRAM_mission_struct  -- per-mission 12KB control struct address
+  +0x04 12B  char[12] level_name          -- e.g., "looney30\0\0\0\0"
+  +0x10  4B  uint32 rom_start             -- start of compressed level blob in ROM
+  +0x14  4B  uint32 rom_end               -- end of compressed level blob in ROM
+  +0x18  4B  uint32 func1_rom_offset      -- ROM offset to per-level update function 1
+  +0x1C  4B  uint32 func2_rom_offset      -- ROM offset to per-level update function 2
+
+func1 and func2 are SHARED across levels (different missions in same world
+share the same update functions). They are PER-FRAME handlers, not loaders.
+
+RDRAM_mission_struct range: 0x80159720 - 0x80162B90 (12KB blocks, 26 total)
+ROM blob range: 0x004B5750 - 0x00C495AF (all compressed, ~11.4MB total)
+func1/func2 ROM range: 0x0007FF40 - 0x000C4000 (within code section)
+
+════════════════════════════════════════════════════════════
+N64 OBJECT INDEX FORMAT — CONFIRMED
+════════════════════════════════════════════════════════════
+
+At ROM 0x0745F0 (RDRAM 0x800749F0), 735 entries × 16 bytes:
+  +0x00  8B  char[8] name    -- object class name (null-padded to 8 chars)
+  +0x08  4B  uint32 rom_start
+  +0x0C  4B  uint32 rom_end
+
+ROM blob range: 0x00C495B0 - 0x00F7DAB0 (all compressed, ~3.3MB total)
+All blob sizes are 16-byte aligned.
+Small stubs (~80-128 bytes) have uncompressed '636060...' header.
+Large objects (~1-100KB) have compressed data starting with 0xED/0xA5/0x8D.
+

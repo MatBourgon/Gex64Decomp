@@ -1,0 +1,67 @@
+N64 ASSET INDEXES — CORRECTED LAYOUT
+Gex 64: Enter the Gecko (US)
+============================================================
+
+COMPRESSION: Raw DEFLATE (Python: zlib.decompressobj(-15).decompress(data))
+             Trailing zero padding (up to 16 bytes) stripped before decompression.
+             688/688 real objects and 26/26 levels decompress successfully.
+             Overall ratio: ~2.3:1
+
+════════════════════════════════════════════════════════════
+LEVEL INDEX — ROM 0x0708E0, 26 entries × 32 bytes
+════════════════════════════════════════════════════════════
+
+Entry layout:
+  +0x00  uint32  rom_start         ROM offset of compressed level blob
+  +0x04  uint32  rom_end           ROM offset end of compressed level blob
+  +0x08  uint32  func1_rom_offset  ROM offset to per-frame update function 1
+  +0x0C  uint32  func2_rom_offset  ROM offset to per-frame update function 2
+  +0x10  uint32  rdram_target      RDRAM address of per-mission struct (0x8015xxxx-0x8016xxxx)
+  +0x14 char[12] level_name        Null-padded ASCII (e.g., "looney30\0\0\0\0")
+
+IMPORTANT CORRECTIONS from previous session:
+  - Fields +0x00/+0x04 are rom_start/rom_end (not +0x10/+0x14)
+  - The level name is at +0x14 (not +0x04)
+  - func1/func2 are at +0x08/+0x0C (ROM offsets, not RDRAM)
+
+All 26 Levels:
+  [0]  looney30  ROM 0x07E7B80-0x085C2C0  (476KB → 1009KB)  rdram=0x80161EA0
+  [1]  horror4   ROM 0x0687F10-0x06EA110  (392KB → 1020KB)  rdram=0x80164D20
+  [2]  rta1      ROM 0x0ACB540-0x0B6A440  (635KB → 1244KB)  rdram=0x8015EF20
+  [3]  horror2   ROM 0x0625A90-0x0687F10  (393KB → 1040KB)  rdram=0x80164D20
+  [4]  circuit5  ROM 0x0519D80-0x057AC60  (387KB →  992KB)  rdram=0x801636E0
+  [5]  kungfu02  ROM 0x0764E80-0x07C0CD0  (367KB → 1016KB)  rdram=0x801627B0
+  [6]  scifi10   ROM 0x0B6A440-0x0BC7430  (371KB →  845KB)  rdram=0x80164FD0
+  [7]  prehst1   ROM 0x09731F0-0x09D0A50  (374KB →  846KB)  rdram=0x80164610
+  [8]  looney69  ROM 0x085C2C0-0x08C1700  (405KB →  840KB)  rdram=0x80161EA0
+  [9]  prehst2   ROM 0x09D0A50-0x0A4C3E0  (494KB →  882KB)  rdram=0x80164610
+  [10] circuit9  ROM 0x057AC60-0x05E3BD0  (419KB → 1089KB)  rdram=0x801636E0
+  [11] scifi14   ROM 0x0BC7430-0x0C18BC0  (325KB →  681KB)  rdram=0x80164FD0
+  [12] kungfu1   ROM 0x07067C0-0x0764E80  (377KB → 1068KB)  rdram=0x801627B0
+  [13] rezop3    ROM 0x0A57840-0x0ACB540  (463KB → 1241KB)  rdram=0x80161620
+  [14] aztec16   ROM 0x04B5750-0x04F0E50  (237KB →  538KB)  rdram=0x8015A0E0
+  [15] horror6   ROM 0x06EA110-0x0705E40  (111KB →  287KB)  rdram=0x80164D20
+  [16] nypd01    ROM 0x093ED90-0x09731F0  (209KB →  452KB)  rdram=0x80159EC0
+  [17] spy2      ROM 0x0C18BC0-0x0C495B0  (194KB →  416KB)  rdram=0x8015AE60
+  [18] kungfu4   ROM 0x07C0CD0-0x07E5F00  (148KB →  438KB)  rdram=0x801627B0
+  [19] rezop2    ROM 0x0A4C3E0-0x0A57840   (45KB →   89KB)  rdram=0x80161620
+  [20] circuit0  ROM 0x04F0E50-0x0519D80  (163KB →  380KB)  rdram=0x801636E0
+  [21] gillig1   ROM 0x0616BE0-0x0625A90   (59KB →  122KB)  rdram=0x8015A970
+  [22] mooshu1   ROM 0x0932610-0x093ED90   (49KB →   96KB)  rdram=0x8015DE80
+  [23] gexzil9   ROM 0x0605AF0-0x0616BE0   (68KB →  163KB)  rdram=0x80162B90
+  [24] final01   ROM 0x05E3BD0-0x0605AF0  (135KB →  277KB)  rdram=0x80161860
+  [25] map5      ROM 0x08C1700-0x0932610  (451KB → 1052KB)  rdram=0x80161690
+
+════════════════════════════════════════════════════════════
+OBJECT INDEX — ROM 0x0745F0, 735 entries × 16 bytes
+════════════════════════════════════════════════════════════
+
+Entry layout (unchanged from previous):
+  +0x00 char[8]  name      Object class name (null-padded to 8 chars)
+  +0x08 uint32   rom_start
+  +0x0C uint32   rom_end
+
+Object ROM range: 0x00C495B0 - 0x00F7DAB0 (all compressed)
+Stub objects (first byte = 0x63): 47/735, uncompressed, 80-128 bytes each
+Real objects: 688/735, raw DEFLATE compressed, 2.3:1 average ratio
+

@@ -1,0 +1,186 @@
+BIGFILE.DAT decoder output
+n_resources=192  n_maps=26  checksum=0x176CC437
+
+ idx      offset   size_KB  type            f1     f2_name          f3
+--------------------------------------------------------------------------------
+  16  0x00000140         0  meta    0x00000106  '\\x00@F\\x01'  0x6B144D0C
+  13  0x00000180         5  meta    0x0000013E  '\\x000F\\x01'  0x752F742E
+   0  0x00001800         5  arg     0x3FB6CBAA      'map7'  0x1B80E3EA
+  10  0x00002CB0         7  meta    0x00001F26  '\\x00\\x08F\\x01'  0xEE1126B9
+ 169  0x00004B58         7  meta    0x00002C02  '\\x00x\\x13\\x03'  0x56E521D3
+ 154  0x000068A4         5  meta    0x00004E25  '\\x00p\\xE3\\x02'  0x5350F3FF
+ 175  0x00007F38         2  meta    0x00005292  '\\x008+\\x03'  0xBD3DAD09
+  40  0x00008848         1  meta    0x00005935  '\\x00\\xA8\\x91\\x01'  0x670563ED
+ 115  0x00008DBC         1  meta    0x00006131  '\\x00\\xE8n\\x02'  0xA7A604E8
+ 190  0x00009230         0  meta    0x00006311  '\\x00@Q\\x03'  0x1E9864B1
+ 139  0x000094FC         0  meta    0x000062E2  '\\x00h\\xB0\\x02'  0xBB8472C2
+ 160  0x000095DC         1  meta    0x00005BAF  '\\x00P\\xFA\\x02'  0x0278FD2D
+  85  0x00009C7A         0  meta    0x00006830  '\\x000\\x11\\x02'  0x33A7CB24
+  64  0x00009F78         0  meta    0x00006178  '\\x00h\\xDD\\x01'  0x18F1BDA1
+  49  0x00009F8C         3  meta    0x00006183  '\\x000\\xAC\\x01'  0x9C094EB0
+ 130  0x0000ABAC         3  meta    0x00006CCB  '\\x00\\xD0\\x96\\x02'  0x595CFA84
+  70  0x0000BA44         0  meta    0x00007466  '\\x00@\\xF3\\x01'  0xA7D12FE1
+  19  0x0000BD68         1  meta    0x00007F0E  '\\x00\\xE0F\\x01'  0xF8E06F8B
+ 184  0x0000C1BC         1  meta    0x00006FD1  '\\x00\\x988\\x03'  0xC2D5F2F6
+ 109  0x0000C7B0         0  meta    0x00009A4B  '\\x00\\xD8V\\x02'  0xC1E2BB2C
+ 145  0x0000C928         0  meta    0x00007888  '\\x00\\xF8\\xC9\\x02'  0xB020DF7A
+  34  0x0000CBE4         7  meta    0x0000A5E9  '\\x00\\xB0w\\x01'  0x4EDC4F59
+  25  0x0000E9C4         1  meta    0x000093D1  '\\x00\\x80^\\x01'  0x8D44ABF9
+  94  0x0000EF00        10  meta    0x00008D51  "\\x000'\\x02"  0x6300B487
+   3  0x00011800        64  level   0x799BEA73  'I\\x81\\xF3\\xCE'  0x1975B2D5
+ 181  0x000218FC         8  bin     0x000129AF  '\\x00\\x107\\x03'  0xC3FA8750
+   4  0x00023A58       105  bin     0x0001A60D  '\\x008\\x02\\x00'  0x8C1EE4FA
+   6  0x0003E000         8  bin     0x23CFAF52  '\\xA0\\xAB{\\x99'  0x1D89AF60
+   1  0x00040014       137  bin     0x0000F74C  '\\x00 \\x00\\x00'  0x89278BBA
+  88  0x00062454         7  meta    0x00000000  '\\x000\\x12\\x02'  0x827B2C90
+  76  0x000642A8        44  bin     0x0003B94A  '\\x00\\xC0\\xFD\\x01'  0x53AB3021
+  28  0x0006F584        10  meta    0x00000000  '\\x00\\x80_\\x01'  0xF18973D8
+ 121  0x00071FD0         4  bin     0x00043A6B  '\\x00\\x10{\\x02'  0xC067C61E
+  73  0x00073164        15  meta    0x00000000  '\\x00 \\xF4\\x01'  0x55EA3253
+ 163  0x00076EB4         2  meta    0x00000000  '\\x00\\x18\\xFB\\x02'  0xB5C33DF5
+ 118  0x00077A14         0  meta    0x00000000  '\\x00\\xE0o\\x02'  0xED69256E
+ 148  0x00077B34         0  meta    0x00000000  '\\x000\\xCB\\x02'  0x1C21B5A9
+  43  0x00077E64         1  meta    0x00000000  '\\x00\\xB0\\x92\\x01'  0xFCC4E29F
+ 178  0x000784A4         4  meta    0x00000000  '\\x00\\x00,\\x03'  0xA41E84A5
+ 133  0x000794E4        26  meta    0x00000000  '\\x00\\xA8\\x97\\x02'  0xE546C6FC
+ 187  0x00080014       255  bin     0x000637E1  '\\x00\\x90@\\x03'  0xA26C4903
+  17  0x000C0000        27  bin     0x1B7FA003  '\\xC4\\xE9\\x00\\x00'  0x000093D1
+ 136  0x000C6EC8       106  bin     0x000A2F41  '\\x00\\xC8\\xA5\\x02'  0x50F37FAD
+  91  0x000E16E4        52  bin     0x00096B9D  '\\x00P\\x1D\\x02'  0x04668343
+ 151  0x000EE914        11  bin     0x000A5BBE  '\\x00\\x90\\xD8\\x02'  0xF7C970C7
+  31  0x000F1850        13  bin     0x000A82D9  '\\x00\\xC8l\\x01'  0x86E55371
+  61  0x000F4D6C         9  bin     0x0009B2CC  '\\x008\\xD3\\x01'  0x7F86FF9E
+ 106  0x000F7368         5  bin     0x0009E340  '\\x00\\x88L\\x02'  0x0B7D47FB
+  46  0x000F8838        43  bin     0x000B3628  '\\x00\\x80\\xA0\\x01'  0x220F0F04
+ 166  0x00103688    12,100  vram    0x0009B9A4  '\\x00`\\x09\\x03'  0xA69F7E7D
+   7  0x00CD4800     7,704  vram    0x00000000  '\\x00`x\\x00'  0x9ED2337F
+   9  0x0145A800        32  bin     0x86FF64EA  'B\\x1Dn\\xF5'  0x1F92A318
+  12  0x01462800         4  bin     0x3549F8A1  '\\x00\\x00\\x18\\x00'  0x27B78AD1
+  15  0x01463800         4  bin     0x4FB66865  '\\x00\\x00\\x10\\x00'  0x29BEEB79
+  18  0x01464800        70  bin     0x8D44ABF9  '\\xC9P\\xB7>'  0x1E8BA086
+  21  0x01476000       740  vram    0x6658A7E2  '\\x94\\x9D\\xE3\\xC0'  0x1E8CAE28
+  24  0x0152F000       778  geom    0x532DF8F9  '\\xEF\\xA1\\x8D9'  0x1B7FA003
+  27  0x015F1800       472  audio   0x0AE97177  '\\xF0\\xB8.\\x94'  0x1E8C1EDC
+  30  0x01667800     1,078  level   0x597928B5  '\\xF6\\x0Cbz'  0x1E8B400C
+  33  0x01775000        66  bin     0x670563ED  '\\x8A\\xB5\\x8A\\xEE'  0x29BFA8B6
+  36  0x01785800       894  vram    0xFCC4E29F  '\\xB5\\xB25\\xBD'  0x29C0A914
+  39  0x01865000       750  geom    0xCBF98F86  '\\xB2\\xB6\\x173'  0x1E8F2697
+  42  0x01920800       522  audio   0x4EDC4F59  '\\x13\\x9F\\xC2i'  0x29C1D2D1
+  45  0x019A3000     1,122  level   0xFFA9EEA9  '\\xEB\\xFA\\x1Em'  0x29C103D6
+  48  0x01ABB800        56  bin     0xA7D12FE1  '1p\\xABn'  0x27BAE28E
+  51  0x01AC9800       900  vram    0x380D79CD  'z\\x1AQ\\x9E'  0x27BBE4D0
+  54  0x01BAA800       682  geom    0xFCDDCC84  '\\x95\\x83\\xDE\\x0A'  0x1E8F86FE
+  57  0x01C55000       488  audio   0x18F1BDA1  '\\xD2\\xB9x&'  0x27BB5301
+  60  0x01CCF000     1,024  level   0x74D037D0  '\\xE2\\xD6\\x8B\\xF7'  0x27BA8148
+  63  0x01DCF000        56  bin     0xA7D12FE1  '1p\\xABn'  0x27BB0346
+  66  0x01DDD000       902  vram    0x55EA3253  '\\x0A4 \\x95'  0x27BC0518
+  69  0x01EBE800       500  geom    0x13EFD43E  '<\\x1D?y'  0x1E8F86FE
+  72  0x01F3B800       488  audio   0x18F1BDA1  '\\xD2\\xB9x&'  0x27BBD2E1
+  75  0x01FB5800       394  level   0xC2709ACA  '\\x17\\x1E\\xC8\\xE6'  0x27BB00A8
+  78  0x02018000        64  bin     0x33A7CB24  '}E\\xD8\\xC5'  0x2AC4B127
+  81  0x02028000       740  vram    0x827B2C90  '\\xDB\\x98\\xCBY'  0x2AC5B6C9
+  84  0x020E1000       228  geom    0x008E633C  '\\x97&\\xBD!'  0x1F92FC77
+  87  0x0211A000       430  audio   0x6300B487  '\\xDC\\xA21\\x0C'  0x2AC606FE
+  90  0x02185800       922  level   0x7E1260B5  '\\xDF\\xE6\\x01<'  0x2AC5305A
+  93  0x0226C000        64  bin     0x33A7CB24  '}E\\xD8\\xC5'  0x2AC5DC96
+  96  0x0227C000       750  vram    0x827B2C90  '\\xDB\\x98\\xCBY'  0x2AC6DB78
+  99  0x02337800       694  geom    0x5054D2F2  '\\x1B\\x05\\xB4\\x1B'  0x1E8EC730
+ 102  0x023E5000       516  audio   0xB04E58E2  'h\\xC7kY'  0x27B8FD31
+ 105  0x02466000     1,028  level   0xEF202833  '\\xEA\\xEDN\\xBC'  0x27B82F78
+ 108  0x02567000        66  bin     0xA7A604E8      'P3u}'  0x29BE6A08
+ 111  0x02577800       864  vram    0x3B099BD6  'P\\x86\\x1Bp'  0x29BF6BAA
+ 114  0x0264F800       662  geom    0x642FB476  '\\xB8\\xE0\\xFC\\xD1'  0x1E8EC730
+ 117  0x026F5000       516  audio   0xB04E58E2  'h\\xC7kY'  0x27B95CE9
+ 120  0x02776000       508  level   0x78316BE4  '\\x8C\\xF5\\x10\\xEA'  0x27B88EA0
+ 123  0x027F5000        54  bin     0x595CFA84  '\\xA8v\\x85\\xBA'  0x27B968C5
+ 126  0x02802800       900  vram    0x679102D4  '\\x82^\\xE0\\xB3'  0x27BA6E9B
+ 129  0x028E3800       578  geom    0xE1266F4B  '56j\\x01'  0x1E8F268D
+ 132  0x02974000       512  audio   0x2608F61C  '\\x91\\xE2\\xEC\\xD0'  0x27BA3892
+ 135  0x029F4000     1,070  level   0xB3F52538  'F\\x81s\\xE8'  0x27B96ADB
+ 138  0x02AFF800        54  bin     0x595CFA84  '\\xA8v\\x85\\xBA'  0x27B9A955
+ 141  0x02B0D000       880  vram    0x679102D4  '\\x82^\\xE0\\xB3'  0x27BAAF0B
+ 144  0x02BE9000       762  geom    0x51736306  'H\\xC6\\x9Ai'  0x1D88AF4B
+ 147  0x02CA7800       526  audio   0xDFE31113  '\\xA9S\\x06g'  0x26AC95C3
+ 150  0x02D2B000     1,040  level   0x9FFC8E85  '\\xB0\\xF7\\xF5\\xD3'  0x26ABC63B
+ 153  0x02E2F000        52  bin     0xB020DF7A  '\\xC1\\xB5:m'  0x26AC668B
+ 156  0x02E3C000       848  vram    0x4560FB21  '*\\x1C\\x08\\x9A'  0x26AD6595
+ 159  0x02F10000       620  geom    0xE833EB4C  '\\x08\\xC9F\\xCF'  0x1D89AEFF
+ 162  0x02FAB000       502  audio   0xD8076C06  'w\\xC3\\xFF\\xBE'  0x26AFD769
+ 165  0x03028800     1,062  level   0x42733B63  '\\x03h\\xA0s'  0x26AF0491
+ 168  0x03132000        34  bin     0xBD3DAD09  '\\xFFt\\xE4\\xAD'  0x24AC46C1
+ 171  0x0313A800       868  vram    0x265FA7AD  '\\xD9\\xCD\\xAF\\x86'  0x24AD4417
+ 174  0x03213800       662  geom    0x9D604A07  'l\\xC9\\x8F\\xBD'  0x1D8ACE78
+ 177  0x032B9000       510  audio   0x4B38E335  '|\\xD2d\\x82'  0x24AD16D2
+ 180  0x03338800       302  level   0x6C33F7FB  '\\xB1\\x14C\\x80'  0x24AC440C
+ 183  0x03384000        50  bin     0xBD3DAD09  '\\xFFt\\xE4\\xAD'  0x24AC8553
+ 186  0x03390800       880  vram    0xA41E84A5  '\\xC5\\xC8\\xB2\\xC8'  0x24AD8785
+ 189  0x0346C800     6,373  geom    0xCE1E95C3  'N\\xB2\\xB4\\xD1'  0x1E8EF40A
+ 140  0x03AA5C88     9,018  bin     0x27BA58CA  '\\x14\\x83\\x07\\x00'  0x00000000
+
+
+=== Hash-addressed entries (offset > BIGFILE_SIZE) ===
+These 60 entries likely contain the 26 per-mission config files
+addressed by hash/CRC rather than direct byte offset.
+
+ idx     f0_hash          f1     f2_name          f3
+------------------------------------------------------------
+   2  0x8C18BA7F  0x1B7F62A4  '\\x14\\x00\\x04\\x00'  0x00011F21
+   5  0x8334A9EA  0x1E8EA8D5  '\\x00\\x80t\\x00'  0x00000000
+   8  0xF6F293BF  0x1E8C9B3A  "\\x04'\\x01\\x00"  0x0000597C
+  11  0x32C51DA1  0x27B91C1A  '\\x14\\x02\\x00\\x00'  0x00000188
+  20  0x3DAEBC01  0x1E8C5EC6  '\\x94\\x80\\x05\\x00'  0x00000000
+  23  0x1B4F14C8  0x1E8B8016  '\\x1C\\xEF\\x0E\\x00'  0x000B8CB4
+  26  0x3EB750C9  0x1E8B609C  '\\xA0|\\x00\\x00'  0x0000612B
+  29  0xF3B2CFBD  0x1E8C6E32  '\\x14\\x00\\x08\\x00'  0x00064BE2
+  32  0x5CA293F1  0x1E8F2697  'H\\x88\\x00\\x00'  0x00005935
+  35  0x69C29F13  0x29C05ECF  'd~\\x07\\x00'  0x00000000
+  38  0x3FBB0386  0x29BF8FC8  '\\x00\\x9D\\x0F\\x00'  0x000B53F7
+  41  0xEE8AB58A  0x29C124A8  '\\xE4\\xCB\\x00\\x00'  0x0000A5E9
+  44  0xBD35B2B5  0x29C2250A  '\\x14\\x00\\x08\\x00'  0x00064DAC
+  47  0x7D7E90F8  0x1E8F86FE  'D\\xBA\\x00\\x00'  0x00007466
+  50  0x686948DC  0x27BB9311  '\\xE4\\\\x07\\x00'  0x00000000
+  53  0x51A9CC54  0x27BAC158  '\\x8Cj\\x10\\x00'  0x000A2D37
+  56  0x6EAB7031  0x27BAA29E  'x\\x9F\\x00\\x00'  0x00006178
+  59  0x9520340A  0x27BBA4C0  '\\x14\\x00\\x08\\x00'  0x00064579
+  62  0xB8B4742E  0x1E8F86FE  'D\\xBA\\x00\\x00'  0x00007466
+  65  0x2678B9D2  0x27BBB2D9  'd1\\x07\\x00'  0x00000000
+  68  0x82280575  0x27BAE090  '\\x9C\\x95\\x0B\\x00'  0x0007520C
+  71  0x6EAB7031  0x27BB237E  'x\\x9F\\x00\\x00'  0x00006178
+  74  0x9520340A  0x27BC2520  '\\x14\\x90\\x04\\x00'  0x0002635E
+  77  0x44DBBD98  0x1F92FC77  'z\\x9C\\x00\\x00'  0x00006830
+  80  0x0C31A2DC  0x2AC5672B  'T$\\x06\\x00'  0x00000000
+  83  0x6857692B  0x2AC4918F  '\\xFA\\x1A\\x05\\x00'  0x00031DCE
+  86  0xC5D8457D  0x2AC550F2  '\\x00\\xEF\\x00\\x00'  0x00008D51
+  89  0x59CB98DB  0x2AC6571C  '\\x14\\x00\\x08\\x00'  0x0004F4A3
+  92  0x8BC1C0FA  0x1F92FC77  'z\\x9C\\x00\\x00'  0x00006830
+  95  0x0C31A2DC  0x2AC68A9A  'T$\\x06\\x00'  0x00000000
+  98  0xDB696DE9  0x2AC5BC3E  '\\x90\\xE4\\x0F\\x00'  0x000A6981
+ 101  0x7D753350  0x27B84CAE  '\\x14\\xC7\\x00\\x00'  0x00008D52
+ 104  0x9EB84545  0x27B94AF0  '\\x14\\x00\\x08\\x00'  0x000620C5
+ 107  0x1C8713A2  0x1E8EC730  '\\xBC\\x8D\\x00\\x00'  0x00006131
+ 110  0xA783AF7F  0x29BF1C71  '\\xF4~\\x07\\x00'  0x00000000
+ 113  0x4D7234B7  0x29BE4D76  '\\xAC\\x95\\x0F\\x00'  0x0009EC3F
+ 116  0x7D753350  0x27B8AD76  '\\x14\\xC7\\x00\\x00'  0x00008D52
+ 119  0x9EB84545  0x27B9AB28  '\\x14\\x00\\x08\\x00'  0x0003A956
+ 122  0x533420EE  0x1E8F268D  '\\xAC\\xAB\\x00\\x00'  0x00006CCB
+ 128  0x6A7867C2  0x27B94B13  '\\x98\\x94\\x0B\\x00'  0x000895E7
+ 131  0xBA8576A8  0x27B9890D  '\\xFC\\x94\\x00\\x00'  0x000062E1
+ 134  0x908AFC17  0x27BA8F53  '\\x14\\x00\\x08\\x00'  0x00068473
+ 137  0x442D2C60  0x1E8F268D  '\\xAC\\xAB\\x00\\x00'  0x00006CCB
+ 143  0x29701A25  0x27B98A83  'TR\\x0F\\x00'  0x000B6110
+ 146  0x6D3AB5C1  0x26ABE7AB  '\\xA4\\xE5\\x00\\x00'  0x0000B017
+ 149  0x87101989  0x26ACE4B5  '\\x14\\x00\\x08\\x00'  0x0005DCD2
+ 152  0xAA384393  0x1D88AF4B  '(\\xC9\\x00\\x00'  0x00007888
+ 155  0x505CE7E6  0x26AD14E3  '4\\x9A\\x07\\x00'  0x00000000
+ 158  0x431DDD91  0x26AC471B  '\\x14\\xFB\\x0C\\x00'  0x00094904
+ 161  0x49F0E3A0  0x26AF2501  '\\x8C\\x9F\\x00\\x00'  0x0000618A
+ 164  0x45E4A5D7  0x26B0261F  '\\x14\\x00\\x08\\x00'  0x0006D257
+ 167  0xFC54FE33  0x1D8ACE78  '8\\x7F\\x00\\x00'  0x00005292
+ 170  0xC97CBF9D  0x24ACF51B  '\\x14\\x82\\x07\\x00'  0x00000000
+ 173  0xACF6E08F  0x24AC27C5  '@\\xFA\\x0E\\x00'  0x0009FD07
+ 176  0xADE474FF  0x24AC6508  '\\xD0\\xC1\\x00\\x00'  0x00006FE3
+ 179  0xC8B2C8C5  0x24AD67DE  '\\x14\\x00\\x08\\x00'  0x00038399
+ 182  0x51A9D5A1  0x1D8ACE78  '8\\x7F\\x00\\x00'  0x00005292
+ 185  0x7C616975  0x24AD3689  '\\xA4\\x84\\x07\\x00'  0x00000000
+ 188  0x126D6BE9  0x24AC6457  '\\x14\\x0D\\x10\\x00'  0x000A7119
+ 191  0xE49269CB  0x27B9DA65  ' j\\x00\\x00'  0x000049DC

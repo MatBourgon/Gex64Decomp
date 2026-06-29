@@ -1,0 +1,135 @@
+N64 SCRIPTEXEC — ARCHITECTURE CONFIRMED
+Gex 64: Enter the Gecko
+============================================================
+
+STATUS: The N64 equivalent of PS1 ScriptExec has been located and characterised.
+        It is NOT a bytecode interpreter. It uses direct compiled-C dispatch.
+
+════════════════════════════════════════════════════════════
+CORE FINDING
+════════════════════════════════════════════════════════════
+
+The PS1 ScriptExec (0x80024D30) was a bytecode interpreter with 105 opcodes
+and a runtime-parsed script stream. The N64 version replaces this with a
+TWO-TIER COMPILED DISPATCH system at 0x8008E788.
+
+The function 0x8008E788 (ObjectStateMachine_tick) is the N64 equivalent.
+
+════════════════════════════════════════════════════════════
+FUNCTION: ObjectStateMachine_tick @ 0x8008E788
+════════════════════════════════════════════════════════════
+
+Arguments:
+  $a0 = entity_ptr   (the game entity being updated)
+  $a1 = context_ptr  (world context / level context)
+
+Key fields read:
+  $s1 = entity->script_obj  (the script data struct, from entity+0xFC)
+  lh  $v1, 0($s1)           = current_state (int16, the "opcode")
+  lhu $v0, 0x38($s1)        = frame_counter (incremented by 0x80 each tick)
+
+Dispatch sequence (at 0x8008E800):
+  sltiu $v0, $v1, 0x11      ; if state < 17:
+  beqz  $v0, 0x8008F88C     ;   goto in-ROM switch (states 17+)
+  sll   $v0, $v1, 2         ; state * 4
+  lui   $at, 0x8016
+  addu  $at, $at, $v0
+  lw    $v0, 0x1628($at)    ; load handler from per-level table[state]
+  jr    $v0                  ; call level-specific handler
+
+════════════════════════════════════════════════════════════
+TIER 1: PER-LEVEL DISPATCH TABLE (states 0–16)
+════════════════════════════════════════════════════════════
+
+Table at RDRAM 0x80161628 (within per-mission struct, +8 from base 0x80161620).
+17 entries × 4 bytes. POPULATED AT RUNTIME when a level loads.
+Each level writes its own function pointers here.
+
+The pointed-to functions live in the COMPRESSED LEVEL DATA that gets
+loaded to RDRAM 0x8015xxxx–0x8016xxxx from ROM at level start.
+
+This means states 0–16 are LEVEL-SPECIFIC BEHAVIORS:
+  - Each level defines up to 17 "script command" handlers
+  - These are compiled C functions, not bytecode
+  - They implement the scripted behaviors for objects in THAT SPECIFIC LEVEL
+
+════════════════════════════════════════════════════════════
+TIER 2: IN-ROM SWITCH (states 17+, at 0x8008F88C)
+════════════════════════════════════════════════════════════
+
+Opcodes handled by hard-coded ROM switch:
+
+  state == 9   → jal 0x8015BB78 (runtime level fn), check result == -1 → next
+  state == 3   → j   0x8015E388 (runtime level fn: "gotoPos" equivalent?)
+  state == 0xE → j   0x8015E38C (runtime level fn)
+  state == 0xF → j   0x8015E38C (same handler as 0xE)
+  state == 0x10 → j  0x8015E38C (same handler)
+  state == 0xA → sh  0xA, 0($s1) then sh 1, 2($s1) (advance to next state)
+  state == 0xC → (default compare, sets state 0xC)
+  state == 1   → (via addiu path, sets next state)
+
+After all state handling: copies Gex's XYZ position from world ctx to s1:
+  lhu $v0, 0x48($v1) → sh at +0x4C($s1)  (X coord)
+  lhu $v0, 0x4A($v1) → sh at +0x4E($s1)  (Y coord)
+  lhu $v0, 0x4C($v1) → sh at +0x50($s1)  (Z coord)
+  lhu $v0, 0x64($s2) → sh at +0x4A($s1)  (facing/yaw)
+
+This "snap to Gex position" at end confirms: the script object tracks Gex
+for trigger/proximity checks, same as the PS1 ScriptExec world-gate.
+
+════════════════════════════════════════════════════════════
+SCRIPT OBJECT STRUCT (s1, confirmed from disasm)
+════════════════════════════════════════════════════════════
+
+  +0x00  int16  current_state      -- "opcode" / state index (0–255+)
+  +0x02  int16  next_state         -- state to transition to
+  +0x04  ???
+  ...
+  +0x38  uint16 frame_counter      -- incremented by 0x80 per tick (goes to 0x4B1)
+  +0x4A  int16  gex_yaw_mirror     -- copy of Gex facing angle
+  +0x4C  int16  gex_x_mirror       -- copy of Gex X position
+  +0x4E  int16  gex_y_mirror       -- copy of Gex Y position
+  +0x50  int16  gex_z_mirror       -- copy of Gex Z position
+
+════════════════════════════════════════════════════════════
+CALL SITE
+════════════════════════════════════════════════════════════
+
+Called from: 0x8001BE60 (ObjectUpdate_tick)
+When: entity->script_obj->status_word & 0x2000 (the "script active" flag)
+
+ObjectUpdate_tick (0x8001BE60) is the PER-FRAME object update function.
+When the object has 0x2000 set in its status word, it runs the script.
+This is the N64 equivalent of ScriptExec being called from the object pool tick.
+
+════════════════════════════════════════════════════════════
+COMPARISON: PS1 vs N64 SCRIPTEXEC
+════════════════════════════════════════════════════════════
+
+  Feature              PS1                    N64
+  ─────────────────────────────────────────────────────────
+  Location             0x80024D30             0x8008E788
+  Dispatch type        Table (105 entries)    Two-tier: level ptr + ROM switch
+  Opcode format        32-bit word (bit31=active) int16 state index
+  Script storage       INDEX files (extern)   Level data (compiled-in ptrs)
+  Handler type         Bytecode handlers      Compiled C functions
+  Max opcodes          105                    17 (per-level) + ~10 (global)
+  World gate           beqz world_ptr         reads Gex XYZ, tracks proximity
+  Arg format           (arg_count+1)*4 bytes  No args -- state index only
+  Calls per tick       up to 0x2000           exactly 1
+
+════════════════════════════════════════════════════════════
+IMPLICATIONS FOR LUS PORT
+════════════════════════════════════════════════════════════
+
+The N64 version does NOT have a standalone ScriptExec C function to decompile.
+Instead, the scripting system is:
+  1. 0x8008E788 = ObjectStateMachine_tick (small dispatch function -- decompilable)
+  2. Per-level handler functions (in compressed level data -- need decompressor first)
+  3. In-ROM global handlers at 0x8008F88C (small switch -- decompilable)
+
+The PS1 script_exec.c we wrote is NOT directly portable to N64.
+The N64 equivalent would be: ObjectStateMachine_tick + level-specific C functions.
+
+Priority: decompile 0x8008E788 (small, well-understood) and 0x8001BE60 (object tick).
+

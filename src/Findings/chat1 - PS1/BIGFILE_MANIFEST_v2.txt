@@ -1,0 +1,312 @@
+BIGFILE TOC — Corrected Decode (24-byte entries from offset 4)
+Gex 2: Enter the Gecko  SLUS-00598  Gex Trilogy disc
+================================================================================
+
+Format: [4B count=192][192 × 24B entries][resource data]
+  entry[0]  = name_hash (lookup key in g_StreamSlotTable)
+  entry[+4] = primary streaming size (bytes)
+  entry[+8] = secondary streaming size (bytes)
+  entry[+C] = BIGFILE byte offset (location of resource data)
+  entry[+10]= CRC32 or secondary hash
+  entry[+14]= additional metadata
+
+g_StreamSlotTable base: 0x8008E664  count at: 0x8008E65C
+Populated at boot by 0x8003B738 reading first 8KB of BIGFILE.DAT
+
+slot   name_hash    pri_sz    sec_sz      bf_off  abs_lba  label
+------------------------------------------------------------------------------------------
+  [  0]  0x176CC437        26         0  0x00001800     271  TINY (boot config?)  [GLOBAL/BOOT]
+  [  1]  0x1B80E3EA    262164     63308  0x00002000     272  AUDIO/DNSaC  [GLOBAL/BOOT]
+  [  2]  0x1B7F62A4    262164     73505  0x00011800     303  AUDIO/DNSaC  [GLOBAL/BOOT]
+  [  3]  0x1975B2D5    146008    108045  0x00023800     339  AUDIO/DNSaC  [GLOBAL/BOOT]
+  [  4]  0x1E8EA8D5   7634944         0  0x0003E000     392  GEOM large  [GLOBAL/BOOT]
+  [  5]  0x1D89AF60  13453312         0  0x00786000    4120  GEOM large
+  [  6]  0x1E8C9B3A     75524     22908  0x0145A800   10689  AUDIO small
+  [  7]  0x1F92A318     11440      7974  0x01460800   10701  INDEX/meta or small
+  [  8]  0x27B91C1A       532       392  0x01462800   10705  TINY cfg/meta
+  [  9]  0x27B78AD1       384       318  0x01463000   10706  TINY cfg/meta
+  [ 10]  0x26AB2392       528       415  0x01463800   10707  TINY cfg/meta
+  [ 11]  0x29BEEB79       320       262  0x01464000   10708  TINY cfg/meta
+  [ 12]  0x1B7FA003     59844     37841  0x01464800   10709  AUDIO small
+  [ 13]  0x1E8BA086     48488     32526  0x0146E000   10728  INDEX/meta or small
+  [ 14]  0x1E8C5EC6    360596         0  0x01476000   10744  AUDIO/DNSaC
+  [ 15]  0x1E8CAE28    524308    367587  0x014CE800   10921  GEOM or LEVEL
+  [ 16]  0x1E8B8016    978716    756916  0x0152F000   11114  GEOM    Hub World
+  [ 17]  0x1B7FA003     59844     37841  0x015E8000   11484  AUDIO small
+  [ 18]  0x1E8B609C     31904     24875  0x015F1800   11503  AUDIO   Hub World
+  [ 19]  0x1E8C1EDC    456068         0  0x015F8000   11516  AUDIO/DNSaC
+  [ 20]  0x1E8C6E32    524308    412642  0x01667800   11739  LEVEL   Hub World
+  [ 21]  0x1E8B400C    989264    688857  0x016CC800   11941  GEOM or LEVEL
+  [ 22]  0x1E8F2697     34888     22837  0x01775000   12278  INDEX   Hub World
+  [ 23]  0x29BFA8B6     52196     42473  0x0177B000   12290  AUDIO small
+  [ 24]  0x29C05ECF    491108         0  0x01785800   12311  AUDIO/DNSaC
+  [ 25]  0x29C0A914    524308    422291  0x017FD800   12551  GEOM or LEVEL
+  [ 26]  0x29BF8FC8   1023232    742391  0x01865000   12758  GEOM large
+  [ 27]  0x1E8F2697     34888     22837  0x0191A800   13121  INDEX/meta or small
+  [ 28]  0x29C124A8     52196     42473  0x01920800   13133  AUDIO   Toon TV
+  [ 29]  0x29C1D2D1    491108         0  0x0192B000   13154  AUDIO/DNSaC
+  [ 30]  0x29C2250A    524308    413100  0x019A3000   13394  LEVEL   Toon TV
+  [ 31]  0x29C103D6   1017912    734760  0x01A08000   13596  GEOM large
+  [ 32]  0x1E8F86FE     47684     29798  0x01ABB800   13955  INDEX   Toon TV
+  [ 33]  0x27BAE28E     40844     24963  0x01AC3000   13970  INDEX/meta or small
+  [ 34]  0x27BB9311    482532         0  0x01AC9800   13983  AUDIO/DNSaC
+  [ 35]  0x27BBE4D0    524308    437844  0x01B3F800   14219  GEOM or LEVEL
+  [ 36]  0x27BAC158   1075852    666935  0x01BAA800   14433  GEOM large
+  [ 37]  0x1E8F86FE     47684     29798  0x01C4D800   14759  INDEX/meta or small
+  [ 38]  0x27BAA29E     40824     24952  0x01C55000   14774  AUDIO   Scream TV
+  [ 39]  0x27BB5301    471396         0  0x01C5B800   14787  AUDIO/DNSaC
+  [ 40]  0x27BBA4C0    524308    411001  0x01CCF000   15018  LEVEL   Scream TV
+  [ 41]  0x27BA8148   1002860    635596  0x01D33800   15219  GEOM large
+  [ 42]  0x1E8F86FE     47684     29798  0x01DCF000   15530  INDEX   Scream TV
+  [ 43]  0x27BB0346     40824     24952  0x01DD6800   15545  INDEX/meta or small
+  [ 44]  0x27BBB2D9    471396         0  0x01DDD000   15558  AUDIO/DNSaC
+  [ 45]  0x27BC0518    524308    450213  0x01E50800   15789  GEOM or LEVEL
+  [ 46]  0x27BAE090    759196    479756  0x01EBE800   16009  GEOM or LEVEL
+  [ 47]  0x1E8F86FE     47684     29798  0x01F34000   16244  INDEX/meta or small
+  [ 48]  0x27BB237E     40824     24952  0x01F3B800   16259  AUDIO   Circuit Central
+  [ 49]  0x27BBD2E1    471396         0  0x01F42000   16272  AUDIO/DNSaC
+  [ 50]  0x27BC2520    299028    156510  0x01FB5800   16503  LEVEL   Circuit Central
+  [ 51]  0x27BB00A8    410280    244042  0x01FDC000   16580  AUDIO/DNSaC
+  [ 52]  0x1F92FC77     40058     26672  0x02018000   16700  INDEX   Circuit Central
+  [ 53]  0x2AC4B127     61184     36177  0x0201F000   16714  AUDIO small
+  [ 54]  0x2AC5672B    402516         0  0x02028000   16732  AUDIO/DNSaC
+  [ 55]  0x2AC5B6C9    524308    352633  0x0208A800   16929  GEOM or LEVEL
+  [ 56]  0x2AC4918F    334586    204238  0x020E1000   17102  AUDIO/DNSaC
+  [ 57]  0x1F92FC77     40058     26672  0x02113000   17202  INDEX/meta or small
+  [ 58]  0x2AC550F2     61184     36177  0x0211A000   17216  AUDIO   Kung-Fu Theater
+  [ 59]  0x2AC606FE    402516         0  0x02123000   17234  AUDIO/DNSaC
+  [ 60]  0x2AC6571C    524308    324771  0x02185800   17431  LEVEL   Kung-Fu Theater
+  [ 61]  0x2AC5305A    923364    617373  0x021D5000   17590  GEOM or LEVEL
+  [ 62]  0x1F92FC77     40058     26672  0x0226C000   17892  INDEX   Kung-Fu Theater
+  [ 63]  0x2AC5DC96     61184     36177  0x02273000   17906  AUDIO small
+  [ 64]  0x2AC68A9A    402516         0  0x0227C000   17924  AUDIO/DNSaC
+  [ 65]  0x2AC6DB78    524308    362550  0x022DE800   18121  GEOM or LEVEL
+  [ 66]  0x2AC5BC3E   1041552    682369  0x02337800   18299  GEOM large
+  [ 67]  0x1E8EC730     36284     24881  0x023DE800   18633  INDEX/meta or small
+  [ 68]  0x27B84CAE     50964     36178  0x023E5000   18646  AUDIO   Rocket Channel
+  [ 69]  0x27B8FD31    490004         0  0x023EE000   18664  AUDIO/DNSaC
+  [ 70]  0x27B94AF0    524308    401605  0x02466000   18904  LEVEL   Rocket Channel
+  [ 71]  0x27B82F78   1012584    648000  0x024C8800   19101  GEOM large
+  [ 72]  0x1E8EC730     36284     24881  0x02567000   19418  INDEX   Rocket Channel
+  [ 73]  0x29BE6A08     51120     39499  0x0256D800   19431  AUDIO small
+  [ 74]  0x29BF1C71    491252         0  0x02577800   19451  AUDIO/DNSaC
+  [ 75]  0x29BF6BAA    524308    391461  0x025EF800   19691  GEOM or LEVEL
+  [ 76]  0x29BE4D76   1021356    650303  0x0264F800   19883  GEOM large
+  [ 77]  0x1E8EC730     36284     24881  0x026EE800   20201  INDEX/meta or small
+  [ 78]  0x27B8AD76     50964     36178  0x026F5000   20214  AUDIO small
+  [ 79]  0x27B95CE9    490004         0  0x026FE000   20232  AUDIO/DNSaC
+  [ 80]  0x27B9AB28    524308    239958  0x02776000   20472  LEVEL   Pre-History Channel
+  [ 81]  0x27B88EA0    466896    277099  0x027B1000   20590  AUDIO/DNSaC
+  [ 82]  0x1E8F268D     43948     27851  0x027F5000   20726  INDEX   Pre-History Channel
+  [ 83]  0x27B968C5     38140     25314  0x027FC000   20740  INDEX/meta or small
+  [ 84]  0x27BA195A    492308         0  0x02802800   20753  AUDIO/DNSaC
+  [ 85]  0x27BA6E9B    524308    426932  0x0287B000   20994  GEOM or LEVEL
+  [ 86]  0x27B94B13    758936    562663  0x028E3800   21203  GEOM or LEVEL
+  [ 87]  0x1E8F268D     43948     27851  0x0296D000   21478  INDEX/meta or small
+  [ 88]  0x27B9890D     38140     25313  0x02974000   21492  INDEX/meta or small
+  [ 89]  0x27BA3892    496868         0  0x0297A800   21505  AUDIO/DNSaC
+  [ 90]  0x27BA8F53    524308    427123  0x029F4000   21748  LEVEL   Rezopolis
+  [ 91]  0x27B96ADB    814792    667457  0x02A5C800   21957  GEOM or LEVEL
+  [ 92]  0x1E8F268D     43948     27851  0x02AFF800   22283  INDEX   Rezopolis
+  [ 93]  0x27B9A955     38140     25314  0x02B06800   22297  INDEX/meta or small
+  [ 94]  0x27BA58CA    492308         0  0x02B0D000   22310  AUDIO/DNSaC
+  [ 95]  0x27BAAF0B    524308    406558  0x02B85800   22551  GEOM or LEVEL
+  [ 96]  0x27B98A83   1004116    745744  0x02BE9000   22750  GEOM large
+  [ 97]  0x1D88AF4B     51496     30856  0x02C9F800   23115  AUDIO small
+  [ 98]  0x26ABE7AB     58788     45079  0x02CA7800   23131  AUDIO small
+  [ 99]  0x26AC95C3    490292         0  0x02CB3000   23154  AUDIO/DNSaC
+  [100]  0x26ACE4B5    524308    384210  0x02D2B000   23394  LEVEL   Gilligex Island / Boss 1
+  [101]  0x26ABC63B    977172    678846  0x02D89000   23582  GEOM or LEVEL
+  [102]  0x1D88AF4B     51496     30856  0x02E2F000   23914  INDEX   Gilligex Island / Boss 1
+  [103]  0x26AC668B     26788     20005  0x02E37000   23930  INDEX/meta or small
+  [104]  0x26AD14E3    498228         0  0x02E3C000   23940  AUDIO/DNSaC
+  [105]  0x26AD6595    524308    367944  0x02EB6000   24184  GEOM or LEVEL
+  [106]  0x26AC471B    850708    608516  0x02F10000   24364  GEOM or LEVEL
+  [107]  0x1D89AEFF     38364     23471  0x02FA5000   24662  INDEX/meta or small
+  [108]  0x26AF2501     40844     24970  0x02FAB000   24674  INDEX/meta or small
+  [109]  0x26AFD769    487092         0  0x02FB1800   24687  AUDIO/DNSaC
+  [110]  0x26B0261F    524308    447063  0x03028800   24925  LEVEL   Boss area 2
+  [111]  0x26AF0491   1062536    637348  0x03096000   25144  GEOM large
+  [112]  0x1D8ACE78     32568     21138  0x03132000   25456  INDEX   Boss area 2
+  [113]  0x24AC46C1     19288     11266  0x03137800   25467  INDEX/meta or small
+  [114]  0x24ACF51B    492052         0  0x0313A800   25473  AUDIO/DNSaC
+  [115]  0x24AD4417    524308    395238  0x031B3000   25714  GEOM or LEVEL
+  [116]  0x24AC27C5    981568    654599  0x03213800   25907  GEOM or LEVEL
+  [117]  0x1D8ACE78     32568     21138  0x032B3800   26227  INDEX/meta or small
+  [118]  0x24AC6508     49616     28643  0x032B9000   26238  INDEX/meta or small
+  [119]  0x24AD16D2    492708         0  0x032C0000   26252  AUDIO/DNSaC
+  [120]  0x24AD67DE    524308    230297  0x03338800   26493  LEVEL   Boss area 3
+  [121]  0x24AC440C    137468     76207  0x03371000   26606  AUDIO/DNSaC
+  [122]  0x1D8ACE78     32568     21138  0x03384000   26644  INDEX   Boss area 3
+  [123]  0x24AC8553     49596     28625  0x03389800   26655  INDEX/meta or small
+  [124]  0x24AD3689    492708         0  0x03390800   26669  AUDIO/DNSaC
+  [125]  0x24AD8785    524308    407521  0x03409000   26910  GEOM or LEVEL
+  [126]  0x24AC6457   1051924    684313  0x0346C800   27109  GEOM large
+  [127]  0x1E8EF40A     37424     25361  0x03514000   27444  INDEX/meta or small
+  [128]  0x27B9DA65     27168     18908  0x0351A800   27457  INDEX/meta or small
+  [129]  0x27BA8BFA    462484         0  0x0351F800   27467  AUDIO/DNSaC
+  [130]  0x27BADC3B    524308    299004  0x03590800   27693  GEOM or LEVEL
+  [131]  0x27B9B9B3    505520    289424  0x035D9800   27839  GEOM or LEVEL
+  [132]  0x1E8D4A07      4538      2808  0x03620800   27981  TINY cfg/meta
+  [133]  0x27B3CBFF     66124     49535  0x03621800   27983  AUDIO small
+  [134]  0x27B47A60    488996         0  0x0362E000   28008  AUDIO/DNSaC
+  [135]  0x27B4CDA1    524308    310911  0x036A5800   28247  GEOM or LEVEL
+  [136]  0x27B3A829    339488    214387  0x036F1800   28399  AUDIO/DNSaC
+  [137]  0x1E8F7550     18682     12525  0x03726000   28504  INDEX/meta or small
+  [138]  0x27BA5D39    148244    114610  0x03729800   28511  AUDIO/DNSaC
+  [139]  0x27BB0CA6    483444         0  0x03745800   28567  AUDIO/DNSaC
+  [140]  0x27BB5B67    524308    262936  0x037BC000   28804  GEOM or LEVEL
+  [141]  0x27BA3EEF    404700    285680  0x037FC800   28933  AUDIO/DNSaC
+  [142]  0x1D893FA9      2584      1890  0x03842800   29073  TINY cfg/meta
+  [143]  0x26AE579E     16228     11895  0x03843000   29074  INDEX/meta or small
+  [144]  0x26AF05F6    337380         0  0x03846000   29080  AUDIO/DNSaC
+  [145]  0x26AF5480    524308    284770  0x03898800   29245  GEOM or LEVEL
+  [146]  0x26AE360E    542614    355485  0x038DE800   29385  GEOM or LEVEL
+  [147]  0x1B8182F8      5768      3931  0x03935800   29559  INDEX/meta or small
+  [148]  0x1E90A96C     30792     23895  0x03936800   29561  INDEX/meta or small
+  [149]  0x1E91572C    466916         0  0x0393C800   29573  AUDIO/DNSaC
+  [150]  0x1E91A7C2    524308    327223  0x039AE800   29801  GEOM or LEVEL
+  [151]  0x1E9089FC    569024    368830  0x039FE800   29961  GEOM or LEVEL
+  [152]  0x1C854927      1608      1156  0x03A59000   30142  TINY cfg/meta
+  [153]  0x219BCC1F     17744     10669  0x03A59800   30143  INDEX/meta or small
+  [154]  0x219C7EBE    351988         0  0x03A5C800   30149  AUDIO/DNSaC
+  [155]  0x219CCE0D    524308    274872  0x03AB2800   30321  GEOM or LEVEL
+  [156]  0x219BA3E1    503240    383017  0x03AF6000   30456  GEOM or LEVEL
+  [157]  0x1C85E93A      1608      1156  0x03B54000   30644  TINY cfg/meta
+  [158]  0x23A3AEBD     58836     45099  0x03B54800   30645  AUDIO small
+  [159]  0x23A45EF6    406212         0  0x03B60000   30668  AUDIO/DNSaC
+  [160]  0x23A4ADB3    524308    278814  0x03BC3800   30867  GEOM or LEVEL
+  [161]  0x23A38FF3    628768    527480  0x03C08000   31004  GEOM or LEVEL
+  [162]  0x1C857BB6      1952      1406  0x03C89000   31262  TINY cfg/meta
+  [163]  0x23A25057     18860     14602  0x03C89800   31263  INDEX/meta or small
+  [164]  0x23A3001C    441844         0  0x03C8D800   31271  AUDIO/DNSaC
+  [165]  0x23A35359    524308    388560  0x03CF9800   31487  GEOM or LEVEL
+  [166]  0x23A23119    485684    331645  0x03D58800   31677  AUDIO/DNSaC
+  [167]  0x1D886E5A     32148     21183  0x03DA9800   31839  INDEX/meta or small
+  [168]  0x26AB2306     57464     28169  0x03DAF000   31850  AUDIO small
+  [169]  0x26ABD16E    435268         0  0x03DB6000   31864  AUDIO/DNSaC
+  [170]  0x26AC2018    524308    405245  0x03E20800   32077  GEOM or LEVEL
+  [171]  0x26AB0296    684332    427639  0x03E83800   32275  GEOM or LEVEL
+  [172]  0x1B7FA003     59844     37841  0x03EEC000   32484  AUDIO small
+  [173]  0x1E8BC08D     48468     32517  0x03EF5800   32503  INDEX/meta or small
+  [174]  0x1E8C7ECD    355332         0  0x03EFD800   32519  AUDIO/DNSaC
+  [175]  0x1E8CCE23    524308    348684  0x03F54800   32693  GEOM or LEVEL
+  [176]  0x1E8BA01D    810004    637292  0x03FB0000   32876  GEOM or LEVEL
+  [177]  0x1E8F2697     34888     22837  0x0404C000   33188  INDEX/meta or small
+  [178]  0x29C02972     44964     36365  0x04052000   33200  INDEX/meta or small
+  [179]  0x29C0DF0B    478036         0  0x0405B000   33218  AUDIO/DNSaC
+  [180]  0x29C128D0    524308    299483  0x040D0000   33452  GEOM or LEVEL
+  [181]  0x29C00E0C    564948    387008  0x04119800   33599  GEOM or LEVEL
+  [182]  0x1E8F2697     34888     22837  0x04178000   33788  INDEX/meta or small
+  [183]  0x29C148A1     44964     36365  0x0417E000   33800  INDEX/meta or small
+  [184]  0x29C1FED8    478500         0  0x04187000   33818  AUDIO/DNSaC
+  [185]  0x29C24903    524308    262378  0x041FC000   34052  GEOM or LEVEL
+  [186]  0x29C12FDF    467044    324536  0x0423C800   34181  AUDIO/DNSaC
+  [187]  0x1E8F2697     34888     22837  0x0428C000   34340  INDEX/meta or small
+  [188]  0x29C0E8DE     44964     36365  0x04292000   34352  INDEX/meta or small
+  [189]  0x29C19EA7    478500         0  0x0429B000   34370  AUDIO/DNSaC
+  [190]  0x29C1E97C    352276    159918  0x04310000   34604  AUDIO/DNSaC
+  [191]  0x29C0CFA0    355508    248073  0x04337800   34683  AUDIO/DNSaC
+
+SPECIAL ENTRIES:
+  slot[  0] = 26-byte config at BF+0x1800 (may be streaming boot config)
+  slot[  4] = 7.5MB data at BF+0x3E000 (VRAM/texture atlas A?)
+  slot[  5] = 13.4MB data at BF+0x786000 (VRAM/texture atlas B?)
+
+NOTE: 'primary size' + 'secondary size' ≈ actual file size
+      Primary = amount loaded in first CD read (often 512KB = 0x80000)
+      Secondary = remainder loaded in second CD read
+      For LEVEL .lev files: primary ≈ Section 2 (A8AA), secondary ≈ Section 1
+
+================================================================================
+ENTRY FIELD DECODE
+================================================================================
+
+Entry [+0x00] name_hash (4 bytes):
+  BigFile_hashName(filename): (char_count<<24) | (char_sum<<12) | (xor_pos_prod & 0xFFF)
+  where char_sum = sum of uppercase chars, xor_pos_prod = XOR(char × 1-indexed_pos)
+  Used by BigFile_lookup (0x8003BA80) for linear scan matching.
+
+Entry [+0x04] primary_size (4 bytes):
+  Bytes to load in first CD streaming pass.
+  
+Entry [+0x08] secondary_size (4 bytes):
+  Bytes to load in second CD streaming pass (0 = single-pass file).
+  primary_size + secondary_size = total file bytes.
+
+Entry [+0x0C] bf_offset (4 bytes):
+  Byte offset within BIGFILE.DAT where this resource begins.
+  Absolute disc LBA = BF_LBA(268) + bf_offset / 2048.
+
+Entry [+0x10] word_checksum (4 bytes):
+  Integrity check: sum of all file bytes read as LE uint32 words,
+  last partial word zero-padded to 4 bytes.
+  Verified: duplicate-content entries (21 groups, up to 5 copies each)
+  all share the same checksum.
+
+Entry [+0x14] file_magic (4 bytes):
+  First 4 bytes of file content stored as a LE uint32.
+  Enables O(1) file-type identification without disc access.
+  Known signatures:
+    0x3770616D = "map7" — ASCII streaming script (26 bytes)
+    0x001X0000 = binary streaming config (X*64KB buffer size field)
+    0x5F57AAA8 = A8AA geometry magic
+    0x001042xx = Hub .lev (variant 0x42)
+    0x00100A20 = .lev variant 0x0A
+    0x4E440000 = DNSaC audio header
+
+=============================================================
+FIELD DEFINITIONS (FINALIZED)
+=============================================================
+
+w[0] = name_hash = BigFile_hashName(filename) result:
+    Algorithm (0x8003BA1C / inner loop 0x8003BA34, delay 0x8003BA7C):
+      For each byte in name (NUL-terminated, lowercase a-z → uppercase):
+        sum_chars += char
+        xor_products ^= (char × char_index)  [0-indexed]
+        char_count++
+    result = (char_count << 24) | (sum_chars << 12) | (xor_products & 0xFFF)
+    
+    NOTE: bits 0-11 of result come from XOR in the jr ra delay slot
+    (instruction at 0x8003BA7C: or $v0, $v0, $t0)
+    This is why w[0] values have non-zero lower 12 bits.
+    SPACE does NOT terminate (only NUL 0x00 terminates).
+    Digits/symbols are NOT converted (only a-z get 0xDF masking).
+
+w[1] = primary_stream_size (bytes for first CD read)
+w[2] = secondary_stream_size (bytes for second CD read)
+w[3] = bf_byte_offset (byte position of resource data in BIGFILE.DAT)
+
+w[4] = content_checksum_A  (content-identity, not location-dependent)
+    NOT standard CRC32 (confirmed via zlib.crc32 with all seeds)
+    NOT Adler32 or uint16-sum or uint32-XOR of content
+    Algorithm: UNKNOWN — likely Crystal Dynamics proprietary checksum
+    CONFIRMED: same value for cross-reference duplicate entries
+    (i.e. identical files stored at different BIGFILE offsets)
+
+w[5] = content_checksum_B / file_magic_hint
+    For global/boot resources (entries 0-11, bf_off < 0x01465000):
+      = first 4 bytes of file content, stored as LE uint32
+      (useful for quick magic/type identification without full load)
+    For per-environment resources (entries 12+, bf_off >= 0x01464800):
+      = some other content-derived value (algorithm UNKNOWN)
+      NOT first 4 bytes of primary data
+      NOT first 4 bytes of secondary data
+      NOT CRC32 of any combination of primary/secondary data
+      CONFIRMED: same value for cross-reference duplicate entries
+
+CROSS-REFERENCES in the BIGFILE:
+  Some content appears at multiple physical locations.
+  These are NOT separate files — they are THE SAME file duplicated
+  for streaming efficiency (different missions in same environment
+  need the same INDEX/metadata, pre-placed near their other files).
+  
+  Confirmed duplicate groups:
+    Slots [12, 17, 172] × 3: ~98KB audio sub-header
+    Slots [22, 27, 177, 182, 187] × 5: ~58KB hub INDEX/meta (hub used 5 times)
+    Slots [32, 37, 42, 47] × 4: ~78KB Scream TV mission INDEX
+    Slots [52, 57, 62] × 3: ~67KB Circuit Central/Kung-Fu INDEX
+    Slots [67, 72, 77] × 3: ~61KB mission INDEX
+    Slots [82, 87, 92] × 3: ~72KB mission INDEX
+    Slots [97, 102] × 2: ~82KB mission INDEX
+    Slots [112, 117, 122] × 3: ~54KB boss mission INDEX

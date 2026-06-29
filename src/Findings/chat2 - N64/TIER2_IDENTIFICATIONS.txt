@@ -1,0 +1,419 @@
+Gex 64 Decomp — Tier 2 Stub Identifications
+=============================================
+Named modules with 1–11 remaining stubs.
+
+================================================================================
+SIGNAL.c  (11 stubs)
+================================================================================
+The signal system routes typed event messages between instances. SIGNAL_HandleSignal
+is the top-level dispatcher; the stubs are the per-type handler functions.
+
+  func_8004C350  → SIGNAL_ClearObjectPool()
+    Zeroes the 20-slot scripted-object pool at 0x80157508 (stride 0x14 bytes),
+    then clears a second table at 0x800F??? (calls func_8004C4A4 / pool scan).
+    Called on level load to reset the signal-object state.
+
+  func_8004C4A4  → SIGNAL_FindFreeSlot() → void* (already in TIER1 as pool scan)
+
+  func_8004D5A4  → SIGNAL_Freeze(Instance*, Signal*)
+    Freezes the target instance (sets freeze flag via INSTANCE flags), stores
+    freeze source info. Called when a "freeze" signal is dispatched.
+
+  SIGNAL_UnfreezeAll  (VRAM 0x8004CEB4)
+    Iterates the instance list; for each frozen instance, clears the freeze bit.
+    Copies 8 bytes from arg1 (signal payload) to local stack for context.
+    Calls func_80050854 (SOUND event for unfreeze thaw effect).
+
+  SIGNAL_GameValue  (VRAM 0x8004D794)
+    Handles the "game value change" signal: updates a GameTracker field based
+    on signal payload (score delta, lives delta, health delta etc.).
+
+  SIGNAL_LevelChange  (VRAM 0x8004D9A8)
+    Triggers a level transition. Reads the target level ID from signal payload,
+    sets gameTracker->_4B08 (pending level ID), fires CAMERA_Adjust.
+
+  func_8004DB04  → SIGNAL_Spawn(GameTracker*, Signal*)
+    Calls INSTANCE_BirthObjectFromIntro to spawn the linked instance.
+    Uses RotMatrixZ to set spawn orientation from signal payload angle.
+
+  func_8004DD08  → SIGNAL_Kill(Instance*, Signal*)
+    Calls INSTANCE_KillInstance on the target, fires a death sound.
+
+  SIGNAL_Shards  (VRAM 0x8004DE08)
+    Handles collectible shard pickup signal: increments the shard counter
+    in GameTracker, calls SOUND_PlaySpatialEffect for pickup sound,
+    checks for shard completion (triggers bonus remote spawn).
+
+  SIGNAL_MiscValue  (VRAM ~0x8004E2??)
+    Generic numeric value signal: reads an int from payload and stores to
+    a level-specific GameTracker field (used by level scripting).
+
+  SIGNAL_Relocate  (VRAM 0x8004E5B8)
+    Moves an instance to a new position from the signal payload SVECTOR.
+    Calls MATH3D_SetUnityMatrix (resets rotation), then MATH3D_ApplyMatrixSV
+    to recompute the world-space transform at the new position.
+
+SUGGESTED NAMES (update symbol_addrs.txt):
+  func_8004C350 = SIGNAL_ClearObjectPool
+  func_8004D5A4 = SIGNAL_Freeze
+  func_8004DB04 = SIGNAL_Spawn
+  func_8004DD08 = SIGNAL_Kill
+
+================================================================================
+MATH3D.c  (9 stubs — 2 already named, 7 unnamed)
+================================================================================
+MATH3D_FastAtan2 and ratan2 are the primary trig stubs; the rest are a
+push/pop stack for temporary matrix allocations.
+
+  MATH3D_FastAtan2  (known name, just unmatched)
+    Custom fixed-point atan2 returning angle in 0–0xFFF range.
+
+  ratan2  (known name, unmatched)
+    Wrapper around MATH3D_FastAtan2 for signed angle result.
+
+  func_800305FC  → MATH3D_FastSin(int angle) → int
+    Builds a 0x200-entry sine table using a binary-search / Chebyshev 
+    approximation. Iterates with s0=0x200, s1=0x100 as bisection bounds.
+    Returns fixed-point sine (0x1000 = 1.0).
+
+  func_800306DC  → MATH3D_FastCos(int angle) → int
+    Like FastSin but for cosine. Takes |a0|, |a1|, |a2| (negu), then
+    sltu for quadrant selection — classic cos from sin shift.
+
+  func_80030BA0  → MATRIX_AllocInit()
+    Reads framebuffer end ptr (0x800F8184), computes 0x801E5800 - ptr,
+    stores result to 0x800CF1C8 and 0x800CF1C0. Initialises the per-frame
+    matrix stack allocator by setting the stack base and capacity.
+
+  func_80030BE0  → MATRIX_Alloc(int size) → void*
+    Reads stack counter from 0x800CF1C8, computes slot ptr via
+    counter*8 + 0x800CF1C0, aligns to 16B (addiu a0,a0,0xF; and -0x10).
+    Returns a 16B-aligned matrix slot from the per-frame pool.
+
+  func_80030C50  → MATRIX_GetTop() → void*
+    Reads counter from 0x800CF1C8, returns the top-of-stack slot ptr.
+    Used to get the most recently allocated matrix without popping.
+
+  func_80030CB4  → MATRIX_Push(void* matrix)
+    Checks counter < 0x20 (32-slot limit). Increments counter and stores
+    the matrix pointer at counter*8 + base. Classic push operation.
+
+  func_80030D34  → MATRIX_Pop() → void*
+    Reads counter from 0x800CF1C8; if zero returns. Decrements counter.
+    Returns the popped matrix ptr. Called by GAMELOOP after render pass.
+
+NOTE: func_80030BE0 is already called from GAMELOOP.c as
+  D_800E5FDC = func_80030BE0(0x10C);  etc. — confirming it's MATRIX_Alloc.
+
+SUGGESTED NAMES (update symbol_addrs.txt):
+  func_800305FC = MATH3D_FastSin
+  func_800306DC = MATH3D_FastCos
+  func_80030BA0 = MATRIX_AllocInit
+  func_80030BE0 = MATRIX_Alloc
+  func_80030C50 = MATRIX_GetTop
+  func_80030CB4 = MATRIX_Push
+  func_80030D34 = MATRIX_Pop
+
+================================================================================
+RotMatrix.c / 3EAA0.c  (10 stubs across both files)
+================================================================================
+RotMatrix, RotMatrixX/Y/Z are the primary rotation functions (already named).
+The remaining stubs are compound rotations and a special-case variant.
+
+  func_8003E2FC  → RotMatrixXY(SVECTOR* rot, MATRIX* mat)
+    Reads rot->vy (y-component, offset +4), calls func_8003A4E0=MATH_ClampAngle
+    twice. Applies X then Y rotation to mat in sequence.
+
+  func_8003E378  → RotMatrixXYZ(SVECTOR* rot, MATRIX* mat)
+    Reads rot->vy, calls MATH_ClampAngle ×3. Full XYZ compound rotation.
+    Longer than E2FC (0x18-byte stack vs 0x20-byte), more saved regs.
+
+  RotMatrixZYX  (VRAM 0x8003E478)
+    Inverse rotation order: Z first, then Y, then X. Used for camera matrix
+    decomposition (Euler ZYX convention for yaw-pitch-roll).
+
+  func_8003E65C  → RotMatrixYXZ(SVECTOR* rot, MATRIX* mat)
+    Reads rot->vy, reads rot->vx (offset +0), clamps both. YXZ order.
+
+  func_8003E758  → RotMatrixFull(SVECTOR* rot, MATRIX* mat, int flags)
+    Reads rot->vx (offset +0, not +4 like the others — confirms vx/vy order).
+    5 saved registers (s0–s5). The most general rotation function, selects
+    order based on flags argument. Called from CAMERA for arbitrary orientations.
+
+  func_8003E940  → RotMatrixFromSVECTOR(SVECTOR* src, MATRIX* dst)
+    Reads src shorts at +0 and +2 (X and Y components), stores to
+    0x800E5BA4/6 (globals used by the GTE-equivalent rotation setup).
+    Then calls RotMatrixX/Y internally. Used to convert an SVECTOR normal
+    into a rotation matrix (for shadow/light alignment).
+
+SUGGESTED NAMES:
+  func_8003E2FC = RotMatrixXY
+  func_8003E378 = RotMatrixXYZ
+  func_8003E65C = RotMatrixYXZ
+  func_8003E758 = RotMatrixFull
+  func_8003E940 = RotMatrixFromSVECTOR
+
+================================================================================
+zlib.c  (8 stubs — inflate internals)
+================================================================================
+These are the zlib 1.1.x inflate internals used for ROM decompression.
+They are all public domain code; the function bodies match the standard zlib
+sources exactly. No game-specific logic — just needs byte-for-byte instruction
+matching for a clean build.
+
+  inflate_flush         — flush the output window
+  inflate_blocks        — decode a complete deflate block
+  inflate_codes         — decode literal/length/distance codes
+  huft_build            — build a Huffman decode tree
+  inflate_trees_bits    — build the code-length tree
+  inflate_trees_dynamic — build dynamic literal + distance trees
+  inflate_trees_fixed   — build static (pre-defined) Huffman trees
+  func_801DA910_ED200   — likely inflate_fast (the inner hot loop)
+
+ACTION: These just need matching against zlib 1.1.4 source. Low priority for
+the port — the game only uses inflate() (already decompiled) which calls these.
+
+================================================================================
+COLLIDE_B.c  (5 stubs)
+================================================================================
+COLLIDE_B handles instance-vs-instance bounding-volume tests.
+
+  func_8000D040  → COLLIDE_SpherePair(Instance* a, Instance* b, Level*, ...)
+    Large frame (0x88 bytes), takes 4 args + stack args. Sphere-vs-sphere
+    overlap test between two instances. Computes centre-to-centre distance.
+
+  func_8000DB20  → COLLIDE_CapsulePair(Instance* a, Instance* b, Level*, Instance*)
+    Same frame size as D040. Capsule-vs-capsule (likely for Gex tongue vs objects).
+
+  func_8000DFB0  → COLLIDE_BoxPair(Instance* a, Instance* b)
+    First instruction checks if a==b (skip self-test). Reads instance->_48
+    (position X) from both — AABB overlap test. Used for platform/trigger overlaps.
+
+  func_8000E108  → COLLIDE_InstanceVsWorld(Instance*, GameTracker*)
+    Reads GameTracker via 0x8007FCC8, sets flag 0x1. The per-instance
+    world-collision dispatch: selects sphere/capsule/box test from instance type.
+
+  COLLIDE_Instances  (VRAM 0x8000E690, not 0x8000D040 as listed)
+    Entry point: calls func_80011B20 (COLLIDE_H — the master BSP traversal).
+    Iterates the instance list and runs COLLIDE_InstanceVsWorld for each.
+
+SUGGESTED NAMES:
+  func_8000D040 = COLLIDE_SpherePair
+  func_8000DB20 = COLLIDE_CapsulePair
+  func_8000DFB0 = COLLIDE_BoxPair
+  func_8000E108 = COLLIDE_InstanceVsWorld
+
+================================================================================
+COLLIDE_A.c  (1 stub)
+================================================================================
+  func_8000CAF0  → COLLIDE_PointAndWorld_Inner
+    Enormous stack frame (0x4A8 bytes — 296 local variables). This is the
+    inner BVH/BSP traversal loop for point-vs-terrain collision. Reads
+    arg0->_0 (PCollideInfo->type u16), which drives the collision shape selector.
+    Called by COLLIDE_PointAndWorld (already decompiled in func_8000CEB4).
+
+SUGGESTED NAME: func_8000CAF0 = COLLIDE_PointAndWorld_Inner
+
+================================================================================
+COLLIDE_C.c  (2 stubs)
+================================================================================
+  func_8000E7D0  → COLLIDE_PointAndInstance_Full
+    Large frame (0x108 bytes). Full point-vs-instance test with normal
+    computation (not just trivial reject). Counterpart to the trivial reject.
+
+  COLLIDE_PointAndInstanceTrivialReject  (VRAM ~0x8000EA18)
+    First instruction is XOR swap (xor a1/v1 sequence) — the classic
+    branch-free swap for fast AABB trivial reject. Quickly discards
+    point-vs-instance pairs that cannot possibly intersect.
+
+================================================================================
+COLLIDE_D.c  (2 stubs)
+================================================================================
+  COLLIDE_PointAndTerrain  (VRAM 0x8000EBB0, mid-function entry)
+    Reads HFace vertex positions, computes barycentric coords via mflo/div.
+    The terrain-specific collision test that walks the HFace list from HInfo.
+
+  func_8000F0DC  → COLLIDE_TerrainFull
+    Huge frame (0x4C0 bytes). The complete terrain collision system with
+    full BSP traversal, normal interpolation, and slide-plane computation.
+    Takes 4+ stack args beyond a0-a3.
+
+SUGGESTED NAME: func_8000F0DC = COLLIDE_TerrainFull
+
+================================================================================
+COLLIDE_F.c  (3 stubs)
+================================================================================
+  func_8000FA40  → COLLIDE_DistanceSqrSVECTOR(SVECTOR* a, SVECTOR* b) → int
+    First 4 instructions: lh v1,[a], lh v0,[b], subu a1,v1,v0, mult a1,a1.
+    Classic squared-distance computation between two SVECTOR positions.
+    Short function, returns sum of squares of X/Y/Z deltas.
+
+  func_8000FD74  → COLLIDE_SphereAndTerrain(Instance*, Level*, PCollideInfo*)
+    Frame 0x80 bytes, 3 args. Sphere-vs-terrain test using the PCollideInfo
+    structure. Called when instance collision type is sphere.
+
+  func_800101BC  → COLLIDE_BoxAndTerrain(Instance*, Level*, PCollideInfo*)
+    Frame 0x68 bytes. AABB-vs-terrain. Calls DistanceSqrSVECTOR internally.
+
+SUGGESTED NAMES:
+  func_8000FA40 = COLLIDE_DistanceSqrSVECTOR
+  func_8000FD74 = COLLIDE_SphereAndTerrain
+  func_800101BC = COLLIDE_BoxAndTerrain
+
+================================================================================
+COLLIDE_G.c  (2 stubs)
+================================================================================
+  func_80010350  → COLLIDE_GetNearestFace(PCollideInfo*, HInfo*, ...)
+    Very large frame (0x168 bytes). Iterates the HFace list from an HInfo
+    struct, finds the nearest penetrating face for a given test point.
+    Returns via PCollideInfo->type and ->prim fields.
+
+  func_80010ED8  → COLLIDE_ResolveAllFaces(PCollideInfo*, HInfo*, ...)
+    Even larger frame (0x210 bytes). Called after GetNearestFace to compute
+    the full collision response: normal, penetration depth, contact point,
+    and slide-plane for all active HFace contacts.
+
+SUGGESTED NAMES:
+  func_80010350 = COLLIDE_GetNearestFace
+  func_80010ED8 = COLLIDE_ResolveAllFaces
+
+================================================================================
+COLLIDE_H.c  (1 stub)
+================================================================================
+  func_80011B20  → COLLIDE_BSP_Traverse(PCollideInfo*, ...)
+    Largest stack frame in the collision system: 0x4F8 bytes (314 local slots).
+    This is the master BSP tree traversal function, called from COLLIDE_Instances.
+    Walks the level's spatial acceleration structure, culls with AABB tests,
+    and dispatches to GetNearestFace for candidate primitives.
+    Called from COLLIDE_B's COLLIDE_Instances entry point.
+
+SUGGESTED NAME: func_80011B20 = COLLIDE_BSP_Traverse
+
+================================================================================
+INSTANCE.c  (5 stubs)
+================================================================================
+  func_8002CF4C  → INSTANCE_SetObjectFlags(Instance* src, Instance* dst)
+    Checks dst->flags2 bit 0x2 (static flag). Reads dst->_1C->_4 (object data).
+    Copies flags from the linked object definition into the instance.
+
+  func_8002D134  → INSTANCE_CloneInstance(Instance* src) → Instance*
+    Reads src->_10 (flags), src->_4 (linked data ptr). Allocates a new
+    instance from the pool and copies fields from src. Used for particle bursts.
+
+  func_8002DAF8  → INSTANCE_SetSplineFrame(Instance*, int frame)
+    Checks bgez (positive frame), negates if negative. Stores the signed frame
+    value into the spline controller. Handles reverse-direction spline traversal.
+
+  func_8002E0D8  → INSTANCE_LoadObjectData(Instance*)
+    Reads data from 0x8008BEE0 (object data cache) using lwl/lwr (unaligned load).
+    Copies the cached object definition block into the instance.
+
+  func_8002E21C  → INSTANCE_GetLinkedInstance(Instance*) → Instance*
+    Reads instance->_4 (linked instance ptr). If null, calls func_8002D2C0
+    (INSTANCE_AllocLinked). Returns the linked instance or allocates one.
+
+SUGGESTED NAMES:
+  func_8002CF4C = INSTANCE_SetObjectFlags
+  func_8002D134 = INSTANCE_CloneInstance
+  func_8002DAF8 = INSTANCE_SetSplineFrame
+  func_8002E0D8 = INSTANCE_LoadObjectData
+  func_8002E21C = INSTANCE_GetLinkedInstance
+
+================================================================================
+GAMELOOP.c  (2 stubs)
+================================================================================
+  GAMELOOP_InitGameTracker  (VRAM 0x80019B1C)
+    Continuation of the init stub visible at 0x80019B80: zeroes
+    gameTracker->_4C08 (level mode), ->_E4/_E0 (timer fields),
+    ->_4C14/_4C18 (score), ->_4CB0/_4CA8 (remote counts),
+    ->_96/_95/_94 (byte flags). Sets ->_4CB8 = 0xFA0 (4000 = initial timer?).
+    Full GameTracker zero-init function.
+
+  GAMELOOP_Process  (VRAM 0x80019F18)
+    The per-frame game loop: calls OBJECT_ProcessAll, CAMERA update,
+    SIGNAL dispatch, HUD render, and audio tick. The main heartbeat.
+    Already partially visible from callers in other modules.
+
+================================================================================
+main.c  (3 stubs)
+================================================================================
+  func_8003BAF8  → MAIN_InitSubsystems()
+    Calls: func_8002B840 (VISETUP_Init), func_80032630 (AUDIO_CTRL_Init),
+    func_8003AC88 (unknown — likely INPUT_Init or SAVE_Init).
+    Sets 0x80150000+0xA0 = some global. The subsystem initialisation sequence
+    called once at boot.
+
+  func_8003BB78  → MAIN_HandleGameState()
+    Reads gGameState (0x800701BC, value 1 or 2), dispatches to different
+    game-state handlers (attract mode vs active game).
+    Checks state==1 → attract, state==2 → active game loop.
+
+  func_8003BEF4  → MAIN_UpdateLevelSelect()
+    Reads 0x8007xxxx (-0x340), multiplies index by 7 (sll 3 + sub), accesses
+    a lookup table at 0x80114730 (level metadata table). Used on the world
+    map to map a selection cursor to the actual level index.
+
+SUGGESTED NAMES:
+  func_8003BAF8 = MAIN_InitSubsystems
+  func_8003BB78 = MAIN_HandleGameState
+  func_8003BEF4 = MAIN_UpdateLevelSelect
+
+================================================================================
+OBTABLE.c  (1 stub)
+================================================================================
+  func_8003EBF4  → OBTABLE_SpawnFromName(Instance*, ?)
+    Reads instance->_90 (object name ptr), checks byte[0] == '_' (0x5F).
+    Reads instance->_40 (object table base). Calls OBTABLE_FindObject on
+    the name, then registers a new entry.
+    This is the object-name-based spawner used by scripted level events.
+
+SUGGESTED NAME: func_8003EBF4 = OBTABLE_SpawnFromName
+
+================================================================================
+SPLINE.c  (2 stubs)
+================================================================================
+  func_80050F98  → SPLINE_SetDefFrames(SplineDef* def, Spline* a, Spline* b,
+                                         Spline* c) → int
+    Takes 4 args: a SplineDef and three Spline ptrs. Likely initialises
+    a MultiSpline definition by setting the currkey/fracCurr fields in def
+    from the three component splines.
+
+  func_800517E4  → SPLINE_Interpolate(Spline* spline, SplineDef* def, ?, ?)
+    Frame 0x78 bytes, reads 0x800BF080 (global delta-time or frame counter).
+    Sets s5 = -0x200 (minimum interpolation clamp). The main Catmull-Rom
+    spline interpolation function.
+
+SUGGESTED NAMES:
+  func_80050F98 = SPLINE_SetDefFrames
+  func_800517E4 = SPLINE_Interpolate
+
+================================================================================
+MulMatrix.c  (2 stubs)
+================================================================================
+  MulMatrix0  (VRAM 0x8003C070)
+    First checks if a0==a2 (destination alias check). If so, calls MulMatrix2
+    with a2=NULL to handle in-place multiply. Otherwise calls MulMatrix2.
+    MulMatrix0 is the safe "in-place-aware" wrapper.
+
+  MulMatrix2  (VRAM 0x8003C368)
+    Core 3×3 SVECTOR matrix multiply. Frame 0xA8 bytes (large — full matrix
+    expansion). Operates on t7=a0 (src1), t8=a1 (src2), result to a2.
+    All 9 dot products computed explicitly in fixed-point arithmetic.
+    This is the fundamental rotation-matrix concatenation function.
+
+NOTE: Both are already correctly named in symbol_addrs.txt. They just need
+byte-matching against a reference PS1-era matrix library implementation.
+
+================================================================================
+LIGHT3D.c  (1 stub)
+================================================================================
+  LIGHT_DrawShadow  (VRAM 0x8002FA30)
+    Writes the shadow GBI display list. At 0x80030E20 (mid-function):
+    writes DL command 0xFD100000 (G_SETTEXTIMAGE) to DL ptr from 0x80157050,
+    advances DL ptr by 8, writes 0x8007E038 (texture data address) as second word.
+    Then writes another DL command block. This builds the shadow quad GBI DL
+    using a pre-baked shadow texture at a fixed VRAM address.
+
+    The function signature (from LIGHT3D.c context):
+      void LIGHT_DrawShadow(Instance* instance, GameTracker* gameTracker)
+

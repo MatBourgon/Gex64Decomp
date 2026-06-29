@@ -1,0 +1,203 @@
+N64 GEX 2 ROM ANALYSIS
+======================
+ROM: Gex 64 - Enter the Gecko (U) [NX2E].z64
+Size: 16,777,216 bytes (16MB)
+ROM Header: 0x80371240 (big-endian, standard Z64 format)
+
+────────────────────────────────────────────────────────────────────────────────
+ROM LAYOUT
+────────────────────────────────────────────────────────────────────────────────
+
+0x0000000 - 0x0000040   ROM header (64 bytes)
+0x0000040 - 0x00C0000   Boot code + main MIPS executable code (low entropy ~5.0-5.5)
+0x00C0000 - 0x04B5750   Continuation: more code, string tables, UI strings, INDEX tables
+                         - "ENTER NAME FOR THIS GAME" string at 0x0C2004
+                         - Level INDEX table at 0x0708E0
+                         - Object INDEX table at 0x0745F0
+0x04B5750 - 0x0F7DAB0   Compressed game asset data (high entropy ~7.8-7.9)
+                         - Level data blobs (26 levels, 50KB-650KB each)
+                         - Object data blobs (735 entries, 1KB-18KB each)
+0x0F7DAB0 - 0x0FBFFFF   Likely audio data (slightly lower entropy at 0x0340000 region)
+0x0FC0000 - 0x0FFFFFF   ROM padding (zero entropy = fill bytes)
+
+RDRAM mapping: RDRAM_BASE = 0x80000400
+Code lives at: 0x80000400 - ~0x8007FFFF in RDRAM
+              (ROM offset = RDRAM addr - 0x80000400)
+
+────────────────────────────────────────────────────────────────────────────────
+LEVEL INDEX (ROM 0x0708E0)
+────────────────────────────────────────────────────────────────────────────────
+
+Entry format (32 bytes):
+  +0x00  4B  uint32 RDRAM_load_target  -- where to DMA this level in RAM
+  +0x04 12B  char[12] name             -- level name, null-padded to 12 bytes
+  +0x10  4B  uint32 rom_start          -- start offset in ROM
+  +0x14  4B  uint32 rom_end            -- end offset in ROM (exclusive)
+  +0x18  4B  uint32 decomp_start       -- decompressed range start (virtual)
+  +0x1C  4B  uint32 decomp_end         -- decompressed range end (virtual)
+                                          (decomp_end - decomp_start = decompressed size)
+
+All 26 entries (matching the 26 TV remotes):
+
+Name           RDRAM_target ROM_start  ROM_end    ROM_size   Decomp_size
+looney30       0x80161EA0   0x00687F10 0x006EA110  401,920    606,464
+horror4        0x80164D20   0x00ACB540 0x00B6A440  651,008    671,792
+rta1           0x8015EF20   0x00625A90 0x00687F10  402,560    606,464
+horror2        0x80164D20   0x00519D80 0x0057AC60  397,024    172,992  (?)
+circuit5       0x801636E0   0x00764E80 0x007C0CD0  376,400    172,032
+kungfu02       0x801627B0   0x00B6A440 0x00BC7430  380,912    319,808
+scifi10        0x80164FD0   0x009731F0 0x009D0A50  383,072    319,808
+prehst1        0x80164610   0x0085C2C0 0x008C1700  414,784    172,672
+looney69       0x80161EA0   0x009D0A50 0x00A4C3E0  506,256    319,808
+prehst2        0x80164610   0x0057AC60 0x005E3BD0  429,936    172,992
+circuit9       0x801636E0   0x00BC7430 0x00C18BC0  333,712    319,808
+scifi14        0x80164FD0   0x007067C0 0x00764E80  386,752    172,032
+kungfu1        0x801627B0   0x00A57840 0x00ACB540  474,368    319,808 (note: 'fu1' not 'kungfu1')
+rezop3         0x80161620   0x004B5750 0x004F0E50  243,456    172,288
+aztec16        0x8015A0E0   0x006EA110 0x00705E40  113,968    172,544
+horror6        0x80164D20   0x0093ED90 0x009731F0  214,112     53,376
+nypd01         0x80159EC0   0x00C18BC0 0x00C495B0  199,152    106,032
+spy2           0x8015AE60   0x007C0CD0 0x007E5F00  152,112    172,032
+kungfu4        0x801627B0   0x00A4C3E0 0x00A57840   46,176    319,808  (DLC/hub?)
+rezop2         0x80161620   0x004F0E50 0x00519D80  167,728    172,992
+circuit0       0x801636E0   0x00616BE0 0x00625A90   61,104    156,160  (hub?)
+gillig1        0x8015A970   0x00932610 0x0093ED90   51,072    299,776
+mooshu1        0x8015DE80   0x00605AF0 0x00616BE0   69,872    156,160
+gexzil9        0x80162B90   0x005E3BD0 0x00605AF0  139,040    156,160
+final01        0x80161860   0x008C1700 0x00932610  462,608    298,736
+map5           0x80161690   0x00705E40 0x007067C0    2,432     21,392  (overworld map)
+
+NOTE: The "decomp" fields actually appear to be ROM offsets pointing to a secondary
+data region (decomp_start/end may be decompressed buffer pointers in a virtual
+addressing scheme). All level data is COMPRESSED -- entropy ~7.8-7.9, no known
+magic header (not MIO0, Yay0, zlib). Custom Crystal Dynamics compression suspected.
+
+────────────────────────────────────────────────────────────────────────────────
+OBJECT INDEX (ROM 0x0745F0)
+────────────────────────────────────────────────────────────────────────────────
+
+Entry format (16 bytes) -- SAME as PS1 INDEX format:
+  +0x00  8B  char[8] name   -- object class name, null-padded
+  +0x08  4B  uint32 rom_start
+  +0x0C  4B  uint32 rom_end
+
+735 entries total, covering ROM 0x00C495B0 - 0x00F7DAB0.
+Entries sorted alphabetically by name (same convention as PS1 A8AA ordering).
+
+First few entries:
+  '10tons__'  0x00C495B0 - 0x00C49E70  (2,240 bytes)
+  'abubble_'  0x00C49E70 - 0x00C4AF90  (4,384 bytes)
+  'acrate__'  0x00C4AF90 - 0x00C4B440  (1,200 bytes)
+  'actplat_'  0x00C4B440 - 0x00C4C580  (4,416 bytes)
+  'ahead___'  0x00C4C580 - 0x00C4CC20  (1,696 bytes)
+  'alien___'  0x00C4CC20 - 0x00C51280 (18,016 bytes)
+  ...
+  'zweedc__'  0x00F80540 - 0x00F81350  (3,600 bytes)
+  'zwleak__'  0x00F81350 - 0x00F821C0  (3,696 bytes)
+  'zviolet_'  0x00F7CA10 - 0x00F7DAB0  (4,256 bytes)
+
+Asset format: UNKNOWN/COMPRESSED. First bytes are high-entropy with no recognized magic.
+NOT A8AA format. Crystal Dynamics likely used a different (possibly custom) N64 format
+for object geometry -- possibly N64 display list commands (GBI) rather than PS1 ordering
+tables, with a custom header.
+
+────────────────────────────────────────────────────────────────────────────────
+KEY FUNCTIONS IDENTIFIED IN N64 CODE
+────────────────────────────────────────────────────────────────────────────────
+
+0x800279DC  BoundingBoxSweep / CollisionAABB
+            -- Large function (frame 0xA8 = 168 bytes)
+            -- Iterates array with stride 6 bytes (XYZ int16 triplets)
+            -- Computes min/max AABB for a set of vertices
+            -- The 37-entry jump table at ROM 0x06DEC0 is INSIDE this function
+               (a switch statement with 37 cases, not an opcode table)
+            -- Input $a1: pointer to vertex/bound array
+            -- Input $a2: pointer to level/mesh structure (field +0x0C -> vertex data ptr)
+            -- Calls 0x80025B4C at startup (unknown: possibly transform/matrix setup)
+
+0x80025B4C  Unknown -- called from BoundingBoxSweep, receives $fp (a1 copy)
+
+Object vtable dispatch pattern (many sites):
+            lbu  $v0, 0x4e($s0)       ; load class_id byte from object+0x4E
+            lw   $v1, 0x10($v1)       ; load function pointer table from class descriptor
+            sll  $v0, $v0, 2          ; index * 4
+            addu $v0, $v0, $v1        ; table + index
+            lw   $v0, ($v0)           ; load handler pointer
+            ... calls handler ...
+            lhu  $v0, 2($v0)          ; load arg_count from ScriptOpEntry.arg_count
+                                      ; (consistent with ScriptOpEntry: +0=handler, +2=arg_count)
+
+This vtable dispatch at offset +0x4E from object IS the object class dispatch, NOT the
+ScriptExec opcode dispatch. It reads a class ID byte (0x4E offset in object) and the
+field at +0x5E appears to be a current-state or timer field.
+
+────────────────────────────────────────────────────────────────────────────────
+KEY STRINGS FOUND IN N64 ROM
+────────────────────────────────────────────────────────────────────────────────
+
+ROM 0x07F1F4: Level completion strings:
+  "PRESS A TO CONTINUE"
+  "BONUS BONANZA COMPLETE"
+  "GILLIGEX ISLE COMPLETE"
+  "MOOSHOO PORK COMPLETE"
+  "GEXZILLA VS. MECHAREZ COMPLETE"
+  "CHANNEL Z COMPLETE"
+  "%d OF %d RED REMOTES FOUND"
+
+ROM 0x07F2C6: Asset name references: "fxpurple", "fxgreen_"
+
+ROM 0x07F31C: Level asset names: "fpower__", "alien___", "logo1"-"logo4", "intro1", "map5"
+
+ROM 0x0C2004: Save name entry: "ENTER NAME FOR THIS GAME", "PRESS A TO SAVE", 
+              "PRESS START TO ABORT"
+
+STRIPPED strings (present in PS1 debug build, NOT in N64 retail):
+  - gex3d\ build paths
+  - ScriptExec opcode names (birthObject, gotoPos, setNoRemove, etc.)
+  - PsyQ/libgpu debug trace strings
+  - CD filesystem debug messages
+
+────────────────────────────────────────────────────────────────────────────────
+COMPRESSION ANALYSIS
+────────────────────────────────────────────────────────────────────────────────
+
+All game assets (levels and objects) are compressed. Evidence:
+  - Entropy 7.8-7.9 (near-maximum, consistent with compression)
+  - No known compression magic header (not MIO0, Yay0, Yay1, zlib, gzip)
+  - Decompressed sizes encoded in level INDEX entries (decomp range fields)
+  - Typical compression ratio: ~65% (ROM blob / decompressed size)
+
+The decompressor function likely exists somewhere in 0x000000-0x0C0000 code range
+and is called from the DMA/streaming loader (analogous to PS1 CD_cachefile/CdRead).
+Finding it requires dynamic analysis (pcsx-redux equivalent: mupen64plus with debugger)
+or static analysis tracing from the RDRAM_load_target addresses in the level INDEX.
+
+────────────────────────────────────────────────────────────────────────────────
+N64 vs PS1 COMPARISON SUMMARY
+────────────────────────────────────────────────────────────────────────────────
+
+IDENTICAL between versions:
+  ✓ Level names (looney, horror, circuit, kungfu, scifi, prehst, rezop, aztec, 
+                  nypd, spy, gillig, mooshu, gexzil, final, map)
+  ✓ Number of levels: 26 (matching 26 TV remotes)
+  ✓ Object names (10tons, abubble, acrate, alien, etc.)
+  ✓ INDEX table format: [8-char name][4B start][4B end] = 16 bytes per entry
+  ✓ Object class dispatch pattern: class_id at object+0x4E, handler table via class desc
+  ✓ ScriptOpEntry layout: +0x00=handler_ptr, +0x02=arg_count (consistent across both)
+
+DIFFERS between versions:
+  ✗ Asset format: PS1 uses A8AA relocatable geometry; N64 uses custom compressed blobs
+  ✗ Rendering: PS1 uses GPU ordering tables (POLY_FT4); N64 uses GBI display lists
+  ✗ Audio: PS1 uses SPU + DNSaC ADPCM; N64 uses N64 Sound Driver (unknown audio fmt)
+  ✗ Compression: PS1 assets not compressed; N64 assets compressed (custom scheme)
+  ✗ Memory: PS1 2MB RDRAM at 0x80000000; N64 8MB RDRAM at 0x80000400
+  ✗ Debug strings: PS1 Trilogy build is debug (strings retained); N64 retail (stripped)
+  ✗ RDRAM load addresses: 0x8015xxxx-0x8016xxxx for N64 vs 0x800Cxxxx for PS1
+
+NEXT STEPS for N64 analysis:
+  1. Identify the decompressor function (trace from DMA loader)
+  2. Decompress a level blob and check if the internal format matches PS1 LEV structure
+  3. Find ScriptExec dispatch (no string landmarks; needs pattern search for
+     opcode byte + multiply/shift + table lookup + jal)
+  4. Find BigFile_hashName (same algorithm expected, search for *27 multiply pattern)
+  5. Cross-reference confirmed N64 BoundingBoxSweep (0x800279DC) against PS1 equivalent

@@ -1,0 +1,161 @@
+AUDIO & GEOMETRY FILE FORMATS — Gex 2: Enter the Gecko (SLUS-00598)
+====================================================================
+
+╔══════════════════════════════════════════════════════════════════════╗
+║  DNSaC AUDIO FORMAT  (.dnsc in our extraction)                       ║
+║  Crystal Dynamics proprietary PS1 audio container                    ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+PURPOSE: Per-environment compressed audio container. Carries all ambient
+music loops, sound effects, and voice samples for one level environment.
+
+SIZES: 430–535 KB per file. All files are independent; none shared across
+environments (though entries [57] and [72] — Scream TV / Circuit Central —
+are identical in the header region).
+
+HEADER (variable length, starting at byte 0):
+  Off  Sz   Description
+  ───  ──   ───────────
+   0   2    File flags: 0x0080 = hub world (special flag); 0x0000 = all others
+   2   5    Magic "DNSaC\0" (44 4E 53 61 43 00)
+   7   1    Reserved / version = 0x00
+   8   1    SPU channel count = 0x04 (always 4 SPU voices per bank)
+   9   1    Sound effect count (33 hub / 43 Toon / 38 Scream / 49 Kung-Fu…)
+  10   2    LE: total entry count in the sound-definition table
+  12   2    LE: secondary count (≈ 0.74 × total_entry_count)
+  14   2    LE: tertiary count (varies: 7 / 44 / 8 / 15 / 8)
+  16   2    Varies per file:
+              Hub: 0x0204; Toon/Scream: 0x0044; Kung-Fu: 0x0014
+              Likely: header-section byte-length before body entries start
+  18   2    LE: 0x6C80 (= 27,776) for all non-hub environments;
+              0x2002 for hub. Possible ADPCM block count or loop point.
+  20+       Additional variable-length metadata (counts, loop points, ...)
+
+ENTRY TABLE (follows header, at varying offsets per file):
+  Body consists of variable-length Sound Definition Records:
+
+  Record type 4:  [sound_id] 0x04 0x08 [param_lo] [param_hi]  (5 bytes)
+  Record type 6:  [sound_id] 0x06 0x08 [param]               (4 bytes)
+
+  Where:
+    sound_id = 0x00..0x7F (sound effect index, can exceed file's sound_count
+               since some IDs are skipped / reserved)
+    0x04      = type 4 (standard sound effect definition)
+    0x06      = type 6 (alternate type — possibly looping or layered)
+    0x08      = SPU channel assignment byte (always 8 = channel group 2)
+    params    = sample-relative parameters (pitch, pan, volume, or SPU regs)
+
+  Observed IDs from hub world (partial): 0x08, 0x09, 0x0A, 0x0C, 0x0D,
+  0x18, 0x1E, 0x20, 0x22, 0x26, 0x29, 0x2A, 0x2B, 0x2C, 0x34, 0x36,
+  0x37, 0x38, 0x3B, 0x3C, 0x3F, 0x42, 0x44 …
+
+SAMPLE DATA: Begins after the entry table. Contains raw PS1 SPU ADPCM
+  audio (16-byte blocks, 28 samples/block at the selected sample rate).
+  At 22,050 Hz: 3,000 ADPCM blocks ≈ 3.8 seconds (typical ambient loop).
+  Files of ~483 KB carry hundreds of seconds of compressed audio across
+  the 33–49 sound effect slots.
+
+
+╔══════════════════════════════════════════════════════════════════════╗
+║  A8AA GEOMETRY FORMAT  (.geom in our extraction + .lev Section 2)    ║
+║  Crystal Dynamics relocatable object/geometry class definition block  ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+PURPOSE: Compiled, memory-mappable game-object class definitions. Contains
+vtable-like data structures, default parameter tables, and geometry refs
+for all object types in one level environment (enemies, items, platforms…).
+
+TWO LOCATIONS PER ENVIRONMENT:
+  1. Standalone .geom file  → STATIC level geometry (floors, walls, sky mesh)
+     Loaded at 0x800C0000 in PS1 RAM
+  2. Embedded in .lev file Section 2 → DYNAMIC object geometry (enemies,
+     items, interactive props) padded to sector boundary after world data
+
+SIZES:
+  .geom files: 400 KB – 6.3 MB (static geometry scales with level complexity)
+  .lev Section 2 embedded A8AA: 70 KB – 740 KB (dynamic objects)
+
+FILE STRUCTURE:
+  ┌─────────────────────────────────────────────────────────────────┐
+  │  RELOCATION DESCRIPTOR TABLE                                    │
+  │  Byte [0..1]:  Magic = A8 AA                                   │
+  │  Byte [2..3]:  Descriptor table info (size or class count)     │
+  │  Bytes [4..N]: Triplet entries: (field_offset, count, stride)  │
+  │                 • field_offset: byte offset within class struct │
+  │                 • count: how many pointer-slots to relocate     │
+  │                 • stride: bytes between successive pointer slots│
+  │                 Common: count=2, stride=4 → two 4-byte ptrs    │
+  │  [AA AA]:      Group separator within descriptor table         │
+  │  [01 00 00]:   End-of-table sentinel (zero count)              │
+  ├─────────────────────────────────────────────────────────────────┤
+  │  CLASS DEFINITION DATA                                          │
+  │  Raw struct data for all object classes in this block.         │
+  │  Contains embedded FILE-RELATIVE pointers to sub-tables,       │
+  │  function dispatch entries, animation refs, geometry refs.     │
+  │  All pointers = offsets from file start (not absolute addrs).  │
+  └─────────────────────────────────────────────────────────────────┘
+
+LOADING SEQUENCE (discovered via Level_remoteInit analysis):
+  1. .geom file loaded by CD streaming to temp buffer at 0x801EEFD0
+  2. MemRange_relocate (0x8003CDB0) called with:
+       old_base = 0x801EEFD0 (temp streaming location)
+       new_base = mem[0x80086750] (permanent RAM destination)
+       size     = 0x5000 (20,480 bytes — the descriptor + class-ptr region)
+  3. Embedded pointers adjusted: ptr = ptr - old_base + new_base
+  4. Runtime class data ready for use at fixed RAM address 0x800C0000+
+  5. Object_birth (0x80038810) spawns instances referencing this data
+  6. Object_initFromClass (0x80039698) links instances to class structs
+
+EXAMPLE CLASS STRUCT LAYOUT (hub world, from descriptor triplets):
+  Offset  Count  Stride  Content
+  0x00    4      1       Type/class flags (4 individual bytes)
+  0x04    2      6       6-byte sub-entries (coords or bounds)
+  0x14    2      4       Function pointer pair (e.g. init + update)
+  0x1C    2      4       Function pointer pair
+  0x24    2      4       Function pointer pair
+  0x3C    2      4       Function pointer pair
+  0x54    2      4       Function pointer pair
+  0x74    2      4       Function pointer pair
+  (…continues with more pointer fields at higher offsets…)
+
+INDEX FILE → A8AA POINTER CORRESPONDENCE:
+  The .meta index file for each environment contains ASCII object-type
+  names followed by 4-byte pointers in the range 0x800Cxxxx.
+  These ARE the post-relocation addresses within the loaded .geom block:
+  hub .geom loaded at 0x800C0000 → file-relative ptr 0x8EBC becomes 0x800C8EBC.
+  Examples: "funfx___"→0x800C8EBC, "leaf"→0x800C8F24, "bullet"→0x800CA358
+
+
+╔══════════════════════════════════════════════════════════════════════╗
+║  LEVEL .LEV SECTION 1 — WORLD DATA / BINARY OPCODE STREAM           ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+See LEV_INDEX_FORMAT.txt for the level file two-section structure.
+
+SECTION 1 CONTENT: Binary encoded level world data (~160-450 KB).
+  Contains: camera rail paths, trigger zones, collision volumes,
+  object spawn descriptors, scripted event sequences, level scripts.
+
+INLINE A8AA CHUNKS: The Section 1 stream EMBEDS A8AA geometry chunks
+  directly within the opcode stream at object-definition points.
+  Level [30] (Hub): first inline A8AA at byte offset 21 (5 bytes after header).
+  Multiple A8AA chunks interspersed throughout the stream.
+
+SECTION 1 BYTE COUNTS:
+  env[30]  Hub:         412,642 B
+  env[45]  Toon TV:     413,100 B
+  env[60]  Scream TV:   411,001 B
+  env[75]  Kung-Fu:     156,510 B  (smallest — fewest levels)
+  env[90]:              324,771 B
+  env[105]:             401,605 B
+  env[120]:             239,958 B
+  env[135]:             427,123 B
+  env[150]:             384,210 B
+  env[165]:             447,063 B  (largest)
+  env[180]:             230,295 B
+
+ZERO PADDING / SECTION 2 BOUNDARY:
+  After Section 1, 596–1,851 zero bytes pad to next 0x800-byte boundary.
+  Section 2 (embedded A8AA) begins there.
+  Detected at offset within file: 0x64579–0x6D257 (varies per level).
+

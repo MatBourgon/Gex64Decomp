@@ -1,0 +1,413 @@
+Gex 64 Decomp — Unnamed Module Identifications
+================================================
+Generated from ROM 0x1050 offset / VRAM 0x80000450 base.
+
+Each entry: ROM range, VRAM range, size, identification, evidence.
+
+================================================================================
+13920  (ROM 0x13920–0x14AC0, VRAM 0x80012D20–0x80013EC0, 4512B)
+NAME:  INTRO / INSTANCE_IntroDispatch  — Object intro/spawn controller
+================================================================================
+First function reads instance->_100 (intro counter), instance->_104 (intro ptr),
+instance->_110 (intro type index). Multiplies type*3 to index into a 12-byte
+struct array, loading position and timing data. Calls:
+  OBTABLE_FindObject      — look up linked objects by name
+  SIGNAL_HandleSignal     — fire birth/death signals
+  SCRIPT_InstanceSplineSet — attach spline to spawned instance
+  INSTANCE_KillInstance   — destroy an instance
+  INSTANCE_BirthObject    — spawn a new instance
+  SVECTOR_Length          — distance check for spawn trigger
+
+This is the intro (cutscene trigger / spawn sequence) dispatcher that Crystal
+Dynamics uses for object birth animations and chained spawns. Called when an
+Instance has pending intro frames (instance->_100 > 0).
+
+RENAME: 13920.c → INTRO_DISPATCH.c
+FUNCTION NAMES:
+  func_80012D20 → INTRO_ProcessInstance(Instance*, GameTracker*)
+  Remaining stubs → INTRO_HandleType0..N per intro type variant
+
+================================================================================
+14AC0  (ROM 0x14AC0–0x161C0, VRAM 0x80013EC0–0x800155C0, 5888B)
+NAME:  HUD  — Heads-up display renderer
+================================================================================
+First word reads 0x800E5DB2 (HUD mode flags short), checks bits 0x808 and 0x404.
+Calls DrawTextToScreen 45 times — the highest call count of any module for that
+function. Also calls osSendMesg (for VI sync), sprintf (for numeric formatting).
+Accesses 0x800E5B98 (HUD enable byte), 0x80157030 (HUD page index).
+
+The module renders: remote count, lives, health, level timer, paw prints,
+bonus scores, and pause-menu overlays. The large function count (~20 stubs) maps
+to individual HUD element draw functions.
+
+func_80040170 (called 25×) — the screen-space text layout helper
+func_80032F90 (called 10×) — the VI page-flip/sync function (in 33230)
+
+RENAME: 14AC0.c → HUD.c
+FUNCTION NAMES:
+  func_80013EC0 → HUD_Update(GameTracker*)
+  func_80014374 → HUD_DrawRemoteCount()
+  func_80014D94 → HUD_DrawLives()
+  func_80014DD4 → HUD_DrawTimer()
+  Remaining stubs → HUD_DrawElement_N()
+
+================================================================================
+161C0  (ROM 0x161C0–0x19BD0, VRAM 0x800155C0–0x80018FD0, 14864B)
+NAME:  MATH3D_QUAT / TRANSFORM  — Quaternion math + instance transform update
+================================================================================
+Contains the already-identified G2Quat_ToEuler (0x80015780) and
+G2Quat_ToMatrix_S (0x800158BC). The 70 functions in this module are all related
+to quaternion/matrix operations and instance transform management. Calls:
+  LIST_InsertFunc         — add to processing list
+  ratan2, MATH3D_FastAtan2, MATH3D_FastSqrt — trig/length
+  RotMatrixY/X/Z, MATH3D_SetUnityMatrix     — matrix ops
+  func_80030090 (×10) — MulMatrix (variant in MATRIX module)
+  func_8003012C (×7)  — another matrix multiply
+
+The module manages the per-frame world transform computation for all Instances:
+reading position/rotation, computing the world matrix, and inserting the Instance
+into the appropriate LIST for rendering.
+
+RENAME: 161C0.c → TRANSFORM.c  (or G2QUAT.c)
+FUNCTION NAMES:
+  func_800155C0 → TRANSFORM_UpdateInstance(Instance*, GameTracker*)
+  func_80015780 → G2Quat_ToEuler  (already named)
+  func_800157BC → G2Quat_ToMatrix (already named variant)
+  func_800158BC → G2Quat_ToMatrix_S (already named)
+  func_80015EC0 → TRANSFORM_ComputeWorldMatrix(Instance*)
+  func_80015F14 → TRANSFORM_ApplyRotation(Instance*, MATRIX*)
+  func_80015F60 → TRANSFORM_InterpolateQuat(Instance*)
+  Remaining     → TRANSFORM_helper_N()
+
+================================================================================
+19BD0  (ROM 0x19BD0–0x1A6A0, VRAM 0x80018FD0–0x80019AA0, 2768B)
+NAME:  SHADOW  — Shadow raycaster and instance shadow rendering
+================================================================================
+First function: checks instance->_0E (shadow enable flag), calls
+func_80015EC0 (TRANSFORM_ComputeWorldMatrix) if nonzero. 0x18-byte struct.
+
+Second function (0x80019000, the main one): allocates a 0xA8-byte stack frame,
+copies instance position to local SVECTOR, calls func_80069F50 (memset/clear),
+then proceeds to COLLIDE_PointAndWorld (confirmed) to raycast downward for shadow
+position. Calls LIST_InsertFunc to add shadow to the shadow render list, calls
+MATH3D_SetUnityMatrix for shadow matrix. Uses memset (via func_80069F50).
+
+This is the shadow system described in LIGHT3D.c comments: each shadow-capable
+Instance gets a downward raycast, stores the contact point, and queues the shadow
+quad for rendering.
+
+RENAME: 19BD0.c → SHADOW.c
+FUNCTION NAMES:
+  func_80018FD0 → SHADOW_CheckAndUpdate(Instance*)
+  func_80019000 → SHADOW_CastAndQueue(Instance*, GameTracker*, void*, void*)
+  Remaining stubs → SHADOW_DrawQuad(), SHADOW_UpdateList(), etc.
+
+================================================================================
+2BA70  (ROM 0x2BA70–0x2C440, VRAM 0x8002AE70–0x8002B840, 2512B)
+NAME:  SCRIPT_CAMERA  — Scripted camera / cinematic follow system
+================================================================================
+First function: reads instance->_FC bit 0 (locked flag), checks a1->_1C->_28
+(a spline chain pointer). Calls:
+  CAMERA_CameraLock / CAMERA_CameraUnlock
+  SplineGetFirstPoint, SplineGetFrameNumber, SplineSetDef2FrameNumber
+  SplineGetPrev, SplineGetData, ratan2
+
+This is the camera scripting system: when a cinematic trigger fires, this module
+locks the camera, attaches it to a spline path, and drives it frame-by-frame
+using the Spline APIs. The ratan2 call computes camera yaw to track Gex.
+
+RENAME: 2BA70.c → SCRIPT_CAMERA.c
+FUNCTION NAMES:
+  func_8002AE70 → SCRIPT_CAMERA_Update(Instance*, Instance*)
+  func_8002AF84 → SCRIPT_CAMERA_AttachSpline(Instance*, Spline*)
+  func_8002B0F0 → SCRIPT_CAMERA_AdvanceFrame(Instance*)
+  func_8002B2D8 → SCRIPT_CAMERA_Release(Instance*)
+  func_8002B428 → SCRIPT_CAMERA_ComputeAngle(Instance*, Instance*)
+
+================================================================================
+2C440  (ROM 0x2C440–0x2CD50, VRAM 0x8002B840–0x8002C150, 2320B)
+NAME:  VISETUP  — Video interface / RCP framebuffer setup
+================================================================================
+First function writes 0x2 to two HW registers (VI width/mode shorts at
+0x80131798, 0x80154828), sets framebuffer pointers (0x80131798, 0x80157050 =
+0x80225800), calls func_80058AE0(0x42) — this is osViSetSpecialFeatures(AA_MODE).
+
+Remaining functions: osVirtualToPhysical, osWritebackDCache, osViSetSpecialFeatures,
+guPerspectiveF, guMtxF2L — all standard RCP/VI setup calls.
+
+This module handles double-buffer framebuffer swapping, perspective matrix upload,
+and VI special features (anti-aliasing, interlace). Called once per frame from
+the main render loop.
+
+RENAME: 2C440.c → VISETUP.c
+FUNCTION NAMES:
+  func_8002B840 → VISETUP_Init()
+  func_8002B894 → VISETUP_SetFramebuffer(void* fb, int width, int height)
+  func_8002BB80 → VISETUP_SwapBuffers()
+
+================================================================================
+2F310  (ROM 0x2F310–0x30630, VRAM 0x8002E710–0x8002FA30, 4896B)
+NAME:  OBJECT_UPDATE  — Per-frame object list update / process loop
+================================================================================
+First function: reads instance->_0E (countdown timer, short), decrements it,
+calls func_80015EC0 (TRANSFORM_ComputeWorldMatrix) when it reaches 0 then jumps
+to func_8002EBC4. Accesses instance->_1C, _44, _46 (size/collision fields).
+Calls func_80006374 and func_800064A0 — those are in the OS/boot range (0x6000s),
+likely osGetTime() or scheduler yield functions. Also calls memset (×2), and
+func_80015EC0, func_80033220 (audio update?), func_800509E0 (SFX poll).
+
+Callers include 0x8001A18C (main game loop), 0x8002F424 (self), level overlays.
+This is the per-frame object processing loop: iterates the instance list, ticks
+timers, calls processFunc/collideFunc, updates transforms.
+
+RENAME: 2F310.c → OBJECT_UPDATE.c
+FUNCTION NAMES:
+  func_8002E710 → OBJECT_TickAndProcess(Instance*, GameTracker*)
+  func_8002E758 → OBJECT_ProcessList(GameTracker*)
+  func_8002EBC4 → OBJECT_UpdateTransform(Instance*, GameTracker*)
+  Remaining     → OBJECT_helper_N()
+
+================================================================================
+33230  (ROM 0x33230–0x345E0, VRAM 0x80032630–0x800339E0, 5040B)
+NAME:  AUDIO_CTRL  — Music/audio controller (partially identified)
+================================================================================
+Already partially decompiled: MusSetMasterVolume, MusInitialize, MusPtrBankInitialize,
+MusHandleSetVolume, MusHandleStop, MusHandleAsk, inflate, func_800329A0,
+func_80032B34, func_80032F30, func_80032F90, func_80032BD0, func_800331DC,
+func_800331BC, func_80033200, func_80033248.
+
+The 6 remaining stubs are music event handlers and the zlib-based music bank
+decompressor. func_80050980 (called 2×) = SFX_PlayEvent.
+
+RENAME: 33230.c → AUDIO_CTRL.c  (already well-named in practice)
+REMAINING STUBS (6): music bank load, stream handlers, SFX cross-fade.
+
+================================================================================
+345E0  (ROM 0x345E0–0x360E0, VRAM 0x800339E0–0x800354E0, 6912B)
+NAME:  PARTICLE  — Particle system emitter and renderer
+================================================================================
+First function: divides frame-counter (0x800E5CD8) by arg0->short[0] (emit rate),
+then by arg0->short[2] (sub-rate). Reads RGBA bytes at arg0+4,5,6,7. Computes
+offset arg0+8+v1*8 to find the particle definition block. Calls func_80033A80
+(the inner emitter), which reads a byte at stack[0x27] (particle type), does
+further divides, reads color from a texture pointer (0x800E7EEC or 0x80157050
+depending on depth-buffer state).
+
+The large dispatch at 0x80033B3C on particle type byte (values 4, 8, 0x20 etc.)
+matches a particle type enum. COLLIDE_GetNormal (called 1×) is used for ground-
+aligned particles (sparks, dust puffs that orient to surface normal).
+Self-recursive = iterates a particle list. Calls func_80034640 (draw particle),
+func_80034BF8 (free particle), func_80034FE4 (alloc particle).
+
+RENAME: 345E0.c → PARTICLE.c
+FUNCTION NAMES:
+  func_800339E0 → PARTICLE_Emit(ParticleDef*, GameTracker*)
+  func_80033A80 → PARTICLE_SpawnOne(ParticleDef*, void*, void*)
+  func_80033B80 → PARTICLE_UpdateList(GameTracker*)
+  func_80034640 → PARTICLE_Draw(Particle*)
+  func_80034BF8 → PARTICLE_Free(Particle*)
+  func_80034FE4 → PARTICLE_Alloc()
+  func_800375E0 → PARTICLE_DrawAll(GameTracker*)
+
+================================================================================
+360E0  (ROM 0x360E0–0x368B0, VRAM 0x800354E0–0x80035CB0, 2000B)
+NAME:  CONTROLLER  — Controller input + memory card (PFS) manager
+================================================================================
+First function: initialises struct at 0x800AB0B8 (controller status array),
+calls func_80057190 (osContInit equivalent), func_80057820 (osContSetCh). Then
+osSetEventMesg, osCreateMesgQueue — standard controller init sequence.
+osPfsFileState, osPfsFreeBlocks, osPfsReadWriteFile — memory card access.
+osRecvMesg (×2) — waits for controller/SI events.
+
+func_80040170 (called 3×) = the pad-read polling function (in HUD range,
+but also services controller state). func_80032F90 (×1) = VI sync.
+
+RENAME: 360E0.c → CONTROLLER.c
+FUNCTION NAMES:
+  func_800354E0 → CONTROLLER_Init()
+  func_80035550 → CONTROLLER_Poll(GameTracker*)
+  func_800356A8 → MEMCARD_Read(int slot, void* buf, int size)
+  func_80035800 → MEMCARD_Write(int slot, void* buf, int size)
+
+================================================================================
+368B0  (ROM 0x368B0–0x38670, VRAM 0x80035CB0–0x80037A70, 7616B)
+NAME:  RENDER_BLEND  — Software alpha-blend / color mix for RDP primitives
+================================================================================
+First instruction: srl v1,a0,24 followed by mult v1,v0 — extracts the alpha
+byte from a 32-bit RGBA color and multiplies it. Then extracts R,G,B components
+(bytes 0-2) individually, multiplies each by a factor (a1). This is a 24-bit
+software color blend: result = lerp(color_a, color_b, alpha).
+
+Called 7× from within 38670 (the render pipeline) — used to blend fog/vertex
+colors before writing RDP primitives. Self-recursive (7 callers within 368B0)
+= it processes a list of primitives. osVirtualToPhysical + guMtxCatF + osWritebackDCache
+confirm this is in the RDP submission path.
+
+RENAME: 368B0.c → RENDER_BLEND.c
+FUNCTION NAMES:
+  func_80035CB0 → BLEND_MulColor(u32 color, u32 factor) → u32
+  func_80035D1C → BLEND_LerpColor(u32 a, u32 b, int t) → u32
+  func_80037418 → BLEND_ApplyFog(void* prim_list, GameTracker*)
+  func_800374FC → BLEND_ProcessList(void* prim, void* fog_params)
+  func_800375E0 → BLEND_SubmitRDP(void* dl, int count)
+
+================================================================================
+38670  (ROM 0x38670–0x3AF50, VRAM 0x80037A70–0x8003A350, 10464B)
+NAME:  PIPE3D  — 3D rendering pipeline / display list builder
+================================================================================
+First function writes constants (10, 16, 40, 30, 0) to globals at 0x800CE0E0–F0
+then immediately returns — these are render batch size limits (maxOpaque, maxAlpha,
+maxParticle, maxSprite, maxBlend). The next 4 functions are stubs (jr $ra) —
+null render mode handlers.
+
+Calls MATH3D_ApplyMatrixSVT (7×) for transform of SVECTORs into clip space,
+RotMatrix (1×), osVirtualToPhysical + guMtxF2L + osWritebackDCache for DL
+submission. OBTABLE_FindObject (1×) for draw-order sorting. sprintf + vPrint3DTextf
+for debug overlays.
+
+func_80037ACC: stores a0 (clipping limit) to 0x80076A88 — the screen-space
+clip distance register. func_80037AE0 calls it with 0x140 (320 = screen width).
+
+RENAME: 38670.c → PIPE3D.c
+FUNCTION NAMES:
+  func_80037A70 → PIPE3D_SetBatchLimits()
+  func_80037AAC → PIPE3D_NullDraw_0() … NullDraw_3()  (4 stubs)
+  func_80037ACC → PIPE3D_SetClipDistance(int dist)
+  func_80037AE0 → PIPE3D_InitClip()
+  func_80037ACC onward → PIPE3D_BuildOpaqueDL(), PIPE3D_BuildAlphaDL(), etc.
+  func_80038798 → PIPE3D_SubmitBatch(void* dl)
+  func_8003A6AC → (math clamp, already in 3AF50)
+
+================================================================================
+3B0E0  (ROM 0x3B0E0–0x3BAA0, VRAM 0x8003A4E0–0x8003AEA0, 2496B)
+NAME:  MATH_CLAMP  — Integer clamping and angle normalization utilities
+================================================================================
+First instruction: bgez a0 — branches immediately on sign of input.
+Pattern: |a0|, compare to 0x1000, 0x800, 0x400, binary search for magnitude.
+Returns a clamped or normalized value. This is an angle wrap / clamp function
+(angles in the engine use 0x1000 = 90°, 0x4000 = 360°).
+
+Already named in symbol_addrs:
+  func_8003A4E0 → LoadObjectData         (this is WRONG — recheck)
+  func_8003A6AC → GetObjectDataFromName  (also wrong)
+
+Actually looking at callers: func_8003A4E0 is called from 1BA60 (GEX_Process)
+with angular velocity args, and func_8003A6AC is called in trig contexts
+(after ratan2). These ARE math clamp/normalize functions, NOT the load
+functions (those are in 3BAA0 at ROM 0x3BAA0+). The symbol_addrs entries
+for LoadObjectData etc. fall at ROM 0x3AF10+, beyond 3B0E0.
+
+RENAME: 3B0E0.c → MATH_CLAMP.c
+FUNCTION NAMES:
+  func_8003A4E0 → MATH_ClampAngle(int angle) → int
+  func_8003A6AC → MATH_WrapAngle(int angle) → int
+  func_8003A8C0 → MATH_ClampI16(int val, int min, int max) → int
+  (remaining small functions = other clamp/abs variants)
+
+================================================================================
+3FB20  (ROM 0x3FB20–0x405D0, VRAM 0x8003EF20–0x8003F9D0, 2736B)
+NAME:  CHEAT / DEBUG  — Cheat code handler and debug object spawner
+================================================================================
+First function: loads address 0x8008E358 (cheat code input buffer), then
+constants 0xBA001402 and 0xFCFFF279 — these are bitmask sequences for cheat
+code detection (button combination comparison). Calls OBTABLE_FindObject (to
+spawn debug objects) and DrawTextToScreen (to display cheat confirmation).
+Self-recursive = walks a cheat code table. Calls func_80037B34 (in PIPE3D
+range — debug line draw).
+
+RENAME: 3FB20.c → CHEAT.c
+FUNCTION NAMES:
+  func_8003EF20 → CHEAT_Update(GameTracker*)
+  func_8003F334 → CHEAT_CheckSequence(int* buf, u32 mask)
+  func_8003F850 → CHEAT_Activate(int cheat_id, GameTracker*)
+
+================================================================================
+405D0  (ROM 0x405D0–0x40D70, VRAM 0x8003F9D0–0x80040770, 1952B)
+NAME:  REMOTE_BITS  — Red remote collectible bitfield manager
+================================================================================
+First function: if a0==0 returns early. Loads 0x800F9760 (remote bit array),
+0x80156BE4 (current byte offset), 0x80156BD4 (current bit offset). Does
+sllv (1, bit_offset) then OR into the byte — sets a bit. Then decrements
+bit_offset; when it underflows (bgez fails), resets to 7 and advances byte ptr.
+GetRemoteCount (1×) validates the count.
+
+Second function scans the bit array looking for set bits, counting them
+(for "remotes collected in level" HUD display).
+
+This is the per-level remote collectible tracking system: each remote has a
+bit in a persistent byte array. Set on collection, read for HUD and save data.
+
+RENAME: 405D0.c → REMOTE_BITS.c
+FUNCTION NAMES:
+  func_8003F9D0 → REMOTE_SetBit(int remote_index)
+  func_8003FA48 → REMOTE_ClearBit(int remote_index)
+  func_8003FD84 → REMOTE_CountInLevel(GameTracker*) → int
+  func_8001A1D8 → (caller — likely REMOTE_CheckAll in 13920 range)
+
+================================================================================
+42BD0  (ROM 0x42BD0–0x443F0, VRAM 0x80041FD0–0x800437F0, 6176B)
+NAME:  CAMERA_MATRIX  — Camera world/view matrix computation
+================================================================================
+First function: reads arg1->short[0x12] (camera mode short). If == 1, calls
+func_80042184 (decompose rotation into Euler), copies result to arg0 (a 0x12-byte
+matrix output struct at short[0],[6],[C],[2],[8],[E],[4],[A],[10]).
+Remaining cases read directly from the input camera struct and copy matrix
+elements, then call RotMatrix, MulMatrix2, MATH3D_FastAtan2, RotMatrixZ/X/Y.
+
+This computes the camera's view matrix each frame from its position, target
+look-at point, and up vector. Called from the main render setup path.
+
+RENAME: 42BD0.c → CAMERA_MATRIX.c
+FUNCTION NAMES:
+  func_80041FD0 → CAMERA_BuildViewMatrix(MATRIX* out, CameraState* cam)
+  func_80042120 → CAMERA_DecomposeRotation(MATRIX* out)
+  func_80042184 → CAMERA_EulerToMatrix(MATRIX* out)
+  func_80042330 → CAMERA_LookAt(MATRIX* out, SVECTOR* eye, SVECTOR* target)
+  func_80042674 → CAMERA_ApplyTransform(CameraState* cam, GameTracker*)
+  func_80042CC0 → CAMERA_UpdateFrustum(CameraState* cam)
+  func_8003AD94 → (callee — likely MATRIX_Transpose or similar)
+
+================================================================================
+4FC20  (ROM 0x4FC20–0x51880, VRAM 0x8004F020–0x80050C80, 7264B)
+NAME:  SOUND  — Spatial sound effect dispatcher (partially identified)
+================================================================================
+Already partially decompiled: func_8004F60C (looping SFX manager with handle
+tracking), func_800503F8 (null stub), func_800508CC (null stub), func_800508D4
+(initialises gameTracker->_4B12 SFX slots), func_80050BC4 (music volume ramping).
+
+func_80050508 = SOUND_PlaySpatialEffect(Instance*, u16 sfx_id, s16 pitch,
+                                         u8 volume, u32 distance)
+  — confirmed by KUNGFU.c, NYPD.c, RTA.c call sites with positional args.
+func_800506B8 = SOUND_UpdateLoopingHandle(Instance*, MusHandle, s16, u8, u32)
+func_80033248 = SOUND_HandleIsValid(MusHandle) → int
+func_80033200 = SOUND_HandleIsFinished(MusHandle) → int
+func_800331BC = SOUND_StopHandle(MusHandle)
+
+The 14 stubs handle: SFX category dispatch (footsteps, impacts, ambient, music
+stings), distance attenuation, reverb zone switching, and one-shot/looping mode.
+
+RENAME: 4FC20.c → SOUND.c  (already good)
+REMAINING STUBS: SOUND_PlayFootstep, SOUND_PlayImpact, SOUND_PlayAmbient,
+                  SOUND_SetReverb, SOUND_UpdateAll, etc.
+
+================================================================================
+52EE0  (ROM 0x52EE0–0x53BD0, VRAM 0x800522E0–0x80052FD0, 3312B)
+NAME:  DISPLAY_LIST  — Display list allocator and RDP task submitter
+================================================================================
+First function: loads global 0x800791E0 (DL write pointer), adds a0 (byte count)
+to it, shifts right 8 (segment offset), stores both — this is a DL buffer
+allocation: ptr += size; seg_off = ptr >> 8. Returns the new pointer.
+Second function: reads a0->_C (task length), a0->_8 (task type),
+a0->_0 (task data ptr), calls osWritebackDCache on the data, then submits to
+the RSP via func_80052758 (osSpTaskStart?).
+
+Calls func_80034BF8 (PARTICLE_Free — cleans up expired particle DL entries),
+func_80052FB8 (osSpTaskLoad?), func_800529A8 (osSendMesg to RSP queue).
+
+RENAME: 52EE0.c → DISPLAY_LIST.c
+FUNCTION NAMES:
+  func_800522E0 → DL_Alloc(int size) → void*
+  func_80052308 → DL_Submit(OSTask* task)
+  func_80052758 → DL_WaitForRSP()
+  func_80052FB8 → DL_LoadTask(OSTask* task)
+  func_800529A8 → DL_SendToQueue(OSTask* task)

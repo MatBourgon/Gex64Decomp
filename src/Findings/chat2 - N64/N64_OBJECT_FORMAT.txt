@@ -1,0 +1,268 @@
+N64 CRYSTAL DYNAMICS DECOMPRESSED OBJECT FORMAT
+=================================================
+Gex 64: Enter the Gecko — Confirmed via acrate__ analysis
+
+OVERVIEW
+--------
+Each object blob decompresses (raw DEFLATE) to a self-contained relocatable binary.
+The format supports multi-instance loading: the same blob can be loaded at different
+RDRAM addresses by applying the relocation table.
+
+FILE LAYOUT
+-----------
+[+0x0000] uint32            n_reloc_entries
+[+0x0004] uint32[n_reloc]   reloc_offsets       (file-relative; each marks a ptr field)
+[+0x0004+n*4] ...           OBJECT DESCRIPTOR   (class + geometry data)
+
+RELOCATION
+----------
+At load time, for each offset O in the reloc table:
+  *(uint32*)(file_base + O) += rdram_load_address
+This converts all file-relative pointers to absolute RDRAM addresses.
+NOT all reloc entries mark true pointer fields — some mark RGBA vertex color fields
+and other values. The engine adds the base unconditionally; vertex RGBA works because
+color values (0xRRGGBBAA) added to a very small base stay in a valid range.
+
+OBJECT CLASS DESCRIPTOR (starts at file offset 4 + n_reloc*4)
+--------------------------------------------------------------
+desc+0x00  uint32  object_class_type
+           0x01 = simple/no-mesh (collision proxy, NPC descriptor)
+           0x10 = static geometry (terrain, platforms, environment)
+           0x11 = dynamic object (enemies, pickups, interactables)
+           0x41 = boss/special object
+           0x50 = complex animated object
+           (upper bytes: mesh_variant_count, animation_track_count, etc.)
+
+desc+0x04  uint32  parent_class_ptr (NULL = no inheritance)
+desc+0x08  uint32  subclass_flags   (0x00010000 = standard)
+desc+0x0C  uint32  null_slot_ptr    (file offset 0x4C; becomes RDRAM null ptr after reloc)
+desc+0x10  uint32  extra_data_ptr   (NULL or ptr to extra class data)
+desc+0x14  uint32  bound_r1         (packed: hi16=4000, lo16=10000 for most objects)
+desc+0x18  uint32  bound_r2         (packed: hi16=6000, lo16=12000 for most objects)
+desc+0x1C  uint32  geom_ptr         (ptr to geometry block; NULL for no-mesh objects)
+desc+0x20  uint32  next_ptr         (circular doubly-linked list: next sibling)
+desc+0x24  uint32  prev_ptr         (circular doubly-linked list: prev sibling)
+
+NAME SECTION (immediately follows descriptor, before geometry)
+--------------------------------------------------------------
+8 bytes: object name (null-padded ASCII, e.g. "acrate__")
+4 bytes: padding zeros
+8 bytes: object name (second copy)
+4 bytes: 0x00CDCDCD (Crystal Dynamics sentinel / null-list-terminator)
+
+GEOMETRY BLOCK (pointed to by desc+0x1C)
+-----------------------------------------
+geom+0x00  uint32  vtx_buffer_ptr   (ptr to vertex array)
+geom+0x04  uint32  default_color    (RGBA packed, e.g. 0x646464FF = gray)
+geom+0x08  uint32  (reserved/zero)
+geom+0x0C  uint32  (reserved/zero)
+geom+0x10  uint32  vertex_count     (e.g. 27 = 0x1B for aztcpc__)
+geom+0x14  uint32  face_count       (e.g. 15 = 0x0F for aztcpc__)
+geom+0x18  uint32  (reserved/zero)
+geom+0x1C  uint32  (reserved/zero)
+geom+0x20  uint32  face_list_ptr    (ptr to first face record)
+...
+
+VERTEX FORMAT (12 bytes each, at vtx_buffer_ptr)
+-------------------------------------------------
+bytes[0]   uint8   R (red vertex color)
+bytes[1]   uint8   G (green vertex color)
+bytes[2]   uint8   B (blue vertex color)
+bytes[3]   uint8   A (alpha, typically 255)
+bytes[4:6] int16   X (position, big-endian, model-space units)
+bytes[6:8] int16   Y
+bytes[8:10] int16  Z
+bytes[10:12] int16 W (texture coord U, or normal index, or padding)
+
+FACE RECORD FORMAT (12 bytes each, at face_list_ptr)
+-----------------------------------------------------
+bytes[0:4]  uint32  batch_ptr (ptr into another face's vtx-index block;
+                               used by renderer to detect vertex cache batch boundaries)
+bytes[4:6]  uint16  vertex_index_A (index into vertex array)
+bytes[6:8]  uint16  vertex_index_B
+bytes[8:10] uint16  vertex_index_C
+bytes[10:12] uint16 material_flags (0xFF47 = standard opaque)
+
+NOTES
+-----
+- Face records are contiguous (stride 12, no gaps between faces)
+- Multiple face records can share the same batch_ptr (same render batch)
+- The batch_ptr → RDRAM address of another face's [vA,vB,vC,mat] at runtime
+- Vertex index 7 in acrate__ appears to be a PIVOT/ORIGIN point (XYZ=0,1,2)
+  used as the object's transform anchor, not a visible mesh vertex
+- All structures are big-endian (N64 native byte order)
+- All pointers in file are file-relative; add RDRAM load base after decompression
+
+EXAMPLE: acrate__ (A-frame crate enemy)
+----------------------------------------
+Compressed: 1200B → Decompressed: 1780B
+n_reloc = 32
+Descriptor at +0x0084, class_type = 0x00040211 (class=17/0x11, variants=4, tracks=2)
+7 vertices at +0x0180 (cube corners, XYZ range ±240/±120/±100)
+11 triangles at +0x01E0 (forming a closed box mesh with pivot at origin)
+Name "acrate__" at +0x00B8 and +0x00C4, CDCD sentinel at +0x00CC
+
+CLASS 0x10 (STATIC GEOMETRY) FORMAT - SUPPLEMENT
+=================================================
+aztcpc__ analysis reveals class 0x10 objects use a DIFFERENT geometry format
+than class 0x11 objects.
+
+KEY DIFFERENCE: Class 0x10 uses pre-baked GBI display lists (Fast3D format)
+with vertices interleaved in a specific stride pattern.
+
+LAYOUT OVERVIEW FOR CLASS 0x10:
+─────────────────────────────────
+[0x0000] n_reloc (uint32)
+[0x0004] reloc_offsets (n_reloc × uint32)
+[0x00??] DESCRIPTOR (same 10-word header as class 0x11, geom_ptr = NULL)
+         desc+0x1C: geom_ptr = 0 (no external geometry block)
+[0x00??] NAME SECTION (same as class 0x11)
+[0x00??] DESCRIPTOR TAIL (pointers to animation/state data, varies by object)
+[0x00C8] DISPLAY LIST BATCHES (Crystal Dynamics CD-GBI hybrid format):
+         Each batch:
+           [8B BATCH HEADER] [n × G_TRI1 8B] [B8 8B batch terminator]
+         Batch header format:
+           byte[0]   = 0x00 (identifies this as a batch header)
+           byte[1]   = batch flags / LOD data
+           byte[2]   = triangle count or type
+           byte[3]   = flags
+           byte[4:8] = file offset to texture setup DL (e.g., 0x0A50 or 0x0AB8)
+         G_TRI1 format (old Fast3D):
+           BF 00 00 00 00 [v0×2] [v1×2] [v2×2]
+           (vertex indices are cache-relative, multiplied by 2 in the GBI encoding)
+         B8 = batch terminator (reused G_POPMTX opcode)
+
+[0x01DC] INTERLEAVED VERTEX+STATE DATA (Crystal Dynamics packed format):
+         Stride = 48 bytes (4 × 12B records per vertex):
+           Record 0 (+00): 12B state/control data (XY offsets, flags)
+           Record 1 (+12): 12B state/control data (segment ptrs, UVs)
+           Record 2 (+24): 12B state/control data (more UV/state)
+           Record 3 (+36): 12B VERTEX = [R][G][B][A][X i16][Y i16][Z i16][W=0 i16]
+                           (same 12B vertex format as class 0x11!)
+         NOTE: Vertices occur at file_offset = 0x01F4 + n×48
+               (first vertex at +0x01F4, stride 48, for n_vtx vertices)
+
+[geom_blk] GEOMETRY BLOCK (pointed from reloc, contains vtx/tex counts):
+           +0x00: uint32 texture_data_ptr (file offset, NOT vertex buffer!)
+           +0x04: uint32 default_color RGBA
+           +0x10: uint32 vertex_count (e.g., 27 = 0x1B)
+           +0x14: uint32 batch_count  (e.g., 3 display list batches)
+           +0x20: uint32 display_list_start_ptr (file offset to first batch header)
+           (Note: vtx_buffer_ptr is actually texture_data_ptr for class 0x10)
+
+[tex_data] TEXTURE DATA + PALETTE:
+           CI4 palette at texture_data_ptr (16 × 2B = 32B)
+           CI4 texture data follows (width × height × 4bits / 8)
+           Second texture setup repeats (for second texture used in object)
+
+TEXTURE FORMAT: CI4 (4-bit Color Index)
+   Palette: 16 entries × RGB5A1 (2 bytes each) = 32 bytes
+   Texture data: 4 bits per pixel, packed MSB first
+   Two textures per aztcpc__ object (base texture + detail?)
+   GBI uses segments to reference: segment 5 = object texture base address
+
+EXAMPLE: aztcpc__ (Aztec Pillar Column):
+   20 vertices at interleaved stride 48, starting at +0x01F4
+   28 triangles across 3 GBI batches (2 different textures used)
+   Two CI4 textures at +0x0800 (palette) and +0x0820 (pixels)
+   Column geometry: inner radius ≈315 units, outer radius ≈445 units, height ≈600 units
+   (flared-top Aztec column shape, Y-up coordinate system)
+
+VERTEX EXTRACTION FOR CLASS 0x10:
+   offset = display_list_end + 0x1C  (first vertex after DL header area)
+   for i in range(vertex_count):
+       record = data[offset + i*48 + 36 : offset + i*48 + 48]  # 3rd record of group
+       R,G,B,A = record[0:4]
+       X,Y,Z   = int16(record[4:6]), int16(record[6:8]), int16(record[8:10])
+       W       = int16(record[10:12])  # typically 0
+
+TRIANGLE EXTRACTION FOR CLASS 0x10:
+   offset = desc_start + 0x?? (first batch header)
+   while offset < display_list_end:
+       if data[offset] == 0x00: # batch header
+           texture_ptr = uint32(data[offset+4:offset+8])
+           offset += 8
+           while data[offset] == 0xBF: # G_TRI1
+               v0 = data[offset+5] >> 1
+               v1 = data[offset+6] >> 1
+               v2 = data[offset+7] >> 1
+               triangles.append((v0,v1,v2))
+               offset += 8
+           if data[offset] == 0xB8: # batch end
+               offset += 8
+       else:
+           break  # no more batches
+
+RELATIONSHIP TO CLASS 0x11:
+   Both classes use the same 12B vertex format (RGBA + XYZ i16 + W i16).
+   Class 0x11: vertices in contiguous buffer at desc→geom→vtx_ptr, faces in list.
+   Class 0x10: vertices interleaved in display list data at stride 48, 
+               triangles as GBI G_TRI1 commands in batch headers.
+
+CLASS 0x01 FORMAT
+─────────────────
+"Simple/no-mesh" objects. Two sub-variants:
+
+  (a) STUB VARIANT (≤440B): geom_ptr=NULL, no geometry data.
+      Only contains descriptor header + bounding sphere + name.
+      These are behavior-only descriptors: spawn generators (gengen__),
+      collision runners (couldrn_), boulder generators (bldrgen__).
+      The bound fields encode the trigger radius, not a visual mesh.
+
+  (b) GEOMETRY VARIANT (>440B, e.g. astmedn_ 2788B): has geom_ptr, uses
+      identical vertex+face format to class 0x11.
+      These are "simple physics" objects with lightweight AI/behavior.
+
+CLASS 0x41 FORMAT
+──────────────────
+"2D billboard / screen-space" objects. Used for HUD elements and cutscene
+display surfaces (TV screens, title cards).
+
+VERTEX FORMAT (12B):
+  bytes[0:2]   s16  X  (screen-space horizontal, origin at center)
+  bytes[2:4]   s16  Y  (screen-space vertical, origin at center)
+  bytes[4:8]   RGBA     (vertex color for this quad region)
+  bytes[8:12]  u32  batch_ptr (file-relative ptr to texture batch descriptor)
+
+FACE FORMAT (12B):
+  bytes[0:2]   u16  v1
+  bytes[2:4]   u16  v2
+  bytes[4:6]   u16  v3
+  bytes[6:8]   u16  mat  (0xFF47=opaque, 0xFF57=special)
+  bytes[8:12]  u32  batch_ptr
+
+NOTE: In class 0x41, the batch_ptr is at the END of the record (bytes 8-12),
+      unlike class 0x11 where it is at the BEGINNING (bytes 0-4).
+
+The large data section between descriptor and vertices encodes texture UV mappings
+and display list state (segment addresses, blend modes) as ptr arrays.
+End-of-file contains CI4 texture setup GBI (G_LOADTLUT, G_LOADBLOCK, G_SETTILESIZE).
+Coordinates are in N64 screen pixels (±680 typical for a full-screen element).
+
+Example: finltv__ (Final Boss TV) — 8332B, 69 relocs
+  18 vertices, 28 faces, XY range ±680 × ±653, Z=0 (flat billboard)
+
+CLASS 0x50 FORMAT
+──────────────────
+"Animated platform" objects. The descriptor's geom_ptr field (desc+0x1C) is NULL,
+but the object still contains geometry using the CLASS 0x11 format.
+
+LAYOUT:
+  [reloc header] [descriptor] [name×2 + CDCD sentinel]
+  [motion parameters block] (varies: spring constants, travel distance, timing)
+  [vertices: class 0x11 12B format starting 12B before face data]
+  [faces: class 0x11 12B format]
+
+The motion parameters encode the platform's behavioral script:
+  - Platform type (sliding, rotating, oscillating)
+  - Movement speed, travel distance, timing
+  - Reference to linked behavior object (class 0x50 sub-class)
+  - Animation trigger conditions
+
+The vertex+face geometry describes the VISUAL MESH of the platform
+(same format as class 0x11; both RGBA+XYZ+W vertices and ptr+vABC+mat faces).
+Pivot vertex (XYZ=0,1,2) present as last vertex, same as class 0x11.
+
+Example: kngslab_ (Kung-Fu Theater Sliding Slab) — 1328B, 41 relocs
+  15 vertices (14 real + pivot), 15 faces
+  Rectangular slab 1535×2560 units, Y=-319 (flat), dark gray (62,62,62)

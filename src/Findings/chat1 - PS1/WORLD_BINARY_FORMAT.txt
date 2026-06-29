@@ -1,0 +1,145 @@
+WORLD BINARY FORMAT (LEVEL SECTION 1 / CAMERA CONFIG)
+Gex 2: Enter the Gecko  SLUS-00598
+======================================================
+
+╔══════════════════════════════════════════════════════════════════════╗
+║  CAMERA BEHAVIOR CONFIGURATION FILES (slots 8–11 in BIGFILE)         ║
+║  Global resources present in ALL level environments                  ║
+║  Sizes: 582–943 bytes each  •  Node counts: 12–24                   ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+PURPOSE: Defines how the camera follows/orbits Gex during gameplay.
+Each file configures a specific camera behavior mode (follow, orbit, etc.)
+for a different play context (indoor/outdoor, boss, hub, etc.).
+
+FOUR FILES:
+  slot[ 8] = 924B total, 24 nodes — Hub / outdoor camera (24 control points)
+  slot[ 9] = 702B total, 12 nodes — Standard indoor follow camera
+  slot[10] = 943B total, 16 nodes — Extended behavior (boss/special)
+  slot[11] = 582B total, 12 nodes — Alternate indoor mode
+
+BIGFILE SLOTS:
+  Streaming buffer: entries at BIGFILE offsets 0x01462800–0x01464000
+  NOT environment-specific: loaded once at boot, shared across all levels
+
+──────────────────────────────────────────────────────────────────────
+FILE FORMAT
+──────────────────────────────────────────────────────────────────────
+
+HEADER (4 bytes, at start of file):
+  [+0x00]  uint16 LE  type_flags     = 0x0000 for all 4 files
+  [+0x02]  uint16 LE  node_count     = number of camera configuration nodes
+
+CAMERA PARAMETERS (at fixed offsets within file, used directly):
+  [+0x04]  int16 LE   primary_param  = 0xFFFF (−1) = "unlimited" / no constraint
+  [+0x14]  int16 LE   clamp_value    = spring damping limit (8, 13, 27, 522)
+  [+0x30]  int16 LE   range_limit_A  = horizontal angular range
+  [+0x32]  int16 LE   range_limit_B  = vertical angular range
+  [+0x34]  int16 LE   range_limit_C  = zoom/distance range
+
+These fields are read directly by 0x80011C8C (camera_update) into camera_obj:
+  buf[0x00] → camera_obj[0x120]  (type_flags copy)
+  buf[0x02] → camera_obj[0x122]  (node_count copy)
+  buf[0x04] → camera_obj[0x124]  (primary_param copy)
+  buf[0x30] → camera_obj[0x128]  (range_limit_A copy)
+  buf[0x32] → camera_obj[0x12A]  (range_limit_B copy)
+  buf[0x34] → camera_obj[0x12C]  (range_limit_C copy)
+
+NODE DATA SECTION (from byte 4 onward):
+  Begins with 0xFFFF (−1) as a section-start sentinel.
+  Contains variable-length per-node records (total bytes / node_count is
+  not a clean integer, confirming variable-length encoding).
+
+  The encoding appears to be a DELTA or KEYFRAME stream where:
+  • 0x02 is the most frequent byte (61/300 = 20% in one file), suggesting
+    it acts as a field-type code or delta marker
+  • Records follow a pattern: [value_lo][value_hi][field_code]
+    where field_code = {0x02, 0x03, 0x04, 0x05, 0x06} and higher values
+    mark boundaries or other operations
+  • The exact encoding of the per-node delta stream is not yet decoded;
+    it is parsed by 0x8005EAC4 (camera behavior pointer getter) which
+    calls 0x8005D9D4 for actual node initialization
+
+SECTION BOUNDARIES within node data (0xFFFF sentinel):
+  slot[ 8] (24 nodes): sections of 0, 137, 47, 3 int16s
+    → section[2]: 47/24 ≈ 2 int16s per node (closest to integer)
+  slot[ 9] (12 nodes): sections of 0, 149 int16s
+  slot[10] (16 nodes): sections of 0, 45, 149 int16s
+  slot[11] (12 nodes): sections of 0, 122 int16s
+
+TERMINATOR + PADDING:
+  Active data ends with a row of 0x8000 values (−32768 = INT16_MIN).
+  Followed by zero-padding to primary_stream_size.
+  Secondary section (after primary_stream_size) is all zeros (unused).
+
+──────────────────────────────────────────────────────────────────────
+RUNTIME CAMERA NODE FORMAT (expanded from file data)
+──────────────────────────────────────────────────────────────────────
+
+The camera system (0x8005E754 / 0x8005EAC4) expands the file data into
+one of two runtime node-array formats, selected by camera_obj[+6]:
+
+MODE A (camera_obj[+6] = 1):  COMPACT — 10 bytes per node (5 int16s)
+  Index stride: node_base + node_idx × 10
+  Fields: [+0] id/flags, [+2] val1, [+4] val2, [+6] val3, [+8] val4
+
+MODE B (camera_obj[+6] = 0):  FULL — 32 bytes per node (16 int16s)
+  Index stride: node_base + node_idx × 32
+  Fields used (from disasm):
+    [+0]  node_id / flags
+    [+2]  x_position (int16)  → camera_obj[+0x12] (x output)
+    [+4]  y_position (int16)  → camera_obj[+0x14] (y output)
+    [+6]  z_position (int16)  → (z output)
+    [+8..+31]: additional orientation, speed, FOV, link fields
+
+CAMERA OBJECT LAYOUT (struct camera_obj at camera_obj[+0x148]):
+  [+0]   ptr  base_ptr     = pointer to runtime node array
+  [+4]   i16  max_count    = total node count (= file node_count)
+  [+6]   u8   mode_byte    = 0=mode_B(32B), 1=mode_A(10B)
+  [+0x120] u16  type_flags_copy
+  [+0x122] u16  node_count_copy
+  [+0x124] u16  primary_param_copy
+  [+0x128] u16  range_limit_A_copy
+  [+0x12A] u16  range_limit_B_copy
+  [+0x12C] u16  range_limit_C_copy
+  [+0x148] ptr  behavior_data = pointer to this camera config file (= file base)
+  [+0x14C] i16  camera_state (0=none,2,5,6=follow,0xC,0xD=transition,0xF)
+  [+0x150] i16  next_state
+  [+0x3B6] u16  field3B6
+  [+0x3B8] u16  type_flags (= buf[0x00])
+  [+0x3BA] u16  count_field (= buf[0x02])
+  [+0x3BC] u16  field3BC
+  [+0x3BE] u16  clamped_value (= max(buf[0x04], buf[0x14]))
+  [+0x43C] i32  frame_counter
+  [+0x480] ptr  sub_obj_A
+  [+0x484] ptr  sub_obj_B
+  [+0x2C8] i32  state_phase
+
+──────────────────────────────────────────────────────────────────────
+CAMERA STATE MACHINE STATES (camera_obj[+0x14C])
+──────────────────────────────────────────────────────────────────────
+  0x00  = Inactive / uninitialized
+  0x02  = State 2 (one of two sub-modes, determined by s1=0xC/0xE range)
+  0x05  = State 5 (transition with frame counter)
+  0x06  = Follow camera (active tracking, calls 0x8001F1F0)
+  0x0C  = State C (sub-mode of 0x02)
+  0x0D  = State D (sub-mode of 0x02, from state-0x02 transition)
+  0x0F  = State F (terminal state in several transitions)
+
+KEY CAMERA FUNCTIONS:
+  0x80011C8C  Camera_update(camera_obj, world)
+              — dispatches to sub-handlers by camera_obj[0x4DEE] mode
+              — copies fixed-offset params from file to camera_obj
+  0x80015728  Camera_stateMachine(camera_obj, event)
+              — main state machine; handles state transitions
+  0x8005E1F4  Camera_behaviorStep(camera_obj, control_struct) → result
+              — single step through behavior data; wraps eac4+e754
+  0x8005E754  Camera_behaviorTraverse(camera_obj, ctrl, table)
+              — walks node array using stride 10 (mode A) or 32 (mode B)
+  0x8005EAC4  Camera_behaviorGetPtr(camera_obj, ctrl) → node_ptr
+              — resolves index into node_base + stride computation
+  0x8005D7C8  Camera_applyNodeB(camera_obj, ctrl, node_ptr)
+              — applies mode-B (32B) node to camera state
+  0x8005D9D4  Camera_applyNodeA(camera_obj, ctrl)
+              — applies mode-A (10B) node to camera state
+

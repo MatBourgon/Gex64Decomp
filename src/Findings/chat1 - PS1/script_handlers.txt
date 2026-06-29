@@ -1,0 +1,217 @@
+// ============================================================================
+// Gex 2 (SLUS-00598) -- Script opcode dispatch table full annotation
+// Table base: 0x80085C00  |  105 entries x 12 bytes  |  ScriptExec @ 0x80024D30
+//
+// Entry layout:  [+0x00] name_str_ptr  [+0x04] handler_ptr  [+0x08] arg_info
+// arg_info:  low 16 = arg_count (words after opcode index in bytecode)
+//            high 16 = obj_flag (1 = handler dereferences $a1[+4] as object ptr)
+//
+// Handler calling convention:
+//   int handler(script_obj_ptr $a0, script_args_ptr $a1)
+//   $a1[+0x00] = opcode_index (the current word, already consumed by dispatcher)
+//   $a1[+0x04] = arg0, [+0x08] = arg1, [+0x0A/C] = arg2/3 (halfwords in some)
+//   Returns 0 = advance PC normally; 1 = skip advance (handler moved PC itself)
+//
+// Script PC advance: (arg_count + 1) * 4 bytes per dispatch iteration
+// ============================================================================
+
+// --- Object struct field layout (inferred from handler field accesses) ---
+// object[+0x04]: sub-object or target ptr  (indirect: $a1[+4] -> object, then object[+4] = sub-ptr)
+// object[+0x08]: second arg / sub-index
+// object[+0x0A]: arg2 halfword
+// object[+0x0C]: arg3 halfword / model id slot
+// object[+0x10]: spline/physics state ptr
+// object[+0x14]: motion flags
+// object[+0x1C]: render/state flags word  (bit7=hidden, bit others=freeze/noremove)
+// object[+0x20]: background flags
+// object[+0x24]: animation state ptr
+// object[+0x28]: camera spline param
+// object[+0x2C]: signal value (dsignal target)
+// object[+0x40]: fog parameter base
+// object[+0x48]: position X (halfword, used by gotoPos)
+// object[+0x4A]: position Y (halfword, used by gotoPos)
+// object[+0x4C]: fog near distance
+// object[+0x4E]: fog far distance
+// object[+0x4F]: light group byte (lightGroup)
+// object[+0x50]: blend value (blendStart)
+// object[+0x5C]: far plane distance
+// object[+0x5E]: animation frame index (gotoFrame)
+// object[+0x6C]: death Z threshold (deathZ)
+// object[+0x78]: freeze-list head
+// object[+0x7C]: freeze-list tail
+// object[+0xA4]: screen wipe color R
+// object[+0xA5]: screen wipe color G
+// object[+0xA8]: screen wipe param A
+// object[+0xAA]: screen wipe param B
+// object[+0xAC]: screen wipe param C
+// object[+0xC2]: model/mesh ID (changeModel)
+// object[+0xF4]: freeze refcount
+// object[+0x104]: frame counter (frame opcode)
+
+// --- Subsystem entry points revealed by handler sub-calls ---
+// CAMERA  (0x80015xxx-0x80017xxx)
+0x80015728  Camera_setMode
+0x80016404  Camera_setValue
+0x800173B0  Camera_lock
+0x800173C4  Camera_unlock
+0x800173D8  Camera_setSmooth
+0x800173E0  Camera_save
+0x80017B70  Camera_restore
+0x80017C48  Camera_setTimer
+0x80017D7C  Camera_adjust
+0x80017FA8  Camera_set
+0x80017FC0  Camera_shake
+
+// SOUND (0x8005Dxxx)
+0x8005CAD4  Sound_command      (shared dispatcher for soundStartSequence/Stop/Pause/Resume/Mute/Unmute/setMusicVariable)
+0x8005D1E0  Music_control      (called by MusicControl opcode)
+0x8005D560  SoundEffect_start  (called by SoundEffect opcode)
+0x8005D5DC  Freeze_soundfx     (called by freeze opcode -- pauses sound on frozen objects)
+0x8005D630  SoundEffect_stop   (called by SoundEffect opcode)
+
+// VOICE (0x80053xxx)
+0x80053644  Voice_queue
+0x8005370C  Voice_unqueue
+0x800537A0  Voice_clearQueue
+0x80053998  Voice_request
+0x80053C4C  Voice_force
+0x80053D24  Voice_disable
+0x80053D48  Voice_reEnable
+
+// OBJECT SYSTEM (0x80038xxx)
+0x80038810  Object_birth       (called by birthObject -- spawns a new object instance)
+
+// LEVEL / POSITION (0x80071xxx)
+0x800710C0  Level_coordTransform  (called by teleport and relocate)
+0x80071B30  Level_setPosition     (called by teleport and relocate)
+0x8003E8FC  Level_transition      (called by teleport and relocate -- may trigger level change)
+
+// FREEZE SYSTEM
+0x8001F1F0  Freeze_object         (called by freeze opcode)
+
+// GAME VALUE / STATE
+0x800543F8  GameValue_dispatch    (jalr inside -- function-pointer dispatch for gameValue opcode)
+
+// UTILITY
+0x80022A48  Script_setTimer       (called by timer, frame, setPlayerControl -- schedules a timed callback)
+0x80011A5C  Launch_func           (called by launch opcode)
+0x80011A7C  CostumeChange_func    (called by costumeChange opcode)
+0x8003AF9C  Fog_update            (called by fogNear/fogFar after setting values)
+0x80070970  Fog_recalc            (called by fogNear/fogFar)
+0x80074F10  Shards_func           (called twice by Shards opcode -- spawn shard particles)
+0x800708D0  Shards_spawn          (called by Shards opcode)
+
+// ============================================================================
+// FULL HANDLER TABLE (all 105 entries)
+// Format: index | opcode_name | handler_addr | argc | obj_flag | notes
+// ============================================================================
+//   0  hideObject             0x80022A08  argc=1  obj=0  -- sets bit 7 in object->flags[0x1C]
+//   1  unhideObject           0x80022A28  argc=1  obj=0  -- clears bit 7 in object->flags[0x1C]
+//   2  timer                  0x80022AC8  argc=1  obj=1  -- calls Script_setTimer; sets timer on object
+//   3  gotoFrame              0x80022BE4  argc=1  obj=1  -- sets object->frame_index[0x5E]
+//   4  changeModel            0x80022C10  argc=2  obj=1  -- sets object->model_id[0xC2]
+//   5  startAniTex            0x80022BD4  argc=1  obj=1  -- starts animated texture on object
+//   6  stopAniTex             0x80022BDC  argc=1  obj=1  -- stops animated texture on object
+//   7  startSpline            0x80022B3C  argc=1  obj=1  -- initialises spline path; sets [0x10],[0x14],[0x24]
+//   8  stopSpline             0x80022BA4  argc=1  obj=1  -- stops spline path on object
+//   9  deathZ                 0x80022C68  argc=1  obj=1  -- sets object->deathZ[0x6C]
+//  10  dsignal                0x80022C3C  argc=2  obj=1  -- sets signal value at object[0x2C]
+//  11  gsignal                0x80022C60  argc=1  obj=1  -- global signal send (2 instrs -- likely stores to global)
+//  12  lightGroup             0x80022C8C  argc=1  obj=0  -- sets object->lightGroup[0x4F] byte
+//  13  cameraAdjust           0x80022CA0  argc=1  obj=1  -- calls Camera_adjust
+//  14  cameraMode             0x80022CF4  argc=1  obj=1  -- calls Camera_setMode
+//  15  camera                 0x80022CD0  argc=1  obj=1  -- calls Camera_set
+//  16  cameraTimer            0x80022DB4  argc=1  obj=1  -- calls Camera_setTimer
+//  17  cameraSmooth           0x80022D84  argc=1  obj=1  -- calls Camera_setSmooth
+//  18  cameraValue??          0x80022E44  argc=2  obj=1  -- calls Camera_setValue (name truncated in binary)
+//  19  cameraLock             0x80022D24  argc=1  obj=1  -- calls Camera_lock
+//  20  cameraUnlock           0x80022D54  argc=1  obj=1  -- calls Camera_unlock
+//  21  cameraSave             0x80022DE4  argc=1  obj=1  -- calls Camera_save
+//  22  cameraRestore          0x80022E14  argc=1  obj=1  -- calls Camera_restore
+//  23  teleport               0x80022E7C  argc=4  obj=1  -- calls Level_transition+Level_setPosition+Level_coordTransform; full XYZ+level warp
+//  24  farPlane               0x80022FF8  argc=1  obj=1  -- sets object->farPlane[0x5C]
+//  25  soundStartSequence     0x8002301C  argc=2  obj=1  -- calls Sound_command
+//  26  soundStopSlot          0x8002305C  argc=1  obj=1  -- calls Sound_command
+//  27  soundPauseSlot         0x80023090  argc=1  obj=1  -- calls Sound_command
+//  28  soundResumeSlot        0x800230C4  argc=1  obj=1  -- calls Sound_command
+//  29  soundMuteChannel       0x800230F8  argc=2  obj=1  -- calls Sound_command
+//  30  soundUnmuteChannel     0x80023138  argc=2  obj=1  -- calls Sound_command
+//  31  times                  0x80023178  argc=1  obj=1  -- sets repeat count at object[+4]
+//  32  freeze                 0x800231A0  argc=1  obj=1  -- calls Freeze_object + Freeze_soundfx; sets freeze flags
+//  33  unfreeze               0x800232A4  argc=1  obj=1  -- clears freeze flags; restores physics
+//  34  freezeAll              0x80023338  argc=0  obj=1  -- walks object list at [0x78/0x7C]; freezes all
+//  35  unfreezeAll            0x800233D0  argc=0  obj=1  -- walks object list; unfreezes all
+//  36  hideBG                 0x800234E0  argc=0  obj=1  -- hides background layer; clears flags at [0x20/0x24]
+//  37  unhideBG               0x80023540  argc=0  obj=1  -- shows background layer
+//  38  hideBGObject           0x800235A4  argc=1  obj=1  -- hides individual BG object by id
+//  39  unhideBGObject         0x800235C4  argc=1  obj=1  -- shows individual BG object by id
+//  40  mirror                 0x800235E4  argc=0  obj=0  -- sets mirror flag at script_obj[0x10]
+//  41  unmirror               0x800235FC  argc=0  obj=0  -- clears mirror flag at script_obj[0x10]
+//  42  setMirror              0x80023618  argc=1  obj=1  -- sets mirror flag from arg on object
+//  43  fogNear                0x80023634  argc=1  obj=1  -- sets fog near distance; calls Fog_recalc+Fog_update
+//  44  fogFar                 0x80023698  argc=1  obj=1  -- sets fog far distance; calls Fog_recalc+Fog_update
+//  45  startVertexMorph       0x800236FC  argc=1  obj=1  -- starts vertex morph anim on object
+//  46  stopVertexMorph        0x8002371C  argc=1  obj=1  -- stops vertex morph anim on object
+//  47  logicValue             0x8002373C  argc=2  obj=1  -- writes value into logic variable slot
+//  48  cameraShake            0x8002375C  argc=2  obj=1  -- calls Camera_shake with magnitude+duration
+//  49  logicAnd               0x80023794  argc=1  obj=1  -- logic_var[slot] &= arg; reads bytes at [0x5/0x6]
+//  50  logicOr                0x800237EC  argc=1  obj=1  -- logic_var[slot] |= arg
+//  51  logicXor               0x8002384C  argc=1  obj=1  -- logic_var[slot] ^= arg
+//  52  logicTrue              0x80023890  argc=2  obj=1  -- if logic_var[slot] != 0: call ScriptExec_wrap (branch taken)
+//  53  logicFalse             0x80023900  argc=2  obj=1  -- if logic_var[slot] == 0: call ScriptExec_wrap (branch not-taken)
+//  54  callSignal             0x80023970  argc=1  obj=1  -- calls ScriptExec_wrap on signal handler
+//  55  offset                 0x80023998  argc=2  obj=0  -- advances PC by offset arg (relative jump in bytecode)
+//  56  logicAdd               0x800239C0  argc=1  obj=1  -- logic_var[slot] += arg
+//  57  logicSub               0x80023A04  argc=1  obj=1  -- logic_var[slot] -= arg
+//  58  goto                   0x80023A48  argc=1  obj=0  -- absolute PC jump: calls ScriptExec_wrap with target
+//  59  label                  0x80023A6C  argc=0  obj=0  -- no-op (label marker; 2 instrs = jr $ra + delay slot)
+//  60  ??? (0x80086348)       0x80023A74  argc=0  obj=0  -- no-op stub (name string ptr unresolved; probably "nop" or "end")
+//  61  gosub                  0x80023A7C  argc=1  obj=0  -- subroutine call: ScriptExec_wrap with return address
+//  62  stopPlayerControl      0x80023AA0  argc=0  obj=1  -- disables player input (writes control flag)
+//  63  startPlayerControl     0x80023AC4  argc=0  obj=1  -- re-enables player input
+//  64  setPlayerControl       0x80023C58  argc=2  obj=1  -- sets specific control mode via Script_setTimer
+//  65  launch                 0x80023C8C  argc=2  obj=1  -- calls Launch_func (probably fires a projectile/launch obj)
+//  66  costumeChange          0x80023CAC  argc=1  obj=1  -- calls CostumeChange_func; updates object[0xC]
+//  67  gameValue              0x80023CE0  argc=2  obj=1  -- indirect call via GameValue_dispatch fnptr table
+//  68  setZSignal             0x80023D88  argc=3  obj=1  -- sets Z-axis signal: stores values at [0x4/0x6/0x8/0xC]
+//  69  resetZSignal           0x80023DF4  argc=1  obj=1  -- clears Z signal state
+//  70  SoundEffect            0x80023E28  argc=1  obj=0  -- calls SoundEffect_start / SoundEffect_stop
+//  71  MusicControl           0x80023E94  argc=1  obj=1  -- calls Music_control
+//  72  LevelChange            0x80023EF8  argc=1  obj=1  -- 2 instrs only; likely stores level-change request
+//  73  VoiceControl           0x80023F00  argc=1  obj=1  -- 2 instrs; stores voice control request
+//  74  BankChange             0x80023F08  argc=1  obj=1  -- 2 instrs; stores sound bank change request
+//  75  GameLoadSave           0x80023F10  argc=1  obj=1  -- 2 instrs; stores save/load trigger
+//  76  HideObjectGroup        0x80023F18  argc=1  obj=1  -- iterates group; sets bit 7 on each object->flags[0x1C]
+//  77  UnhideObjectGroup      0x80023F6C  argc=1  obj=1  -- iterates group; clears bit 7 on each object->flags[0x1C]
+//  78  Shards                 0x800242C4  argc=3  obj=0  -- spawns shard particles: 2x Shards_func + Shards_spawn
+//  79  cameraSpline??         0x800245F4  argc=2  obj=1  -- sets camera spline params [0x28]; probably "cameraSpline"
+//  80  screenWipe             0x800246A4  argc=1  obj=1  -- sets screen-wipe params [0xA8/0xAA/0xAC] and trigger
+//  81  VoiceQueue             0x800246E4  argc=1  obj=1  -- calls Voice_queue
+//  82  VoiceUnQueue           0x80024708  argc=1  obj=1  -- calls Voice_unqueue
+//  83  VoiceRequest           0x8002472C  argc=1  obj=1  -- calls Voice_request
+//  84  VoiceClearQueue        0x80024774  argc=0  obj=1  -- calls Voice_clearQueue
+//  85  VoiceForce             0x80024750  argc=1  obj=1  -- calls Voice_force (bypasses queue)
+//  86  setMusicVariable       0x80023EB8  argc=2  obj=1  -- calls Sound_command to set music variable
+//  87  introActive            0x800247D4  argc=1  obj=1  -- calls ScriptExec_wrap; gates on intro-active flag [0x1C]
+//  88  introFX                0x80024834  argc=2  obj=1  -- sets intro FX state [0x24]
+//  89  gotoPos                0x80024894  argc=2  obj=1  -- sets position X[0x48] Y[0x4A] from halfword args
+//  90  frame                  0x80022AFC  argc=1  obj=1  -- calls Script_setTimer; uses frame counter [0x104]
+//  91  birthObject            0x8002349C  argc=1  obj=1  -- calls Object_birth; sets hidden flag [0x1C]
+//  92  blendStart             0x800248E8  argc=1  obj=1  -- sets object->blend[0x50]
+//  93  miscValue              0x8002490C  argc=2  obj=1  -- generic value setter using two args [0x4/0x8]
+//  94  VoiceDisable           0x80024794  argc=0  obj=1  -- calls Voice_disable (silences all voice)
+//  95  VoiceReEnable          0x800247B4  argc=0  obj=1  -- calls Voice_reEnable
+//  96  setTimes               0x80024934  argc=2  obj=1  -- sets repeat-count pair [0x4/0x8]
+//  97  screenWipeColor        0x8002494C  argc=1  obj=1  -- sets wipe color R[0xA4] G[0xA5]
+//  98  relocate               0x80024990  argc=4  obj=1  -- same 3 calls as teleport; full position relocation
+//  99  logicTrueElse          0x80024B40  argc=2  obj=1  -- if true: exec inline block; else: jump over via ScriptExec_wrap
+// 100  logicFalseElse         0x80024BA0  argc=2  obj=1  -- if false: exec inline block; else: jump over
+// 101  print                  0x80024C00  argc=3  obj=1  -- debug print; reads string ptr and 2 args [0x4/0x6/0x8/0xA/0xC]
+// 102  tagTimer               0x80024C94  argc=0  obj=1  -- 4 instrs; tags a timer on the current object
+// 103  setNoRemove            0x80024CA4  argc=1  obj=1  -- sets no-remove flag in [0x1C]; links object into list [0x10/0x24]
+// 104  resetNoRemove          0x80024CF4  argc=1  obj=1  -- clears no-remove flag; unlinks from list
+
+// ============================================================================
+// Entry 60 mystery: string at 0x80086348 is empty/unresolved in our string table
+// -- likely "nop" or script-level "end" instruction; handler is a 2-instruction stub
+// ============================================================================

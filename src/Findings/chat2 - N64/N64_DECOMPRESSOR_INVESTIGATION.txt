@@ -1,0 +1,161 @@
+N64 ASSET FORMAT & DECOMPRESSOR INVESTIGATION
+Gex 64: Enter the Gecko — Static Analysis Results
+============================================================
+
+STATUS: Decompressor NOT found via static analysis.
+        Dynamic analysis (emulator + debugger) required.
+
+════════════════════════════════════════════════════════════
+CONFIRMED: DATA IS COMPRESSED (or encrypted)
+════════════════════════════════════════════════════════════
+
+Evidence:
+1. Bit distribution: 48.6% ones vs 51.4% zeros (near-perfect 50/50 → high entropy source)
+2. All 30+ LZSS variants produce output dominated by initial-window zeros → not valid decompression
+3. Valid F3DEX2 GBI opcodes at stride-8 positions: only 7-9% (genuine display lists: 40%+)
+4. All blob sizes are multiples of 16 bytes (compression output padded to 16-byte boundary)
+5. XOR analysis: same-size objects share specific bytes in fixed positions (not explained by random data)
+
+════════════════════════════════════════════════════════════
+OBJECT FORMAT STRUCTURE (partially decoded)
+════════════════════════════════════════════════════════════
+
+Two distinct object categories:
+
+CATEGORY A — STUB/NULL OBJECTS (0x63 60 60 60 prefix):
+  47 of 735 objects.
+  80-128 bytes in size.
+  UNCOMPRESSED — bytes are identical across all objects of the same size.
+  Common first 16 bytes: 63 60 60 60 [61|67] 60 60 E0 01 62 05 20 56 01 62 1F
+  Structure: appears to be null/placeholder object descriptors.
+  Trailing 16 bytes: all zeros (padding).
+
+CATEGORY B — REAL GAME OBJECTS (various first bytes):
+  688 of 735 objects.
+  200B–97KB in size.
+  COMPRESSED with unknown Crystal Dynamics scheme.
+  
+  HEADER BYTES (uncompressed, shared across object type):
+    byte[0]: object family code (0x7D, 0xED, 0xA5, 0x8D, etc.)
+    byte[1]: 0xD0 always present across small objects (possible version/format byte)
+    byte[2]: object variant (varies per object)
+    byte[3]: sub-type
+    byte[4-7]: object-specific fields
+    ...bytes 8+: compressed payload
+  
+  Same-size objects within the same family share 4-39 bytes of common prefix.
+  Example: astplta_ and astpltb_ (6128B) share first 39 bytes identically.
+  After the common prefix, data diverges completely (random-looking).
+
+════════════════════════════════════════════════════════════
+WHAT THE DECOMPRESSOR IS NOT
+════════════════════════════════════════════════════════════
+
+All of the following were tested and ruled out:
+- Standard 8-bit flag LZSS (1=literal, 0=backref, MSB/LSB first, all window sizes)
+- 16-bit flag word LZSS
+- LZSS with various window fills (0x00, 0xFF, 0x20)
+- LZSS with various min_match (2, 3) and offset sizes (8, 10, 11, 12 bits)
+- LZF (byte-aligned LZ with control words < 0x20 = literal, >= 0x20 = backref)
+- Nintendo LZSS (0x10 header byte + 24-bit size)
+- MIO0-style absolute-offset back-references
+- Simple XOR scramble with known constants (0xFF, 0xAA, 0x55, 0x5A, 0xA5)
+- Bit rotation (ROR/ROL 1-7 bits)
+- 16-bit byte-swap or 32-bit word-reversal
+- 16-byte block-based LZSS
+- Raw uncompressed GBI display list data
+
+════════════════════════════════════════════════════════════
+KEY STATIC FINDINGS ABOUT THE FORMAT
+════════════════════════════════════════════════════════════
+
+1. OBJECT SIZE ENCODING: The first byte partially encodes the object "type" but
+   does not directly encode size. Multiple objects of different sizes can share byte[0].
+
+2. SHARED PREFIXES: Same-size objects within the same game world often share 4-39 bytes
+   of identical prefix in their compressed data. This suggests the DECOMPRESSED output
+   begins with a shared TYPE DESCRIPTOR followed by object-specific data.
+
+3. PADDING: All blobs end with 8-12 bytes of zeros (padding to next 16-byte boundary).
+   The actual compressed stream ends before the zeros.
+
+4. NO STANDARD MAGIC BYTES: None of the blobs start with recognized compression
+   magic (MIO0, Yay0, Yay1, LZ, zlib, etc.).
+
+════════════════════════════════════════════════════════════
+DECOMPRESSOR LOCATION ATTEMPTS
+════════════════════════════════════════════════════════════
+
+Searched 1,461 functions in the N64 ROM code section (0x80001000-0x800C4000).
+
+Decompressor scoring criteria:
+  - Different src/dst pointer registers advancing by 1
+  - Backward branches near copy operations  
+  - Bit manipulation (srl, andi) for flag byte extraction
+  - Self-contained (few outbound calls)
+
+Top candidates (all eliminated):
+  0x80055CF4 → float animation lerp (false positive from lbu/sb count)
+  0x8005BFE0 → CD/ROM sector reader with 32-byte sliding buffer
+  0x80040DD8 → physics/kinematic update function
+  0x8008B67C → geometry transform function
+
+The actual decompressor may:
+  a) Be called via function pointer from PI manager thread (not findable by call-graph)
+  b) Be interleaved with the DMA loop (not a standalone function)
+  c) Live in the 0x0C0000-0x4B5750 area (the large compressed-asset code region 
+     that lies between the known code section and the first level data blob)
+
+════════════════════════════════════════════════════════════
+RECOMMENDED DYNAMIC ANALYSIS PROCEDURE
+════════════════════════════════════════════════════════════
+
+Goal: Catch the moment compressed data is written to RDRAM as decompressed data.
+
+Using mupen64plus with debugger:
+  1. Load the ROM: mupen64plus --debugger Gex_64.z64
+  2. Set memory WRITE watchpoint at target RDRAM region
+     The simplest target: RDRAM 0x800C0000 (static geometry load destination
+     identified from PS1 analysis; N64 equivalent should be similar)
+  3. Run until first level loads (press through menus to a level)
+  4. The watchpoint will fire at the FIRST WRITE of decompressed object data
+  5. Step back in the call stack to find the decompressor function
+  6. Note: a0/a1 will be (compressed_src, decompressed_dst) or similar
+
+Alternative watchpoint addresses:
+  - RDRAM 0x801DA800 (display list buffer -- may be populated from decompressed data)
+  - The RDRAM_load_target from level INDEX entry 'rezop3': 0x80161620
+
+Mupen64plus Lua script for watchpoint:
+  emu.addmembreakpoint(0x800C0000, 4, "write", function(addr, val)
+    print("Write to 0x"..string.format("%08X", addr)..
+          " = 0x"..string.format("%08X", val)..
+          " from PC=0x"..string.format("%08X", emu.getPC()))
+    emu.pause()
+  end)
+
+════════════════════════════════════════════════════════════
+WHAT WE'LL FIND ONCE DECOMPRESSOR IS IDENTIFIED
+════════════════════════════════════════════════════════════
+
+The decompressor function signature is expected to be:
+  void decompress(u8* src, u8* dst, u32 compressed_size)
+  or
+  u32 decompress(u8* src, u8* dst)  // returns decompressed size
+
+Once found:
+1. Read the algorithm from the disassembly (MIPS is straightforward)
+2. Implement in Python to verify on all 735 object blobs
+3. Write a C implementation for Torch to use as a custom factory
+4. Decompressed format will likely be Crystal Dynamics' N64 object format
+   (analogous to PS1 A8AA but with GBI display lists and N64 RDRAM pointers)
+
+════════════════════════════════════════════════════════════
+PI DMA FUNCTION (confirmed, for reference)
+════════════════════════════════════════════════════════════
+
+The N64 ROM DMA function (cartridge read) is at RDRAM 0x80065A10.
+Arguments: a0=direction(0=read), a1=dram_addr, a2=cart_phys_addr, a3=size
+It waits for PI idle, then sets PI_DRAM_ADDR, PI_CART_ADDR, PI_RD_LEN.
+Called via libultra's PI manager thread (not via direct jal).
+

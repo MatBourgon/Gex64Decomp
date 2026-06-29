@@ -1,0 +1,158 @@
+INDEX & LEVEL FILE FORMATS — Gex 2: Enter the Gecko (SLUS-00598)
+=================================================================
+
+╔══════════════════════════════════════════════════════════════════════╗
+║  INDEX FILE  (.meta in our extraction)                               ║
+║  Entries: [33][48][63][78][93][108][123][138][153][168][183]         ║
+║  Size: 34–70 KB per file                                             ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+PURPOSE: Per-environment OBJECT REGISTRY.  Links ASCII name strings for
+sound effects, particle effects, and interactive objects to their runtime
+class-code address in the PS1 executable (0x800C-range RAM pointers).
+Also carries HUD/objective text for each level environment.
+
+CONFIRMED IDENTITIES (from embedded strings):
+  Group 1  [33]  Hub world    — funfx___, leaf, elmpuff, hunt, bullet, daisy
+  Group 2  [48]  Toon TV      — cold_, chan, cecube_, fltlamp, skel, prysht_
+  Group 3  [63]  (same as 48) — identical first 1KB; missions share object table
+  Group 4  [78]  Circuit Central — identical first 1KB to [93]
+  Group 10 [168] Channel Z   — rrspark_, rrzap_, ezrat, flat, mtntsht, rebug
+                               HUD text: "  #2COLLECT", "GET THE", "CAT4XCH",
+                               "TRAIN", "COMPLETE", "ME UP!", "  %2"
+                               Format strs: "%d", "%64d"
+
+SHARING PATTERN:
+  idx[48] == idx[63]:  TRUE for first 1 KB (Scream TV, 2-3 missions share)
+  idx[78] == idx[93]:  TRUE for first 1 KB (Circuit Central, 2 missions)
+  Full files differ (mission-specific text appended after shared object table)
+
+BINARY FORMAT (variable-length records):
+  No fixed stride.  Each record: [control_byte] [ASCII_run] [more_control]...
+  Name strings are delimited by encountering a non-printable byte (< 0x20
+  or ≥ 0x80).  Control bytes following a name specify its type and params.
+
+  Observed control codes (partial):
+    0x00 → section/block boundary marker
+    0x01 → sub-entry or instance index
+    0x02 → sound effect type (immediately followed by name string)
+    0x05 → particle effect type
+    0x0B → unknown, often precedes RAM ptr block
+    0x0C → mesh/animation object (name followed by geometry ref)
+    0x82 → high-bit variant (possible: sub-name, or extended type)
+
+  After the name+control sequence, some entries embed 4-byte LE RAM ptrs:
+    Examples from hub world index:
+      "funfx___" → 0x800C8EBC (init function or vtable in exe)
+      "leaf"    → 0x800C8F24
+      "elmpuff" → 0x800C9030
+      "@bullet"  → 0x800CA358, 0x800CA524, 0x800CA824
+      "daisy"   → 0x800CB338, 0x800CB4C0, 0x800CBC54 …
+    These 0x800Cxxxx pointers are OBJECT CLASS CODE pointers in SLUS_005.98.
+
+  File layout (approximate):
+    [0..N]      Shared object table (identical across missions in same env)
+    [N..end]    Mission-specific text (HUD objective text, format strings)
+
+
+╔══════════════════════════════════════════════════════════════════════╗
+║  LEVEL FILE  (.lev in our extraction)                                ║
+║  Entries: [30][45][60][75][90][105][120][135][150][165][180]         ║
+║  Size: 295 KB – 1,122 KB per file                                    ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+PURPOSE: Complete world description for one level environment.
+         Includes camera paths, collision/trigger data, scripted events,
+         all interactive object geometry, and Gex's spawn position.
+
+STRUCTURE: Two sections separated by zero-padding to 0x800-byte boundary.
+
+  ┌─────────────────────────────────────────────────────────────────┐
+  │  SECTION 1: 16-byte header + world/script data                  │
+  │  Size: 157 KB – 447 KB                                          │
+  ├─────────────────────────────────────────────────────────────────┤
+  │  ZERO PADDING: variable, aligns to next 0x800-byte boundary     │
+  │  Length: 596 – 1,851 bytes                                      │
+  ├─────────────────────────────────────────────────────────────────┤
+  │  SECTION 2: embedded A8AA geometry block                         │
+  │  Size: 70 KB – 740 KB                                           │
+  │  Always starts with: A8 AA [xx xx] 00 04 01 04 02 06 …         │
+  └─────────────────────────────────────────────────────────────────┘
+
+16-BYTE HEADER (Section 1):
+  Offset  Size  Description
+  ──────  ────  ───────────
+   0      1     Magic = 0x20 (fixed)
+   1      1     Variant byte (level-type flags):
+                  0x02 = standard (most levels)
+                  0x0A = extended geometry (Circuit Central × 2)
+                  0x42 = Hub World
+                  0xF2 = Kung-Fu Theater
+                  0xC2 = unknown boss/channel
+                  0x82 = unknown
+                  0x1A = smaller/simpler format
+   2      1     Header size = 0x10 = 16 (fixed)
+   3      1     Padding = 0x00 (fixed)
+   4–7    4     0x00 0x00 0x02 0x02 (fixed except variant 0xF2)
+   8–15   8     Configuration bytes (vary per level, encodes object/sector counts)
+                Standard: 04 04 00 08 05 09 02 [00|02|04]
+                0xF2 variant: 04 04 90 04 04 09 24 01
+
+SECTION 1 WORLD DATA (bytes 16 onward):
+  Binary stream of small-integer opcodes and parameters.
+  Encodes: camera rail paths, trigger zones, collision hulls,
+           scripted event sequences, and object spawn data.
+  
+  The stream CONTAINS INLINE A8AA CHUNKS (embedded geometry of
+  spawn objects, interactive items, enemies in their initial positions).
+  Level [30] has its first inline A8AA at byte offset 21 (after a 5-byte
+  pre-amble); other levels have inline A8AAs scattered throughout.
+  
+  Known constants in this stream (level [60] sample):
+    0x0F = sub-section marker (appears with size parameters)
+    0x01–0x0E = common opcode range
+    After large packed run, the stream transitions to the zero pad.
+
+  Main section sizes by environment:
+    Hub [30]:            412,642 B  (complex TV network hub)
+    Toon TV [45]:        413,100 B
+    Scream TV [60]:      411,001 B
+    Kung-Fu Theater [75]: 156,510 B  (simplest, fewest missions)
+    env [90]:            324,771 B
+    env [105]:           401,605 B
+    env [120]:           239,958 B
+    env [135]:           427,123 B
+    env [150]:           384,210 B
+    env [165]:           447,063 B  (largest main section)
+    env [180]:           230,295 B
+
+SECTION 2 EMBEDDED A8AA (after zero pad):
+  Starts at next 0x800-byte boundary after the zero-padding.
+  Header signature: A8 AA [size_lo] [size_hi] 00 04 01 04 02 06 …
+  
+  This geometry block contains: interactive/dynamic objects for this
+  environment (enemies, pickups, doors, breakable items, bosses).
+  DISTINCT from the standalone .geom file which contains the static
+  level environment mesh (floors, walls, platforms, sky).
+  
+  Embedded A8AA sizes by environment:
+    Hub [30]:            690,176 B  (many interactive objects)
+    Toon TV [45]:        735,232 B
+    Scream TV [60]:      636,928 B
+    Kung-Fu Theater [75]: 245,760 B
+    env [90]:            595,968 B
+    env [105]:           624,640 B
+    env [120]:           266,240 B
+    env [135]:           641,024 B
+    env [150]:           655,360 B
+    env [165]:           616,448 B
+    env [180]:            70,656 B  (smallest – fewest objects)
+
+GEOMETRY SPLIT SUMMARY:
+  Static geometry  → standalone .geom file (A8AA format, visual mesh)
+  Dynamic geometry → embedded in .lev file, Section 2 (A8AA format, objects)
+  Level world data → .lev file, Section 1 (binary opcode stream)
+  Sound/effects    → .dnsc file (DNSaC audio container)
+  Textures         → .vram file (PS1 VRAM atlas)
+  Object registry  → .meta file (index file described above)
+
