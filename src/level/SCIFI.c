@@ -288,7 +288,18 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_80161ED0_E7CF0);
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_80161F50_E7D70);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_80162154_E7F74);
+void func_80162154_E7F74(Instance* instance, short arg1) {
+    MATRIX mat;
+    SVECTOR euler;
+
+    MATH3D_SetUnityMatrix(&mat);
+    RotMatrix(&instance->rotation, &mat);
+    RotMatrixZ(arg1, &mat);
+    func_800157BC(&mat, &euler);
+    instance->rotation.x = euler.x;
+    instance->rotation.y = euler.y;
+    instance->rotation.z = euler.z;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_801621D4_E7FF4);
 

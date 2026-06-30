@@ -1,5 +1,6 @@
 #include "common.h"
 
+#include "CAMERA.h"
 #include "level/CIRCUIT.h"
 #include "types/intro/QMark.h"
 #include "types/intro/BTimer.h"
@@ -142,7 +143,17 @@ INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015B570_82750);
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_ebridge_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015B780_82960);
+void func_8015B780_82960(Instance* instance, GameTracker* gameTracker) {
+    Camera* camera;
+
+    camera = gameTracker->camera;
+    if (instance->_120 & 4) {
+        instance->_120 &= ~4;
+        CAMERA_SetSmoothValue(camera, instance->_D0[1]);
+        CAMERA_CameraUnlock(camera, -1);
+        CAMERA_Restore(camera, 1);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015B7E0_829C0);
 
@@ -240,7 +251,14 @@ void circuit_launch_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015D304_844E4);
+void func_8015D304_844E4(Instance* instance) {
+    instance->flags &= ~0x800;
+    if (!(instance->_11C & 8)) {
+        instance->_F4[2] = instance->_104;
+        instance->position.x = PlayerInstance->position.x;
+        instance->position.y = PlayerInstance->position.y;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015D354_84534);
 
@@ -254,7 +272,17 @@ INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_follow_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_follow_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015D780_84960);
+void func_8015D780_84960(Instance* instance, GameTracker* gameTracker) {
+    if (instance->introData != 0) {
+        if (((int*)instance->introData)[0] != 0) {
+            if (((int*)instance->introData)[0] > 10U) {
+                SIGNAL_HandleSignal(instance, ((int*)instance->introData)[0] + 4, 0);
+            } else {
+                SIGNAL_HandleSignal(instance, ((int*)instance->introData)[1] + 4, 0);
+            }
+        }
+    }
+}
 
 void circuit_pball_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
@@ -368,7 +396,20 @@ void func_8015F720_86900(Instance* instance) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015F75C_8693C);
+void func_8015F75C_8693C(Instance* instance) {
+    unsigned short val0;
+    unsigned char val1;
+    int val2;
+
+    val0 = ((unsigned short*)&instance->_F4[2])[1];
+    val1 = ((unsigned char*)&instance->_F4[2])[1];
+    val2 = ((char*)&instance->_F4[2])[0];
+    instance->currentAnimFrame = 0;
+    instance->_F4[2] = 0;
+    instance->_F4[0] = val0;
+    instance->_F4[1] = val1;
+    instance->currentModelAnim = val2;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015F780_86960);
 

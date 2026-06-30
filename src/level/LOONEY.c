@@ -330,7 +330,12 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_leafgen_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_8015B934_B3BE4);
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_8015BBA4_B3E54);
+void func_8015BBA4_B3E54(short* arg0) {
+    func_800162C0(arg0);
+    RotMatrixX(((short*)arg0)[0x44/2], (char*)((int*)arg0)[5] + 0xC);
+    RotMatrixY(((short*)arg0)[0x46/2], (char*)((int*)arg0)[5] + 0xC);
+    RotMatrixZ(((short*)arg0)[0x48/2], (char*)((int*)arg0)[5] + 0xC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_8015BC04_B3EB4);
 

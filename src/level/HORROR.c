@@ -1,5 +1,6 @@
 #include "common.h"
 
+#include "types/Camera.h"
 #include "level/HORROR.h"
 #include "types/intro/QMark.h"
 #include "types/intro/BTimer.h"
@@ -143,7 +144,19 @@ void horror_polter_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_8015E05C_A188C);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_8015E1A8_A19D8);
+void func_8015E1A8_A19D8(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+
+    bsp = instance->bspTree;
+    if (bsp->_06 == 1) {
+        if (bsp->instanceSpline == gameTracker->player) {
+            if (bsp->_0C[5] >= 6U) {
+                instance->flags |= 0x10;
+                INSTANCE_PlainDeath(instance, 5, 3, 0);
+            }
+        }
+    }
+}
 
 int* func_8015E220_A1A50(Instance* instance, int arg1) {
     int* list;
@@ -487,13 +500,38 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_80162214_A5A44);
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_801622E4_A5B14);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_801623DC_A5C0C);
+void func_801623DC_A5C0C(GameTracker* arg0, short arg1, int arg2, void* arg3) {
+    Camera* camera;
+
+    camera = arg0->camera;
+    if (!(((unsigned short*)arg3)[0xCC/2] & 0x10)) {
+        if (camera->_data10[19] == 0) {
+            ((char*)arg3)[0x120] = 1;
+            camera->_data10[19] = (int)arg3;
+            if (camera->mode != 2) {
+                func_801622E4_A5B14(arg0, arg1, arg2, arg3);
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_80162438_A5C68);
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_801624B4_A5CE4);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_80162524_A5D54);
+int func_80162524_A5D54(short* arg0, short* arg1) {
+    int result;
+
+    result = 0;
+    if (arg0[0x3B8/2] == arg1[0]) {
+        if (arg0[0x3BA/2] == arg1[1]) {
+            if (arg0[0x3BE/2] == arg1[0xA]) {
+                result = arg0[0x3BC/2] == arg1[2];
+            }
+        }
+    }
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_8016257C_A5DAC);
 
