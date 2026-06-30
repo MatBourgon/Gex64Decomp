@@ -39,3 +39,5 @@ There is currently no naming scheme, but at the very least:
 
 After converting an assembly file to a C file in the yaml file, make sure to add it to either `mips1.source.txt` or `mips3.source.txt`, otherwise it won't compile and you'll get a linking error. You should always try `mips1.source.txt` first.
 
+## Extra research
+[Teraunce's AI-Assisted decompilation](https://github.com/Teraunce/Gex64Decomp/tree/master): may prove fruitful for trying to connect different functions together based on analyzing the game.
