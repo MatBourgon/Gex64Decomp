@@ -182,7 +182,10 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_genbrk_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015BF08_E1D28);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015BFA8_E1DC8);
+void func_8015BFA8_E1DC8(Instance* instance) {
+    instance->flags &= ~0x400;
+    func_8002E350(instance);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015BFD4_E1DF4);
 
@@ -245,7 +248,11 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_mylot_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015E070_E3E90);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015E108_E3F28);
+int func_8015E108_E3F28(Instance* instance) {
+    instance->rotation.x &= 0xFFF;
+    instance->rotation.y &= 0xFFF;
+    return instance->rotation.x == 0 && instance->rotation.y == 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015E130_E3F50);
 

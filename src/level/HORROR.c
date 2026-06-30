@@ -145,7 +145,19 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_8015E05C_A188C);
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_8015E1A8_A19D8);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_8015E220_A1A50);
+int* func_8015E220_A1A50(Instance* instance, int arg1) {
+    int* list;
+    int* result;
+
+    result = NULL;
+    list = ((int**)instance->intro)[1];
+    if (list != NULL) {
+        if (arg1 < list[0]) {
+            result = (int*)list[arg1 + 1];
+        }
+    }
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_skel_OnCreate);
 

@@ -275,7 +275,18 @@ INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015D770_AC990);
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_samuri_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015DB1C_ACD3C);
+void func_8015DB1C_ACD3C(Instance* instance, short* arg1) {
+    int anim;
+
+    anim = 6;
+    instance->flags2 &= ~0x10;
+    arg1[0x18/2] = 5;
+    if (arg1[0x10/2] == 0) {
+        anim = 1;
+    }
+    instance->currentModelAnim = anim;
+    instance->currentAnimFrame = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015DB50_ACD70);
 
@@ -340,13 +351,35 @@ INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_pend_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_ninja_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015F570_AE790);
+void func_8015F570_AE790(Instance* instance, short* arg1) {
+    instance->flags2 &= ~0x10;
+    arg1[8] = 5;
+    instance->currentModelAnim = 1;
+    instance->currentAnimFrame = 0;
+}
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015F598_AE7B8);
+void func_8015F598_AE7B8(Instance* instance, short* arg1) {
+    instance->flags2 &= ~0x10;
+    arg1[8] = 1;
+    if (instance->currentModelAnim != 0) {
+        instance->currentModelAnim = 0;
+        instance->currentAnimFrame = 0;
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015F5D0_AE7F0);
+void func_8015F5D0_AE7F0(Instance* instance, short* arg1) {
+    instance->currentModelAnim = 0;
+    instance->currentAnimFrame = 0;
+    instance->flags2 &= ~0x10;
+    arg1[8] = 0xA;
+}
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015F5F4_AE814);
+void func_8015F5F4_AE814(Instance* instance, short* arg1) {
+    instance->currentModelAnim = 6;
+    instance->currentAnimFrame = 0;
+    instance->flags2 &= ~0x10;
+    arg1[8] = 0xB;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015F61C_AE83C);
 
