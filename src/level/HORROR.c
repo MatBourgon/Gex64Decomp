@@ -500,13 +500,10 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_80162214_A5A44);
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_801622E4_A5B14);
 
-/* arg0[2] is Camera*: func_801622E4_A5B14 (called below) loads this same
- * field into a0 for func_8000B054, which elsewhere (SIGNAL.c) is only ever
- * called with gameTracker8->camera. */
-void func_801623DC_A5C0C(int* arg0, short arg1, int arg2, void* arg3) {
+void func_801623DC_A5C0C(GameTracker* arg0, short arg1, int arg2, void* arg3) {
     Camera* camera;
 
-    camera = ((Camera*)arg0[2]);
+    camera = arg0->camera;
     if (!(((unsigned short*)arg3)[0xCC/2] & 0x10)) {
         if (camera->_data10[19] == 0) {
             ((char*)arg3)[0x120] = 1;
