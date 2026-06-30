@@ -1,5 +1,6 @@
 #include "common.h"
 
+#include "CAMERA.h"
 #include "level/CIRCUIT.h"
 #include "types/intro/QMark.h"
 #include "types/intro/BTimer.h"
@@ -143,9 +144,9 @@ INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015B570_82750);
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_ebridge_OnCreate);
 
 void func_8015B780_82960(Instance* instance, GameTracker* gameTracker) {
-    int* camera;
+    Camera* camera;
 
-    camera = (int*)gameTracker->camera;
+    camera = gameTracker->camera;
     if (instance->_120 & 4) {
         instance->_120 &= ~4;
         CAMERA_SetSmoothValue(camera, instance->_D0[1]);

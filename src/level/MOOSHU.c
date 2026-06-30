@@ -88,7 +88,7 @@ INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015B614_C3F94);
 
 void func_8015B674_C3FF4(Instance* instance, short* arg1) {
     instance->flags2 &= ~0x10;
-    if ((rand() & 3) != 0) {
+    if ((rand() % 4) != 0) {
         instance->currentModelAnim = 8;
     } else {
         instance->currentModelAnim = 6;
@@ -99,7 +99,7 @@ void func_8015B674_C3FF4(Instance* instance, short* arg1) {
 
 void func_8015B6D4_C4054(Instance* instance, short* arg1) {
     instance->flags2 &= ~0x10;
-    if ((rand() & 3) != 0) {
+    if ((rand() % 4) != 0) {
         instance->currentModelAnim = 6;
     } else {
         instance->currentModelAnim = 8;

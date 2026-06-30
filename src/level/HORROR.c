@@ -1,5 +1,6 @@
 #include "common.h"
 
+#include "types/Camera.h"
 #include "level/HORROR.h"
 #include "types/intro/QMark.h"
 #include "types/intro/BTimer.h"
@@ -499,15 +500,18 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_80162214_A5A44);
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_801622E4_A5B14);
 
+/* arg0[2] is Camera*: func_801622E4_A5B14 (called below) loads this same
+ * field into a0 for func_8000B054, which elsewhere (SIGNAL.c) is only ever
+ * called with gameTracker8->camera. */
 void func_801623DC_A5C0C(int* arg0, short arg1, int arg2, void* arg3) {
-    int* camera;
+    Camera* camera;
 
-    camera = (int*)arg0[2];
+    camera = ((Camera*)arg0[2]);
     if (!(((unsigned short*)arg3)[0xCC/2] & 0x10)) {
-        if (camera[0x4D4/4] == 0) {
+        if (camera->_data10[19] == 0) {
             ((char*)arg3)[0x120] = 1;
-            camera[0x4D4/4] = (int)arg3;
-            if (camera[0x14C/4] != 2) {
+            camera->_data10[19] = (int)arg3;
+            if (camera->mode != 2) {
                 func_801622E4_A5B14(arg0, arg1, arg2, arg3);
             }
         }

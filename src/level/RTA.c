@@ -188,18 +188,18 @@ INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zswitchm_OnCreate);
 
 int func_8015C344_DC9B4(Instance* instance) {
     int result;
-    int* object;
-    int* animData;
+    Object* object;
+    short* animData;
 
     result = 0;
     if (instance != NULL) {
-        object = (int*)instance->object;
+        object = instance->object;
         if (object != NULL) {
-            if (((short*)object)[5] > 0) {
-                animData = (int*)((int*)object[4])[0];
+            if (((short*)&object->_08)[1] > 0) {
+                animData = (short*)(object->animList)[0];
                 if (animData != NULL) {
-                    if (((short*)animData)[1] > 0) {
-                        result = ((short*)animData)[1] - 1;
+                    if (animData[1] > 0) {
+                        result = animData[1] - 1;
                     }
                 }
             }
