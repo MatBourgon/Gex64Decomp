@@ -164,7 +164,17 @@ INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_mutant_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_mtntsht_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_mtntsht_OnUpdate);
+void rezop_mtntsht_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    short dx;
+    short dy;
+
+    dx = instance->position.x - instance->initialPos.x;
+    dy = instance->position.y - instance->initialPos.y;
+    if (((short*)&instance->_F4[2])[1] * ((short*)&instance->_F4[2])[1] < dx * dx + dy * dy) {
+        INSTANCE_PlainDeath(instance, 4, -1, 0);
+    }
+    func_80047E64(instance, ((short*)&instance->_F4[2])[0]);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_mtntsht_OnCollide);
 
