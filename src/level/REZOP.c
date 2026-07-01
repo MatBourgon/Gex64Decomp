@@ -86,7 +86,17 @@ INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_simon_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/REZOP", func_8015B750_D3EC0);
 
-INCLUDE_ASM("asm/nonmatchings/level/REZOP", func_8015B9AC_D411C);
+void func_8015B9AC_D411C(short* arg0) {
+    func_800162C0(arg0);
+    RotMatrixX(((short*)arg0)[0x44/2], (char*)((int*)arg0)[5] + 0xC);
+    RotMatrixY(((short*)arg0)[0x46/2], (char*)((int*)arg0)[5] + 0xC);
+    RotMatrixZ(((short*)arg0)[0x48/2], (char*)((int*)arg0)[5] + 0xC);
+    if (((short*)arg0)[0xE/2] == 0x1D) {
+        ((unsigned short*)arg0)[0x4C/2] = -((unsigned short*)arg0)[0x4C/2];
+        ((unsigned short*)arg0)[0x4E/2] = -((unsigned short*)arg0)[0x4E/2];
+        ((unsigned short*)arg0)[0x50/2] = -((unsigned short*)arg0)[0x50/2];
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/REZOP", func_8015BA40_D41B0);
 

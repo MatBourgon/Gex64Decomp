@@ -209,7 +209,17 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_stmvent_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015B904_E1724);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015BB90_E19B0);
+void func_8015BB90_E19B0(short* arg0) {
+    func_800162C0(arg0);
+    RotMatrixX(((short*)arg0)[0x44/2], (char*)((int*)arg0)[5] + 0xC);
+    RotMatrixY(((short*)arg0)[0x46/2], (char*)((int*)arg0)[5] + 0xC);
+    RotMatrixZ(((short*)arg0)[0x48/2], (char*)((int*)arg0)[5] + 0xC);
+    if (((short*)arg0)[0xE/2] == 0x1D) {
+        ((unsigned short*)arg0)[0x4C/2] = -((unsigned short*)arg0)[0x4C/2];
+        ((unsigned short*)arg0)[0x4E/2] = -((unsigned short*)arg0)[0x4E/2];
+        ((unsigned short*)arg0)[0x50/2] = -((unsigned short*)arg0)[0x50/2];
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015BC24_E1A44);
 
