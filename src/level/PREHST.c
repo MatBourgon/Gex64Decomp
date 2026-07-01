@@ -118,11 +118,23 @@ INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_8015AC20_C84A0);
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_8015ADA8_C8628);
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_eel_OnCreate);
+void prehst_eel_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    instance->currentModelAnim = 0;
+    instance->currentAnimFrame = 0;
+    instance->_D0[3] = 0;
+    instance->_F4[0] = 0;
+    instance->_100 = 0;
+    instance->flags |= 0x800;
+    instance->_104 = ((short*)instance->object->animList[1])[1];
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_eel_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_eel_OnCollide);
+void prehst_eel_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    if (func_80027500(instance->bspTree, gameTracker)) {
+        INSTANCE_PlainDeath(instance, 5, 3, 0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_stmvent_OnCreate);
 

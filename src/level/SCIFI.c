@@ -87,7 +87,16 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015A3F4_E0214);
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_rocket_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_rocket_OnCollide);
+void scifi_rocket_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bspTree;
+    bspTree = instance->bspTree;
+    GenericCollide(instance, gameTracker);
+    if (bspTree->instanceSpline == PlayerInstance) {
+        if (PlayerInstance->_F4[0] == 1) {
+            instance->_100 = 1;
+        }
+    }
+}
 
 void scifi_onoff_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if (instance->intro->flags & 0x1000) {
@@ -149,11 +158,23 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_bub_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_bub_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_eel_OnCreate);
+void scifi_eel_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    instance->currentModelAnim = 0;
+    instance->currentAnimFrame = 0;
+    instance->_D0[3] = 0;
+    instance->_F4[0] = 0;
+    instance->_100 = 0;
+    instance->flags |= 0x800;
+    instance->_104 = ((short*)instance->object->animList[1])[1];
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_eel_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_eel_OnCollide);
+void scifi_eel_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    if (func_80027500(instance->bspTree, gameTracker)) {
+        INSTANCE_PlainDeath(instance, 5, 3, 0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_stmvent_OnCreate);
 
@@ -180,7 +201,13 @@ void scifi_genbrk_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     GenericProcess(instance, gameTracker);
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_genbrk_OnCollide);
+extern int D_800EB8A0;
+void scifi_genbrk_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    if (func_80027500(instance->bspTree, gameTracker)) {
+        func_8015BC24_E1A44(instance, D_800EB8A0);
+        func_80046978(instance);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015BF08_E1D28);
 

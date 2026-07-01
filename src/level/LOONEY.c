@@ -564,7 +564,16 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_80161664_B9914);
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_frocket_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_frocket_OnCollide);
+void looney_frocket_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bspTree;
+    bspTree = instance->bspTree;
+    GenericCollide(instance, gameTracker);
+    if (bspTree->instanceSpline == PlayerInstance) {
+        if (PlayerInstance->_F4[0] == 1) {
+            instance->_100 = 1;
+        }
+    }
+}
 
 void looney_genbrk_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
@@ -573,7 +582,13 @@ void looney_genbrk_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     GenericProcess(instance, gameTracker);
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_genbrk_OnCollide);
+extern int D_800EB8A0;
+void looney_genbrk_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    if (func_80027500(instance->bspTree, gameTracker)) {
+        func_8015B250_B3500(instance, D_800EB8A0);
+        func_80046978(instance);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_jimboat_OnCollide);
 
