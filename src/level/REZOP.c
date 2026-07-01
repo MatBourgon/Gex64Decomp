@@ -230,7 +230,20 @@ INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_gas_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_gas_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_gas_OnCollide);
+void rezop_gas_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    Instance* bspPlayer;
+    int playerState;
+
+    bspPlayer = instance->bspTree->instanceSpline;
+    playerState = (int)gameTracker->player;
+    if (bspPlayer->object != NULL && bspPlayer == (Instance*)playerState
+        && instance->_F4[0] >= 2 && func_80027578(instance, gameTracker, bspPlayer) == 0) {
+        playerState = PlayerInstance->_F4[1];
+        if (playerState != 0x200000 && playerState != 0x10 && playerState != 0x2000) {
+            func_800223F8(gameTracker8, 0x78, 0);
+        }
+    }
+}
 
 void rezop_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int var_s0;

@@ -451,7 +451,20 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_grrfish_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_grrfish_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_funplat_OnCreate);
+extern int D_80161DA4_BA054[];
+void looney_funplat_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    SVector newPoint;
+    SVector oldPoint;
+
+    if (instance->introData == 0) {
+        instance->introData = (void*)D_80161DA4_BA054;
+    }
+    newPoint.x = oldPoint.x = instance->position.x;
+    newPoint.y = oldPoint.y = instance->position.y;
+    newPoint.z = instance->_E0[2] = instance->position.z;
+    oldPoint.z = instance->_40[6] + 0x80;
+    COLLIDE_PointAndTerrain(gameTracker8->level->segmentAddress, (SVECTOR*)&newPoint, (SVECTOR*)&oldPoint, instance);
+}
 
 void looney_funplat_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     short* introData;

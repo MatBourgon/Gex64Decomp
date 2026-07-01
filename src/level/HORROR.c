@@ -408,7 +408,20 @@ void horror_onoff_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_onoff_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_funplat_OnCreate);
+extern int D_80164C38_A8468[];
+void horror_funplat_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    SVector newPoint;
+    SVector oldPoint;
+
+    if (instance->introData == 0) {
+        instance->introData = (void*)D_80164C38_A8468;
+    }
+    newPoint.x = oldPoint.x = instance->position.x;
+    newPoint.y = oldPoint.y = instance->position.y;
+    newPoint.z = instance->_E0[2] = instance->position.z;
+    oldPoint.z = instance->_40[6] + 0x80;
+    COLLIDE_PointAndTerrain(gameTracker8->level->segmentAddress, (SVECTOR*)&newPoint, (SVECTOR*)&oldPoint, instance);
+}
 
 void horror_funplat_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     short* introData;

@@ -458,7 +458,20 @@ INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_leafgen_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_leafgen_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_funplat_OnCreate);
+extern int D_801626C0_B18E0[];
+void kungfu_funplat_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    SVector newPoint;
+    SVector oldPoint;
+
+    if (instance->introData == 0) {
+        instance->introData = (void*)D_801626C0_B18E0;
+    }
+    newPoint.x = oldPoint.x = instance->position.x;
+    newPoint.y = oldPoint.y = instance->position.y;
+    newPoint.z = instance->_E0[2] = instance->position.z;
+    oldPoint.z = instance->_40[6] + 0x80;
+    COLLIDE_PointAndTerrain(gameTracker8->level->segmentAddress, (SVECTOR*)&newPoint, (SVECTOR*)&oldPoint, instance);
+}
 
 void kungfu_funplat_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     short* introData;

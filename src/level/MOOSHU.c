@@ -194,9 +194,28 @@ INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015D7C8_C6148);
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015DA78_C63F8);
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", mooshu_ebolt_OnCreate);
+extern void func_80017AB8(int, int);
+void mooshu_ebolt_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    if (instance->flags & 0x20000) {
+        if (*(int*)&instance->_108 != 0) {
+            func_80017AB8(*(int*)&instance->_108, 0);
+            *(int*)&instance->_108 = 0;
+        }
+    } else {
+        instance->flags |= 0x100000;
+        instance->flags |= 0x10400;
+        instance->object->oflags |= 8;
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", mooshu_ebolt_OnUpdate);
+void mooshu_ebolt_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    func_8015D7C8_C6148(instance, instance->_100);
+    if (instance->_F4[2] > 0) {
+        instance->_F4[2]--;
+    } else if (instance->_F4[2] == 0) {
+        func_8002E350(instance);
+    }
+}
 
 void mooshu_vandb_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
