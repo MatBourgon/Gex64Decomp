@@ -198,7 +198,14 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_8015F620_A2E50);
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_spray_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_spray_OnCollide);
+void horror_spray_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    if (instance->bspTree->_06 == 1
+        && instance->bspTree->instanceSpline == gameTracker->player
+        && instance->bspTree->_0C[5] >= 6U) {
+        func_8004AAA8(instance, 10, 0);
+        INSTANCE_PlainDeath(instance, 5, 3, 0);
+    }
+}
 
 void horror_shittrn_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }

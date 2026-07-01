@@ -29,7 +29,14 @@ INCLUDE_RODATA("asm/nonmatchings/level/KUNGFU", D_801626C0_B18E0);
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_spray_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_spray_OnCollide);
+void kungfu_spray_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    if (instance->bspTree->_06 == 1
+        && instance->bspTree->instanceSpline == gameTracker->player
+        && instance->bspTree->_0C[5] >= 6U) {
+        func_8004AAA8(instance, 10, 0);
+        INSTANCE_PlainDeath(instance, 5, 3, 0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_bug_OnCreate);
 
@@ -551,7 +558,14 @@ void kungfu_brkbone_OnCreate(Instance* instance, GameTracker* gameTracker) {
 void kungfu_brkbone_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_brkbone_OnCollide);
+void kungfu_brkbone_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    if (func_80027500(instance->bspTree, gameTracker)) {
+        if (((short*)&instance->object->_08)[0] >= 2) {
+            instance->currentModel = 1;
+        }
+        INSTANCE_PlainDeath(instance, 5, -1, 0);
+    }
+}
 
 void kungfu_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int var_s0;

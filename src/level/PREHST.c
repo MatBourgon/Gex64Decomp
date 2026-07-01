@@ -212,7 +212,14 @@ void prehst_brkbone_OnCreate(Instance* instance, GameTracker* gameTracker) {
 void prehst_brkbone_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_brkbone_OnCollide);
+void prehst_brkbone_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    if (func_80027500(instance->bspTree, gameTracker)) {
+        if (((short*)&instance->object->_08)[0] >= 2) {
+            instance->currentModel = 1;
+        }
+        INSTANCE_PlainDeath(instance, 5, -1, 0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_bldrgen_OnCreate);
 
