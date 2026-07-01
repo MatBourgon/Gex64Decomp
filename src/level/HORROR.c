@@ -319,7 +319,9 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_flasher_OnUpdate);
 void horror_flasher_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_hhelev_OnCreate);
+void horror_hhelev_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    instance->flags |= 0x400;
+}
 
 void horror_evileye_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
