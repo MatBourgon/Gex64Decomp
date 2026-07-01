@@ -1,6 +1,7 @@
 #include "common.h"
 
 #include "level/SCIFI.h"
+#include "MATRIX.h"
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_80159720_DF540);
 
@@ -81,9 +82,27 @@ void scifi_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_rocket_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015A36C_E018C);
+void func_8015A36C_E018C(Instance* instance, void* unused, SVECTOR* out, SVECTOR* in) {
+    MATRIX mat;
+    LVECTOR temp;
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015A3F4_E0214);
+    func_80041FD0(&mat, instance->matrix);
+    MATH3D_ApplyMatrix(&mat, in, &temp);
+    out->x = mat.l[0] + temp.x;
+    out->y = mat.l[1] + temp.y;
+    out->z = mat.l[2] + temp.z;
+}
+
+void func_8015A3F4_E0214(Instance* instance, void* unused, SVECTOR* out, SVECTOR* in) {
+    MATRIX* mat;
+    LVECTOR temp;
+
+    mat = instance->matrix;
+    MATH3D_ApplyMatrix(mat, in, &temp);
+    out->x = mat->l[0] + temp.x;
+    out->y = mat->l[1] + temp.y;
+    out->z = mat->l[2] + temp.z;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_rocket_OnUpdate);
 

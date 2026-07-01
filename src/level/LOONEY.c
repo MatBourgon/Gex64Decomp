@@ -1,6 +1,7 @@
 #include "common.h"
 
 #include "level/LOONEY.h"
+#include "MATRIX.h"
 
 extern int D_80161BD0_B9E80;
 
@@ -571,9 +572,27 @@ void looney_fxgen_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_frocket_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_801615DC_B988C);
+void func_801615DC_B988C(Instance* instance, void* unused, SVECTOR* out, SVECTOR* in) {
+    MATRIX mat;
+    LVECTOR temp;
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_80161664_B9914);
+    func_80041FD0(&mat, instance->matrix);
+    MATH3D_ApplyMatrix(&mat, in, &temp);
+    out->x = mat.l[0] + temp.x;
+    out->y = mat.l[1] + temp.y;
+    out->z = mat.l[2] + temp.z;
+}
+
+void func_80161664_B9914(Instance* instance, void* unused, SVECTOR* out, SVECTOR* in) {
+    MATRIX* mat;
+    LVECTOR temp;
+
+    mat = instance->matrix;
+    MATH3D_ApplyMatrix(mat, in, &temp);
+    out->x = mat->l[0] + temp.x;
+    out->y = mat->l[1] + temp.y;
+    out->z = mat->l[2] + temp.z;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_frocket_OnUpdate);
 
