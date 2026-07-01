@@ -63,7 +63,10 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_zomarm_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_zomarm_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_zomleg_OnCreate);
+void horror_zomleg_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    instance->_F4[0] = 1;
+    instance->_F4[2] = 0x3C;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_zomleg_OnUpdate);
 
@@ -135,7 +138,9 @@ INCLUDE_RODATA("asm/nonmatchings/level/HORROR", D_80164C74_A84A4);
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_fltlamp_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_polter_OnCreate);
+void horror_polter_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    instance->scale.z = instance->scale.y = instance->scale.x = 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_polter_OnUpdate);
 
