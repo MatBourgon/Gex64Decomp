@@ -16,7 +16,19 @@ INCLUDE_RODATA("asm/nonmatchings/_4f810", D_8007EAF0);
 
 INCLUDE_ASM("asm/nonmatchings/_4f810", func_8004EC10);
 
-INCLUDE_ASM("asm/nonmatchings/_4f810", func_8004EF70);
+extern void SIGNAL_HandleSignal(void* instance, void* signal, int arg2);
+
+void func_8004EF70(void) {
+    short index;
+    int* entry;
+
+    index = D_8007865E;
+    if (index != -1) {
+        D_8007865E = -1;
+        entry = &D_80157508[index * 0x14/4];
+        SIGNAL_HandleSignal((void*)entry[1], (void*)entry[4], entry[0] = 0);
+    }
+}
 
 void func_8004EFD0() {
     int* temp_a0;

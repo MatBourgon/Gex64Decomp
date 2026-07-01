@@ -644,38 +644,6 @@ void INSTANCE_DefaultInit(Instance* instance, Object* object) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/INSTANCE", func_8002E21C);
-/*typedef struct
-{
-    int count;
-    Intro* introList[0];
-} IntroList;
-
-void func_8002E21C(Intro* arg0) {
-    Intro* temp_a0;
-    Intro** var_s0;
-    s32 var_s1;
-    IntroList* temp_v1;
-    
-    temp_v1 = (IntroList*)arg0->_04;
-        
-
-    if (temp_v1 == NULL) {
-        INSTANCE_BirthObjectFromIntro(arg0);
-        return;
-    }
-    
-    var_s1 = temp_v1->count;
-    var_s0 = temp_v1->introList;
-        
-    while (var_s1 != 0)
-    {
-        if (*var_s0 != NULL) {
-            INSTANCE_BirthObjectFromIntro(*var_s0);
-        }
-        var_s1 -= 1;
-        var_s0 += 1;
-    }
-}*/
 
 Instance* INSTANCE_IntroObject(Object* target, GameTracker* gameTracker) {
     Intro* intro;

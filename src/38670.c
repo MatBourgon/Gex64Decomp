@@ -1,6 +1,18 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/38670", func_80037A70);
+extern int D_800BDEE0;
+extern int D_800BDEE4;
+extern int D_800BDEE8;
+extern int D_800BDEEC;
+extern int D_800BDEF0;
+
+void func_80037A70(void) {
+    D_800BDEE0 = 0xA;
+    D_800BDEE4 = 0x10;
+    D_800BDEE8 = 0x28;
+    D_800BDEEC = 0x1E;
+    D_800BDEF0 = 0;
+}
 
 void func_80037AAC(void) {
 }
@@ -68,9 +80,39 @@ INCLUDE_ASM("asm/nonmatchings/38670", func_800390CC);
 
 INCLUDE_ASM("asm/nonmatchings/38670", func_8003922C);
 
-INCLUDE_ASM("asm/nonmatchings/38670", func_8003959C);
+extern int* D_80157050;
+extern int D_800EB87C;
+extern int D_800E5D20;
 
-INCLUDE_ASM("asm/nonmatchings/38670", func_80039600);
+void func_8003959C(void) {
+    int* ptr;
+
+    ptr = D_80157050;
+    D_800EB87C = -1;
+    D_800E5D20 = 1;
+    D_80157050 = ptr + 2;
+    ptr[0] = 0xB6000000;
+    ptr[1] = 0x3000;
+    D_80157050 = ptr + 4;
+    ptr[2] = 0xFCFFFFFF;
+    ptr[3] = 0xFFFE793C;
+}
+
+extern int* gameTracker8;
+extern unsigned int* D_80156B14;
+extern int D_800B83B8;
+extern int D_801574F8;
+extern int D_80157058;
+extern int D_800E9734;
+extern int D_80154714;
+
+void func_80039600(void) {
+    D_801574F8 = D_80156B14[1];
+    D_800B83B8 = 2;
+    D_80157058 = D_80156B14[2];
+    D_800E9734 = D_80156B14[1] / ((short*)gameTracker8)[0x9A/2];
+    D_80154714 = D_80156B14[2] / ((short*)gameTracker8)[0x9A/2];
+}
 
 INCLUDE_ASM("asm/nonmatchings/38670", func_80039688);
 
