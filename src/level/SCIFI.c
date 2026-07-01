@@ -176,7 +176,9 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015BC24_E1A44);
 void scifi_genbrk_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_genbrk_OnUpdate);
+void scifi_genbrk_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    GenericProcess(instance, gameTracker);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_genbrk_OnCollide);
 

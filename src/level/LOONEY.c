@@ -569,7 +569,9 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_frocket_OnCollide);
 void looney_genbrk_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_genbrk_OnUpdate);
+void looney_genbrk_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    GenericProcess(instance, gameTracker);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_genbrk_OnCollide);
 
