@@ -184,7 +184,15 @@ void common_derez_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->currentTextureAnimFrame = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/_be60", common_derez_OnUpdate);
+void common_derez_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    short temp_v0;
+
+    temp_v0 = (short) instance->currentTextureAnimFrame + 1;
+    instance->currentTextureAnimFrame = temp_v0;
+    if (temp_v0 == 0xC) {
+        INSTANCE_KillInstance(instance);
+    }
+}
 
 void common_derez_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
