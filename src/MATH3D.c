@@ -302,7 +302,7 @@ void MATH3D_SetIdentityQuat(G2Quat* q)
 }
 
 extern int D_800E8184;
-extern void inflate(void);
+#include "zlib/zlib.h"
 extern int D_800BF1C0;
 extern int D_800BF1C4;
 extern int D_800BF1C8;

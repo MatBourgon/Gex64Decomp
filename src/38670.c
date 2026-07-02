@@ -1,17 +1,13 @@
 #include "common.h"
 
-extern int D_800BDEE0;
-extern int D_800BDEE4;
-extern int D_800BDEE8;
-extern int D_800BDEEC;
-extern int D_800BDEF0;
+extern int D_800BDEE0[5];
 
 void func_80037A70(void) {
-    D_800BDEE0 = 0xA;
-    D_800BDEE4 = 0x10;
-    D_800BDEE8 = 0x28;
-    D_800BDEEC = 0x1E;
-    D_800BDEF0 = 0;
+    D_800BDEE0[0] = 0xA;
+    D_800BDEE0[1] = 0x10;
+    D_800BDEE0[2] = 0x28;
+    D_800BDEE0[3] = 0x1E;
+    D_800BDEE0[4] = 0;
 }
 
 void func_80037AAC(void) {
@@ -36,13 +32,10 @@ void func_80037AE0(void) {
     func_80037ACC(0x140);
 }
 
-extern int D_800BDEE8;
-extern int D_800BDEEC;
-
 void Set3DTextPosition(short x, short y)
 {
-    D_800BDEE8 = x;
-    D_800BDEEC = y;
+    D_800BDEE0[2] = x;
+    D_800BDEE0[3] = y;
 }
 
 void func_80037B24(void) {

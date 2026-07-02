@@ -1,4 +1,5 @@
 #include "common.h"
+#include "SIGNAL.h"
 
 extern short D_8007865E;
 
@@ -15,8 +16,6 @@ INCLUDE_RODATA("asm/nonmatchings/_4f810", D_8007EAE4);
 INCLUDE_RODATA("asm/nonmatchings/_4f810", D_8007EAF0);
 
 INCLUDE_ASM("asm/nonmatchings/_4f810", func_8004EC10);
-
-extern void SIGNAL_HandleSignal(void* instance, void* signal, int arg2);
 
 void func_8004EF70(void) {
     short index;

@@ -3,7 +3,6 @@
 #include "types/Instance.h"
 #include "types/GameTracker.h"
 #include "types/BSPTree.h"
-#include "INSTANCE.h"
 
 INCLUDE_ASM("asm/nonmatchings/_24cf0", func_800240F0);
 
@@ -175,8 +174,8 @@ void func_80027110(Instance* instance, short value, GameTracker* gameTracker) {
 
     data = gameTracker->player->data;
     instance->flags |= 0x400;
-    if (*(int*)((char*)data + 0x130) == 0) {
-        *(int*)((char*)data + 0x130) = (int)instance;
+    if (*(Instance**)((char*)data + 0x130) == 0) {
+        *(Instance**)((char*)data + 0x130) = instance;
         *(short*)((char*)data + 0x134) = value;
     }
 }
