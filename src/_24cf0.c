@@ -38,7 +38,18 @@ void func_8002569C(Instance* instance) {
 
 INCLUDE_ASM("asm/nonmatchings/_24cf0", func_800256A8);
 
-INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80025764);
+extern int D_800B83BC;
+
+void func_80025764(Instance* instance, GameTracker* gameTracker, short value) {
+    short* data = ((short*)instance->data);
+
+    if (data != NULL) {
+        if (data[0x6F] == 0) {
+            D_800B83BC = 2;
+        }
+        data[0x6F] = value;
+    }
+}
 
 int func_80025798(Instance* instance) {
     int result;
@@ -50,13 +61,71 @@ int func_80025798(Instance* instance) {
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/_24cf0", func_800257B4);
+int func_800257B4(Instance* instance) {
+    int state;
+    unsigned short* data;
+    int result;
 
-INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80025800);
+    state = instance->_F4[0];
+    data = ((unsigned short*)instance->data);
+    result = 0;
+    if (state == 1 || state == 0x8000) {
+        result = 1;
+    } else if (data != 0 && (data[0x45] & 0x80)) {
+        result = 1;
+    }
+    return result;
+}
 
-INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80025850);
+extern short D_80157650[20][4];
 
-INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80025884);
+short* func_80025800(void) {
+    short* entry;
+    short index;
+
+    entry = D_80157650[0];
+    index = 0;
+    while (1) {
+        if (*entry == 0) {
+            *entry = 1;
+            return entry;
+        }
+        index++;
+        if (index >= 0x14) {
+            return 0;
+        }
+        entry += 4;
+    }
+}
+
+void func_80025850(void) {
+    short *ptr;
+    short i;
+
+    ptr = D_80157650[0];
+    for (i = 0; i < 20; i++) {
+        *ptr = 0;
+        ptr += 4;
+    }
+}
+
+short* func_80025884(short arg0) {
+    short* entry;
+    short index;
+
+    entry = D_80157650[0];
+    index = 0;
+    while (1) {
+        if (*entry != 0 && entry[3] == arg0) {
+            return entry;
+        }
+        index++;
+        if (index >= 0x14) {
+            return 0;
+        }
+        entry += 4;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/_24cf0", func_800258E4);
 
@@ -100,9 +169,26 @@ INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80027028);
 
 INCLUDE_ASM("asm/nonmatchings/_24cf0", func_800270C8);
 
-INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80027110);
+void func_80027110(Instance* instance, short value, GameTracker* gameTracker) {
+    void* data;
 
-INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80027144);
+    data = gameTracker->player->data;
+    instance->flags |= 0x400;
+    if (*(Instance**)((char*)data + 0x130) == 0) {
+        *(Instance**)((char*)data + 0x130) = instance;
+        *(short*)((char*)data + 0x134) = value;
+    }
+}
+
+extern int D_800B83BC;
+extern void func_80050A80(int arg0, int arg1);
+
+void func_80027144(Instance* instance, GameTracker* gameTracker) {
+    func_800240F0(instance, gameTracker);
+    func_8002E350(instance);
+    D_800B83BC = 0;
+    func_80050A80(0, 0xA);
+}
 
 INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80027184);
 
@@ -118,7 +204,14 @@ void func_80027410(Instance* instance) {
     instance->_B8 = *(int*)instance->data;
 }
 
-INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80027428);
+void func_80027428(int arg0) {
+    char* data;
+
+    data = ((char*)PlayerInstance->data);
+    if (*(short*)(data + 0x78) == 0) {
+        *(short*)(data + 0x82) = *(unsigned short*)(data + 0x86) + (arg0 - *(unsigned short*)(data + 0x88));
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80027468);
 
@@ -131,9 +224,31 @@ int func_80027500(BSPTree* bsp, GameTracker* gameTracker) {
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80027548);
+/* arg0 = BSPTree*, arg1 = GameTracker*. Confirmed by cross-reference: same
+ * bsp->instanceSpline / bsp->_06 fields at the same offsets, with the same
+ * early-return shape, are used in func_80027500 just above (which already
+ * matches 100%). */
+int func_80027548(BSPTree* bsp, GameTracker* gameTracker) {
+    if ((bsp->instanceSpline == gameTracker->player) && (bsp->_06 == 4)) {
+        return 1;
+    }
 
-INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80027578);
+    return 0;
+}
+
+int func_80027578(void) {
+    int state;
+    short* data;
+    int result;
+
+    state = PlayerInstance->_F4[0];
+    data = ((short*)gameTracker8->player->data);
+    result = 0;
+    if ((unsigned int)(state - 2) < 2 || data[0x6E] != 0) {
+        result = 1;
+    }
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_24cf0", func_800275C4);
 

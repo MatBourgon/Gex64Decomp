@@ -58,7 +58,20 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A820);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A8A8);
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A98C);
+void func_8004A98C(Instance* instance, void* list, short* src, int count) {
+    int i;
+    char* ptr;
+
+    instance->_B8 = (int)list;
+    ptr = (char*)list;
+    for (i = 0; i < count;) {
+        i++;
+        *(short*)(ptr + 6) = *src;
+        src++;
+        ptr += 8;
+    }
+    *(short*)(ptr + 6) = -1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A9C8);
 
@@ -99,7 +112,13 @@ int func_8004AC10(int *arg0, int unused, int arg2, int arg3) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004AC78);
+void func_8004AC78(Instance* instance, Model* model) {
+    if (model != NULL) {
+        if (instance->object->modelList[instance->currentModel] != model) {
+            instance->object->modelList[instance->currentModel] = model;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004ACB0);
 
