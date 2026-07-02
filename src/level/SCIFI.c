@@ -317,7 +317,34 @@ void scifi_gas_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_mylot_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015E070_E3E90);
+int func_8015E070_E3E90(Instance* instance) {
+    MATRIX mat;
+    unsigned short out[3];
+    unsigned short out2[3];
+    register int result __asm__("$2");
+    unsigned short x;
+    unsigned short y;
+    unsigned short z;
+
+    MATH3D_SetUnityMatrix(&mat);
+    RotMatrixX(instance->rotation.x, &mat);
+    RotMatrixY(instance->rotation.y + 0x800, &mat);
+    RotMatrixZ(instance->rotation.z, &mat);
+    func_800157BC(&mat, out);
+    result = 0;
+    x = out[0];
+    y = out[1];
+    z = out[2];
+    out2[0] = x;
+    x &= 0xFFF;
+    out2[1] = y;
+    y &= 0xFFF;
+    out2[2] = z;
+    out2[0] = x;
+    out2[1] = y;
+    if (x == 0) result = (y < 1);
+    return result;
+}
 
 int func_8015E108_E3F28(Instance* instance) {
     instance->rotation.x &= 0xFFF;
@@ -325,13 +352,69 @@ int func_8015E108_E3F28(Instance* instance) {
     return instance->rotation.x == 0 && instance->rotation.y == 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015E130_E3F50);
+int func_8015E130_E3F50(Instance* instance, GameTracker* gameTracker) {
+    MATRIX mat;
+    SVector pos;
+    SVECTOR result;
+    SVECTOR delta;
+    int temp;
+
+    MATH3D_SetUnityMatrix(&mat);
+    pos.x = instance->position.x;
+    pos.y = instance->position.y;
+    pos.z = instance->position.z;
+    delta.x = pos.x - gameTracker->player->position.x;
+    delta.y = pos.y - gameTracker->player->position.y;
+    delta.z = pos.z - gameTracker->player->position.z;
+    RotMatrixZ(-instance->rotation.z, &mat);
+    temp = (mat.m[1][0] * delta.x + mat.m[1][1] * delta.y + mat.m[1][2] * delta.z) >> 12;
+    result.y = temp;
+    return (temp << 16) > 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015E234_E4054);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015E3AC_E41CC);
+int func_8015E3AC_E41CC(Instance* instance, GameTracker* gameTracker) {
+    MATRIX mat;
+    SVector pos;
+    SVECTOR result;
+    SVECTOR delta;
+    int temp;
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015E4D0_E42F0);
+    MATH3D_SetUnityMatrix(&mat);
+    pos.x = instance->position.x;
+    pos.y = instance->position.y;
+    pos.z = instance->position.z;
+    delta.x = pos.x - gameTracker->player->position.x;
+    delta.y = pos.y - gameTracker->player->position.y;
+    delta.z = pos.z - gameTracker->player->position.z;
+    RotMatrixX(instance->rotation.x, &mat);
+    RotMatrixY(instance->rotation.y, &mat);
+    RotMatrixZ(-instance->rotation.z, &mat);
+    temp = (mat.m[0][0] * delta.x + mat.m[0][1] * delta.y + mat.m[0][2] * delta.z) >> 12;
+    result.x = temp;
+    return (unsigned)(temp << 16) >> 31;
+}
+
+int func_8015E4D0_E42F0(Instance* instance, GameTracker* gameTracker) {
+    MATRIX mat;
+    SVector pos;
+    SVECTOR result;
+    SVECTOR delta;
+    int temp;
+
+    MATH3D_SetUnityMatrix(&mat);
+    pos.x = instance->position.x;
+    pos.y = instance->position.y;
+    pos.z = instance->position.z;
+    delta.x = pos.x - gameTracker->player->position.x;
+    delta.y = pos.y - gameTracker->player->position.y;
+    delta.z = pos.z - gameTracker->player->position.z;
+    RotMatrixZ(-instance->rotation.z, &mat);
+    temp = (mat.m[0][0] * delta.x + mat.m[0][1] * delta.y + mat.m[0][2] * delta.z) >> 12;
+    result.x = temp;
+    return (unsigned)(temp << 16) >> 31;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015E5D4_E43F4);
 

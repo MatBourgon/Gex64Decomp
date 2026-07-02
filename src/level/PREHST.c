@@ -267,7 +267,34 @@ INCLUDE_RODATA("asm/nonmatchings/level/PREHST", D_80164598_D1E18);
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_ptera_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_801630A0_D0920);
+int func_801630A0_D0920(Instance* instance) {
+    MATRIX mat;
+    unsigned short out[3];
+    unsigned short out2[3];
+    register int result __asm__("$2");
+    unsigned short x;
+    unsigned short y;
+    unsigned short z;
+
+    MATH3D_SetUnityMatrix(&mat);
+    RotMatrixX(instance->rotation.x, &mat);
+    RotMatrixY(instance->rotation.y + 0x800, &mat);
+    RotMatrixZ(instance->rotation.z, &mat);
+    func_800157BC(&mat, out);
+    result = 0;
+    x = out[0];
+    y = out[1];
+    z = out[2];
+    out2[0] = x;
+    x &= 0xFFF;
+    out2[1] = y;
+    y &= 0xFFF;
+    out2[2] = z;
+    out2[0] = x;
+    out2[1] = y;
+    if (x == 0) result = (y < 1);
+    return result;
+}
 
 int func_80163138_D09B8(Instance* instance) {
     instance->rotation.x &= 0xFFF;
@@ -275,13 +302,69 @@ int func_80163138_D09B8(Instance* instance) {
     return instance->rotation.x == 0 && instance->rotation.y == 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_80163160_D09E0);
+int func_80163160_D09E0(Instance* instance, GameTracker* gameTracker) {
+    MATRIX mat;
+    SVector pos;
+    SVECTOR result;
+    SVECTOR delta;
+    int temp;
+
+    MATH3D_SetUnityMatrix(&mat);
+    pos.x = instance->position.x;
+    pos.y = instance->position.y;
+    pos.z = instance->position.z;
+    delta.x = pos.x - gameTracker->player->position.x;
+    delta.y = pos.y - gameTracker->player->position.y;
+    delta.z = pos.z - gameTracker->player->position.z;
+    RotMatrixZ(-instance->rotation.z, &mat);
+    temp = (mat.m[1][0] * delta.x + mat.m[1][1] * delta.y + mat.m[1][2] * delta.z) >> 12;
+    result.y = temp;
+    return (temp << 16) > 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_80163264_D0AE4);
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_801633DC_D0C5C);
+int func_801633DC_D0C5C(Instance* instance, GameTracker* gameTracker) {
+    MATRIX mat;
+    SVector pos;
+    SVECTOR result;
+    SVECTOR delta;
+    int temp;
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_80163500_D0D80);
+    MATH3D_SetUnityMatrix(&mat);
+    pos.x = instance->position.x;
+    pos.y = instance->position.y;
+    pos.z = instance->position.z;
+    delta.x = pos.x - gameTracker->player->position.x;
+    delta.y = pos.y - gameTracker->player->position.y;
+    delta.z = pos.z - gameTracker->player->position.z;
+    RotMatrixX(instance->rotation.x, &mat);
+    RotMatrixY(instance->rotation.y, &mat);
+    RotMatrixZ(-instance->rotation.z, &mat);
+    temp = (mat.m[0][0] * delta.x + mat.m[0][1] * delta.y + mat.m[0][2] * delta.z) >> 12;
+    result.x = temp;
+    return (unsigned)(temp << 16) >> 31;
+}
+
+int func_80163500_D0D80(Instance* instance, GameTracker* gameTracker) {
+    MATRIX mat;
+    SVector pos;
+    SVECTOR result;
+    SVECTOR delta;
+    int temp;
+
+    MATH3D_SetUnityMatrix(&mat);
+    pos.x = instance->position.x;
+    pos.y = instance->position.y;
+    pos.z = instance->position.z;
+    delta.x = pos.x - gameTracker->player->position.x;
+    delta.y = pos.y - gameTracker->player->position.y;
+    delta.z = pos.z - gameTracker->player->position.z;
+    RotMatrixZ(-instance->rotation.z, &mat);
+    temp = (mat.m[0][0] * delta.x + mat.m[0][1] * delta.y + mat.m[0][2] * delta.z) >> 12;
+    result.x = temp;
+    return (unsigned)(temp << 16) >> 31;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_80163604_D0E84);
 
