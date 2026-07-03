@@ -1615,6 +1615,7 @@ __rmonGetRegionCount = 0x80066AB0; // type:func
 __rmonGetRegions = 0x80066B04; // type:func
 __rmonSetFault = 0x80066C90; // type:func
 __rmonInit = 0x80066CCC; // type:func
+__rmonPanic = 0x80066D9C; // type:func
 __rmonSetComm = 0x80066DA4; // type:func
 __rmonGetGRegisters = 0x80066DE0; // type:func
 __rmonSetGRegisters = 0x80066EB8; // type:func
