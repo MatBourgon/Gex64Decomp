@@ -27,7 +27,16 @@ void func_8015A150_C2AD0(Instance* instance, short arg1, short arg2) {
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015A18C_C2B0C);
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015A1E0_C2B60);
+void func_8015A1E0_C2B60(Instance* instance, int arg1, int arg2, short* arg3) {
+    short angle;
+
+    if (func_8015B9D0_C4350(instance, arg3, &angle) != 0) {
+        instance->rotation.z = angle + 0x400;
+        func_8015BB44_C44C4(instance, arg3);
+    } else {
+        func_8004ACB0(&instance->rotation.z, (short)(angle + 0x400), arg3[8]);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015A258_C2BD8);
 
@@ -77,9 +86,27 @@ void func_8015B5F0_C3F70(Instance* instance, short* arg1) {
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015B614_C3F94);
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015B674_C3FF4);
+void func_8015B674_C3FF4(Instance* instance, short* arg1) {
+    instance->flags2 &= ~0x10;
+    if ((rand() % 4) != 0) {
+        instance->currentModelAnim = 8;
+    } else {
+        instance->currentModelAnim = 6;
+    }
+    instance->currentAnimFrame = 0;
+    arg1[6] = 7;
+}
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015B6D4_C4054);
+void func_8015B6D4_C4054(Instance* instance, short* arg1) {
+    instance->flags2 &= ~0x10;
+    if ((rand() % 4) != 0) {
+        instance->currentModelAnim = 6;
+    } else {
+        instance->currentModelAnim = 8;
+    }
+    instance->currentAnimFrame = 0;
+    arg1[6] = 8;
+}
 
 void func_8015B734_C40B4(Instance* instance, short* arg1) {
     instance->currentModelAnim = 7;
@@ -123,7 +150,15 @@ void func_8015C708_C5088(Instance* instance, GameTracker* gameTracker)
     instance->_F4[2] = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015C710_C5090);
+void func_8015C710_C5090(Instance* instance, GameTracker* gameTracker) {
+    instance->_F4[2] = 0;
+    if (instance->_F4[0] == 1) {
+        instance->_104 = 0x10;
+        instance->_F4[1] = 0;
+        instance->_F4[0] = 3;
+        func_80050508(instance, 0x126, (short)((rand() & 0x1F) - 0xF), 0xC8, 0x2710);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015C780_C5100);
 

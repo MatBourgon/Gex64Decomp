@@ -150,7 +150,14 @@ void kungfu_launch_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015AC1C_A9E3C);
+void func_8015AC1C_A9E3C(Instance* instance) {
+    instance->flags &= ~0x800;
+    if (!(instance->_11C & 8)) {
+        instance->_F4[2] = instance->_104;
+        instance->position.x = PlayerInstance->position.x;
+        instance->position.y = PlayerInstance->position.y;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015AC6C_A9E8C);
 
@@ -288,7 +295,18 @@ void func_8015DB1C_ACD3C(Instance* instance, short* arg1) {
     instance->currentAnimFrame = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015DB50_ACD70);
+void func_8015DB50_ACD70(Instance* instance, short* arg1) {
+    instance->flags2 &= ~0x10;
+    arg1[0x18/2] = 0;
+    if (arg1[8] == 0) {
+        instance->currentModelAnim = 2;
+        instance->currentAnimFrame = 0;
+    } else {
+        instance->currentModelAnim = 6;
+        instance->currentAnimFrame = 0x3D;
+    }
+    instance->position = instance->initialPos;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015DBB0_ACDD0);
 
