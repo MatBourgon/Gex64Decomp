@@ -391,6 +391,7 @@ __osRdb_IP6_Empty = 0x80079650;
 __osThreadTail = 0x80079560;
 __osActiveQueue = 0x8007956C;
 __osRunningThread = 0x80079570;
+__osFaultedThread = 0x80079574;
 __osBaseCounter = 0x800B83E0;
 __osCurrentTime = 0x800E8EB8; // size:0x8
 __osRdb_IP6_Data = 0x80156BD8;
