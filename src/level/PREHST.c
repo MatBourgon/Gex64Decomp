@@ -428,9 +428,43 @@ int func_80163500_D0D80(Instance* instance, GameTracker* gameTracker) {
     return (unsigned)(temp << 16) >> 31;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_80163604_D0E84);
+SVECTOR func_80163604_D0E84(Instance* instance, short dist) {
+    MATRIX mat;
+    SVECTOR result;
+    SVECTOR vec;
+    SVECTOR final;
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_801636E8_D0F68);
+    RotMatrix(&instance->rotation, &mat);
+    vec.x = 0;
+    vec.y = 0;
+    vec.z = dist;
+    result.x = (vec.x * mat.m[0][0] >> 12) + (vec.y * mat.m[0][1] >> 12) + (vec.z * mat.m[0][2] >> 12);
+    result.y = (vec.x * mat.m[1][0] >> 12) + (vec.y * mat.m[1][1] >> 12) + (vec.z * mat.m[1][2] >> 12);
+    result.z = (vec.x * mat.m[2][0] >> 12) + (vec.y * mat.m[2][1] >> 12) + (vec.z * mat.m[2][2] >> 12);
+    final.x = result.x + instance->position.x;
+    final.y = result.y + instance->position.y;
+    final.z = result.z + instance->position.z;
+    return final;
+}
+
+SVECTOR func_801636E8_D0F68(Instance* instance, short dist) {
+    MATRIX mat;
+    SVECTOR result;
+    SVECTOR vec;
+    SVECTOR final;
+
+    RotMatrix(&instance->rotation, &mat);
+    vec.x = 0;
+    vec.y = 0;
+    vec.z = -dist;
+    result.x = (vec.x * mat.m[0][0] >> 12) + (vec.y * mat.m[0][1] >> 12) + (vec.z * mat.m[0][2] >> 12);
+    result.y = (vec.x * mat.m[1][0] >> 12) + (vec.y * mat.m[1][1] >> 12) + (vec.z * mat.m[1][2] >> 12);
+    result.z = (vec.x * mat.m[2][0] >> 12) + (vec.y * mat.m[2][1] >> 12) + (vec.z * mat.m[2][2] >> 12);
+    final.x = result.x + instance->position.x;
+    final.y = result.y + instance->position.y;
+    final.z = result.z + instance->position.z;
+    return final;
+}
 
 void func_801637D0_D1050(Instance* instance, SVECTOR offset, int dist, short angle) {
     MATRIX m1;

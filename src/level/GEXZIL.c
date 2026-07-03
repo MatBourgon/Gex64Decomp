@@ -90,11 +90,13 @@ INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_mekblst_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_mekblst_OnUpdate);
 
+void func_8015EAB8_97C38(Instance* instance, int* arg1);
+
 void func_8015C484_95604(Instance* instance, short* arg1, int* arg2) {
     extern int D_80154834;
     if (instance->flags2 & 0x10) {
         if (arg1[0x4E/2] <= 0 && D_80154834 == 0 && arg2[0x4C48/4] == 0) {
-            func_8015EAB8_97C38(instance, arg1);
+            func_8015EAB8_97C38(instance, ((int*)arg1));
         } else {
             instance->flags2 &= ~0x10;
         }
