@@ -1,4 +1,3 @@
-src/_532f0.c
 src/libmus/player_commands.c
 src/libmus/player.c
 src/_56790.c
