@@ -309,6 +309,8 @@ segments:
 
       # Start of DATA
       - [0x6B920, data]
+      - [0x7A190, .data, io/aisetnextbuf]
+      - [0x7A1A0, data]
       - [0x7A200, .data, sched/sched]
       - [0x7A210, data]
 
