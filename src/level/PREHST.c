@@ -532,7 +532,22 @@ void func_801639D0_D1250(Instance* instance, SVECTOR offset, short dist, short a
     instance->rotation.z = euler.z;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_80163BC8_D1448);
+void func_80163BC8_D1448(Instance* instance, short target, short step) {
+    int s;
+    int delta;
+
+    s = step;
+    delta = instance->position.z - target;
+    if ((delta >= 0) ? (s >= delta) : (s >= target - instance->position.z)) {
+        instance->position.z = target;
+    } else {
+        if (instance->position.z > target) {
+            instance->position.z = instance->position.z - step;
+        } else {
+            instance->position.z = instance->position.z + step;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_80163C4C_D14CC);
 

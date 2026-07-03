@@ -582,7 +582,22 @@ void func_8015E9A0_E47C0(Instance* instance, SVECTOR offset, short dist, short a
     instance->rotation.z = euler.z;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015EB98_E49B8);
+void func_8015EB98_E49B8(Instance* instance, short target, short step) {
+    int s;
+    int delta;
+
+    s = step;
+    delta = instance->position.z - target;
+    if ((delta >= 0) ? (s >= delta) : (s >= target - instance->position.z)) {
+        instance->position.z = target;
+    } else {
+        if (instance->position.z > target) {
+            instance->position.z = instance->position.z - step;
+        } else {
+            instance->position.z = instance->position.z + step;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_mylot_OnUpdate);
 
