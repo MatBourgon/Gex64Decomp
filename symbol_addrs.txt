@@ -386,6 +386,7 @@ __osSiAccessQueue = 0x801576F0;
 __osSiAccessQueueEnabled = 0x8007A6D0;
 __osViNext = 0x80079984;
 __osViCurr = 0x80079980;
+alGlobals = 0x80079580; 
 hdwrBugFlag = 0x80079590;
 __osRdb_IP6_Empty = 0x80079650;
 __osThreadTail = 0x80079560;
