@@ -466,7 +466,7 @@ SVECTOR func_801636E8_D0F68(Instance* instance, short dist) {
     return final;
 }
 
-void func_801637D0_D1050(Instance* instance, SVECTOR offset, int dist, short angle) {
+void func_801637D0_D1050(Instance* instance, SVECTOR offset, short dist, short angle) {
     MATRIX m1;
     MATRIX m2;
     MATRIX m3;
@@ -499,7 +499,38 @@ void func_801637D0_D1050(Instance* instance, SVECTOR offset, int dist, short ang
     instance->rotation.z = euler.z;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_801639D0_D1250);
+void func_801639D0_D1250(Instance* instance, SVECTOR offset, short dist, short angle) {
+    MATRIX m1;
+    MATRIX m2;
+    MATRIX m3;
+    SVECTOR result;
+    SVECTOR vec;
+    SVECTOR euler;
+    SVECTOR rot;
+
+    MATH3D_SetUnityMatrix(&m1);
+    MATH3D_SetUnityMatrix(&m2);
+    MATH3D_SetUnityMatrix(&m3);
+    vec.x = 0;
+    vec.y = 0;
+    vec.z = dist;
+    rot.x = instance->rotation.x;
+    rot.y = instance->rotation.y;
+    rot.z = instance->rotation.z;
+    RotMatrixX(angle, &m2);
+    RotMatrix(&rot, &m3);
+    MulMatrix0(&m3, &m2, &m1);
+    result.x = (vec.x * m1.m[0][0] >> 12) + (vec.y * m1.m[0][1] >> 12) + (vec.z * m1.m[0][2] >> 12);
+    result.y = (vec.x * m1.m[1][0] >> 12) + (vec.y * m1.m[1][1] >> 12) + (vec.z * m1.m[1][2] >> 12);
+    result.z = (vec.x * m1.m[2][0] >> 12) + (vec.y * m1.m[2][1] >> 12) + (vec.z * m1.m[2][2] >> 12);
+    instance->position.x = result.x + offset.x;
+    instance->position.y = result.y + offset.y;
+    instance->position.z = result.z + offset.z;
+    func_800157BC(&m1, &euler);
+    instance->rotation.x = euler.x;
+    instance->rotation.y = euler.y;
+    instance->rotation.z = euler.z;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_80163BC8_D1448);
 
