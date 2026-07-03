@@ -7,7 +7,17 @@
 
 #include "PRinternal/macros.h"
 
-INCLUDE_ASM("asm/nonmatchings/rmon/rmonmisc", __rmonSetFault);
+int __rmonSetFault(KKHeader* req) {
+    KKFaultRequest* request = (KKFaultRequest*)req;
+    KKObjectEvent reply;
+
+    reply.header.code = request->header.code;
+    reply.header.error = TV_ERROR_NO_ERROR;
+    reply.object = request->tid;
+
+    __rmonSendReply(&reply.header, sizeof(reply), KK_TYPE_REPLY);
+    return TV_ERROR_NO_ERROR;
+}
 
 INCLUDE_ASM("asm/nonmatchings/rmon/rmonmisc", __rmonInit);
 
