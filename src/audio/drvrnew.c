@@ -16,7 +16,7 @@
  */
 #define ms *(((s32)((f32)44.1))&~0x7)
 
-INCLUDE_RODATA("asm/nonmatchings/audio/drvrnew", D_8007EE10);
+INCLUDE_RODATA("asm/nonmatchings/audio/drvrnew", __osRcpImTable);
 
 void init_lpfilter(ALLowPass *lp)
 {

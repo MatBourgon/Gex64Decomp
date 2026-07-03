@@ -1,10 +1,22 @@
 #include "common.h"
+#include "audio/synthInternals.h"
 
 INCLUDE_ASM("asm/nonmatchings/audio/synthesizer", alSynNew);
 
 INCLUDE_ASM("asm/nonmatchings/audio/synthesizer", alAudioFrame);
 
-INCLUDE_ASM("asm/nonmatchings/audio/synthesizer", __allocParam);
+ALParam *__allocParam() 
+{
+    ALParam *update = 0;
+    ALSynth *drvr = &alGlobals->drvr;
+
+    if (drvr->paramList) {        
+        update = drvr->paramList;
+        drvr->paramList = drvr->paramList->next;
+        update->next = 0;
+    }
+    return update;
+}
 
 INCLUDE_ASM("asm/nonmatchings/audio/synthesizer", __freeParam);
 
