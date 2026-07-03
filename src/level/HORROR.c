@@ -194,7 +194,68 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_fltlamp_OnCollide);
 void horror_spray_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
+typedef struct {
+    char _00[0x1C];
+    short posX;
+    short posY;
+    short posZ;
+    short _22;
+    unsigned short unk24;
+    short _26;
+    unsigned short unk28;
+    short _2A;
+    unsigned short unk2C;
+    short _2E;
+    unsigned short unk30;
+    short _32;
+    unsigned short unk34;
+    short _36;
+    unsigned short unk38;
+    short _3A;
+    unsigned short unk3C;
+    short _3E;
+    unsigned short unk40;
+    char _42[0x2A];
+    unsigned short frame;
+} SprayData;
+
+extern void func_80016894(void*);
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_8015F620_A2E50);
+/* near-match (18 diffs: frame a1/a2, mflo v0/v1, z-check v0/v1 swap — scheduler difference):
+void func_8015F620_A2E50(void* arg0) {
+    SprayData* data;
+    Instance* player;
+    int dz;
+    int posZadj;
+    int dx;
+    int dy;
+
+    data = ((SprayData*)arg0);
+    data->unk24 -= 5;
+    data->unk28 += 5;
+    data->frame++;
+    data->unk2C -= 5;
+    data->unk30 -= 5;
+    data->unk34 += 5;
+    data->unk38 += 5;
+    data->unk3C += 5;
+    data->unk40 -= 5;
+    func_80016894(arg0);
+    player = PlayerInstance;
+    dx = player->position.x - data->posX;
+    dy = player->position.y - data->posY;
+    if (dx * dx + dy * dy < 0x4000) {
+        posZadj = data->posZ - 0x100;
+        dz = player->position.z - posZadj;
+        if (dz < 0) dz = -dz;
+        if (dz < 0x100) {
+            if (player->_F4[1] != 0x200000) {
+                func_800223F8(gameTracker8, 0x78, 0);
+            }
+        }
+    }
+}
+*/
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_spray_OnUpdate);
 

@@ -197,7 +197,69 @@ void scifi_eel_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_stmvent_OnCreate);
 
+typedef struct {
+    char _00[0x1C];
+    short posX;
+    short posY;
+    short posZ;
+    short _22;
+    unsigned short unk24;
+    short _26;
+    unsigned short unk28;
+    short _2A;
+    unsigned short unk2C;
+    short _2E;
+    unsigned short unk30;
+    short _32;
+    unsigned short unk34;
+    short _36;
+    unsigned short unk38;
+    short _3A;
+    unsigned short unk3C;
+    short _3E;
+    unsigned short unk40;
+    short _42;
+    short _44;
+    char _46[0x26];
+    unsigned short frame;
+} VentSprayData;
+
+extern void func_80016894(void*);
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015B4BC_E12DC);
+/* near-match (8 diffs: frame a1/a2, mflo v0/v1, z-check load order — scheduler difference):
+void func_8015B4BC_E12DC(void* arg0) {
+    VentSprayData* data;
+    Instance* player;
+    int dz;
+    int dx;
+    int dy;
+
+    data = ((VentSprayData*)arg0);
+    data->unk24 -= 10;
+    data->unk28 += 10;
+    data->frame++;
+    data->unk2C -= 10;
+    data->unk30 -= 10;
+    data->unk34 += 10;
+    data->unk38 += 10;
+    data->unk3C += 10;
+    data->unk40 -= 10;
+    func_80016894(arg0);
+    if (data->_44 != 0) return;
+    player = PlayerInstance;
+    dx = player->position.x - data->posX;
+    dy = player->position.y - data->posY;
+    if (dx * dx + dy * dy < 0x4000) {
+        dz = player->position.z - data->posZ;
+        if (dz < 0) dz = -dz;
+        if (dz < 0x80) {
+            if (player->_F4[1] != 0x200000) {
+                func_800223F8(gameTracker8, 0x78, 0);
+            }
+        }
+    }
+}
+*/
 
 INCLUDE_RODATA("asm/nonmatchings/level/SCIFI", D_80164E3C_EAC5C);
 
@@ -420,7 +482,38 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015E5D4_E43F4);
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015E6B8_E44D8);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015E7A0_E45C0);
+void func_8015E7A0_E45C0(Instance* instance, SVECTOR offset, int dist, short angle) {
+    MATRIX m1;
+    MATRIX m2;
+    MATRIX m3;
+    SVECTOR result;
+    SVECTOR vec;
+    SVECTOR euler;
+    SVECTOR rot;
+
+    MATH3D_SetUnityMatrix(&m1);
+    MATH3D_SetUnityMatrix(&m2);
+    MATH3D_SetUnityMatrix(&m3);
+    vec.x = 0;
+    vec.y = 0;
+    vec.z = -dist;
+    rot.x = instance->rotation.x;
+    rot.y = instance->rotation.y;
+    rot.z = instance->rotation.z;
+    RotMatrixX(-angle, &m2);
+    RotMatrix(&rot, &m3);
+    MulMatrix0(&m3, &m2, &m1);
+    result.x = (vec.x * m1.m[0][0] >> 12) + (vec.y * m1.m[0][1] >> 12) + (vec.z * m1.m[0][2] >> 12);
+    result.y = (vec.x * m1.m[1][0] >> 12) + (vec.y * m1.m[1][1] >> 12) + (vec.z * m1.m[1][2] >> 12);
+    result.z = (vec.x * m1.m[2][0] >> 12) + (vec.y * m1.m[2][1] >> 12) + (vec.z * m1.m[2][2] >> 12);
+    instance->position.x = result.x + offset.x;
+    instance->position.y = result.y + offset.y;
+    instance->position.z = result.z + offset.z;
+    func_800157BC(&m1, &euler);
+    instance->rotation.x = euler.x;
+    instance->rotation.y = euler.y;
+    instance->rotation.z = euler.z;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015E9A0_E47C0);
 
