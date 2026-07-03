@@ -1,6 +1,5 @@
 #include "common.h"
 
-extern void func_80052954();                                  /* extern */
 extern int D_800E5CE0;
 extern char D_80154830;
 extern char D_80154831;
@@ -59,17 +58,14 @@ void func_80052954(void) {
 
 INCLUDE_ASM("asm/nonmatchings/_532f0", func_800529A8);
 
-extern int func_80052D18(int arg0,int arg1);                                 /* extern */
 extern int D_80154834;
 
-void func_80052A7C(void) {
-    int arg0;
+void func_80052A7C(int arg0) {
     if (D_80154834 == 0) {
         func_80052D18(arg0, 7);
     }
 }
 
-extern func_80052ADC(int);                                     /* extern */
 extern int func_80052FB8(void);                                /* extern */
 
 void func_80052AA8(int arg0) {
