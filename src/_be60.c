@@ -185,11 +185,9 @@ void common_derez_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
 void common_derez_OnUpdate(Instance* instance, GameTracker* gameTracker) {
-    short temp_v0;
-
-    temp_v0 = (short) instance->currentTextureAnimFrame + 1;
-    instance->currentTextureAnimFrame = temp_v0;
-    if (temp_v0 == 0xC) {
+    instance->currentTextureAnimFrame++;
+    
+    if (instance->currentTextureAnimFrame == 0xC) {
         INSTANCE_KillInstance(instance);
     }
 }
