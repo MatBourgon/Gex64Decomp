@@ -539,7 +539,31 @@ int func_8015E130_E3F50(Instance* instance, GameTracker* gameTracker) {
     return (temp << 16) > 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015E234_E4054);
+int func_8015E234_E4054(Instance* instance, GameTracker* gameTracker, short base, short min, short angle) {
+    MATRIX mat;
+    SVector pos;
+    SVECTOR result;
+    SVECTOR delta;
+    int temp;
+
+    MATH3D_SetUnityMatrix(&mat);
+    pos.x = instance->position.x;
+    pos.y = instance->position.y;
+    pos.z = instance->position.z;
+    delta.x = pos.x - gameTracker->player->position.x;
+    delta.y = pos.y - gameTracker->player->position.y;
+    delta.z = pos.z - gameTracker->player->position.z;
+    RotMatrixZ(-angle, &mat);
+    temp = (mat.m[1][0] * delta.x + mat.m[1][1] * delta.y + mat.m[1][2] * delta.z) >> 12;
+    result.y = temp;
+    if (result.y > 0) {
+        return base;
+    }
+    if (min < base + result.y / 5) {
+        return base + result.y / 5;
+    }
+    return min;
+}
 
 int func_8015E3AC_E41CC(Instance* instance, GameTracker* gameTracker) {
     MATRIX mat;
