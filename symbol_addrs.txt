@@ -421,6 +421,7 @@ __osSiAccessQueueEnabled = 0x8007A6D0;
 osViModePalLan1 = 0x8007A730;
 osViModeMpalLan1 = 0x8007A780;
 osViModeNtscLan1 = 0x8007A6E0;
+dispatchTable = 0x8007A820;
 ldigs = 0x8007A910;
 udigs = 0x8007A924;
 vi = 0x80079920; // size:0x60

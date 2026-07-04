@@ -328,6 +328,8 @@ segments:
       - [0x7A590, data, io/vimgr]
       - [0x7A5B0, .data, io/vitbl]
       - [0x7B2D0, data]
+      - [0x7B420, .data, rmon/rmoncmds]
+      - [0x7B500, data, rmon/rmonmain]
       - [0x7B510, .data, libc/xlitob]
       - [0x7B540, data]
 
