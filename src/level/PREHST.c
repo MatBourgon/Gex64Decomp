@@ -236,7 +236,63 @@ void func_8015B47C_C8CFC(void* arg0) {
 }
 */
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_8015B5B0_C8E30);
+extern void func_80017E88();
+extern void func_8015B47C_C8CFC();
+
+void func_8015B5B0_C8E30(Instance* instance) {
+    extern int D_800EB8A0;
+    Object* obj;
+    Model* model;
+    SVECTOR rot;
+    SVECTOR vel;
+    VentSprayData* spray;
+
+    obj = ((Object*)OBTABLE_FindObject("sprysht_"));
+    if (instance->_E0[3] == 0) {
+        model = obj->modelList[0];
+    } else {
+        model = obj->modelList[1];
+    }
+    if (instance->_104 != 0) {
+        *(int*)&instance->_108 += 0x1000;
+        if (*(int*)&instance->_108 == 0xC000) {
+            instance->_104 = 0;
+        }
+    } else {
+        *(int*)&instance->_108 -= 0x1000;
+        if (*(int*)&instance->_108 == -0xC000) {
+            instance->_104 = 1;
+        }
+    }
+    if (*(int*)&instance->_118 != 0) {
+        *(int*)&instance->_11C += 0x1000;
+        if (*(int*)&instance->_11C == 0xA000) {
+            *(int*)&instance->_118 = 0;
+        }
+    } else {
+        *(int*)&instance->_11C -= 0x1000;
+        if (*(int*)&instance->_11C == -0xA000) {
+            *(int*)&instance->_118 = 1;
+        }
+    }
+    rot.x = (*(int*)&instance->_10C >> 1) + (*(int*)&instance->_11C >> 12);
+    rot.y = (*(int*)&instance->_110 >> 1) + (*(int*)&instance->_11C >> 12);
+    rot.z = (*(int*)&instance->_114 >> 1) + (*(int*)&instance->_108 >> 12);
+    vel.x = 0;
+    vel.y = 0;
+    vel.z = 0;
+    spray = ((VentSprayData*)func_800170E8(model, model->_14, &instance->position, &rot, 0, D_800EB8A0, func_80017E88, func_8015B47C_C8CFC, 0x14));
+    if (spray != NULL) {
+        if (*(int*)&instance->_34[2] == 0) {
+            *(int*)&instance->_34[2] = func_80050508(instance, 0x112, -0x15E, 0x50, 0xBB8);
+        }
+        if (instance->_E0[3] == 0) {
+            spray->_44 = 0;
+        } else {
+            spray->_44 = 1;
+        }
+    }
+}
 
 void prehst_stmvent_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     if (instance->_D0[3] & 1) {
