@@ -3,6 +3,7 @@
 #include "types/Vector.h"
 #include "types/Matrix.h"
 #include "types/Quat.h"
+#include "zlib/zlib.h"
 
 INCLUDE_ASM("asm/nonmatchings/MATH3D", MATH3D_FastAtan2);
 
@@ -302,7 +303,6 @@ void MATH3D_SetIdentityQuat(G2Quat* q)
 }
 
 extern int D_800E8184;
-#include "zlib/zlib.h"
 extern int D_800BF1C0;
 extern int D_800BF1C4;
 extern int D_800BF1C8;

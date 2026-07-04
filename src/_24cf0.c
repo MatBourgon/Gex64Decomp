@@ -174,9 +174,9 @@ void func_80027110(Instance* instance, short value, GameTracker* gameTracker) {
 
     data = gameTracker->player->data;
     instance->flags |= 0x400;
-    if (*(Instance**)((char*)data + 0x130) == 0) {
-        *(Instance**)((char*)data + 0x130) = instance;
-        *(short*)((char*)data + 0x134) = value;
+    if (((Instance**)data)[0x130/4] == 0) {
+        ((Instance**)data)[0x130/4] = instance;
+        ((short*)data)[0x134/2] = value;
     }
 }
 
