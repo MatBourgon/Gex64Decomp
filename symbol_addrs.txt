@@ -424,6 +424,7 @@ osViModeNtscLan1 = 0x8007A6E0;
 vi = 0x80079920; // size:0x60
 __osViCurr = 0x80079980;
 __osViNext = 0x80079984;
+__osViDevMgr = 0x80079990; // size:28
 __osHwIntTable = 0x80079610; // size:0x14
 __osRdb_DbgRead_Ct = 0x80079624;
 __osRdb_Mesg = 0x80079628;

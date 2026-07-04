@@ -325,7 +325,9 @@ segments:
       - [0x7A270, .data, audio/drvrnew]
       - [0x7A400, data, audio/env]
       - [0x7A520, .data, io/vi]
-      - [0x7A590, data]
+      - [0x7A590, data, io/vimgr]
+      - [0x7A5B0, .data, io/vitbl]
+      - [0x7B2D0, data]
 
       # Start of RODATA
       - [0x7C040, .rodata, CAMERA]
