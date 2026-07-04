@@ -72,12 +72,15 @@ void spy_launch_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/SPY", spy_launch_OnUpdate);
-/* near-match (45 diff words from two 1-instruction scheduler windows, all else identical):
-   1) the _110-update block: KMC hoists the lw above the inner beqz and delay-fills the subu;
-      our GCC keeps the lw in the block with an extra nop (speculative-load hoist difference).
-   2) player->_F4[2] & ~0x40 & ~0x400: KMC emits two ands (reusing the ~0x400 reg from
-      instance->flags); our combine always folds the constants into one and (~0x440),
-      even through a shared mask variable.
+/* near-match: every instruction matches except ONE scheduler window in the state-1 block.
+   The target emits [slt; lw _110; nop; beqz; subu-in-delay] - KMC's reorg pulls the lw
+   above the branch and delay-fills the subu (a 2-insn thread steal). Our GCC either
+   leaves the lw inside the block (extra nop) or, with the load written before the if,
+   hoists it above the slt as well. All arrangements are +/-1 instruction.
+   Note the mask40/mask400 variables below are REQUIRED and correct: with literal
+   constants the tree folds ~0x40 & ~0x400 into ~0x440 at parse time, while the target
+   has two separate ands sharing the ~0x400 register with the instance->flags clear
+   (KMC combine does not substitute a multi-use constant register).
 extern Object* D_8007684C;
 extern int D_800EB8A0;
 
@@ -164,8 +167,12 @@ void spy_launch_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     if (instance->_F4[0] >= 2) {
         if (instance->_F4[1] >= 5 || instance->_F4[0] != 2) {
             if (func_800257B4(player) != 0 || (player->_F4[1] & 0x8000)) {
-                instance->flags &= ~0x400;
-                player->_F4[2] = player->_F4[2] & ~0x40 & ~0x400;
+                int mask40;
+                int mask400;
+                mask400 = ~0x400;
+                mask40 = ~0x40;
+                instance->flags &= mask400;
+                player->_F4[2] = player->_F4[2] & mask40 & mask400;
                 instance->_F4[0] = 0;
                 instance->_F4[1] = 0;
             }
