@@ -71,6 +71,9 @@ void spy_launch_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/SPY", spy_launch_OnUpdate);
 
+int func_80159F3C_EB60C(Instance* instance, GameTracker* gameTracker);
+void func_8015A098_EB768(Instance* instance, GameTracker* gameTracker);
+
 void spy_launch_OnCollide(Instance* instance, GameTracker* gameTracker) {
     Instance* temp_a0;
     BSPTree* bsp;
@@ -92,7 +95,7 @@ void spy_launch_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-void func_80159EEC_EB5BC(Instance* instance) {
+void func_80159EEC_EB5BC(Instance* instance, GameTracker* gameTracker) {
     instance->flags &= ~0x800;
     if (!(instance->_11C & 8)) {
         instance->_F4[2] = instance->_104;
@@ -101,20 +104,77 @@ void func_80159EEC_EB5BC(Instance* instance) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/SPY", func_80159F3C_EB60C);
+extern char D_8015AE00_EC4D0[];
+
+int func_80159F3C_EB60C(Instance* instance, GameTracker* gameTracker) {
+    int* sub;
+    Intro** list;
+    Intro* entry;
+    Instance* other;
+    int count;
+    int i;
+
+    if (instance->intro != NULL) {
+        sub = instance->intro->_04;
+        if (sub != NULL) {
+            list = (Intro**)(sub + 1);
+            count = sub[0];
+            for (i = 0; i < count; i++, list++) {
+                entry = *list;
+                if (*(int*)entry->object->parentName == ((int*)D_8015AE00_EC4D0)[0]
+                    && ((int*)entry->object->parentName)[1] == ((int*)D_8015AE00_EC4D0)[1]) {
+                    other = entry->instance;
+                    if (other != NULL) {
+                        if ((other->_F4[0] - 1) < 2U) {
+                            return 1;
+                        }
+                        if (*(int*)&other->_108 != 0) {
+                            return 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return 0;
+}
 
 void func_8015A014_EB6E4(Instance* instance, GameTracker* gameTracker) {
-    register short* pData asm("$18");
+    short* pData;
+
     pData = (short*)gameTracker->player->data;
     instance->flags |= 0x400;
-    func_80159EEC_EB5BC(instance);
+    func_80159EEC_EB5BC(instance, gameTracker);
     instance->_F4[0] = 2;
     PlayerInstance->_E0[1] = pData[4];
     gameTracker->player->_F4[2] |= 0x400;
     func_8004AAA8(instance, 0x18, 0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/SPY", func_8015A098_EB768);
+void func_8015A098_EB768(Instance* instance, GameTracker* gameTracker) {
+    short* data;
+    Instance* player;
+
+    data = gameTracker->player->data;
+    instance->flags |= 0x400;
+    func_80159EEC_EB5BC(instance, gameTracker);
+    player = PlayerInstance;
+    data[0x9C/2] = data[0xA0/2] - 1;
+    data[0x9E/2] = data[0xA0/2] - 1;
+    instance->_F4[0] = 1;
+    *(int*)&instance->_110 = ((short*)&instance->_D0[0])[1];
+    player->_D0[2] = 0;
+    player->_E0[1] = 0;
+    player->flags |= 0x400000;
+    func_800256A8(gameTracker);
+    data[0x8C/2] = 0;
+    data[0x8E/2] = 0;
+    data[0x90/2] = 0;
+    data[0x94/2] = 0;
+    data[0x96/2] = 0;
+    data[0x98/2] = 0;
+    func_8004AAA8(instance, 0x18, 0);
+}
 
 void spy_onoff_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if (instance->intro->flags & 0x1000) {
