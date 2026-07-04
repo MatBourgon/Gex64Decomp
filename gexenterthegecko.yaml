@@ -309,9 +309,10 @@ segments:
 
       # Start of DATA
       - [0x6B920, data] # This entire blob (up to 0x7A070) contains data for engine & level files
+      
       - [0x7A070, data, libmus/player_commands]
       - [0x7A120, data, _56790]
-      - [0x7A140, data, os/initialize]
+      - [0x7A140, .data, os/initialize]
       - [0x7A160, .data, os/thread]
       - [0x7A180, .data, audio/sl]
       - [0x7A190, .data, io/aisetnextbuf]
