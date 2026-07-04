@@ -117,6 +117,9 @@ src/io/viblack.c
 src/io/si.c
 src/io/sirawdma.c
 src/io/siacs.c
+src/io/vimodentsclan1.c
+src/io/vimodepallan1.c
+src/io/vimodempallan1.c
 src/io/crc.c
 src/io/contramread.c
 src/io/contramwrite.c
