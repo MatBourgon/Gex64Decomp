@@ -9,7 +9,12 @@ void spy_qsofa_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/SPY", spy_qsofa_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/SPY", spy_qsofa_OnCollide);
+void spy_qsofa_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp = instance->bspTree;
+    if ((bsp->_06 == 4) && (bsp->instanceSpline == PlayerInstance) && (bsp->_04 == 5)) {
+        instance->_F4[0] = 1;
+    }
+}
 
 void spy_launch_OnCreate(Instance* instance, GameTracker* gameTracker) {
     short* objData;
@@ -147,11 +152,32 @@ void spy_onoff_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/SPY", spy_onoff_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/SPY", spy_gnrobot_OnCreate);
+extern short D_8015AD70_EC440[];
+
+void spy_gnrobot_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    if (instance->introData == NULL) {
+        instance->introData = D_8015AD70_EC440;
+    }
+    instance->_100 = ((short*)instance->introData)[1];
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/SPY", spy_gnrobot_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/SPY", spy_gnrobot_OnCollide);
+void spy_gnrobot_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+    int* fc;
+
+    bsp = instance->bspTree;
+    fc = &instance->_F4[2];
+    if ((bsp->instanceSpline == PlayerInstance) && (bsp->_0C[5] == 8)) {
+        fc[1] -= 1;
+    }
+    if (fc[1] == 0) {
+        INSTANCE_KillInstance(instance);
+    } else {
+        func_80022D54(instance, gameTracker);
+    }
+}
 
 void spy_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int var_s0;
