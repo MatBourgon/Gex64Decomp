@@ -91,11 +91,32 @@ INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", Fgoto);
 
 INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", Freverb);
 
-INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", FrandNote);
+unsigned char *FrandNote(c_t *arg0, unsigned char *arg1) {
+    int temp;
+    temp = func_80055740(*arg1++);
+    ((unsigned char *)arg0)[0xB1] = temp;
+    temp += *arg1++;
+    ((unsigned char *)arg0)[0xB1] = temp;
+    return arg1;
+}
 
-INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", FrandVolume);
+unsigned char *FrandVolume(c_t *arg0, unsigned char *arg1) {
+    int temp;
+    temp = func_80055740(*arg1++);
+    ((unsigned char *)arg0)[0xB4] = temp;
+    temp += *arg1++;
+    ((unsigned char *)arg0)[0xB4] = temp;
+    return arg1;
+}
 
-INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", FrandPan);
+unsigned char *FrandPan(c_t *arg0, unsigned char *arg1) {
+    int temp;
+    temp = func_80055740(*arg1++);
+    ((unsigned char *)arg0)[0xB5] = temp;
+    temp += *arg1++;
+    ((unsigned char *)arg0)[0xB5] = temp;
+    return arg1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/libmus/player_commands", Fvolume);
 

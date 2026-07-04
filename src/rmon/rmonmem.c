@@ -14,7 +14,9 @@ INCLUDE_ASM("asm/nonmatchings/rmon/rmonmem", __rmonWriteMem);
 
 INCLUDE_ASM("asm/nonmatchings/rmon/rmonmem", __rmonListProcesses);
 
-INCLUDE_ASM("asm/nonmatchings/rmon/rmonmem", __rmonLoadProgram);
+int __rmonLoadProgram(void) {
+    return -1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/rmon/rmonmem", __rmonGetExeName);
 

@@ -98,7 +98,17 @@ INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_rezbomb_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_80159E50_8AFF0);
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015A0DC_8B27C);
+void func_8015A0DC_8B27C(short* arg0) {
+    func_800162C0(arg0);
+    RotMatrixX(((short*)arg0)[0x44/2], (char*)((int*)arg0)[5] + 0xC);
+    RotMatrixY(((short*)arg0)[0x46/2], (char*)((int*)arg0)[5] + 0xC);
+    RotMatrixZ(((short*)arg0)[0x48/2], (char*)((int*)arg0)[5] + 0xC);
+    if (((short*)arg0)[0xE/2] == 0x1D) {
+        ((unsigned short*)arg0)[0x4C/2] = -((unsigned short*)arg0)[0x4C/2];
+        ((unsigned short*)arg0)[0x4E/2] = -((unsigned short*)arg0)[0x4E/2];
+        ((unsigned short*)arg0)[0x50/2] = -((unsigned short*)arg0)[0x50/2];
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015A170_8B310);
 

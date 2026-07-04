@@ -130,7 +130,9 @@ INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_charger_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_charger_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_chrganm_OnCreate);
+void circuit_chrganm_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    func_80027110(instance, 0xA, gameTracker);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_chrganm_OnUpdate);
 
