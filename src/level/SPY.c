@@ -72,6 +72,113 @@ void spy_launch_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/SPY", spy_launch_OnUpdate);
+/* near-match (45 diff words from two 1-instruction scheduler windows, all else identical):
+   1) the _110-update block: KMC hoists the lw above the inner beqz and delay-fills the subu;
+      our GCC keeps the lw in the block with an extra nop (speculative-load hoist difference).
+   2) player->_F4[2] & ~0x40 & ~0x400: KMC emits two ands (reusing the ~0x400 reg from
+      instance->flags); our combine always folds the constants into one and (~0x440),
+      even through a shared mask variable.
+extern Object* D_8007684C;
+extern int D_800EB8A0;
+
+int func_80159F3C_EB60C(Instance* instance, GameTracker* gameTracker);
+void func_8015A014_EB6E4(Instance* instance, GameTracker* gameTracker);
+void func_8015A098_EB768(Instance* instance, GameTracker* gameTracker);
+
+void spy_launch_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    Instance* player;
+    short* pdata;
+    int done;
+    SVECTOR unused;
+
+    player = gameTracker->player;
+    pdata = player->data;
+    if (instance->_F4[0] == 0 && (instance->_11C & 0x30) == 0x30
+        && ((gameTracker->_0014[2] & 0x10) || player->_F4[1] == 0x20 || player->_F4[1] == 0x80)) {
+        if (func_80159F3C_EB60C(instance, gameTracker) == 0) {
+            if (pdata[0x78/2] != 0) {
+                func_8015A014_EB6E4(instance, gameTracker);
+            } else {
+                func_8015A098_EB768(instance, gameTracker);
+            }
+        }
+    }
+    if (instance->_F4[2] > 0) {
+        instance->_F4[2] = instance->_F4[2] - instance->_100;
+        if (instance->_F4[2] <= 0) {
+            if (!(instance->_11C & 2)) {
+                instance->flags |= 0x800;
+            }
+            instance->position = instance->initialPos;
+            instance->_F4[2] = 0;
+        }
+        instance->scale.x = instance->_F4[2] * (*(int*)&instance->_118) / instance->_104 + 0x1000;
+        instance->scale.y = instance->_F4[2] * (*(int*)&instance->_118) / instance->_104 + 0x1000;
+        instance->scale.z = instance->_F4[2] * (*(int*)&instance->_118) / instance->_104 + 0x1000;
+    }
+    if (instance->_F4[0] == 2) {
+        short* d;
+        d = gameTracker->player->data;
+        player->_F4[2] |= 0x40;
+        d[0x144/2] = instance->_120;
+        instance->_F4[1] += 1;
+        d[0x9E/2] = d[0xA0/2] - 1;
+    }
+    done = 0;
+    if (instance->_F4[0] == 1) {
+        int total;
+        int speed;
+        int step;
+        int threshold;
+        int progress;
+        int delta;
+        short chunk;
+
+        speed = *(short*)&instance->_112;
+        total = *(int*)&instance->_10C;
+        step = total / speed;
+        chunk = 0x20;
+        step = step - speed / chunk;
+        progress = *(int*)&instance->_108;
+        threshold = speed * step;
+        if (progress + speed >= total) {
+            delta = total - progress;
+            done = 1;
+        } else {
+            delta = speed;
+        }
+        player->position.z += delta;
+        if (done != 0) {
+            instance->_F4[0] = 3;
+            *(int*)&instance->_108 = 0;
+            player->flags &= ~0x400000;
+        } else {
+            *(int*)&instance->_108 += delta;
+            if (threshold < *(int*)&instance->_108) {
+                if (chunk < *(short*)&instance->_112) {
+                    *(int*)&instance->_110 = ((*(int*)&instance->_110 - chunk) << 16) >> 16;
+                }
+            }
+        }
+    }
+    if (instance->_F4[0] >= 2) {
+        if (instance->_F4[1] >= 5 || instance->_F4[0] != 2) {
+            if (func_800257B4(player) != 0 || (player->_F4[1] & 0x8000)) {
+                instance->flags &= ~0x400;
+                player->_F4[2] = player->_F4[2] & ~0x40 & ~0x400;
+                instance->_F4[0] = 0;
+                instance->_F4[1] = 0;
+            }
+        }
+    }
+    if (instance->_F4[0] > 0) {
+        if (D_8007684C != NULL) {
+            func_800176E8(&player->position, D_8007684C->modelList[0], D_800EB8A0, 0xA);
+        }
+    }
+    instance->_11C &= ~0x20;
+}
+*/
 
 int func_80159F3C_EB60C(Instance* instance, GameTracker* gameTracker);
 void func_8015A098_EB768(Instance* instance, GameTracker* gameTracker);
