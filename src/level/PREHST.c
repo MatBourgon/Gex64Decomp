@@ -387,7 +387,22 @@ INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_cavetl_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_cavetl_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_cavetl_OnCollide);
+void prehst_cavetl_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp = instance->bspTree;
+
+    if ((bsp->_06 == 1) && (bsp->instanceSpline == gameTracker->player) && (bsp->_0C[5] >= 8U)
+        && (instance->_F4[0] != 2)) {
+        instance->_F4[0] = 2;
+        instance->currentAnimFrame = 0;
+    } else if ((bsp->_06 == 1) && (bsp->instanceSpline == gameTracker->player) && (bsp->_0C[5] < 7U)
+        && (instance->_F4[0] == 1)) {
+        func_80022714(instance, gameTracker);
+    } else if ((instance->_F4[0] == 0) && (bsp->instanceSpline != gameTracker->player)) {
+        instance->position.x += ((unsigned short*)bsp)[0x14];
+        instance->position.y += ((unsigned short*)bsp)[0x15];
+        COLLIDE_UpdateAllTransforms(instance, ((SVECTOR*)&((unsigned short*)bsp)[0x14]), gameTracker);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_tricer_OnCreate);
 
