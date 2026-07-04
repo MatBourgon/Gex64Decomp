@@ -228,7 +228,77 @@ void spy_onoff_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/SPY", spy_onoff_OnCollide);
+extern int D_8015AE0C_EC4DC;
+extern int D_8015AE10_EC4E0;
+
+void spy_onoff_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    short* config;
+    BSPTree* bsp;
+    int** list;
+    Instance* other;
+    int match;
+    int toggled;
+    int checkState;
+    int fire;
+    short i;
+
+    match = 0;
+    toggled = 0;
+    checkState = 0;
+    fire = 0;
+    config = instance->introData;
+    bsp = instance->bspTree;
+    if (config != NULL && bsp->_06 == 1 && bsp->_0C[5] >= 8U && instance->_F4[1] != 1) {
+        list = (int**)(config + 2);
+        if (config[1] == 0) {
+            match = 1;
+        } else if (config[1] == 1) {
+            if (instance->_F4[0] == 0) {
+                match = 1;
+                checkState = 1;
+            }
+        } else if (config[1] == 2) {
+            if (instance->_F4[0] == 1) {
+                match = 1;
+                checkState = 1;
+            }
+        }
+        for (i = 0; i < config[0]; i++, list++) {
+            other = ((Intro*)list[0])->instance;
+            if (other == NULL) continue;
+            if (other->flags & 0x2000000) continue;
+            if (match == 0) continue;
+            if (checkState != 0) {
+                if (!((((unsigned short*)config)[1] & 1) && !(other->flags & 0x1000000))) {
+                    if (!(((unsigned short*)config)[1] & 2)) continue;
+                    if (!(other->flags & 0x1000000)) continue;
+                }
+            }
+            other->flags &= ~0x100000;
+            if (!(other->flags2 & 0x10000)) {
+                other->flags2 |= 0x1000;
+            }
+            other->flags |= 0x2000000;
+            toggled = 1;
+        }
+        if ((match != 0 && toggled != 0) || config[0] == 0) {
+            instance->intro->flags ^= 0x800;
+            instance->_F4[0] ^= 1;
+            fire = 1;
+        } else if (*(int*)instance->object->name == D_8015AE0C_EC4DC
+                   && ((int*)instance->object->name)[1] == D_8015AE10_EC4E0) {
+            fire = 1;
+        }
+        if (fire != 0) {
+            if (((short*)&instance->object->_08)[1] != 0) {
+                instance->_F4[1] = 1;
+            }
+            if (*(int*)list == 0x29A) {
+                SIGNAL_HandleSignal(instance, (int*)((int*)list)[1] + 1, 0);
+            }
+        }
+    }
+}
 
 extern short D_8015AD70_EC440[];
 
