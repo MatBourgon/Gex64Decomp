@@ -316,7 +316,8 @@ segments:
       - [0x7A200, .data, sched/sched]
       - [0x7A210, data]
       - [0x7A240, .data, os/timerintr]
-      - [0x7A250, data]
+      - [0x7A250, .data, os/rdbsend]
+      - [0x7A260, data]
 
       # Start of RODATA
       - [0x7C040, .rodata, CAMERA]
