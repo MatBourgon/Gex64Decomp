@@ -2,7 +2,9 @@
 
 INCLUDE_ASM("asm/nonmatchings/rmon/rmonbrk", __rmonSetBreak);
 
-INCLUDE_ASM("asm/nonmatchings/rmon/rmonbrk", __rmonListBreak);
+int __rmonListBreak(void) {
+    return -1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/rmon/rmonbrk", __rmonClearBreak);
 
