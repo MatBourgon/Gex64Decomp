@@ -101,7 +101,9 @@ INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_crnkplt_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_crnkplt_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_crnkplt_OnCollide);
+void rezop_crnkplt_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    GenericCollide(instance, gameTracker);
+}
 
 void rezop_rezcrnk_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
@@ -202,7 +204,9 @@ INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_tvgurny_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_tvgurny_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_tvgurny_OnCollide);
+void rezop_tvgurny_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    GenericCollide(instance, gameTracker);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_gas_OnCreate);
 

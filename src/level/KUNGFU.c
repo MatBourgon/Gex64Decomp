@@ -12,7 +12,9 @@ INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_kboat_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_kboat_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_kboat_OnCollide);
+void kungfu_kboat_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    GenericCollide(instance, gameTracker);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_kbgen_OnCreate);
 
@@ -365,7 +367,9 @@ INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_pend_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_pend_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_pend_OnCollide);
+void kungfu_pend_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    GenericCollide(instance, gameTracker);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_ninja_OnCreate);
 
@@ -409,13 +413,17 @@ INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_swing_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_swing_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_swing_OnCollide);
+void kungfu_swing_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    func_80022D54(instance, gameTracker);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_oneway_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_oneway_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_oneway_OnCollide);
+void kungfu_oneway_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    func_80022D54(instance, gameTracker);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_80160D4C_AFF6C);
 
