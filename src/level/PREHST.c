@@ -121,7 +121,29 @@ void prehst_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_8015AC20_C84A0);
+int func_8015AC20_C84A0(Instance* instance, short dist, SVector* out) {
+    SVector start;
+    SVector probe;
+    int result;
+    short deltaS;
+
+    probe = *(SVector*)&instance->position;
+    start = probe;
+    if (out != NULL) {
+        *out = probe;
+    }
+    start.z += (dist < 0x80) ? 0x80 : dist;
+    probe.z -= (dist < 0x80) ? 0x80 : dist;
+    result = COLLIDE_PointAndTerrain(gameTracker8->level->segmentAddress, (SVECTOR*)&probe, (SVECTOR*)&start, instance);
+    deltaS = probe.z - instance->position.z;
+    if (dist < ((deltaS >= 0) ? deltaS : -deltaS)) return 0;
+    if (result == 0) return 0;
+    if (func_80047D10(result) != 0) return 0;
+    if (out != NULL) {
+        *out = probe;
+    }
+    return 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_8015ADA8_C8628);
 
