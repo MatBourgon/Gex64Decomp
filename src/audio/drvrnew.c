@@ -1,9 +1,31 @@
 #include "common.h"
 
-#include "PR/abi.h"
-#include "PR/libaudio.h"
+/*====================================================================
+ * drvrNew.c
+ *
+ * Copyright 1993, Silicon Graphics, Inc.
+ * All Rights Reserved.
+ *
+ * This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics,
+ * Inc.; the contents of this file may not be disclosed to third
+ * parties, copied or duplicated in any form, in whole or in part,
+ * without the prior written permission of Silicon Graphics, Inc.
+ *
+ * RESTRICTED RIGHTS LEGEND:
+ * Use, duplication or disclosure by the Government is subject to
+ * restrictions as set forth in subdivision (c)(1)(ii) of the Rights
+ * in Technical Data and Computer Software clause at DFARS
+ * 252.227-7013, and/or in similar or successor clauses in the FAR,
+ * DOD or NASA FAR Supplement. Unpublished - rights reserved under the
+ * Copyright Laws of the United States.
+ *====================================================================*/
+#include <PR/libaudio.h>
 #include "audio/synthInternals.h"
-
+#include <PR/os.h>
+#include <compiler/gcc/stdio.h>
+#include "audio/initfx.h"
+// TODO: this comes from a header
+#ident "$Revision: 1.49 $"
 /*
  * WARNING: THE FOLLOWING CONSTANT MUST BE KEPT IN SYNC
  * WITH SCALING IN MICROCODE!!!
@@ -16,13 +38,66 @@
  */
 #define ms *(((s32)((f32)44.1))&~0x7)
 
-INCLUDE_RODATA("asm/nonmatchings/audio/drvrnew", D_8007EE10);
 
-void init_lpfilter(ALLowPass *lp)
+INCLUDE_RODATA("asm/nonmatchings/audio/drvrnew", __osRcpImTable);
+ 
+
+static s32 SMALLROOM_PARAMS[26] = {
+    /* sections	   length */
+          3,        100 ms,
+                                      /*       chorus  chorus   filter
+       input  output  fbcoef  ffcoef   gain     rate   depth     coef  */
+           0,   54 ms,  9830,  -9830,      0,      0,      0,      0,
+       19 ms,   38 ms,  3276,  -3276, 0x3fff,      0,      0,      0,
+           0,   60 ms,  5000,      0,      0,      0,      0, 0x5000
+};
+
+static s32 BIGROOM_PARAMS[34] = {
+    /* sections	   length */
+          4,        100 ms,
+                                      /*       chorus  chorus   filter
+       input  output  fbcoef  ffcoef   gain     rate   depth     coef  */
+           0,   66 ms,  9830,  -9830,      0,      0,      0,      0,
+       22 ms,   54 ms,  3276,  -3276, 0x3fff,      0,      0,      0,
+       66 ms,   91 ms,  3276,  -3276, 0x3fff,      0,      0,      0,
+           0,   94 ms,  8000,      0,      0,      0,      0, 0x5000
+};
+
+static s32 ECHO_PARAMS[10] = {
+    /* sections	   length */
+          1,       200 ms,
+                                      /*       chorus  chorus   filter
+       input  output  fbcoef  ffcoef   gain     rate   depth     coef   */
+           0,  179 ms, 12000,      0, 0x7fff,      0,      0,      0
+};
+
+static s32 CHORUS_PARAMS[10] = {
+    /* sections	   length */
+          1,        20 ms,
+                                      /*       chorus  chorus   filter
+       input  output  fbcoef  ffcoef   gain     rate   depth     coef   */
+	  0,   5 ms, 0x4000,      0,  0x7fff,   7600,   700,      0
+};
+
+static s32 FLANGE_PARAMS[10] = {
+    /* sections	   length */
+          1,        20 ms,
+                                      /*       chorus  chorus   filter
+       input  output  fbcoef  ffcoef   gain     rate   depth     coef   */
+	   0,   5 ms,      0, 0x5fff, 0x7fff,    380,   500,      0
+};
+
+static s32 NULL_PARAMS[10] = {
+    0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0
+};
+
+
+void _init_lpfilter(ALLowPass *lp)
 {
-    int		i, temp;
-    short		fc;
-    double		ffc, fcoef;
+    s32		i, temp;
+    s16		fc;
+    f64		ffc, fcoef;
 
     temp = lp->fc * SCALE;
     fc = temp >> 15;
@@ -33,15 +108,100 @@ void init_lpfilter(ALLowPass *lp)
 	lp->fcvec.fccoef[i] = 0;
     
     lp->fcvec.fccoef[i++] = fc;
-    fcoef = ffc = (double)fc/SCALE;
+    fcoef = ffc = (f64)fc/SCALE;
 
     for (; i<16; i++){
 	fcoef *= ffc;
-	lp->fcvec.fccoef[i] = (short)(fcoef * SCALE);
+	lp->fcvec.fccoef[i] = (s16)(fcoef * SCALE);
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/audio/drvrnew", alFxNew);
+
+void alFxNew(ALFx *r, ALSynConfig *c, ALHeap *hp)
+{
+    u16		i, j, k;
+    s32		*param = 0;
+    ALFilter	*f = (ALFilter *) r;
+    ALDelay	*d;
+
+    alFilterNew(f, 0, alFxParam, AL_FX);
+    f->handler = alFxPull;
+    r->paramHdl = (ALSetFXParam)alFxParamHdl;
+
+    switch (c->fxType) {
+      case AL_FX_SMALLROOM:	param = SMALLROOM_PARAMS;	break;
+      case AL_FX_BIGROOM:	param = BIGROOM_PARAMS;		break;
+      case AL_FX_ECHO:		param = ECHO_PARAMS;		break;
+      case AL_FX_CHORUS:	param = CHORUS_PARAMS;		break;
+      case AL_FX_FLANGE:	param = FLANGE_PARAMS;		break;
+      case AL_FX_CUSTOM:	param = c->params;		break;
+      default:			param = NULL_PARAMS;		break;
+    }
+
+
+    j = 0;
+    
+    r->section_count = param[j++];
+    r->length 	     = param[j++];
+
+    r->delay = alHeapAlloc(hp, r->section_count, sizeof(ALDelay));
+    r->base = alHeapAlloc(hp, r->length, sizeof(s16));
+    r->input = r->base;
+
+    for ( k=0; k < r->length; k++)
+	r->base[k] = 0;
+
+    for ( i=0; i<r->section_count; i++ ){
+	d = &r->delay[i];
+	d->input  = param[j++];
+	d->output = param[j++];
+	d->fbcoef = param[j++];
+	d->ffcoef = param[j++];
+	d->gain   = param[j++];
+
+	if (param[j]) {
+#define RANGE 2.0
+/*	    d->rsinc     = ((f32) param[j++])/0xffffff; */
+	    d->rsinc = ((((f32)param[j++])/1000) * RANGE)/c->outputRate;
+
+	    /*
+	     * the following constant is derived from:
+	     *
+	     *		ratio = 2^(cents/1200)
+	     *
+	     * and therefore for hundredths of a cent
+	     *			           x
+	     *		ln(ratio) = ---------------
+	     *			    (120,000)/ln(2)
+	     * where
+	     *		120,000/ln(2) = 173123.40...
+	     */
+#define CONVERT 173123.404906676
+#define LENGTH	(d->output - d->input)
+	    d->rsgain 	 = (((f32) param[j++])/CONVERT) * LENGTH;
+	    d->rsval	 = 1.0;
+	    d->rsdelta	 = 0.0;
+	    d->rs 	 = alHeapAlloc(hp, 1, sizeof(ALResampler));
+	    d->rs->state = alHeapAlloc(hp, 1, sizeof(RESAMPLE_STATE));
+	    d->rs->delta = 0.0;
+	    d->rs->first = 1;
+	} else {
+	    d->rs = 0;
+	    j++;
+	    j++;
+	}
+
+	if (param[j]) {
+	    d->lp = alHeapAlloc(hp, 1, sizeof(ALLowPass));
+	    d->lp->fstate = alHeapAlloc(hp, 1, sizeof(POLEF_STATE));
+	    d->lp->fc = param[j++];
+	    _init_lpfilter(d->lp);
+	} else {
+	    d->lp = 0;
+	    j++;
+	}
+    }
+}
 
 void alEnvmixerNew(ALEnvMixer *e, ALHeap *hp)
 {
@@ -145,3 +305,4 @@ void alSaveNew(ALSave *f)
     f->first = 1;
     
 }
+
