@@ -395,7 +395,34 @@ INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_tricer_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_tricer_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_raptor_OnCreate);
+void prehst_raptor_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    unsigned char* fc;
+    unsigned short* data;
+
+    fc = (unsigned char*)&instance->_F4[2];
+    data = instance->data;
+    if (instance->intro->multiSpline == NULL || ((int*)instance->intro->multiSpline)[0] == 0) {
+        fc[0xB] = 1;
+    } else if (((int*)instance->intro->multiSpline)[1] != 0) {
+        fc[0xC] = 1;
+    }
+    fc[0xA] = fc[0xB] == 0;
+    instance->flags |= 0x100000;
+    func_80048DE4(instance, fc, fc + 4, 0);
+    if (data[3] == 0) {
+        func_8004A7B8(instance, 3, 0);
+        data[3] = (func_8004A61C(instance) - 1) * data[0];
+    }
+    instance->_F4[0] = 2;
+    instance->_F4[1] = 2;
+    if (fc[0xA] == 0) {
+        func_8004A7B8(instance, 2, 0);
+    } else {
+        func_8004A7B8(instance, 0, 0);
+    }
+    func_80049330(instance);
+    data[6] = 0;
+}
 
 INCLUDE_RODATA("asm/nonmatchings/level/PREHST", D_80164514_D1D94);
 
