@@ -5,11 +5,11 @@
 
 void __osPiCreateAccessQueue(void) {
     extern OSMesgQueue __osPiAccessQueue;
-    extern u32 D_800795F0;
-    extern OSMesg D_800B2910;
+    extern u32 __osPiAccessQueueEnabled;
+    extern OSMesg piAccessBuf;
 
-    D_800795F0 = 1;
-    osCreateMesgQueue(&__osPiAccessQueue, &D_800B2910, 1);
+    __osPiAccessQueueEnabled = 1;
+    osCreateMesgQueue(&__osPiAccessQueue, &piAccessBuf, 1);
     osSendMesg(&__osPiAccessQueue, NULL, 0);
 }
 
