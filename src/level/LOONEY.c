@@ -270,7 +270,35 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_8015B1BC_B346C);
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_8015B250_B3500);
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_8015B4BC_B376C);
+extern char D_80161DC0_BA070[];
+extern unsigned short D_80078A40[][4];
+extern void func_80017E88();
+extern void func_80016894();
+
+void func_8015B4BC_B376C(Instance* instance) {
+    extern int D_800EB8A0;
+    Object* obj;
+    Model* model;
+    SVECTOR pos;
+    SVECTOR vel;
+    int i;
+
+    obj = ((Object*)OBTABLE_FindObject(D_80161DC0_BA070));
+    if (obj != NULL) {
+        pos.x = instance->position.x;
+        pos.y = instance->position.y;
+        pos.z = instance->position.z + 0x140;
+        model = obj->modelList[0];
+        for (i = 0; i < 20; i++) {
+            unsigned short* entry;
+            entry = D_80078A40[rand() % 244];
+            vel.x = (entry[0] << 16) >> 23;
+            vel.y = (entry[1] << 16) >> 23;
+            vel.z = (entry[2] << 16) >> 23;
+            func_800170E8(model, model->_14, &pos, &vel, 0, D_800EB8A0, func_80017E88, func_80016894, 0xF);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_brkblok_OnCollide);
 
