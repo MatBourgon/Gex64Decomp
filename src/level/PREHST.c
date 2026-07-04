@@ -330,7 +330,29 @@ void prehst_sptball_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->position.z += 0x80;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_sptball_OnUpdate);
+void prehst_sptball_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    if (instance->_F4[0] == 0) {
+        if (instance->_104 >= -0x17) {
+            instance->_104 -= 1;
+        }
+        if (*(int*)&instance->_108 < instance->position.z + instance->_104) {
+            instance->position.z = instance->position.z + instance->_104;
+        } else {
+            instance->_F4[0] = 1;
+        }
+        instance->position.x = instance->position.x + ((instance->_100 * ((func_8003A6AC(instance->_F4[2]) << 16) >> 16)) >> 12);
+        instance->position.y = instance->position.y + ((instance->_100 * ((func_8003A4E0(instance->_F4[2]) << 16) >> 16)) >> 12);
+        instance->_F4[2] += 0x20;
+    } else if (instance->_F4[0] == 1) {
+        if (instance->scale.x >= 0x1F5) {
+            instance->scale.x -= 0x199;
+            instance->scale.y -= 0x199;
+            instance->scale.z -= 0x199;
+        } else {
+            INSTANCE_KillInstance(instance);
+        }
+    }
+}
 
 void prehst_sptball_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp = instance->bspTree;
