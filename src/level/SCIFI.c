@@ -195,7 +195,34 @@ void scifi_eel_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_stmvent_OnCreate);
+void scifi_stmvent_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    MATRIX mat;
+    short* introData;
+
+    introData = instance->introData;
+    RotMatrix(&instance->intro->rotation, &mat);
+    *(int*)&instance->_10C = mat.m[0][2] * 25 >> 10;
+    *(int*)&instance->_110 = mat.m[1][2] * 25 >> 10;
+    *(int*)&instance->_114 = mat.m[2][2] * 25 >> 10;
+    if (introData != NULL) {
+        instance->_D0[0] = introData[1];
+        instance->_D0[1] = introData[2];
+        if (introData[4] != 0) {
+            instance->_D0[3] |= 1;
+        }
+        instance->_E0[0] = introData[0];
+        instance->_E0[1] = instance->_D0[0] + instance->_D0[1];
+        instance->_E0[3] = introData[5];
+    } else {
+        instance->_D0[0] = 0x3C;
+        instance->_D0[1] = 0x3C;
+        instance->_E0[1] = 0x78;
+        instance->_E0[0] = 0;
+        instance->_E0[3] = 0;
+        instance->_D0[3] &= ~1;
+    }
+    *(int*)&instance->_34[2] = 0;
+}
 
 typedef struct {
     char _00[0x1C];
@@ -267,7 +294,31 @@ INCLUDE_RODATA("asm/nonmatchings/level/SCIFI", D_80164E40_EAC60);
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015B5F0_E1410);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_stmvent_OnUpdate);
+void scifi_stmvent_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    if (instance->_D0[3] & 1) {
+        func_8015B5F0_E1410(instance);
+    } else {
+        instance->_E0[2] = instance->_E0[0] % instance->_E0[1];
+        if (instance->_D0[0] < instance->_E0[2]) {
+            if (PlayerInstance->_F4[1] == 0x200000) {
+                instance->_100++;
+            }
+            if (instance->_100 >= 10) {
+                instance->_E0[0] = 0;
+                instance->_100 = 0;
+            }
+            func_8015B5F0_E1410(instance);
+        }
+        instance->_E0[0]++;
+    }
+    if (*(int*)&instance->_34[2] != 0) {
+        if (func_80033248(*(int*)&instance->_34[2]) == 0) {
+            *(int*)&instance->_34[2] = 0;
+        } else {
+            func_800506B8(instance, *(int*)&instance->_34[2], -0x15E, 0x50, 0xBB8);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015B904_E1724);
 
