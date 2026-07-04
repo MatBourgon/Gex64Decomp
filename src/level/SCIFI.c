@@ -447,7 +447,32 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_apod_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_apod_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_alien_OnCreate);
+typedef struct {
+    short _00;
+    short _02;
+    short _04;
+    short _06;
+    short _08;
+    short _0A;
+    short _0C;
+    short _0E;
+} AlienData;
+
+void scifi_alien_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    *(AlienData*)&instance->_F4[2] = *(AlienData*)instance->data;
+    if (!(instance->flags & 0x20000)) {
+        instance->flags |= 0x10000;
+        instance->_F4[0] = 2;
+        func_8004A7B8(instance, 2, 0);
+        instance->position.z += ((AlienData*)&instance->_F4[2])->_08;
+        func_80049330(instance);
+        instance->flags |= 0x100000;
+        *(short*)&instance->_112 = ((AlienData*)&instance->_F4[2])->_00 / 2 + 1;
+        *(short*)&instance->_110 = *(short*)&instance->_114 = ((AlienData*)&instance->_F4[2])->_00;
+    } else if (instance->_120 != 0) {
+        instance->intro->flags |= 8;
+    }
+}
 
 INCLUDE_RODATA("asm/nonmatchings/level/SCIFI", D_80164E60_EAC80);
 
