@@ -446,6 +446,7 @@ NULL_PARAMS = 0x800797D8; // size:40
 eqpower = 0x80079800;
 piThread = 0x800B1150;
 ramromThread = 0x800B2300;
+siAccessBuf = 0x800B3BB0;
 __osBaseCounter = 0x800B83E0;
 __osCurrentTime = 0x800E8EB8; // size:0x8
 __osRdb_IP6_Data = 0x80156BD8;

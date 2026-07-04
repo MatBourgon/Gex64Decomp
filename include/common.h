@@ -21,6 +21,9 @@
 #define BOOL int
 #endif
 
+#define BSS_DEFINE extern
+#define BSS_STATIC extern
+
 // Forces inlining of function, without generating elsewhere
 #ifndef FORCE_INLINE
 #define FORCE_INLINE extern inline

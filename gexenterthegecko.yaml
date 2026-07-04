@@ -331,7 +331,7 @@ segments:
       - [0x7A520, .data, io/vi]
       - [0x7A590, data, io/vimgr]
       - [0x7A5B0, .data, io/vitbl]
-      - [0x7B2D0, data, io/siacs]
+      - [0x7B2D0, .data, io/siacs]
       - [0x7B2E0, .data, io/vimodentsclan1]
       - [0x7B330, .data, io/vimodepallan1]
       - [0x7B380, .data, io/vimodempallan1]
