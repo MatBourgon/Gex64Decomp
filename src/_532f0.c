@@ -21,6 +21,7 @@ void func_800526F0(void) {
     func_80052954();
 }
 
+
 INCLUDE_ASM("asm/nonmatchings/_532f0", func_80052758);
 
 INCLUDE_RODATA("asm/nonmatchings/_532f0", D_8007EB00);
@@ -33,28 +34,7 @@ void func_80052944(void) {
 void func_8005294C(void) {
 }
 
-extern char D_80154832;
-extern int D_80154834;
-extern int D_80154838;
-extern int D_80156854;
-extern int D_80156858;
-extern int D_8015686C;
-extern int D_80156870;
-extern int D_80156874;
-extern int D_80156878;
-
-void func_80052954(void) {
-    D_80156854 = 0x4B0;
-    D_80154834 = 0;
-    D_80156870 = 0;
-    D_8015686C = 0;
-    D_80156878 = 0;
-    D_80156874 = 0;
-    D_80156858 = 0;
-    D_80154832 = 0;
-    D_80154838 = -1;
-}
-
+INCLUDE_ASM("asm/nonmatchings/_532f0", func_80052954);
 
 INCLUDE_ASM("asm/nonmatchings/_532f0", func_800529A8);
 
@@ -66,14 +46,11 @@ void func_80052A7C(int arg0) {
     }
 }
 
-extern int func_80052FB8(void);                                /* extern */
-
 void func_80052AA8(int arg0) {
     if (func_80052FB8() != 0) {
         func_80052ADC(arg0);
     }
 }
-
 
 INCLUDE_ASM("asm/nonmatchings/_532f0", func_80052ADC);
 
