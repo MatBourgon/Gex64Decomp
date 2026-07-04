@@ -145,7 +145,45 @@ int func_8015AC20_C84A0(Instance* instance, short dist, SVector* out) {
     return 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_8015ADA8_C8628);
+short func_8015ADA8_C8628(Instance* instance, short rotStep, short zStep, short dist, int flag) {
+    SVector probe;
+    SVECTOR savedPos;
+    int result;
+    int ok;
+
+    result = 0;
+    savedPos = instance->position;
+    ok = 1;
+    if (rotStep != 0) {
+        func_80047E64(instance, rotStep * 2);
+        if (func_8015AC20_C84A0(instance, dist, &probe) == 0) {
+            ok = 0;
+        } else {
+            instance->position = savedPos;
+            func_80047E64(instance, rotStep);
+        }
+    }
+    if (ok != 0) {
+        if (func_8015AC20_C84A0(instance, dist, &probe) == 0) {
+            ok = 0;
+        }
+    }
+    if (ok == 0 && flag != 0) {
+        instance->position.x = savedPos.x;
+        instance->position.y = savedPos.y;
+        result |= 2;
+    } else if (ok == 0 || instance->position.z + zStep > probe.z) {
+        instance->position.x = probe.x;
+        instance->position.y = probe.y;
+        instance->position.z = instance->position.z + zStep;
+    } else {
+        instance->position.x = probe.x;
+        instance->position.y = probe.y;
+        instance->position.z = probe.z;
+        result |= 1;
+    }
+    return result;
+}
 
 void prehst_eel_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->currentModelAnim = 0;
