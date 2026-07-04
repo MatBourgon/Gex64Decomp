@@ -169,7 +169,41 @@ void scifi_onoff_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_onoff_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_bub_OnCreate);
+void scifi_bub_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    short* introData;
+    short* objData;
+
+    introData = instance->introData;
+    objData = instance->object->data;
+    if (introData != NULL) {
+        instance->_F4[2] = introData[0];
+        instance->_100 = introData[1];
+        *(int*)&instance->_10C = introData[2];
+    } else if (objData != NULL) {
+        instance->_F4[2] = objData[0];
+        instance->_100 = objData[1];
+        *(int*)&instance->_10C = objData[2];
+    }
+    if (((short*)&instance->_F4[2])[1] == 0) {
+        instance->_F4[2] = 0x64;
+    }
+    if (((short*)&instance->_100)[1] == 0) {
+        instance->_100 = 0x1E;
+    }
+    if (((short*)&instance->_10C)[1] == 0) {
+        *(int*)&instance->_10C = 0x384;
+    }
+    INSTANCE_InsertInstanceWithFlagsSet(instance, 0x1000);
+    func_8004A7B8(instance, 0, 0);
+    instance->currentTextureAnimFrame = -1;
+    instance->_F4[0] = 0;
+    instance->rotation.x = 0;
+    instance->rotation.y = 0;
+    instance->rotation.z = 0;
+    instance->flags |= 0x80;
+    instance->initialPos = instance->position;
+    *(int*)&instance->_110 = 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015AC28_E0A48);
 
