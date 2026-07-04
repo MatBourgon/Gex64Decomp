@@ -7,7 +7,23 @@
 void spy_qsofa_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/SPY", spy_qsofa_OnUpdate);
+void spy_qsofa_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    if (instance->_F4[0] == 1) {
+        if (instance->currentAnimFrame == 0) {
+            short* data;
+            data = gameTracker->player->data;
+            data[0x90/2] = 0x180;
+            data[0x98/2] = -0x10;
+            func_800256A8(gameTracker);
+            func_80050508(instance, 0x18, 0, 0x64, 0xFA0);
+        }
+        func_8002DAF8(instance, -1);
+        if (instance->currentAnimFrame == ((short*)instance->object->animList[instance->currentModelAnim])[1] - 1) {
+            instance->_F4[0] = 0;
+            instance->currentAnimFrame = 0;
+        }
+    }
+}
 
 void spy_qsofa_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp = instance->bspTree;
