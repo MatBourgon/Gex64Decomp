@@ -385,7 +385,38 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_funguy_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_funguy_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_fallgen_OnCreate);
+typedef struct {
+    char _00[8];
+    short min;
+    short max;
+    short count;
+    short _0E;
+    short (*entries)[4];
+} FallGenData;
+
+void looney_fallgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    FallGenData* config;
+    int* fc;
+    int total;
+    int i;
+
+    total = 0;
+    config = instance->introData;
+    fc = &instance->_F4[2];
+    if (config != NULL) {
+        for (i = 0; i < config->count; i++) {
+            total += config->entries[i][2];
+            config->entries[i][3] = total;
+        }
+        fc[1] = total;
+        if (config->max != config->min) {
+            fc[0] = config->min + rand() % (config->max - config->min);
+        } else {
+            fc[0] = config->max;
+        }
+    }
+    instance->flags |= 0x800;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_8015C6A0_B4950);
 
