@@ -1,6 +1,8 @@
 #include "common.h"
 
 #include "level/SPY.h"
+#include "SCRIPT.h"
+#include "SPLINE.h"
 #include "types/intro/BTimer.h"
 #include "types/G2String.h"
 
@@ -237,7 +239,39 @@ void spy_gnrobot_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_100 = ((short*)instance->introData)[1];
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/SPY", spy_gnrobot_OnUpdate);
+typedef struct {
+    short frame;
+    unsigned short anim;
+} GnRobotKey;
+
+void spy_gnrobot_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    short* config;
+    MultiSpline* ms;
+    unsigned short frame;
+    GnRobotKey* p;
+    int i;
+    SVECTOR unused; /* dead local needed for the original's 0x28 stack frame */
+
+    config = instance->introData;
+    ms = SCRIPT_GetMultiSpline(instance, NULL, NULL);
+    frame = SplineGetFrameNumber(ms->positional, &ms->curPositional);
+    instance->_F4[2] += 1;
+    p = (GnRobotKey*)config;
+    if (((int*)config)[1] > 0) {
+        i = 0;
+        do {
+            if (p[i + 2].frame == frame) {
+                instance->currentModelAnim = p[i + 2].anim;
+                instance->currentAnimFrame = 0;
+            }
+            i++;
+        } while (i < ((int*)config)[1]);
+    }
+    func_8002DAF8(instance, -1);
+    if (instance->currentAnimFrame == ((short*)instance->object->animList[instance->currentModelAnim])[1] - 1) {
+        instance->currentModelAnim = ((unsigned short*)config)[0];
+    }
+}
 
 void spy_gnrobot_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp;
