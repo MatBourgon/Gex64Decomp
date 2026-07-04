@@ -573,7 +573,38 @@ void looney_funplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_fxgen_OnCreate);
+extern char D_80161DA8_BA058[];
+
+void looney_fxgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    int* fc;
+    unsigned char* config;
+
+    fc = &instance->_F4[2];
+    if (instance->flags & 0x20000) {
+        if (*(int*)&instance->_108 != 0) {
+            func_800331BC(*(int*)&instance->_108);
+            *(int*)&instance->_108 = 0;
+        }
+    } else {
+        if (instance->introData == NULL) {
+            instance->introData = D_80161DA8_BA058;
+        }
+        config = instance->introData;
+        fc[0] = OBTABLE_FindObject(config + 0xC);
+        if ((config[1] & 1) == 0) {
+            if ((config[1] & 2) != 0) {
+                *(short*)&instance->_110 = 0x119;
+                ((short*)&instance->_110)[1] = 0x78;
+                ((short*)&instance->_114)[1] = 0xDAC;
+                *(short*)&instance->_114 = (rand() & 0x7F) - 0x15E;
+                ((short*)&instance->_10C)[1] = *(short*)&instance->_10C = rand() & 7;
+                config[1] |= 0x80;
+            }
+        }
+        fc[3] = 0;
+        instance->flags |= 0x10000;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_80160B20_B8DD0);
 
