@@ -543,6 +543,9 @@ void scifi_gas_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_mylot_OnCreate);
 
+INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015E070_E3E90);
+/* near-match kept for reference: matches only with `register int result __asm__("$2")` to pin the
+   return register; leader prefers no asm constructs, so it stays commented until properly matched.
 int func_8015E070_E3E90(Instance* instance) {
     MATRIX mat;
     unsigned short out[3];
@@ -571,6 +574,7 @@ int func_8015E070_E3E90(Instance* instance) {
     if (x == 0) result = (y < 1);
     return result;
 }
+*/
 
 int func_8015E108_E3F28(Instance* instance) {
     instance->rotation.x &= 0xFFF;

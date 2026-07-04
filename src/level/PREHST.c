@@ -611,6 +611,9 @@ INCLUDE_RODATA("asm/nonmatchings/level/PREHST", D_80164598_D1E18);
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_ptera_OnUpdate);
 
+INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_801630A0_D0920);
+/* near-match kept for reference: matches only with `register int result __asm__("$2")` to pin the
+   return register; leader prefers no asm constructs, so it stays commented until properly matched.
 int func_801630A0_D0920(Instance* instance) {
     MATRIX mat;
     unsigned short out[3];
@@ -639,6 +642,7 @@ int func_801630A0_D0920(Instance* instance) {
     if (x == 0) result = (y < 1);
     return result;
 }
+*/
 
 int func_80163138_D09B8(Instance* instance) {
     instance->rotation.x &= 0xFFF;

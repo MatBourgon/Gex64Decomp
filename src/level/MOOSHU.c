@@ -194,11 +194,11 @@ INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015D7C8_C6148);
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015DA78_C63F8);
 
-extern void func_80017AB8(int, int);
+extern void func_80017AB8(short* arg0, short arg1);
 void mooshu_ebolt_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if (instance->flags & 0x20000) {
         if (*(int*)&instance->_108 != 0) {
-            func_80017AB8(*(int*)&instance->_108, 0);
+            func_80017AB8(*(short**)&instance->_108, 0);
             *(int*)&instance->_108 = 0;
         }
     } else {

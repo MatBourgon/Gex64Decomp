@@ -18,11 +18,11 @@ INCLUDE_RODATA("asm/nonmatchings/level/GEXZIL", D_80162AA0_9BC20);
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015A09C_9321C);
 
-extern void func_80017AB8(int, int);
+extern void func_80017AB8(short* arg0, short arg1);
 void gexzil_ebolt_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if (instance->flags & 0x20000) {
         if (*(int*)&instance->_108 != 0) {
-            func_80017AB8(*(int*)&instance->_108, 0);
+            func_80017AB8(*(short**)&instance->_108, 0);
             *(int*)&instance->_108 = 0;
         }
     } else {
