@@ -2,6 +2,7 @@
 
 #include "level/REZOP.h"
 #include "types/intro/BTimer.h"
+#include "types/G2String.h"
 
 extern int D_800E5FD8;
 extern int D_80154834;
@@ -273,10 +274,9 @@ void rezop_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_F4[1] = 0;
 }
 
-// Failing to match due to ro section?
-INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_btimer_OnUpdate);
+extern char D_80161590_D9D00[];
 
-/*void rezop_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+void rezop_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     char buffer[0x50];
     int timeLeft;
     int minutesLeft;
@@ -319,13 +319,13 @@ INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_btimer_OnUpdate);
         if ((((short*)((int**)gameTracker))[0x4C12/2] == 0) && (var_v1 != 0) && (instance->intro->_2C == 0)) {
             ((int*)temp_s2)[0x8/4] -= D_800E5FD8;
         }
-        if ((gameTracker->player->_F4[2] & 0x600000) == 0x600000) && (instance->_F4[1] == 0)) {
+        if (((gameTracker->player->_F4[2] & 0x600000) == 0x600000) && (instance->_F4[1] == 0)) {
             temp_s2[0] = (intro->missionTime - 1);
             if (intro->collectType == EBTIMER_COLLECTTYPE_CUTSCENE) {
                 SIGNAL_HandleSignal(PlayerInstance, intro->b + 4, 0);
             }
             instance->_F4[1] = 1;
-            PlayerInstance->_F4[2] &= ~0x400000;
+            PlayerInstance->_F4[2] &= 0xFFBFFFFF;
         }
         if ((gameTracker->player->_F4[2] & 0x400000) && ((((int**)gameTracker)[0x4C00/4] != 0) || (((int**)gameTracker)[0x4C04/4] != 0))) {
             func_8002C18C(5);
@@ -348,7 +348,7 @@ INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_btimer_OnUpdate);
             if ((timeLeft > 300) || ((timeLeft % 15) >= 5)) {
                 Set3DTextPosition(0x2D, 0xC8);
                 if ((timeLeft % 30) >= 15) {
-                    sprintf(buffer, "%d", minutesLeft);
+                    sprintf(buffer, D_80161590_D9D00, minutesLeft);  // "%d" — emitted earlier in this TU by a still-undecompiled function (INCLUDE_RODATA blob); a literal here would duplicate it and shift .rodata
                 } else {
                     sprintf(buffer, "%d.", minutesLeft);
                 }
@@ -377,7 +377,7 @@ INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_btimer_OnUpdate);
             }
         }
     }
-}*/
+}
 
 void rezop_markey_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
