@@ -131,7 +131,12 @@ INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_snkplat_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_snkplat_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_snkplat_OnCollide);
+void rezop_snkplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp = instance->bspTree;
+    if ((bsp->_06 == 4) && (bsp->instanceSpline == PlayerInstance)) {
+        GenericCollide(instance, gameTracker);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_rezbull_OnCreate);
 
