@@ -18,9 +18,28 @@ INCLUDE_RODATA("asm/nonmatchings/level/GEXZIL", D_80162AA0_9BC20);
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015A09C_9321C);
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_ebolt_OnCreate);
+extern void func_80017AB8(short* arg0, short arg1);
+void gexzil_ebolt_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    if (instance->flags & 0x20000) {
+        if (*(int*)&instance->_108 != 0) {
+            func_80017AB8(*(short**)&instance->_108, 0);
+            *(int*)&instance->_108 = 0;
+        }
+    } else {
+        instance->flags |= 0x100000;
+        instance->flags |= 0x10400;
+        instance->object->oflags |= 8;
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_ebolt_OnUpdate);
+void gexzil_ebolt_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    func_80159DEC_92F6C(instance, instance->_100);
+    if (instance->_F4[2] > 0) {
+        instance->_F4[2]--;
+    } else if (instance->_F4[2] == 0) {
+        func_8002E350(instance);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_bldg_OnCreate);
 
@@ -71,11 +90,13 @@ INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_mekblst_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_mekblst_OnUpdate);
 
+void func_8015EAB8_97C38(Instance* instance, int* arg1);
+
 void func_8015C484_95604(Instance* instance, short* arg1, int* arg2) {
     extern int D_80154834;
     if (instance->flags2 & 0x10) {
         if (arg1[0x4E/2] <= 0 && D_80154834 == 0 && arg2[0x4C48/4] == 0) {
-            func_8015EAB8_97C38(instance, arg1);
+            func_8015EAB8_97C38(instance, ((int*)arg1));
         } else {
             instance->flags2 &= ~0x10;
         }
@@ -284,7 +305,20 @@ INCLUDE_RODATA("asm/nonmatchings/level/GEXZIL", D_80162B48_9BCC8);
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_gas_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_gas_OnCollide);
+void gexzil_gas_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    Instance* bspPlayer;
+    int playerState;
+
+    bspPlayer = instance->bspTree->instanceSpline;
+    playerState = (int)gameTracker->player;
+    if (bspPlayer->object != NULL && bspPlayer == (Instance*)playerState
+        && instance->_F4[0] >= 2 && func_80027578(instance, gameTracker, bspPlayer) == 0) {
+        playerState = PlayerInstance->_F4[1];
+        if (playerState != 0x200000 && playerState != 0x10 && playerState != 0x2000) {
+            func_800223F8(gameTracker8, 0x78, 0);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_explode_OnCreate);
 

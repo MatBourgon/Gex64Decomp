@@ -1,8 +1,23 @@
 #include "common.h"
 
-INCLUDE_ASM("asm/nonmatchings/_2cd50", func_8002C150);
-
+extern short D_800EB808[];
 extern short D_800EB80C[];
+
+void func_8002C150(void) {
+    int i;
+    int byteOffset;
+    int value;
+
+    i = 0;
+    value = 4;
+    byteOffset = 0;
+    do {
+        *(short*)((char*)D_800EB80C + byteOffset) = value;
+        *(short*)((char*)D_800EB808 + byteOffset) = 0;
+        byteOffset += 0xC;
+        i++;
+    } while (i < 7);
+}
 
 void func_8002C18C(int arg0) {
     D_800EB80C[arg0 * 6] = 4;
