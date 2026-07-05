@@ -675,6 +675,141 @@ void map_start_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/MAP", map_start_OnUpdate);
+/* near-match: 309/309 instructions, 11 diff words confined to two scheduler windows:
+   1) prologue: ours orders the _D0[2] load before the camera load and splits the
+      multispline loads around the increment; the target does the reverse (independent
+      -load ordering tie, KMC scheduler).
+   2) the D_800785D0 branch delay slot: KMC fills it with the fc addiu, ours with the
+      li 5 from the next statement (fc's addiu sinks because its first use is late).
+   Everything else verified: intro camera fly-in driver - runs the player intro anim
+   chain (func_800284C4/func_80024A80) while D_800785D0 is clear, resets the remote/
+   collectable tables on D_800785CC, waits for the intro sound handle, advances the
+   two camera multisplines while buttons 0xF0 are held (fast-forward), restarts the
+   attract loop through the level list at D_80161194/D_801611A4 every 0x258 frames,
+   snaps to the end on the map level type, rewinds on button 0x4000, and unhides the
+   player once _D0[2] reaches 0x64.
+extern int D_800785D0;
+extern int D_800785CC[];
+extern int D_800785D4;
+extern int D_8006CF54;
+extern char D_801539C8[];
+extern char* D_80161194_C1BC4[];
+extern char* D_801611A4_C1BD4[];
+extern G2String D_801612C0_C1CF0;
+extern unsigned int D_801612C4_C1CF4;
+
+void map_start_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    short* data;
+    int** cam;
+    int* ms1;
+    int* ms2;
+    char* fc;
+    char* sel;
+    int frame;
+    int i;
+
+    data = (short*)PlayerInstance->data;
+    cam = (int**)gameTracker->camera;
+    instance->_D0[2] = instance->_D0[2] + 1;
+    ms1 = (int*)cam[0x480/4];
+    ms2 = (int*)cam[0x484/4];
+    if (D_800785D0 == 0) {
+        fc = (char*)&instance->_F4[2];
+        gameTracker->player->_F4[0] = 5;
+        if (fc[0x25] == PlayerInstance->currentAnimFrame) {
+            PlayerInstance->flags2 |= 0x10;
+            data[0x8A/2] = 0x91;
+            sel = D_801539C8;
+            if (!(PlayerInstance->flags & 0x100)) {
+                sel = (char*)gameTracker + 0x18;
+            }
+            func_800284C4(PlayerInstance, gameTracker, data, sel);
+            PlayerInstance->currentAnimFrame = -1;
+        }
+        func_80024A80(PlayerInstance, gameTracker, data);
+        fc[0x25] = *(unsigned short*)&PlayerInstance->currentAnimFrame;
+        frame = *(unsigned short*)&PlayerInstance->currentAnimFrame + 1;
+        PlayerInstance->currentAnimFrame = frame;
+        if (PlayerInstance->object->oflags2 & 8) {
+            func_80050400(PlayerInstance, frame & 0xFF);
+        }
+    }
+    if (D_800785CC[0] != 0) {
+        short* pdata2;
+        pdata2 = (short*)PlayerInstance->data;
+        ((char*)gameTracker)[0x4CA0] = 0;
+        ((int*)gameTracker)[0x4C98/4] = 0;
+        ((int*)gameTracker)[0x4C94/4] = 0;
+        ((int*)gameTracker)[0x4BF4/4] = pdata2[0x1C/2];
+        D_8006CF54 = 0xC;
+        ((int*)gameTracker)[0x4BF8/4] = pdata2[0x1A/2];
+        for (i = 0; i < 0x1F; i++) {
+            ((char*)gameTracker + i)[0x4C6E] = 0;
+            *(short*)((char*)gameTracker8 + i*6 + 0x4CEC) = 0;
+            *(short*)((char*)gameTracker8 + i*6 + 0x4CEA) = 0;
+            *(short*)((char*)gameTracker8 + i*6 + 0x4CE8) = 0;
+        }
+    }
+    if (((int**)gameTracker->camera)[0x480/4] != NULL && ((int**)gameTracker->camera)[0x484/4] != NULL) {
+        if (((char*)instance)[0x120] == 0) {
+            ((char*)instance)[0x120] = 1;
+        } else {
+            if (((char*)instance)[0x120] != 1) {
+                if (((int*)gameTracker8)[0x4C54/4] & 0x7F) {
+                    func_80033334((((int*)gameTracker8)[0x4C54/4] - 1) & 0x7F);
+                }
+                if (((int*)gameTracker8)[0x4C54/4] != 0) {
+                    return;
+                }
+                func_80033354();
+                func_80033334(instance->_D0[1] & 0x7F);
+                ((char*)instance)[0x120] = 1;
+            }
+            if ((((short*)ms1[0])[0x4/2] - 1 == ((short*)ms1)[0x10/2]) && !(ms1[0x10/4] & 0x7FFF)
+                && (PlayerInstance->flags & 0x200)) {
+                if (((int*)gameTracker)[0x40/4] != 0) {
+                    instance->_D0[0] = 0x258;
+                }
+                instance->_D0[0] -= 1;
+                if (instance->_D0[0] < 0) {
+                    ((char*)gameTracker)[0x4CDD] = 1;
+                    func_800396E0(D_80161194_C1BC4[((char*)gameTracker)[0x4CDE]], D_801611A4_C1BD4[((char*)gameTracker)[0x4CDE]], gameTracker);
+                    instance->_D0[0] = 0x258;
+                    ((char*)gameTracker)[0x4CDE] = (((char*)gameTracker)[0x4CDE] + 1) % 4;
+                }
+            }
+            if (((int*)gameTracker)[0x40/4] & 0xF0) {
+                SplineGetNextPoint((Spline*)ms1[0], (SplineDef*)(ms1 + 4));
+                SplineGetNextPoint((Spline*)ms2[0], (SplineDef*)(ms2 + 4));
+                instance->_D0[2] += 1;
+            }
+            if (((G2String*)gameTracker->level->levelType)->raw[0] == D_801612C0_C1CF0.raw[0]
+                && ((G2String*)gameTracker->level->levelType)->raw[1] == D_801612C4_C1CF4) {
+                if (((short*)ms2)[0x10/2] == ((short*)ms2[0])[0x4/2] - 1) {
+                    func_80048DE4(0, ms1 + 4, ms1 + 5, ms1 + 6);
+                    func_80048DE4(0, ms2 + 4, ms2 + 5, ms2 + 6);
+                    instance->_D0[2] = 0;
+                }
+            } else if (((int*)gameTracker)[0x40/4] == 0x4000) {
+                if (D_800785D4 == 0) {
+                    SplineDef* d1;
+                    SplineDef* d2;
+                    d1 = (SplineDef*)(ms1 + 4);
+                    SplineGetLastPoint((Spline*)ms1[0], d1);
+                    d2 = (SplineDef*)(ms2 + 4);
+                    SplineGetLastPoint((Spline*)ms2[0], d2);
+                    SplineGetPreviousPoint((Spline*)ms1[0], d1);
+                    SplineGetPreviousPoint((Spline*)ms2[0], d2);
+                    instance->_D0[2] = 0x64;
+                }
+            }
+        }
+        if (instance->_D0[2] >= 0x64) {
+            gameTracker->player->flags &= ~0x800;
+        }
+    }
+}
+*/
 
 void map_bobbox_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
