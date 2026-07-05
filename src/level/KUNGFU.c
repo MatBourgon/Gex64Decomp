@@ -99,11 +99,53 @@ void kungfu_spray_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_bug_OnCreate);
+void kungfu_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    unsigned short* intro;
+
+    ((short*)&instance->_100)[1] = 0x18;
+    instance->flags |= 0x100000;
+    intro = (unsigned short*)instance->introData;
+
+    if (intro != NULL) {
+        *(short*)&instance->_100 = intro[0];
+        ((short*)&instance->_104)[1] = intro[1];
+        *(short*)&instance->_108 = intro[2];
+        ((short*)&instance->_108)[1] = intro[3];
+        *(short*)&instance->_10C = intro[4];
+        if (((short*)intro)[5] != 0) {
+            ((short*)&instance->_10C)[1] = ((short*)intro)[5];
+        } else {
+            ((short*)&instance->_10C)[1] = 0x40;
+        }
+    } else {
+        *(short*)&instance->_100 = 0x96;
+        ((short*)&instance->_104)[1] = ((unsigned short*)&instance->intro->position)[0] - 0x500;
+        *(short*)&instance->_108 = ((unsigned short*)&instance->intro->position)[1] - 0x780;
+        ((short*)&instance->_108)[1] = ((unsigned short*)&instance->intro->position)[0] + 0x500;
+        *(short*)&instance->_10C = ((unsigned short*)&instance->intro->position)[1] + 0x780;
+        ((short*)&instance->_10C)[1] = 0x40;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_bug_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_bug_OnCollide);
+void kungfu_bug_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+    short* temp;
+
+    bsp = instance->bspTree;
+    temp = (short*)&instance->_F4[2];
+
+    if (bsp->_06 == 1) {
+        if ((bsp->instanceSpline == gameTracker->player) && (bsp->_08[4] < 2U) && (bsp->_0C[5] >= 6U)) {
+            INSTANCE_PlainDeath(instance, 5, 3, 0);
+        } else if ((bsp->_06 == 1) && (bsp->instanceSpline == gameTracker->player) && ((bsp->_08[4] == 0) || (bsp->_08[4] == 2))) {
+            func_80022714(instance, gameTracker);
+            instance->_F4[0] = 0;
+            temp[4] = 0x5A;
+        }
+    }
+}
 
 void kungfu_crawler_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
@@ -199,6 +241,9 @@ void kungfu_launch_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_launch_OnUpdate);
 
+int func_8015AC6C_A9E8C(Instance* instance, GameTracker* gameTracker);
+void func_8015ADC8_A9FE8(Instance* instance, GameTracker* gameTracker);
+
 void kungfu_launch_OnCollide(Instance* instance, GameTracker* gameTracker) {
     Instance* temp_a0;
     BSPTree* bsp;
@@ -220,7 +265,7 @@ void kungfu_launch_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-void func_8015AC1C_A9E3C(Instance* instance) {
+void func_8015AC1C_A9E3C(Instance* instance, GameTracker* gameTracker) {
     instance->flags &= ~0x800;
     if (!(instance->_11C & 8)) {
         instance->_F4[2] = instance->_104;
@@ -229,11 +274,77 @@ void func_8015AC1C_A9E3C(Instance* instance) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015AC6C_A9E8C);
+extern char D_801626DC_B18FC[];
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015AD44_A9F64);
+int func_8015AC6C_A9E8C(Instance* instance, GameTracker* gameTracker) {
+    int* sub;
+    Intro** list;
+    Intro* entry;
+    Instance* other;
+    int count;
+    int i;
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015ADC8_A9FE8);
+    if (instance->intro != NULL) {
+        sub = instance->intro->_04;
+        if (sub != NULL) {
+            list = (Intro**)(sub + 1);
+            count = sub[0];
+            for (i = 0; i < count; i++, list++) {
+                entry = *list;
+                if (*(int*)entry->object->parentName == ((int*)D_801626DC_B18FC)[0]
+                    && ((int*)entry->object->parentName)[1] == ((int*)D_801626DC_B18FC)[1]) {
+                    other = entry->instance;
+                    if (other != NULL) {
+                        if ((other->_F4[0] - 1) < 2U) {
+                            return 1;
+                        }
+                        if (*(int*)&other->_108 != 0) {
+                            return 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return 0;
+}
+
+void func_8015AD44_A9F64(Instance* instance, GameTracker* gameTracker) {
+    short* pData;
+
+    pData = (short*)gameTracker->player->data;
+    instance->flags |= 0x400;
+    func_8015AC1C_A9E3C(instance, gameTracker);
+    instance->_F4[0] = 2;
+    PlayerInstance->_E0[1] = pData[4];
+    gameTracker->player->_F4[2] |= 0x400;
+    func_8004AAA8(instance, 0x6A, 0);
+}
+
+void func_8015ADC8_A9FE8(Instance* instance, GameTracker* gameTracker) {
+    short* data;
+    Instance* player;
+
+    data = gameTracker->player->data;
+    instance->flags |= 0x400;
+    func_8015AC1C_A9E3C(instance, gameTracker);
+    player = PlayerInstance;
+    data[0x9C/2] = data[0xA0/2] - 1;
+    data[0x9E/2] = data[0xA0/2] - 1;
+    instance->_F4[0] = 1;
+    *(int*)&instance->_110 = ((short*)&instance->_D0[0])[1];
+    player->_D0[2] = 0;
+    player->_E0[1] = 0;
+    player->flags |= 0x400000;
+    func_800256A8(gameTracker);
+    data[0x8C/2] = 0;
+    data[0x8E/2] = 0;
+    data[0x90/2] = 0;
+    data[0x94/2] = 0;
+    data[0x96/2] = 0;
+    data[0x98/2] = 0;
+    func_8004AAA8(instance, 0x6A, 0);
+}
 
 void func_8015AE8C_AA0AC(Instance* instance, GameTracker* gameTracker)
 {
@@ -298,7 +409,77 @@ void kungfu_onoff_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_onoff_OnCollide);
+extern int D_801626E8_B1908;
+extern int D_801626EC_B190C;
+
+void kungfu_onoff_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    short* config;
+    BSPTree* bsp;
+    int** list;
+    Instance* other;
+    int match;
+    int toggled;
+    int checkState;
+    int fire;
+    short i;
+
+    match = 0;
+    toggled = 0;
+    checkState = 0;
+    fire = 0;
+    config = instance->introData;
+    bsp = instance->bspTree;
+    if (config != NULL && bsp->_06 == 1 && bsp->_0C[5] >= 8U && instance->_F4[1] != 1) {
+        list = (int**)(config + 2);
+        if (config[1] == 0) {
+            match = 1;
+        } else if (config[1] == 1) {
+            if (instance->_F4[0] == 0) {
+                match = 1;
+                checkState = 1;
+            }
+        } else if (config[1] == 2) {
+            if (instance->_F4[0] == 1) {
+                match = 1;
+                checkState = 1;
+            }
+        }
+        for (i = 0; i < config[0]; i++, list++) {
+            other = ((Intro*)list[0])->instance;
+            if (other == NULL) continue;
+            if (other->flags & 0x2000000) continue;
+            if (match == 0) continue;
+            if (checkState != 0) {
+                if (!((((unsigned short*)config)[1] & 1) && !(other->flags & 0x1000000))) {
+                    if (!(((unsigned short*)config)[1] & 2)) continue;
+                    if (!(other->flags & 0x1000000)) continue;
+                }
+            }
+            other->flags &= ~0x100000;
+            if (!(other->flags2 & 0x10000)) {
+                other->flags2 |= 0x1000;
+            }
+            other->flags |= 0x2000000;
+            toggled = 1;
+        }
+        if ((match != 0 && toggled != 0) || config[0] == 0) {
+            instance->intro->flags ^= 0x800;
+            instance->_F4[0] ^= 1;
+            fire = 1;
+        } else if (*(int*)instance->object->name == D_801626E8_B1908
+                   && ((int*)instance->object->name)[1] == D_801626EC_B190C) {
+            fire = 1;
+        }
+        if (fire != 0) {
+            if (((short*)&instance->object->_08)[1] != 0) {
+                instance->_F4[1] = 1;
+            }
+            if (*(int*)list == 0x29A) {
+                SIGNAL_HandleSignal(instance, (int*)((int*)list)[1] + 1, 0);
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_spike_OnCreate);
 
@@ -346,9 +527,69 @@ INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_canball_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_cannon_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015D5E8_AC808);
+int func_8015D5E8_AC808(Instance* instance, short dist, SVector* out) {
+    SVector start;
+    SVector probe;
+    int result;
+    short deltaS;
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015D770_AC990);
+    probe = *(SVector*)&instance->position;
+    start = probe;
+    if (out != NULL) {
+        *out = probe;
+    }
+    start.z += (dist < 0x80) ? 0x80 : dist;
+    probe.z -= (dist < 0x80) ? 0x80 : dist;
+    result = COLLIDE_PointAndTerrain(gameTracker8->level->segmentAddress, (SVECTOR*)&probe, (SVECTOR*)&start, instance);
+    deltaS = probe.z - instance->position.z;
+    if (dist < ((deltaS >= 0) ? deltaS : -deltaS)) return 0;
+    if (result == 0) return 0;
+    if (func_80047D10(result) != 0) return 0;
+    if (out != NULL) {
+        *out = probe;
+    }
+    return 1;
+}
+
+short func_8015D770_AC990(Instance* instance, short rotStep, short zStep, short dist, int flag) {
+    SVector probe;
+    SVECTOR savedPos;
+    int result;
+    int ok;
+
+    result = 0;
+    savedPos = instance->position;
+    ok = 1;
+    if (rotStep != 0) {
+        func_80047E64(instance, rotStep * 2);
+        if (func_8015D5E8_AC808(instance, dist, &probe) == 0) {
+            ok = 0;
+        } else {
+            instance->position = savedPos;
+            func_80047E64(instance, rotStep);
+        }
+    }
+    if (ok != 0) {
+        if (func_8015D5E8_AC808(instance, dist, &probe) == 0) {
+            ok = 0;
+        }
+    }
+    if (ok == 0 && flag != 0) {
+        instance->position.x = savedPos.x;
+        instance->position.y = savedPos.y;
+        result |= 2;
+    } else if (ok == 0 || instance->position.z + zStep > probe.z) {
+        instance->position.x = probe.x;
+        instance->position.y = probe.y;
+        instance->position.z = instance->position.z + zStep;
+    } else {
+        instance->position.x = probe.x;
+        instance->position.y = probe.y;
+        instance->position.z = probe.z;
+        result |= 1;
+    }
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_samuri_OnCreate);
 
@@ -511,7 +752,12 @@ INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_leafgen_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_801616D4_B08F4);
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_80161944_B0B64);
+void func_80161944_B0B64(short* arg0) {
+    func_800162C0(arg0);
+    RotMatrixX(((short*)arg0)[0x44/2], (char*)((int*)arg0)[5] + 0xC);
+    RotMatrixY(((short*)arg0)[0x46/2], (char*)((int*)arg0)[5] + 0xC);
+    RotMatrixZ(((short*)arg0)[0x48/2], (char*)((int*)arg0)[5] + 0xC);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_801619A4_B0BC4);
 

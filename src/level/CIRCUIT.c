@@ -16,11 +16,53 @@ INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_plat_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_plat_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_bug_OnCreate);
+void circuit_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    unsigned short* intro;
+
+    ((short*)&instance->_100)[1] = 0x18;
+    instance->flags |= 0x100000;
+    intro = (unsigned short*)instance->introData;
+
+    if (intro != NULL) {
+        *(short*)&instance->_100 = intro[0];
+        ((short*)&instance->_104)[1] = intro[1];
+        *(short*)&instance->_108 = intro[2];
+        ((short*)&instance->_108)[1] = intro[3];
+        *(short*)&instance->_10C = intro[4];
+        if (((short*)intro)[5] != 0) {
+            ((short*)&instance->_10C)[1] = ((short*)intro)[5];
+        } else {
+            ((short*)&instance->_10C)[1] = 0x40;
+        }
+    } else {
+        *(short*)&instance->_100 = 0x96;
+        ((short*)&instance->_104)[1] = ((unsigned short*)&instance->intro->position)[0] - 0x500;
+        *(short*)&instance->_108 = ((unsigned short*)&instance->intro->position)[1] - 0x780;
+        ((short*)&instance->_108)[1] = ((unsigned short*)&instance->intro->position)[0] + 0x500;
+        *(short*)&instance->_10C = ((unsigned short*)&instance->intro->position)[1] + 0x780;
+        ((short*)&instance->_10C)[1] = 0x40;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_bug_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_bug_OnCollide);
+void circuit_bug_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+    short* temp;
+
+    bsp = instance->bspTree;
+    temp = (short*)&instance->_F4[2];
+
+    if (bsp->_06 == 1) {
+        if ((bsp->instanceSpline == gameTracker->player) && (bsp->_08[4] < 2U) && (bsp->_0C[5] >= 6U)) {
+            INSTANCE_PlainDeath(instance, 5, 3, 0);
+        } else if ((bsp->_06 == 1) && (bsp->instanceSpline == gameTracker->player) && ((bsp->_08[4] == 0) || (bsp->_08[4] == 2))) {
+            func_80022714(instance, gameTracker);
+            instance->_F4[0] = 0;
+            temp[4] = 0x5A;
+        }
+    }
+}
 
 void circuit_bouncer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     short* intro;
@@ -232,6 +274,9 @@ void circuit_launch_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_launch_OnUpdate);
 
+int func_8015D354_84534(Instance* instance, GameTracker* gameTracker);
+void func_8015D4B0_84690(Instance* instance, GameTracker* gameTracker);
+
 void circuit_launch_OnCollide(Instance* instance, GameTracker* gameTracker) {
     Instance* temp_a0;
     BSPTree* bsp;
@@ -253,7 +298,7 @@ void circuit_launch_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-void func_8015D304_844E4(Instance* instance) {
+void func_8015D304_844E4(Instance* instance, GameTracker* gameTracker) {
     instance->flags &= ~0x800;
     if (!(instance->_11C & 8)) {
         instance->_F4[2] = instance->_104;
@@ -262,11 +307,77 @@ void func_8015D304_844E4(Instance* instance) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015D354_84534);
+extern char D_801635EC_8A7CC[];
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015D42C_8460C);
+int func_8015D354_84534(Instance* instance, GameTracker* gameTracker) {
+    int* sub;
+    Intro** list;
+    Intro* entry;
+    Instance* other;
+    int count;
+    int i;
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015D4B0_84690);
+    if (instance->intro != NULL) {
+        sub = instance->intro->_04;
+        if (sub != NULL) {
+            list = (Intro**)(sub + 1);
+            count = sub[0];
+            for (i = 0; i < count; i++, list++) {
+                entry = *list;
+                if (*(int*)entry->object->parentName == ((int*)D_801635EC_8A7CC)[0]
+                    && ((int*)entry->object->parentName)[1] == ((int*)D_801635EC_8A7CC)[1]) {
+                    other = entry->instance;
+                    if (other != NULL) {
+                        if ((other->_F4[0] - 1) < 2U) {
+                            return 1;
+                        }
+                        if (*(int*)&other->_108 != 0) {
+                            return 1;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return 0;
+}
+
+void func_8015D42C_8460C(Instance* instance, GameTracker* gameTracker) {
+    short* pData;
+
+    pData = (short*)gameTracker->player->data;
+    instance->flags |= 0x400;
+    func_8015D304_844E4(instance, gameTracker);
+    instance->_F4[0] = 2;
+    PlayerInstance->_E0[1] = pData[4];
+    gameTracker->player->_F4[2] |= 0x400;
+    func_8004AAA8(instance, 0x18, 0);
+}
+
+void func_8015D4B0_84690(Instance* instance, GameTracker* gameTracker) {
+    short* data;
+    Instance* player;
+
+    data = gameTracker->player->data;
+    instance->flags |= 0x400;
+    func_8015D304_844E4(instance, gameTracker);
+    player = PlayerInstance;
+    data[0x9C/2] = data[0xA0/2] - 1;
+    data[0x9E/2] = data[0xA0/2] - 1;
+    instance->_F4[0] = 1;
+    *(int*)&instance->_110 = ((short*)&instance->_D0[0])[1];
+    player->_D0[2] = 0;
+    player->_E0[1] = 0;
+    player->flags |= 0x400000;
+    func_800256A8(gameTracker);
+    data[0x8C/2] = 0;
+    data[0x8E/2] = 0;
+    data[0x90/2] = 0;
+    data[0x94/2] = 0;
+    data[0x96/2] = 0;
+    data[0x98/2] = 0;
+    func_8004AAA8(instance, 0x18, 0);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_follow_OnCreate);
 
@@ -307,7 +418,38 @@ INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_ppath_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_ppath_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_fxgen_OnCreate);
+extern char D_801635A0_8A780[];
+
+void circuit_fxgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    int* fc;
+    unsigned char* config;
+
+    fc = &instance->_F4[2];
+    if (instance->flags & 0x20000) {
+        if (*(int*)&instance->_108 != 0) {
+            func_800331BC(*(int*)&instance->_108);
+            *(int*)&instance->_108 = 0;
+        }
+    } else {
+        if (instance->introData == NULL) {
+            instance->introData = D_801635A0_8A780;
+        }
+        config = instance->introData;
+        fc[0] = OBTABLE_FindObject(config + 0xC);
+        if ((config[1] & 1) == 0) {
+            if ((config[1] & 2) != 0) {
+                *(short*)&instance->_110 = 0x119;
+                ((short*)&instance->_110)[1] = 0x46;
+                ((short*)&instance->_114)[1] = 0xDAC;
+                *(short*)&instance->_114 = (rand() & 0x7F) - 0x15E;
+                ((short*)&instance->_10C)[1] = *(short*)&instance->_10C = rand() & 7;
+                config[1] |= 0x80;
+            }
+        }
+        fc[3] = 0;
+        instance->flags |= 0x10000;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015E084_85264);
 
