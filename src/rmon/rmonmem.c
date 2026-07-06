@@ -191,8 +191,8 @@ int __rmonLoadProgram(KKHeader* request UNUSED) {
     return TV_ERROR_ILLEGAL_CALL;
 }
 
-static const char D_8007F1C8[];
-static const char D_8007F1D0[];
+static const char D_8007F1C8[]; // imem
+static const char D_8007F1D0[]; // rmon
 
 int __rmonGetExeName(KKHeader* req) {
     KKObjectRequest* request = (KKObjectRequest*)req;
