@@ -21,7 +21,23 @@ INCLUDE_ASM("asm/nonmatchings/1BA60", func_8001C650);
 
 INCLUDE_ASM("asm/nonmatchings/1BA60", func_8001C738);
 
-INCLUDE_ASM("asm/nonmatchings/1BA60", func_8001C920);
+void func_8001C920(int* arg0, int* arg1, short* arg2) {
+    short temp = arg2[110];
+    
+    if (temp != 0) {
+        temp -= 1;
+        arg2[110] = temp;
+        if (arg0[62] != 0x4000000) {
+            
+            if (temp & 2) {
+                arg0[4] |= 0x800;
+            } else {
+
+                arg0[4] &= ~0x800;
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/1BA60", func_8001C978);
 
@@ -31,7 +47,22 @@ INCLUDE_ASM("asm/nonmatchings/1BA60", func_8001CDFC);
 
 INCLUDE_ASM("asm/nonmatchings/1BA60", func_8001CE54);
 
-INCLUDE_ASM("asm/nonmatchings/1BA60", func_8001CF90);
+extern int D_8006CFA4;
+
+void func_8001CF90(int *arg0, int *arg1) {
+    arg0[0x3D] = 3;
+    
+    if (arg1[0x12FD] == 1) {
+        D_8006CFA4 = 0xBE;
+    } 
+    else {
+        D_8006CFA4 = 0x5A;
+    }
+    
+    if ((arg1[0x1302] & 0x20000) != 0) {
+        D_8006CFA4 -= 0x1E;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/1BA60", func_8001CFE8);
 
