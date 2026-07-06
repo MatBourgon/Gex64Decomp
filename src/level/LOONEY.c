@@ -1,6 +1,7 @@
 #include "common.h"
 
 #include "level/LOONEY.h"
+#include "OBTABLE.h"
 #include "MATRIX.h"
 
 extern int D_80161BD0_B9E80;
@@ -294,7 +295,7 @@ void func_8015B4BC_B376C(Instance* instance) {
     SVECTOR vel;
     int i;
 
-    obj = ((Object*)OBTABLE_FindObject(D_80161DC0_BA070));
+    obj = OBTABLE_FindObject(D_80161DC0_BA070);
     if (obj != NULL) {
         pos.x = instance->position.x;
         pos.y = instance->position.y;
@@ -403,27 +404,27 @@ typedef struct {
     short count;
     short _0E;
     short (*entries)[4];
-} FallGenData;
+} FallGenIntro;
 
 void looney_fallgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    FallGenData* config;
+    FallGenIntro* intro;
     int* fc;
     int total;
     int i;
 
     total = 0;
-    config = instance->introData;
+    intro = instance->introData;
     fc = &instance->_F4[2];
-    if (config != NULL) {
-        for (i = 0; i < config->count; i++) {
-            total += config->entries[i][2];
-            config->entries[i][3] = total;
+    if (intro != NULL) {
+        for (i = 0; i < intro->count; i++) {
+            total += intro->entries[i][2];
+            intro->entries[i][3] = total;
         }
         fc[1] = total;
-        if (config->max != config->min) {
-            fc[0] = config->min + rand() % (config->max - config->min);
+        if (intro->max != intro->min) {
+            fc[0] = intro->min + rand() % (intro->max - intro->min);
         } else {
-            fc[0] = config->max;
+            fc[0] = intro->max;
         }
     }
     instance->flags |= 0x800;
@@ -632,7 +633,7 @@ extern char D_80161DA8_BA058[];
 
 void looney_fxgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int* fc;
-    unsigned char* config;
+    unsigned char* intro;
 
     fc = &instance->_F4[2];
     if (instance->flags & 0x20000) {
@@ -644,16 +645,16 @@ void looney_fxgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
         if (instance->introData == NULL) {
             instance->introData = D_80161DA8_BA058;
         }
-        config = instance->introData;
-        fc[0] = OBTABLE_FindObject(config + 0xC);
-        if ((config[1] & 1) == 0) {
-            if ((config[1] & 2) != 0) {
+        intro = instance->introData;
+        fc[0] = (int)OBTABLE_FindObject(intro + 0xC);
+        if ((intro[1] & 1) == 0) {
+            if ((intro[1] & 2) != 0) {
                 *(short*)&instance->_110 = 0x119;
                 ((short*)&instance->_110)[1] = 0x78;
                 ((short*)&instance->_114)[1] = 0xDAC;
                 *(short*)&instance->_114 = (rand() & 0x7F) - 0x15E;
                 ((short*)&instance->_10C)[1] = *(short*)&instance->_10C = rand() & 7;
-                config[1] |= 0x80;
+                intro[1] |= 0x80;
             }
         }
         fc[3] = 0;

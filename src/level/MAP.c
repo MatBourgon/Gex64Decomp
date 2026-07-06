@@ -1003,14 +1003,12 @@ void map_tvmenu_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-void func_8015B96C_BC39C();
-
 void map_tvmenu_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int splineOk;
     short i;
     short total;
     signed char* fc;
-    int* config;
+    int* intro;
     int* cam;
     int* sp;
     short* keys;
@@ -1020,7 +1018,7 @@ void map_tvmenu_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
     splineOk = 0;
     fc = (signed char*)&instance->_F4[2];
-    config = instance->introData;
+    intro = instance->introData;
     cam = (int*)gameTracker->camera;
     if (cam[0x14C/4] == 5 && cam[0x480/4] != 0) {
         splineOk = cam[0x484/4] != 0;
@@ -1061,27 +1059,27 @@ void map_tvmenu_OnUpdate(Instance* instance, GameTracker* gameTracker) {
                     }
                 }
             }
-            if ((instance->flags & 0x200) && config != NULL && ((short*)fc)[3] != 0 && fc[0x13] != 0) {
+            if ((instance->flags & 0x200) && intro != NULL && ((short*)fc)[3] != 0 && fc[0x13] != 0) {
                 if ((((short*)fc)[1] != 0
                      || ((((int*)gameTracker)[0x44/4] & 0x80) && ((short*)fc)[2] == 0))
-                    && config[1] != 0) {
+                    && intro[1] != 0) {
                     ((short*)fc)[1] = 0;
-                    SIGNAL_HandleSignal(PlayerInstance, config[1] + 4, 0);
+                    SIGNAL_HandleSignal(PlayerInstance, intro[1] + 4, 0);
                     if (func_80033268(0x81) == 0) {
                         func_800509E0(0x81, 0x7A, 0x40, 0x64);
                     }
-                } else if ((((int*)gameTracker)[0x44/4] & 0x10) && config[0] != 0) {
-                    SIGNAL_HandleSignal(PlayerInstance, config[0] + 4, 0);
+                } else if ((((int*)gameTracker)[0x44/4] & 0x10) && intro[0] != 0) {
+                    SIGNAL_HandleSignal(PlayerInstance, intro[0] + 4, 0);
                     if (func_80033268(0x81) == 0) {
                         func_800509E0(0x81, 0x7A, 0x40, -0x64);
                     }
-                } else if ((((int*)gameTracker)[0x44/4] & 0x20) && config[2] != 0) {
-                    SIGNAL_HandleSignal(PlayerInstance, config[2] + 4, 0);
+                } else if ((((int*)gameTracker)[0x44/4] & 0x20) && intro[2] != 0) {
+                    SIGNAL_HandleSignal(PlayerInstance, intro[2] + 4, 0);
                     if (func_80033268(0x81) == 0) {
                         func_800509E0(0x81, 0x7A, 0x40, 0);
                     }
-                } else if ((((int*)gameTracker)[0x44/4] & 0x40) && config[3] != 0) {
-                    SIGNAL_HandleSignal(PlayerInstance, config[3] + 4, 0);
+                } else if ((((int*)gameTracker)[0x44/4] & 0x40) && intro[3] != 0) {
+                    SIGNAL_HandleSignal(PlayerInstance, intro[3] + 4, 0);
                     if (func_80033268(0x81) == 0) {
                         func_800509E0(0x81, 0x7A, 0x40, 0);
                     }

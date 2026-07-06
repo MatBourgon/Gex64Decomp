@@ -274,7 +274,7 @@ void func_8015AC1C_A9E3C(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-extern char D_801626DC_B18FC[];
+extern G2String D_801626DC_B18FC;
 
 int func_8015AC6C_A9E8C(Instance* instance, GameTracker* gameTracker) {
     int* sub;
@@ -291,8 +291,7 @@ int func_8015AC6C_A9E8C(Instance* instance, GameTracker* gameTracker) {
             count = sub[0];
             for (i = 0; i < count; i++, list++) {
                 entry = *list;
-                if (*(int*)entry->object->parentName == ((int*)D_801626DC_B18FC)[0]
-                    && ((int*)entry->object->parentName)[1] == ((int*)D_801626DC_B18FC)[1]) {
+                if (G2String_Compare_EQ(entry->object->parentName, &D_801626DC_B18FC)) {
                     other = entry->instance;
                     if (other != NULL) {
                         if ((other->_F4[0] - 1) < 2U) {
@@ -409,11 +408,10 @@ void kungfu_onoff_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-extern int D_801626E8_B1908;
-extern int D_801626EC_B190C;
+extern char D_801626E8_B1908[];
 
 void kungfu_onoff_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    short* config;
+    short* intro;
     BSPTree* bsp;
     int** list;
     Instance* other;
@@ -427,31 +425,31 @@ void kungfu_onoff_OnCollide(Instance* instance, GameTracker* gameTracker) {
     toggled = 0;
     checkState = 0;
     fire = 0;
-    config = instance->introData;
+    intro = instance->introData;
     bsp = instance->bspTree;
-    if (config != NULL && bsp->_06 == 1 && bsp->_0C[5] >= 8U && instance->_F4[1] != 1) {
-        list = (int**)(config + 2);
-        if (config[1] == 0) {
+    if (intro != NULL && bsp->_06 == 1 && bsp->_0C[5] >= 8U && instance->_F4[1] != 1) {
+        list = (int**)(intro + 2);
+        if (intro[1] == 0) {
             match = 1;
-        } else if (config[1] == 1) {
+        } else if (intro[1] == 1) {
             if (instance->_F4[0] == 0) {
                 match = 1;
                 checkState = 1;
             }
-        } else if (config[1] == 2) {
+        } else if (intro[1] == 2) {
             if (instance->_F4[0] == 1) {
                 match = 1;
                 checkState = 1;
             }
         }
-        for (i = 0; i < config[0]; i++, list++) {
+        for (i = 0; i < intro[0]; i++, list++) {
             other = ((Intro*)list[0])->instance;
             if (other == NULL) continue;
             if (other->flags & 0x2000000) continue;
             if (match == 0) continue;
             if (checkState != 0) {
-                if (!((((unsigned short*)config)[1] & 1) && !(other->flags & 0x1000000))) {
-                    if (!(((unsigned short*)config)[1] & 2)) continue;
+                if (!((((unsigned short*)intro)[1] & 1) && !(other->flags & 0x1000000))) {
+                    if (!(((unsigned short*)intro)[1] & 2)) continue;
                     if (!(other->flags & 0x1000000)) continue;
                 }
             }
@@ -462,12 +460,11 @@ void kungfu_onoff_OnCollide(Instance* instance, GameTracker* gameTracker) {
             other->flags |= 0x2000000;
             toggled = 1;
         }
-        if ((match != 0 && toggled != 0) || config[0] == 0) {
+        if ((match != 0 && toggled != 0) || intro[0] == 0) {
             instance->intro->flags ^= 0x800;
             instance->_F4[0] ^= 1;
             fire = 1;
-        } else if (*(int*)instance->object->name == D_801626E8_B1908
-                   && ((int*)instance->object->name)[1] == D_801626EC_B190C) {
+        } else if (G2String_Compare_EQ(instance->object->name, D_801626E8_B1908)) {
             fire = 1;
         }
         if (fire != 0) {

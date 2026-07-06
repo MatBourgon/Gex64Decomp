@@ -307,7 +307,7 @@ void func_8015D304_844E4(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-extern char D_801635EC_8A7CC[];
+extern G2String D_801635EC_8A7CC;
 
 int func_8015D354_84534(Instance* instance, GameTracker* gameTracker) {
     int* sub;
@@ -324,8 +324,7 @@ int func_8015D354_84534(Instance* instance, GameTracker* gameTracker) {
             count = sub[0];
             for (i = 0; i < count; i++, list++) {
                 entry = *list;
-                if (*(int*)entry->object->parentName == ((int*)D_801635EC_8A7CC)[0]
-                    && ((int*)entry->object->parentName)[1] == ((int*)D_801635EC_8A7CC)[1]) {
+                if (G2String_Compare_EQ(entry->object->parentName, &D_801635EC_8A7CC)) {
                     other = entry->instance;
                     if (other != NULL) {
                         if ((other->_F4[0] - 1) < 2U) {
@@ -422,7 +421,7 @@ extern char D_801635A0_8A780[];
 
 void circuit_fxgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int* fc;
-    unsigned char* config;
+    unsigned char* intro;
 
     fc = &instance->_F4[2];
     if (instance->flags & 0x20000) {
@@ -434,16 +433,16 @@ void circuit_fxgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
         if (instance->introData == NULL) {
             instance->introData = D_801635A0_8A780;
         }
-        config = instance->introData;
-        fc[0] = OBTABLE_FindObject(config + 0xC);
-        if ((config[1] & 1) == 0) {
-            if ((config[1] & 2) != 0) {
+        intro = instance->introData;
+        fc[0] = OBTABLE_FindObject(intro + 0xC);
+        if ((intro[1] & 1) == 0) {
+            if ((intro[1] & 2) != 0) {
                 *(short*)&instance->_110 = 0x119;
                 ((short*)&instance->_110)[1] = 0x46;
                 ((short*)&instance->_114)[1] = 0xDAC;
                 *(short*)&instance->_114 = (rand() & 0x7F) - 0x15E;
                 ((short*)&instance->_10C)[1] = *(short*)&instance->_10C = rand() & 7;
-                config[1] |= 0x80;
+                intro[1] |= 0x80;
             }
         }
         fc[3] = 0;

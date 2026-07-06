@@ -220,7 +220,7 @@ void func_80159EEC_EB5BC(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-extern char D_8015AE00_EC4D0[];
+extern G2String D_8015AE00_EC4D0;
 
 int func_80159F3C_EB60C(Instance* instance, GameTracker* gameTracker) {
     int* sub;
@@ -237,8 +237,7 @@ int func_80159F3C_EB60C(Instance* instance, GameTracker* gameTracker) {
             count = sub[0];
             for (i = 0; i < count; i++, list++) {
                 entry = *list;
-                if (*(int*)entry->object->parentName == ((int*)D_8015AE00_EC4D0)[0]
-                    && ((int*)entry->object->parentName)[1] == ((int*)D_8015AE00_EC4D0)[1]) {
+                if (G2String_Compare_EQ(entry->object->parentName, &D_8015AE00_EC4D0)) {
                     other = entry->instance;
                     if (other != NULL) {
                         if ((other->_F4[0] - 1) < 2U) {
@@ -342,11 +341,10 @@ void spy_onoff_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-extern int D_8015AE0C_EC4DC;
-extern int D_8015AE10_EC4E0;
+extern char D_8015AE0C_EC4DC[];
 
 void spy_onoff_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    short* config;
+    short* intro;
     BSPTree* bsp;
     int** list;
     Instance* other;
@@ -360,31 +358,31 @@ void spy_onoff_OnCollide(Instance* instance, GameTracker* gameTracker) {
     toggled = 0;
     checkState = 0;
     fire = 0;
-    config = instance->introData;
+    intro = instance->introData;
     bsp = instance->bspTree;
-    if (config != NULL && bsp->_06 == 1 && bsp->_0C[5] >= 8U && instance->_F4[1] != 1) {
-        list = (int**)(config + 2);
-        if (config[1] == 0) {
+    if (intro != NULL && bsp->_06 == 1 && bsp->_0C[5] >= 8U && instance->_F4[1] != 1) {
+        list = (int**)(intro + 2);
+        if (intro[1] == 0) {
             match = 1;
-        } else if (config[1] == 1) {
+        } else if (intro[1] == 1) {
             if (instance->_F4[0] == 0) {
                 match = 1;
                 checkState = 1;
             }
-        } else if (config[1] == 2) {
+        } else if (intro[1] == 2) {
             if (instance->_F4[0] == 1) {
                 match = 1;
                 checkState = 1;
             }
         }
-        for (i = 0; i < config[0]; i++, list++) {
+        for (i = 0; i < intro[0]; i++, list++) {
             other = ((Intro*)list[0])->instance;
             if (other == NULL) continue;
             if (other->flags & 0x2000000) continue;
             if (match == 0) continue;
             if (checkState != 0) {
-                if (!((((unsigned short*)config)[1] & 1) && !(other->flags & 0x1000000))) {
-                    if (!(((unsigned short*)config)[1] & 2)) continue;
+                if (!((((unsigned short*)intro)[1] & 1) && !(other->flags & 0x1000000))) {
+                    if (!(((unsigned short*)intro)[1] & 2)) continue;
                     if (!(other->flags & 0x1000000)) continue;
                 }
             }
@@ -395,12 +393,11 @@ void spy_onoff_OnCollide(Instance* instance, GameTracker* gameTracker) {
             other->flags |= 0x2000000;
             toggled = 1;
         }
-        if ((match != 0 && toggled != 0) || config[0] == 0) {
+        if ((match != 0 && toggled != 0) || intro[0] == 0) {
             instance->intro->flags ^= 0x800;
             instance->_F4[0] ^= 1;
             fire = 1;
-        } else if (*(int*)instance->object->name == D_8015AE0C_EC4DC
-                   && ((int*)instance->object->name)[1] == D_8015AE10_EC4E0) {
+        } else if (G2String_Compare_EQ(instance->object->name, D_8015AE0C_EC4DC)) {
             fire = 1;
         }
         if (fire != 0) {
@@ -429,19 +426,19 @@ typedef struct {
 } GnRobotKey;
 
 void spy_gnrobot_OnUpdate(Instance* instance, GameTracker* gameTracker) {
-    short* config;
+    short* intro;
     MultiSpline* ms;
     unsigned short frame;
     GnRobotKey* p;
     int i;
     SVECTOR unused; /* dead local needed for the original's 0x28 stack frame */
 
-    config = instance->introData;
+    intro = instance->introData;
     ms = SCRIPT_GetMultiSpline(instance, NULL, NULL);
     frame = SplineGetFrameNumber(ms->positional, &ms->curPositional);
     instance->_F4[2] += 1;
-    p = (GnRobotKey*)config;
-    if (((int*)config)[1] > 0) {
+    p = (GnRobotKey*)intro;
+    if (((int*)intro)[1] > 0) {
         i = 0;
         do {
             if (p[i + 2].frame == frame) {
@@ -449,11 +446,11 @@ void spy_gnrobot_OnUpdate(Instance* instance, GameTracker* gameTracker) {
                 instance->currentAnimFrame = 0;
             }
             i++;
-        } while (i < ((int*)config)[1]);
+        } while (i < ((int*)intro)[1]);
     }
     func_8002DAF8(instance, -1);
     if (instance->currentAnimFrame == ((short*)instance->object->animList[instance->currentModelAnim])[1] - 1) {
-        instance->currentModelAnim = ((unsigned short*)config)[0];
+        instance->currentModelAnim = ((unsigned short*)intro)[0];
     }
 }
 
