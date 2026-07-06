@@ -382,6 +382,7 @@ segments:
 
       # All bss segments need to be named for process to work
       - { type: bss, vram: 0x8007F340, name: _bss_7F340 }
+      - { type: .bss, vram: 0x800B1150, name: io/pimgr }
       - { type: .bss, vram: 0x800B2910, name: io/piacs }
       - { type: .bss, vram: 0x800B2920, name: debug/kdebugserver }
       - { type: .bss, vram: 0x800B2930, name: host/readhost }
