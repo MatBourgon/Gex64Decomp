@@ -41,7 +41,51 @@ void gillig_tikifir_OnCreate(Instance* instance, GameTracker* gameTracker) {
     *(int*)&instance->_10C = ((rand() & 0x1F) - 0x10);
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/GILLIG", gillig_tikifir_OnUpdate);
+extern short func_8003A6AC(int);
+extern short func_8003A4E0(int);
+
+void gillig_tikifir_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    short newScale;
+
+    if (instance->_104 != 0) {
+        if (func_800506B8(instance, instance->_104, *(short*)&instance->_10E, *(short*)&instance->_10A, 0xDAC) == 0) {
+            func_800331BC(instance->_104);
+            instance->_104 = 0;
+        }
+    } else {
+        instance->_104 = func_80050508(instance, 0x69, *(short*)&instance->_10E, *(short*)&instance->_10A, 0xDAC);
+    }
+    if (instance->_F4[0] == 0) {
+        *(int*)&instance->_108 = *(int*)&instance->_108 + 9;
+        newScale = (unsigned short)instance->scale.z + 0x200;
+        instance->scale.z = newScale;
+        if (newScale >= 0x1000) {
+            instance->_F4[0] = 1;
+        }
+    } else if (instance->_F4[0] == 1) {
+        instance->_100 = instance->_100 + 1;
+        if ((instance->_100 >= 0x4D) ||
+            (instance->rotation.z = (unsigned short)instance->rotation.z + instance->_F4[2],
+             instance->position.x = (unsigned short)instance->parent->position.x + (func_8003A6AC(instance->rotation.z + 0x400) * 39 >> 6),
+             instance->position.y = (unsigned short)instance->parent->position.y + (func_8003A4E0(instance->rotation.z + 0x400) * 39 >> 6),
+             ((int**)((int**)instance->intro->_04)[1])[0x24/4][0x108/4] == 0)) {
+            instance->_F4[0] = 2;
+        }
+    } else if (instance->_F4[0] == 2) {
+        *(int*)&instance->_108 = *(int*)&instance->_108 - 9;
+        if (*(int*)&instance->_108 <= 0) {
+            *(int*)&instance->_108 = 1;
+        }
+        newScale = (unsigned short)instance->scale.z - 0x200;
+        instance->scale.z = newScale;
+        if (newScale < 2) {
+            if (instance->_104 != 0) {
+                func_800331BC(instance->_104);
+            }
+            INSTANCE_KillInstance(instance);
+        }
+    }
+}
 
 void gillig_tikifir_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp;
