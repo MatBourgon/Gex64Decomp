@@ -32,9 +32,9 @@
 #ident "$Revision: 1.3 $"
 #endif
 
-BSS_STATIC u32 RCPpc;
-BSS_STATIC u32 oldIMEMvalue;
-BSS_STATIC u32 DMEMbuffer[4] ALIGNED(0x8);
+static u32 RCPpc;
+static u32 oldIMEMvalue;
+static u32 DMEMbuffer[4] ALIGNED(0x8);
 
 typedef union {
     u32 everything;

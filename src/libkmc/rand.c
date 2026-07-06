@@ -1,7 +1,7 @@
 #include "common.h"
 #include <compiler/gcc/stdlib.h>
 
-extern int sRandNext;
+static int sRandNext;
 
 int rand() {
     sRandNext = sRandNext * 1103515245 + 12345;

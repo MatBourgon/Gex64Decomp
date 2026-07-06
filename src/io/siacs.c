@@ -4,8 +4,8 @@
 #include "PR/os_internal.h"
 
 #define SI_Q_BUF_LEN 1
-BSS_STATIC OSMesg siAccessBuf[SI_Q_BUF_LEN] ALIGNED(0x8);
-BSS_DEFINE OSMesgQueue __osSiAccessQueue ALIGNED(0x8);
+static OSMesg siAccessBuf[SI_Q_BUF_LEN] ALIGNED(0x8);
+OSMesgQueue __osSiAccessQueue ALIGNED(0x8);
 u32 __osSiAccessQueueEnabled = 0;
 
 void __osSiCreateAccessQueue(void) {

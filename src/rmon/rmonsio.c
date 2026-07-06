@@ -27,8 +27,8 @@
 #ident "$Revision: 1.4 $"
 #endif
 
-BSS_STATIC OSMesgQueue IOmq ALIGNED(0x8);
-BSS_STATIC OSMesg IOmsgs;
+static OSMesgQueue IOmq ALIGNED(0x8);
+static OSMesg IOmsgs;
 
 void* __osRdb_DbgRead_Buf;
 u8 rmonRdbReadBuf[RMON_DBG_BUF_SIZE] ALIGNED(0x10);

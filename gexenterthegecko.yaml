@@ -379,7 +379,24 @@ segments:
       - [0x7FDE0, .rodata, libc/xldtob]
       - [0x7FE50, .rodata, rmon/rmonbrk]
       - [0x7FEB0, rodata, _6ac60]
-      - { type: bss, vram: 0x8007F340 }
+
+      # All bss segments need to be named for process to work
+      - { type: bss, vram: 0x8007F340, name: _bss_7F340 }
+      - { type: .bss, vram: 0x800B1150, name: io/pimgr }
+      - { type: .bss, vram: 0x800B2910, name: io/piacs }
+      - { type: .bss, vram: 0x800B2920, name: debug/kdebugserver }
+      - { type: .bss, vram: 0x800B2930, name: host/readhost }
+      - { type: .bss, vram: 0x800B2950, name: io/sptask }
+      - { type: .bss, vram: 0x800B2990, name: io/vimgr }
+      - { type: .bss, vram: 0x800B3BB0, name: io/siacs }
+      - { type: .bss, vram: 0x800B3BC0, name: rmon/rmonsio }
+      - { type: .bss, vram: 0x800B3BE0, name: rmon/rmonmisc }
+      - { type: .bss, vram: 0x800B7DF0, name: rmon/rmonregs }
+      - { type: .bss, vram: 0x800B7E10, name: rmon/rmonmain }
+      - { type: .bss, vram: 0x800B8290, name: rmon/rmonbrk }
+      - { type: .bss, vram: 0x800B8290, name: rmon/rmonbrk }
+      - { type: .bss, vram: 0x800B83A0, name: libkmc/rand }
+      - { type: bss, vram: 0x800B83B0, name: tail }
 
   # Start of Level code
   - name: aztec_code

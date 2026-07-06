@@ -10,7 +10,7 @@ extern u32 __osRdb_IP6_Empty;
 
 #ifndef _FINALROM
 
-BSS_STATIC u8 buffer[12];
+static u8 buffer[12];
 static u32 numChars = 0;
 
 static u32 string_to_u32(u8* s) {

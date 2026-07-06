@@ -6,8 +6,8 @@
 #include "PRinternal/macros.h"
 
 static int readHostInitialized = FALSE;
-BSS_STATIC OSMesgQueue readHostMesgQueue ALIGNED(0x8);
-BSS_STATIC OSMesg readHostMesgBuf[1];
+static OSMesgQueue readHostMesgQueue ALIGNED(0x8);
+static OSMesg readHostMesgBuf[1];
 
 u32 __osRdb_Read_Data_Buf;
 u32 __osRdb_Read_Data_Ct;

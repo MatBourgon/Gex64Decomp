@@ -4,21 +4,21 @@
 #include "PRinternal/piint.h"
 #include "PR/rdb.h"
 
-BSS_STATIC OSThread piThread ALIGNED(0x8);
-BSS_STATIC STACK(piThreadStack, OS_PIM_STACKSIZE) ALIGNED(0x10);
+static OSThread piThread ALIGNED(0x8);
+static STACK(piThreadStack, OS_PIM_STACKSIZE) ALIGNED(0x10);
 
 #ifndef _FINALROM
-BSS_STATIC OSThread ramromThread ALIGNED(0x8);
-BSS_STATIC STACK(ramromThreadStack, 0x400) ALIGNED(0x10);
-BSS_STATIC OSMesgQueue getRamromQ ALIGNED(0x8);
-BSS_STATIC OSMesg getRamromBuf[1];
-BSS_STATIC OSMesgQueue freeRamromQ ALIGNED(0x8);
-BSS_STATIC OSMesg freeRamromBuf[1];
-BSS_STATIC void ramromMain(void*);
+static OSThread ramromThread ALIGNED(0x8);
+static STACK(ramromThreadStack, 0x400) ALIGNED(0x10);
+static OSMesgQueue getRamromQ ALIGNED(0x8);
+static OSMesg getRamromBuf[1];
+static OSMesgQueue freeRamromQ ALIGNED(0x8);
+static OSMesg freeRamromBuf[1];
+static void ramromMain(void*);
 #endif
 
-BSS_STATIC OSMesgQueue piEventQueue ALIGNED(0x8);
-BSS_STATIC OSMesg piEventBuf[1];
+static OSMesgQueue piEventQueue ALIGNED(0x8);
+static OSMesg piEventBuf[1];
 
 OSDevMgr __osPiDevMgr = { 0 };
 OSPiHandle* __osPiTable = NULL;

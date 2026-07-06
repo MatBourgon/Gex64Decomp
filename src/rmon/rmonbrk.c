@@ -35,11 +35,11 @@ typedef struct {
 } BREAKINFO;
 
 /* first breakpoint is reserved for implementing single-stepping */
-BSS_STATIC BREAKINFO breakpoints[NUM_BREAKPOINTS] ALIGNED(0x8);
+static BREAKINFO breakpoints[NUM_BREAKPOINTS] ALIGNED(0x8);
 /* breakpoint for alternate branch target */
-BSS_STATIC BREAKINFO altBreak;
+static BREAKINFO altBreak;
 
-BSS_STATIC BREAKINFO RCPbreakpoints[NUM_BREAKPOINTS] ALIGNED(0x8);
+static BREAKINFO RCPbreakpoints[NUM_BREAKPOINTS] ALIGNED(0x8);
 
 u8 __rmonRcpAtBreak;
 
