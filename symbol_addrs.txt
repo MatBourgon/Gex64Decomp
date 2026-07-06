@@ -7,7 +7,6 @@
 .L8015998C_EC79C = 0x8015998C; // type:label segment:logo_code
 .L8015998C_D9FFC = 0x8015998C; // type:label segment:rta_code
 
-func_80069398 = 0x80069398; // type:func
 bootproc = 0x8003B590; // type:func
 
 // Insert real functions from this point on

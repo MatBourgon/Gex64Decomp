@@ -158,7 +158,6 @@ src/os/stopthread.c
 src/io/sprawread.c
 src/io/sprawwrite.c
 
-src/rmon/rmonrcp.c
 src/rmon/rmonbrk.c
 
 src/libc/ldiv.c

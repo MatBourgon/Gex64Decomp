@@ -295,7 +295,7 @@ segments:
       - [0x69DF0, c, os/stopthread]
       - [0x69EB0, c, io/sprawread]
       - [0x69F00, c, io/sprawwrite]
-      - [0x69F50, c, rmon/rmonrcp]
+      - [0x69F50, hasm, rmon/rmonrcp]
       - [0x69FF0, c, rmon/rmonbrk]
       - [0x6A990, c, libc/ldiv]
       - [0x6AB50, c, libkmc/memset]
