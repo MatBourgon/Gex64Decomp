@@ -392,6 +392,8 @@ segments:
       - { type: bss, vram: 0x800B3BE0, name: _bss_B3BE0 }
       - { type: .bss, vram: 0x800B7DF0, name: rmon/rmonregs }
       - { type: bss, vram: 0x800B7E10, name: _bss_B7E10 }
+      - { type: .bss, vram: 0x800B8290, name: rmon/rmonbrk }
+      - { type: bss, vram: 0x800B83A0, name: _bss_B83A0 }
 
   # Start of Level code
   - name: aztec_code
