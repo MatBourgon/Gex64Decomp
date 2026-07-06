@@ -337,7 +337,7 @@ segments:
       - [0x7B380, .data, io/vimodempallan1]
       - [0x7B3D0, .data, libc/xprintf]
       - [0x7B420, .data, rmon/rmoncmds]
-      - [0x7B500, data, rmon/rmonmain]
+      - [0x7B500, .data, rmon/rmonmain]
       - [0x7B510, .data, libc/xlitob]
       - [0x7B540, data, _6ac60]
       - [0x7B740, data, mmuldi3]
