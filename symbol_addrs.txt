@@ -51,6 +51,7 @@ piEventQueue = 0x800B28F0;
 piEventBuf = 0x800B2908;
 piAccessBuf = 0x800B2910;
 buffer = 0x800B2920; // allow_duplicated:True size:0x8
+tmp_task = 0x800B2950; // size:120
 collide_t1 = 0x800B83C4;
 __osRdb_DbgRead_Buf = 0x800B83CC;
 leoDiskStack = 0x800BDFB0;
