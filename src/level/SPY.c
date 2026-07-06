@@ -423,13 +423,13 @@ void spy_gnrobot_OnCreate(Instance* instance, GameTracker* gameTracker) {
 typedef struct {
     short frame;
     unsigned short anim;
-} GnRobotKey;
+} GnRobotKeyframe;
 
 void spy_gnrobot_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     short* intro;
     MultiSpline* ms;
     unsigned short frame;
-    GnRobotKey* p;
+    GnRobotKeyframe* p;
     int i;
     SVECTOR unused; /* dead local needed for the original's 0x28 stack frame */
 
@@ -437,7 +437,7 @@ void spy_gnrobot_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     ms = SCRIPT_GetMultiSpline(instance, NULL, NULL);
     frame = SplineGetFrameNumber(ms->positional, &ms->curPositional);
     instance->_F4[2] += 1;
-    p = (GnRobotKey*)intro;
+    p = (GnRobotKeyframe*)intro;
     if (((int*)intro)[1] > 0) {
         i = 0;
         do {
