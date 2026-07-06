@@ -325,7 +325,7 @@ segments:
       - [0x7A230, data, debug/kdebugserver]
       - [0x7A240, .data, os/timerintr]
       - [0x7A250, .data, os/rdbsend]
-      - [0x7A260, data, host/readhost]
+      - [0x7A260, .data, host/readhost]
       - [0x7A270, .data, audio/drvrnew]
       - [0x7A400, data, audio/env]
       - [0x7A520, .data, io/vi]
