@@ -386,7 +386,7 @@ segments:
       - { type: .bss, vram: 0x800B2920, name: debug/kdebugserver }
       - { type: .bss, vram: 0x800B2930, name: host/readhost }
       - { type: .bss, vram: 0x800B2950, name: io/sptask }
-      - { type: bss, vram: 0x800B2990, name: _bss_B2990 }
+      - { type: .bss, vram: 0x800B2990, name: io/vimgr }
       - { type: .bss, vram: 0x800B3BB0, name: io/siacs }
       - { type: .bss, vram: 0x800B3BC0, name: rmon/rmonsio }
       - { type: bss, vram: 0x800B3BE0, name: _bss_B3BE0 }

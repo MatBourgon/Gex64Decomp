@@ -9,12 +9,12 @@ OSDevMgr __osViDevMgr = { 0 };
 #if BUILD_VERSION >= VERSION_J
 u32 __additional_scanline = 0;
 #endif
-BSS_STATIC OSThread viThread;
-BSS_STATIC STACK(viThreadStack, OS_VIM_STACKSIZE) ALIGNED(0x10);
-BSS_STATIC OSMesgQueue viEventQueue ALIGNED(0x8);
-BSS_STATIC OSMesg viEventBuf[5] ALIGNED(0x8);
-BSS_STATIC OSIoMesg viRetraceMsg ALIGNED(0x8);
-BSS_STATIC OSIoMesg viCounterMsg ALIGNED(0x8);
+static OSThread viThread;
+static STACK(viThreadStack, OS_VIM_STACKSIZE) ALIGNED(0x10);
+static OSMesgQueue viEventQueue ALIGNED(0x8);
+static OSMesg viEventBuf[5] ALIGNED(0x8);
+static OSIoMesg viRetraceMsg ALIGNED(0x8);
+static OSIoMesg viCounterMsg ALIGNED(0x8);
 
 static void viMgrMain(void* arg);
 void osCreateViManager(OSPri pri) {
@@ -75,7 +75,7 @@ static void viMgrMain(void* arg) {
     __OSViContext* vc;
     OSDevMgr* dm;
     OSIoMesg* mb;
-    BSS_STATIC u16 retrace;
+    static u16 retrace;
     s32 first;
     u32 count;
 
