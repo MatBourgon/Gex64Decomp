@@ -43,6 +43,7 @@ dyna_cldstat = 0x8006CED0; // type:s32 size:0x20
 collide_t0 = 0x800E5B90;
 __osViIntrCount = 0x800E5B9C;
 __osRdb_Read_Data_Ct = 0x800E5CF8;
+__osDiskHandle = 0x800E5DA8;
 ramromThreadStack = 0x800B24B0;
 getRamromQ = 0x800B28B0;
 getRamromBuf = 0x800B28C8;
