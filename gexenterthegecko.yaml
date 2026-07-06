@@ -319,7 +319,7 @@ segments:
       - [0x7A1A0, .data, io/controller]
       - [0x7A1B0, data, io/motor]
       - [0x7A1C0, .data, io/pimgr]
-      - [0x7A1F0, data, io/piacs]
+      - [0x7A1F0, .data, io/piacs]
       - [0x7A200, .data, sched/sched]
       - [0x7A210, data, os/exceptasm]
       - [0x7A230, data, debug/kdebugserver]
