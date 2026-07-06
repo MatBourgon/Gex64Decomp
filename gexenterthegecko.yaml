@@ -322,7 +322,7 @@ segments:
       - [0x7A1F0, .data, io/piacs]
       - [0x7A200, .data, sched/sched]
       - [0x7A210, data, os/exceptasm]
-      - [0x7A230, data, debug/kdebugserver]
+      - [0x7A230, .data, debug/kdebugserver]
       - [0x7A240, .data, os/timerintr]
       - [0x7A250, .data, os/rdbsend]
       - [0x7A260, .data, host/readhost]
