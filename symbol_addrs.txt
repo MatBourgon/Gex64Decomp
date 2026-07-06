@@ -1663,6 +1663,7 @@ __rmonIOputw = 0x800654C8; // type:func
 __rmonIOhandler = 0x80065524; // type:func
 _bcopy = 0x800655E0; // type:func
 _Printf = 0x80065900; // type:func
+_Putfld = 0x80065E70; // type:func
 __osGetCause = 0x80066330; // type:func
 osGetCount = 0x80066340; // type:func
 __osSetCompare = 0x80066350; // type:func
