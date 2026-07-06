@@ -383,9 +383,10 @@ segments:
       # All bss segments need to be named for process to work
       - { type: bss, vram: 0x8007F340, name: _bss_7F340 }
       - { type: .bss, vram: 0x800B2920, name: debug/kdebugserver }
-      - { type: bss, vram: 0x800B2930, name: _bss_B2930 }
-      - { type: .bss, vram: 0x800B3BB0, name: io/siacs}
-      - { type: bss, vram: 0x800B3BC0, name: _bss_B3BC0}
+      - { type: .bss, vram: 0x800B2930, name: host/readhost }
+      - { type: bss, vram: 0x800B2950, name: _bss_B2950 }
+      - { type: .bss, vram: 0x800B3BB0, name: io/siacs }
+      - { type: bss, vram: 0x800B3BC0, name: _bss_B3BC0 }
 
   # Start of Level code
   - name: aztec_code
