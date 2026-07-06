@@ -26,12 +26,12 @@
 
 int __rmonActive = FALSE;
 
-BSS_STATIC vu32 somethingToDo;
-BSS_STATIC u32 inbuffer[280] ALIGNED(0x10);
-BSS_STATIC u8 cmdinptr;
-BSS_STATIC u8 cmdoutptr;
-BSS_STATIC int state;
-BSS_STATIC char* inPointer;
+static vu32 somethingToDo;
+static u32 inbuffer[280] ALIGNED(0x10);
+static u8 cmdinptr;
+static u8 cmdoutptr;
+static int state;
+static char* inPointer;
 
 void __rmonSendHeader(KKHeader* const block, u32 blockSize, u32 type) {
     int sent;
