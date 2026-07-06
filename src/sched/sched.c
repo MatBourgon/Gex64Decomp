@@ -1,5 +1,3 @@
-#include "common.h"
-
 #include <PR/os_message.h>
 #include <PR/sched.h>
 #include <assert.h>
