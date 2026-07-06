@@ -1,6 +1,7 @@
 #include "common.h"
 
 #include "level/SCIFI.h"
+#include "types/G2String.h"
 #include "MATRIX.h"
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_80159720_DF540);
@@ -167,7 +168,75 @@ void scifi_onoff_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_onoff_OnCollide);
+extern char D_80164E3C_EAC5C[];
+
+void scifi_onoff_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    short* intro;
+    BSPTree* bsp;
+    int** list;
+    Instance* other;
+    int match;
+    int toggled;
+    int checkState;
+    int fire;
+    short i;
+
+    match = 0;
+    toggled = 0;
+    checkState = 0;
+    fire = 0;
+    intro = instance->introData;
+    bsp = instance->bspTree;
+    if (intro != NULL && bsp->_06 == 1 && bsp->_0C[5] >= 8U && instance->_F4[1] != 1) {
+        list = (int**)(intro + 2);
+        if (intro[1] == 0) {
+            match = 1;
+        } else if (intro[1] == 1) {
+            if (instance->_F4[0] == 0) {
+                match = 1;
+                checkState = 1;
+            }
+        } else if (intro[1] == 2) {
+            if (instance->_F4[0] == 1) {
+                match = 1;
+                checkState = 1;
+            }
+        }
+        for (i = 0; i < intro[0]; i++, list++) {
+            other = ((Intro*)list[0])->instance;
+            if (other == NULL) continue;
+            if (other->flags & 0x2000000) continue;
+            if (match == 0) continue;
+            if (checkState != 0) {
+                if (!((((unsigned short*)intro)[1] & 1) && !(other->flags & 0x1000000))) {
+                    if (!(((unsigned short*)intro)[1] & 2)) continue;
+                    if (!(other->flags & 0x1000000)) continue;
+                }
+            }
+            other->flags &= ~0x100000;
+            if (!(other->flags2 & 0x10000)) {
+                other->flags2 |= 0x1000;
+            }
+            other->flags |= 0x2000000;
+            toggled = 1;
+        }
+        if ((match != 0 && toggled != 0) || intro[0] == 0) {
+            instance->intro->flags ^= 0x800;
+            instance->_F4[0] ^= 1;
+            fire = 1;
+        } else if (G2String_Compare_EQ(instance->object->name, D_80164E3C_EAC5C)) {
+            fire = 1;
+        }
+        if (fire != 0) {
+            if (((short*)&instance->object->_08)[1] != 0) {
+                instance->_F4[1] = 1;
+            }
+            if (*(int*)list == 0x29A) {
+                SIGNAL_HandleSignal(instance, (int*)((int*)list)[1] + 1, 0);
+            }
+        }
+    }
+}
 
 void scifi_bub_OnCreate(Instance* instance, GameTracker* gameTracker) {
     short* introData;
@@ -820,7 +889,38 @@ void func_80162154_E7F74(Instance* instance, short arg1) {
     instance->rotation.z = euler.z;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_801621D4_E7FF4);
+void func_801621D4_E7FF4(Instance* instance, SVECTOR offset, short dist, short angle) {
+    MATRIX m1;
+    MATRIX m2;
+    MATRIX m3;
+    SVECTOR result;
+    SVECTOR vec;
+    SVECTOR euler;
+    SVECTOR rot;
+
+    MATH3D_SetUnityMatrix(&m1);
+    MATH3D_SetUnityMatrix(&m2);
+    MATH3D_SetUnityMatrix(&m3);
+    vec.x = 0;
+    vec.y = 0;
+    vec.z = dist;
+    rot.x = instance->rotation.x;
+    rot.y = instance->rotation.y;
+    rot.z = instance->rotation.z;
+    RotMatrixX(angle, &m2);
+    RotMatrix(&rot, &m3);
+    MulMatrix0(&m3, &m2, &m1);
+    result.x = (vec.x * m1.m[0][0] >> 12) + (vec.y * m1.m[0][1] >> 12) + (vec.z * m1.m[0][2] >> 12);
+    result.y = (vec.x * m1.m[1][0] >> 12) + (vec.y * m1.m[1][1] >> 12) + (vec.z * m1.m[1][2] >> 12);
+    result.z = (vec.x * m1.m[2][0] >> 12) + (vec.y * m1.m[2][1] >> 12) + (vec.z * m1.m[2][2] >> 12);
+    instance->position.x = result.x + offset.x;
+    instance->position.y = result.y + offset.y;
+    instance->position.z = result.z + offset.z;
+    func_800157BC(&m1, &euler);
+    instance->rotation.x = euler.x;
+    instance->rotation.y = euler.y;
+    instance->rotation.z = euler.z;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_rt_OnUpdate);
 
