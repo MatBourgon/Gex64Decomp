@@ -390,7 +390,7 @@ segments:
       - { type: .bss, vram: 0x800B2990, name: io/vimgr }
       - { type: .bss, vram: 0x800B3BB0, name: io/siacs }
       - { type: .bss, vram: 0x800B3BC0, name: rmon/rmonsio }
-      - { type: bss, vram: 0x800B3BE0, name: _bss_B3BE0 }
+      - { type: .bss, vram: 0x800B3BE0, name: rmon/rmonmisc }
       - { type: .bss, vram: 0x800B7DF0, name: rmon/rmonregs }
       - { type: .bss, vram: 0x800B7E10, name: rmon/rmonmain }
       - { type: .bss, vram: 0x800B8290, name: rmon/rmonbrk }
