@@ -103,7 +103,7 @@ void INITIALIZE_FUNC() {
     osClockRate = osClockRate * 3 / 4;
 
     if (osResetType == 0) { // cold reset
-        _bzero(osAppNMIBuffer, OS_APP_NMI_BUFSIZE);
+        bzero(osAppNMIBuffer, OS_APP_NMI_BUFSIZE);
     }
 
     if (osTvType == OS_TV_PAL) {
