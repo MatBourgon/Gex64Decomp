@@ -1,5 +1,3 @@
-#include "common.h"
-
 #include "PR/os_version.h"
 
 #if BUILD_VERSION < VERSION_J
@@ -193,8 +191,28 @@ int __rmonLoadProgram(KKHeader* request UNUSED) {
     return TV_ERROR_ILLEGAL_CALL;
 }
 
+static const char D_8007F1C8[];
+static const char D_8007F1D0[];
 
-INCLUDE_ASM("asm/nonmatchings/rmon/rmonmem", __rmonGetExeName);
+int __rmonGetExeName(KKHeader* req) {
+    KKObjectRequest* request = (KKObjectRequest*)req;
+    KKBufferEvent* reply = (KKBufferEvent*)__rmonUtilityBuffer;
+
+    STUBBED_PRINTF(("GetExeName\n"));
+
+    reply->header.code = request->header.code;
+    reply->header.error = TV_ERROR_NO_ERROR;
+    reply->object = request->object;
+
+    if (req->method == RMON_RSP) {
+        strcpy(reply->buffer, D_8007F1C8);
+    } else {
+        strcpy(reply->buffer, D_8007F1D0);
+    }
+    __rmonSendReply(&reply->header, sizeof(reply->header) + sizeof(reply->object) + 8, KK_TYPE_REPLY);
+
+    return TV_ERROR_NO_ERROR;
+}
 
 int __rmonGetRegionCount(KKHeader* req) {
     KKObjectRequest* request = (KKObjectRequest*)req;

@@ -257,7 +257,7 @@ static void _Putfld(_Pft *px, va_list *pap, char code, char *ac) {
     }
 }
 
+// used in rmonmem.c, moving to there breaks linking for now
+INCLUDE_RODATA("asm/nonmatchings/libc/xprintf", D_8007F1C8); // imem
 
-INCLUDE_RODATA("asm/nonmatchings/libc/xprintf", D_8007F1C8);
-
-INCLUDE_RODATA("asm/nonmatchings/libc/xprintf", D_8007F1D0);
+INCLUDE_RODATA("asm/nonmatchings/libc/xprintf", D_8007F1D0); // rmon
