@@ -1,6 +1,7 @@
 #include "common.h"
 
 #include "level/LOONEY.h"
+#include "MATRIX.h"
 
 extern int D_80161BD0_B9E80;
 
@@ -266,7 +267,17 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_8015ADD8_B3088);
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_8015AF30_B31E0);
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_8015B1BC_B346C);
+void func_8015B1BC_B346C(short* arg0) {
+    func_800162C0(arg0);
+    RotMatrixX(((short*)arg0)[0x44/2], (char*)((int*)arg0)[5] + 0xC);
+    RotMatrixY(((short*)arg0)[0x46/2], (char*)((int*)arg0)[5] + 0xC);
+    RotMatrixZ(((short*)arg0)[0x48/2], (char*)((int*)arg0)[5] + 0xC);
+    if (((short*)arg0)[0xE/2] == 0x1D) {
+        ((unsigned short*)arg0)[0x4C/2] = -((unsigned short*)arg0)[0x4C/2];
+        ((unsigned short*)arg0)[0x4E/2] = -((unsigned short*)arg0)[0x4E/2];
+        ((unsigned short*)arg0)[0x50/2] = -((unsigned short*)arg0)[0x50/2];
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_8015B250_B3500);
 
@@ -451,7 +462,20 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_grrfish_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_grrfish_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_funplat_OnCreate);
+extern int D_80161DA4_BA054[];
+void looney_funplat_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    SVector newPoint;
+    SVector oldPoint;
+
+    if (instance->introData == 0) {
+        instance->introData = (void*)D_80161DA4_BA054;
+    }
+    newPoint.x = oldPoint.x = instance->position.x;
+    newPoint.y = oldPoint.y = instance->position.y;
+    newPoint.z = instance->_E0[2] = instance->position.z;
+    oldPoint.z = instance->_40[6] + 0x80;
+    COLLIDE_PointAndTerrain(gameTracker8->level->segmentAddress, (SVECTOR*)&newPoint, (SVECTOR*)&oldPoint, instance);
+}
 
 void looney_funplat_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     short* introData;
@@ -558,20 +582,55 @@ void looney_fxgen_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_frocket_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_801615DC_B988C);
+void func_801615DC_B988C(Instance* instance, void* unused, SVECTOR* out, SVECTOR* in) {
+    MATRIX mat;
+    LVECTOR temp;
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_80161664_B9914);
+    func_80041FD0(&mat, instance->matrix);
+    MATH3D_ApplyMatrix(&mat, in, &temp);
+    out->x = mat.l[0] + temp.x;
+    out->y = mat.l[1] + temp.y;
+    out->z = mat.l[2] + temp.z;
+}
+
+void func_80161664_B9914(Instance* instance, void* unused, SVECTOR* out, SVECTOR* in) {
+    MATRIX* mat;
+    LVECTOR temp;
+
+    mat = instance->matrix;
+    MATH3D_ApplyMatrix(mat, in, &temp);
+    out->x = mat->l[0] + temp.x;
+    out->y = mat->l[1] + temp.y;
+    out->z = mat->l[2] + temp.z;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_frocket_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_frocket_OnCollide);
+void looney_frocket_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bspTree;
+    bspTree = instance->bspTree;
+    GenericCollide(instance, gameTracker);
+    if (bspTree->instanceSpline == PlayerInstance) {
+        if (PlayerInstance->_F4[0] == 1) {
+            instance->_100 = 1;
+        }
+    }
+}
 
 void looney_genbrk_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_genbrk_OnUpdate);
+void looney_genbrk_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    GenericProcess(instance, gameTracker);
+}
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_genbrk_OnCollide);
+extern int D_800EB8A0;
+void looney_genbrk_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    if (func_80027500(instance->bspTree, gameTracker)) {
+        func_8015B250_B3500(instance, D_800EB8A0);
+        func_80046978(instance);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_jimboat_OnCollide);
 

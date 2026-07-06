@@ -3,6 +3,7 @@
 #include "types/Vector.h"
 #include "types/Matrix.h"
 #include "types/Quat.h"
+#include "zlib/zlib.h"
 
 INCLUDE_ASM("asm/nonmatchings/MATH3D", MATH3D_FastAtan2);
 
@@ -301,7 +302,20 @@ void MATH3D_SetIdentityQuat(G2Quat* q)
     q->w = 4096;
 }
 
-INCLUDE_ASM("asm/nonmatchings/MATH3D", func_80030BA0);
+extern int D_800E8184;
+extern int D_800BF1C0;
+extern int D_800BF1C4;
+extern int D_800BF1C8;
+extern int D_800BF1CC;
+extern int D_800BF1D0;
+
+void func_80030BA0(void) {
+    D_800BF1C8 = 0;
+    D_800BF1C0 = D_800E8184;
+    D_800BF1C4 = (int)inflate - D_800E8184;
+    D_800BF1CC = D_800E8184;
+    D_800BF1D0 = (int)inflate - D_800E8184;
+}
 
 INCLUDE_ASM("asm/nonmatchings/MATH3D", func_80030BE0);
 
@@ -309,4 +323,12 @@ INCLUDE_ASM("asm/nonmatchings/MATH3D", func_80030C50);
 
 INCLUDE_ASM("asm/nonmatchings/MATH3D", func_80030CB4);
 
-INCLUDE_ASM("asm/nonmatchings/MATH3D", func_80030D34);
+extern int D_800BF1C8;
+
+void func_80030D34(void) {
+    int *counter = &D_800BF1C8;
+
+    if (*counter != 0) {
+        (*counter)--;
+    }
+}

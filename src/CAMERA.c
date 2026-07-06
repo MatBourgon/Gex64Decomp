@@ -64,7 +64,9 @@ int CAMERA_LengthSVector(SVECTOR* sv) {
     return (MATH3D_FastSqrt2((sv->x * sv->x + sv->y * sv->y + sv->z * sv->z) << 4, 4) + 8) >> 4;
 }
 
-INCLUDE_ASM("asm/nonmatchings/CAMERA", func_80002134);
+int func_80002134(SVECTOR* sv) {
+    return (MATH3D_FastSqrt2((sv->x * sv->x + sv->y * sv->y + sv->z * sv->z) << 2, 2) + 2) >> 2;
+}
 
 INCLUDE_ASM("asm/nonmatchings/CAMERA", CAMERA_SetValue);
 
