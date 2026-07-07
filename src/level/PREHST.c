@@ -551,7 +551,24 @@ void prehst_cavetl_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_tricer_OnCreate);
+void prehst_tricer_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    void* data;
+
+    data = instance->data;
+    ScriptGetPosSpline(instance);
+    ((short*)&instance->_118)[1] = 0;
+    instance->_F4[2] = (int)((char*)data + 0x2A);
+    func_8004A98C(instance, &instance->_100, (short*)((char*)data + 0x26), 1);
+    func_8004A9C8(instance, 0, 0, 0, *(short*)((char*)data + 0x26));
+    instance->flags |= 0x100080;
+    func_80048DE4(instance, &instance->_110, &instance->_114, 0);
+    instance->_F4[0] = 1;
+    instance->_F4[1] = 3;
+    func_8004A7B8(instance, 3, 0);
+    func_80049330(instance);
+    instance->_11C |= 0x2000;
+    *(unsigned short*)&instance->_120 = *(unsigned short*)&instance->_120 | 8;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_tricer_OnUpdate);
 
