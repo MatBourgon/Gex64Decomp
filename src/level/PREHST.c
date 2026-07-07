@@ -637,7 +637,24 @@ void prehst_bldrgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_bldrgen_OnUpdate);
+void prehst_bldrgen_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    int* intro;
+
+    intro = instance->introData;
+    if (instance->_F4[0] == 1) {
+        instance->_F4[2]++;
+        if (instance->_F4[2] >= intro[1]) {
+            instance->_F4[2] = intro[0];
+            instance->_F4[0] = 0;
+        }
+    } else {
+        instance->_F4[2]++;
+        if (instance->_F4[2] >= intro[0]) {
+            INSTANCE_BirthCachedObject(instance, 0x20);
+            instance->_F4[2] = 0;
+        }
+    }
+}
 
 void prehst_bldrgen_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
@@ -714,6 +731,7 @@ INCLUDE_RODATA("asm/nonmatchings/level/PREHST", D_80164598_D1E18);
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_ptera_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_801630A0_D0920);
+
 /* near-match kept for reference: matches only with `register int result __asm__("$2")` to pin the
    return register; leader prefers no asm constructs, so it stays commented until properly matched.
 int func_801630A0_D0920(Instance* instance) {
