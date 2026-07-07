@@ -1,6 +1,18 @@
-#include "common.h"
 
-#include <gu/guint.h>
+/**************************************************************************
+ *									  *
+ *		 Copyright (C) 1994, Silicon Graphics, Inc.		  *
+ *									  *
+ *  These coded instructions, statements, and computer programs  contain  *
+ *  unpublished  proprietary  information of Silicon Graphics, Inc., and  *
+ *  are protected by Federal copyright law.  They  may  not be disclosed  *
+ *  to  third  parties  or copied or duplicated in any form, in whole or  *
+ *  in part, without the prior written consent of Silicon Graphics, Inc.  *
+ *									  *
+ **************************************************************************/
+
+#include "gu/guint.h"
+#include <PR/ultratypes.h>
 
 void guPerspectiveF(float mf[4][4], u16 *perspNorm, float fovy, float aspect, float near, float far, float scale)
 {
@@ -44,16 +56,3 @@ void guPerspective(Mtx *m, u16 *perspNorm, float fovy, float aspect, float near,
 }
 
 
-INCLUDE_RODATA("asm/nonmatchings/gu/perspective", P); // (...), P[0]
-
-INCLUDE_RODATA("asm/nonmatchings/gu/perspective", rpi); // rpi
-
-INCLUDE_RODATA("asm/nonmatchings/gu/perspective", pihi); // pihi
-
-INCLUDE_RODATA("asm/nonmatchings/gu/perspective", pilo); // pilo
-
-INCLUDE_RODATA("asm/nonmatchings/gu/perspective", zero); // zero
-
-INCLUDE_RODATA("asm/nonmatchings/gu/perspective", D_8007ECA8);
-
-INCLUDE_RODATA("asm/nonmatchings/gu/perspective", D_8007ECB0);
