@@ -34,25 +34,25 @@ void guPerspectiveF(float mf[4][4], u16 *perspNorm, float fovy, float aspect, fl
 	}
 }
 
-INCLUDE_ASM("asm/nonmatchings/gu/perspective", guPerspective);
+void guPerspective(Mtx *m, u16 *perspNorm, float fovy, float aspect, float near, float far, float scale)
+{
+	Matrix	mf;
 
-INCLUDE_RODATA("asm/nonmatchings/gu/perspective", D_8007EC58); // (...), P[0]
+	guPerspectiveF(mf, perspNorm, fovy, aspect, near, far, scale);
 
-INCLUDE_RODATA("asm/nonmatchings/gu/perspective", D_8007EC68); // P[1]
+	guMtxF2L(mf, m);
+}
 
-INCLUDE_RODATA("asm/nonmatchings/gu/perspective", D_8007EC70); // P[2]
 
-INCLUDE_RODATA("asm/nonmatchings/gu/perspective", D_8007EC78); // P[3]
+INCLUDE_RODATA("asm/nonmatchings/gu/perspective", P); // (...), P[0]
 
-INCLUDE_RODATA("asm/nonmatchings/gu/perspective", D_8007EC80); // P[4]
+INCLUDE_RODATA("asm/nonmatchings/gu/perspective", rpi); // rpi
 
-INCLUDE_RODATA("asm/nonmatchings/gu/perspective", D_8007EC88); // rpi
+INCLUDE_RODATA("asm/nonmatchings/gu/perspective", pihi); // pihi
 
-INCLUDE_RODATA("asm/nonmatchings/gu/perspective", D_8007EC90); // pihi
+INCLUDE_RODATA("asm/nonmatchings/gu/perspective", pilo); // pilo
 
-INCLUDE_RODATA("asm/nonmatchings/gu/perspective", D_8007EC98); // pilo
-
-INCLUDE_RODATA("asm/nonmatchings/gu/perspective", D_8007ECA0); // zero
+INCLUDE_RODATA("asm/nonmatchings/gu/perspective", zero); // zero
 
 INCLUDE_RODATA("asm/nonmatchings/gu/perspective", D_8007ECA8);
 

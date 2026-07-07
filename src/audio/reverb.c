@@ -1,4 +1,21 @@
-#include "common.h"
+/*====================================================================
+ * reverb.c
+ *
+ * Copyright 1993, Silicon Graphics, Inc.
+ * All Rights Reserved.
+ *
+ * This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics,
+ * Inc.; the contents of this file may not be disclosed to third
+ * parties, copied or duplicated in any form, in whole or in part,
+ * without the prior written permission of Silicon Graphics, Inc.
+ * RESTRICTED RIGHTS LEGEND:
+ * Use, duplication or disclosure by the Government is subject to
+ * restrictions as set forth in subdivision (c)(1)(ii) of the Rights
+ * in Technical Data and Computer Software clause at DFARS
+ * 252.227-7013, and/or in similar or successor clauses in the FAR,
+ * DOD or NASA FAR Supplement. Unpublished - rights reserved under the
+ * Copyright Laws of the United States.
+ *====================================================================*/
 
 #include <PR/libaudio.h>
 #include <PR/ultraerror.h>
@@ -9,8 +26,12 @@
 #include <assert.h>
 #include "audio/initfx.h"
 
+// TODO: these come from headers
+#ident "$Revision: 1.49 $"
+#ident "$Revision: 1.17 $"
 #define RANGE 2.0
 extern ALGlobals *alGlobals;
+
 #ifdef AUD_PROFILE
 extern u32 cnt_index, reverb_num, reverb_cnt, reverb_max, reverb_min, lastCnt[];
 extern u32 load_num, load_cnt, load_max, load_min, save_num, save_cnt, save_max, save_min;
@@ -32,6 +53,8 @@ Acmd *_loadBuffer(ALFx *r, s16 *curr_ptr, s32 buff, s32 count, Acmd *p);
 Acmd *_saveBuffer(ALFx *r, s16 *curr_ptr, s32 buff, s32 count, Acmd *p);
 Acmd *_filterBuffer(ALLowPass *lp, s32 buff, s32 count, Acmd *p);
 f32  _doModFunc(ALDelay *d, s32 count);
+
+static s32 L_INC[] = { L0_INC, L1_INC, L2_INC };
 
 /***********************************************************************
  * Reverb filter public interfaces
@@ -211,9 +234,81 @@ s32 alFxParamHdl(void *filter, s32 paramID, void *param)
     return 0;
 }
 
-// Near match
-INCLUDE_ASM("asm/nonmatchings/audio/reverb", _loadOutputBuffer);
+Acmd *_loadOutputBuffer(ALFx *r, ALDelay *d, s32 buff, s32 incount, Acmd *p)
+{
+    Acmd        *ptr = p;
+    s32         ratio, count, rbuff = AL_TEMP_2;
+    s16         *out_ptr;
+    f32         fincount, fratio, delta;
+    s32         ramalign = 0, length;
+    static f32  val=0.0, lastval=-10.0;
+    static f32  blob=0;
+/*
+ * The following section implements the chorus resampling. Modulate where you pull
+ * the samples from, since you need varying amounts of samples.
+ */
+    if (d->rs) {
+        length = d->output - d->input;
+        delta = _doModFunc(d, incount); /* get the number of samples to modulate by */
+        /*
+         * find ratio of delta to delay length and quantize
+         *  to same resolution as resampler
+         */
+        delta /= length;  /* convert delta from number of samples to a pitch ratio */
+        delta = (s32)(delta * UNITY_PITCH); /* quantize to value microcode will use */
+        delta = delta / UNITY_PITCH;
+        fratio = 1.0 - delta;  /* pitch ratio needs to be centered around 1, not zero */
+      
+        /* d->rs->delta is the difference between the fractional and integer value
+         * of the samples needed. fratio * incount + rs->delta gives the number of samples 
+         * needed for this frame.
+         */
+        fincount = d->rs->delta + (fratio * (f32)incount);
+        count = (s32) fincount; /* quantize to s32 */
+        d->rs->delta = fincount - (f32)count; /* calculate the round off and store */
 
+        /*
+         * d->rsdelta is amount the out_ptr has deviated from its starting position. 
+         * You calc the out_ptr by taking d->output - d->rsdelta, and then using the 
+         * negative of that as an index into the delay buffer. loadBuffer that uses this
+         * value then bumps it up if it is below the  delay buffer.
+         */ 
+        out_ptr = &r->input[-(d->output - d->rsdelta)];
+        ramalign = ((s32)out_ptr & 0x7) >> 1; /* calculate the number of samples needed 
+                                               to align the buffer*/
+#ifdef _DEBUG
+#if 0
+        if(length > 0) {
+            if (length - d->rsdelta > (s32)r->length) {
+                __osError(ERR_ALMODDELAYOVERFLOW, 1, length - d->rsdelta - r->length);
+            }
+        }
+        else if(length < 0) {
+            if ((-length) - d->rsdelta > (s32)r->length) {
+                __osError(ERR_ALMODDELAYOVERFLOW, 1, (-length) - d->rsdelta - r->length);
+            }
+        }
+#endif
+#endif
+        /* load the rbuff with samples, note that there will be ramalign worth of
+         *  samples at the begining which you don't care about. */
+        ptr = _loadBuffer(r, out_ptr - ramalign, rbuff, count + ramalign, ptr);
+
+        /* convert fratio to 16 bit fraction for microcode use */ 
+        ratio = (s32)(fratio * UNITY_PITCH);
+        /* set the buffers, and do the resample */
+        aSetBuffer(ptr++, 0, rbuff + (ramalign<<1), buff, incount<<1);
+        aResample(ptr++, d->rs->first, ratio, osVirtualToPhysical(d->rs->state));
+      
+        d->rs->first = 0; /* turn off first time flag */
+        d->rsdelta += count - incount; /* add the number of samples to d->rsdelta */
+    } else {
+        out_ptr = &r->input[-d->output];
+        ptr = _loadBuffer(r, out_ptr, buff, incount, ptr);
+    }
+
+    return ptr;
+}
 /* 
  * This routine is for loading data from the delay line buff. If the
  * address of curr_ptr < r->base, it will force it to be within r->base
@@ -328,7 +423,6 @@ Acmd *_filterBuffer(ALLowPass *lp, s32 buff, s32 count, Acmd *p)
  * should go at it's full chorus. In otherwords, this function returns a number
  * of samples the output pointer should modulate backwards.
  */
-
 f32 _doModFunc(ALDelay *d, s32 count)
 {
   f32 val;
@@ -355,3 +449,6 @@ f32 _doModFunc(ALDelay *d, s32 count)
 
   return(d->rsgain * val);
 }
+
+
+
