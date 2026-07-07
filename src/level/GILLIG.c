@@ -194,7 +194,143 @@ void gillig_hedhntr_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->flags2 &= ~0x10;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/GILLIG", gillig_hedhntr_OnUpdate);
+extern short D_8015A920_9CF00[];
+
+void gillig_hedhntr_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    short* introData;
+    int state;
+
+    state = instance->_F4[0];
+    introData = instance->introData;
+    if (state == -1) {
+        func_8002DAF8(instance, -1);
+        if (instance->flags2 & 0x10) {
+            instance->_F4[0] = 0;
+            instance->currentAnimFrame = 0;
+            instance->flags2 &= ~0x10;
+            if (*introData == 0) {
+                instance->currentModelAnim = 0;
+                return;
+            }
+            instance->currentModelAnim = 1;
+        }
+    } else if (state == 0) {
+        int anim;
+        int link;
+
+        func_8002DAF8(instance, -1);
+        if (instance->flags2 & 0x10) {
+            if (instance->_F4[1] == 1) {
+                instance->_F4[1] = 0;
+                instance->currentModelAnim = 3;
+                instance->currentAnimFrame = 0;
+            } else {
+                anim = instance->currentModelAnim;
+                if (anim == 3) {
+                    if (!(rand() % 2)) {
+                        instance->currentModelAnim = 1;
+                        instance->currentAnimFrame = 0;
+                    } else {
+                        instance->currentModelAnim = 0;
+                        instance->currentAnimFrame = 0;
+                    }
+                } else if (anim < 2U) {
+                    if (!(rand() % 4)) {
+                        instance->currentModelAnim = 1;
+                        instance->currentAnimFrame = 0;
+                    } else {
+                        instance->currentModelAnim = 0;
+                        instance->currentAnimFrame = 0;
+                    }
+                }
+            }
+            instance->flags2 &= ~0x10;
+        }
+        link = ((int**)((int**)instance->intro->_04)[1])[0x24/4][0x108/4];
+        if (link == 1) {
+            instance->_F4[0] = link;
+            instance->currentModelAnim = 0;
+            if (*introData == 0) {
+                instance->_F4[2] = 0x9D2;
+                instance->rotation.z = 0x5D2 - (unsigned short)instance->intro->rotation.z;
+            } else if (*introData == link) {
+                instance->_F4[2] = 0xC22;
+                instance->rotation.z = 0x822 - (unsigned short)instance->intro->rotation.z;
+            } else {
+                instance->_F4[2] = 0xE66;
+                instance->rotation.z = 0xA66 - (unsigned short)instance->intro->rotation.z;
+            }
+            if (*introData != 2) {
+                instance->_100 = *introData + 1;
+                return;
+            }
+            instance->_100 = 1;
+            instance->_104 = 0;
+        }
+    } else if (state == 1) {
+        int accel;
+        int idx;
+
+        func_8002DAF8(instance, -1);
+        instance->position.x = (unsigned short)((Instance*)((int**)((int**)instance->intro->_04)[1])[0x24/4])->position.x + (func_8003A6AC(instance->_F4[2]) * 39 >> 6);
+        instance->position.y = (unsigned short)((Instance*)((int**)((int**)instance->intro->_04)[1])[0x24/4])->position.y + (func_8003A4E0(instance->_F4[2]) * 39 >> 6);
+        if (instance->_104 != 0) {
+            idx = instance->_100;
+            accel = instance->_F4[2];
+            if (accel < D_8015A920_9CF00[idx]) {
+                instance->_F4[2] = accel + 8;
+            } else {
+                if (idx != 2) {
+                    instance->_100 = idx + 1;
+                } else {
+                    instance->_100 = 1;
+                    instance->_104 = 0;
+                }
+                instance->_F4[0] = 2;
+            }
+        } else {
+            idx = instance->_100;
+            accel = instance->_F4[2];
+            if (D_8015A920_9CF00[idx] < accel) {
+                instance->_F4[2] = accel - 8;
+            } else {
+                if (idx != 0) {
+                    instance->_100 = idx - 1;
+                } else {
+                    instance->_100 = 1;
+                    instance->_104 = 1;
+                }
+                instance->_F4[0] = 2;
+            }
+        }
+        instance->rotation.z = (instance->_F4[2] - (unsigned short)instance->intro->rotation.z) - 0x400;
+        return;
+    } else if (state == 2) {
+        func_8002DAF8(instance, -1);
+        if (((int**)((int**)instance->intro->_04)[1])[0x24/4][0xFC/4] == 0x7C) {
+            instance->_F4[0] = 1;
+        }
+    } else if (state == 3) {
+        int link;
+
+        func_8002DAF8(instance, -1);
+        if (instance->flags2 & 0x10) {
+            instance->flags |= 0x800;
+            instance->currentAnimFrame = ((short*)instance->object->animList[instance->currentModelAnim])[1] - 1;
+            instance->intro->flags |= 0x80;
+            instance->_F4[0] = 4;
+            link = ((int**)((int**)instance->intro->_04)[1])[0x24/4][0x108/4];
+            if (link == 2) {
+                func_80050A80(0, 1);
+            } else if (link == 1) {
+                func_80050A80(0, 2);
+            }
+            if (((int**)((int**)instance->intro->_04)[1])[0x24/4][0x108/4] == 0) {
+                func_800278EC(PlayerInstance);
+            }
+        }
+    }
+}
 
 void gillig_hedhntr_OnCollide(Instance* instance, GameTracker* gameTracker)
 {
