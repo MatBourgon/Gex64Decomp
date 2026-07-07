@@ -1,7 +1,7 @@
 #define ASWHITESPACE    0x01
 #define ASUPPERCASE     0x02
 #define ASLOWERCASE     0x04
-#define ASDIGIT        0x08
+#define ASDIGIT         0x08
 #define ASHEXLETTER     0x10
 #define ASCOMMAND       0x20
 #define ASSYMBOL        0x40
