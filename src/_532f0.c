@@ -98,9 +98,19 @@ INCLUDE_ASM("asm/nonmatchings/_532f0", func_80052C2C);
 
 INCLUDE_ASM("asm/nonmatchings/_532f0", func_80052D18);
 
-INCLUDE_ASM("asm/nonmatchings/_532f0", func_80052F58);
+void func_80052F58(void) {
+    if (D_80154830 == 0) {
+        D_80154831 = 1;
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/_532f0", func_80052F7C);
+void func_80052F7C(void) {
+    char* p = &D_80154830;
+    if (*p != 0) {
+        *p -= 1;
+    }
+    D_80154831 = 0;
+}
 
 extern char D_80154830;
 void func_80052FAC()

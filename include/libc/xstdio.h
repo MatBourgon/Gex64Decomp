@@ -4,6 +4,12 @@
 #include "compiler/gcc/stdlib.h"
 #include "compiler/gcc/stdarg.h"
 
+#ifdef __sgi
+typedef double ldouble; // IDO does not support long doubles
+#else
+typedef long double ldouble;
+#endif
+
 typedef struct {
     /* 0x0 */ union {
         /* 0x0 */ long long ll;
@@ -30,7 +36,7 @@ typedef struct {
 #define FLAGS_ZERO 16
 typedef char *outfun(char*,const char*,size_t);
 
-int _Printf(outfun prout, char *arg, const char *fmt, va_list args);
+int _Printf(void* pfn(void*,const char*,size_t), void *arg, const char *fmt, va_list ap);
 void _Litob(_Pft *args, char type);
 void _Ldtob(_Pft* args, char type);
 

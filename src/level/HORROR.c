@@ -467,7 +467,75 @@ void horror_onoff_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_onoff_OnCollide);
+extern char D_80164CC0_A84F0[];
+
+void horror_onoff_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    short* intro;
+    BSPTree* bsp;
+    int** list;
+    Instance* other;
+    int match;
+    int toggled;
+    int checkState;
+    int fire;
+    short i;
+
+    match = 0;
+    toggled = 0;
+    checkState = 0;
+    fire = 0;
+    intro = instance->introData;
+    bsp = instance->bspTree;
+    if (intro != NULL && bsp->_06 == 1 && bsp->_0C[5] >= 8U && instance->_F4[1] != 1) {
+        list = (int**)(intro + 2);
+        if (intro[1] == 0) {
+            match = 1;
+        } else if (intro[1] == 1) {
+            if (instance->_F4[0] == 0) {
+                match = 1;
+                checkState = 1;
+            }
+        } else if (intro[1] == 2) {
+            if (instance->_F4[0] == 1) {
+                match = 1;
+                checkState = 1;
+            }
+        }
+        for (i = 0; i < intro[0]; i++, list++) {
+            other = ((Intro*)list[0])->instance;
+            if (other == NULL) continue;
+            if (other->flags & 0x2000000) continue;
+            if (match == 0) continue;
+            if (checkState != 0) {
+                if (!((((unsigned short*)intro)[1] & 1) && !(other->flags & 0x1000000))) {
+                    if (!(((unsigned short*)intro)[1] & 2)) continue;
+                    if (!(other->flags & 0x1000000)) continue;
+                }
+            }
+            other->flags &= ~0x100000;
+            if (!(other->flags2 & 0x10000)) {
+                other->flags2 |= 0x1000;
+            }
+            other->flags |= 0x2000000;
+            toggled = 1;
+        }
+        if ((match != 0 && toggled != 0) || intro[0] == 0) {
+            instance->intro->flags ^= 0x800;
+            instance->_F4[0] ^= 1;
+            fire = 1;
+        } else if (G2String_Compare_EQ(instance->object->name, D_80164CC0_A84F0)) {
+            fire = 1;
+        }
+        if (fire != 0) {
+            if (((short*)&instance->object->_08)[1] != 0) {
+                instance->_F4[1] = 1;
+            }
+            if (*(int*)list == 0x29A) {
+                SIGNAL_HandleSignal(instance, (int*)((int*)list)[1] + 1, 0);
+            }
+        }
+    }
+}
 
 extern int D_80164C38_A8468[];
 void horror_funplat_OnCreate(Instance* instance, GameTracker* gameTracker) {

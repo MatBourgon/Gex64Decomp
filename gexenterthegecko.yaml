@@ -295,13 +295,14 @@ segments:
       - [0x69DF0, c, os/stopthread]
       - [0x69EB0, c, io/sprawread]
       - [0x69F00, c, io/sprawwrite]
-      - [0x69F50, c, rmon/rmonrcp]
+      - [0x69F50, hasm, rmon/rmonrcp]
       - [0x69FF0, c, rmon/rmonbrk]
       - [0x6A990, c, libc/ldiv]
       - [0x6AB50, c, libkmc/memset]
       - [0x6AC20, c, libkmc/rand]
       - [0x6AC60, asm, _6ac60]
-      - [0x6B0D0, hasm, mmuldi3]
+      - [0x6B0D0, c, libkmc/tolower]
+      - [0x6B100, hasm, libkmc/mmuldi3]
       - [0x6B5F0, asm]
 
       # text bin
@@ -317,30 +318,31 @@ segments:
       - [0x7A180, .data, audio/sl]
       - [0x7A190, .data, io/aisetnextbuf]
       - [0x7A1A0, .data, io/controller]
-      - [0x7A1B0, data, io/motor]
-      - [0x7A1C0, data, io/pimgr]
-      - [0x7A1F0, data, io/piacs]
+      - [0x7A1B0, .data, io/motor]
+      - [0x7A1C0, .data, io/pimgr]
+      - [0x7A1F0, .data, io/piacs]
       - [0x7A200, .data, sched/sched]
       - [0x7A210, data, os/exceptasm]
-      - [0x7A230, data, debug/kdebugserver]
+      - [0x7A230, .data, debug/kdebugserver]
       - [0x7A240, .data, os/timerintr]
       - [0x7A250, .data, os/rdbsend]
-      - [0x7A260, data, host/readhost]
+      - [0x7A260, .data, host/readhost]
       - [0x7A270, .data, audio/drvrnew]
-      - [0x7A400, data, audio/env]
+      - [0x7A400, .data, audio/env]
+      - [0x7A500, .data, audio/reverb]
       - [0x7A520, .data, io/vi]
-      - [0x7A590, data, io/vimgr]
+      - [0x7A590, .data, io/vimgr]
       - [0x7A5B0, .data, io/vitbl]
-      - [0x7B2D0, data, io/siacs]
+      - [0x7B2D0, .data, io/siacs]
       - [0x7B2E0, .data, io/vimodentsclan1]
       - [0x7B330, .data, io/vimodepallan1]
       - [0x7B380, .data, io/vimodempallan1]
-      - [0x7B3D0, data, libc/xprintf]
+      - [0x7B3D0, .data, libc/xprintf]
       - [0x7B420, .data, rmon/rmoncmds]
-      - [0x7B500, data, rmon/rmonmain]
+      - [0x7B500, .data, rmon/rmonmain]
       - [0x7B510, .data, libc/xlitob]
       - [0x7B540, data, _6ac60]
-      - [0x7B740, data, mmuldi3]
+      - [0x7B740, .data, libkmc/tolower]
       - [0x7B840, data]
 
       # Start of RODATA
@@ -368,8 +370,8 @@ segments:
       - [0x7F8E0, .rodata, io/aisetfreq]
       - [0x7F8F0, .rodata, io/devmgr]
       - [0x7F910, .rodata, sched/sched]
-      - [0x7F930, .rodata, gu/cosf]
-      - [0x7F9C0, rodata, os/exceptasm]
+      - [0x7F930, rodata, gu/libm_vals]
+      - [0x7F9A0, rodata, os/exceptasm]
       - [0x7FA10, .rodata, audio/drvrnew]
       - [0x7FAD0, .rodata, audio/env]
       - [0x7FBC0, .rodata, audio/resample]
@@ -379,7 +381,24 @@ segments:
       - [0x7FDE0, .rodata, libc/xldtob]
       - [0x7FE50, .rodata, rmon/rmonbrk]
       - [0x7FEB0, rodata, _6ac60]
-      - { type: bss, vram: 0x8007F340 }
+
+      # All bss segments need to be named for process to work
+      - { type: bss, vram: 0x8007F340, name: _bss_7F340 }
+      - { type: .bss, vram: 0x800B1150, name: io/pimgr }
+      - { type: .bss, vram: 0x800B2910, name: io/piacs }
+      - { type: .bss, vram: 0x800B2920, name: debug/kdebugserver }
+      - { type: .bss, vram: 0x800B2930, name: host/readhost }
+      - { type: .bss, vram: 0x800B2950, name: io/sptask }
+      - { type: .bss, vram: 0x800B2990, name: io/vimgr }
+      - { type: .bss, vram: 0x800B3BB0, name: io/siacs }
+      - { type: .bss, vram: 0x800B3BC0, name: rmon/rmonsio }
+      - { type: .bss, vram: 0x800B3BE0, name: rmon/rmonmisc }
+      - { type: .bss, vram: 0x800B7DF0, name: rmon/rmonregs }
+      - { type: .bss, vram: 0x800B7E10, name: rmon/rmonmain }
+      - { type: .bss, vram: 0x800B8290, name: rmon/rmonbrk }
+      - { type: .bss, vram: 0x800B8290, name: rmon/rmonbrk }
+      - { type: .bss, vram: 0x800B83A0, name: libkmc/rand }
+      - { type: bss, vram: 0x800B83B0, name: tail }
 
   # Start of Level code
   - name: aztec_code

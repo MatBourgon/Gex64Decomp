@@ -1,6 +1,7 @@
 #include "common.h"
 
 #include "level/LOONEY.h"
+#include "OBTABLE.h"
 #include "MATRIX.h"
 
 extern int D_80161BD0_B9E80;
@@ -281,7 +282,35 @@ void func_8015B1BC_B346C(short* arg0) {
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_8015B250_B3500);
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_8015B4BC_B376C);
+extern char D_80161DC0_BA070[];
+extern unsigned short D_80078A40[][4];
+extern void func_80017E88();
+extern void func_80016894();
+
+void func_8015B4BC_B376C(Instance* instance) {
+    extern int D_800EB8A0;
+    Object* obj;
+    Model* model;
+    SVECTOR pos;
+    SVECTOR vel;
+    int i;
+
+    obj = OBTABLE_FindObject(D_80161DC0_BA070);
+    if (obj != NULL) {
+        pos.x = instance->position.x;
+        pos.y = instance->position.y;
+        pos.z = instance->position.z + 0x140;
+        model = obj->modelList[0];
+        for (i = 0; i < 20; i++) {
+            unsigned short* entry;
+            entry = D_80078A40[rand() % 244];
+            vel.x = (entry[0] << 16) >> 23;
+            vel.y = (entry[1] << 16) >> 23;
+            vel.z = (entry[2] << 16) >> 23;
+            func_800170E8(model, model->_14, &pos, &vel, 0, D_800EB8A0, func_80017E88, func_80016894, 0xF);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_brkblok_OnCollide);
 
@@ -368,7 +397,38 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_funguy_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_funguy_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_fallgen_OnCreate);
+typedef struct {
+    char _00[8];
+    short min;
+    short max;
+    short count;
+    short _0E;
+    short (*entries)[4];
+} FallGenIntro;
+
+void looney_fallgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    FallGenIntro* intro;
+    int* fc;
+    int total;
+    int i;
+
+    total = 0;
+    intro = instance->introData;
+    fc = &instance->_F4[2];
+    if (intro != NULL) {
+        for (i = 0; i < intro->count; i++) {
+            total += intro->entries[i][2];
+            intro->entries[i][3] = total;
+        }
+        fc[1] = total;
+        if (intro->max != intro->min) {
+            fc[0] = intro->min + rand() % (intro->max - intro->min);
+        } else {
+            fc[0] = intro->max;
+        }
+    }
+    instance->flags |= 0x800;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_8015C6A0_B4950);
 
@@ -569,7 +629,38 @@ void looney_funplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_fxgen_OnCreate);
+extern char D_80161DA8_BA058[];
+
+void looney_fxgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    int* fc;
+    unsigned char* intro;
+
+    fc = &instance->_F4[2];
+    if (instance->flags & 0x20000) {
+        if (*(int*)&instance->_108 != 0) {
+            func_800331BC(*(int*)&instance->_108);
+            *(int*)&instance->_108 = 0;
+        }
+    } else {
+        if (instance->introData == NULL) {
+            instance->introData = D_80161DA8_BA058;
+        }
+        intro = instance->introData;
+        fc[0] = (int)OBTABLE_FindObject(intro + 0xC);
+        if ((intro[1] & 1) == 0) {
+            if ((intro[1] & 2) != 0) {
+                *(short*)&instance->_110 = 0x119;
+                ((short*)&instance->_110)[1] = 0x78;
+                ((short*)&instance->_114)[1] = 0xDAC;
+                *(short*)&instance->_114 = (rand() & 0x7F) - 0x15E;
+                ((short*)&instance->_10C)[1] = *(short*)&instance->_10C = rand() & 7;
+                intro[1] |= 0x80;
+            }
+        }
+        fc[3] = 0;
+        instance->flags |= 0x10000;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_80160B20_B8DD0);
 

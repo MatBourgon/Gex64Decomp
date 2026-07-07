@@ -1,10 +1,19 @@
 #include "common.h"
 
 #include "LIST.h"
+#include "types/Matrix.h"
 
 INCLUDE_ASM("asm/nonmatchings/161C0", func_800155C0);
 
-INCLUDE_ASM("asm/nonmatchings/161C0", G2Quat_ToEuler);
+void G2Quat_ToMatrix_S(MATRIX* mat, short* quat);
+void func_800157BC(MATRIX* mat, short* euler);
+
+void G2Quat_ToEuler(short* quat, short* euler) {
+    MATRIX mat;
+
+    G2Quat_ToMatrix_S(&mat, quat);
+    func_800157BC(&mat, euler);
+}
 
 INCLUDE_ASM("asm/nonmatchings/161C0", func_800157BC);
 
