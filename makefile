@@ -8,7 +8,8 @@ LIBKMCSOURCES := $(shell cat libkmc.source.txt)
 LIBKMCOBJECTS := $(addprefix $(BUILD_DIR)/, $(patsubst %.c, %.o, $(LIBKMCSOURCES)))
 COBJECTS := $(MIPS1OBJECTS) $(MIPS3OBJECTS) $(LIBKMCOBJECTS)
 CRODATASOURCES := $(patsubst src/%.c,asm/data/%.rodata.s,$(MIPS1SOURCES) $(MIPS3SOURCES) $(LIBKMCSOURCES))
-ASMSOURCES := $(filter-out $(CRODATASOURCES),$(shell find asm -not \( -path asm/nonmatchings -prune \) -not \( -path asm/matchings -prune \) -name "*.s"))
+HASMSOURCES := $(shell cat hasm.source.txt)
+ASMSOURCES := $(filter-out $(CRODATASOURCES),$(shell find asm -not \( -path asm/nonmatchings -prune \) -not \( -path asm/matchings -prune \) -name "*.s")) $(HASMSOURCES)
 ASMOBJECTS := $(addprefix $(BUILD_DIR)/, $(patsubst %.s, %.o, $(ASMSOURCES)))
 
 AS = mips-linux-gnu-as
