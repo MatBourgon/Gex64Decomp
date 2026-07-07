@@ -24,9 +24,23 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A3B4);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A420);
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A47C);
+void func_8004A47C(Instance* instance) {
+    int groupId;
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A4E4);
+    instance->flags |= 0x1000;
+    groupId = INSTANCE_InstanceGroupNumber(instance);
+    LIST_DeleteFunc(&instance->node);
+    LIST_InsertFunc(&gameTracker8->instanceList->group[groupId], &instance->node);
+}
+
+void func_8004A4E4(Instance* instance) {
+    int groupId;
+
+    instance->flags &= ~0x1000;
+    groupId = INSTANCE_InstanceGroupNumber(instance);
+    LIST_DeleteFunc(&instance->node);
+    LIST_InsertFunc(&gameTracker8->instanceList->group[groupId], &instance->node);
+}
 
 void INSTANCE_InsertInstanceWithFlagsSet(Instance* instance, int flags) {
     int groupId;
