@@ -36,9 +36,11 @@ def ParseMainSegment(segment):
             (path, name) = ParseSubsegmentLabel(label, offset)
             match subtype:
                 case "c":
-                    subsegments.extend(CreateSegmentDefinition(name, path, True, "game" if offset <= 0x56340 else "sdk"))
-                case "asm" | "hasm":
-                    subsegments.extend(CreateSegmentDefinition(name, path, False, "game" if offset <= 0x56340 else "sdk"))
+                    subsegments.extend(CreateSegmentDefinition(name, path, True, "game" if offset <= 0x53BD0 else "sdk"))
+                case "asm":
+                    subsegments.extend(CreateSegmentDefinition(name, path, False, "game" if offset <= 0x53BD0 else "sdk"))
+                case "hasm":
+                    subsegments.extend(CreateSegmentDefinition(name, path, "src/" in path, "game" if offset <= 0x53BD0 else "sdk"))
     return subsegments
 
 def ParseLevelSegment(segment):
