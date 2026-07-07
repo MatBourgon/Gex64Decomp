@@ -301,7 +301,8 @@ segments:
       - [0x6AB50, c, libkmc/memset]
       - [0x6AC20, c, libkmc/rand]
       - [0x6AC60, asm, _6ac60]
-      - [0x6B0D0, hasm, mmuldi3]
+      - [0x6B0D0, c, libkmc/tolower]
+      - [0x6B100, hasm, libkmc/mmuldi3]
       - [0x6B5F0, asm]
 
       # text bin
@@ -317,7 +318,7 @@ segments:
       - [0x7A180, .data, audio/sl]
       - [0x7A190, .data, io/aisetnextbuf]
       - [0x7A1A0, .data, io/controller]
-      - [0x7A1B0, data, io/motor]
+      - [0x7A1B0, .data, io/motor]
       - [0x7A1C0, .data, io/pimgr]
       - [0x7A1F0, .data, io/piacs]
       - [0x7A200, .data, sched/sched]
@@ -327,7 +328,8 @@ segments:
       - [0x7A250, .data, os/rdbsend]
       - [0x7A260, .data, host/readhost]
       - [0x7A270, .data, audio/drvrnew]
-      - [0x7A400, data, audio/env]
+      - [0x7A400, .data, audio/env]
+      - [0x7A500, .data, audio/reverb]
       - [0x7A520, .data, io/vi]
       - [0x7A590, .data, io/vimgr]
       - [0x7A5B0, .data, io/vitbl]
@@ -340,7 +342,7 @@ segments:
       - [0x7B500, .data, rmon/rmonmain]
       - [0x7B510, .data, libc/xlitob]
       - [0x7B540, data, _6ac60]
-      - [0x7B740, data, mmuldi3]
+      - [0x7B740, .data, libkmc/tolower]
       - [0x7B840, data]
 
       # Start of RODATA
@@ -368,8 +370,8 @@ segments:
       - [0x7F8E0, .rodata, io/aisetfreq]
       - [0x7F8F0, .rodata, io/devmgr]
       - [0x7F910, .rodata, sched/sched]
-      - [0x7F930, .rodata, gu/cosf]
-      - [0x7F9C0, rodata, os/exceptasm]
+      - [0x7F930, rodata, gu/libm_vals]
+      - [0x7F9A0, rodata, os/exceptasm]
       - [0x7FA10, .rodata, audio/drvrnew]
       - [0x7FAD0, .rodata, audio/env]
       - [0x7FBC0, .rodata, audio/resample]
