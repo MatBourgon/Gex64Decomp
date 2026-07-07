@@ -324,7 +324,7 @@ SIGNAL_8004EA2C = 0x8004EA2C; // type:func
 send_mesg = 0x8005D90C; // type:func
 handle_CpU = 0x8005D9C8; // type:func
 
-ctoupper = 0x8006A4D0; // type:func
+tolower = 0x8006A4D0; // type:func
 
 TVTextInformation = 0x800782A8; // size:0x2E8
 
@@ -445,6 +445,7 @@ dispatchTable = 0x8007A820;
 __rmonActive = 0x8007A900;
 ldigs = 0x8007A910;
 udigs = 0x8007A924;
+asciiMap = 0x8007AB40;
 vi = 0x80079920; // size:0x60
 __osViCurr = 0x80079980;
 __osViNext = 0x80079984;
@@ -1770,7 +1771,9 @@ altBreak = 0x800B8310;
 RCPbreakpoints = 0x800B8318;
 sRandNext = 0x800B83A0; // type:s32
 __divdi3 = 0x8006A700; // type:func
+__moddi3 = 0x8006A7B0; // type:func
 __udivdi3 = 0x8006A870; // type:func
 __umoddi3 = 0x8006A890; // type:func
 div64_32 = 0x8006A634; // type:func
+__muldi3 = 0x8006A500; // type:func
 div64_64 = 0x8006A538; // type:func

@@ -145,7 +145,7 @@ int GetLevelIndexFromId(const char* targetLevelId)
     int i;
     
     for (i = 0; i < levelNameLen; ++i)
-        correctLevelId[i] = ctoupper(targetLevelId[i]);
+        correctLevelId[i] = tolower(targetLevelId[i]);
 
     correctLevelId[i] = '\0';
 
