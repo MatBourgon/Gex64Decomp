@@ -30,7 +30,49 @@ void gillig_tikifb_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/GILLIG", gillig_tikifb_OnUpdate);
+extern short func_8003A6AC(int);
+extern short func_8003A4E0(int);
+extern short ratan2(int, int);
+
+void gillig_tikifb_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    int state;
+    int px, py;
+
+    state = instance->_F4[0];
+    if (state == 0) {
+        if (instance->position.z < instance->intro->position.z + 0x320) {
+            instance->position.z = instance->position.z + 0x30;
+            return;
+        }
+        px = instance->position.x;
+        py = instance->position.y;
+        instance->_100 = ratan2(py - PlayerInstance->position.y, px - PlayerInstance->position.x) + 0x800;
+        instance->_F4[0] = 1;
+        return;
+    }
+    if (state == 1) {
+        if (instance->intro->position.z + 0x100 < instance->position.z) {
+            instance->position.x = (unsigned short)instance->position.x + (func_8003A6AC(instance->_100 + instance->_F4[2]) * 3 >> 7);
+            instance->position.y = (unsigned short)instance->position.y + (func_8003A4E0(instance->_100 + instance->_F4[2]) * 3 >> 7);
+            instance->position.z = (unsigned short)instance->position.z - 0x1E;
+            return;
+        }
+        instance->position.x = (unsigned short)instance->position.x + (func_8003A6AC(instance->_100 + instance->_F4[2]) * 25 >> 10);
+        instance->position.y = (unsigned short)instance->position.y + (func_8003A4E0(instance->_100 + instance->_F4[2]) * 25 >> 10);
+        return;
+    }
+    if (state == 2) {
+        instance->position.x = (unsigned short)instance->position.x + (func_8003A6AC((instance->_100 + instance->_F4[2]) - 0x800) * 3 >> 6);
+        instance->position.y = (unsigned short)instance->position.y + (func_8003A4E0((instance->_100 + instance->_F4[2]) - 0x800) * 3 >> 6);
+        return;
+    }
+    if (state == 3) {
+        instance->_104 = instance->_104 + 1;
+        if (instance->_104 >= 4) {
+            INSTANCE_KillInstance(instance);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/GILLIG", gillig_tikifb_OnCollide);
 
@@ -40,9 +82,6 @@ void gillig_tikifir_OnCreate(Instance* instance, GameTracker* gameTracker) {
     *(int*)&instance->_108 = 1;
     *(int*)&instance->_10C = ((rand() & 0x1F) - 0x10);
 }
-
-extern short func_8003A6AC(int);
-extern short func_8003A4E0(int);
 
 void gillig_tikifir_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     short newScale;
