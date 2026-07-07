@@ -74,7 +74,58 @@ void gillig_tikifb_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/GILLIG", gillig_tikifb_OnCollide);
+extern int D_8015A960_9CF40;
+extern int D_8015A964_9CF44;
+
+void gillig_tikifb_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+    SVECTOR point;
+    int playerState;
+    int type;
+
+    bsp = instance->bspTree;
+    type = bsp->_06;
+    if ((type == 1) && (bsp->instanceSpline == gameTracker->player)) {
+        playerState = PlayerInstance->_F4[1];
+        if ((playerState == 0x10) || (playerState == 0x2000)) {
+            if ((func_80027578() == 0) && (instance->currentModel == type) && (instance->_F4[0] != 2)) {
+                instance->_F4[0] = 2;
+                func_80050508(instance, 0xBF, -0x5A, 0x64, 0x2710);
+            }
+        } else {
+            if (instance->currentModel == 0) {
+                func_80022714(instance, gameTracker);
+                return;
+            }
+            instance->_F4[0] = 3;
+        }
+    } else if (((bsp->_06 == 2) || (bsp->_06 == 5) || (bsp->_06 == 3)) && (bsp->instanceSpline != PlayerInstance)) {
+        if (bsp->_06 == 3) {
+            if (!(((short*)bsp->_0C)[3] & 0x8000)) {
+                func_8004AAE4(bsp, &point, gameTracker);
+                if (point.z < 0xFC3) {
+                    if (instance->currentModel == 0) {
+                        INSTANCE_KillInstance(instance);
+                        return;
+                    }
+                    instance->_F4[0] = 2;
+                }
+            }
+        } else if (*(int*)bsp->instanceSpline->object->parentName == D_8015A960_9CF40
+                   && ((int*)bsp->instanceSpline->object->parentName)[1] == D_8015A964_9CF44) {
+            *(int*)&instance->parent->_108 = *(int*)&instance->parent->_108 - 1;
+            if (*(int*)&instance->parent->_108 == 2) {
+                instance->parent->_F4[2] = 0xBD;
+                instance->parent->_100 = 0x7C;
+            }
+            INSTANCE_KillInstance(instance);
+            bsp->instanceSpline->_F4[0] = 3;
+            bsp->instanceSpline->currentModelAnim = 2;
+            bsp->instanceSpline->currentAnimFrame = 0;
+            bsp->instanceSpline->flags2 &= ~0x10;
+        }
+    }
+}
 
 void gillig_tikifir_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->scale.z = 1;
