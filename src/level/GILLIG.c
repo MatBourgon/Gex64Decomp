@@ -1,6 +1,8 @@
 #include "common.h"
 
 #include "level/GILLIG.h"
+#include "INSTANCE.h"
+#include "OBTABLE.h"
 
 void gillig_couldrn_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
@@ -10,7 +12,96 @@ void gillig_couldrn_OnCreate(Instance* instance, GameTracker* gameTracker)
 
 INCLUDE_RODATA("asm/nonmatchings/level/GILLIG", D_8015A920_9CF00);
 
-INCLUDE_ASM("asm/nonmatchings/level/GILLIG", gillig_couldrn_OnUpdate);
+extern short func_8003A6AC(int);
+extern short func_8003A4E0(int);
+
+void gillig_couldrn_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    int state;
+
+    if (*(int*)&instance->_108 == 3) {
+        instance->_F4[2] += 1;
+        if ((instance->_F4[2] % 155) == 0) {
+            instance->_F4[0] = 1;
+            ((Intro**)instance->intro->_04)[2]->instance->_F4[1] = 1;
+            ((Intro**)instance->intro->_04)[3]->instance->_F4[1] = 1;
+            ((Intro**)instance->intro->_04)[4]->instance->_F4[1] = 1;
+            instance->_F4[2] = 0;
+        }
+    } else if (*(int*)&instance->_108 < 3) {
+        if ((instance->_F4[2] % 189) == 0) {
+            instance->_F4[0] = 1;
+            ((Intro**)instance->intro->_04)[2]->instance->_F4[1] = 1;
+            ((Intro**)instance->intro->_04)[3]->instance->_F4[1] = 1;
+            ((Intro**)instance->intro->_04)[4]->instance->_F4[1] = 1;
+            instance->_F4[2] = 0;
+        }
+        if ((instance->_100 % 189) == 0) {
+            instance->_F4[0] = 2;
+            ((Intro**)instance->intro->_04)[2]->instance->_F4[1] = 1;
+            ((Intro**)instance->intro->_04)[3]->instance->_F4[1] = 1;
+            ((Intro**)instance->intro->_04)[4]->instance->_F4[1] = 1;
+            instance->_100 = 0;
+        }
+        instance->_F4[2] += 1;
+        instance->_100 += 1;
+    }
+    state = instance->_F4[0];
+    if (state == 1) {
+        Object* obj;
+        Object* fcObj;
+        Instance* first;
+        Instance* second;
+        Instance* third;
+        int count;
+
+        obj = OBTABLE_FindObject("tikifb__");
+        fcObj = OBTABLE_FindObject("tikifc__");
+        count = instance->_104;
+        first = INSTANCE_BirthObject(instance, fcObj);
+        second = INSTANCE_BirthObject(instance, obj);
+        third = INSTANCE_BirthObject(instance, obj);
+        if (count == 0) {
+            first->currentModel = 1;
+            first->_F4[2] = -0x80;
+            second->_F4[2] = 0;
+            third->_F4[2] = 0x80;
+        } else if (count == state) {
+            first->currentModel = 1;
+            first->_F4[2] = 0;
+            second->_F4[2] = -0x80;
+            third->_F4[2] = 0x80;
+        } else {
+            first->currentModel = 1;
+            first->_F4[2] = 0x80;
+            second->_F4[2] = 0;
+            third->_F4[2] = -0x80;
+            instance->_104 = -1;
+        }
+        instance->_F4[0] = 0;
+        instance->_104 += 1;
+    } else if (state == 2) {
+        Object* obj;
+        Instance* fire;
+
+        obj = OBTABLE_FindObject("tikifir_");
+        fire = INSTANCE_BirthObject(instance, obj);
+        fire->position.x = (unsigned short)fire->position.x + (func_8003A6AC(0x60) * 39 >> 6);
+        fire->position.y = (unsigned short)fire->position.y + (func_8003A4E0(0x60) * 39 >> 6);
+        fire->position.z = (unsigned short)fire->position.z + 0x80;
+        fire->rotation.z = -0x3A0;
+        fire->_F4[2] = 0x18;
+        fire = INSTANCE_BirthObject(instance, obj);
+        fire->position.x = (unsigned short)fire->position.x + (func_8003A6AC(0x7A0) * 39 >> 6);
+        fire->position.y = (unsigned short)fire->position.y + (func_8003A4E0(0x7A0) * 39 >> 6);
+        fire->position.z = (unsigned short)fire->position.z + 0x80;
+        fire->rotation.z = 0x3A0;
+        fire->_F4[2] = -0x18;
+        instance->_F4[0] = 0;
+    }
+    if (PlayerInstance->_F4[2] & 0x400000) {
+        func_800396E0("map", "map5", gameTracker);
+    }
+}
 
 void gillig_couldrn_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
@@ -30,8 +121,6 @@ void gillig_tikifb_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-extern short func_8003A6AC(int);
-extern short func_8003A4E0(int);
 extern short ratan2(int, int);
 
 void gillig_tikifb_OnUpdate(Instance* instance, GameTracker* gameTracker) {
