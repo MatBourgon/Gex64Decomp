@@ -13,7 +13,36 @@ void prehst_ttplat_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_ttplat_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_ttplat_OnCollide);
+void prehst_ttplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+    Intro** list;
+    Instance* first;
+    Instance* target;
+
+    bsp = instance->bspTree;
+    if ((bsp->_06 == 4) && (bsp->instanceSpline == gameTracker->player)) {
+        list = (Intro**)instance->intro->_04;
+        first = list[2]->instance;
+        if (first != instance) {
+            target = first;
+        } else {
+            target = list[1]->instance;
+        }
+        if (instance->_F4[0] != 6) {
+            instance->_F4[0] = 6;
+            if (instance->_F4[2] >= -0x1F) {
+                instance->_F4[2] = -0x20;
+            }
+            instance->_100 = -1;
+            target->_F4[0] = 5;
+            target->_100 = 1;
+            if (target->_F4[2] < 0x20) {
+                target->_F4[2] = 0x20;
+            }
+        }
+        instance->_F4[1] = 0;
+    }
+}
 
 void prehst_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
     unsigned short* intro;
@@ -563,7 +592,26 @@ INCLUDE_RODATA("asm/nonmatchings/level/PREHST", D_80164518_D1D98);
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_raptor_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_raptor_OnCollide);
+void prehst_raptor_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+    unsigned char* p08;
+    unsigned char* p0C;
+
+    bsp = instance->bspTree;
+    p08 = bsp->_08;
+    p0C = bsp->_0C;
+    if ((instance->_F4[0] != 1) && (bsp->instanceSpline == gameTracker->player)) {
+        if ((bsp->_06 == 1) && (p08[5] < p0C[5])) {
+            instance->_F4[0] = bsp->_06;
+            func_8004A7B8(instance, 1, 0);
+            func_8004AAA8(instance, 0x1D7, 0);
+            return;
+        }
+        if (instance->_F4[0] != 1) {
+            func_80022714(instance, gameTracker);
+        }
+    }
+}
 
 void prehst_zviolet_OnCreate(Instance* instance, GameTracker* gameTracker) {
     void* data;
