@@ -34,7 +34,15 @@ void guPerspectiveF(float mf[4][4], u16 *perspNorm, float fovy, float aspect, fl
 	}
 }
 
-INCLUDE_ASM("asm/nonmatchings/gu/perspective", guPerspective);
+void guPerspective(Mtx *m, u16 *perspNorm, float fovy, float aspect, float near, float far, float scale)
+{
+	Matrix	mf;
+
+	guPerspectiveF(mf, perspNorm, fovy, aspect, near, far, scale);
+
+	guMtxF2L(mf, m);
+}
+
 
 INCLUDE_RODATA("asm/nonmatchings/gu/perspective", P); // (...), P[0]
 
