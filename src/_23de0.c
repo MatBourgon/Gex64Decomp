@@ -1,4 +1,5 @@
 #include "common.h"
+#include "types/GameTracker.h"
 
 INCLUDE_ASM("asm/nonmatchings/_23de0", func_800231E0);
 
