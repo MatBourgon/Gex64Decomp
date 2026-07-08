@@ -273,7 +273,7 @@ segments:
       - [0x66030, c, rmon/rmonsio]
       - [0x661E0, hasm, libc/bcopy]
       - [0x66500, c, libc/xprintf]
-      - [0x66F30, hasm, os/getcause]
+      - [0x66F30, hasm, ../src/os/getcause]
       - [0x66F40, hasm, os/getcount]
       - [0x66F50, hasm, os/setcompare]
       - [0x66F60, c, io/dp]
