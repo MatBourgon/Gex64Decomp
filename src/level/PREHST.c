@@ -910,24 +910,19 @@ void prehst_gas_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_gas_OnUpdate);
-
-/* Near-match: everything from the switch dispatch to the end matches 100%
- * (verified word-for-word; only the jtbl reloc form differs, which links
- * identically). The gap is the entry block: the target has zero load-delay
- * nops (lhu 0x56 fills lhu 0x108's slot, addiu fills lw's slot, sh 0x56 in
- * the branch delay) — that interleaving comes from KMC's load-delay-aware
- * reorg, which our GCC never reproduces (same class as the documented
- * "reorg 2-insn thread steal"). Our build is +1 nop regardless of statement
- * order/form (10+ variants tried). Applies equally to the byte-identical
- * GEXZIL/REZOP/SCIFI twins. Attempt:
 void prehst_gas_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     unsigned short* fc;
+    unsigned short x;
+    unsigned short y;
+    int w;
 
     fc = (unsigned short*)&instance->_F4[2];
-    *(unsigned short*)&instance->_108 += 1;
-    instance->currentTextureAnimFrame++;
-    if (*(int*)&instance->_108 & 0x8000) {
+    x = *(unsigned short*)&instance->_108;
+    y = instance->currentTextureAnimFrame;
+    *(unsigned short*)&instance->_108 = x + 1;
+    w = *(int*)&instance->_108;
+    instance->currentTextureAnimFrame = y + 1;
+    if (w & 0x8000) {
         instance->rotation.z = ((unsigned short)instance->rotation.z + 0x2200) & 0xFFF;
     }
     switch (instance->_F4[0]) {
@@ -988,7 +983,6 @@ void prehst_gas_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         break;
     }
 }
-*/
 
 void prehst_gas_OnCollide(Instance* instance, GameTracker* gameTracker) {
     Instance* bspPlayer;

@@ -672,7 +672,79 @@ void scifi_gas_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_gas_OnUpdate);
+void scifi_gas_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    unsigned short* fc;
+    unsigned short x;
+    unsigned short y;
+    int w;
+
+    fc = (unsigned short*)&instance->_F4[2];
+    x = *(unsigned short*)&instance->_108;
+    y = instance->currentTextureAnimFrame;
+    *(unsigned short*)&instance->_108 = x + 1;
+    w = *(int*)&instance->_108;
+    instance->currentTextureAnimFrame = y + 1;
+    if (w & 0x8000) {
+        instance->rotation.z = ((unsigned short)instance->rotation.z + 0x2200) & 0xFFF;
+    }
+    switch (instance->_F4[0]) {
+    case 0:
+        if (fc[6] >= fc[1]) {
+            fc[6] = 0;
+            instance->_F4[0] = 1;
+            instance->_F4[1] = 2;
+            instance->flags2 &= ~0x10;
+        }
+        break;
+    case 1:
+        if (fc[6] >= ((unsigned char*)fc)[5]) {
+            fc[6] = 0;
+            instance->_F4[0] = 2;
+            instance->flags2 &= ~0x10;
+            instance->flags |= 0x400;
+        } else if (instance->_F4[1] == 2) {
+            func_8004A820(instance, 0);
+            if (instance->currentAnimFrame >= ((unsigned char*)fc)[4]) {
+                instance->_F4[1] = 4;
+                instance->currentAnimFrame = ((unsigned char*)fc)[4];
+            } else if (instance->flags2 & 0x10) {
+                instance->_F4[1] = 4;
+            }
+        } else if (instance->_F4[1] == 4) {
+            func_8004A8A8(instance, 0);
+            if (instance->flags2 & 0x10) {
+                instance->_F4[1] = 0;
+            }
+            instance->flags2 &= ~0x10;
+        }
+        break;
+    case 2:
+        func_8004A820(instance, 0);
+        if (instance->flags2 & 0x10) {
+            fc[6] = func_8004A61C(instance);
+            instance->_F4[0] = 3;
+        }
+        break;
+    case 3:
+        if (fc[6] >= fc[0]) {
+            fc[6] = 0;
+            instance->_F4[0] = 4;
+            instance->flags2 &= ~0x10;
+        }
+        break;
+    case 4:
+        func_8004A8A8(instance, 0);
+        if (instance->flags2 & 0x10) {
+            fc[6] = func_8004A61C(instance);
+            instance->_F4[0] = 0;
+            func_800331BC(((int*)fc)[2]);
+            instance->flags &= ~0x400;
+        }
+        break;
+    case 5:
+        break;
+    }
+}
 
 void scifi_gas_OnCollide(Instance* instance, GameTracker* gameTracker) {
     Instance* bspPlayer;
