@@ -591,7 +591,86 @@ INCLUDE_RODATA("asm/nonmatchings/level/SCIFI", D_80164EAC_EACCC);
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_alien_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_gas_OnCreate);
+typedef struct {
+    short _00;
+    short _02;
+    short _04;
+    short _06;
+} GasData;
+
+void scifi_gas_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    int t;
+    unsigned short* introData;
+    char* fc;
+    void* data;
+    int r;
+    unsigned int m;
+
+    t = 0;
+    introData = ((unsigned short*)instance->introData);
+    data = instance->data;
+    fc = (char*)&instance->_F4[2];
+    if (instance->flags & 0x20000) {
+        if (instance->_F4[0] == 5) {
+            func_800331BC(instance->_104);
+        }
+    } else {
+        *(GasData*)&instance->_F4[2] = *(GasData*)data;
+        r = rand();
+        instance->flags |= 0x80;
+        instance->currentTextureAnimFrame = r % 24;
+        if (introData != NULL) {
+            if (introData[0] != 0xFFFF) {
+                *(GasData*)&instance->_F4[2] = *(GasData*)(introData + 1);
+                if (((char*)&instance->_100)[2] < 0) {
+                    *(int*)&instance->_108 |= 0x8000;
+                    ((char*)&instance->_100)[2] = ~((unsigned char*)&instance->_100)[2];
+                }
+                t = func_8004A61C(instance);
+                m = introData[0];
+                m %= (unsigned int)(((unsigned short*)&instance->_F4[2])[1] + *(unsigned short*)&instance->_F4[2] + ((unsigned char*)&instance->_100)[1]);
+                if (m < ((unsigned short*)&instance->_F4[2])[1]) {
+                    *(short*)&instance->_108 = m;
+                    instance->_F4[0] = 0;
+                } else {
+                    m -= ((unsigned short*)&instance->_F4[2])[1];
+                    if (m < ((unsigned char*)&instance->_100)[1]) {
+                        *(short*)&instance->_108 = m;
+                        instance->_F4[0] = 1;
+                    } else {
+                        m -= ((unsigned char*)&instance->_100)[1];
+                        if (m < t) {
+                            instance->_F4[0] = 2;
+                            t = m;
+                        } else {
+                            m -= t;
+                            if (m < *(unsigned short*)&instance->_F4[2]) {
+                                *(short*)&instance->_108 = m;
+                                instance->_F4[0] = 3;
+                            } else {
+                                m -= *(unsigned short*)&instance->_F4[2];
+                                if (m < t) {
+                                    instance->_F4[0] = 4;
+                                    t = t - m;
+                                } else {
+                                    t = 0;
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                instance->_F4[0] = 5;
+                t = func_8004A61C(instance) - 1;
+                instance->flags |= 0x10000;
+            }
+        }
+        if (fc[6] >= 3) {
+            fc[6] = 2;
+        }
+        func_8004A7B8(instance, fc[6], t);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_gas_OnUpdate);
 
