@@ -414,7 +414,13 @@ void prehst_stmvent_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
 typedef struct {
-    char _00[0x1C];
+    char _00[8];
+    void* next;
+    unsigned short flags;
+    short _0E;
+    void* callback;
+    void* _14;
+    int _18;
     short posX;
     short posY;
     short posZ;
@@ -436,7 +442,16 @@ typedef struct {
     unsigned short unk40;
     short _42;
     short _44;
-    char _46[0x26];
+    unsigned short _46;
+    unsigned short _48;
+    short _4A;
+    unsigned short _4C;
+    unsigned short _4E;
+    unsigned short _50;
+    unsigned short _52;
+    unsigned short _54;
+    unsigned short _56;
+    char _58[0x14];
     unsigned short frame;
 } VentSprayData;
 
@@ -1454,7 +1469,80 @@ void func_80163BC8_D1448(Instance* instance, short target, short step) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_80163C4C_D14CC);
+void func_80163C4C_D14CC(VentSprayData* p, void* callback, char* data, int arg3, unsigned short* def, char* table, unsigned short* pos, unsigned short* vel, unsigned short* acc, int arg9, unsigned short arg10) {
+    short* tail;
+    int* nxt;
+    int off;
+    unsigned short ia;
+    unsigned short ib;
+    unsigned short ic;
+    unsigned short pz;
+
+    ia = def[0];
+    ib = def[1];
+    ic = def[2];
+    p->posX = pos[0];
+    p->posY = pos[1];
+    p->posZ = pos[2];
+    off = ia * 12;
+    p->unk24 = ((unsigned short*)(table + off))[0];
+    p->_26 = ((unsigned short*)(table + off))[1];
+    p->unk28 = ((unsigned short*)(table + off))[2];
+    off = ib * 12;
+    p->unk2C = ((unsigned short*)(table + off))[0];
+    p->_2E = ((unsigned short*)(table + off))[1];
+    p->unk30 = ((unsigned short*)(table + off))[2];
+    off = ic * 12;
+    p->unk34 = ((unsigned short*)(table + off))[0];
+    p->_36 = ((unsigned short*)(table + off))[1];
+    p->unk38 = ((unsigned short*)(table + off))[2];
+    tail = &p->_44;
+    if (((unsigned char*)def)[7] & 2) {
+        p->flags |= 1;
+        nxt = ((int**)def)[2];
+        p->next = nxt;
+        p->_18 = (nxt[3] & 0x3FFFFFF) | 0x24000000;
+    } else {
+        p->flags &= ~1;
+        p->_18 = (((int*)def)[2] & 0x3FFFFFF) | 0x20000000;
+    }
+    if (callback != NULL) {
+        p->callback = callback;
+    } else {
+        p->callback = func_80016894;
+    }
+    p->_14 = data;
+    if (vel != NULL) {
+        p->_4C = vel[0];
+        p->_4E = vel[1];
+        p->_50 = vel[2];
+    } else {
+        p->_4C = 0;
+        p->_4E = 0;
+        p->_50 = 0;
+    }
+    if (acc != NULL) {
+        p->_52 = acc[0];
+        p->_54 = acc[1];
+        p->_56 = acc[2];
+    } else {
+        p->_52 = 0;
+        p->_54 = 0;
+        p->_56 = 0;
+    }
+    func_800166C4(data + 0xC, gameTracker8->camera, &p->posX, 0);
+    pz = p->posZ;
+    p->_0E = arg10;
+    tail[1] = 0;
+    tail[0] = pz;
+    tail[2] = p->_50;
+    p->unk24 += 0x28;
+    p->unk28 -= 0x78;
+    p->unk2C += 0x28;
+    p->unk30 += 0x28;
+    p->unk34 -= 0x78;
+    p->unk38 += 0x28;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_80163EE0_D1760);
 
