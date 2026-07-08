@@ -1,6 +1,7 @@
 #include "common.h"
 
 #include "level/PREHST.h"
+#include "SCRIPT.h"
 
 void prehst_ttplat_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if (instance->introData != NULL) {
@@ -13,7 +14,145 @@ void prehst_ttplat_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_ttplat_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_ttplat_OnCollide);
+/* Near-match (144/151 instructions, structure fully understood — see below).
+ * Unfixable gap: after each `lh` of scale.z the target keeps an uncoalesced
+ * register copy (`addu $a1, $v0, $zero`) with the compare reading the original
+ * load register — our GCC always coalesces the copy away (or copy-propagates
+ * a two-variable `zz = z` form back into one register). Same unfixable class
+ * as the reorg 2-insn thread steal. Attempt kept for future reference:
+void prehst_ttplat_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    Intro** list;
+    Instance* first;
+    int* introData;
+    Instance* target;
+    int state;
+    int delta;
+    int sum;
+    short z;
+    int zz;
+    short z3;
+    int zz3;
+    int lim;
+    SVector dead[5]; (* dead local — reproduces the original's 0x28-byte stack frame *)
+
+    list = (Intro**)instance->intro->_04;
+    first = list[2]->instance;
+    introData = instance->introData;
+    if (first != instance) {
+        target = first;
+    } else {
+        target = list[1]->instance;
+    }
+    state = instance->_F4[0];
+    if (state == 4) {
+        delta = instance->_F4[2];
+        if (delta > 0 && instance->_100 < 0) {
+            sum = delta + instance->_100;
+            z = instance->scale.z;
+            zz = z;
+            if (z < 0x1000) {
+                instance->_F4[2] = sum;
+                if (instance->_F4[1] != 1) {
+                    instance->scale.z = zz + sum;
+                }
+            } else {
+                instance->_F4[2] = sum;
+                target->_F4[1] = 1;
+            }
+        } else if (delta < 0 && instance->_100 > 0) {
+            sum = delta + instance->_100;
+            z = instance->scale.z;
+            zz = z;
+            if (z >= 0x201) {
+                instance->_F4[2] = sum;
+                if (instance->_F4[1] != 1) {
+                    instance->scale.z = zz + sum;
+                }
+            } else {
+                instance->_F4[2] = sum;
+                target->_F4[1] = 1;
+            }
+        } else {
+            instance->_F4[0] = 3;
+            instance->_F4[1] = 0;
+        }
+    } else if (state == 6) {
+        if (instance->_F4[2] >= -0x2F) {
+            instance->_F4[2] += instance->_100;
+        }
+        z = instance->scale.z;
+        zz = z;
+        if (z >= 0x201) {
+            if (instance->_F4[1] != 1) {
+                instance->scale.z = zz + instance->_F4[2];
+            }
+        } else {
+            target->_F4[1] = 1;
+        }
+        instance->_F4[0] = 4;
+        instance->_100 = 2;
+    } else if (state == 5) {
+        if (instance->_F4[2] < 0x30) {
+            instance->_F4[2] += instance->_100;
+        }
+        z = instance->scale.z;
+        zz = z;
+        if (z < 0x1000) {
+            if (instance->_F4[1] != 1) {
+                instance->scale.z = zz + instance->_F4[2];
+            }
+        } else {
+            target->_F4[1] = 1;
+        }
+        instance->_F4[0] = 4;
+        instance->_100 = -2;
+    } else if (state == 3) {
+        z3 = instance->scale.z;
+        zz3 = z3;
+        lim = *introData;
+        if (z3 < lim + 0x20) {
+            if (lim - 0x20 < z3) {
+                instance->_F4[0] = 0;
+            } else {
+                instance->scale.z = zz3 + 0x20;
+            }
+        } else if (lim - 0x20 < z3) {
+            instance->scale.z = zz3 - 0x20;
+        }
+    }
+}
+*/
+
+void prehst_ttplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+    Intro** list;
+    Instance* first;
+    Instance* target;
+
+    bsp = instance->bspTree;
+    if ((bsp->_06 == 4) && (bsp->instanceSpline == gameTracker->player)) {
+        list = (Intro**)instance->intro->_04;
+        first = list[2]->instance;
+        if (first != instance) {
+            target = first;
+        } else {
+            target = list[1]->instance;
+        }
+        if (instance->_F4[0] != 6) {
+            instance->_F4[0] = 6;
+            if (instance->_F4[2] >= -0x1F) {
+                instance->_F4[2] = -0x20;
+            }
+            instance->_100 = -1;
+            target->_F4[0] = 5;
+            target->_100 = 1;
+            if (target->_F4[2] < 0x20) {
+                target->_F4[2] = 0x20;
+            }
+        }
+        instance->_F4[1] = 0;
+    }
+}
 
 void prehst_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
     unsigned short* intro;
@@ -44,6 +183,74 @@ void prehst_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_bug_OnUpdate);
+
+/* Near-match (163/165). Everything matches except ONE surviving register copy
+ * in the state-0 else-arm: the target has a second `addu $v0, $v1` copy of the
+ * _102 value before the slti, which our cse always copy-propagates away. The
+ * first copy (`addu $a0, $v1`) was cracked by reassigning the loader variable
+ * (`t = x; x = next-value;` keeps the copy alive — rotation lesson refinement);
+ * the second has no following reassignment to pin it. Attempt:
+void prehst_bug_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    short* fc;
+    Spline* spline;
+    int data[2];
+    SplineDef sd;
+    SVECTOR vec;
+    SVector dead[2]; (* dead local — reproduces the original's 0x58-byte frame *)
+    int x;
+    int t;
+    int px;
+    int py;
+    short angle;
+
+    func_8002DAF8(instance, -1);
+    fc = (short*)&instance->_F4[2];
+    if (instance->_F4[0] == 0) {
+        spline = ScriptGetPosSpline(instance);
+        sd = *(SplineDef*)&instance->_F4[2];
+        SplineGetNext(spline, &sd);
+        SplineGetData(spline, &sd, data);
+        func_80049B80(instance, &((short*)&instance->_100)[1], 0x100, 0, 0, data, 0);
+        *(SplineDef*)&instance->_F4[2] = sd;
+        x = ((short*)&instance->_104)[0];
+        px = PlayerInstance->position.x;
+        py = PlayerInstance->position.y;
+        if (x <= 0) {
+            if (((short*)&instance->_104)[1] < px && px < *(short*)&instance->_10A
+                && *(short*)&instance->_108 < py && py < *(short*)&instance->_10C) {
+                instance->_F4[0] = 1;
+            }
+        } else {
+            t = x;
+            x = ((short*)&instance->_100)[1];
+            ((short*)&instance->_104)[0] = t - 1;
+            t = x;
+            if (x >= 0x19) {
+                ((short*)&instance->_100)[1] = t - 1;
+            }
+        }
+    } else if (instance->_F4[0] == 1) {
+        angle = ratan2(instance->intro->position.y - PlayerInstance->position.y,
+                       instance->intro->position.x - PlayerInstance->position.x) - 0x400;
+        func_8004ACB0(&instance->rotation.z, angle, 0x100);
+        if (angle == instance->rotation.z) {
+            instance->_F4[0] = 2;
+            ((short*)&instance->_100)[1] = *(short*)&instance->_10E;
+        }
+    } else if (instance->_F4[0] == 2) {
+        vec.x = PlayerInstance->position.x;
+        vec.y = PlayerInstance->position.y;
+        vec.z = *(short*)&instance->_100;
+        func_80049B80(instance, &((short*)&instance->_100)[1], 0x80, 0, 0, &vec, 0x100);
+        func_80049A58(0x20, vec.z, instance);
+        if (instance->position.x < ((short*)&instance->_104)[1] || *(short*)&instance->_10A < instance->position.x
+            || instance->position.y < *(short*)&instance->_108 || *(short*)&instance->_10C < instance->position.y) {
+            instance->_F4[0] = 0;
+            fc[4] = 0x3C;
+        }
+    }
+}
+*/
 
 void prehst_bug_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp;
@@ -275,7 +482,13 @@ void prehst_stmvent_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
 typedef struct {
-    char _00[0x1C];
+    char _00[8];
+    void* next;
+    unsigned short flags;
+    short _0E;
+    void* callback;
+    void* _14;
+    int _18;
     short posX;
     short posY;
     short posZ;
@@ -297,7 +510,16 @@ typedef struct {
     unsigned short unk40;
     short _42;
     short _44;
-    char _46[0x26];
+    unsigned short _46;
+    unsigned short _48;
+    short _4A;
+    unsigned short _4C;
+    unsigned short _4E;
+    unsigned short _50;
+    unsigned short _52;
+    unsigned short _54;
+    unsigned short _56;
+    char _58[0x14];
     unsigned short frame;
 } VentSprayData;
 
@@ -463,7 +685,23 @@ void prehst_sptball_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_cavegex_OnCreate);
+void prehst_cavegex_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    int* intro;
+
+    intro = instance->introData;
+    instance->_F4[0] = 2;
+    instance->_F4[2] = 2;
+    *(int*)&instance->_108 = instance->position.x;
+    *(int*)&instance->_10C = instance->position.y;
+    *(int*)&instance->_110 = instance->position.z;
+    if (intro != NULL) {
+        instance->_104 = intro[0] * intro[0];
+        instance->_100 = intro[1] * intro[1];
+        return;
+    }
+    instance->_104 = 0x895440;
+    instance->_100 = 0x190000;
+}
 
 extern int D_80164480_D1D00;
 void func_8015BAFC_C937C(Instance* instance, GameTracker* gameTracker, int arg2) {
@@ -506,7 +744,24 @@ void prehst_cavetl_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_tricer_OnCreate);
+void prehst_tricer_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    void* data;
+
+    data = instance->data;
+    ScriptGetPosSpline(instance);
+    ((short*)&instance->_118)[1] = 0;
+    instance->_F4[2] = (int)((char*)data + 0x2A);
+    func_8004A98C(instance, &instance->_100, (short*)((char*)data + 0x26), 1);
+    func_8004A9C8(instance, 0, 0, 0, *(short*)((char*)data + 0x26));
+    instance->flags |= 0x100080;
+    func_80048DE4(instance, &instance->_110, &instance->_114, 0);
+    instance->_F4[0] = 1;
+    instance->_F4[1] = 3;
+    func_8004A7B8(instance, 3, 0);
+    func_80049330(instance);
+    instance->_11C |= 0x2000;
+    *(unsigned short*)&instance->_120 = *(unsigned short*)&instance->_120 | 8;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_tricer_OnUpdate);
 
@@ -547,15 +802,106 @@ INCLUDE_RODATA("asm/nonmatchings/level/PREHST", D_80164518_D1D98);
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_raptor_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_raptor_OnCollide);
+void prehst_raptor_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+    unsigned char* p08;
+    unsigned char* p0C;
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_zviolet_OnCreate);
+    bsp = instance->bspTree;
+    p08 = bsp->_08;
+    p0C = bsp->_0C;
+    if ((instance->_F4[0] != 1) && (bsp->instanceSpline == gameTracker->player)) {
+        if ((bsp->_06 == 1) && (p08[5] < p0C[5])) {
+            instance->_F4[0] = bsp->_06;
+            func_8004A7B8(instance, 1, 0);
+            func_8004AAA8(instance, 0x1D7, 0);
+            return;
+        }
+        if (instance->_F4[0] != 1) {
+            func_80022714(instance, gameTracker);
+        }
+    }
+}
+
+void prehst_zviolet_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    void* data;
+
+    data = instance->data;
+    *(SVECTOR*)&instance->_F4[2] = *(SVECTOR*)data;
+    instance->_104 = (int)((char*)data + 4);
+    func_8004A7B8(instance, 1, 0);
+    if (*(char*)&instance->_F4[2] != 0) {
+        instance->flags2 |= 8;
+    }
+    instance->_10E = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_zviolet_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_zviolet_OnCollide);
+void prehst_zviolet_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    extern int D_801539C8;
+    extern void func_8015F1F0_CCA70(Instance*);
+    BSPTree* bsp;
+    unsigned char* fc;
+    int* mask;
+    int state;
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_8015F1F0_CCA70);
+    bsp = instance->bspTree;
+    fc = (unsigned char*)&instance->_F4[2];
+    if (bsp->instanceSpline == gameTracker->player) {
+        if (*(int*)&bsp->_04 == 0x20004
+            && (func_80027578() == 0 || ((short*)PlayerInstance->data)[0xDC/2] != 0)
+            && (state = PlayerInstance->_F4[1],
+                (unsigned int)(state - 1) < 2 || state == 0x100 || state == 4 || state == 0x80000
+                || state == 0x1000 || state == 0x2000 || state == 8 || state == 0x20 || state == 0x40
+                || state == 0x80 || state == 0x10 || state == 0x200)) {
+            if (fc[0x11] == 0) {
+                mask = &D_801539C8;
+                if (!(PlayerInstance->flags & 0x100)) {
+                    mask = &gameTracker->_0014[1];
+                }
+                state = PlayerInstance->_F4[1];
+                if (state == 0x20 || state == 0x80
+                    || (!(gameTracker->player->flags & 0x40000) && (*mask & 0x10))) {
+                    *(short*)&fc[0xE] = 0x32;
+                    fc[0x19] = 2;
+                }
+                func_8015F1F0_CCA70(instance);
+            }
+            fc[0x10] = 1;
+        }
+    }
+    gameTracker->player->_F4[2] |= 0x40000000;
+}
+
+void func_8015F1F0_CCA70(Instance* instance) {
+    int* list;
+    Intro** p;
+    Instance* obj;
+    int count;
+    int i;
+    SVector dead; /* dead local — reproduces the original's 8-byte stack frame */
+
+    list = instance->intro->_04;
+    if (list != NULL) {
+        p = (Intro**)list;
+        count = *(int*)p;
+        p++;
+        i = 0;
+        if (count > 0) {
+            do {
+                obj = (*p)->instance;
+                if (obj != NULL) {
+                    obj->flags &= ~0x400;
+                }
+                i++;
+                p++;
+            } while (i < count);
+        }
+    }
+    PlayerInstance->flags |= 0x400000;
+    instance->flags |= 0x400;
+}
 
 void func_8015F290_CCB10(Instance* instance) {
     if (instance->flags & 0x400) {
@@ -566,9 +912,160 @@ void func_8015F290_CCB10(Instance* instance) {
     ((short*)&instance->_108)[1] = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_gas_OnCreate);
+typedef struct {
+    short _00;
+    short _02;
+    short _04;
+    short _06;
+} GasData;
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_gas_OnUpdate);
+void prehst_gas_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    int t;
+    unsigned short* introData;
+    char* fc;
+    void* data;
+    int r;
+    unsigned int m;
+
+    t = 0;
+    introData = ((unsigned short*)instance->introData);
+    data = instance->data;
+    fc = (char*)&instance->_F4[2];
+    if (instance->flags & 0x20000) {
+        if (instance->_F4[0] == 5) {
+            func_800331BC(instance->_104);
+        }
+    } else {
+        *(GasData*)&instance->_F4[2] = *(GasData*)data;
+        r = rand();
+        instance->flags |= 0x80;
+        instance->currentTextureAnimFrame = r % 24;
+        if (introData != NULL) {
+            if (introData[0] != 0xFFFF) {
+                *(GasData*)&instance->_F4[2] = *(GasData*)(introData + 1);
+                if (((char*)&instance->_100)[2] < 0) {
+                    *(int*)&instance->_108 |= 0x8000;
+                    ((char*)&instance->_100)[2] = ~((unsigned char*)&instance->_100)[2];
+                }
+                t = func_8004A61C(instance);
+                m = introData[0];
+                m %= (unsigned int)(((unsigned short*)&instance->_F4[2])[1] + *(unsigned short*)&instance->_F4[2] + ((unsigned char*)&instance->_100)[1]);
+                if (m < ((unsigned short*)&instance->_F4[2])[1]) {
+                    *(short*)&instance->_108 = m;
+                    instance->_F4[0] = 0;
+                } else {
+                    m -= ((unsigned short*)&instance->_F4[2])[1];
+                    if (m < ((unsigned char*)&instance->_100)[1]) {
+                        *(short*)&instance->_108 = m;
+                        instance->_F4[0] = 1;
+                    } else {
+                        m -= ((unsigned char*)&instance->_100)[1];
+                        if (m < t) {
+                            instance->_F4[0] = 2;
+                            t = m;
+                        } else {
+                            m -= t;
+                            if (m < *(unsigned short*)&instance->_F4[2]) {
+                                *(short*)&instance->_108 = m;
+                                instance->_F4[0] = 3;
+                            } else {
+                                m -= *(unsigned short*)&instance->_F4[2];
+                                if (m < t) {
+                                    instance->_F4[0] = 4;
+                                    t = t - m;
+                                } else {
+                                    t = 0;
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                instance->_F4[0] = 5;
+                t = func_8004A61C(instance) - 1;
+                instance->flags |= 0x10000;
+            }
+        }
+        if (fc[6] >= 3) {
+            fc[6] = 2;
+        }
+        func_8004A7B8(instance, fc[6], t);
+    }
+}
+
+void prehst_gas_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    unsigned short* fc;
+    unsigned short x;
+    unsigned short y;
+    int w;
+
+    fc = (unsigned short*)&instance->_F4[2];
+    x = *(unsigned short*)&instance->_108;
+    y = instance->currentTextureAnimFrame;
+    *(unsigned short*)&instance->_108 = x + 1;
+    w = *(int*)&instance->_108;
+    instance->currentTextureAnimFrame = y + 1;
+    if (w & 0x8000) {
+        instance->rotation.z = ((unsigned short)instance->rotation.z + 0x2200) & 0xFFF;
+    }
+    switch (instance->_F4[0]) {
+    case 0:
+        if (fc[6] >= fc[1]) {
+            fc[6] = 0;
+            instance->_F4[0] = 1;
+            instance->_F4[1] = 2;
+            instance->flags2 &= ~0x10;
+        }
+        break;
+    case 1:
+        if (fc[6] >= ((unsigned char*)fc)[5]) {
+            fc[6] = 0;
+            instance->_F4[0] = 2;
+            instance->flags2 &= ~0x10;
+            instance->flags |= 0x400;
+        } else if (instance->_F4[1] == 2) {
+            func_8004A820(instance, 0);
+            if (instance->currentAnimFrame >= ((unsigned char*)fc)[4]) {
+                instance->_F4[1] = 4;
+                instance->currentAnimFrame = ((unsigned char*)fc)[4];
+            } else if (instance->flags2 & 0x10) {
+                instance->_F4[1] = 4;
+            }
+        } else if (instance->_F4[1] == 4) {
+            func_8004A8A8(instance, 0);
+            if (instance->flags2 & 0x10) {
+                instance->_F4[1] = 0;
+            }
+            instance->flags2 &= ~0x10;
+        }
+        break;
+    case 2:
+        func_8004A820(instance, 0);
+        if (instance->flags2 & 0x10) {
+            fc[6] = func_8004A61C(instance);
+            instance->_F4[0] = 3;
+        }
+        break;
+    case 3:
+        if (fc[6] >= fc[0]) {
+            fc[6] = 0;
+            instance->_F4[0] = 4;
+            instance->flags2 &= ~0x10;
+        }
+        break;
+    case 4:
+        func_8004A8A8(instance, 0);
+        if (instance->flags2 & 0x10) {
+            fc[6] = func_8004A61C(instance);
+            instance->_F4[0] = 0;
+            func_800331BC(((int*)fc)[2]);
+            instance->flags &= ~0x400;
+        }
+        break;
+    case 5:
+        break;
+    }
+}
 
 void prehst_gas_OnCollide(Instance* instance, GameTracker* gameTracker) {
     Instance* bspPlayer;
@@ -610,7 +1107,24 @@ void prehst_bldrgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_bldrgen_OnUpdate);
+void prehst_bldrgen_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    int* intro;
+
+    intro = instance->introData;
+    if (instance->_F4[0] == 1) {
+        instance->_F4[2]++;
+        if (instance->_F4[2] >= intro[1]) {
+            instance->_F4[2] = intro[0];
+            instance->_F4[0] = 0;
+        }
+    } else {
+        instance->_F4[2]++;
+        if (instance->_F4[2] >= intro[0]) {
+            INSTANCE_BirthCachedObject(instance, 0x20);
+            instance->_F4[2] = 0;
+        }
+    }
+}
 
 void prehst_bldrgen_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
@@ -629,9 +1143,33 @@ INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_8015FC2C_CD4AC);
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_boulder_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_boulder_OnCollide);
+void prehst_boulder_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_spitplt_OnCreate);
+    bsp = instance->bspTree;
+    if ((bsp->_06 == 1) && (bsp->instanceSpline == gameTracker->player) && (func_80027578() == 0)) {
+        func_8004AAA8(instance, 0x25, 0xC8);
+        func_8004AAA8(instance, 0x25, 0);
+        func_8002275C(instance, gameTracker);
+    }
+}
+
+void prehst_spitplt_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    char* intro;
+    int accum;
+    int i;
+
+    intro = instance->introData;
+    accum = 0;
+    if (intro != NULL) {
+        for (i = 0; i < ((int*)intro)[1]; i++) {
+            accum += *(short*)(intro + i * 8 + 0xC);
+            *(short*)(intro + i * 8 + 0xE) = accum;
+        }
+    }
+    instance->_118 = accum;
+    instance->_F4[0] = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_spitplt_OnUpdate);
 
@@ -645,7 +1183,104 @@ void prehst_spitplt_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_ptera_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_80160840_CE0C0);
+/* Near-match (158/158 instructions; 16 diffs = one register rotation among the
+ * three matrix-product temps: ours picks a2/t1/a3 where the original has
+ * a3/a2/t1, cascading into the two srl destinations). Everything else matches,
+ * including both store-run branches (which needed the x/y two-temp rotation so
+ * the state constants inherit anti-dependencies and stay out of delay slots)
+ * and the zero-folded matrix multiply. Same allocator-tie class as
+ * func_80163F94. Attempt:
+int func_80163138_D09B8(Instance* instance);
+
+void prehst_ptera_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    short* data;
+    short* fc;
+    short x;
+    short y;
+    unsigned short w;
+    int d;
+    MATRIX mat;
+    SVector pos;
+    SVECTOR vec;
+    SVECTOR result;
+
+    data = ((short*)instance->object->data);
+    instance->flags |= 0x100000;
+    instance->initialPos = instance->position;
+    *(short*)&instance->_112 = 0;
+    *(short*)&instance->_11C = 0;
+    *(short*)&instance->_108 = 0;
+    *(short*)&instance->_110 = 0x7F;
+    instance->rotation.x = instance->intro->rotation.x;
+    instance->rotation.y = instance->intro->rotation.y;
+    instance->rotation.z = instance->intro->rotation.z;
+    instance->intro->rotation.x = 0;
+    instance->intro->rotation.y = 0;
+    instance->intro->rotation.z = 0;
+    INSTANCE_InsertInstanceWithFlagsSet(instance, 0x8000);
+    fc = (short*)&instance->_F4[2];
+    if (func_801630A0_D0920(instance) != 0) {
+        x = instance->position.x;
+        y = instance->position.y;
+        ((short*)&instance->_100)[1] = x;
+        x = instance->rotation.z;
+        *(short*)&instance->_104 = y;
+        d = data[0];
+        *(short*)&instance->_114 = x;
+        x = 3;
+        *(short*)&instance->_116 = x;
+        ((short*)&instance->_104)[1] = (unsigned short)instance->position.z - d * 2;
+    } else if (func_80163138_D09B8(instance) != 0) {
+        x = instance->position.x;
+        y = instance->position.y;
+        ((short*)&instance->_100)[1] = x;
+        x = instance->rotation.z;
+        *(short*)&instance->_104 = y;
+        d = data[0];
+        *(short*)&instance->_114 = x;
+        x = 1;
+        *(short*)&instance->_116 = x;
+        ((short*)&instance->_104)[1] = (unsigned short)instance->position.z + d * 2;
+    } else {
+        MATH3D_SetUnityMatrix(&mat);
+        RotMatrixX(instance->rotation.x, &mat);
+        RotMatrixY(instance->rotation.y, &mat);
+        RotMatrixZ(instance->rotation.z, &mat);
+        pos.x = instance->position.x;
+        pos.y = instance->position.y;
+        pos.z = instance->position.z;
+        vec.x = 0;
+        vec.y = 0;
+        vec.z = data[0];
+        result.y = (vec.x * mat.m[1][0] >> 12) + (vec.y * mat.m[1][1] >> 12) + (vec.z * mat.m[1][2] >> 12);
+        result.z = (vec.x * mat.m[2][0] >> 12) + (vec.y * mat.m[2][1] >> 12) + (vec.z * mat.m[2][2] >> 12);
+        result.x = (vec.x * mat.m[0][0] >> 12) + (vec.y * mat.m[0][1] >> 12) + (vec.z * mat.m[0][2] >> 12);
+        ((short*)&instance->_100)[1] = result.x + pos.x;
+        *(short*)&instance->_104 = result.y + pos.y;
+        ((short*)&instance->_104)[1] = result.z + pos.z;
+        w = data[0];
+        ((short*)&instance->_104)[1] = (unsigned short)instance->position.z - w;
+        d = (unsigned short)instance->intro->rotation.z;
+        w = 2;
+        *(short*)&instance->_116 = w;
+        *(short*)&instance->_114 = d + 0x800;
+    }
+    fc[0x1E/2] = 0;
+    instance->_F4[0] = 1;
+    func_8004A7B8(instance, 0, 0);
+}
+*/
+
+void func_80160840_CE0C0(Instance* instance) {
+    BSPTree* bsp;
+
+    bsp = instance->bspTree;
+    if (bsp->_06 == 3) {
+        instance->position.x = (unsigned short)instance->position.x + ((unsigned short*)bsp)[0x28/2];
+        instance->position.y = (unsigned short)instance->position.y + ((unsigned short*)bsp)[0x2A/2];
+        instance->position.z = (unsigned short)instance->position.z + ((unsigned short*)bsp)[0x2C/2];
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_ptera_OnCollide);
 
@@ -654,6 +1289,7 @@ INCLUDE_RODATA("asm/nonmatchings/level/PREHST", D_80164598_D1E18);
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_ptera_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_801630A0_D0920);
+
 /* near-match kept for reference: matches only with `register int result __asm__("$2")` to pin the
    return register; leader prefers no asm constructs, so it stays commented until properly matched.
 int func_801630A0_D0920(Instance* instance) {
@@ -901,14 +1537,181 @@ void func_80163BC8_D1448(Instance* instance, short target, short step) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_80163C4C_D14CC);
+void func_80163C4C_D14CC(VentSprayData* p, void* callback, char* data, int arg3, unsigned short* def, char* table, unsigned short* pos, unsigned short* vel, unsigned short* acc, int arg9, unsigned short arg10) {
+    short* tail;
+    int* nxt;
+    int off;
+    unsigned short ia;
+    unsigned short ib;
+    unsigned short ic;
+    unsigned short pz;
+
+    ia = def[0];
+    ib = def[1];
+    ic = def[2];
+    p->posX = pos[0];
+    p->posY = pos[1];
+    p->posZ = pos[2];
+    off = ia * 12;
+    p->unk24 = ((unsigned short*)(table + off))[0];
+    p->_26 = ((unsigned short*)(table + off))[1];
+    p->unk28 = ((unsigned short*)(table + off))[2];
+    off = ib * 12;
+    p->unk2C = ((unsigned short*)(table + off))[0];
+    p->_2E = ((unsigned short*)(table + off))[1];
+    p->unk30 = ((unsigned short*)(table + off))[2];
+    off = ic * 12;
+    p->unk34 = ((unsigned short*)(table + off))[0];
+    p->_36 = ((unsigned short*)(table + off))[1];
+    p->unk38 = ((unsigned short*)(table + off))[2];
+    tail = &p->_44;
+    if (((unsigned char*)def)[7] & 2) {
+        p->flags |= 1;
+        nxt = ((int**)def)[2];
+        p->next = nxt;
+        p->_18 = (nxt[3] & 0x3FFFFFF) | 0x24000000;
+    } else {
+        p->flags &= ~1;
+        p->_18 = (((int*)def)[2] & 0x3FFFFFF) | 0x20000000;
+    }
+    if (callback != NULL) {
+        p->callback = callback;
+    } else {
+        p->callback = func_80016894;
+    }
+    p->_14 = data;
+    if (vel != NULL) {
+        p->_4C = vel[0];
+        p->_4E = vel[1];
+        p->_50 = vel[2];
+    } else {
+        p->_4C = 0;
+        p->_4E = 0;
+        p->_50 = 0;
+    }
+    if (acc != NULL) {
+        p->_52 = acc[0];
+        p->_54 = acc[1];
+        p->_56 = acc[2];
+    } else {
+        p->_52 = 0;
+        p->_54 = 0;
+        p->_56 = 0;
+    }
+    func_800166C4(data + 0xC, gameTracker8->camera, &p->posX, 0);
+    pz = p->posZ;
+    p->_0E = arg10;
+    tail[1] = 0;
+    tail[0] = pz;
+    tail[2] = p->_50;
+    p->unk24 += 0x28;
+    p->unk28 -= 0x78;
+    p->unk2C += 0x28;
+    p->unk30 += 0x28;
+    p->unk34 -= 0x78;
+    p->unk38 += 0x28;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_80163EE0_D1760);
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_80163F94_D1814);
 
+/* Near-match (133/133 instructions, all 46 diffs are one systematic s0<->s1 swap
+ * between `angle` and `r` — our allocator gives `angle` s0, the original has
+ * `r` in s0. Declaration order, `register`, and ref-count changes don't flip it.
+ * Same allocation-tie class as func_80163EE0/func_8015FC2C/func_8015B47C (the
+ * whole PREHST particle-helper family). Attempt kept for future reference:
+extern void func_80163C4C_D14CC();
+extern void func_80163EE0_D1760();
+
+void func_80163F94_D1814(Instance* instance) {
+    extern int D_800EB8A0;
+    int r;
+    int c;
+    Model* model;
+    int m14;
+    short angle;
+    SVECTOR vel;
+    SVECTOR acc;
+    SVECTOR pos;
+
+    model = instance->object->modelList[instance->currentModel + 1];
+    m14 = model->_14;
+    pos.x = instance->position.x;
+    pos.y = instance->position.y;
+    pos.z = instance->position.z;
+    angle = rand() % 0x1000;
+    r = rand();
+    c = func_8003A6AC(angle);
+    vel.x = (((short*)&instance->_F4[2])[1] + r % *(short*)&instance->_100) * ((c << 16) >> 16) >> 12;
+    r = rand();
+    c = func_8003A4E0(angle);
+    vel.y = (((short*)&instance->_F4[2])[1] + r % *(short*)&instance->_100) * ((c << 16) >> 16) >> 12;
+    acc.x = 0;
+    acc.y = -1;
+    r = rand();
+    vel.z = ((unsigned short*)&instance->_100)[1] + r % *(short*)&instance->_104;
+    acc.z = -((unsigned short*)&instance->_104)[1];
+    func_800170E8(model, m14, &pos, &vel, &acc, D_800EB8A0, func_80163C4C_D14CC, func_80163EE0_D1760, *(short*)&instance->_108);
+}
+*/
+
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_lavadrp_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_lavadrp_OnUpdate);
+typedef struct {
+    short _00;
+    short _02;
+    short _04;
+    short _06;
+    short _08;
+    short _0A;
+    short _0C;
+    short _0E;
+} LavaDropIntro;
+
+void prehst_lavadrp_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    extern void func_80163F94_D1814(Instance*);
+    MultiSpline* ms;
+    LavaDropIntro* introData;
+    short* fc;
+    SplineDef* sp1;
+    SplineDef* sp2;
+    SplineDef* sp3;
+    int flag;
+    int i;
+    SVector dead; /* dead local — reproduces the original's 0x48-byte stack frame */
+
+    flag = 0;
+    ms = instance->intro->multiSpline;
+    introData = instance->introData;
+    fc = (short*)&instance->_F4[2];
+    if (*(short*)&instance->_118 == 0) {
+        flag = 1;
+        ms = instance->object->modelList[instance->currentModel]->multiSpline;
+    }
+    sp1 = ((SplineDef*)&instance->_10C);
+    sp2 = ((SplineDef*)&instance->_110);
+    sp3 = ((SplineDef*)&instance->_114);
+    if (SCRIPT_SplineProcess(instance, ms, sp1, sp2, sp3, 1, flag) == 1) {
+        if (*(short*)&instance->_118 == 0) {
+            func_80048DE4(instance, sp1, sp2, sp3);
+            *(short*)&instance->_118 = 1;
+        } else {
+            if (introData != NULL) {
+                *(LavaDropIntro*)&instance->_F4[2] = *introData;
+            }
+            i = 0;
+            if (*(short*)&instance->_F4[2] > 0) {
+                do {
+                    func_80163F94_D1814(instance);
+                    i++;
+                } while (i < fc[0]);
+            }
+            INSTANCE_PlainDeath(instance, -1, 0, 0);
+        }
+    } else if (*(short*)&instance->_118 == 1) {
+        func_80047DB4(instance, 0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_lavadrp_OnCollide);
