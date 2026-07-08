@@ -86,12 +86,6 @@ def CreateObjJSON(segments):
         ]
     }
 
-def FindObj(l, k):
-    for e in l:
-        if e is not None and e["name"] == k:
-            return e
-    return None
-
 def ApplyOverrides(j):
     with open("objdiff.overrides.txt", "r") as f:
         s = f.read()
@@ -118,7 +112,7 @@ try:
             print("Error: No segments detected")
             exit(1)
 
-        objdiffjson = ApplyOverrides(CreateObjJSON(segments))
+        objdiffjson = CreateObjJSON(segments)
         
         with open("objdiff.json", "w") as fo:
             json.dump(objdiffjson, fo)
