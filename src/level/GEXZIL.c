@@ -339,13 +339,164 @@ INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_80162024_9B1A4);
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8016218C_9B30C);
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_gas_OnCreate);
+typedef struct {
+    short _00;
+    short _02;
+    short _04;
+    short _06;
+} GasData;
+
+void gexzil_gas_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    int t;
+    unsigned short* introData;
+    char* fc;
+    void* data;
+    int r;
+    unsigned int m;
+
+    t = 0;
+    introData = ((unsigned short*)instance->introData);
+    data = instance->data;
+    fc = (char*)&instance->_F4[2];
+    if (instance->flags & 0x20000) {
+        if (instance->_F4[0] == 5) {
+            func_800331BC(instance->_104);
+        }
+    } else {
+        *(GasData*)&instance->_F4[2] = *(GasData*)data;
+        r = rand();
+        instance->flags |= 0x80;
+        instance->currentTextureAnimFrame = r % 24;
+        if (introData != NULL) {
+            if (introData[0] != 0xFFFF) {
+                *(GasData*)&instance->_F4[2] = *(GasData*)(introData + 1);
+                if (((char*)&instance->_100)[2] < 0) {
+                    *(int*)&instance->_108 |= 0x8000;
+                    ((char*)&instance->_100)[2] = ~((unsigned char*)&instance->_100)[2];
+                }
+                t = func_8004A61C(instance);
+                m = introData[0];
+                m %= (unsigned int)(((unsigned short*)&instance->_F4[2])[1] + *(unsigned short*)&instance->_F4[2] + ((unsigned char*)&instance->_100)[1]);
+                if (m < ((unsigned short*)&instance->_F4[2])[1]) {
+                    *(short*)&instance->_108 = m;
+                    instance->_F4[0] = 0;
+                } else {
+                    m -= ((unsigned short*)&instance->_F4[2])[1];
+                    if (m < ((unsigned char*)&instance->_100)[1]) {
+                        *(short*)&instance->_108 = m;
+                        instance->_F4[0] = 1;
+                    } else {
+                        m -= ((unsigned char*)&instance->_100)[1];
+                        if (m < t) {
+                            instance->_F4[0] = 2;
+                            t = m;
+                        } else {
+                            m -= t;
+                            if (m < *(unsigned short*)&instance->_F4[2]) {
+                                *(short*)&instance->_108 = m;
+                                instance->_F4[0] = 3;
+                            } else {
+                                m -= *(unsigned short*)&instance->_F4[2];
+                                if (m < t) {
+                                    instance->_F4[0] = 4;
+                                    t = t - m;
+                                } else {
+                                    t = 0;
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                instance->_F4[0] = 5;
+                t = func_8004A61C(instance) - 1;
+                instance->flags |= 0x10000;
+            }
+        }
+        if (fc[6] >= 3) {
+            fc[6] = 2;
+        }
+        func_8004A7B8(instance, fc[6], t);
+    }
+}
 
 INCLUDE_RODATA("asm/nonmatchings/level/GEXZIL", D_80162B3C_9BCBC);
 
 INCLUDE_RODATA("asm/nonmatchings/level/GEXZIL", D_80162B48_9BCC8);
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_gas_OnUpdate);
+void gexzil_gas_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    unsigned short* fc;
+    unsigned short x;
+    unsigned short y;
+    int w;
+
+    fc = (unsigned short*)&instance->_F4[2];
+    x = *(unsigned short*)&instance->_108;
+    y = instance->currentTextureAnimFrame;
+    *(unsigned short*)&instance->_108 = x + 1;
+    w = *(int*)&instance->_108;
+    instance->currentTextureAnimFrame = y + 1;
+    if (w & 0x8000) {
+        instance->rotation.z = ((unsigned short)instance->rotation.z + 0x2200) & 0xFFF;
+    }
+    switch (instance->_F4[0]) {
+    case 0:
+        if (fc[6] >= fc[1]) {
+            fc[6] = 0;
+            instance->_F4[0] = 1;
+            instance->_F4[1] = 2;
+            instance->flags2 &= ~0x10;
+        }
+        break;
+    case 1:
+        if (fc[6] >= ((unsigned char*)fc)[5]) {
+            fc[6] = 0;
+            instance->_F4[0] = 2;
+            instance->flags2 &= ~0x10;
+            instance->flags |= 0x400;
+        } else if (instance->_F4[1] == 2) {
+            func_8004A820(instance, 0);
+            if (instance->currentAnimFrame >= ((unsigned char*)fc)[4]) {
+                instance->_F4[1] = 4;
+                instance->currentAnimFrame = ((unsigned char*)fc)[4];
+            } else if (instance->flags2 & 0x10) {
+                instance->_F4[1] = 4;
+            }
+        } else if (instance->_F4[1] == 4) {
+            func_8004A8A8(instance, 0);
+            if (instance->flags2 & 0x10) {
+                instance->_F4[1] = 0;
+            }
+            instance->flags2 &= ~0x10;
+        }
+        break;
+    case 2:
+        func_8004A820(instance, 0);
+        if (instance->flags2 & 0x10) {
+            fc[6] = func_8004A61C(instance);
+            instance->_F4[0] = 3;
+        }
+        break;
+    case 3:
+        if (fc[6] >= fc[0]) {
+            fc[6] = 0;
+            instance->_F4[0] = 4;
+            instance->flags2 &= ~0x10;
+        }
+        break;
+    case 4:
+        func_8004A8A8(instance, 0);
+        if (instance->flags2 & 0x10) {
+            fc[6] = func_8004A61C(instance);
+            instance->_F4[0] = 0;
+            func_800331BC(((int*)fc)[2]);
+            instance->flags &= ~0x400;
+        }
+        break;
+    case 5:
+        break;
+    }
+}
 
 void gexzil_gas_OnCollide(Instance* instance, GameTracker* gameTracker) {
     Instance* bspPlayer;
