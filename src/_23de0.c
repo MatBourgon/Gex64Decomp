@@ -4,25 +4,24 @@ INCLUDE_ASM("asm/nonmatchings/_23de0", func_800231E0);
 
 INCLUDE_ASM("asm/nonmatchings/_23de0", func_80023828);
 
-void func_80023B2C(int* arg0, int* arg1) {
-    int* temp_s1;
-
-    temp_s1 = (int*)arg0[8];
+void func_80023B2C(int* arg0, GameTracker* gameTracker) {
+    int* temp_s1 = (int*)arg0[8];
+    
 
     if (temp_s1[78] != 0) {
         func_8002569C(temp_s1[78]);
         temp_s1[78] = 0;
 
-        if (++arg1[4862] == 5) {
-            arg1[4862] = 4;
+        if (++((int*)gameTracker)[0x12FE] == 5) {
+            ((int*)gameTracker)[0x12FE] = 4;
         }
 
-        func_8002780C(arg1);
+        func_8002780C(gameTracker);
     }
 
     if (temp_s1[76] != 0) {
-        func_80025588(arg0, arg1);
-        func_8002780C(arg1);
+        func_80025588(arg0, gameTracker);
+        func_8002780C(gameTracker);
     }
 }
 
