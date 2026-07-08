@@ -184,6 +184,74 @@ void prehst_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_bug_OnUpdate);
 
+/* Near-match (163/165). Everything matches except ONE surviving register copy
+ * in the state-0 else-arm: the target has a second `addu $v0, $v1` copy of the
+ * _102 value before the slti, which our cse always copy-propagates away. The
+ * first copy (`addu $a0, $v1`) was cracked by reassigning the loader variable
+ * (`t = x; x = next-value;` keeps the copy alive — rotation lesson refinement);
+ * the second has no following reassignment to pin it. Attempt:
+void prehst_bug_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    short* fc;
+    Spline* spline;
+    int data[2];
+    SplineDef sd;
+    SVECTOR vec;
+    SVector dead[2]; (* dead local — reproduces the original's 0x58-byte frame *)
+    int x;
+    int t;
+    int px;
+    int py;
+    short angle;
+
+    func_8002DAF8(instance, -1);
+    fc = (short*)&instance->_F4[2];
+    if (instance->_F4[0] == 0) {
+        spline = ScriptGetPosSpline(instance);
+        sd = *(SplineDef*)&instance->_F4[2];
+        SplineGetNext(spline, &sd);
+        SplineGetData(spline, &sd, data);
+        func_80049B80(instance, &((short*)&instance->_100)[1], 0x100, 0, 0, data, 0);
+        *(SplineDef*)&instance->_F4[2] = sd;
+        x = ((short*)&instance->_104)[0];
+        px = PlayerInstance->position.x;
+        py = PlayerInstance->position.y;
+        if (x <= 0) {
+            if (((short*)&instance->_104)[1] < px && px < *(short*)&instance->_10A
+                && *(short*)&instance->_108 < py && py < *(short*)&instance->_10C) {
+                instance->_F4[0] = 1;
+            }
+        } else {
+            t = x;
+            x = ((short*)&instance->_100)[1];
+            ((short*)&instance->_104)[0] = t - 1;
+            t = x;
+            if (x >= 0x19) {
+                ((short*)&instance->_100)[1] = t - 1;
+            }
+        }
+    } else if (instance->_F4[0] == 1) {
+        angle = ratan2(instance->intro->position.y - PlayerInstance->position.y,
+                       instance->intro->position.x - PlayerInstance->position.x) - 0x400;
+        func_8004ACB0(&instance->rotation.z, angle, 0x100);
+        if (angle == instance->rotation.z) {
+            instance->_F4[0] = 2;
+            ((short*)&instance->_100)[1] = *(short*)&instance->_10E;
+        }
+    } else if (instance->_F4[0] == 2) {
+        vec.x = PlayerInstance->position.x;
+        vec.y = PlayerInstance->position.y;
+        vec.z = *(short*)&instance->_100;
+        func_80049B80(instance, &((short*)&instance->_100)[1], 0x80, 0, 0, &vec, 0x100);
+        func_80049A58(0x20, vec.z, instance);
+        if (instance->position.x < ((short*)&instance->_104)[1] || *(short*)&instance->_10A < instance->position.x
+            || instance->position.y < *(short*)&instance->_108 || *(short*)&instance->_10C < instance->position.y) {
+            instance->_F4[0] = 0;
+            fc[4] = 0x3C;
+        }
+    }
+}
+*/
+
 void prehst_bug_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp;
     short* temp;
