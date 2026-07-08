@@ -1,0 +1,2 @@
+src/gu/libm_vals.s
+src/os/exceptasm.s
