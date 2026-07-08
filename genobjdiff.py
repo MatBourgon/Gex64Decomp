@@ -86,6 +86,26 @@ def CreateObjJSON(segments):
         ]
     }
 
+def FindObj(l, k):
+    for e in l:
+        if e is not None and e["name"] == k:
+            return e
+    return None
+
+def ApplyOverrides(j):
+    with open("objdiff.overrides.txt", "r") as f:
+        s = f.read()
+        s = s.replace("\r\n", "\n")
+        keys = s.split("\n")
+        for k in keys:
+            n = FindObj(j["units"], k)
+            if n is None:
+                print(f"Unknown objdiff override: \"{k}\"")
+            else:
+                n["metadata"]["complete"] = True
+
+    return j
+
 try:
     with open("gexenterthegecko.yaml", "r") as f:
         y = yaml.load(f.read(), Loader=Loader)
@@ -98,7 +118,7 @@ try:
             print("Error: No segments detected")
             exit(1)
 
-        objdiffjson = CreateObjJSON(segments)
+        objdiffjson = ApplyOverrides(CreateObjJSON(segments))
         
         with open("objdiff.json", "w") as fo:
             json.dump(objdiffjson, fo)
