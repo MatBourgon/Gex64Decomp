@@ -13,7 +13,36 @@ void prehst_ttplat_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_ttplat_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_ttplat_OnCollide);
+void prehst_ttplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+    Intro** list;
+    Instance* first;
+    Instance* target;
+
+    bsp = instance->bspTree;
+    if ((bsp->_06 == 4) && (bsp->instanceSpline == gameTracker->player)) {
+        list = (Intro**)instance->intro->_04;
+        first = list[2]->instance;
+        if (first != instance) {
+            target = first;
+        } else {
+            target = list[1]->instance;
+        }
+        if (instance->_F4[0] != 6) {
+            instance->_F4[0] = 6;
+            if (instance->_F4[2] >= -0x1F) {
+                instance->_F4[2] = -0x20;
+            }
+            instance->_100 = -1;
+            target->_F4[0] = 5;
+            target->_100 = 1;
+            if (target->_F4[2] < 0x20) {
+                target->_F4[2] = 0x20;
+            }
+        }
+        instance->_F4[1] = 0;
+    }
+}
 
 void prehst_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
     unsigned short* intro;
@@ -463,7 +492,23 @@ void prehst_sptball_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_cavegex_OnCreate);
+void prehst_cavegex_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    int* intro;
+
+    intro = instance->introData;
+    instance->_F4[0] = 2;
+    instance->_F4[2] = 2;
+    *(int*)&instance->_108 = instance->position.x;
+    *(int*)&instance->_10C = instance->position.y;
+    *(int*)&instance->_110 = instance->position.z;
+    if (intro != NULL) {
+        instance->_104 = intro[0] * intro[0];
+        instance->_100 = intro[1] * intro[1];
+        return;
+    }
+    instance->_104 = 0x895440;
+    instance->_100 = 0x190000;
+}
 
 extern int D_80164480_D1D00;
 void func_8015BAFC_C937C(Instance* instance, GameTracker* gameTracker, int arg2) {
@@ -506,7 +551,24 @@ void prehst_cavetl_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_tricer_OnCreate);
+void prehst_tricer_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    void* data;
+
+    data = instance->data;
+    ScriptGetPosSpline(instance);
+    ((short*)&instance->_118)[1] = 0;
+    instance->_F4[2] = (int)((char*)data + 0x2A);
+    func_8004A98C(instance, &instance->_100, (short*)((char*)data + 0x26), 1);
+    func_8004A9C8(instance, 0, 0, 0, *(short*)((char*)data + 0x26));
+    instance->flags |= 0x100080;
+    func_80048DE4(instance, &instance->_110, &instance->_114, 0);
+    instance->_F4[0] = 1;
+    instance->_F4[1] = 3;
+    func_8004A7B8(instance, 3, 0);
+    func_80049330(instance);
+    instance->_11C |= 0x2000;
+    *(unsigned short*)&instance->_120 = *(unsigned short*)&instance->_120 | 8;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_tricer_OnUpdate);
 
@@ -547,9 +609,39 @@ INCLUDE_RODATA("asm/nonmatchings/level/PREHST", D_80164518_D1D98);
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_raptor_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_raptor_OnCollide);
+void prehst_raptor_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+    unsigned char* p08;
+    unsigned char* p0C;
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_zviolet_OnCreate);
+    bsp = instance->bspTree;
+    p08 = bsp->_08;
+    p0C = bsp->_0C;
+    if ((instance->_F4[0] != 1) && (bsp->instanceSpline == gameTracker->player)) {
+        if ((bsp->_06 == 1) && (p08[5] < p0C[5])) {
+            instance->_F4[0] = bsp->_06;
+            func_8004A7B8(instance, 1, 0);
+            func_8004AAA8(instance, 0x1D7, 0);
+            return;
+        }
+        if (instance->_F4[0] != 1) {
+            func_80022714(instance, gameTracker);
+        }
+    }
+}
+
+void prehst_zviolet_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    void* data;
+
+    data = instance->data;
+    *(SVECTOR*)&instance->_F4[2] = *(SVECTOR*)data;
+    instance->_104 = (int)((char*)data + 4);
+    func_8004A7B8(instance, 1, 0);
+    if (*(char*)&instance->_F4[2] != 0) {
+        instance->flags2 |= 8;
+    }
+    instance->_10E = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_zviolet_OnUpdate);
 
@@ -610,7 +702,24 @@ void prehst_bldrgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_bldrgen_OnUpdate);
+void prehst_bldrgen_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    int* intro;
+
+    intro = instance->introData;
+    if (instance->_F4[0] == 1) {
+        instance->_F4[2]++;
+        if (instance->_F4[2] >= intro[1]) {
+            instance->_F4[2] = intro[0];
+            instance->_F4[0] = 0;
+        }
+    } else {
+        instance->_F4[2]++;
+        if (instance->_F4[2] >= intro[0]) {
+            INSTANCE_BirthCachedObject(instance, 0x20);
+            instance->_F4[2] = 0;
+        }
+    }
+}
 
 void prehst_bldrgen_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
@@ -629,9 +738,33 @@ INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_8015FC2C_CD4AC);
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_boulder_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_boulder_OnCollide);
+void prehst_boulder_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_spitplt_OnCreate);
+    bsp = instance->bspTree;
+    if ((bsp->_06 == 1) && (bsp->instanceSpline == gameTracker->player) && (func_80027578() == 0)) {
+        func_8004AAA8(instance, 0x25, 0xC8);
+        func_8004AAA8(instance, 0x25, 0);
+        func_8002275C(instance, gameTracker);
+    }
+}
+
+void prehst_spitplt_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    char* intro;
+    int accum;
+    int i;
+
+    intro = instance->introData;
+    accum = 0;
+    if (intro != NULL) {
+        for (i = 0; i < ((int*)intro)[1]; i++) {
+            accum += *(short*)(intro + i * 8 + 0xC);
+            *(short*)(intro + i * 8 + 0xE) = accum;
+        }
+    }
+    instance->_118 = accum;
+    instance->_F4[0] = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_spitplt_OnUpdate);
 
@@ -645,7 +778,16 @@ void prehst_spitplt_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_ptera_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_80160840_CE0C0);
+void func_80160840_CE0C0(Instance* instance) {
+    BSPTree* bsp;
+
+    bsp = instance->bspTree;
+    if (bsp->_06 == 3) {
+        instance->position.x = (unsigned short)instance->position.x + ((unsigned short*)bsp)[0x28/2];
+        instance->position.y = (unsigned short)instance->position.y + ((unsigned short*)bsp)[0x2A/2];
+        instance->position.z = (unsigned short)instance->position.z + ((unsigned short*)bsp)[0x2C/2];
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_ptera_OnCollide);
 
@@ -654,6 +796,7 @@ INCLUDE_RODATA("asm/nonmatchings/level/PREHST", D_80164598_D1E18);
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_ptera_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_801630A0_D0920);
+
 /* near-match kept for reference: matches only with `register int result __asm__("$2")` to pin the
    return register; leader prefers no asm constructs, so it stays commented until properly matched.
 int func_801630A0_D0920(Instance* instance) {
