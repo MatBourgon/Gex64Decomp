@@ -104,7 +104,32 @@ void* LoadLevelData(int levelIndex) {
     return (void*)temp_s0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/3BAA0", LoadGexObject);
+extern char GexDataEnd;
+extern char GexDataStart;
+
+void* LoadGexObject(void) {
+    char sp10[32];
+    int compressedSize;
+    int uncompressedSize;
+    int* ptr;
+    
+    void* start = &GexDataStart;
+    void* end = &GexDataEnd;
+
+    compressedSize = end - start;
+    
+    if (compressedSize == 0)
+        return NULL;
+        
+    ptr = (int)func_80030BE0(0x3A980);
+    func_801DA910(&sp10, ptr, 0x3A980);
+    uncompressedSize = inflate(&sp10, start, compressedSize);
+    uncompressedSize = func_8003B270(ptr, uncompressedSize);
+    osWritebackDCache(ptr, uncompressedSize);
+    func_80030C50(0x3A980 - uncompressedSize);
+    
+    return ptr;
+}
 /*void* func_8003B3D4() {
     char zstream[32];
     int size;
