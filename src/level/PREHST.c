@@ -14,23 +14,23 @@ void prehst_ttplat_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_ttplat_OnUpdate);
 
-/* Near-match (144/151 instructions, structure fully understood — see below).
- * Unfixable gap: after each `lh` of scale.z the target keeps an uncoalesced
- * register copy (`addu $a1, $v0, $zero`) with the compare reading the original
- * load register — our GCC always coalesces the copy away (or copy-propagates
- * a two-variable `zz = z` form back into one register). Same unfixable class
- * as the reorg 2-insn thread steal. Attempt kept for future reference:
+/* Near-match, much improved (148/151, was 144/151). The x-rotation discovery
+ * (one variable cycling through scale.z / 1 / _F4[2] / 4 / 2 / state constants,
+ * each reassignment pinning the previous copy) reproduced the copies in states
+ * 4/6/5 and the nop dispatch delay slots. Remaining gap: state 3's zz3=z3 copy
+ * has no following reassignment to pin it, so our cse folds it and the dbr then
+ * over-merges the two arms' shared [addiu;slt] prefix (-3 instructions), plus
+ * the x/state v0-v1 and delta/introData register ties. Attempt:
 void prehst_ttplat_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     Intro** list;
     Instance* first;
     int* introData;
     Instance* target;
-    int state;
+    int x;
     int delta;
     int sum;
-    short z;
     int zz;
-    short z3;
+    int z3;
     int zz3;
     int lim;
     SVector dead[5]; (* dead local — reproduces the original's 0x28-byte stack frame *)
@@ -43,81 +43,106 @@ void prehst_ttplat_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     } else {
         target = list[1]->instance;
     }
-    state = instance->_F4[0];
-    if (state == 4) {
+    x = 4;
+    if (instance->_F4[0] == x) {
         delta = instance->_F4[2];
         if (delta > 0 && instance->_100 < 0) {
             sum = delta + instance->_100;
-            z = instance->scale.z;
-            zz = z;
-            if (z < 0x1000) {
-                instance->_F4[2] = sum;
-                if (instance->_F4[1] != 1) {
+            x = instance->scale.z;
+            zz = x;
+            instance->_F4[2] = sum;
+            if (x < 0x1000) {
+                x = 1;
+                if (instance->_F4[1] != x) {
                     instance->scale.z = zz + sum;
                 }
             } else {
-                instance->_F4[2] = sum;
-                target->_F4[1] = 1;
+                x = 1;
+                target->_F4[1] = x;
             }
         } else if (delta < 0 && instance->_100 > 0) {
             sum = delta + instance->_100;
-            z = instance->scale.z;
-            zz = z;
-            if (z >= 0x201) {
-                instance->_F4[2] = sum;
-                if (instance->_F4[1] != 1) {
+            x = instance->scale.z;
+            zz = x;
+            instance->_F4[2] = sum;
+            if (x >= 0x201) {
+                x = 1;
+                if (instance->_F4[1] != x) {
                     instance->scale.z = zz + sum;
                 }
             } else {
-                instance->_F4[2] = sum;
-                target->_F4[1] = 1;
+                x = 1;
+                target->_F4[1] = x;
             }
         } else {
-            instance->_F4[0] = 3;
+            x = 3;
+            instance->_F4[0] = x;
             instance->_F4[1] = 0;
         }
-    } else if (state == 6) {
-        if (instance->_F4[2] >= -0x2F) {
-            instance->_F4[2] += instance->_100;
-        }
-        z = instance->scale.z;
-        zz = z;
-        if (z >= 0x201) {
-            if (instance->_F4[1] != 1) {
-                instance->scale.z = zz + instance->_F4[2];
+    } else {
+        x = 6;
+        if (instance->_F4[0] == x) {
+            if (instance->_F4[2] >= -0x2F) {
+                instance->_F4[2] += instance->_100;
             }
-        } else {
-            target->_F4[1] = 1;
-        }
-        instance->_F4[0] = 4;
-        instance->_100 = 2;
-    } else if (state == 5) {
-        if (instance->_F4[2] < 0x30) {
-            instance->_F4[2] += instance->_100;
-        }
-        z = instance->scale.z;
-        zz = z;
-        if (z < 0x1000) {
-            if (instance->_F4[1] != 1) {
-                instance->scale.z = zz + instance->_F4[2];
-            }
-        } else {
-            target->_F4[1] = 1;
-        }
-        instance->_F4[0] = 4;
-        instance->_100 = -2;
-    } else if (state == 3) {
-        z3 = instance->scale.z;
-        zz3 = z3;
-        lim = *introData;
-        if (z3 < lim + 0x20) {
-            if (lim - 0x20 < z3) {
-                instance->_F4[0] = 0;
+            x = instance->scale.z;
+            zz = x;
+            if (x >= 0x201) {
+                x = 1;
+                if (instance->_F4[1] != x) {
+                    x = instance->_F4[2];
+                    instance->scale.z = zz + x;
+                }
             } else {
-                instance->scale.z = zz3 + 0x20;
+                x = 1;
+                target->_F4[1] = x;
             }
-        } else if (lim - 0x20 < z3) {
-            instance->scale.z = zz3 - 0x20;
+            x = 4;
+            instance->_F4[0] = x;
+            x = 2;
+            instance->_100 = x;
+        } else {
+            x = 5;
+            if (instance->_F4[0] == x) {
+                if (instance->_F4[2] < 0x30) {
+                    instance->_F4[2] += instance->_100;
+                }
+                x = instance->scale.z;
+                zz = x;
+                if (x < 0x1000) {
+                    x = 1;
+                    if (instance->_F4[1] != x) {
+                        x = instance->_F4[2];
+                        instance->scale.z = zz + x;
+                    }
+                } else {
+                    x = 1;
+                    target->_F4[1] = x;
+                }
+                x = 4;
+                instance->_F4[0] = x;
+                x = -2;
+                instance->_100 = x;
+            } else {
+                x = 3;
+                if (instance->_F4[0] == x) {
+                    z3 = instance->scale.z;
+                    lim = *introData;
+                    if (z3 < lim + 0x20) {
+                        zz3 = z3;
+                        if (lim - 0x20 < z3) {
+                            instance->_F4[0] = 0;
+                        } else {
+                            instance->scale.z = zz3 + 0x20;
+                        }
+                    } else {
+                        zz3 = z3;
+                        if (lim - 0x20 < z3) {
+                            instance->scale.z = zz3 - 0x20;
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -519,7 +544,11 @@ typedef struct {
     unsigned short _52;
     unsigned short _54;
     unsigned short _56;
-    char _58[0x14];
+    int _58;
+    int _5C;
+    int _60;
+    int _64;
+    int _68;
     unsigned short frame;
 } VentSprayData;
 
@@ -1141,7 +1170,78 @@ INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_8015F9A4_CD224);
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_8015FC2C_CD4AC);
 
+typedef struct {
+    int _00;
+    int _04;
+    int _08;
+    int _0C;
+} SmokeDef;
+
+extern void func_8015F9A4_CD224();
+extern void func_8015FC2C_CD4AC();
+
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_boulder_OnUpdate);
+
+#if 0
+/* Near-match (200/200; all 40 diffs are the angle/r s0-s1 allocation
+ * inversion — third confirmed instance, see CLAUDE.md "angle/r allocation
+ * inversion". Longhand modulo (r - r/10*10) compiles byte-identical and
+ * does not flip it either. */
+void prehst_boulder_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    extern int D_800EB8A0;
+    int* data;
+    Model* model;
+    int m14;
+    int r;
+    int c;
+    short angle;
+    int i;
+    VentSprayData* p;
+    SVECTOR vel;
+    SVECTOR acc;
+    SVECTOR pos;
+
+    data = *(int**)&instance->_114;
+    if (SCRIPT_InstanceSplineProcess(instance, (SplineDef*)&instance->_F4[2], (SplineDef*)&instance->_104, 0, 1) << 16 > 0) {
+        INSTANCE_PlainDeath(instance, 5, -1, 0);
+    }
+    if (data[2] > *(int*)&instance->_10C && *(short*)&instance->_F4[2] + 1 == ((int**)data)[3][*(int*)&instance->_10C]) {
+        func_8004AAA8(instance, 0x26, 0);
+        i = 0;
+        *(int*)&instance->_10C = *(int*)&instance->_10C + 1;
+        do {
+            if (*(short*)&instance->object->_08 >= 2) {
+                model = instance->object->modelList[1];
+            } else {
+                model = instance->object->modelList[0];
+            }
+            m14 = model->_14;
+            pos.x = instance->position.x;
+            pos.y = instance->position.y;
+            pos.z = (unsigned short)instance->position.z - 0x12C;
+            angle = rand() % 0x1000;
+            r = rand();
+            c = func_8003A6AC(angle);
+            vel.x = (r % 10 + 0x28) * ((c << 16) >> 16) >> 12;
+            r = rand();
+            c = func_8003A4E0(angle);
+            vel.y = (r % 10 + 0x28) * ((c << 16) >> 16) >> 12;
+            acc.y = -1;
+            acc.z = -5;
+            acc.x = 0;
+            vel.z = rand() % 20 + 0x19;
+            p = ((VentSprayData*)func_80017138(instance, m14, &pos, &vel, &acc, D_800EB8A0, func_8015F9A4_CD224, func_8015FC2C_CD4AC, 0x19));
+            if (p != NULL && model->_20 != 0) {
+                p->flags |= 4;
+                *(SmokeDef*)&p->_58 = *(SmokeDef*)p->next;
+                p->_68 = model->_20 + 4;
+                p->frame = rand();
+            }
+            i++;
+        } while (i < 15);
+    }
+}
+#endif
 
 void prehst_boulder_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp;
