@@ -1429,12 +1429,12 @@ typedef struct {
     short _0A;
     short _0C;
     short _0E;
-} LavaDropData;
+} LavaDropIntro;
 
 void prehst_lavadrp_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     extern void func_80163F94_D1814(Instance*);
     MultiSpline* ms;
-    LavaDropData* introData;
+    LavaDropIntro* introData;
     short* fc;
     SplineDef* sp1;
     SplineDef* sp2;
@@ -1460,7 +1460,7 @@ void prehst_lavadrp_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             *(short*)&instance->_118 = 1;
         } else {
             if (introData != NULL) {
-                *(LavaDropData*)&instance->_F4[2] = *introData;
+                *(LavaDropIntro*)&instance->_F4[2] = *introData;
             }
             i = 0;
             if (*(short*)&instance->_F4[2] > 0) {
