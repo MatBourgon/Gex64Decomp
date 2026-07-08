@@ -54,7 +54,23 @@ INCLUDE_RODATA("asm/nonmatchings/level/REZOP", D_80161558_D9CC8);
 
 INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_rezrat_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_rezrat_OnCollide);
+void rezop_rezrat_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    extern int D_800EB8A0;
+    BSPTree* bsp;
+
+    bsp = instance->bspTree;
+    if (bsp->_06 == 1 && bsp->instanceSpline == gameTracker->player
+        && bsp->_0C[5] >= 6U && instance->_F4[0] != 2) {
+        if (((Instance*)instance->_11C)->_100 >= 0x14) {
+            func_80017598(instance, 0, 0, 0, D_800EB8A0, 0, 0);
+            INSTANCE_KillInstance(instance);
+        } else {
+            instance->_F4[0] = 2;
+            func_80017598(instance, 0, 0, 0, D_800EB8A0, 0, 0);
+            instance->flags |= 0x800;
+        }
+    }
+}
 
 void rezop_rrgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
     char* data;
@@ -137,7 +153,28 @@ void rezop_tbbttn_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 }
 #endif
 
-INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_tbbttn_OnCollide);
+void rezop_tbbttn_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+    short six;
+    int state;
+    int* list;
+
+    bsp = instance->bspTree;
+    six = bsp->_06;
+    if (six == 1 && bsp->instanceSpline == gameTracker->player
+        && (PlayerInstance->_F4[1] == 0x80 || PlayerInstance->_F4[1] == 0x20)) {
+        state = instance->_F4[0];
+        if (state != 3 && bsp->_0C[4] == 9) {
+            if (state != six) {
+                func_80050508(instance, 0xB4, 0, 0x5A, 0x9C4);
+            }
+            instance->scale.z = 0x400;
+            instance->_F4[0] = six;
+            list = instance->intro->_04;
+            ((Intro**)list)[list[0]]->instance->_F4[0] = six;
+        }
+    }
+}
 
 void rezop_tbplat_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->flags |= 0x100000;
@@ -455,7 +492,37 @@ INCLUDE_RODATA("asm/nonmatchings/level/REZOP", D_80161590_D9D00);
 
 INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_mutant_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_mutant_OnCollide);
+void rezop_mutant_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+    int v;
+
+    bsp = instance->bspTree;
+    if (bsp->_06 == 1 && bsp->instanceSpline == gameTracker->player) {
+        if (bsp->_0C[5] >= 6U) {
+            if (instance->_F4[0] == 3) {
+                func_8002275C(instance, gameTracker);
+            } else {
+                v = instance->currentModelAnim;
+                instance->_F4[0] = 5;
+                if (v == 4) {
+                    instance->currentModelAnim = 0;
+                    instance->currentAnimFrame = 0;
+                } else if (v == 0) {
+                    if (instance->currentAnimFrame >= 0x15) {
+                        instance->currentAnimFrame = 0;
+                        instance->flags2 &= ~0x10;
+                    }
+                } else {
+                    instance->currentAnimFrame = 0;
+                    instance->currentModelAnim = 0;
+                    instance->flags2 &= ~0x10;
+                }
+            }
+        } else if (instance->_F4[0] == 3) {
+            func_80022714(instance, gameTracker);
+        }
+    }
+}
 
 void rezop_mtntsht_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->initialPos = instance->position;
