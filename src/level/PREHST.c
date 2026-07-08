@@ -1106,6 +1106,94 @@ void prehst_spitplt_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_ptera_OnCreate);
 
+/* Near-match (158/158 instructions; 16 diffs = one register rotation among the
+ * three matrix-product temps: ours picks a2/t1/a3 where the original has
+ * a3/a2/t1, cascading into the two srl destinations). Everything else matches,
+ * including both store-run branches (which needed the x/y two-temp rotation so
+ * the state constants inherit anti-dependencies and stay out of delay slots)
+ * and the zero-folded matrix multiply. Same allocator-tie class as
+ * func_80163F94. Attempt:
+int func_80163138_D09B8(Instance* instance);
+
+void prehst_ptera_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    short* data;
+    short* fc;
+    short x;
+    short y;
+    unsigned short w;
+    int d;
+    MATRIX mat;
+    SVector pos;
+    SVECTOR vec;
+    SVECTOR result;
+
+    data = ((short*)instance->object->data);
+    instance->flags |= 0x100000;
+    instance->initialPos = instance->position;
+    *(short*)&instance->_112 = 0;
+    *(short*)&instance->_11C = 0;
+    *(short*)&instance->_108 = 0;
+    *(short*)&instance->_110 = 0x7F;
+    instance->rotation.x = instance->intro->rotation.x;
+    instance->rotation.y = instance->intro->rotation.y;
+    instance->rotation.z = instance->intro->rotation.z;
+    instance->intro->rotation.x = 0;
+    instance->intro->rotation.y = 0;
+    instance->intro->rotation.z = 0;
+    INSTANCE_InsertInstanceWithFlagsSet(instance, 0x8000);
+    fc = (short*)&instance->_F4[2];
+    if (func_801630A0_D0920(instance) != 0) {
+        x = instance->position.x;
+        y = instance->position.y;
+        ((short*)&instance->_100)[1] = x;
+        x = instance->rotation.z;
+        *(short*)&instance->_104 = y;
+        d = data[0];
+        *(short*)&instance->_114 = x;
+        x = 3;
+        *(short*)&instance->_116 = x;
+        ((short*)&instance->_104)[1] = (unsigned short)instance->position.z - d * 2;
+    } else if (func_80163138_D09B8(instance) != 0) {
+        x = instance->position.x;
+        y = instance->position.y;
+        ((short*)&instance->_100)[1] = x;
+        x = instance->rotation.z;
+        *(short*)&instance->_104 = y;
+        d = data[0];
+        *(short*)&instance->_114 = x;
+        x = 1;
+        *(short*)&instance->_116 = x;
+        ((short*)&instance->_104)[1] = (unsigned short)instance->position.z + d * 2;
+    } else {
+        MATH3D_SetUnityMatrix(&mat);
+        RotMatrixX(instance->rotation.x, &mat);
+        RotMatrixY(instance->rotation.y, &mat);
+        RotMatrixZ(instance->rotation.z, &mat);
+        pos.x = instance->position.x;
+        pos.y = instance->position.y;
+        pos.z = instance->position.z;
+        vec.x = 0;
+        vec.y = 0;
+        vec.z = data[0];
+        result.y = (vec.x * mat.m[1][0] >> 12) + (vec.y * mat.m[1][1] >> 12) + (vec.z * mat.m[1][2] >> 12);
+        result.z = (vec.x * mat.m[2][0] >> 12) + (vec.y * mat.m[2][1] >> 12) + (vec.z * mat.m[2][2] >> 12);
+        result.x = (vec.x * mat.m[0][0] >> 12) + (vec.y * mat.m[0][1] >> 12) + (vec.z * mat.m[0][2] >> 12);
+        ((short*)&instance->_100)[1] = result.x + pos.x;
+        *(short*)&instance->_104 = result.y + pos.y;
+        ((short*)&instance->_104)[1] = result.z + pos.z;
+        w = data[0];
+        ((short*)&instance->_104)[1] = (unsigned short)instance->position.z - w;
+        d = (unsigned short)instance->intro->rotation.z;
+        w = 2;
+        *(short*)&instance->_116 = w;
+        *(short*)&instance->_114 = d + 0x800;
+    }
+    fc[0x1E/2] = 0;
+    instance->_F4[0] = 1;
+    func_8004A7B8(instance, 0, 0);
+}
+*/
+
 void func_80160840_CE0C0(Instance* instance) {
     BSPTree* bsp;
 
