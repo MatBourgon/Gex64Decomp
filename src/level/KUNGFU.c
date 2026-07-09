@@ -504,7 +504,9 @@ INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_dragflm_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015C884_ABAA4);
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_dragbod_OnCreate);
+void kungfu_dragbod_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    instance->flags |= 0x100400;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_dragbod_OnCollide);
 
