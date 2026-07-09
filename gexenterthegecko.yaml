@@ -151,6 +151,7 @@ segments:
       - [0x579B0, c, gu/sinf]
       - [0x57B50, hasm, ../src/os/invaldcache]
       - [0x57C00, hasm, ../src/os/invalicache]
+      - [0x57C80, asm] # Empty block of memory
       - [0x57CE0, hasm, ../src/os/writebackdcache]
       - [0x57D60, hasm, ../src/os/writebackdcacheall]
       - [0x57D90, c, os/createmesgqueue]
