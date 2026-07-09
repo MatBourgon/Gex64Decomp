@@ -11,3 +11,4 @@ src/os/setintmask.s
 src/os/setfpccsr.s
 src/os/setsr.s
 src/os/maptlbrdb.s
+src/rmon/rmonrcp.s
