@@ -1,5 +1,5 @@
 #include "common.h"
-#include <compiler/gcc/stdlib.h>
+#include <stdlib.h>
 
 static int sRandNext;
 

@@ -1,5 +1,3 @@
-#include "common.h"
-
 /*====================================================================
  * drvrNew.c
  *
@@ -19,11 +17,11 @@
  * DOD or NASA FAR Supplement. Unpublished - rights reserved under the
  * Copyright Laws of the United States.
  *====================================================================*/
-#include <PR/libaudio.h>
-#include "audio/synthInternals.h"
-#include <PR/os.h>
-#include <compiler/gcc/stdio.h>
-#include "audio/initfx.h"
+#include <libaudio.h>
+#include "synthInternals.h"
+#include <os.h>
+#include <stdio.h>
+#include "initfx.h"
 // TODO: this comes from a header
 #ident "$Revision: 1.49 $"
 /*
@@ -37,9 +35,6 @@
  * a few hopefully useful effects.
  */
 #define ms *(((s32)((f32)44.1))&~0x7)
-
-
-INCLUDE_RODATA("asm/nonmatchings/audio/drvrnew", __osRcpImTable);
  
 
 static s32 SMALLROOM_PARAMS[26] = {

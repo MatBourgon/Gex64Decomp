@@ -1,8 +1,8 @@
 #ifndef _XSTDIO_H
 #define _XSTDIO_H
-#include "PR/ultratypes.h"
-#include "compiler/gcc/stdlib.h"
-#include "compiler/gcc/stdarg.h"
+#include "ultratypes.h"
+#include "stdlib.h"
+#include "stdarg.h"
 
 #ifdef __sgi
 typedef double ldouble; // IDO does not support long doubles

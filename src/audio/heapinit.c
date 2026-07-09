@@ -18,8 +18,8 @@
  * Copyright Laws of the United States.
  *====================================================================*/
 
-#include "audio/synthInternals.h"
-#include <PR/libaudio.h>
+#include "synthInternals.h"
+#include <libaudio.h>
 
 void alHeapInit(ALHeap *hp, u8 *base, s32 len)
 {

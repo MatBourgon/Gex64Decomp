@@ -18,9 +18,9 @@
  * Copyright Laws of the United States.
  *====================================================================*/
 
-#include "audio/synthInternals.h"
-#include <PR/os_internal.h>
-#include <PR/ultraerror.h>
+#include "synthInternals.h"
+#include <os_internal.h>
+#include <ultraerror.h>
 
 void alSynSetFXMix(ALSynth *synth, ALVoice *v, u8 fxmix)
 {

@@ -1,9 +1,9 @@
 #include "common.h"
 
 #include "PRinternal/macros.h"
-#include "compiler/gcc/string.h"
-#include "compiler/gcc/stdarg.h"
-#include "libc/xstdio.h"
+#include "string.h"
+#include "stdarg.h"
+#include "xstdio.h"
 
 // TODO: these come from headers
 #ident "$Revision: 1.34 $"

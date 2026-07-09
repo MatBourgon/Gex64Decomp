@@ -18,7 +18,7 @@
  * Copyright Laws of the United States.
  *====================================================================*/
 
-#include "audio/synthInternals.h"
+#include "synthInternals.h"
 
 ALFxRef *alSynAllocFX(ALSynth *s, s16 bus, ALSynConfig *c, ALHeap *hp)
 {

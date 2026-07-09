@@ -17,14 +17,14 @@
  * Copyright Laws of the United States.
  *====================================================================*/
 
-#include <PR/libaudio.h>
-#include <PR/ultraerror.h>
-#include "audio/synthInternals.h"
-#include <PR/os.h>
-#include <PR/os_internal.h>
-#include <compiler/gcc/stdio.h>
+#include <libaudio.h>
+#include <ultraerror.h>
+#include "synthInternals.h"
+#include <os.h>
+#include <os_internal.h>
+#include <stdio.h>
 #include <assert.h>
-#include "audio/initfx.h"
+#include "initfx.h"
 
 // TODO: these come from headers
 #ident "$Revision: 1.49 $"

@@ -18,8 +18,8 @@
  * Copyright Laws of the United States.
  *====================================================================*/
 
-#include <PR/libaudio.h>
-#include "audio/synthInternals.h"
+#include <libaudio.h>
+#include "synthInternals.h"
 
 Acmd *alMainBusPull(void *filter, s16 *outp, s32 outCount, s32 sampleOffset, Acmd *p) 
 {

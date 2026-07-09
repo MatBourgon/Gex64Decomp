@@ -18,7 +18,7 @@
  * Copyright Laws of the United States.
  *====================================================================*/
 
-#include "audio/synthInternals.h"
+#include "synthInternals.h"
 
 void alSynDelete(ALSynth *drvr)
 {
