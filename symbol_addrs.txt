@@ -1360,9 +1360,14 @@ common_remsilv_OnUpdate = 0x80045638; // type:func allow_duplicated:True
 common_remsilv_OnCollide = 0x80046148; // type:func allow_duplicated:True
 
 // Others
+leoBootID = 0x800001A0;
 osTvType = 0x80000300; // type:s32
+osRomType = 0x80000304; // type:s32
 osRomBase = 0x80000308; // type:s32
 osResetType = 0x8000030C; // type:s32
+osCicId = 0x80000310; // type:s32
+osVersion = 0x80000314; // type:s32
+osMemSize = 0x80000318; // type:s32
 osAppNMIBuffer = 0x8000031C; // type:s32 size:0x40
 osSyncPrintf = 0x80038B8C; // type:func
 Fstop = 0x80052FD0; // type:func
