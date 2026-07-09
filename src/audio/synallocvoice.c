@@ -18,9 +18,9 @@
  * Copyright Laws of the United States.
  *====================================================================*/
 
-#include <PR/os_internal.h>
-#include <PR/ultraerror.h>
-#include "audio/synthInternals.h"
+#include <os_internal.h>
+#include <ultraerror.h>
+#include "synthInternals.h"
 
 s32 _allocatePVoice(ALSynth *drvr, PVoice **pvoice, s16 priority);
 

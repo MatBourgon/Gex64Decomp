@@ -1,5 +1,5 @@
-#include "PR/os_version.h"
-#include "compiler/gcc/stdlib.h"
+#include "os_version.h"
+#include "stdlib.h"
 
 // TODO: these come from headers
 #ident "$Revision: 1.34 $"

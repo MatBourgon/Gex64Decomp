@@ -18,8 +18,8 @@
  * Copyright Laws of the United States.
  *====================================================================*/
 
-#include <PR/libaudio.h>
-#include "audio/synthInternals.h"
+#include <libaudio.h>
+#include "synthInternals.h"
 
 void alFilterNew(ALFilter *f, ALCmdHandler h, ALSetParam s, s32 type)
 {

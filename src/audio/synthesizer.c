@@ -15,9 +15,9 @@
  * DOD or NASA FAR Supplement. Unpublished - rights reserved under the
  * Copyright Laws of the United States.
  *====================================================================*/
-#include "audio/synthInternals.h"
+#include "synthInternals.h"
 #include <assert.h>
-#include <PR/os_version.h>
+#include <os_version.h>
 // TODO: this comes from a header
 #ident "$Revision: 1.17 $"
 

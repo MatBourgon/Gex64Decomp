@@ -1,6 +1,6 @@
 #include "common.h"
 
-#include <audio/player.h>
+#include <player.h>
 
 extern int max_channels;
 

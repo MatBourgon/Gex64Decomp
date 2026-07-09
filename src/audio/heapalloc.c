@@ -18,10 +18,10 @@
  * Copyright Laws of the United States.
  *====================================================================*/
 
-#include "audio/synthInternals.h"
-#include <PR/libaudio.h>
-#include <PR/os_internal.h>
-#include <PR/ultraerror.h>
+#include "synthInternals.h"
+#include <libaudio.h>
+#include <os_internal.h>
+#include <ultraerror.h>
 
 void *alHeapDBAlloc(u8 *file, s32 line, ALHeap *hp, s32 num, s32 size)
 {

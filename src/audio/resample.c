@@ -18,10 +18,10 @@
  * Copyright Laws of the United States.
  *====================================================================*/
 
-#include <PR/libaudio.h>
-#include "audio/synthInternals.h"
-#include <PR/os.h>
-#include <compiler/gcc/stdio.h>
+#include <libaudio.h>
+#include "synthInternals.h"
+#include <os.h>
+#include <stdio.h>
 
 // TODO: this comes from a header
 #ident "$Revision: 1.49 $"

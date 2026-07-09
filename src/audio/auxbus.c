@@ -19,7 +19,7 @@
  *====================================================================*/
 
 #include <PR/libaudio.h>
-#include "audio/synthInternals.h"
+#include "synthInternals.h"
 
 Acmd *alAuxBusPull(void *filter, s16 *outp, s32 outCount, s32 sampleOffset,
                    Acmd *p) 

@@ -1,6 +1,6 @@
-#include "compiler/gcc/stdlib.h"
-#include "compiler/gcc/string.h"
-#include "libc/xstdio.h"
+#include "stdlib.h"
+#include "string.h"
+#include "xstdio.h"
 
 // TODO: these come from headers
 #ident "$Revision: 1.34 $"

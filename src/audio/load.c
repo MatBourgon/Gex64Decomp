@@ -18,10 +18,10 @@
  * Copyright Laws of the United States.
  *====================================================================*/
 
-#include <PR/libaudio.h>
-#include "audio/synthInternals.h"
-#include <PR/os.h>
-#include <PR/R4300.h>
+#include <libaudio.h>
+#include "synthInternals.h"
+#include <os.h>
+#include <R4300.h>
 
 #ifndef MIN
 #   define MIN(a,b) (((a)<(b))?(a):(b))
