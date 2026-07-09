@@ -282,10 +282,8 @@ moddi_ret:
     /* 6B45C 8006A85C 03E00008 */  jr         $ra
     /* 6B460 8006A860 00591021 */   addu      $v0, $v0, $t9
 endlabel __moddi3
-    /* 6B464 8006A864 00000000 */  nop
-    /* 6B468 8006A868 00000000 */  nop
-    /* 6B46C 8006A86C 00000000 */  nop
 
+.align 4
 glabel __udivdi3
 div_com:
     /* 6B470 8006A870 14C00003 */  bnez       $a2, udivdi64
@@ -296,9 +294,8 @@ udivdi64:
     /* 6B480 8006A880 0801A94E */  j          div64_64
     /* 6B484 8006A884 00000000 */   nop
 endlabel __udivdi3
-    /* 6B488 8006A888 00000000 */  nop
-    /* 6B48C 8006A88C 00000000 */  nop
 
+.align 4
 glabel __umoddi3
     /* 6B490 8006A890 14C00008 */  bnez       $a2, umoddi64
     /* 6B494 8006A894 00000000 */   nop
