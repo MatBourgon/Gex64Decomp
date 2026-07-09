@@ -17,3 +17,4 @@ src/os/invalicache.s
 src/os/writebackdcache.s
 src/os/writebackdcacheall.s
 src/libc/bzero.s
+src/libkmc/mmuldi3.s

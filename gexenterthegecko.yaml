@@ -302,7 +302,8 @@ segments:
       - [0x6AC20, c, libkmc/rand]
       - [0x6AC60, asm, _6ac60]
       - [0x6B0D0, c, libkmc/tolower]
-      - [0x6B100, hasm, libkmc/mmuldi3]
+      - [0x6B100, hasm, ../src/libkmc/mmuldi3]
+      - [0x6B4D0, asm, _6b4d0]
       - [0x6B5F0, asm]
 
       # text bin
