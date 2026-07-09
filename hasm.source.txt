@@ -1,3 +1,8 @@
 src/gu/libm_vals.s
 src/os/exceptasm.s
 src/os/getcause.s
+src/libc/bcopy.s
+src/os/getcount.s
+src/os/setcompare.s
+src/os/getsr.s
+src/os/interrupt.s
