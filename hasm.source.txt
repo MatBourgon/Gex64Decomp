@@ -7,3 +7,4 @@ src/os/setcompare.s
 src/os/getsr.s
 src/os/interrupt.s
 src/os/probetlb.s
+src/os/setintmask.s

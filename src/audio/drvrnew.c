@@ -37,9 +37,6 @@
  * a few hopefully useful effects.
  */
 #define ms *(((s32)((f32)44.1))&~0x7)
-
-
-INCLUDE_RODATA("asm/nonmatchings/audio/drvrnew", __osRcpImTable);
  
 
 static s32 SMALLROOM_PARAMS[26] = {
