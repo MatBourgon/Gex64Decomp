@@ -8,3 +8,6 @@ src/os/getsr.s
 src/os/interrupt.s
 src/os/probetlb.s
 src/os/setintmask.s
+src/os/setfpccsr.s
+src/os/setsr.s
+src/os/maptlbrdb.s
