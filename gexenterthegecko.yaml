@@ -206,7 +206,7 @@ segments:
       - [0x5C800, c, io/devmgr]
       - [0x5CBC0, c, io/piacs]
       - [0x5CCB0, c, io/pidma]
-      - [0x5CD60, hasm, libc/bzero]
+      - [0x5CD60, hasm, ../src/libc/bzero]
       - [0x5CE00, c, libc/string]
       - [0x5CE90, c, libc/sprintf]
       - [0x5CF20, c, sched/sched]
