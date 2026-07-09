@@ -16,7 +16,20 @@ void kungfu_kboat_OnCollide(Instance* instance, GameTracker* gameTracker) {
     GenericCollide(instance, gameTracker);
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_kbgen_OnCreate);
+void kungfu_kbgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    int* intro;
+
+    intro = (int*)instance->introData;
+    instance->_F4[0] = 0;
+    instance->flags |= 0x100C00;
+    if (intro != 0) {
+        if (intro[3] == 0 || (((unsigned short*)intro)[0xC] & 4)) {
+            instance->_F4[2] = intro[2];
+        } else {
+            instance->_F4[0] = 1;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_kbgen_OnUpdate);
 
@@ -482,7 +495,16 @@ INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_spike_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_spike_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_spike_OnCollide);
+void kungfu_spike_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    int frame;
+    BSPTree* bsp;
+
+    frame = instance->currentAnimFrame;
+    bsp = instance->bspTree;
+    if (frame != 0 && bsp->instanceSpline == gameTracker->player) {
+        func_80022714(instance, gameTracker);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015B5A8_AA7C8);
 
@@ -618,7 +640,14 @@ void func_8015DB50_ACD70(Instance* instance, short* arg1) {
     instance->position = instance->initialPos;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015DBB0_ACDD0);
+void func_8015DBB0_ACDD0(Instance* instance, short* arg1) {
+    instance->flags2 &= ~0x10;
+    arg1[0x18 / 2] = 1;
+    if (instance->currentModelAnim != 0 && instance->currentModelAnim != 5) {
+        instance->currentModelAnim = arg1[0x10 / 2] != 0 ? 5 : 0;
+        instance->currentAnimFrame = 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015DC00_ACE20);
 
@@ -741,7 +770,13 @@ INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_80160F68_B0188);
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_joyride_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8016121C_B043C);
+void func_8016121C_B043C(Instance* instance, GameTracker* gameTracker) {
+    Instance* player;
+
+    player = gameTracker->player;
+    func_8004AEC8(instance, 0, 0, 0x80, (SVECTOR*)((short*)instance->_D0 + 5));
+    player->position = *(SVECTOR*)((short*)instance->_D0 + 5);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_joyride_OnUpdate);
 
