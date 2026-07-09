@@ -1,3 +1,5 @@
+src/entry/entry.s
+
 src/gu/libm_vals.s
 
 src/libc/bcopy.s

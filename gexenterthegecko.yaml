@@ -50,6 +50,7 @@ options:
   data_string_encoding: ASCII
   rodata_string_guesser_level: 2
   data_string_guesser_level: 2
+  # hasm_in_src_path: True -- good for when everything is matched, bad for objdiff
   # libultra_symbols: True
   # hardware_regs: True
   gfx_ucode: f3dex
@@ -67,7 +68,7 @@ segments:
     start: 0x1000
     vram: 0x80000400
     subsegments:
-      - [0x1000, hasm]
+      - [0x1000, hasm, ../src/entry/entry]
 
   - name: main
     type: code
@@ -324,7 +325,7 @@ segments:
       - [0x7A1C0, .data, io/pimgr]
       - [0x7A1F0, .data, io/piacs]
       - [0x7A200, .data, sched/sched]
-      - [0x7A210, .data, ../src/os/exceptasm]
+      - [0x7A210, .data, os/exceptasm]
       - [0x7A230, .data, debug/kdebugserver]
       - [0x7A240, .data, os/timerintr]
       - [0x7A250, .data, os/rdbsend]
@@ -373,10 +374,10 @@ segments:
       - [0x7F8E0, .rodata, io/aisetfreq]
       - [0x7F8F0, .rodata, io/devmgr]
       - [0x7F910, .rodata, sched/sched]
-      - [0x7F930, .rodata, ../src/gu/libm_vals]
+      - [0x7F930, .rodata, gu/libm_vals]
       - [0x7F940, .rodata, gu/cosf]
-      - [0x7F9A0, .rodata, ../src/os/exceptasm]
-      - [0x7FA10, .rodata, ../src/os/setintmask]
+      - [0x7F9A0, .rodata, os/exceptasm]
+      - [0x7FA10, .rodata, os/setintmask]
       - [0x7FAD0, .rodata, audio/env]
       - [0x7FBC0, .rodata, audio/resample]
       - [0x7FBF0, .rodata, audio/reverb]
