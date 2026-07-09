@@ -53,7 +53,10 @@ INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", mooshu_moo_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", mooshu_moo_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", mooshu_moobar_OnCreate);
+void mooshu_moobar_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    instance->intro = NULL;
+    instance->flags = (instance->flags | 0x100C00) & ~1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", mooshu_moobar_OnCollide);
 

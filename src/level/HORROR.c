@@ -25,13 +25,32 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_chandb_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_chandb_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_chand_OnCreate);
+void horror_chand_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    instance->_E0[1] = -8;
+    instance->_F4[0] = 0;
+    instance->_D0[2] = 0;
+    instance->flags |= 0x100000;
+    *(int*)&instance->_108 = instance->position.z;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_chand_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_chand_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_axe_OnCreate);
+void horror_axe_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    int v;
+
+    v = *(int*)instance->introData;
+    if (v != 0) {
+        v = 4;
+    } else {
+        v = 1;
+    }
+    instance->_F4[0] = v;
+    v = 2;
+    instance->_104 = v;
+    instance->_100 = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_80159D8C_9D5BC);
 
@@ -100,7 +119,15 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_fltchst_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_fltchst_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_ledge_OnCreate);
+void horror_ledge_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    int* intro;
+
+    intro = instance->introData;
+    instance->_100 = 0xA;
+    if (intro != NULL && intro[0] == 1) {
+        instance->currentModel = 1;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_ledge_OnUpdate);
 
@@ -410,7 +437,12 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_splitob_OnUpdate);
 void horror_splitob_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_elevpan_OnCreate);
+void horror_elevpan_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    instance->flags |= 0x80;
+    if (*(short*)instance->introData == 1) {
+        instance->currentTextureAnimFrame = 1;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_elevpan_OnUpdate);
 

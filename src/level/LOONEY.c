@@ -445,7 +445,15 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_fallobj_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_fallobj_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_teeter_OnCreate);
+void looney_teeter_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    extern int D_80161C9C_B9F4C;
+
+    if (instance->introData == NULL) {
+        instance->introData = &D_80161C9C_B9F4C;
+    }
+    instance->_118 = 0;
+    instance->_11C = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_teeter_OnUpdate);
 
@@ -725,7 +733,15 @@ void looney_genbrk_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_jimboat_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_colorset_OnCreate);
+void looney_colorset_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    unsigned short* intro;
+
+    intro = instance->introData;
+    instance->flags |= 0x80;
+    if (intro != NULL) {
+        instance->currentTextureAnimFrame = intro[0];
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_colorset_OnCollide);
 

@@ -5,7 +5,9 @@
 
 #include "types/Vector.h"
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zgrate_OnCreate);
+void rta_zgrate_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    instance->_F4[2] = instance->intro->position.z;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zgrate_OnUpdate);
 

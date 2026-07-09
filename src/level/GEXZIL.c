@@ -128,7 +128,10 @@ INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015C188_95308);
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015C208_95388);
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_mekblst_OnCreate);
+void gexzil_mekblst_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    instance->intro = NULL;
+    instance->flags |= 0x100000;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_mekblst_OnUpdate);
 

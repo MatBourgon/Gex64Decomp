@@ -548,7 +548,15 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015C5CC_E23EC);
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_apod_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_apod_OnCollide);
+void scifi_apod_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+    short t;
+
+    bsp = instance->bspTree;
+    if (bsp->instanceSpline == gameTracker->player && ((t = bsp->_04) == 2 || t == 5)) {
+        GenericCollide(instance, gameTracker);
+    }
+}
 
 typedef struct {
     short _00;

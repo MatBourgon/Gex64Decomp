@@ -4,6 +4,7 @@
 #include "INSTANCE.h"
 #include "OBTABLE.h"
 #include "SIGNAL.h"
+#include "SPLINE.h"
 #include "types/intro/BTimer.h"
 #include "types/G2String.h"
 
@@ -103,7 +104,31 @@ void rezop_rrzap_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->flags |= 0x100080;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_rrzap_OnUpdate);
+void rezop_rrzap_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    unsigned short t;
+
+    if (instance->_F4[0] == 0) {
+        if (*(int*)&instance->position.x != *(int*)&PlayerInstance->position.x) {
+            t = ((unsigned short*)&instance->_F4[2])[1];
+            func_80049B80(instance, &t, 0x100, 0xDDB, 0x100, &PlayerInstance->position, 0x100);
+        }
+        instance->currentTextureAnimFrame = ((Instance*)instance->parent)->_120;
+        if (instance->parent->_120 == 5) {
+            instance->_F4[0] = 1;
+            gameTracker->player->flags |= 0x100;
+        }
+    } else if (instance->_F4[0] == 1) {
+        if (instance->_100 == 0) {
+            func_80022714(instance, gameTracker);
+        }
+        instance->_100 = instance->_100 + 1;
+        if (instance->_100 == 0x3C) {
+            instance->_F4[0] = 0;
+            instance->_100 = 0;
+            PlayerInstance->flags &= ~0x100;
+        }
+    }
+}
 
 void rezop_rrzap_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
@@ -294,7 +319,28 @@ void rezop_rezcrnk_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_snkplat_OnCreate);
+void rezop_snkplat_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    short* intro;
+    int* d;
+    SVECTOR a;
+    SVECTOR b;
+
+    intro = instance->introData;
+    instance->flags |= 0x100000;
+    a.x = b.x = instance->position.x;
+    a.y = b.y = instance->position.y;
+    d = instance->_D0;
+    a.z = instance->position.z;
+    b.z = (unsigned short)instance->position.z + 0x300;
+    COLLIDE_PointAndTerrain(gameTracker8->level->segmentAddress, &a, &b, instance);
+    if (intro != NULL) {
+        instance->_D0[2] = intro[0];
+    } else {
+        instance->_D0[2] = 0;
+    }
+    d[0] = instance->position.x + (((func_8003A6AC(d[2]) << 16) >> 16) * 0xF >> 6);
+    d[1] = instance->position.y + (((func_8003A4E0(d[2]) << 16) >> 16) * 0xF >> 6);
+}
 
 void rezop_snkplat_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int d[2];
@@ -326,7 +372,33 @@ void rezop_rezbull_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_rezbull_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_rezbull_OnCollide);
+void rezop_rezbull_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    extern int D_800EB8A0;
+    BSPTree* bsp;
+    SVECTOR out;
+    int px;
+
+    bsp = instance->bspTree;
+    if (bsp->_06 == 1 && bsp->instanceSpline == gameTracker->player
+        && bsp->_0C[5] >= 6U && instance->_F4[0] != 5) {
+        px = instance->position.x;
+        instance->_F4[2] = (ratan2(instance->position.y - PlayerInstance->position.y,
+                                   px - PlayerInstance->position.x) << 16) >> 16;
+        instance->_100 = 0x20;
+        instance->_F4[0] = 4;
+    } else if (bsp->_06 == 2) {
+        if (instance->_F4[0] == bsp->_06) {
+            func_8004AAE4(bsp, &out, gameTracker);
+            if (out.z >= 0xED9) {
+                *(Instance**)&instance->_104 = bsp->instanceSpline;
+            }
+        }
+    } else if (bsp->_06 == 3 && (*(unsigned short*)&bsp->_0C[6] & 8)) {
+        instance->position.z = (unsigned short)instance->position.z + 0x500;
+        func_80017598(instance, 0, 0, 0, D_800EB8A0, 0, 0);
+        INSTANCE_KillInstance(instance);
+    }
+}
 
 void rezop_srchlit_OnCreate(Instance* instance, GameTracker* gameTracker) {
     short* fc;
@@ -379,7 +451,34 @@ void rezop_spnplat_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_spnplat_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_spnplat_OnCollide);
+void rezop_spnplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    int* intro;
+    BSPTree* bsp;
+    Instance* other;
+
+    intro = instance->introData;
+    bsp = instance->bspTree;
+    if ((unsigned int)(instance->_F4[0] - 3) >= 2U) {
+        if (bsp->instanceSpline == gameTracker->player) {
+            instance->_F4[1] = 1;
+            instance->_F4[0] = instance->_F4[2];
+        } else if (bsp->_06 == 3 && instance->_104 == 0) {
+            instance->_104 = 1;
+            instance->position.x = (unsigned short)instance->position.x + ((unsigned short*)bsp)[0x28/2] * 2;
+            instance->position.y = (unsigned short)instance->position.y + ((unsigned short*)bsp)[0x2A/2] * 2;
+            instance->position.z = (unsigned short)instance->position.z + ((unsigned short*)bsp)[0x2C/2] * 2;
+            COLLIDE_UpdateAllTransforms(instance, ((SVECTOR*)&((unsigned short*)bsp)[0x14]), gameTracker);
+            other = ((Instance*)intro[2]);
+            if (other->_F4[2] == 1) {
+                other->_F4[2] = 2;
+            } else {
+                other->_F4[2] = 1;
+            }
+            other = ((Instance*)intro[2]);
+            other->_F4[0] = other->_F4[2];
+        }
+    }
+}
 
 void rezop_mutant_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int* intro;
@@ -569,7 +668,39 @@ void rezop_tvgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->flags |= 0x100800;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_tvgen_OnUpdate);
+void rezop_tvgen_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    char* intro;
+    Object* obj;
+    Instance* birthed;
+    int v;
+
+    intro = instance->introData;
+    obj = OBTABLE_FindObject(intro + 8);
+    if (intro == NULL || obj == NULL) {
+        INSTANCE_KillInstance(instance);
+    } else if (instance->_F4[0] == 1) {
+        instance->_F4[2] = instance->_F4[2] + 1;
+        if (instance->_F4[2] == ((int*)intro)[1]) {
+            v = ((int*)intro)[0];
+            instance->_F4[0] = 0;
+            instance->_F4[2] = v;
+        }
+    } else {
+        instance->_F4[2] += 1;
+        if ((unsigned int)gameTracker8->_0051[0x14] % (unsigned int)((int*)intro)[0] == 0) {
+            instance->_F4[2] = 0;
+            birthed = INSTANCE_BirthObject(instance, obj);
+            if (birthed != NULL) {
+                obj->oflags |= 0x2000;
+                birthed->introData = NULL;
+                if ((instance->object->oflags & 0x400) && (((unsigned short*)intro)[8] & 4) && instance->_100 == 0) {
+                    instance->_100 = 1;
+                    SCRIPT_InstanceSplineSet(birthed, ((short*)intro)[3], 0, 0, 0);
+                }
+            }
+        }
+    }
+}
 
 void rezop_tvgurny_OnCreate(Instance* instance, GameTracker* gameTracker) {
     SVECTOR a;
@@ -585,7 +716,27 @@ void rezop_tvgurny_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_120 = (SCRIPT_CountFramesInSpline(instance) << 16) >> 16;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_tvgurny_OnUpdate);
+void rezop_tvgurny_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    SVECTOR a;
+    SVECTOR b;
+    SVECTOR* pt;
+
+    instance->_11C += 1;
+    if (instance->_11C == 0x28) {
+        *(int*)&instance->_C0[0] = 0;
+    }
+    if (instance->_11C == instance->_120 - 0x28) {
+        b.x = instance->position.x;
+        b.y = instance->position.y;
+        b.z = instance->position.z;
+        pt = SplineGetLastPoint(instance->intro->multiSpline->positional, (SplineDef*)&instance->_F4[2]);
+        a = *pt;
+        COLLIDE_PointAndTerrain(gameTracker8->level->segmentAddress, &a, &b, instance);
+        SCRIPT_InstanceSplineSet(instance, (short)(instance->_120 - 0x28), (SplineDef*)&instance->_F4[2], (SplineDef*)&instance->_104, 0);
+        instance->_D0[0] += 1;
+    }
+    GenericProcess(instance, gameTracker);
+}
 
 void rezop_tvgurny_OnCollide(Instance* instance, GameTracker* gameTracker) {
     GenericCollide(instance, gameTracker);

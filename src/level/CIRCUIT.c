@@ -207,7 +207,16 @@ INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_ebridge_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_ebridge_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_ebrijac_OnCreate);
+void circuit_ebrijac_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    int* intro;
+
+    intro = instance->introData;
+    instance->_F4[2] = -1;
+    if (intro != NULL) {
+        instance->_F4[2] = intro[0];
+    }
+    instance->_104 = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_ebrijac_OnUpdate);
 
