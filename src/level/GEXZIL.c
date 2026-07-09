@@ -324,7 +324,15 @@ INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8016034C_994CC);
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_mecha_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_80160B70_99CF0);
+/* p0/p1 are packed short pairs; returns the 12.4 planar distance between them */
+int func_80160B70_99CF0(int p0, int p1) {
+    int dx;
+    int dy;
+
+    dx = ((short*)&p0)[0] - ((short*)&p1)[0];
+    dy = ((short*)&p0)[1] - ((short*)&p1)[1];
+    return MATH3D_FastSqrt2((dx * dx >> 12) + (dy * dy >> 12), 0xC);
+}
 
 /* p0/p1 are packed short pairs (x in the high half, y in the low half) */
 int func_80160BD8_99D58(int p0, int p1) {

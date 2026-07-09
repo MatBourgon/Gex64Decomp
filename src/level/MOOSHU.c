@@ -65,7 +65,18 @@ void mooshu_moobar_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->flags = (instance->flags | 0x100C00) & ~1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", mooshu_moobar_OnCollide);
+void mooshu_moobar_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    unsigned short* data;
+
+    if (instance->parent != 0) {
+        data = (unsigned short*)instance->parent->object->data;
+        if (instance->_F4[2] == 0) {
+            func_80022738(instance, gameTracker);
+            data[2] |= 0x4000;
+        }
+        data[2] |= 0x8000;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", mooshu_moo_OnCollide);
 

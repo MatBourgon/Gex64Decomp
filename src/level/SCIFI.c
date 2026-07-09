@@ -288,7 +288,15 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015AC28_E0A48);
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_bub_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_bub_OnCollide);
+void scifi_bub_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+
+    bsp = instance->bspTree;
+    if (bsp->instanceSpline == gameTracker->player && bsp->_08[4] == 0) {
+        func_80159720_DF540(((short*)&instance->_F4[2])[1]);
+        instance->_F4[0] = 1;
+    }
+}
 
 void scifi_eel_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->currentModelAnim = 0;

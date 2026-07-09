@@ -256,7 +256,17 @@ INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_rezzull_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015E788_8F928);
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_popper_OnCreate);
+extern char D_8016166C_9280C[];
+
+void final_popper_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    *(short*)&instance->_F4[2] = 2;
+    instance->scale.z = 0;
+    instance->_104 = 0;
+    *(unsigned short*)&instance->position.z -= 0x12C;
+    instance->flags |= 0x400;
+    *(int*)&instance->_108 = OBTABLE_FindObject(D_80161588_92728);
+    *(int*)&instance->_10C = OBTABLE_FindObject(D_8016166C_9280C);
+}
 
 INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_8016166C_9280C);
 

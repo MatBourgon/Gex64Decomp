@@ -295,7 +295,15 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_skel_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_skel_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_skelh_OnCreate);
+void horror_skelh_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    instance->_F4[0] = 0;
+    if (instance->parent != 0 && instance->parent->intro != 0) {
+        instance->flags |= 0x100400;
+        *(int*)&instance->_10C = 0;
+        *(int*)&instance->_110 = (int)instance->parent->intro->multiSpline;
+        *(int*)&instance->_114 = (int)instance->parent->introData;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_skelh_OnUpdate);
 
