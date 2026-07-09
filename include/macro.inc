@@ -132,4 +132,29 @@
 .set $fs5,          $f30
 .set $fs5f,         $f31
 
+.set	C0_INX,		$0
+.set	C0_RAND,		$1
+.set	C0_ENTRYLO0,	$2
+.set	C0_ENTRYLO1,	$3
+.set	C0_CONTEXT,	$4
+.set	C0_PAGEMASK,	$5		/* page mask */
+.set	C0_WIRED,	$6		/* # wired entries in tlb */
+.set	C0_BADVADDR,	$8
+.set	C0_COUNT,	$9		/* free-running counter */
+.set	C0_ENTRYHI,	$10
+.set	C0_SR,		$12
+.set	C0_CAUSE,	$13
+.set	C0_EPC,		$14
+.set	C0_PRID,		$15		/* revision identifier */
+.set	C0_COMPARE,	$11		/* counter comparison reg. */
+.set	C0_CONFIG,	$16		/* hardware configuration */
+.set	C0_LLADDR,	$17		/* load linked address */
+.set	C0_WATCHLO,	$18		/* watchpoint */
+.set	C0_WATCHHI,	$19		/* watchpoint */
+.set	C0_ECC,		$26		/* S-cache ECC and primary parity */
+.set	C0_CACHE_ERR,	$27		/* cache error status */
+.set	C0_TAGLO,	$28		/* cache operations */
+.set	C0_TAGHI,	$29		/* cache operations */
+.set	C0_ERROR_EPC,	$30		/* ECC error prg. counter */
+
 .endif

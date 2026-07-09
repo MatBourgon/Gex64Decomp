@@ -214,7 +214,7 @@ segments:
       - [0x5DB10, hasm, ../src/os/exceptasm]
       - [0x5E8F0, hasm, ../src/os/getsr]
       - [0x5E900, hasm, ../src/os/interrupt]
-      - [0x5E940, hasm, os/probetlb]
+      - [0x5E940, hasm, ../src/os/probetlb]
       - [0x5EA00, hasm, os/setintmask]
       - [0x5EAA0, hasm, os/setfpccsr]
       - [0x5EAB0, hasm, os/setsr]
