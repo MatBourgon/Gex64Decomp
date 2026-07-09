@@ -99,17 +99,16 @@ INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015B144_942C4);
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015B220_943A0);
 
-int func_8015B334_944B4(Instance* instance) {
-    int* intro;
+int func_8015B334_944B4(Intro* intro) {
+    Instance* instance;
     int result;
     int flag;
 
-    intro = (int*)instance->introData;
-    if (intro != 0) {
-        result = intro[0xFC / 4] < intro[0x100 / 4];
+    instance = intro->instance;
+    if (instance != 0) {
+        result = instance->_F4[2] < instance->_100;
     } else {
-        /* with no introData, the intro field slot holds flag bits here */
-        flag = (int)instance->intro & 8;
+        flag = intro->flags & 8;
         result = flag == 0;
     }
     return result;

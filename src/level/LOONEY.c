@@ -1,6 +1,7 @@
 #include "common.h"
 
 #include "level/LOONEY.h"
+#include "types/G2String.h"
 #include "OBTABLE.h"
 #include "MATRIX.h"
 
@@ -487,8 +488,7 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_trapmuv_OnUpdate);
 void looney_trapmuv_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-extern int D_80161E00_BA0B0;
-extern int D_80161E04_BA0B4;
+extern char D_80161E00_BA0B0[];
 
 void looney_pusher_OnCreate(Instance* instance, GameTracker* gameTracker) {
     const char* name;
@@ -496,7 +496,7 @@ void looney_pusher_OnCreate(Instance* instance, GameTracker* gameTracker) {
     *(int*)&instance->_108 = 0;
     instance->_100 = 0;
     name = instance->object->name;
-    if (((int*)name)[0] == D_80161E00_BA0B0 && ((int*)name)[1] == D_80161E04_BA0B4) {
+    if (G2String_Compare_EQ(name, D_80161E00_BA0B0)) {
         instance->_104 = 0;
     } else {
         instance->_104 = 0x14;

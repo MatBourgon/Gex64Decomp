@@ -264,14 +264,13 @@ INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_80161670_92810);
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_popper_OnUpdate);
 
-extern int D_80161618_927B8;
-extern int D_8016161C_927BC;
+extern char D_80161618_927B8[];
 
 void final_popper_OnCollide(Instance* instance, GameTracker* gameTracker) {
     const char* name;
 
     name = instance->bspTree->instanceSpline->object->name;
-    if (((int*)name)[0] == D_80161618_927B8 && ((int*)name)[1] == D_8016161C_927BC) {
+    if (G2String_Compare_EQ(name, D_80161618_927B8)) {
         *(short*)&instance->_F4[2] = 3;
     }
 }
