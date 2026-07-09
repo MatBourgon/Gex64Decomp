@@ -12,3 +12,7 @@ src/os/setfpccsr.s
 src/os/setsr.s
 src/os/maptlbrdb.s
 src/rmon/rmonrcp.s
+src/os/invaldcache.s
+src/os/invalicache.s
+src/os/writebackdcache.s
+src/os/writebackdcacheall.s
