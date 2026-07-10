@@ -143,9 +143,13 @@ segments:
       - [0x532F0, c, _532f0]
 
       # Start of Libraries
+
+      # Lib mus
       - [0x53BD0, c, libmus/player_commands]
       - [0x55110, c, libmus/player]
       - [0x56790, c, _56790]
+
+      # General SDK
       - [0x57220, c, gu/mtxutil]
       - [0x574A0, c, gu/mtxcatf]
       - [0x57630, c, gu/perspective]
@@ -300,6 +304,8 @@ segments:
       - [0x69F50, hasm, ../src/rmon/rmonrcp]
       - [0x69FF0, c, rmon/rmonbrk]
       - [0x6A990, c, libc/ldiv]
+
+      # Lib KMC
       - [0x6AB50, c, libkmc/memset]
       - [0x6AC20, c, libkmc/rand]
       - [0x6AC60, asm, _6ac60]
@@ -376,8 +382,8 @@ segments:
       - [0x7F910, .rodata, sched/sched]
       - [0x7F930, .rodata, gu/libm_vals]
       - [0x7F940, .rodata, gu/cosf]
-      - [0x7F9A0, .rodata, os/exceptasm]
-      - [0x7FA10, .rodata, os/setintmask]
+      - [0x7F9A0, .rodata, ../src/os/exceptasm]
+      - [0x7FA10, .rodata, ../src/os/setintmask]
       - [0x7FAD0, .rodata, audio/env]
       - [0x7FBC0, .rodata, audio/resample]
       - [0x7FBF0, .rodata, audio/reverb]

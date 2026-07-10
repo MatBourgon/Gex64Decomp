@@ -26,6 +26,17 @@ def ParseSubsegmentLabel(label, offset):
     else:
         return ("/" + label[:label.rfind("/") + 1], label[label.rfind("/") + 1:])
 
+def GetOffsetName(offset):
+    if offset <= 0x53BD0:
+        return "game"
+    if offset <= 0x57220:
+        return "libmus"
+    if offset <= 0x6AC60:
+        return "sdk"
+    if offset <= 0x6B6F0:
+        return "libkmc"
+    return "unknown"
+
 def ParseMainSegment(segment):
     subsegments = []
     for subsegment in segment["subsegments"]:
@@ -34,13 +45,14 @@ def ParseMainSegment(segment):
             subtype = subsegment[1] if len(subsegment) > 1 else None
             label = subsegment[2] if len(subsegment) > 2 else None
             (path, name) = ParseSubsegmentLabel(label, offset)
+            offsetName = GetOffsetName(offset)
             match subtype:
                 case "c":
-                    subsegments.extend(CreateSegmentDefinition(name, path, True, "game" if offset < 0x53BD0 else "sdk"))
+                    subsegments.extend(CreateSegmentDefinition(name, path, True, offsetName))
                 case "asm":
-                    subsegments.extend(CreateSegmentDefinition(name, path, False, "game" if offset < 0x53BD0 else "sdk"))
+                    subsegments.extend(CreateSegmentDefinition(name, path, False, offsetName))
                 case "hasm":
-                    subsegments.extend(CreateSegmentDefinition(name, path, True, "game" if offset < 0x53BD0 else "sdk"))
+                    subsegments.extend(CreateSegmentDefinition(name, path, True, offsetName))
     return subsegments
 
 def ParseLevelSegment(segment):
