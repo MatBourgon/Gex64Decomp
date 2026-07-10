@@ -18,7 +18,19 @@ int func_8004A344(int*** arg0) {
   return *var_v0[1];
 }
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A368);
+int func_8004A368(int** arg0, int arg1) {
+    int var_a0;
+    int* temp_v1;
+
+    temp_v1 = (int*)arg0[7][1];
+    var_a0 = 0;
+    
+    if ((temp_v1 != 0) && (arg1 < temp_v1[0])) {
+        var_a0 = ((int**)temp_v1)[arg1 + 1][9];
+    }
+    
+    return var_a0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A3B4);
 
@@ -62,7 +74,26 @@ void INSTANCE_InsertInstanceWithFlagsCleared(Instance* instance, int flags) {
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A61C);
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A67C);
+extern int func_8004A61C(void);
+
+int func_8004A67C(short* arg0) {
+    
+    int temp_v0;
+    int var_s0 = -1;
+
+    if (arg0 != 0) {
+        
+         var_s0 = arg0[47] + 1;
+        
+        temp_v0 = func_8004A61C();
+        
+        if (var_s0 >= temp_v0) {
+             var_s0 = temp_v0 - 1;
+        }
+    }
+    
+    return  var_s0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A6C8);
 
@@ -146,7 +177,30 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004B090);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004B23C);
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004B2DC);
+int func_8004B2DC(int arg0) {
+    int var_a2;
+    int var_a3;
+    int temp_a1;
+    unsigned int var_a0;
+    unsigned int var_v1;
+
+    var_a0 = arg0;
+    var_a2 = 0;
+    var_v1 = 0;
+    var_a3 = 0xF;
+    do {
+        var_v1 = (var_v1 * 4) | (var_a0 >> 0x1E);
+        var_a2 *= 2;
+        temp_a1 = (var_a2 * 2) + 1;
+        var_a0 *= 4;
+        if (var_v1 >= temp_a1) {
+            var_v1 -= temp_a1;
+            var_a2 += 1;
+        }
+        var_a3 -= 1;
+    } while (var_a3 != -1);
+    return var_a2;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004B32C);
 
