@@ -491,12 +491,9 @@ void looney_trapmuv_OnCollide(Instance* instance, GameTracker* gameTracker) {
 extern char D_80161E00_BA0B0[];
 
 void looney_pusher_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    const char* name;
-
     *(int*)&instance->_108 = 0;
     instance->_100 = 0;
-    name = instance->object->name;
-    if (G2String_Compare_EQ(name, D_80161E00_BA0B0)) {
+    if (G2String_Compare_EQ(instance->object->name, D_80161E00_BA0B0)) {
         instance->_104 = 0;
     } else {
         instance->_104 = 0x14;

@@ -267,10 +267,7 @@ INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_popper_OnUpdate);
 extern char D_80161618_927B8[];
 
 void final_popper_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    const char* name;
-
-    name = instance->bspTree->instanceSpline->object->name;
-    if (G2String_Compare_EQ(name, D_80161618_927B8)) {
+    if (G2String_Compare_EQ(instance->bspTree->instanceSpline->object->name, D_80161618_927B8)) {
         *(short*)&instance->_F4[2] = 3;
     }
 }
