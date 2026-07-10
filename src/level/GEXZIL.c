@@ -99,9 +99,28 @@ INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015B144_942C4);
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015B220_943A0);
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015B334_944B4);
+int func_8015B334_944B4(Intro* intro) {
+    Instance* instance;
+    int result;
+    int flag;
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_mechjet_OnCreate);
+    instance = intro->instance;
+    if (instance != 0) {
+        result = instance->_F4[2] < instance->_100;
+    } else {
+        flag = intro->flags & 8;
+        result = flag == 0;
+    }
+    return result;
+}
+
+void gexzil_mechjet_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    if (instance->flags & 0x20000) {
+        ((int*)instance->parent->object->data)[0x94 / 4] = 0;
+    } else {
+        instance->flags |= 0x10400;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_mechjet_OnUpdate);
 
@@ -307,7 +326,16 @@ INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_mecha_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_80160B70_99CF0);
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_80160BD8_99D58);
+/* p0/p1 are packed short pairs (x in the high half, y in the low half) */
+int func_80160BD8_99D58(int p0, int p1) {
+    int angle;
+
+    angle = (short)ratan2(((short*)&p1)[1] - ((short*)&p0)[1], ((short*)&p1)[0] - ((short*)&p0)[0]);
+    if (angle < 0) {
+        angle += 0x1000;
+    }
+    return angle;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_80160C28_99DA8);
 
@@ -520,7 +548,14 @@ INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_explode_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_explode_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_explode_OnCollide);
+void gexzil_explode_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+
+    bsp = instance->bspTree;
+    if (bsp->instanceSpline == gameTracker->player && bsp->_06 == 1) {
+        func_80022714(instance, gameTracker);
+    }
+}
 
 INCLUDE_RODATA("asm/nonmatchings/level/GEXZIL", D_80162B70_9BCF0);
 

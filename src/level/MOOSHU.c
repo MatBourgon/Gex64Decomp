@@ -25,7 +25,14 @@ void func_8015A150_C2AD0(Instance* instance, short arg1, short arg2) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015A18C_C2B0C);
+int func_8015A18C_C2B0C(Instance* instance) {
+    if (instance->flags2 & 0x10) {
+        PlayerInstance->_F4[0] = 2;
+        gameTracker8->player->_F4[2] &= ~0x1000000;
+        return 1;
+    }
+    return 0;
+}
 
 void func_8015A1E0_C2B60(Instance* instance, int arg1, int arg2, short* arg3) {
     short angle;
@@ -87,7 +94,21 @@ void func_8015B5F0_C3F70(Instance* instance, short* arg1) {
     arg1[6] = 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015B614_C3F94);
+void func_8015C710_C5090(Instance* instance, GameTracker* gameTracker);
+
+void func_8015B614_C3F94(Instance* instance, short* arg1) {
+    Instance* target;
+
+    instance->currentModelAnim = 4;
+    instance->flags2 &= ~0x10;
+    instance->currentAnimFrame = 0;
+    arg1[0xC / 2] = 2;
+    *(unsigned short*)&arg1[0x4 / 2] &= 0xEFF7;
+    target = ((Instance**)arg1)[0];
+    if (target != 0) {
+        func_8015C710_C5090(target, gameTracker8);
+    }
+}
 
 void func_8015B674_C3FF4(Instance* instance, short* arg1) {
     instance->flags2 &= ~0x10;
@@ -146,7 +167,12 @@ INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", mooshu_moolevr_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", mooshu_moolevr_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015C6D0_C5050);
+int func_8015C6D0_C5050(Instance* instance) {
+    if (instance->rotation.x == 0 || (instance->_F4[0] == 3 && instance->rotation.x < 0x400)) {
+        return 1;
+    }
+    return 0;
+}
 
 void func_8015C708_C5088(Instance* instance, GameTracker* gameTracker)
 {

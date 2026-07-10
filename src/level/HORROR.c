@@ -12,18 +12,52 @@ extern int D_80154834;
 extern int D_80164C30_A8460;
 
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_drawer_OnCreate);
+void horror_drawer_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    int* intro;
+    int v;
+
+    intro = (int*)instance->introData;
+    if (intro != 0) {
+        v = intro[0];
+        instance->_F4[0] = v;
+        if (v == 1) {
+            instance->scale.x = 1;
+            func_8002E704();
+        }
+    } else {
+        instance->_F4[0] = 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_drawer_OnUpdate);
 
 void horror_drawer_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_chandb_OnCreate);
+void horror_chandb_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    int* intro;
+
+    intro = (int*)instance->introData;
+    instance->_F4[0] = 0;
+    instance->flags |= 0x100000;
+    if (intro[0] == 1) {
+        instance->currentModelAnim = 1;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_chandb_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_chandb_OnCollide);
+void horror_chandb_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+
+    bsp = instance->bspTree;
+    if (bsp->_04 == 1) {
+        instance->_F4[1] = 2;
+    }
+    if (bsp->_06 == 4) {
+        instance->_F4[1] = 1;
+    }
+}
 
 void horror_chand_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_E0[1] = -8;
@@ -35,7 +69,17 @@ void horror_chand_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_chand_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_chand_OnCollide);
+void horror_chand_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    int on;
+
+    on = 1;    /* materialized early — required for the original register allocation */
+    if (instance->bspTree->_06 == 4) {
+        instance->_F4[1] = on;
+    }
+    if (instance->intro->multiSpline != 0) {
+        GenericCollide(instance, gameTracker);
+    }
+}
 
 void horror_axe_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int v;
@@ -58,13 +102,38 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_8015A014_9D844);
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_axe_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_axe_OnCollide);
+void horror_axe_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_face_OnCreate);
+    bsp = instance->bspTree;
+    if (bsp->_06 == 1 && bsp->instanceSpline == gameTracker->player && instance->_F4[0] != 0) {
+        func_80022714(instance, gameTracker);
+    }
+}
+
+void horror_face_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    instance->_F4[0] = 1;
+    instance->flags |= 0x100000;
+    if (((short*)instance->introData)[1] != 0) {
+        instance->_F4[0] = 0;
+        instance->flags |= 0x800;
+    }
+    instance->_104 = 0;
+    *(int*)&instance->_108 = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_face_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_face_OnCollide);
+void horror_face_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+    int state;
+
+    state = instance->_F4[0];
+    bsp = instance->bspTree;
+    if (state == 1 && bsp->_06 == 1 && bsp->instanceSpline == gameTracker->player) {
+        func_80022714(instance, gameTracker);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_zombie_OnCreate);
 
@@ -106,7 +175,16 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_8015BF7C_9F7AC);
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_huckhed_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_gate_OnCreate);
+void horror_gate_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    short* intro;
+
+    intro = (short*)instance->introData;
+    if (intro != 0 && intro[0] == 1) {
+        instance->scale.z = 1;
+        instance->_F4[0] = 2;
+        func_8002E704();
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_gate_OnUpdate);
 
@@ -145,7 +223,14 @@ void horror_ldgeact_OnCollide(Instance* instance, GameTracker* gameTracker) {
 void horror_bkshlf_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_bkshlf_OnUpdate);
+void horror_bkshlf_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    if (instance->_F4[1] == 1) {
+        *(unsigned short*)&instance->rotation.z -= 0xC;
+    } else if (instance->_F4[1] == 2) {
+        *(unsigned short*)&instance->rotation.z += 0xC;
+    }
+    instance->_F4[1] = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_bkshlf_OnCollide);
 
@@ -432,7 +517,17 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_evileye_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_splitob_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_splitob_OnUpdate);
+void horror_splitob_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    Instance* player;
+
+    player = PlayerInstance;
+    if (player->position.z < instance->_100 && instance->_100 - 0x100 < player->position.z) {
+        *(int*)&player->_C0[0] = instance->_F4[2];
+        player->_C0[2] = player->position.x;
+        player->_C0[3] = player->position.y;
+        player->_C0[4] = instance->_100;
+    }
+}
 
 void horror_splitob_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
@@ -444,7 +539,17 @@ void horror_elevpan_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_elevpan_OnUpdate);
+extern int D_80078654;
+
+void horror_elevpan_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    short* intro;
+
+    intro = (short*)instance->introData;
+    if (D_80078654 != 0 && instance->currentTextureAnimFrame != 1) {
+        instance->currentTextureAnimFrame = 1;
+        intro[0] = 1;
+    }
+}
 
 void horror_elevpan_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }

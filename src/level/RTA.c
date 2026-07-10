@@ -9,7 +9,25 @@ void rta_zgrate_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_F4[2] = instance->intro->position.z;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zgrate_OnUpdate);
+extern char D_8015EF10_DF580;
+
+void rta_zgrate_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    SVECTOR unused;          /* dead local — reproduces the 8-byte frame */
+    int z;
+    int zz;
+
+    if (D_8015EF10_DF580 != 0) {
+        z = instance->position.z;
+        zz = z;
+        z = z - instance->_F4[2];
+        if (z < 0x9C4) {
+            instance->position.z = zz + 100;
+        }
+    } else {
+        instance->position.z = instance->_F4[2];
+        instance->_100 = 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zshark_OnCreate);
 
@@ -150,7 +168,14 @@ void rta_lavadrp_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 void rta_lavadrp_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zturtle_OnCreate);
+void rta_zturtle_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    SCRIPT_InstanceSplineInit(instance, gameTracker);
+    *(int*)&instance->_34[0] = 5;
+    instance->scale.x = instance->scale.y = instance->scale.z = 0xCE4;
+    instance->_F4[2] = 0;
+    *(int*)&instance->_10C = 0;
+    instance->flags |= 0x100000;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zturtle_OnUpdate);
 
@@ -158,7 +183,12 @@ INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zturtle_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zarchsig_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_count_OnCreate);
+void rta_count_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    instance->_F4[2] = 0x20;
+    instance->_100 = 0x15E;
+    instance->flags |= 0x80;
+    instance->currentTextureAnimFrame = ((int*)gameTracker8)[0x4CC8 / 4] + 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_count_OnUpdate);
 
@@ -174,7 +204,17 @@ INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015B1D4_DB844);
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015B4EC_DBB5C);
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zgeyser_OnCreate);
+extern char D_8015EE74_DF4E4[];
+
+void rta_zgeyser_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    instance->_F4[2] = OBTABLE_FindObject(D_8015EE74_DF4E4);
+    instance->scale.x = 0x1000;
+    instance->scale.y = 0x1000;
+    *(short*)&instance->_100 = 0;
+    ((short*)&instance->_100)[1] = 0;
+    *(short*)&instance->_104 = 0;
+    instance->scale.z = 0x180;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zgeyser_OnUpdate);
 
@@ -297,9 +337,30 @@ void rta_qmark_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zarrow_OnCreate);
+void rta_zarrow_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    if (instance->flags & 0x20000) {
+        instance->intro->flags &= ~8;
+    } else {
+        instance->flags |= 0x10400;
+        instance->_F4[2] = 0;
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zarrow_OnUpdate);
+extern int D_8015EF14_DF584;
+extern short D_8015ED10_DF380[];
+
+void rta_zarrow_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    int v;
+
+    v = instance->_F4[2] + 1;
+    instance->_F4[2] = v;
+    if (v >= 0x14) {
+        instance->_F4[2] = 0;
+        if (D_8015EF14_DF584 != 0) {
+            func_8015C8C8_DCF38(&instance->position, 0x206C, D_8015EF14_DF584, D_8015ED10_DF380);
+        }
+    }
+}
 
 void func_8015C8C0_DCF30(Instance* instance, GameTracker* gameTracker) {
 }
@@ -320,7 +381,16 @@ INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zstmvent_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015D0B4_DD724);
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zstmvent_OnCollide);
+void rta_zstmvent_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+    Instance* player;
+
+    bsp = instance->bspTree;
+    player = gameTracker->player;
+    if (bsp->instanceSpline == player) {
+        func_80022714(bsp->instanceSpline, gameTracker);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015D20C_DD87C);
 
@@ -344,7 +414,16 @@ INCLUDE_RODATA("asm/nonmatchings/level/RTA", D_8015EEB8_DF528);
 
 INCLUDE_RODATA("asm/nonmatchings/level/RTA", D_8015EEBC_DF52C);
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015E228_DE898);
+extern int D_8015EF18_DF588;
+
+void func_8015E228_DE898(Instance* instance) {
+    instance->_F4[0] = 6;
+    instance->currentAnimFrame = 0x1A;
+    instance->currentModelAnim = 0x35;
+    instance->_F4[1] = 0;
+    D_8015EF18_DF588 = 0x10;
+    D_8015EF14_DF584 = OBTABLE_FindObject("zbubbl__");
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015E27C_DE8EC);
 
