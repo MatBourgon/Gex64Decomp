@@ -94,6 +94,14 @@ def CreateObjJSON(segments):
             {
                 "id": "level",
                 "name": "Level"
+            },
+            {
+                "id": "libmus",
+                "name": "Libmus"
+            },
+            {
+                "id": "libkmc",
+                "name":" LibKMC"
             }
         ]
     }
