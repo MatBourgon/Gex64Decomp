@@ -24,15 +24,16 @@ void func_80046730(Instance* instance) {
 INCLUDE_ASM("asm/nonmatchings/_47260", func_8004675C);
 
 extern int D_800EB8A0;
-extern int func_8004675C;
-int func_80046924(int* arg0) {
-    arg0[43] = (int)&func_8004675C;       
-    arg0[44] = 0;                         
+extern func_8004675C(void*,void*);
+
+int func_80046924(Instance* instance) {
+    instance[43] = (int)&func_8004675C;       
+    instance[44] = 0;                         
     
-    arg0[63] = 0x1000;                    
-    arg0[64] = func_80015F14(D_800EB8A0); 
+    instance[63] = 0x1000;                    
+    instance[64] = func_80015F14(D_800EB8A0); 
     
-    arg0[65] = 0;                         
+    instance[65] = 0;                         
     func_8004A47C(arg0);
 }
 
@@ -101,37 +102,37 @@ extern UnknownStruct8 D_8007E6C0;
 extern int D_800EB8A0;
 
 
-int func_80047240(int arg0) {
+int func_80047240(Instance* instance) {
     UnknownStruct8 sp20;
 
     sp20 = D_8007E6C0; 
 
 
-    func_80017598(arg0, 0, &sp20, 0, D_800EB8A0, 0, 0);
+    func_80017598(instance, 0, &sp20, 0, D_800EB8A0, 0, 0);
 }
 
 extern int D_800EB8A0;
 extern int func_80016894;
 
-int func_800472A4(int arg0) {
-    func_8001719C(arg0, 0, 0, 0, D_800EB8A0, 0, &func_80016894, 8);
+int func_800472A4(Instance* instance) {
+    func_8001719C(instance, 0, 0, 0, D_800EB8A0, 0, &func_80016894, 8);
 }
 
-extern char D_8007E6C8;
-extern char D_8007E6D4;
+extern char D_8007E6C8[];
+extern char D_8007E6D4[];
 
 Model* func_800472F0(int arg0) {
-    Object* temp_v0;
-    char* var_v0;
+    Object* object;
+    char* effectName;
 
-    var_v0 = &D_8007E6D4;
+    effectName = D_8007E6D4;
     if (arg0 != 0) {
-        var_v0 = &D_8007E6C8;
+        effectName = D_8007E6C8;
     }
     
-    temp_v0 = OBTABLE_FindObject(var_v0);
+    object = OBTABLE_FindObject(effectName);
     
-    return (temp_v0 != NULL) ? *temp_v0->modelList : NULL;
+    return (object != NULL) ? object->modelList[0] : NULL;
 }
 
 int func_80047344(Instance* instance, int arg1) {
