@@ -18,11 +18,11 @@ int func_8004A344(int*** arg0) {
   return *var_v0[1];
 }
 
-int func_8004A368(int** arg0, int arg1) {
+int func_8004A368(Instance* instance, int arg1) {
     int var_a0;
     int* temp_v1;
 
-    temp_v1 = (int*)arg0[7][1];
+    (int**)temp_v1 = ((int**)instance)[7][1];
     var_a0 = 0;
     
     if ((temp_v1 != 0) && (arg1 < temp_v1[0])) {
@@ -74,18 +74,18 @@ void INSTANCE_InsertInstanceWithFlagsCleared(Instance* instance, int flags) {
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A61C);
 
-extern int func_8004A61C(void);
+extern int func_8004A61C(Instance* instance);
 
-int func_8004A67C(short* arg0) {
+int func_8004A67C(Instance* arg0) {
     
     int temp_v0;
     int var_s0 = -1;
 
     if (arg0 != 0) {
         
-         var_s0 = arg0[47] + 1;
+         var_s0 = ((short*)arg0)[47] + 1;
         
-        temp_v0 = func_8004A61C();
+        temp_v0 = func_8004A61C(arg0);
         
         if (var_s0 >= temp_v0) {
              var_s0 = temp_v0 - 1;
