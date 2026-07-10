@@ -27,13 +27,13 @@ def ParseSubsegmentLabel(label, offset):
         return ("/" + label[:label.rfind("/") + 1], label[label.rfind("/") + 1:])
 
 def GetOffsetName(offset):
-    if offset <= 0x53BD0:
+    if offset < 0x53BD0:
         return "game"
-    if offset <= 0x57220:
+    if offset < 0x57220:
         return "libmus"
-    if offset <= 0x6AC60:
+    if offset < 0x6AC60:
         return "sdk"
-    if offset <= 0x6B6F0:
+    if offset < 0x6B6F0:
         return "libkmc"
     return "unknown"
 
