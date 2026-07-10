@@ -24,16 +24,16 @@ void func_80046730(Instance* instance) {
 INCLUDE_ASM("asm/nonmatchings/_47260", func_8004675C);
 
 extern int D_800EB8A0;
-extern func_8004675C(void*,void*);
+extern func_8004675C(void,void);
 
 int func_80046924(Instance* instance) {
-    instance[43] = (int)&func_8004675C;       
-    instance[44] = 0;                         
-    
-    instance[63] = 0x1000;                    
-    instance[64] = func_80015F14(D_800EB8A0); 
-    
-    instance[65] = 0;                         
+    instance->processFunc = func_8004675C;
+    instance->collideFunc = 0;
+
+    instance->F4[2] = 0x1000;
+    instance->_100 = func_80015F14(D_800EB8A0); 
+
+    instance->_104 = 0;
     func_8004A47C(instance);
 }
 
