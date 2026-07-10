@@ -30,7 +30,7 @@ int func_80046924(Instance* instance) {
     instance->processFunc = func_8004675C;
     instance->collideFunc = 0;
 
-    instance->F4[2] = 0x1000;
+    instance->_F4[2] = 0x1000;
     instance->_100 = func_80015F14(D_800EB8A0); 
 
     instance->_104 = 0;
