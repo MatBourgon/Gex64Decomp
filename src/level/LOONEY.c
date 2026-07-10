@@ -1,6 +1,7 @@
 #include "common.h"
 
 #include "level/LOONEY.h"
+#include "types/G2String.h"
 #include "OBTABLE.h"
 #include "MATRIX.h"
 
@@ -459,7 +460,19 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_teeter_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_teeter_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_trapsit_OnCreate);
+extern short D_80161CA4_B9F54[];
+
+void looney_trapsit_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    if (instance->introData == 0) {
+        instance->introData = D_80161CA4_B9F54;
+    }
+    instance->_104 = instance->position.z;
+    if (((short*)instance->introData)[0] == 0) {
+        instance->_F4[2] = 2;
+    } else {
+        instance->_F4[2] = 0;
+    }
+}
 
 INCLUDE_RODATA("asm/nonmatchings/level/LOONEY", D_80161DD8_BA088);
 
@@ -475,7 +488,17 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_trapmuv_OnUpdate);
 void looney_trapmuv_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_pusher_OnCreate);
+extern char D_80161E00_BA0B0[];
+
+void looney_pusher_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    *(int*)&instance->_108 = 0;
+    instance->_100 = 0;
+    if (G2String_Compare_EQ(instance->object->name, D_80161E00_BA0B0)) {
+        instance->_104 = 0;
+    } else {
+        instance->_104 = 0x14;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_pusher_OnUpdate);
 
@@ -520,7 +543,17 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_8015FEC8_B8178);
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_daisy_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_grrfish_OnCreate);
+extern int D_80161D98_BA048[];
+
+void looney_grrfish_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    if (instance->object->data == 0) {
+        instance->object->data = D_80161D98_BA048;
+    }
+    instance->_D0[0] = instance->intro->position.z;
+    if (*(int*)instance->object->data >= 0) {
+        instance->currentModel = 1;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_80160164_B8414);
 

@@ -22,9 +22,19 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_80159D54_DFB74);
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_80159E3C_DFC5C);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_dust_OnCreate);
+void scifi_dust_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    instance->_F4[2] = rand() % 10 + 6;
+}
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_dust_OnUpdate);
+void scifi_dust_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    unsigned short z;
+
+    z = instance->position.z - instance->_F4[2];
+    instance->position.z = z;
+    if ((short)z < instance->intro->position.z - 0x190) {
+        INSTANCE_KillInstance(instance);
+    }
+}
 
 void scifi_crawler_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
@@ -519,7 +529,13 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015BFD4_E1DF4);
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_bldbota_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_bldbota_OnUpdate);
+void scifi_bldbota_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    unsigned short frame;
+
+    frame = instance->currentTextureAnimFrame;
+    instance->currentTextureAnimFrame = frame + 1;
+    func_8015BFD4_E1DF4(instance->_F4[2], (short)frame);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_abubble_OnCreate);
 
@@ -540,7 +556,18 @@ void scifi_xa_OnCreate(Instance* instance, GameTracker* gameTracker)
 }
 
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_xa_OnUpdate);
+void scifi_xa_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    int w;
+
+    instance->_F4[2] += 1;
+    *(unsigned short*)&instance->scale.x += 0x555;
+    w = instance->_F4[2];
+    *(unsigned short*)&instance->scale.y += 0x555;
+    *(unsigned short*)&instance->scale.z += 0x555;
+    if (w >= 0xD) {
+        func_8002E350(instance);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_apod_OnCreate);
 
@@ -1085,7 +1112,10 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_rt_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_rt_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_rtblast_OnCreate);
+void scifi_rtblast_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    instance->initialPos = instance->position;
+    *(ROTATION*)&instance->intro->rotation = instance->rotation;
+}
 
 void scifi_rtblast_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     short dx;

@@ -205,7 +205,12 @@ INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015BA9C_82C7C);
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_ebridge_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_ebridge_OnCollide);
+void circuit_ebridge_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    if (instance->bspTree->instanceSpline == gameTracker->player) {
+        instance->_D0[0] = 10;
+        instance->_120 |= 1;
+    }
+}
 
 void circuit_ebrijac_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int* intro;
@@ -218,7 +223,19 @@ void circuit_ebrijac_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_104 = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_ebrijac_OnUpdate);
+void circuit_ebrijac_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    if (instance->_104 != 0) {
+        if (instance->scale.z == 0x1000) {
+            instance->scale.z = 0x800;
+            func_8002E704();
+        }
+    } else {
+        if (instance->scale.z != 0x1000) {
+            instance->scale.z = 0x1000;
+            func_8002E704();
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_ebrijac_OnCollide);
 
@@ -387,7 +404,13 @@ void func_8015D4B0_84690(Instance* instance, GameTracker* gameTracker) {
     func_8004AAA8(instance, 0x18, 0);
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_follow_OnCreate);
+void circuit_follow_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    if ((instance->intro->flags & 0x80) == 0) {
+        instance->flags |= 0x400;
+    }
+    instance->_100 = 1;
+    instance->flags |= 0x100800;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_follow_OnUpdate);
 
@@ -420,11 +443,24 @@ INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015DB80_84D60);
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_ppath_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015DD58_84F38);
+void func_8015DD58_84F38(Instance* instance) {
+    if (instance->_F4[0] != 2) {
+        instance->_F4[0] = 2;
+    } else {
+        Model* model;
+
+        model = instance->object->modelList[instance->currentModel];
+        instance->currentTextureAnimFrame = ((int*)model->_20)[2] * ((int*)model->_20)[3] >> 1;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_ppath_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_ppath_OnCollide);
+void circuit_ppath_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    if (instance->object->oflags & 0x400) {
+        GenericCollide(instance, gameTracker);
+    }
+}
 
 extern char D_801635A0_8A780[];
 
@@ -534,7 +570,16 @@ INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_reza_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_reza_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015F6B8_86898);
+void func_8015F6B8_86898(Instance* instance, int arg1, int arg2) {
+    instance->_F4[0] = 1;
+    instance->_F4[1] = 2;
+    instance->currentModelAnim = 1;
+    instance->currentAnimFrame = 0;
+    *(short*)&instance->_110 = arg1;
+    ((short*)&instance->_110)[1] = arg2;
+    instance->flags &= ~1;
+    func_8015FC70_86E50(instance);
+}
 
 void func_8015F708_868E8(Instance* instance) {
     instance->_F4[0] = 5;
@@ -563,7 +608,23 @@ void func_8015F75C_8693C(Instance* instance) {
     instance->currentModelAnim = val2;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015F780_86960);
+/* walks a list of 0x14-byte weighted records, returning the record where
+   the running weight sum first exceeds val (weighted random pick) */
+int* func_8015F780_86960(int* p, int val) {
+    int sum;
+
+    sum = 0;
+    if (val >= 0) {
+        while (1) {
+            sum += p[0];
+            if (val < sum) {
+                break;
+            }
+            p += 0x14 / 4;
+        }
+    }
+    return p;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_robo_OnCreate);
 
@@ -618,7 +679,14 @@ INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_explode_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_explode_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_explode_OnCollide);
+void circuit_explode_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+
+    bsp = instance->bspTree;
+    if (bsp->instanceSpline == gameTracker->player && bsp->_06 == 1) {
+        func_80022714(instance, gameTracker);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_pulse_OnCreate);
 
