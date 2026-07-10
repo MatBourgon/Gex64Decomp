@@ -34,7 +34,7 @@ int func_80046924(Instance* instance) {
     instance[64] = func_80015F14(D_800EB8A0); 
     
     instance[65] = 0;                         
-    func_8004A47C(arg0);
+    func_8004A47C(instance);
 }
 
 void func_80046978(Instance* instance) {
