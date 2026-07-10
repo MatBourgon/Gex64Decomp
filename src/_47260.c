@@ -24,7 +24,7 @@ void func_80046730(Instance* instance) {
 INCLUDE_ASM("asm/nonmatchings/_47260", func_8004675C);
 
 extern int D_800EB8A0;
-extern func_8004675C(void,void);
+extern func_8004675C(void*,void*);
 
 int func_80046924(Instance* instance) {
     instance->processFunc = func_8004675C;
