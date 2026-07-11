@@ -4,7 +4,24 @@
 #include "types/GameTracker.h"
 #include "types/BSPTree.h"
 
-INCLUDE_ASM("asm/nonmatchings/_24cf0", func_800240F0);
+int func_800240F0(int* arg0, int* arg1) {
+    if (arg0 != 0) {
+        arg0[4] &= ~0x400;
+    }
+
+    if (arg1 != 0) {
+        arg1 = (int*)arg1[3];
+        if (arg1 != 0) {
+            arg1 = (int*)arg1[8];
+            if (arg1 != 0) {
+                *(int*)((int)arg1 + 0x130) = 0;
+                *(short*)((int)arg1 + 0x134) = 0;
+                *(short*)((int)arg1 + 0xDE) = 0;
+                *(short*)((int)arg1 + 0x18C) = 0;
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80024148);
 
@@ -18,7 +35,17 @@ INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80024A80);
 
 INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80024B94);
 
-INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80024C30);
+int func_80024C30(int arg0, int arg1, int arg2) {
+    int temp_a2 = *(int*)(arg1 + 0x130);
+    
+    if (temp_a2 != 0) {
+        int temp_v1 = *(int*)(arg0 + 0x2c) + (*(short*)(arg1 + 0x134) << 5);
+
+        *(short*)(temp_a2 + 0x48) = *(int*)(temp_v1 + 0x14);
+        *(short*)(*(int*)(arg1 + 0x130) + 0x4a) = *(int*)(temp_v1 + 0x18);
+        *(short*)(*(int*)(arg1 + 0x130) + 0x4c) = *(int*)(temp_v1 + 0x1c);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80024C84);
 

@@ -119,7 +119,19 @@ INCLUDE_ASM("asm/nonmatchings/38670", func_80039980);
 
 INCLUDE_ASM("asm/nonmatchings/38670", func_80039A58);
 
-INCLUDE_ASM("asm/nonmatchings/38670", func_80039C20);
+int func_80039C20(int* arg0, short* arg1) {
+    short val = *(short*)((char*)arg0 + 0x98);
+    int var_a1;
+
+    if (val < -1) {
+        var_a1 = val + 1;
+    } else {
+        *(short*)((char*)arg0 + 0x98) = val - 1;
+        var_a1 = -1;
+    }
+    
+    func_80039A58(arg0, var_a1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/38670", func_80039C68);
 
