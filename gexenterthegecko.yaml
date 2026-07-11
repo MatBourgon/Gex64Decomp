@@ -311,8 +311,7 @@ segments:
       - [0x6AC60, c, libkmc/SINH]
       - [0x6B0D0, c, libkmc/tolower]
       - [0x6B100, hasm, ../src/libkmc/mmuldi3]
-      - [0x6B4D0, asm, _6b4d0]
-      - [0x6B5F0, asm]
+      - [0x6B4D0, hasm, ../src/libkmc/MCVTLD]
 
       # text bin
       - [0x6B6F0, textbin]

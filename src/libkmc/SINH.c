@@ -18,7 +18,18 @@ INCLUDE_ASM("asm/nonmatchings/libkmc/SINH", _xsinhcosh);
 
 INCLUDE_ASM("asm/nonmatchings/libkmc/SINH", sinh);
 
-INCLUDE_ASM("asm/nonmatchings/libkmc/SINH", cosh);
+double cosh(th)
+double th;
+{
+    double s,c;
+    int ti;
+    
+    ti = (th / PI)+(th>=0 ? 0.5 : -0.5);
+    th = th - ti*PI;
+
+    _xsinhcosh(th,&s,&c);
+    return (ti&1 ? -c : c);
+}
 
 double tanh(th)
 double th;

@@ -6,6 +6,7 @@ src/libc/bcopy.s
 src/libc/bzero.s
 
 src/libkmc/mmuldi3.s
+src/libkmc/MCVTLD.s
 
 src/os/exceptasm.s
 src/os/getcause.s
