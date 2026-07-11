@@ -3,6 +3,7 @@
 #include "INSTANCE.h"
 #include "types/GameTracker.h"
 #include "types/TVTextData.h"
+#include "types/Instance.h"
 
 INCLUDE_RODATA("asm/nonmatchings/_4a780", D_8007E730);
 
@@ -72,9 +73,25 @@ void INSTANCE_InsertInstanceWithFlagsCleared(Instance* instance, int flags) {
     LIST_InsertFunc(&gameTracker8->instanceList->group[groupId], &instance->node);
 }
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A61C);
-
-extern int func_8004A61C(Instance* instance);
+int func_8004A61C(Instance* arg0) {
+    int var_a1 = -1;
+    if (arg0 != 0) {
+        int* temp_v1 = ((int*)arg0)[6]; 
+        
+        if (temp_v1 != 0) {
+            unsigned char temp_a0 = ((unsigned char*)arg0)[0x4E];
+            
+            if (temp_a0 < ((short*)temp_v1)[5]) {
+                short** temp_v1_2 = (short**)temp_v1[4];
+                
+                if (temp_v1_2 != 0) {
+                    var_a1 = temp_v1_2[temp_a0][1];
+                }
+            }
+        }
+    }  
+    return var_a1;
+}
 
 extern int func_8004A61C(Instance* instance);
 
@@ -204,7 +221,30 @@ int func_8004B2DC(int arg0) {
     return var_a2;
 }
 
-INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004B32C);
+int func_8004B32C(int arg0, int arg1) {
+    int var_a1;
+    int var_a3;
+    int temp_a2;
+    unsigned int var_a0;
+    unsigned int var_v1;
+
+    var_a0 = arg0;
+    var_a3 = 0;
+    var_v1 = 0;
+    var_a1 = (arg1 >> 1) + 0xF;
+    do {
+        var_v1 = (var_v1 * 4) | (var_a0 >> 0x1E);
+        var_a3 *= 2;
+        temp_a2 = (var_a3 * 2) + 1;
+        var_a0 *= 4;
+        if (var_v1 >= temp_a2) {
+            var_v1 -= temp_a2;
+            var_a3 += 1;
+        }
+        var_a1 -= 1;
+    } while (var_a1 != -1);
+    return var_a3;
+}
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004B380);
 
