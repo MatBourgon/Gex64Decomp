@@ -450,6 +450,7 @@ dispatchTable = 0x8007A820;
 __rmonActive = 0x8007A900;
 ldigs = 0x8007A910;
 udigs = 0x8007A924;
+_ahtbl = 0x8007A940;
 asciiMap = 0x8007AB40;
 vi = 0x80079920; // size:0x60
 __osViCurr = 0x80079980;
