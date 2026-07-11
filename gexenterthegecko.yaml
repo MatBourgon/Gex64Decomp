@@ -308,7 +308,7 @@ segments:
       # Lib KMC
       - [0x6AB50, c, libkmc/memset]
       - [0x6AC20, c, libkmc/rand]
-      - [0x6AC60, asm, _6ac60]
+      - [0x6AC60, c, libkmc/SINH]
       - [0x6B0D0, c, libkmc/tolower]
       - [0x6B100, hasm, ../src/libkmc/mmuldi3]
       - [0x6B4D0, asm, _6b4d0]
@@ -350,7 +350,7 @@ segments:
       - [0x7B420, .data, rmon/rmoncmds]
       - [0x7B500, .data, rmon/rmonmain]
       - [0x7B510, .data, libc/xlitob]
-      - [0x7B540, data, _6ac60]
+      - [0x7B540, data, libkmc/SINH]
       - [0x7B740, .data, libkmc/tolower]
       - [0x7B840, data]
 
@@ -391,7 +391,7 @@ segments:
       - [0x7FC50, .rodata, libc/xprintf]
       - [0x7FDE0, .rodata, libc/xldtob]
       - [0x7FE50, .rodata, rmon/rmonbrk]
-      - [0x7FEB0, rodata, _6ac60]
+      - [0x7FEB0, .rodata, libkmc/SINH]
 
       # All bss segments need to be named for process to work
       - { type: bss, vram: 0x8007F340, name: _bss_7F340 }
