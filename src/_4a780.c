@@ -22,7 +22,7 @@ int func_8004A368(Instance* instance, int arg1) {
     int var_a0;
     int* temp_v1;
 
-    (int**)temp_v1 = instance->intro->_04;
+    temp_v1 = instance->intro->_04;
     var_a0 = 0;
     
     if ((temp_v1 != 0) && (arg1 < temp_v1[0])) {
