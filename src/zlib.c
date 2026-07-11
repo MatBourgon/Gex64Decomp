@@ -130,21 +130,51 @@ int inflate_flush(inflate_blocks_state* s, z_stream* z, int r) {
     return r;
 }
 
-INCLUDE_RODATA("asm/nonmatchings/zlib", inflate_mask);
+static unsigned int inflate_mask[17] = {
+    0x00000000,
+    0x00000001,
+    0x00000003,
+    0x00000007,
+    0x0000000F,
+    0x0000001F,
+    0x0000003F,
+    0x0000007F,
+    0x000000FF,
+    0x000001FF,
+    0x000003FF,
+    0x000007FF,
+    0x00000FFF,
+    0x00001FFF,
+    0x00003FFF,
+    0x00007FFF,
+    0x0000FFFF
+};
 
-INCLUDE_RODATA("asm/nonmatchings/zlib", inflate_fixed_built);
+static const unsigned int border[] = {
+    16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15
+};
 
-INCLUDE_RODATA("asm/nonmatchings/zlib", inflate_border);
+static const unsigned int inflate_cplens[31] = {
+3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31,
+        35, 43, 51, 59, 67, 83, 99, 115, 131, 163, 195, 227, 258, 0, 0
+};
 
-INCLUDE_RODATA("asm/nonmatchings/zlib", inflate_cplens);
+static const unsigned int inflate_cplext[31] = {
+0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2,
+        3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 0, 112, 112
+};
 
-INCLUDE_RODATA("asm/nonmatchings/zlib", inflate_cplext);
+static const int inflate_cpdist[30] = {
+1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193,
+        257, 385, 513, 769, 1025, 1537, 2049, 3073, 4097, 6145,
+        8193, 12289, 16385, 24577
+};
 
-INCLUDE_RODATA("asm/nonmatchings/zlib", inflate_cpdist);
-
-INCLUDE_RODATA("asm/nonmatchings/zlib", inflate_cpdext);
-
-extern unsigned int inflate_mask[];
+static const int inflate_cpdext[30] = {
+0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6,
+        7, 7, 8, 8, 9, 9, 10, 10, 11, 11,
+        12, 12, 13, 13
+};
 
 /* zlib infutil.h macros, adapted: FLUSH has no WRAP (it is explicit in
    NEEDOUT), and the huft tables link by absolute pointer */
@@ -166,7 +196,6 @@ extern unsigned int inflate_mask[];
 #define OUTBYTE(a) { *q++ = (unsigned char)(a); m--; }
 #define LOAD { LOADIN LOADOUT }
 
-extern const unsigned int inflate_border[];
 extern unsigned int D_801ECBE0[];
 
 int inflate_blocks(inflate_blocks_state* s, z_stream* z, int r) {
@@ -252,11 +281,11 @@ int inflate_blocks(inflate_blocks_state* s, z_stream* z, int r) {
         case BTREE:         /* get bit lengths tree for a dynamic block */
             while (s->sub.trees.index < 4 + (s->sub.trees.table >> 10)) {
                 NEEDBITS(3)
-                s->sub.trees.blens[inflate_border[s->sub.trees.index++]] = (unsigned int)b & 7;
+                s->sub.trees.blens[border[s->sub.trees.index++]] = (unsigned int)b & 7;
                 DUMPBITS(3)
             }
             while (s->sub.trees.index < 19) {
-                s->sub.trees.blens[inflate_border[s->sub.trees.index++]] = 0;
+                s->sub.trees.blens[border[s->sub.trees.index++]] = 0;
             }
             s->sub.trees.bb = 7;
             inflate_trees_bits(s->sub.trees.blens, &s->sub.trees.bb, &s->sub.trees.tb, s->hufts, z);
@@ -667,11 +696,6 @@ int inflate_trees_bits(unsigned int* c, unsigned int* bb, inflate_huft** tb, inf
     return huft_build(c, 19, 19, 0, 0, tb, bb, hp, &hn, D_801DC830);
 }
 
-extern unsigned int inflate_cplens[];
-extern unsigned int inflate_cplext[];
-extern unsigned int inflate_cpdist[];
-extern unsigned int inflate_cpdext[];
-
 int inflate_trees_dynamic(unsigned int nl, unsigned int nd, unsigned int* c, unsigned int* bl, unsigned int* bd, inflate_huft** tl, inflate_huft** td, inflate_huft* hp, z_stream* z) {
     int r;
     unsigned int hn;
@@ -688,7 +712,7 @@ int inflate_trees_dynamic(unsigned int nl, unsigned int nd, unsigned int* c, uns
     return huft_build(c + nl, nd, 0, inflate_cpdist, inflate_cpdext, td, bd, hp, &hn, D_801DC830);
 }
 
-extern int inflate_fixed_built;
+static int fixed_built = 0;
 extern unsigned int inflate_fixed_bl;
 extern unsigned int inflate_fixed_bd;
 extern inflate_huft* inflate_fixed_tl;
@@ -698,7 +722,7 @@ extern inflate_huft D_801DCCF0[];
 
 int inflate_trees_fixed(unsigned int* bl, unsigned int* bd, inflate_huft** tl, inflate_huft** td, z_stream* z) {
     /* build fixed tables if not already (multiple overlapped executions ok) */
-    if (!inflate_fixed_built) {
+    if (!fixed_built) {
         int k;               /* temporary variable */
         unsigned int f;      /* number of hufts used in fixed_mem */
 
@@ -728,7 +752,7 @@ int inflate_trees_fixed(unsigned int* bl, unsigned int* bd, inflate_huft** tl, i
         huft_build(inflate_huff_build_length_list, 30, 0, inflate_cpdist, inflate_cpdext, &inflate_fixed_td, &inflate_fixed_bd, D_801DCCF0, &f, D_801DC830);
 
         /* done */
-        inflate_fixed_built = 1;
+        fixed_built = 1;
     }
     *bl = inflate_fixed_bl;
     *bd = inflate_fixed_bd;

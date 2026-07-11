@@ -14,7 +14,7 @@ ASMOBJECTS := $(addprefix $(BUILD_DIR)/, $(patsubst %.s, %.o, $(ASMSOURCES)))
 
 AS = mips-linux-gnu-as
 OBJCOPY = mips-linux-gnu-objcopy
-COMMONFLAGS = -mabi=32 -mfp32 -mgp32 -Iinclude -Iinclude/PR -Iinclude/compiler/gcc -Iinclude/audio -Iinclude/libc
+COMMONFLAGS = -mabi=32 -mfp32 -mgp32 -Iinclude -Iinclude/PR -Iinclude/compiler/gcc -Iinclude/audio -Iinclude/libc -Iinclude/libkmc
 ASFLAGS = -mtune=vr4300 -march=vr4300 -no-pad-sections -mips3 -G0 $(COMMONFLAGS)
 CC = tools/gcc
 BSS_DEFINES = -DBSS_STATIC=extern # Temporary. When the BSS section is properly handled, these should be reverted
