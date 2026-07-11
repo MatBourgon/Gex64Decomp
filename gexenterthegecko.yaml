@@ -307,7 +307,7 @@ segments:
 
       # Lib KMC
       - [0x6AB50, c, libkmc/memset]
-      - [0x6AC20, c, libkmc/rand]
+      - [0x6AC20, c, libkmc/RAND]
       - [0x6AC60, c, libkmc/SINH]
       - [0x6B0D0, c, libkmc/TOLOWER]
       - [0x6B100, hasm, ../src/libkmc/mmuldi3]
@@ -407,7 +407,7 @@ segments:
       - { type: .bss, vram: 0x800B7E10, name: rmon/rmonmain }
       - { type: .bss, vram: 0x800B8290, name: rmon/rmonbrk }
       - { type: .bss, vram: 0x800B8290, name: rmon/rmonbrk }
-      - { type: .bss, vram: 0x800B83A0, name: libkmc/rand }
+      - { type: .bss, vram: 0x800B83A0, name: libkmc/RAND }
       - { type: bss, vram: 0x800B83B0, name: tail }
 
   # Start of Level code
