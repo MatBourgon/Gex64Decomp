@@ -1,3 +1,4 @@
+#include "_KMCLIB.h"
 #include <stdlib.h>
 
 static int next;

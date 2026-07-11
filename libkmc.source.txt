@@ -1,5 +1,5 @@
-src/libkmc/memset.c
+src/libkmc/CTYPE.c
+src/libkmc/MEMSET.c
 src/libkmc/RAND.c
 src/libkmc/SINH.c
 src/libkmc/TOLOWER.c
-src/libkmc/CTYPE.c

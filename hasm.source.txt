@@ -5,7 +5,7 @@ src/gu/libm_vals.s
 src/libc/bcopy.s
 src/libc/bzero.s
 
-src/libkmc/mmuldi3.s
+src/libkmc/MMULDI3.s
 src/libkmc/MCVTLD.s
 
 src/os/exceptasm.s

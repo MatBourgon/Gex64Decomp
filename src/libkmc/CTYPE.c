@@ -1,3 +1,4 @@
+#include "_KMCLIB.h"
 #include <CTYPE.h>
 
 char _ctype[256] = {
