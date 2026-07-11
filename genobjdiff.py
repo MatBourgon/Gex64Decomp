@@ -101,7 +101,7 @@ def CreateObjJSON(segments):
             },
             {
                 "id": "libkmc",
-                "name":" LibKMC"
+                "name": "LibKMC"
             }
         ]
     }
