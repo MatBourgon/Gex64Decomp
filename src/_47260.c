@@ -112,7 +112,7 @@ int func_80047240(Instance* instance) {
 }
 
 extern int D_800EB8A0;
-extern int func_80016894(void);
+extern void func_80016894(void);
 
 int func_800472A4(Instance* instance) {
     func_8001719C(instance, 0, 0, 0, D_800EB8A0, 0, &func_80016894, 8);
