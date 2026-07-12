@@ -631,10 +631,10 @@ void scifi_xa_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int w;
 
     instance->_F4[2] += 1;
-    *(unsigned short*)&instance->scale.x += 0x555;
+    instance->scale.x += 0x555;
     w = instance->_F4[2];
-    *(unsigned short*)&instance->scale.y += 0x555;
-    *(unsigned short*)&instance->scale.z += 0x555;
+    instance->scale.y += 0x555;
+    instance->scale.z += 0x555;
     if (w >= 0xD) {
         func_8002E350(instance);
     }
@@ -1129,21 +1129,22 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_80161D18_E7B38);
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_80161DF4_E7C14);
 
-/* mark all unprotected 12-byte segment entries of the first model */
+/* write 0x30000000 into every unprotected 12-byte segment entry of the
+   first model (meaning of the value unknown) */
 void func_80161ED0_E7CF0(int arg0, Instance* instance) {
     Model* model;
     char* p;
     char* end;
-    int color;
+    int value;
 
-    color = 0x30000000;
+    value = 0x30000000;
     if (instance->object != 0) {
         model = instance->object->modelList[0];
         p = (char*)model->_14;
         end = p + model->_10 * 12;
         for (; p < end; p += 12) {
             if (!(p[7] & 2)) {
-                *(int*)(p + 8) = color;
+                *(int*)(p + 8) = value;
             }
         }
     }

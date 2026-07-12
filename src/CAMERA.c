@@ -12,7 +12,7 @@ void func_80000F24(Camera* camera, int arg1)
 {
     D_800B83B0 = arg1;
     D_800E8EC8 = arg1 / 2;
-    camera->cameraCore._08[14] = arg1;
+    camera->cameraCore._10[12] = arg1;
     func_80000450(camera);
 }
 

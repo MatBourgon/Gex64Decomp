@@ -380,6 +380,11 @@ extern int D_8007828C;
    entries indexed by the node's pool id at p[6]; nodes are 28 bytes with a
    0x1C header. Returns the payload of the chunk's end node, or 0 for the
    two reserved sentinels. */
+/* gGlobalMessageBuffer is currently defined as an OSMesgQueue due to main.c,
+   but that object is exactly 0x18 bytes, so this indexing makes no sense.
+   Either gGlobalMessageBuffer is a bigger struct containing an OSMesgQueue, or
+   there is another variable stored right after it that we're trying to index
+   here. */
 char* func_80161538_9A6B8(char* p) {
     int t;
 
@@ -398,6 +403,11 @@ char* func_80161538_9A6B8(char* p) {
 
 /* companion to func_80161538: returns the successor node's payload, or the
    next chunk's base when p is its chunk's end node */
+/* gGlobalMessageBuffer is currently defined as an OSMesgQueue due to main.c,
+   but that object is exactly 0x18 bytes, so this indexing makes no sense.
+   Either gGlobalMessageBuffer is a bigger struct containing an OSMesgQueue, or
+   there is another variable stored right after it that we're trying to index
+   here. */
 char* func_801615A8_9A728(char* p) {
     int t;
     int e;

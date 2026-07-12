@@ -166,6 +166,8 @@ void horror_zomarm_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_E0[1] = -0x10;
     instance->_D0[2] = 0;
     instance->_F4[0] = 1;
+    /* the interleaved _100 store keeps rand's result in a temp; a plain
+       inline call places the stores on the wrong side of the modulo */
     v = rand();
     instance->_100 = 0;
     instance->_F4[2] = v % 20 + 90;
@@ -179,9 +181,9 @@ void horror_zomarm_OnCollide(Instance* instance, GameTracker* gameTracker) {
     bsp = instance->bspTree;
     if (!(((unsigned short*)bsp->_0C)[3] & 1) && instance->_D0[2] <= 0) {
         instance->_F4[1] = 1;
-        *(unsigned short*)&instance->position.x += ((unsigned short*)bsp)[0x28 / 2];
-        *(unsigned short*)&instance->position.y += ((unsigned short*)bsp)[0x2A / 2];
-        *(unsigned short*)&instance->position.z += ((unsigned short*)bsp)[0x2C / 2];
+        instance->position.x += ((short*)bsp)[0x28 / 2];
+        instance->position.y += ((short*)bsp)[0x2A / 2];
+        instance->position.z += ((short*)bsp)[0x2C / 2];
         instance->_D0[2] = 0;
     }
 }
@@ -223,13 +225,11 @@ void horror_gate_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 void horror_gate_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     short* intro;
-    int z;
 
     intro = (short*)instance->introData;
     if (intro != 0 && instance->_F4[0] == 1) {
-        z = *(unsigned short*)&instance->scale.z - 0x44;
-        instance->scale.z = z;
-        if ((short)z <= 0) {
+        instance->scale.z -= 0x44;
+        if (instance->scale.z <= 0) {
             instance->scale.z = 1;
             instance->_F4[0] = 2;
             intro[0] = 1;
@@ -261,8 +261,7 @@ void horror_ledge_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int v;
 
     if (instance->_F4[0] == 1) {
-        v = instance->_F4[2];
-        instance->_F4[2] = v + 1;
+        v = instance->_F4[2]++;
         if (v + 1 == instance->_100) {
             instance->_F4[0] = 2;
             instance->_100 = v;
@@ -296,9 +295,9 @@ void horror_bkshlf_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 void horror_bkshlf_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     if (instance->_F4[1] == 1) {
-        *(unsigned short*)&instance->rotation.z -= 0xC;
+        instance->rotation.z -= 0xC;
     } else if (instance->_F4[1] == 2) {
-        *(unsigned short*)&instance->rotation.z += 0xC;
+        instance->rotation.z += 0xC;
     }
     instance->_F4[1] = 0;
 }
@@ -912,11 +911,11 @@ void func_801623DC_A5C0C(GameTracker* arg0, short arg1, int arg2, void* arg3) {
 
 void func_80162438_A5C68(GameTracker* gameTracker, short* arg1, Instance* arg2) {
     Camera* cam;
-    int flags;
+    unsigned short flags;
 
     cam = gameTracker->camera;
     cam->smooth = arg1[5];
-    flags = *(unsigned short*)&arg2->_C0[4];
+    flags = arg2->_C0[4];
     if (!(flags & 0x10)) {
         if (((int*)cam)[0x520 / 4] == (int)arg2 + 0x106 || ((int*)cam)[0x520 / 4] == (int)arg2 + 0xEE || (flags & 4)) {
             func_80003234(cam);

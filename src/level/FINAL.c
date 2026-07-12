@@ -63,15 +63,12 @@ void final_probe_OnCreate(Instance* instance, GameTracker* gameTracker)
 }
 
 void final_probe_OnUpdate(Instance* instance, GameTracker* gameTracker) {
-    int z;
-
     if (instance->intro->_2C != 0) {
         instance->_F4[0] = 1;
     }
     if (instance->_F4[0] == 1) {
-        z = *(unsigned short*)&instance->position.z + 0x20;
-        instance->position.z = z;
-        if ((short)z > 0x2000) {
+        instance->position.z += 0x20;
+        if (instance->position.z > 0x2000) {
             func_8002E350(instance);
         }
     }
@@ -93,9 +90,9 @@ void final_reztvex_OnCreate(Instance* arg0, GameTracker* gameTracker) {
 
 void final_reztvex_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     instance->currentTextureAnimFrame += 1;
-    *(unsigned short*)&instance->scale.x += 0xEC;
-    *(unsigned short*)&instance->scale.y += 0xEC;
-    *(unsigned short*)&instance->scale.z += 0x9D;
+    instance->scale.x += 0xEC;
+    instance->scale.y += 0xEC;
+    instance->scale.z += 0x9D;
     if (instance->scale.x >= 0x1000) {
         func_8002E350(instance);
     }
@@ -285,7 +282,7 @@ void final_popper_OnCreate(Instance* instance, GameTracker* gameTracker) {
     *(short*)&instance->_F4[2] = 2;
     instance->scale.z = 0;
     instance->_104 = 0;
-    *(unsigned short*)&instance->position.z -= 0x12C;
+    instance->position.z -= 0x12C;
     instance->flags |= 0x400;
     *(int*)&instance->_108 = OBTABLE_FindObject(D_80161588_92728);
     *(int*)&instance->_10C = OBTABLE_FindObject(D_8016166C_9280C);
@@ -337,22 +334,22 @@ void func_8015F05C_901FC(int arg0, Object* obj, SVECTOR* pos) {
 /* returns nonzero when the triangle (p1,p2,t) normal is within t[3] of t */
 int func_8015F0C8_90268(int arg0, SVector* p1, SVector* p2, unsigned short* t) {
     SVECTOR n;
-    int x;    /* x/y pair serializes the component math (register scheduling) */
-    int y;
+    short x;    /* x/y pair serializes the component math (register scheduling) */
+    short y;
 
     _COLLIDE_MakeNormal(&n, p1, p2, (SVector*)t);
-    x = *(unsigned short*)&n.x;
+    x = n.x;
     y = t[0];
     x -= y;
-    *(unsigned short*)&n.x = x;
-    x = *(unsigned short*)&n.y;
+    n.x = x;
+    x = n.y;
     y = t[1];
     x -= y;
-    *(unsigned short*)&n.y = x;
-    x = *(unsigned short*)&n.z;
+    n.y = x;
+    x = n.z;
     y = t[2];
     x -= y;
-    *(unsigned short*)&n.z = x;
+    n.z = x;
     return CAMERA_LengthSVector(&n) < t[3];
 }
 
