@@ -261,7 +261,20 @@ void looney_doeboy_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_brkblok_OnCreate);
+void looney_brkblok_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    int* intro;
+
+    intro = (int*)instance->introData;
+    if (instance->flags & 0x20000) {
+        instance->intro->position = instance->position;
+    } else {
+        if (intro != 0) {
+            instance->_F4[2] = intro[0];
+            instance->_100 = intro[1];
+        }
+        instance->flags |= 0x10000;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_brkblok_OnUpdate);
 

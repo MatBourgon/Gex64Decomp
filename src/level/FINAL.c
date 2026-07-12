@@ -320,9 +320,41 @@ INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_finaltv_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015EEF4_90094);
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015F05C_901FC);
+extern int D_800EB8A0;
+extern void func_80017E88();
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015F0C8_90268);
+void func_8015F05C_901FC(int arg0, Object* obj, SVECTOR* pos) {
+    Model* model;
+
+    if (obj != 0) {
+        model = obj->modelList[7];
+        if (model != 0) {
+            func_800170E8(model, model->_14, pos, 0, 0, D_800EB8A0, func_80017E88, 0, 0x2D);
+        }
+    }
+}
+
+/* returns nonzero when the triangle (p1,p2,t) normal is within t[3] of t */
+int func_8015F0C8_90268(int arg0, int p1, int p2, unsigned short* t) {
+    SVECTOR n;
+    int x;
+    int y;
+
+    _COLLIDE_MakeNormal(&n, p1, p2, t);
+    x = *(unsigned short*)&n.x;
+    y = t[0];
+    x -= y;
+    *(unsigned short*)&n.x = x;
+    x = *(unsigned short*)&n.y;
+    y = t[1];
+    x -= y;
+    *(unsigned short*)&n.y = x;
+    x = *(unsigned short*)&n.z;
+    y = t[2];
+    x -= y;
+    *(unsigned short*)&n.z = x;
+    return CAMERA_LengthSVector(&n) < t[3];
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015F13C_902DC);
 

@@ -247,7 +247,22 @@ INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_orbplat_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_orbplat_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_orbpole_OnCreate);
+void circuit_orbpole_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    int* intro;
+
+    intro = (int*)instance->introData;
+    instance->intro->rotation.z = 0;
+    if (intro != 0) {
+        instance->_F4[0] = intro[1];
+        intro[0] = func_8004A3B4(instance) - 1;
+        if (intro[1] == 1) {
+            instance->currentModelAnim = 1;
+        } else {
+            instance->currentModelAnim = 0;
+        }
+        instance->currentAnimFrame = 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_orbpole_OnUpdate);
 

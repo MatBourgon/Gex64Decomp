@@ -556,9 +556,29 @@ void scifi_bldbota_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_abubble_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_abubble_OnUpdate);
+void scifi_abubble_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    SVECTOR unused;    /* dead local — reproduces the 0x20 frame */
+    int v;
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_abubble_OnCollide);
+    v = instance->_104;
+    if (((short*)&instance->_104)[1] < ((short*)&instance->_100)[1]) {
+        if (instance->flags & 0x1000) {
+            instance->_104 = (short)(v + 1);
+        }
+    } else if (instance->flags & 0x1000) {
+        INSTANCE_InsertInstanceWithFlagsCleared(instance, 0x1000);
+    }
+}
+
+void scifi_abubble_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+
+    bsp = instance->bspTree;
+    if (bsp->instanceSpline == gameTracker->player && bsp->_08[4] == 0) {
+        func_80159720_DF540(((short*)&instance->_F4[2])[1]);
+        INSTANCE_PlainDeath(instance, 5, -1, 0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_acrate_OnCreate);
 
