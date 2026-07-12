@@ -120,7 +120,7 @@ INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_rezxpl_OnUpdate);
 void final_rezxpl_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_80161588_92728);
+INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_80161588_92728); // rezfx___
 
 extern char D_80161588_92728[];
 
@@ -248,11 +248,11 @@ INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_801615B8_92758);
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015CB70_8DD10);
 
-INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_801615C8_92768);
+INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_801615C8_92768); // X %s
 
-INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_801615D0_92770);
+INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_801615D0_92770); // Y %s
 
-INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_801615D8_92778);
+INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_801615D8_92778); // Z %s
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015CC64_8DE04);
 
@@ -266,7 +266,7 @@ INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015D018_8E1B8);
 
 INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_80161610_927B0);
 
-INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_80161618_927B8);
+INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_80161618_927B8); // frez____
 
 INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_8016161C_927BC);
 

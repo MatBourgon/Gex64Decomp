@@ -495,12 +495,10 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_trapmuv_OnUpdate);
 void looney_trapmuv_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-extern char D_80161E00_BA0B0[];
-
 void looney_pusher_OnCreate(Instance* instance, GameTracker* gameTracker) {
     *(int*)&instance->_108 = 0;
     instance->_100 = 0;
-    if (G2String_Compare_EQ(instance->object->name, D_80161E00_BA0B0)) {
+    if (G2String_Compare_EQ(instance->object->name, "pusha___")) {
         instance->_104 = 0;
     } else {
         instance->_104 = 0x14;
@@ -517,10 +515,6 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_bullet_OnCreate);
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_bullet_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_bullet_OnCollide);
-
-INCLUDE_RODATA("asm/nonmatchings/level/LOONEY", D_80161E00_BA0B0);
-
-INCLUDE_RODATA("asm/nonmatchings/level/LOONEY", D_80161E04_BA0B4);
 
 INCLUDE_RODATA("asm/nonmatchings/level/LOONEY", D_80161E0C_BA0BC);
 

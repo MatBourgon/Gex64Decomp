@@ -656,27 +656,27 @@ INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_801635A0_8A780);
 
 INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_801635B8_8A798);
 
-INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_801635C0_8A7A0);
+INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_801635C0_8A7A0); // ebridge_
 
-INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_801635CC_8A7AC);
+INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_801635CC_8A7AC); // ebrijac_
 
-INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_801635D8_8A7B8);
+INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_801635D8_8A7B8); // orbplat_
 
 INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_801635DC_8A7BC);
 
 INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_801635E4_8A7C4);
 
-INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_801635EC_8A7CC);
+INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_801635EC_8A7CC); // launch__
 
-INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_801635F8_8A7D8);
+INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_801635F8_8A7D8); // ppathd__
 
-INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_801635FC_8A7DC);
+INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_801635FC_8A7DC); 
 
-INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_80163604_8A7E4);
+INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_80163604_8A7E4); // horror______
 
 INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_80163610_8A7F0);
 
-INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_80163618_8A7F8);
+INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_80163618_8A7F8); // robo____
 
 INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_8016361C_8A7FC);
 
@@ -699,7 +699,7 @@ INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_pulse_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_80160D80_87F60);
 
-INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_8016363C_8A81C);
+INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_8016363C_8A81C); // bomb____
 
 INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_80163640_8A820);
 

@@ -267,7 +267,7 @@ int func_8015C344_DC9B4(Instance* instance) {
     return result;
 }
 
-INCLUDE_RODATA("asm/nonmatchings/level/RTA", D_8015EE74_DF4E4);
+INCLUDE_RODATA("asm/nonmatchings/level/RTA", D_8015EE74_DF4E4); // geysfx__
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zbubgen_OnCreate);
 
@@ -412,14 +412,12 @@ INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015D9A0_DE010);
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015DAF0_DE160);
 
-extern char D_8015EEB8_DF528[];
-
 void func_8015DE80_DE4F0(Instance* instance, GameTracker* gameTracker) {
     BSPTree newTree;
 
     instance = instance->bspTree->instanceSpline;
     if (instance != 0 && instance->object != 0) {
-        if (G2String_Compare_EQ(instance->object->name, D_8015EEB8_DF528)) {
+        if (G2String_Compare_EQ(instance->object->name, "ptbug___")) {
             instance->bspTree = &newTree;
             newTree.instanceSpline = PlayerInstance;
             common_cola_OnCollide(instance, gameTracker);
@@ -430,10 +428,6 @@ void func_8015DE80_DE4F0(Instance* instance, GameTracker* gameTracker) {
 INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015DF08_DE578);
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015E038_DE6A8);
-
-INCLUDE_RODATA("asm/nonmatchings/level/RTA", D_8015EEB8_DF528);
-
-INCLUDE_RODATA("asm/nonmatchings/level/RTA", D_8015EEBC_DF52C);
 
 extern int D_8015EF18_DF588;
 

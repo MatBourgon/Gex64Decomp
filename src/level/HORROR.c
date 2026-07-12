@@ -688,8 +688,6 @@ void horror_onoff_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-extern char D_80164CC0_A84F0[];
-
 void horror_onoff_OnCollide(Instance* instance, GameTracker* gameTracker) {
     short* intro;
     BSPTree* bsp;
@@ -744,7 +742,7 @@ void horror_onoff_OnCollide(Instance* instance, GameTracker* gameTracker) {
             instance->intro->flags ^= 0x800;
             instance->_F4[0] ^= 1;
             fire = 1;
-        } else if (G2String_Compare_EQ(instance->object->name, D_80164CC0_A84F0)) {
+        } else if (G2String_Compare_EQ(instance->object->name, "gong____")) {
             fire = 1;
         }
         if (fire != 0) {
@@ -1025,10 +1023,6 @@ void horror_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
     instance->_F4[1] = 0;
 }
-
-INCLUDE_RODATA("asm/nonmatchings/level/HORROR", D_80164CC0_A84F0);
-
-INCLUDE_RODATA("asm/nonmatchings/level/HORROR", D_80164CC4_A84F4);
 
 INCLUDE_RODATA("asm/nonmatchings/level/HORROR", D_80164CCC_A84FC);
 

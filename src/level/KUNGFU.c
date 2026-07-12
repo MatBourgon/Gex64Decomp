@@ -497,9 +497,9 @@ INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015B5A8_AA7C8);
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_dragon_OnCreate);
 
-INCLUDE_RODATA("asm/nonmatchings/level/KUNGFU", D_801626DC_B18FC);
+INCLUDE_RODATA("asm/nonmatchings/level/KUNGFU", D_801626DC_B18FC); // launch__
 
-INCLUDE_RODATA("asm/nonmatchings/level/KUNGFU", D_801626E8_B1908);
+INCLUDE_RODATA("asm/nonmatchings/level/KUNGFU", D_801626E8_B1908); // gong____
 
 INCLUDE_RODATA("asm/nonmatchings/level/KUNGFU", D_801626EC_B190C);
 
@@ -523,7 +523,7 @@ INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_dragon_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_cannon_OnCreate);
 
-INCLUDE_RODATA("asm/nonmatchings/level/KUNGFU", D_80162700_B1920);
+INCLUDE_RODATA("asm/nonmatchings/level/KUNGFU", D_80162700_B1920); // draga___
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_cannon_OnUpdate);
 

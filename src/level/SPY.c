@@ -483,9 +483,9 @@ void spy_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_RODATA("asm/nonmatchings/level/SPY", D_8015AD70_EC440);
 
-INCLUDE_RODATA("asm/nonmatchings/level/SPY", D_8015AE00_EC4D0);
+INCLUDE_RODATA("asm/nonmatchings/level/SPY", D_8015AE00_EC4D0); // launch__
 
-INCLUDE_RODATA("asm/nonmatchings/level/SPY", D_8015AE0C_EC4DC);
+INCLUDE_RODATA("asm/nonmatchings/level/SPY", D_8015AE0C_EC4DC); // gong____
 
 INCLUDE_RODATA("asm/nonmatchings/level/SPY", D_8015AE10_EC4E0);
 
