@@ -181,9 +181,9 @@ void horror_zomarm_OnCollide(Instance* instance, GameTracker* gameTracker) {
     bsp = instance->bspTree;
     if (!(((unsigned short*)bsp->_0C)[3] & 1) && instance->_D0[2] <= 0) {
         instance->_F4[1] = 1;
-        instance->position.x += ((short*)bsp)[0x28 / 2];
-        instance->position.y += ((short*)bsp)[0x2A / 2];
-        instance->position.z += ((short*)bsp)[0x2C / 2];
+        instance->position.x += bsp->localOffset.x;
+        instance->position.y += bsp->localOffset.y;
+        instance->position.z += bsp->localOffset.z;
         instance->_D0[2] = 0;
     }
 }
@@ -307,14 +307,14 @@ void horror_bkshlf_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
     bsp = instance->bspTree;
     if (bsp->_06 == 1 && bsp->instanceSpline == gameTracker->player) {
-        if (((short*)bsp)[0x1A / 2] < -0x77) {
-            if (((short*)bsp)[0x18 / 2] <= 0) {
+        if (bsp->globalOffset.y < -0x77) {
+            if (bsp->globalOffset.x <= 0) {
                 instance->_F4[1] = 1;
             } else {
                 instance->_F4[1] = 2;
             }
-        } else if (((short*)bsp)[0x1A / 2] >= 0x78) {
-            if (((short*)bsp)[0x18 / 2] <= 0) {
+        } else if (bsp->globalOffset.y > 0x77) {
+            if (bsp->globalOffset.x <= 0) {
                 instance->_F4[1] = 2;
             } else {
                 instance->_F4[1] = 1;
@@ -864,7 +864,7 @@ void horror_funplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
             if (instance->matrix) {
 
                 func_80041FD0(&transformMatrix, instance->matrix);
-                MATH3D_ApplyMatrixT(&transformMatrix, (SVECTOR*)&((int*)instanceBsp)[0x18/4], &newPosition);
+                MATH3D_ApplyMatrixT(&transformMatrix, &instanceBsp->globalOffset, &newPosition);
 
                 instance->_D0[0] = (-newPosition.y) << 6;
                 instance->_D0[1] = newPosition.x << 6;

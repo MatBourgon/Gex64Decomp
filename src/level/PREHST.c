@@ -561,9 +561,9 @@ void prehst_cavetl_OnCollide(Instance* instance, GameTracker* gameTracker) {
         && (instance->_F4[0] == 1)) {
         func_80022714(instance, gameTracker);
     } else if ((instance->_F4[0] == 0) && (bsp->instanceSpline != gameTracker->player)) {
-        instance->position.x += ((unsigned short*)bsp)[0x14];
-        instance->position.y += ((unsigned short*)bsp)[0x15];
-        COLLIDE_UpdateAllTransforms(instance, ((SVECTOR*)&((unsigned short*)bsp)[0x14]), gameTracker);
+        instance->position.x += bsp->localOffset.x;
+        instance->position.y += bsp->localOffset.y;
+        COLLIDE_UpdateAllTransforms(instance, &bsp->localOffset, gameTracker);
     }
 }
 
@@ -1011,9 +1011,9 @@ void func_80160840_CE0C0(Instance* instance) {
 
     bsp = instance->bspTree;
     if (bsp->_06 == 3) {
-        instance->position.x = (unsigned short)instance->position.x + ((unsigned short*)bsp)[0x28/2];
-        instance->position.y = (unsigned short)instance->position.y + ((unsigned short*)bsp)[0x2A/2];
-        instance->position.z = (unsigned short)instance->position.z + ((unsigned short*)bsp)[0x2C/2];
+        instance->position.x += bsp->localOffset.x;
+        instance->position.y += bsp->localOffset.y;
+        instance->position.z += bsp->localOffset.z;
     }
 }
 

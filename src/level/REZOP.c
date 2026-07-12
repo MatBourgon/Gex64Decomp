@@ -464,10 +464,10 @@ void rezop_spnplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
             instance->_F4[0] = instance->_F4[2];
         } else if (bsp->_06 == 3 && instance->_104 == 0) {
             instance->_104 = 1;
-            instance->position.x = (unsigned short)instance->position.x + ((unsigned short*)bsp)[0x28/2] * 2;
-            instance->position.y = (unsigned short)instance->position.y + ((unsigned short*)bsp)[0x2A/2] * 2;
-            instance->position.z = (unsigned short)instance->position.z + ((unsigned short*)bsp)[0x2C/2] * 2;
-            COLLIDE_UpdateAllTransforms(instance, ((SVECTOR*)&((unsigned short*)bsp)[0x14]), gameTracker);
+            instance->position.x += (unsigned short)bsp->localOffset.x * 2;
+            instance->position.y += (unsigned short)bsp->localOffset.y * 2;
+            instance->position.z += (unsigned short)bsp->localOffset.z * 2;
+            COLLIDE_UpdateAllTransforms(instance, &bsp->localOffset, gameTracker);
             other = ((Instance*)intro[2]);
             if (other->_F4[2] == 1) {
                 other->_F4[2] = 2;

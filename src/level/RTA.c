@@ -423,7 +423,6 @@ extern char D_8015EEB8_DF528[];
 
 void func_8015DE80_DE4F0(Instance* instance, GameTracker* gameTracker) {
     BSPTree newTree;
-    BSPTree unused;    /* dead local — reproduces the 0x48 frame */
 
     instance = instance->bspTree->instanceSpline;
     if (instance != 0 && instance->object != 0) {

@@ -888,7 +888,7 @@ void kungfu_funplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
             if (instance->matrix) {
 
                 func_80041FD0(&transformMatrix, instance->matrix);
-                MATH3D_ApplyMatrixT(&transformMatrix, (SVECTOR*)&((int*)instanceBsp)[0x18/4], &newPosition);
+                MATH3D_ApplyMatrixT(&transformMatrix, &instanceBsp->globalOffset, &newPosition);
 
                 instance->_D0[0] = (-newPosition.y) << 6;
                 instance->_D0[1] = newPosition.x << 6;
