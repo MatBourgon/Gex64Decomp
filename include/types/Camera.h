@@ -37,9 +37,7 @@ typedef struct
 {
     SVECTOR position;
     short _pad;
-    short rx, ry, rz;
-    short _0E;
-    int _10[0x4C/4];
+    int _08[0x54/4];
     int farPlane;
 } CameraCore;
 

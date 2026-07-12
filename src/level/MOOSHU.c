@@ -75,9 +75,9 @@ void func_8015A258_C2BD8(SVECTOR* pos, int arg1, GameTracker* gameTracker) {
     c[0xC] = c[0x18];
     c[0xD] = c[0x19];
     c[0xE] = c[0x1A];
-    cam->cameraCore.rx = c[0x18];
-    cam->cameraCore.ry = c[0x19];
-    c[0x17] = cam->cameraCore.rz = c[0x1A];
+    c[4] = c[0x18];
+    c[5] = c[0x19];
+    c[0x17] = c[6] = c[0x1A];
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015A2E0_C2C60);
