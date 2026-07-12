@@ -302,10 +302,7 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015AC28_E0A48);
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_bub_OnUpdate);
 
 void scifi_bub_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    BSPTree* bsp;
-
-    bsp = instance->bspTree;
-    if (bsp->instanceSpline == gameTracker->player && bsp->_08[4] == 0) {
+    if (instance->bspTree->instanceSpline == gameTracker->player && instance->bspTree->_08[4] == 0) {
         func_80159720_DF540(((short*)&instance->_F4[2])[1]);
         instance->_F4[0] = 1;
     }
@@ -584,10 +581,7 @@ void scifi_abubble_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 }
 
 void scifi_abubble_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    BSPTree* bsp;
-
-    bsp = instance->bspTree;
-    if (bsp->instanceSpline == gameTracker->player && bsp->_08[4] == 0) {
+    if (instance->bspTree->instanceSpline == gameTracker->player && instance->bspTree->_08[4] == 0) {
         func_80159720_DF540(((short*)&instance->_F4[2])[1]);
         INSTANCE_PlainDeath(instance, 5, -1, 0);
     }
@@ -647,11 +641,7 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015C5CC_E23EC);
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_apod_OnUpdate);
 
 void scifi_apod_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    BSPTree* bsp;
-    short t;
-
-    bsp = instance->bspTree;
-    if (bsp->instanceSpline == gameTracker->player && ((t = bsp->_04) == 2 || t == 5)) {
+    if (instance->bspTree->instanceSpline == gameTracker->player && (instance->bspTree->_04 == 2 || instance->bspTree->_04 == 5)) {
         GenericCollide(instance, gameTracker);
     }
 }

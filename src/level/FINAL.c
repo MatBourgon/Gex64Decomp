@@ -398,11 +398,9 @@ extern char D_8016166C_9280C[];
 extern char D_801616F0_92890[];
 
 void final_frez_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    BSPTree* bsp;
-    short* temp_s1;
-
-    bsp = instance->bspTree;
-    temp_s1 = &instance->_C0[2];
+    BSPTree* bsp = instance->bspTree;
+    short* temp_s1 = &instance->_C0[2];
+    
     if (G2String_Compare_EQ(bsp->instanceSpline->object->name, D_8016166C_9280C)) {
         if (instance->_F4[0] != 0) {
             func_800331BC(instance->_F4[0]);

@@ -113,9 +113,7 @@ void rta_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 }
 
 void rta_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    BSPTree* bsp;
-
-    bsp = instance->bspTree;
+    BSPTree* bsp = instance->bspTree;
     if ((bsp->instanceSpline == gameTracker->player) && (bsp->_06 == 1)) {
         if (bsp->_0C[5] >= 6U) {
             INSTANCE_PlainDeath(instance, 5, 3, 0);
@@ -141,10 +139,9 @@ void rta_eel_OnCreate(Instance* instance, GameTracker* gameTracker) {
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_eel_OnUpdate);
 
 void rta_eel_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    BSPTree* bsp;
-    Instance* player;
-    bsp = instance->bspTree;
-    player = gameTracker->player;
+    BSPTree* bsp = instance->bspTree;
+    Instance* player = gameTracker->player;
+    
     if (func_80027500(bsp, gameTracker) || player->_F4[1] == 0x10) {
         INSTANCE_PlainDeath(instance, 5, 3, 0);
     } else if (bsp->_06 == 1 && bsp->instanceSpline == player) {
@@ -397,13 +394,9 @@ INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zstmvent_OnUpdate);
 INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015D0B4_DD724);
 
 void rta_zstmvent_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    BSPTree* bsp;
-    Instance* player;
-
-    bsp = instance->bspTree;
-    player = gameTracker->player;
-    if (bsp->instanceSpline == player) {
-        func_80022714(bsp->instanceSpline, gameTracker);
+    Instance* player = gameTracker->player;
+    if (instance->bspTree->instanceSpline == player) {
+        func_80022714(instance->bspTree->instanceSpline, gameTracker);
     }
 }
 

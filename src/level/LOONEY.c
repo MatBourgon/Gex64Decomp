@@ -67,11 +67,8 @@ void looney_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_bug_OnUpdate);
 
 void looney_bug_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    BSPTree* bsp;
-    short* temp;
-
-    bsp = instance->bspTree;
-    temp = (short*)&instance->_F4[2];
+    BSPTree* bsp = instance->bspTree;
+    short* temp  = (short*)&instance->_F4[2];
 
     if (bsp->_06 == 1) {
         if ((bsp->instanceSpline == gameTracker->player) && (bsp->_08[4] < 2U) && (bsp->_0C[5] >= 6U)) {
@@ -158,12 +155,9 @@ void looney_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 }
 
 void looney_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    int temp_a3;
-    int temp_v1;
-    BSPTree* bsp;
-
-    bsp = instance->bspTree;
-    temp_a3 = bsp->_06;
+    BSPTree* bsp = instance->bspTree;
+    int temp_a3 = bsp->_06;
+    
     if (temp_a3 == 1) {
         if ((bsp->instanceSpline == gameTracker->player) && (bsp->_0C[5] >= 6U)) {
             if (instance->_F4[0] == 0)
@@ -657,15 +651,15 @@ void looney_funplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
     LVECTOR newPosition;
     MATRIX transformMatrix;
 
-    BSPTree* instanceBsp = instance->bspTree;
-    int* s4 = ((int*)instance->_D0);
+    BSPTree* bsp = instance->bspTree;
+    Instance** s4 = ((Instance**)instance->_D0);
 
-    if (instanceBsp->_06 == 4) {
-        if (instanceBsp->instanceSpline == gameTracker->player) {
+    if (bsp->_06 == 4) {
+        if (bsp->instanceSpline == gameTracker->player) {
             if (instance->matrix) {
 
                 func_80041FD0(&transformMatrix, instance->matrix);
-                MATH3D_ApplyMatrixT(&transformMatrix, &instanceBsp->globalOffset, &newPosition);
+                MATH3D_ApplyMatrixT(&transformMatrix, &bsp->globalOffset, &newPosition);
 
                 instance->_D0[0] = (-newPosition.y) << 6;
                 instance->_D0[1] = newPosition.x << 6;
@@ -676,7 +670,7 @@ void looney_funplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
                     instance->_E0[3] = -0x4000;
                 }
 
-                ((Instance**)s4)[0x28/4] = instanceBsp->instanceSpline;
+                s4[0x28/4] = bsp->instanceSpline;
                 GenericCollide(instance, gameTracker);
             }
         }
@@ -790,9 +784,7 @@ void looney_colorset_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
 void looney_colorset_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    BSPTree* bsp;
-
-    bsp = instance->bspTree;
+    BSPTree* bsp = instance->bspTree;
     if ((instance->object->oflags & 0x40000) && bsp->_06 == 1 && bsp->instanceSpline == gameTracker->player && bsp->_0C[5] >= 6U) {
         INSTANCE_PlainDeath(instance, 5, 3, 0);
     }

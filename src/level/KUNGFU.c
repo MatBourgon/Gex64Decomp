@@ -143,11 +143,8 @@ void kungfu_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_bug_OnUpdate);
 
 void kungfu_bug_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    BSPTree* bsp;
-    short* temp;
-
-    bsp = instance->bspTree;
-    temp = (short*)&instance->_F4[2];
+    BSPTree* bsp = instance->bspTree;
+    short* temp = (short*)&instance->_F4[2];
 
     if (bsp->_06 == 1) {
         if ((bsp->instanceSpline == gameTracker->player) && (bsp->_08[4] < 2U) && (bsp->_0C[5] >= 6U)) {
@@ -189,12 +186,9 @@ void kungfu_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 }
 
 void kungfu_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    int temp_a3;
-    int temp_v1;
-    BSPTree* bsp;
+    BSPTree* bsp = instance->bspTree;
+    int temp_a3 = bsp->_06;
 
-    bsp = instance->bspTree;
-    temp_a3 = bsp->_06;
     if (temp_a3 == 1) {
         if ((bsp->instanceSpline == gameTracker->player) && (bsp->_0C[5] >= 6U)) {
             if (instance->_F4[0] == 0)
@@ -258,16 +252,11 @@ int func_8015AC6C_A9E8C(Instance* instance, GameTracker* gameTracker);
 void func_8015ADC8_A9FE8(Instance* instance, GameTracker* gameTracker);
 
 void kungfu_launch_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    Instance* temp_a0;
-    BSPTree* bsp;
-    char var_a2;
-
-    bsp = instance->bspTree;
-    temp_a0 = gameTracker->player;
+    Instance* temp_a0 = gameTracker->player;
+    BSPTree* bsp = instance->bspTree;
+    char var_a2 = (bsp->_06 == 1) ? bsp->_0C[5] : -1;
     
-    var_a2 = (bsp->_06 == 1) ? bsp->_0C[5] : -1;
-    
-    if (((instance->_F4[0] - 1) >= 2U) && (*(int*)&instance->_108 == 0) && (bsp->instanceSpline == (void*)temp_a0) && (bsp->_04 == 5) && (var_a2 < 8) && (bsp->_08[2] == 0)) {
+    if (((instance->_F4[0] - 1) >= 2U) && (*(int*)&instance->_108 == 0) && (bsp->instanceSpline == temp_a0) && (bsp->_04 == 5) && (var_a2 < 8) && (bsp->_08[2] == 0)) {
         if (instance->_11C & 0x10) {
             temp_a0->_F4[2] |= 0x200;
             instance->_11C |= 0x20;
@@ -496,11 +485,9 @@ INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_spike_OnCreate);
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_spike_OnUpdate);
 
 void kungfu_spike_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    int frame;
-    BSPTree* bsp;
+    int frame = instance->currentAnimFrame;
+    BSPTree* bsp = instance->bspTree;
 
-    frame = instance->currentAnimFrame;
-    bsp = instance->bspTree;
     if (frame != 0 && bsp->instanceSpline == gameTracker->player) {
         func_80022714(instance, gameTracker);
     }
@@ -880,15 +867,15 @@ void kungfu_funplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
     LVECTOR newPosition;
     MATRIX transformMatrix;
 
-    BSPTree* instanceBsp = instance->bspTree;
-    int* s4 = ((int*)instance->_D0);
+    BSPTree* bsp = instance->bspTree;
+    Instance** s4 = ((Instance**)instance->_D0);
 
-    if (instanceBsp->_06 == 4) {
-        if (instanceBsp->instanceSpline == gameTracker->player) {
+    if (bsp->_06 == 4) {
+        if (bsp->instanceSpline == gameTracker->player) {
             if (instance->matrix) {
 
                 func_80041FD0(&transformMatrix, instance->matrix);
-                MATH3D_ApplyMatrixT(&transformMatrix, &instanceBsp->globalOffset, &newPosition);
+                MATH3D_ApplyMatrixT(&transformMatrix, &bsp->globalOffset, &newPosition);
 
                 instance->_D0[0] = (-newPosition.y) << 6;
                 instance->_D0[1] = newPosition.x << 6;
@@ -899,7 +886,7 @@ void kungfu_funplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
                     instance->_E0[3] = -0x4000;
                 }
 
-                ((Instance**)s4)[0x28/4] = instanceBsp->instanceSpline;
+                s4[0x28/4] = bsp->instanceSpline;
                 GenericCollide(instance, gameTracker);
             }
         }

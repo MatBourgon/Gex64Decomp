@@ -39,11 +39,9 @@ void GenericCollide(Instance* instance, GameTracker* gameTracker) {
     int v0, v1;
     int t0;
 
-    BSPTree* bsp;
-
-    bsp = instance->bspTree;
-
+    BSPTree* bsp = instance->bspTree;
     t0 = 0;
+
     if (bsp->instanceSpline != PlayerInstance) {
         v1 = bsp->_06;
         a3 = 5;

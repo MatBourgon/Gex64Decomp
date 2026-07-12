@@ -33,11 +33,8 @@ void gexzil_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_bug_OnUpdate);
 
 void gexzil_bug_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    BSPTree* bsp;
-    short* temp;
-
-    bsp = instance->bspTree;
-    temp = (short*)&instance->_F4[2];
+    BSPTree* bsp = instance->bspTree;
+    short* temp = (short*)&instance->_F4[2];
 
     if (bsp->_06 == 1) {
         if ((bsp->instanceSpline == gameTracker->player) && (bsp->_08[4] < 2U) && (bsp->_0C[5] >= 6U)) {
@@ -628,10 +625,7 @@ INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_explode_OnCreate);
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_explode_OnUpdate);
 
 void gexzil_explode_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    BSPTree* bsp;
-
-    bsp = instance->bspTree;
-    if (bsp->instanceSpline == gameTracker->player && bsp->_06 == 1) {
+    if (instance->bspTree->instanceSpline == gameTracker->player && instance->bspTree->_06 == 1) {
         func_80022714(instance, gameTracker);
     }
 }
