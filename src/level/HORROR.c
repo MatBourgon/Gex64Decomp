@@ -135,7 +135,22 @@ void horror_face_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_zombie_OnCreate);
+void horror_zombie_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    int* intro;
+
+    intro = (int*)instance->introData;
+    if (instance->flags & 0x20000) {
+        if (((short*)&instance->_114)[0] >= 3) {
+            instance->intro->flags |= 8;
+        }
+    } else {
+        instance->_F4[0] = 1;
+        instance->currentModelAnim = 0;
+        instance->_120 = intro[0];
+        instance->flags |= 0x10000;
+    }
+    *(int*)&instance->_34[2] = 0;
+}
 
 INCLUDE_RODATA("asm/nonmatchings/level/HORROR", D_80164C30_A8460);
 
@@ -158,7 +173,18 @@ void horror_zomarm_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_zomarm_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_zomarm_OnCollide);
+void horror_zomarm_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+
+    bsp = instance->bspTree;
+    if (!(((unsigned short*)bsp->_0C)[3] & 1) && instance->_D0[2] <= 0) {
+        instance->_F4[1] = 1;
+        *(unsigned short*)&instance->position.x += ((unsigned short*)bsp)[0x28 / 2];
+        *(unsigned short*)&instance->position.y += ((unsigned short*)bsp)[0x2A / 2];
+        *(unsigned short*)&instance->position.z += ((unsigned short*)bsp)[0x2C / 2];
+        instance->_D0[2] = 0;
+    }
+}
 
 void horror_zomleg_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_F4[0] = 1;
@@ -231,7 +257,28 @@ void horror_ledge_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_ledge_OnUpdate);
+void horror_ledge_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    int v;
+
+    if (instance->_F4[0] == 1) {
+        v = instance->_F4[2];
+        instance->_F4[2] = v + 1;
+        if (v + 1 == instance->_100) {
+            instance->_F4[0] = 2;
+            instance->_100 = v;
+            instance->currentModel = 1;
+            instance->_F4[2] = 0;
+        }
+    } else if (instance->_F4[0] == 2) {
+        if (instance->_100 > 0) {
+            instance->_F4[0] = 1;
+            instance->currentModel = 0;
+        } else {
+            instance->_F4[0] = 3;
+            *(int*)instance->introData = 1;
+        }
+    }
+}
 
 void horror_ledge_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
@@ -844,7 +891,23 @@ void func_801623DC_A5C0C(GameTracker* arg0, short arg1, int arg2, void* arg3) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_80162438_A5C68);
+void func_80162438_A5C68(GameTracker* gameTracker, short* arg1, Instance* arg2) {
+    Camera* cam;
+    int flags;
+
+    cam = gameTracker->camera;
+    cam->smooth = arg1[5];
+    flags = *(unsigned short*)&arg2->_C0[4];
+    if (!(flags & 0x10)) {
+        if (((int*)cam)[0x520 / 4] == (int)arg2 + 0x106 || ((int*)cam)[0x520 / 4] == (int)arg2 + 0xEE || (flags & 4)) {
+            func_80003234(cam);
+        }
+        ((int*)cam)[0x4D4 / 4] = 0;
+        cam->cameraKey = 0;
+        ((int*)cam)[0x520 / 4] = 0;
+        cam->smooth = 8;
+    }
+}
 
 /* set _C0[3] on this instance and every instance in its intro group
    (intro->_04 points at a count-prefixed array of Intro*) */

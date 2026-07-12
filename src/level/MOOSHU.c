@@ -2,7 +2,22 @@
 
 #include "level/MOOSHU.h"
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_80159720_C20A0);
+/* quantize a stick/velocity pair into a direction code (0-3) */
+void func_80159720_C20A0(short* out, int arg1, short* vec) {
+    if (vec[0] > 0x200) {
+        if (vec[1] > 0x280) {
+            *out = 1;
+        } else if (vec[1] < -0x280) {
+            *out = 0;
+        }
+    } else if (vec[0] < -0x480) {
+        if (vec[1] > 0x280) {
+            *out = 3;
+        } else if (vec[1] < -0x280) {
+            *out = 2;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_80159798_C2118);
 

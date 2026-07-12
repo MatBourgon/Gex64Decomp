@@ -8,7 +8,20 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_80159720_DF540);
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_801598A4_DF6C4);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_80159A08_DF828);
+extern int* D_8007681C;
+
+int func_80159A08_DF828(void) {
+    short* p;
+
+    p = (short*)D_8007681C[7];
+    if (p[0xC] == 0) {
+        return (short)(*(unsigned short*)&p[0xF] + (p[8] + p[4]) * 30);
+    }
+    if (p[0xC] == 1) {
+        return (short)(*(unsigned short*)&p[0xF] + p[8] * 30);
+    }
+    return p[0xF];
+}
 
 INCLUDE_RODATA("asm/nonmatchings/level/SCIFI", D_80164DF0_EAC10);
 
