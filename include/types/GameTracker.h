@@ -7,7 +7,7 @@
 
 typedef unsigned char byte;
 typedef unsigned int uint;
-typedef struct
+typedef struct GameTracker_s
 {
     int     _0000;
     Level*  level;

@@ -11,6 +11,8 @@
 
 typedef void (*AdditionalDrawFunc)(void*, struct Instance_s*, void* /*unused*/, void* /*unused*/, void* /*unused*/);
 
+struct GameTracker_s;
+
 typedef struct Instance_s
 {
     NodeType node; // 00 (prev), 04 (next)
@@ -49,8 +51,8 @@ typedef struct Instance_s
     int _A0;
     int _A4;
     int _A8;
-    void (*processFunc)(void*,void*);
-    void (*collideFunc)(void*,void*);
+    void (*processFunc)(struct Instance_s*,struct GameTracker_s*);
+    void (*collideFunc)(struct Instance_s*,struct GameTracker_s*);
     AdditionalDrawFunc additionalDrawFunc;
     int _B8;
     SVECTOR shadowPosition;
