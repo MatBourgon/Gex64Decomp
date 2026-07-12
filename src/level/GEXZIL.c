@@ -376,6 +376,10 @@ extern int gGlobalMessageBuffer[];
 extern int D_800BF1B8[];
 extern int D_8007828C;
 
+/* pool bookkeeping: D_8007828C is a table of 16-byte {count, chunk base}
+   entries indexed by the node's pool id at p[6]; nodes are 28 bytes with a
+   0x1C header. Returns the payload of the chunk's end node, or 0 for the
+   two reserved sentinels. */
 char* func_80161538_9A6B8(char* p) {
     int t;
 
@@ -392,6 +396,8 @@ char* func_80161538_9A6B8(char* p) {
     return p - 0x1C;
 }
 
+/* companion to func_80161538: returns the successor node's payload, or the
+   next chunk's base when p is its chunk's end node */
 char* func_801615A8_9A728(char* p) {
     int t;
     int e;

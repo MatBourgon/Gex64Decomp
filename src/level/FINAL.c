@@ -159,7 +159,6 @@ INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015A590_8B730);
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015A78C_8B92C);
 
-
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_rezbomb_OnUpdate);
 
 void final_rezbomb_OnCollide(Instance* instance, GameTracker* gameTracker) {
@@ -336,12 +335,12 @@ void func_8015F05C_901FC(int arg0, Object* obj, SVECTOR* pos) {
 }
 
 /* returns nonzero when the triangle (p1,p2,t) normal is within t[3] of t */
-int func_8015F0C8_90268(int arg0, int p1, int p2, unsigned short* t) {
+int func_8015F0C8_90268(int arg0, SVector* p1, SVector* p2, unsigned short* t) {
     SVECTOR n;
-    int x;
+    int x;    /* x/y pair serializes the component math (register scheduling) */
     int y;
 
-    _COLLIDE_MakeNormal(&n, p1, p2, t);
+    _COLLIDE_MakeNormal(&n, p1, p2, (SVector*)t);
     x = *(unsigned short*)&n.x;
     y = t[0];
     x -= y;
