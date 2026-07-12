@@ -1108,7 +1108,25 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_80161D18_E7B38);
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_80161DF4_E7C14);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_80161ED0_E7CF0);
+/* mark all unprotected 12-byte segment entries of the first model */
+void func_80161ED0_E7CF0(int arg0, Instance* instance) {
+    Model* model;
+    char* p;
+    char* end;
+    int color;
+
+    color = 0x30000000;
+    if (instance->object != 0) {
+        model = instance->object->modelList[0];
+        p = (char*)model->_14;
+        end = p + model->_10 * 12;
+        for (; p < end; p += 12) {
+            if (!(p[7] & 2)) {
+                *(int*)(p + 8) = color;
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_80161F50_E7D70);
 

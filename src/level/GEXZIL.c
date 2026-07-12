@@ -143,7 +143,28 @@ INCLUDE_RODATA("asm/nonmatchings/level/GEXZIL", D_80162AD0_9BC50);
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_mecha_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015C188_95308);
+void func_8015C188_95308(Instance* instance, short* arg1) {
+    if (arg1[0xC0 / 2] == 0) {
+        if (instance->currentModelAnim == 4) {
+            return;
+        }
+        instance->currentModelAnim = 4;
+    } else if (arg1[0xC0 / 2] == 1) {
+        if (instance->currentModelAnim == 0xF) {
+            return;
+        }
+        instance->currentModelAnim = 0xF;
+    } else {
+        if (instance->currentModelAnim == 0x10) {
+            return;
+        }
+        instance->currentModelAnim = 0x10;
+    }
+    instance->currentAnimFrame = 0;
+    arg1[0x14 / 2] = 0;
+    instance->flags2 &= ~0x10;
+    arg1[0x12 / 2] = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015C208_95388);
 
@@ -229,7 +250,7 @@ void func_8015EA68_97BE8(Instance* instance, short* arg1) {
 void func_8015EAB8_97C38(Instance* instance, int* arg1) {
     arg1[0x54/4] = 1;
     ((short*)arg1)[0x26/2] = 0x15;
-    func_8015C188_95308(instance, arg1);
+    func_8015C188_95308(instance, (short*)arg1);
     instance->flags2 &= ~0x10;
 }
 
@@ -371,7 +392,23 @@ char* func_80161538_9A6B8(char* p) {
     return p - 0x1C;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_801615A8_9A728);
+char* func_801615A8_9A728(char* p) {
+    int t;
+    int e;
+
+    if (p == (char*)gGlobalMessageBuffer[0x18 / 4]) {
+        return 0;
+    }
+    if (p == (char*)D_800BF1B8[1]) {
+        return 0;
+    }
+    t = p[6] * 16 + D_8007828C;
+    e = *(int*)(t + 4) + *(int*)t * 28;
+    if ((char*)(e - 0x1C) == p) {
+        return *(char**)(((char*)e)[-0x16] * 16 + D_8007828C + 4);
+    }
+    return p + 0x1C;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_80161624_9A7A4);
 

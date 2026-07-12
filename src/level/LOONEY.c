@@ -789,6 +789,13 @@ void looney_colorset_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_colorset_OnCollide);
+void looney_colorset_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+
+    bsp = instance->bspTree;
+    if ((instance->object->oflags & 0x40000) && bsp->_06 == 1 && bsp->instanceSpline == gameTracker->player && bsp->_0C[5] >= 6U) {
+        INSTANCE_PlainDeath(instance, 5, 3, 0);
+    }
+}
 
 INCLUDE_RODATA("asm/nonmatchings/level/LOONEY", D_80161E88_BA138);
