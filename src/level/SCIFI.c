@@ -8,7 +8,20 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_80159720_DF540);
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_801598A4_DF6C4);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_80159A08_DF828);
+extern int* D_8007681C;
+
+int func_80159A08_DF828(void) {
+    short* p;
+
+    p = (short*)D_8007681C[7];
+    if (p[0xC] == 0) {
+        return (short)(*(unsigned short*)&p[0xF] + (p[8] + p[4]) * 30);
+    }
+    if (p[0xC] == 1) {
+        return (short)(*(unsigned short*)&p[0xF] + p[8] * 30);
+    }
+    return p[0xF];
+}
 
 INCLUDE_RODATA("asm/nonmatchings/level/SCIFI", D_80164DF0_EAC10);
 
@@ -288,7 +301,15 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015AC28_E0A48);
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_bub_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_bub_OnCollide);
+void scifi_bub_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+
+    bsp = instance->bspTree;
+    if (bsp->instanceSpline == gameTracker->player && bsp->_08[4] == 0) {
+        func_80159720_DF540(((short*)&instance->_F4[2])[1]);
+        instance->_F4[0] = 1;
+    }
+}
 
 void scifi_eel_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->currentModelAnim = 0;
@@ -527,7 +548,16 @@ void func_8015BFA8_E1DC8(Instance* instance) {
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015BFD4_E1DF4);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_bldbota_OnCreate);
+void scifi_bldbota_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    if (instance->flags & 0x20000) {
+        func_8015BFA8_E1DC8((Instance*)instance->_F4[2]);
+        instance->_F4[2] = 0xCDCDCDCD;
+    } else {
+        instance->flags |= 0x10080;
+        instance->currentTextureAnimFrame = 0;
+        instance->_F4[2] = func_8015BF08_E1D28(instance);
+    }
+}
 
 void scifi_bldbota_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     unsigned short frame;
@@ -539,11 +569,52 @@ void scifi_bldbota_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_abubble_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_abubble_OnUpdate);
+void scifi_abubble_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    SVECTOR unused;    /* dead local — reproduces the 0x20 frame */
+    int v;
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_abubble_OnCollide);
+    v = instance->_104;
+    if (((short*)&instance->_104)[1] < ((short*)&instance->_100)[1]) {
+        if (instance->flags & 0x1000) {
+            instance->_104 = (short)(v + 1);
+        }
+    } else if (instance->flags & 0x1000) {
+        INSTANCE_InsertInstanceWithFlagsCleared(instance, 0x1000);
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_acrate_OnCreate);
+void scifi_abubble_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+
+    bsp = instance->bspTree;
+    if (bsp->instanceSpline == gameTracker->player && bsp->_08[4] == 0) {
+        func_80159720_DF540(((short*)&instance->_F4[2])[1]);
+        INSTANCE_PlainDeath(instance, 5, -1, 0);
+    }
+}
+
+void scifi_acrate_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    unsigned short* intro;
+    unsigned short* data;
+    short* fc;
+
+    intro = (unsigned short*)instance->introData;
+    data = (unsigned short*)instance->object->data;
+    fc = (short*)&instance->_F4[2];
+    if (intro != 0) {
+        fc[0] = intro[0];
+        fc[1] = intro[1];
+    } else if (data != 0) {
+        fc[0] = data[0];
+        fc[1] = data[1];
+    }
+    if (fc[0] == 0) {
+        fc[0] = 10;
+    }
+    if (fc[1] == 0) {
+        fc[1] = 0x1E;
+    }
+}
 
 void scifi_acrate_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 }
@@ -560,10 +631,10 @@ void scifi_xa_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int w;
 
     instance->_F4[2] += 1;
-    *(unsigned short*)&instance->scale.x += 0x555;
+    instance->scale.x += 0x555;
     w = instance->_F4[2];
-    *(unsigned short*)&instance->scale.y += 0x555;
-    *(unsigned short*)&instance->scale.z += 0x555;
+    instance->scale.y += 0x555;
+    instance->scale.z += 0x555;
     if (w >= 0xD) {
         func_8002E350(instance);
     }
@@ -1058,7 +1129,26 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_80161D18_E7B38);
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_80161DF4_E7C14);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_80161ED0_E7CF0);
+/* write 0x30000000 into every unprotected 12-byte segment entry of the
+   first model (meaning of the value unknown) */
+void func_80161ED0_E7CF0(int arg0, Instance* instance) {
+    Model* model;
+    char* p;
+    char* end;
+    int value;
+
+    value = 0x30000000;
+    if (instance->object != 0) {
+        model = instance->object->modelList[0];
+        p = (char*)model->_14;
+        end = p + model->_10 * 12;
+        for (; p < end; p += 12) {
+            if (!(p[7] & 2)) {
+                *(int*)(p + 8) = value;
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_80161F50_E7D70);
 

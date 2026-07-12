@@ -2,7 +2,22 @@
 
 #include "level/MOOSHU.h"
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_80159720_C20A0);
+/* quantize a stick/velocity pair into a direction code (0-3) */
+void func_80159720_C20A0(short* out, int arg1, short* vec) {
+    if (vec[0] > 0x200) {
+        if (vec[1] > 0x280) {
+            *out = 1;
+        } else if (vec[1] < -0x280) {
+            *out = 0;
+        }
+    } else if (vec[0] < -0x480) {
+        if (vec[1] > 0x280) {
+            *out = 3;
+        } else if (vec[1] < -0x280) {
+            *out = 2;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_80159798_C2118);
 
@@ -45,7 +60,25 @@ void func_8015A1E0_C2B60(Instance* instance, int arg1, int arg2, short* arg3) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015A258_C2BD8);
+/* snap the camera to pos and reset its focus history */
+void func_8015A258_C2BD8(SVECTOR* pos, int arg1, GameTracker* gameTracker) {
+    Camera* cam;
+    unsigned short* c;
+
+    cam = gameTracker->camera;
+    c = (unsigned short*)cam;
+    cam->cameraCore.position.x = pos->x;
+    cam->cameraCore.position.y = pos->y;
+    cam->cameraCore.position.z = pos->z;
+    func_80003A68(cam);
+    CAMERA_SetMode(cam, 8);
+    c[0xC] = c[0x18];
+    c[0xD] = c[0x19];
+    c[0xE] = c[0x1A];
+    c[4] = c[0x18];
+    c[5] = c[0x19];
+    c[0x17] = c[6] = c[0x1A];
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015A2E0_C2C60);
 
@@ -65,7 +98,18 @@ void mooshu_moobar_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->flags = (instance->flags | 0x100C00) & ~1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", mooshu_moobar_OnCollide);
+void mooshu_moobar_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    unsigned short* data;
+
+    if (instance->parent != 0) {
+        data = (unsigned short*)instance->parent->object->data;
+        if (instance->_F4[2] == 0) {
+            func_80022738(instance, gameTracker);
+            data[2] |= 0x4000;
+        }
+        data[2] |= 0x8000;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", mooshu_moo_OnCollide);
 

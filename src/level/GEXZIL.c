@@ -143,7 +143,28 @@ INCLUDE_RODATA("asm/nonmatchings/level/GEXZIL", D_80162AD0_9BC50);
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_mecha_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015C188_95308);
+void func_8015C188_95308(Instance* instance, short* arg1) {
+    if (arg1[0xC0 / 2] == 0) {
+        if (instance->currentModelAnim == 4) {
+            return;
+        }
+        instance->currentModelAnim = 4;
+    } else if (arg1[0xC0 / 2] == 1) {
+        if (instance->currentModelAnim == 0xF) {
+            return;
+        }
+        instance->currentModelAnim = 0xF;
+    } else {
+        if (instance->currentModelAnim == 0x10) {
+            return;
+        }
+        instance->currentModelAnim = 0x10;
+    }
+    instance->currentAnimFrame = 0;
+    arg1[0x14 / 2] = 0;
+    instance->flags2 &= ~0x10;
+    arg1[0x12 / 2] = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015C208_95388);
 
@@ -229,7 +250,7 @@ void func_8015EA68_97BE8(Instance* instance, short* arg1) {
 void func_8015EAB8_97C38(Instance* instance, int* arg1) {
     arg1[0x54/4] = 1;
     ((short*)arg1)[0x26/2] = 0x15;
-    func_8015C188_95308(instance, arg1);
+    func_8015C188_95308(instance, (short*)arg1);
     instance->flags2 &= ~0x10;
 }
 
@@ -324,7 +345,15 @@ INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8016034C_994CC);
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_mecha_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_80160B70_99CF0);
+/* p0/p1 are packed short pairs; returns the 12.4 planar distance between them */
+int func_80160B70_99CF0(int p0, int p1) {
+    int dx;
+    int dy;
+
+    dx = ((short*)&p0)[0] - ((short*)&p1)[0];
+    dy = ((short*)&p0)[1] - ((short*)&p1)[1];
+    return MATH3D_FastSqrt2((dx * dx >> 12) + (dy * dy >> 12), 0xC);
+}
 
 /* p0/p1 are packed short pairs (x in the high half, y in the low half) */
 int func_80160BD8_99D58(int p0, int p1) {
@@ -343,9 +372,59 @@ INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_80160DF8_99F78);
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_801614B0_9A630);
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_80161538_9A6B8);
+extern int gGlobalMessageBuffer[];
+extern int D_800BF1B8[];
+extern int D_8007828C;
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_801615A8_9A728);
+/* pool bookkeeping: D_8007828C is a table of 16-byte {count, chunk base}
+   entries indexed by the node's pool id at p[6]; nodes are 28 bytes with a
+   0x1C header. Returns the payload of the chunk's end node, or 0 for the
+   two reserved sentinels. */
+/* gGlobalMessageBuffer is currently defined as an OSMesgQueue due to main.c,
+   but that object is exactly 0x18 bytes, so this indexing makes no sense.
+   Either gGlobalMessageBuffer is a bigger struct containing an OSMesgQueue, or
+   there is another variable stored right after it that we're trying to index
+   here. */
+char* func_80161538_9A6B8(char* p) {
+    int t;
+
+    if (p == (char*)gGlobalMessageBuffer[0x18 / 4]) {
+        return 0;
+    }
+    if (p == (char*)D_800BF1B8[1]) {
+        return 0;
+    }
+    t = p[6] * 16 + D_8007828C;
+    if (*(char**)(t + 4) == p) {
+        return p + *(int*)t * 28 - 0x1C;
+    }
+    return p - 0x1C;
+}
+
+/* companion to func_80161538: returns the successor node's payload, or the
+   next chunk's base when p is its chunk's end node */
+/* gGlobalMessageBuffer is currently defined as an OSMesgQueue due to main.c,
+   but that object is exactly 0x18 bytes, so this indexing makes no sense.
+   Either gGlobalMessageBuffer is a bigger struct containing an OSMesgQueue, or
+   there is another variable stored right after it that we're trying to index
+   here. */
+char* func_801615A8_9A728(char* p) {
+    int t;
+    int e;
+
+    if (p == (char*)gGlobalMessageBuffer[0x18 / 4]) {
+        return 0;
+    }
+    if (p == (char*)D_800BF1B8[1]) {
+        return 0;
+    }
+    t = p[6] * 16 + D_8007828C;
+    e = *(int*)(t + 4) + *(int*)t * 28;
+    if ((char*)(e - 0x1C) == p) {
+        return *(char**)(((char*)e)[-0x16] * 16 + D_8007828C + 4);
+    }
+    return p + 0x1C;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_80161624_9A7A4);
 

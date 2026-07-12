@@ -1,6 +1,8 @@
 #include "common.h"
 
 #include "level/RTA.h"
+#include "OBTABLE.h"
+#include "types/G2String.h"
 #include "types/intro/QMark.h"
 
 #include "types/Vector.h"
@@ -207,7 +209,7 @@ INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015B4EC_DBB5C);
 extern char D_8015EE74_DF4E4[];
 
 void rta_zgeyser_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    instance->_F4[2] = OBTABLE_FindObject(D_8015EE74_DF4E4);
+    instance->_F4[2] = (int)OBTABLE_FindObject(D_8015EE74_DF4E4);
     instance->scale.x = 0x1000;
     instance->scale.y = 0x1000;
     *(short*)&instance->_100 = 0;
@@ -369,7 +371,20 @@ INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015C8C8_DCF38);
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015CA24_DD094);
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_fxgen_OnCreate);
+extern char D_8015EE18_DF488[];
+
+void rta_fxgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    Object* obj;
+
+    if (instance->introData == 0) {
+        instance->introData = D_8015EE18_DF488;
+    }
+    memset(&instance->_F4[2], 0, 0x28);
+    obj = OBTABLE_FindObject(D_8015EE74_DF4E4);
+    if (obj != 0) {
+        instance->_F4[2] = (int)obj->modelList[0];
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_fxgen_OnUpdate);
 
@@ -404,7 +419,21 @@ INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015D9A0_DE010);
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015DAF0_DE160);
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015DE80_DE4F0);
+extern char D_8015EEB8_DF528[];
+
+void func_8015DE80_DE4F0(Instance* instance, GameTracker* gameTracker) {
+    BSPTree newTree;
+    BSPTree unused;    /* dead local — reproduces the 0x48 frame */
+
+    instance = instance->bspTree->instanceSpline;
+    if (instance != 0 && instance->object != 0) {
+        if (G2String_Compare_EQ(instance->object->name, D_8015EEB8_DF528)) {
+            instance->bspTree = &newTree;
+            newTree.instanceSpline = PlayerInstance;
+            common_cola_OnCollide(instance, gameTracker);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015DF08_DE578);
 
@@ -422,7 +451,7 @@ void func_8015E228_DE898(Instance* instance) {
     instance->currentModelAnim = 0x35;
     instance->_F4[1] = 0;
     D_8015EF18_DF588 = 0x10;
-    D_8015EF14_DF584 = OBTABLE_FindObject("zbubbl__");
+    D_8015EF14_DF584 = (int)OBTABLE_FindObject("zbubbl__");
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015E27C_DE8EC);
