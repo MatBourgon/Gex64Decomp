@@ -159,6 +159,7 @@ INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015A590_8B730);
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015A78C_8B92C);
 
+
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_rezbomb_OnUpdate);
 
 void final_rezbomb_OnCollide(Instance* instance, GameTracker* gameTracker) {

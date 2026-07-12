@@ -1,6 +1,7 @@
 #include "common.h"
 
 #include "level/RTA.h"
+#include "types/G2String.h"
 #include "types/intro/QMark.h"
 
 #include "types/Vector.h"
@@ -417,7 +418,21 @@ INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015D9A0_DE010);
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015DAF0_DE160);
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015DE80_DE4F0);
+extern char D_8015EEB8_DF528[];
+
+void func_8015DE80_DE4F0(Instance* instance, GameTracker* gameTracker) {
+    BSPTree fake;
+    BSPTree unused;    /* dead local — reproduces the 0x48 frame */
+
+    instance = instance->bspTree->instanceSpline;
+    if (instance != 0 && instance->object != 0) {
+        if (G2String_Compare_EQ(instance->object->name, D_8015EEB8_DF528)) {
+            instance->bspTree = &fake;
+            fake.instanceSpline = PlayerInstance;
+            common_cola_OnCollide(instance, gameTracker);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015DF08_DE578);
 

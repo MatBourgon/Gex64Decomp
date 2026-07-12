@@ -60,7 +60,23 @@ void func_8015A1E0_C2B60(Instance* instance, int arg1, int arg2, short* arg3) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015A258_C2BD8);
+/* snap the camera to pos and reset its focus history */
+void func_8015A258_C2BD8(unsigned short* pos, int arg1, GameTracker* gameTracker) {
+    unsigned short* c;
+
+    c = (unsigned short*)gameTracker->camera;
+    c[0] = pos[0];
+    c[1] = pos[1];
+    c[2] = pos[2];
+    func_80003A68(c);
+    CAMERA_SetMode(c, 8);
+    c[0xC] = c[0x18];
+    c[0xD] = c[0x19];
+    c[0xE] = c[0x1A];
+    c[4] = c[0x18];
+    c[5] = c[0x19];
+    c[0x17] = c[6] = c[0x1A];
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015A2E0_C2C60);
 
