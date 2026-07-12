@@ -145,7 +145,16 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_zombie_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_zombie_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_zomarm_OnCreate);
+void horror_zomarm_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    int v;
+
+    instance->_E0[1] = -0x10;
+    instance->_D0[2] = 0;
+    instance->_F4[0] = 1;
+    v = rand();
+    instance->_100 = 0;
+    instance->_F4[2] = v % 20 + 90;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_zomarm_OnUpdate);
 
@@ -186,7 +195,22 @@ void horror_gate_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_gate_OnUpdate);
+void horror_gate_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    short* intro;
+    int z;
+
+    intro = (short*)instance->introData;
+    if (intro != 0 && instance->_F4[0] == 1) {
+        z = *(unsigned short*)&instance->scale.z - 0x44;
+        instance->scale.z = z;
+        if ((short)z <= 0) {
+            instance->scale.z = 1;
+            instance->_F4[0] = 2;
+            intro[0] = 1;
+        }
+        func_8002E704();
+    }
+}
 
 void horror_gate_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
@@ -507,7 +531,11 @@ void horror_bouncer_OnCollide(Instance* instance, GameTracker* gameTracker) {
 void horror_flasher_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_flasher_OnUpdate);
+void horror_flasher_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    if (((unsigned int*)gameTracker8)[0xE0 / 4] % 80 == 0) {
+        func_800509E0(0x1E5, 0x78, 0x40, (rand() & 0x7F) - 0x40);
+    }
+}
 
 void horror_flasher_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
@@ -818,7 +846,16 @@ void func_801623DC_A5C0C(GameTracker* arg0, short arg1, int arg2, void* arg3) {
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_80162438_A5C68);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_801624B4_A5CE4);
+/* set _C0[3] on this instance and every instance in its intro group
+   (intro->_04 points at a count-prefixed array of Intro*) */
+void func_801624B4_A5CE4(Instance* instance, short val) {
+    int i;
+
+    instance->_C0[3] = val;
+    for (i = 1; i < *(int*)instance->intro->_04 + 1; i++) {
+        ((Intro**)instance->intro->_04)[i]->instance->_C0[3] = val;
+    }
+}
 
 int func_80162524_A5D54(short* arg0, short* arg1) {
     int result;

@@ -535,7 +535,16 @@ void func_8015BFA8_E1DC8(Instance* instance) {
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015BFD4_E1DF4);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_bldbota_OnCreate);
+void scifi_bldbota_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    if (instance->flags & 0x20000) {
+        func_8015BFA8_E1DC8((Instance*)instance->_F4[2]);
+        instance->_F4[2] = 0xCDCDCDCD;
+    } else {
+        instance->flags |= 0x10080;
+        instance->currentTextureAnimFrame = 0;
+        instance->_F4[2] = func_8015BF08_E1D28(instance);
+    }
+}
 
 void scifi_bldbota_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     unsigned short frame;

@@ -40,7 +40,17 @@ INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_oldpoptv_OnUpdate);
 void final_oldpoptv_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_lectro_OnCreate);
+void final_lectro_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    instance->flags |= 0x80;
+    instance->currentTextureAnimFrame = 0;
+    instance->flags |= 0x10000;
+    if (instance->flags & 0x20000) {
+        if (instance->_F4[2] != 0) {
+            func_800331BC(instance->_F4[2]);
+            instance->_F4[2] = 0;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_lectro_OnUpdate);
 
@@ -52,7 +62,20 @@ void final_probe_OnCreate(Instance* instance, GameTracker* gameTracker)
     instance->flags |= 0x400;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_probe_OnUpdate);
+void final_probe_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    int z;
+
+    if (instance->intro->_2C != 0) {
+        instance->_F4[0] = 1;
+    }
+    if (instance->_F4[0] == 1) {
+        z = *(unsigned short*)&instance->position.z + 0x20;
+        instance->position.z = z;
+        if ((short)z > 0x2000) {
+            func_8002E350(instance);
+        }
+    }
+}
 
 void final_probe_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }

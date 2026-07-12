@@ -351,7 +351,25 @@ INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_80160DF8_99F78);
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_801614B0_9A630);
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_80161538_9A6B8);
+extern int gGlobalMessageBuffer[];
+extern int D_800BF1B8[];
+extern int D_8007828C;
+
+char* func_80161538_9A6B8(char* p) {
+    int t;
+
+    if (p == (char*)gGlobalMessageBuffer[0x18 / 4]) {
+        return 0;
+    }
+    if (p == (char*)D_800BF1B8[1]) {
+        return 0;
+    }
+    t = p[6] * 16 + D_8007828C;
+    if (*(char**)(t + 4) == p) {
+        return p + *(int*)t * 28 - 0x1C;
+    }
+    return p - 0x1C;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_801615A8_9A728);
 

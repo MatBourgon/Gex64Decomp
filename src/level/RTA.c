@@ -369,7 +369,20 @@ INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015C8C8_DCF38);
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015CA24_DD094);
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_fxgen_OnCreate);
+extern char D_8015EE18_DF488[];
+
+void rta_fxgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    Object* obj;
+
+    if (instance->introData == 0) {
+        instance->introData = D_8015EE18_DF488;
+    }
+    memset(&instance->_F4[2], 0, 0x28);
+    obj = (Object*)OBTABLE_FindObject(D_8015EE74_DF4E4);
+    if (obj != 0) {
+        instance->_F4[2] = (int)obj->modelList[0];
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_fxgen_OnUpdate);
 
