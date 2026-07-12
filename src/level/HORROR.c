@@ -303,7 +303,26 @@ void horror_bkshlf_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     instance->_F4[1] = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_bkshlf_OnCollide);
+void horror_bkshlf_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+
+    bsp = instance->bspTree;
+    if (bsp->_06 == 1 && bsp->instanceSpline == gameTracker->player) {
+        if (((short*)bsp)[0x1A / 2] < -0x77) {
+            if (((short*)bsp)[0x18 / 2] <= 0) {
+                instance->_F4[1] = 1;
+            } else {
+                instance->_F4[1] = 2;
+            }
+        } else if (((short*)bsp)[0x1A / 2] >= 0x78) {
+            if (((short*)bsp)[0x18 / 2] <= 0) {
+                instance->_F4[1] = 2;
+            } else {
+                instance->_F4[1] = 1;
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_fltlamp_OnCreate);
 

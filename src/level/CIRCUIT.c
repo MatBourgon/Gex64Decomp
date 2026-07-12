@@ -452,7 +452,16 @@ INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015D7F0_849D0);
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_pball_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_pball_OnCollide);
+void circuit_pball_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+
+    bsp = instance->bspTree;
+    if (bsp->instanceSpline == gameTracker->player && !(instance->flags & 0x800)
+        && gameTracker->player->_F4[1] != 0x10000 && bsp->_0C[5] < 8U) {
+        func_8002275C(instance, gameTracker);
+        INSTANCE_KillInstance(instance);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015DB80_84D60);
 

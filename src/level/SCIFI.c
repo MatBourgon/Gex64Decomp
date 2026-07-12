@@ -593,7 +593,28 @@ void scifi_abubble_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_acrate_OnCreate);
+void scifi_acrate_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    unsigned short* intro;
+    unsigned short* data;
+    short* fc;
+
+    intro = (unsigned short*)instance->introData;
+    data = (unsigned short*)instance->object->data;
+    fc = (short*)&instance->_F4[2];
+    if (intro != 0) {
+        fc[0] = intro[0];
+        fc[1] = intro[1];
+    } else if (data != 0) {
+        fc[0] = data[0];
+        fc[1] = data[1];
+    }
+    if (fc[0] == 0) {
+        fc[0] = 10;
+    }
+    if (fc[1] == 0) {
+        fc[1] = 0x1E;
+    }
+}
 
 void scifi_acrate_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 }
