@@ -170,12 +170,12 @@ void gillig_tikifb_OnCollide(Instance* instance, GameTracker* gameTracker) {
     SVECTOR point;
     int playerState;
     BSPTree* bsp  = instance->bspTree;
-    int type = bsp->_06;
+    int six = bsp->_06;
 
-    if ((type == 1) && (bsp->instanceSpline == gameTracker->player)) {
+    if ((six == 1) && (bsp->instanceSpline == gameTracker->player)) {
         playerState = PlayerInstance->_F4[1];
         if ((playerState == 0x10) || (playerState == 0x2000)) {
-            if ((func_80027578() == 0) && (instance->currentModel == type) && (instance->_F4[0] != 2)) {
+            if ((func_80027578() == 0) && (instance->currentModel == six) && (instance->_F4[0] != 2)) {
                 instance->_F4[0] = 2;
                 func_80050508(instance, 0xBF, -0x5A, 0x64, 0x2710);
             }

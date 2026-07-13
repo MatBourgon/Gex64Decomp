@@ -313,16 +313,16 @@ int func_8015D354_84534(Instance* instance, GameTracker* gameTracker);
 void func_8015D4B0_84690(Instance* instance, GameTracker* gameTracker);
 
 void circuit_launch_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    Instance* temp_a0 = gameTracker->player;
+    Instance* player = gameTracker->player;
     BSPTree* bsp = instance->bspTree;
     char var_a2 = (bsp->_06 == 1) ? bsp->_0C[5] : -1;
     
-    if (((instance->_F4[0] - 1) >= 2U) && (*(int*)&instance->_108 == 0) && (bsp->instanceSpline == temp_a0) && (bsp->_04 == 5) && (var_a2 < 8) && (bsp->_08[2] == 0)) {
+    if (((instance->_F4[0] - 1) >= 2U) && (*(int*)&instance->_108 == 0) && (bsp->instanceSpline == player) && (bsp->_04 == 5) && (var_a2 < 8) && (bsp->_08[2] == 0)) {
         if (instance->_11C & 0x10) {
-            temp_a0->_F4[2] |= 0x200;
+            player->_F4[2] |= 0x200;
             instance->_11C |= 0x20;
         }
-        else if ((((func_80025798(temp_a0, bsp) != 0) && (instance->_11C == 0)) || (instance->_11C & 1)) && (func_8015D354_84534(instance, gameTracker) == 0)) {
+        else if ((((func_80025798(player, bsp) != 0) && (instance->_11C == 0)) || (instance->_11C & 1)) && (func_8015D354_84534(instance, gameTracker) == 0)) {
             func_8015D4B0_84690(instance, gameTracker);
         }
     }
@@ -670,7 +670,7 @@ INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_801635EC_8A7CC); // launch__
 
 INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_801635F8_8A7D8); // ppathd__
 
-INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_801635FC_8A7DC); 
+INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_801635FC_8A7DC);
 
 INCLUDE_RODATA("asm/nonmatchings/level/CIRCUIT", D_80163604_8A7E4); // horror______
 
