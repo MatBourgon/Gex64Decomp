@@ -119,7 +119,21 @@ void gexzil_mechjet_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_mechjet_OnUpdate);
+void gexzil_mechjet_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    if (instance->_F4[0] == 0) {
+        func_8002DAF8(instance, -1);
+        if (instance->flags2 & 0x10) {
+            instance->_F4[0] = 1;
+            instance->currentAnimFrame = ((unsigned short*)instance->object->animList[0])[1] - 1;
+            instance->flags2 &= ~0x10;
+        }
+    } else if (instance->_F4[0] != 1) {
+        func_8002DAF8(instance, -0x3E9);
+        if (instance->flags2 & 0x10) {
+            func_8002E350(instance);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015B460_945E0);
 
@@ -189,7 +203,21 @@ INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015C504_95684);
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015C704_95884);
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015CADC_95C5C);
+void func_8015CADC_95C5C(Instance* instance, short* arg1) {
+    int f;
+
+    f = instance->flags2;
+    if (f & 0x10) {
+        if (arg1[0x26] <= 0) {
+            gameTracker8->player->flags2 |= 0x10;
+            PlayerInstance->_F4[0] = 2;
+            gameTracker8->player->_F4[2] &= ~0x1000000;
+            arg1[0x13] = 0x29;
+        } else {
+            instance->flags2 = f & ~0x10;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015CB68_95CE8);
 
@@ -296,9 +324,50 @@ void func_8015F588_98708(Instance* instance, short* arg1) {
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015F5D4_98754);
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015F680_98800);
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015F708_98888);
+void func_8015F680_98800(Instance* instance) {
+    short* d;
+
+    d = (short*)instance->object->data;
+    d[8] = -1;
+    d[0x13] = 7;
+    instance->currentModelAnim = 2;
+    instance->currentAnimFrame = 0;
+    d[0xA] = 0;
+    instance->flags2 &= ~0x10;
+    d[9] = 0;
+    instance->currentAnimFrame = 5;
+    instance->_B8 = 0;
+    d[0x1C] = d[0x1D];
+    if (((int*)d)[0x90 / 4] != 0) {
+        func_8002E350(((int*)d)[0x90 / 4]);
+        ((int*)d)[0x90 / 4] = 0;
+    }
+}
+
+int func_8015F708_98888(Instance* instance, Instance* arg1) {
+    char* data = arg1->object->data;
+    int** list;
+    int result;
+    int i;
+
+    result = 0;
+    list = ((int**)((int*)data)[0xA4 / 4]);
+    if (list != 0) {
+        i = 0;
+        if (((short*)data)[0x44 / 2] > i) {
+            do {
+                if (func_8015AC68_93DE8(list[0], instance) != 0) {
+                    result = 1;
+                    break;
+                }
+                i += 1;
+                list += 1;
+            } while (((short*)data)[0x44 / 2] > i);
+        }
+    }
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015F7B4_98934);
 
@@ -332,6 +401,8 @@ void func_8015FF80_99100(Instance* instance, short* arg1) {
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015FFDC_9915C);
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8016014C_992CC);
+
+
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_801601D8_99358);
 
@@ -367,7 +438,29 @@ INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_80160C28_99DA8);
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_80160DF8_99F78);
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_801614B0_9A630);
+extern char* D_80078288;
+
+/* find the type-2 entry with the smallest coordinate sum in the 0x1C-stride table */
+char* func_801614B0_9A630(void) {
+    unsigned int unused[1];    /* dead local — reproduces the 0x10 frame */
+    int best;
+    char* result;
+    char* e;
+    int sum;
+
+    best = 0x40000000;
+    result = 0;
+    for (e = D_80078288; e[7] != 0; e += 0x1C) {
+        if (e[7] == 2) {
+            sum = *(short*)(e + 0xA) + *(short*)(e + 0xC);
+            if (sum < best) {
+                best = sum;
+                result = e;
+            }
+        }
+    }
+    return result;
+}
 
 extern int gGlobalMessageBuffer[];
 extern int D_800BF1B8[];

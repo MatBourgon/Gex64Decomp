@@ -113,7 +113,27 @@ void mooshu_moobar_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", mooshu_moo_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015B2FC_C3C7C);
+void func_8015B2FC_C3C7C(Instance* instance, int arg1, int arg2) {
+    SVECTOR vec;
+
+    if (instance->currentModelAnim == 0) {
+        if (instance->currentAnimFrame == 6) {
+            int* m = ((int*)instance->oldMatrix);
+
+            vec.x = m[0x54 / 4];
+            vec.y = m[0x58 / 4];
+            vec.z = m[0x5C / 4];
+            func_8015D544_C5EC4(&vec, 8, 0x1E, arg2);
+        } else if (instance->currentAnimFrame == 0x11) {
+            int* m = ((int*)instance->oldMatrix);
+
+            vec.x = m[0xD4 / 4];
+            vec.y = m[0xD8 / 4];
+            vec.z = m[0xDC / 4];
+            func_8015D544_C5EC4(&vec, 8, 0x1E, arg2);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015B39C_C3D1C);
 
@@ -233,7 +253,21 @@ void func_8015C710_C5090(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015C780_C5100);
+void func_8015C780_C5100(Instance* instance) {
+    if (instance->_F4[2] == 0) {
+        instance->_F4[1] = 0;
+        instance->_104 = 0;
+        if (instance->_F4[0] == 1) {
+            instance->_F4[2] = 0x14;
+            instance->_F4[0] = 3;
+            func_80050508(instance, 0x126, (short)((rand() & 0x1F) - 0xF), 0xC8, 0x2710);
+        } else if (instance->_F4[0] == 0) {
+            instance->_F4[2] = 0x14;
+            instance->_F4[0] = 2;
+            instance->_100 = 0x40;
+        }
+    }
+}
 
 void mooshu_moosprk_OnCreate(Instance* instance, GameTracker* gameTracker)
 {

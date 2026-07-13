@@ -536,7 +536,18 @@ INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_cavegex_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_cavegex_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_cavetl_OnCreate);
+void prehst_cavetl_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    int* state = instance->_D0;
+
+    instance->_F4[0] = 4;
+    state[2] = 0x14;
+    state[5] = -2;
+    state[0] = -(((func_8003A6AC(instance->rotation.z - 0x400) << 16) >> 16) * 40) >> 12;
+    state[1] = -(((func_8003A4E0(instance->rotation.z - 0x400) << 16) >> 16) * 40) >> 12;
+    state[6] = 0x28;
+    state[7] = 0x28;
+    state[8] = 0x1E;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_cavetl_OnUpdate);
 
@@ -1006,37 +1017,6 @@ INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_ptera_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_801630A0_D0920);
 
-/* near-match kept for reference: matches only with `register int result __asm__("$2")` to pin the
-   return register; leader prefers no asm constructs, so it stays commented until properly matched.
-int func_801630A0_D0920(Instance* instance) {
-    MATRIX mat;
-    unsigned short out[3];
-    unsigned short out2[3];
-    register int result __asm__("$2");
-    unsigned short x;
-    unsigned short y;
-    unsigned short z;
-
-    MATH3D_SetUnityMatrix(&mat);
-    RotMatrixX(instance->rotation.x, &mat);
-    RotMatrixY(instance->rotation.y + 0x800, &mat);
-    RotMatrixZ(instance->rotation.z, &mat);
-    func_800157BC(&mat, out);
-    result = 0;
-    x = out[0];
-    y = out[1];
-    z = out[2];
-    out2[0] = x;
-    x &= 0xFFF;
-    out2[1] = y;
-    y &= 0xFFF;
-    out2[2] = z;
-    out2[0] = x;
-    out2[1] = y;
-    if (x == 0) result = (y < 1);
-    return result;
-}
-*/
 
 int func_80163138_D09B8(Instance* instance) {
     instance->rotation.x &= 0xFFF;

@@ -27,7 +27,20 @@ INCLUDE_RODATA("asm/nonmatchings/level/SCIFI", D_80164DF0_EAC10);
 
 INCLUDE_RODATA("asm/nonmatchings/level/SCIFI", D_80164E14_EAC34);
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_80159A84_DF8A4);
+void func_80159A84_DF8A4(Instance* arg0) {
+    int* data = ((int*)PlayerInstance->data);
+
+    if (arg0 != 0) {
+        INSTANCE_KillInstance(arg0);
+    }
+    memcpy(data + 0x4C / 4, "helmet__", 9);
+    data[0x48 / 4] = 0x14;
+    func_800240C8();
+    if (D_8007681C != 0 && D_8007681C[7] != 0) {
+        ((short*)D_8007681C[7])[0x20 / 2] = 0x12C;
+    }
+}
+
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_80159B10_DF930);
 
