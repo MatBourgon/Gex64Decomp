@@ -191,8 +191,6 @@ void scifi_onoff_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-extern char D_80164E3C_EAC5C[];
-
 void scifi_onoff_OnCollide(Instance* instance, GameTracker* gameTracker) {
     short* intro;
     BSPTree* bsp;
@@ -247,7 +245,7 @@ void scifi_onoff_OnCollide(Instance* instance, GameTracker* gameTracker) {
             instance->intro->flags ^= 0x800;
             instance->_F4[0] ^= 1;
             fire = 1;
-        } else if (G2String_Compare_EQ(instance->object->name, D_80164E3C_EAC5C)) {
+        } else if (G2String_Compare_EQ(instance->object->name, "gong____")) {
             fire = 1;
         }
         if (fire != 0) {
@@ -302,10 +300,7 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015AC28_E0A48);
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_bub_OnUpdate);
 
 void scifi_bub_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    BSPTree* bsp;
-
-    bsp = instance->bspTree;
-    if (bsp->instanceSpline == gameTracker->player && bsp->_08[4] == 0) {
+    if (instance->bspTree->instanceSpline == gameTracker->player && instance->bspTree->_08[4] == 0) {
         func_80159720_DF540(((short*)&instance->_F4[2])[1]);
         instance->_F4[0] = 1;
     }
@@ -421,10 +416,6 @@ void func_8015B4BC_E12DC(void* arg0) {
     }
 }
 */
-
-INCLUDE_RODATA("asm/nonmatchings/level/SCIFI", D_80164E3C_EAC5C);
-
-INCLUDE_RODATA("asm/nonmatchings/level/SCIFI", D_80164E40_EAC60);
 
 extern void func_80017E88();
 extern void func_8015B4BC_E12DC();
@@ -584,10 +575,7 @@ void scifi_abubble_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 }
 
 void scifi_abubble_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    BSPTree* bsp;
-
-    bsp = instance->bspTree;
-    if (bsp->instanceSpline == gameTracker->player && bsp->_08[4] == 0) {
+    if (instance->bspTree->instanceSpline == gameTracker->player && instance->bspTree->_08[4] == 0) {
         func_80159720_DF540(((short*)&instance->_F4[2])[1]);
         INSTANCE_PlainDeath(instance, 5, -1, 0);
     }
@@ -647,11 +635,7 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015C5CC_E23EC);
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_apod_OnUpdate);
 
 void scifi_apod_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    BSPTree* bsp;
-    short t;
-
-    bsp = instance->bspTree;
-    if (bsp->instanceSpline == gameTracker->player && ((t = bsp->_04) == 2 || t == 5)) {
+    if (instance->bspTree->instanceSpline == gameTracker->player && (instance->bspTree->_04 == 2 || instance->bspTree->_04 == 5)) {
         GenericCollide(instance, gameTracker);
     }
 }
@@ -683,15 +667,15 @@ void scifi_alien_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_RODATA("asm/nonmatchings/level/SCIFI", D_80164E60_EAC80);
+INCLUDE_RODATA("asm/nonmatchings/level/SCIFI", D_80164E60_EAC80); // rtblast_
 
-INCLUDE_RODATA("asm/nonmatchings/level/SCIFI", D_80164E6C_EAC8C);
+INCLUDE_RODATA("asm/nonmatchings/level/SCIFI", D_80164E6C_EAC8C); // bub_____
 
 INCLUDE_RODATA("asm/nonmatchings/level/SCIFI", D_80164E78_EAC98);
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_alien_OnUpdate);
 
-INCLUDE_RODATA("asm/nonmatchings/level/SCIFI", D_80164EA8_EACC8);
+INCLUDE_RODATA("asm/nonmatchings/level/SCIFI", D_80164EA8_EACC8); // aliens__
 
 INCLUDE_RODATA("asm/nonmatchings/level/SCIFI", D_80164EAC_EACCC);
 

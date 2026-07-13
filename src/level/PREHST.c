@@ -15,17 +15,13 @@ void prehst_ttplat_OnCreate(Instance* instance, GameTracker* gameTracker) {
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_ttplat_OnUpdate);
 
 void prehst_ttplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    BSPTree* bsp;
     Intro** list;
-    Instance* first;
     Instance* target;
 
-    bsp = instance->bspTree;
-    if ((bsp->_06 == 4) && (bsp->instanceSpline == gameTracker->player)) {
+    if ((instance->bspTree->_06 == 4) && (instance->bspTree->instanceSpline == gameTracker->player)) {
         list = (Intro**)instance->intro->_04;
-        first = list[2]->instance;
-        if (first != instance) {
-            target = first;
+        if (list[2]->instance != instance) {
+            target = list[2]->instance;
         } else {
             target = list[1]->instance;
         }
@@ -76,11 +72,8 @@ void prehst_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_bug_OnUpdate);
 
 void prehst_bug_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    BSPTree* bsp;
-    short* temp;
-
-    bsp = instance->bspTree;
-    temp = (short*)&instance->_F4[2];
+    BSPTree* bsp = instance->bspTree;
+    short* temp = (short*)&instance->_F4[2];
 
     if (bsp->_06 == 1) {
         if ((bsp->instanceSpline == gameTracker->player) && (bsp->_08[4] < 2U) && (bsp->_0C[5] >= 6U)) {
@@ -167,12 +160,9 @@ void prehst_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 }
 
 void prehst_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    int temp_a3;
-    int temp_v1;
-    BSPTree* bsp;
-
-    bsp = instance->bspTree;
-    temp_a3 = bsp->_06;
+    BSPTree* bsp = instance->bspTree;
+    int temp_a3 = bsp->_06;
+    
     if (temp_a3 == 1) {
         if ((bsp->instanceSpline == gameTracker->player) && (bsp->_0C[5] >= 6U)) {
             if (instance->_F4[0] == 0)
@@ -561,9 +551,9 @@ void prehst_cavetl_OnCollide(Instance* instance, GameTracker* gameTracker) {
         && (instance->_F4[0] == 1)) {
         func_80022714(instance, gameTracker);
     } else if ((instance->_F4[0] == 0) && (bsp->instanceSpline != gameTracker->player)) {
-        instance->position.x += ((unsigned short*)bsp)[0x14];
-        instance->position.y += ((unsigned short*)bsp)[0x15];
-        COLLIDE_UpdateAllTransforms(instance, ((SVECTOR*)&((unsigned short*)bsp)[0x14]), gameTracker);
+        instance->position.x += bsp->localOffset.x;
+        instance->position.y += bsp->localOffset.y;
+        COLLIDE_UpdateAllTransforms(instance, &bsp->localOffset, gameTracker);
     }
 }
 
@@ -626,13 +616,10 @@ INCLUDE_RODATA("asm/nonmatchings/level/PREHST", D_80164518_D1D98);
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_raptor_OnUpdate);
 
 void prehst_raptor_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    BSPTree* bsp;
-    unsigned char* p08;
-    unsigned char* p0C;
+    BSPTree* bsp = instance->bspTree;
+    unsigned char* p08 = bsp->_08;
+    unsigned char* p0C = bsp->_0C;
 
-    bsp = instance->bspTree;
-    p08 = bsp->_08;
-    p0C = bsp->_0C;
     if ((instance->_F4[0] != 1) && (bsp->instanceSpline == gameTracker->player)) {
         if ((bsp->_06 == 1) && (p08[5] < p0C[5])) {
             instance->_F4[0] = bsp->_06;
@@ -664,18 +651,16 @@ INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_zviolet_OnUpdate);
 void prehst_zviolet_OnCollide(Instance* instance, GameTracker* gameTracker) {
     extern int D_801539C8;
     extern void func_8015F1F0_CCA70(Instance*);
-    BSPTree* bsp;
-    unsigned char* fc;
     int* mask;
     int state;
+    BSPTree* bsp = instance->bspTree;
+    unsigned char* fc = (unsigned char*)&instance->_F4[2];
 
-    bsp = instance->bspTree;
-    fc = (unsigned char*)&instance->_F4[2];
     if (bsp->instanceSpline == gameTracker->player) {
         if (*(int*)&bsp->_04 == 0x20004
             && (func_80027578() == 0 || ((short*)PlayerInstance->data)[0xDC/2] != 0)
             && (state = PlayerInstance->_F4[1],
-                (unsigned int)(state - 1) < 2 || state == 0x100 || state == 4 || state == 0x80000
+                (state - 1) < 2U || state == 0x100 || state == 4 || state == 0x80000
                 || state == 0x1000 || state == 0x2000 || state == 8 || state == 0x20 || state == 0x40
                 || state == 0x80 || state == 0x10 || state == 0x200)) {
             if (fc[0x11] == 0) {
@@ -685,7 +670,7 @@ void prehst_zviolet_OnCollide(Instance* instance, GameTracker* gameTracker) {
                 }
                 state = PlayerInstance->_F4[1];
                 if (state == 0x20 || state == 0x80
-                    || (!(gameTracker->player->flags & 0x40000) && (*mask & 0x10))) {
+                    || (((gameTracker->player->flags & 0x40000) != 0x40000) && (*mask & 0x10))) {
                     *(short*)&fc[0xE] = 0x32;
                     fc[0x19] = 2;
                 }
@@ -967,9 +952,7 @@ INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_8015FC2C_CD4AC);
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_boulder_OnUpdate);
 
 void prehst_boulder_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    BSPTree* bsp;
-
-    bsp = instance->bspTree;
+    BSPTree* bsp = instance->bspTree;
     if ((bsp->_06 == 1) && (bsp->instanceSpline == gameTracker->player) && (func_80027578() == 0)) {
         func_8004AAA8(instance, 0x25, 0xC8);
         func_8004AAA8(instance, 0x25, 0);
@@ -1007,13 +990,11 @@ void prehst_spitplt_OnCollide(Instance* instance, GameTracker* gameTracker) {
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_ptera_OnCreate);
 
 void func_80160840_CE0C0(Instance* instance) {
-    BSPTree* bsp;
-
-    bsp = instance->bspTree;
+    BSPTree* bsp = instance->bspTree;
     if (bsp->_06 == 3) {
-        instance->position.x = (unsigned short)instance->position.x + ((unsigned short*)bsp)[0x28/2];
-        instance->position.y = (unsigned short)instance->position.y + ((unsigned short*)bsp)[0x2A/2];
-        instance->position.z = (unsigned short)instance->position.z + ((unsigned short*)bsp)[0x2C/2];
+        instance->position.x += bsp->localOffset.x;
+        instance->position.y += bsp->localOffset.y;
+        instance->position.z += bsp->localOffset.z;
     }
 }
 

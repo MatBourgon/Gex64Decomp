@@ -93,13 +93,13 @@ Object* OBTABLE_FindObject(char* name) {
     Object** objectPtr;
 
     if (name != NULL) {
-        objectPtr = (Object**)((int****)gameTracker8)[1][0x10];
+        objectPtr = (Object**)gameTracker8->level->objectNameList;
         if ((void*)*objectPtr != (void*)objectPtr) {
             for(listStart = objectPtr; (void*)*objectPtr != (void*)listStart; objectPtr++)
             {
                 if (*objectPtr != NULL && G2String_Compare_EQ(name, (*objectPtr)->name))
                 {
-                    return (Object*)*objectPtr;
+                    return *objectPtr;
                 }
             }
         }
