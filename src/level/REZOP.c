@@ -375,7 +375,7 @@ void rezop_rezbull_OnCollide(Instance* instance, GameTracker* gameTracker) {
         if (instance->_F4[0] == bsp->_06) {
             func_8004AAE4(bsp, &out, gameTracker);
             if (out.z >= 0xED9) {
-                *(Instance**)&instance->_104 = bsp->instanceSpline;
+                WORK_AS(Instance*, instance->_104) = bsp->instanceSpline;
             }
         }
     } else if (bsp->_06 == 3 && (*(unsigned short*)&bsp->_0C[6] & 8)) {
@@ -624,9 +624,9 @@ void rezop_iris_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
     data = ((unsigned short*)instance->object->data);
     ((short*)&instance->_100)[1] = (short)data[0] / 2;
-    *(short*)&instance->_104 = -((short)data[0] / 2);
+    WORK_AS_IDX(short, instance->_104, 0) = -((short)data[0] / 2);
     WORK_AS_IDX(short, instance->_10C, 1) = data[3];
-    ((short*)&instance->_104)[1] = (short)data[1] / 2 + 0x140;
+    WORK_AS_IDX(short, instance->_104, 1) = (short)data[1] / 2 + 0x140;
     x = -0x140 - (short)data[1] / 2;
     WORK_AS_IDX(short, instance->_108, 0) = x;
     y = data[2];
@@ -710,7 +710,7 @@ void rezop_tvgurny_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         pt = SplineGetLastPoint(instance->intro->multiSpline->positional, (SplineDef*)&instance->_F4[2]);
         a = *pt;
         COLLIDE_PointAndTerrain(gameTracker8->level->segmentAddress, &a, &b, instance);
-        SCRIPT_InstanceSplineSet(instance, (short)(instance->_120 - 0x28), (SplineDef*)&instance->_F4[2], (SplineDef*)&instance->_104, 0);
+        SCRIPT_InstanceSplineSet(instance, (short)(instance->_120 - 0x28), (SplineDef*)&instance->_F4[2], WORK_AS_PTR(SplineDef, instance->_104), 0);
         instance->_D0[0] += 1;
     }
     GenericProcess(instance, gameTracker);

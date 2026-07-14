@@ -44,7 +44,7 @@ void func_80044B2C(Instance* instance) {
     temp_v1 = (instance->_F0[6] * 3);
     ((short*)&instance->_100)[0] = ((temp_v1 + 1) * temp_a2[3]);
     ((short*)&instance->_100)[1] = (((temp_v1 + 4) * temp_a2[3]) - 1);
-    *(short*)&instance->_104 = -1;
+    WORK_AS_IDX(short, instance->_104, 0) = -1;
     instance->currentTextureAnimFrame = *(short*)&instance->_100;
 }
 
@@ -100,9 +100,9 @@ void common_powertv_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         }
     }
     else if (instance->_F4[0] == 1) {
-        if (((short*)&instance->_104)[1] > 0) {
-            ((short*)&instance->_104)[1]--;
-            if ((((short*)&instance->_104)[1] << 0x10) == 0) {
+        if (WORK_AS_IDX(short, instance->_104, 1) > 0) {
+            WORK_AS_IDX(short, instance->_104, 1)--;
+            if ((WORK_AS_IDX(short, instance->_104, 1) << 0x10) == 0) {
                 instance->currentTextureAnimFrame = ((short*)&instance->_100)[0];
                 goto block_7;
             }
@@ -110,8 +110,8 @@ void common_powertv_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         else
         {
 block_7:
-            func_8002DAF8(instance, ((short*)&instance->_104)[0]);
-            if ((((short*)&instance->_104)[0] == -0x3E9) && (instance->currentAnimFrame == 0x1A)) {
+            func_8002DAF8(instance, WORK_AS_IDX(short, instance->_104, 0));
+            if ((WORK_AS_IDX(short, instance->_104, 0) == -0x3E9) && (instance->currentAnimFrame == 0x1A)) {
                 instance->flags2 |= 0x10;
             }
             if (instance->flags2 & 0x10) {

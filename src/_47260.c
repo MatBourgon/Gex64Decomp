@@ -497,7 +497,7 @@ SplineDef *SCRIPT_GetRotSplineDef(Instance *instance, MultiSpline *multi, int is
 
     if ((isParent != 0) || (isClass != 0))
     {
-        splineDef = (SplineDef *)&instance->_104; // work2
+        splineDef = WORK_AS_PTR(SplineDef, instance->_104); // work2
 
         return splineDef;
     }

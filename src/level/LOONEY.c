@@ -45,7 +45,7 @@ void looney_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
     if (intro != NULL) {
         *(short*)&instance->_100 = intro[0];
-        ((short*)&instance->_104)[1] = intro[1];
+        WORK_AS_IDX(short, instance->_104, 1) = intro[1];
         WORK_AS_IDX(short, instance->_108, 0) = intro[2];
         WORK_AS_IDX(short, instance->_108, 1) = intro[3];
         WORK_AS_IDX(short, instance->_10C, 0) = intro[4];
@@ -56,7 +56,7 @@ void looney_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
         }
     } else {
         *(short*)&instance->_100 = 0x96;
-        ((short*)&instance->_104)[1] = ((unsigned short*)&instance->intro->position)[0] - 0x500;
+        WORK_AS_IDX(short, instance->_104, 1) = ((unsigned short*)&instance->intro->position)[0] - 0x500;
         WORK_AS_IDX(short, instance->_108, 0) = ((unsigned short*)&instance->intro->position)[1] - 0x780;
         WORK_AS_IDX(short, instance->_108, 1) = ((unsigned short*)&instance->intro->position)[0] + 0x500;
         WORK_AS_IDX(short, instance->_10C, 0) = ((unsigned short*)&instance->intro->position)[1] + 0x780;
@@ -90,10 +90,10 @@ void looney_bouncer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     
     if (intro != NULL) {
         ((short*)&instance->_100)[1] = intro[0];
-        ((short*)&instance->_104)[0] = intro[1];
+        WORK_AS_IDX(short, instance->_104, 0) = intro[1];
     } else {
         ((short*)&instance->_100)[1] = 0U;
-        ((short*)&instance->_104)[0] = 0U;
+        WORK_AS_IDX(short, instance->_104, 0) = 0U;
     }
     fc[3] = instance->intro->position.x;
     fc[4] = instance->intro->position.y;
@@ -111,7 +111,7 @@ void looney_bouncer_OnCollide(Instance* instance, GameTracker* gameTracker) {
         && (bsp->_08[4] < 2U)
         && (bsp->_0C[5] >= 6U)
         && (
-            (*(short*)&instance->_104 != 3)
+            (WORK_AS_IDX(short, instance->_104, 0) != 3)
             || ((instance->_F4[0] - 2) < 2U)
             || (instance->_F4[0] == 4)
         )) {
@@ -189,7 +189,7 @@ void looney_bowling_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     if (instance->parent == NULL) {
         INSTANCE_KillInstance(instance);
     }
-    if (SCRIPT_InstanceSplineProcess(instance, &instance->_F4[2], &instance->_104, 0, 1) > 0) {
+    if (SCRIPT_InstanceSplineProcess(instance, (SplineDef*)&instance->_F4[2], WORK_AS_PTR(SplineDef, instance->_104), NULL, 1) > 0) {
         INSTANCE_PlainDeath(instance, 5, -1, 0);
     }
     if (++(*(int*)&instance->_110) == 0x50) {

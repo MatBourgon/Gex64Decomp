@@ -578,7 +578,7 @@ void scifi_abubble_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int v;
 
     v = instance->_104;
-    if (((short*)&instance->_104)[1] < ((short*)&instance->_100)[1]) {
+    if (WORK_AS_IDX(short, instance->_104, 1) < ((short*)&instance->_100)[1]) {
         if (instance->flags & 0x1000) {
             instance->_104 = (short)(v + 1);
         }

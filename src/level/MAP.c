@@ -345,7 +345,7 @@ void map_angel_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             INSTANCE_InsertInstanceWithFlagsCleared(instance, 0x1000);
             instance->_F4[0] = 1;
             gameTracker->gameFlags |= 1;
-            (*(short*)&instance->_104) = 0x5A;
+            (WORK_AS_IDX(short, instance->_104, 0)) = 0x5A;
             instance->_40[6] -= 0x400;
             instance->flags &= ~0x800;
         }
@@ -354,8 +354,8 @@ void map_angel_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     else if (instance->_F4[0] == 2)
     {
         
-        if (((short*)&instance->_104)[1] <= 0) {
-            ((short*)&instance->_104)[1] = 0x1E;
+        if (WORK_AS_IDX(short, instance->_104, 1) <= 0) {
+            WORK_AS_IDX(short, instance->_104, 1) = 0x1E;
             instance->_F4[0] = 3;
             goto block_10;
         }
@@ -386,7 +386,7 @@ block_11:
 void map_angel_OnCollide(Instance* instance, GameTracker* gameTracker) {
     if (instance->_F4[0] == 1) {
         instance->_F4[0] = 2;
-        ((short*)&instance->_104)[1] = 0x1E;
+        WORK_AS_IDX(short, instance->_104, 1) = 0x1E;
     }
 }
 

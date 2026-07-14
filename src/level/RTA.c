@@ -224,7 +224,7 @@ void rta_zgeyser_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->scale.y = 0x1000;
     *(short*)&instance->_100 = 0;
     ((short*)&instance->_100)[1] = 0;
-    *(short*)&instance->_104 = 0;
+    WORK_AS_IDX(short, instance->_104, 0) = 0;
     instance->scale.z = 0x180;
 }
 

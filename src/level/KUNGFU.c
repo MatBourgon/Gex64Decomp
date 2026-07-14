@@ -133,7 +133,7 @@ void kungfu_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
     if (intro != NULL) {
         *(short*)&instance->_100 = intro[0];
-        ((short*)&instance->_104)[1] = intro[1];
+        WORK_AS_IDX(short, instance->_104, 1) = intro[1];
         WORK_AS_IDX(short, instance->_108, 0) = intro[2];
         WORK_AS_IDX(short, instance->_108, 1) = intro[3];
         WORK_AS_IDX(short, instance->_10C, 0) = intro[4];
@@ -144,7 +144,7 @@ void kungfu_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
         }
     } else {
         *(short*)&instance->_100 = 0x96;
-        ((short*)&instance->_104)[1] = ((unsigned short*)&instance->intro->position)[0] - 0x500;
+        WORK_AS_IDX(short, instance->_104, 1) = ((unsigned short*)&instance->intro->position)[0] - 0x500;
         WORK_AS_IDX(short, instance->_108, 0) = ((unsigned short*)&instance->intro->position)[1] - 0x780;
         WORK_AS_IDX(short, instance->_108, 1) = ((unsigned short*)&instance->intro->position)[0] + 0x500;
         WORK_AS_IDX(short, instance->_10C, 0) = ((unsigned short*)&instance->intro->position)[1] + 0x780;
