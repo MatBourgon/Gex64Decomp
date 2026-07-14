@@ -5,8 +5,8 @@ INCLUDE_ASM("asm/nonmatchings/_23de0", func_800231E0);
 
 INCLUDE_ASM("asm/nonmatchings/_23de0", func_80023828);
 
-void func_80023B2C(int* arg0, GameTracker* gameTracker) {
-    int* temp_s1 = (int*)arg0[8];
+void func_80023B2C(Instance* instance, GameTracker* gameTracker) {
+    int* temp_s1 = instance->data;
     
 
     if (temp_s1[78] != 0) {
@@ -21,7 +21,7 @@ void func_80023B2C(int* arg0, GameTracker* gameTracker) {
     }
 
     if (temp_s1[76] != 0) {
-        func_80025588(arg0, gameTracker);
+        func_80025588(instance, gameTracker);
         func_8002780C(gameTracker);
     }
 }

@@ -59,9 +59,9 @@ typedef struct Instance_s
     void (*collideFunc)(struct Instance_s*,struct GameTracker_s*);
     AdditionalDrawFunc additionalDrawFunc;
     int _B8;
-    SVECTOR shadowPosition;
-    short currentModel;
-    short _C0[6];
+    SVECTOR shadowPosition; // BC, BE, C0
+    short currentModel; // C2
+    short _C4[6]; // C4, C6, C8, CA, CC, CE
     int _D0[4];
     int _E0[4];
     int _F0;

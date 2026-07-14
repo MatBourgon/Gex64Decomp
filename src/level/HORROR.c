@@ -629,10 +629,10 @@ void horror_splitob_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
     player = PlayerInstance;
     if (player->position.z < instance->work1 && instance->work1 - 0x100 < player->position.z) {
-        *(int*)&player->_C0[0] = instance->work0;
-        player->_C0[2] = player->position.x;
-        player->_C0[3] = player->position.y;
-        player->_C0[4] = instance->work1;
+        *(int*)&player->_C4[0] = instance->work0;
+        player->_C4[2] = player->position.x;
+        player->_C4[3] = player->position.y;
+        player->_C4[4] = instance->work1;
     }
 }
 
@@ -684,7 +684,7 @@ void horror_onoff_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
     if (instance->currentMainState == 0 || instance->work1 != 0) {
         instance->currentAnimFrame = 0;
-    } else if (((short*)&instance->object->_08)[1] != 0) {
+    } else if (instance->object->_0A != 0) {
         instance->currentAnimFrame = ((unsigned short*)(instance->object->animList[0]))[1] - 1;
     }
 }
@@ -704,7 +704,7 @@ void horror_onoff_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             instance->currentSubState = 0;
             if (instance->currentMainState == 0 || instance->work1 != 0) {
                 instance->currentAnimFrame = 0;
-            } else if (((short*)&instance->object->_08)[1] != 0) {
+            } else if (instance->object->_0A != 0) {
                 instance->currentAnimFrame = ((unsigned short*)(instance->object->animList[0]))[1] - 1;
             }
         }
@@ -769,7 +769,7 @@ void horror_onoff_OnCollide(Instance* instance, GameTracker* gameTracker) {
             fire = 1;
         }
         if (fire != 0) {
-            if (((short*)&instance->object->_08)[1] != 0) {
+            if (instance->object->_0A != 0) {
                 instance->currentSubState = 1;
             }
             if (*(int*)list == 0x29A) {
@@ -919,7 +919,7 @@ void func_80162438_A5C68(GameTracker* gameTracker, short* arg1, Instance* arg2) 
 
     cam = gameTracker->camera;
     cam->smooth = arg1[5];
-    flags = arg2->_C0[4];
+    flags = arg2->_C4[4];
     if (!(flags & 0x10)) {
         if (((int*)cam)[0x520 / 4] == (int)arg2 + 0x106 || ((int*)cam)[0x520 / 4] == (int)arg2 + 0xEE || (flags & 4)) {
             func_80003234(cam);
@@ -936,9 +936,9 @@ void func_80162438_A5C68(GameTracker* gameTracker, short* arg1, Instance* arg2) 
 void func_801624B4_A5CE4(Instance* instance, short val) {
     int i;
 
-    instance->_C0[3] = val;
+    instance->_C4[3] = val;
     for (i = 1; i < *(int*)instance->intro->_04 + 1; i++) {
-        ((Intro**)instance->intro->_04)[i]->instance->_C0[3] = val;
+        ((Intro**)instance->intro->_04)[i]->instance->_C4[3] = val;
     }
 }
 

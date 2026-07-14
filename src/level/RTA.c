@@ -267,7 +267,7 @@ int func_8015C344_DC9B4(Instance* instance) {
     if (instance != NULL) {
         object = instance->object;
         if (object != NULL) {
-            if (((short*)&object->_08)[1] > 0) {
+            if (object->_0A > 0) {
                 animData = (short*)(object->animList)[0];
                 if (animData != NULL) {
                     if (animData[1] > 0) {

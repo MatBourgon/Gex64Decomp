@@ -607,7 +607,7 @@ void prehst_raptor_OnCreate(Instance* instance, GameTracker* gameTracker) {
     func_80048DE4(instance, fc, fc + 4, 0);
     if (data[3] == 0) {
         func_8004A7B8(instance, 3, 0);
-        data[3] = (func_8004A61C(instance) - 1) * data[0];
+        data[3] = (INSTANCE_GetCurrentAnimationFrameCount(instance) - 1) * data[0];
     }
     instance->currentMainState = 2;
     instance->currentSubState = 2;
@@ -766,7 +766,7 @@ void prehst_gas_OnCreate(Instance* instance, GameTracker* gameTracker) {
                     WORK_AS(int, instance->work3) |= 0x8000;
                     WORK_AS_IDX(char, instance->work1, 2) = ~WORK_AS_IDX(unsigned char, instance->work1, 2);
                 }
-                t = func_8004A61C(instance);
+                t = INSTANCE_GetCurrentAnimationFrameCount(instance);
                 m = introData[0];
                 m %= (unsigned int)(((unsigned short*)&instance->work0)[1] + *(unsigned short*)&instance->work0 + WORK_AS_IDX(unsigned char, instance->work1, 1));
                 if (m < ((unsigned short*)&instance->work0)[1]) {
@@ -801,7 +801,7 @@ void prehst_gas_OnCreate(Instance* instance, GameTracker* gameTracker) {
                 }
             } else {
                 instance->currentMainState = 5;
-                t = func_8004A61C(instance) - 1;
+                t = INSTANCE_GetCurrentAnimationFrameCount(instance) - 1;
                 instance->flags |= 0x10000;
             }
         }
@@ -861,7 +861,7 @@ void prehst_gas_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     case 2:
         func_8004A820(instance, 0);
         if (instance->flags2 & 0x10) {
-            fc[6] = func_8004A61C(instance);
+            fc[6] = INSTANCE_GetCurrentAnimationFrameCount(instance);
             instance->currentMainState = 3;
         }
         break;
@@ -875,7 +875,7 @@ void prehst_gas_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     case 4:
         func_8004A8A8(instance, 0);
         if (instance->flags2 & 0x10) {
-            fc[6] = func_8004A61C(instance);
+            fc[6] = INSTANCE_GetCurrentAnimationFrameCount(instance);
             instance->currentMainState = 0;
             func_800331BC(((int*)fc)[2]);
             instance->flags &= ~0x400;
@@ -909,7 +909,7 @@ void prehst_brkbone_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
 void prehst_brkbone_OnCollide(Instance* instance, GameTracker* gameTracker) {
     if (func_80027500(instance->bspTree, gameTracker)) {
-        if (((short*)&instance->object->_08)[0] >= 2) {
+        if (instance->object->_08 >= 2) {
             instance->currentModel = 1;
         }
         INSTANCE_PlainDeath(instance, 5, -1, 0);

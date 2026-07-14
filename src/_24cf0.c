@@ -4,22 +4,23 @@
 #include "types/GameTracker.h"
 #include "types/BSPTree.h"
 
-int func_800240F0(int* arg0, int* arg1) {
-    if (arg0 != 0) {
-        arg0[4] &= ~0x400;
+int func_800240F0(Instance* instance, GameTracker* gameTracker) {
+    if (instance != 0) {
+        instance->flags &= ~0x400;
     }
 
-    if (arg1 != 0) {
-        arg1 = (int*)arg1[3];
-        if (arg1 != 0) {
-            arg1 = (int*)arg1[8];
-            if (arg1 != 0) {
-                *(int*)((int)arg1 + 0x130) = 0;
-                *(short*)((int)arg1 + 0x134) = 0;
-                *(short*)((int)arg1 + 0xDE) = 0;
-                *(short*)((int)arg1 + 0x18C) = 0;
-            }
-        }
+    if (gameTracker == NULL)
+        return;
+
+    if (gameTracker->player == NULL)
+        return;
+
+    if (gameTracker->player->data != NULL) {
+        void* data = gameTracker->player->data;
+        *(int*)(data + 0x130) = 0;
+        *(short*)(data + 0x134) = 0;
+        *(short*)(data + 0xDE) = 0;
+        *(short*)(data + 0x18C) = 0;
     }
 }
 
@@ -35,7 +36,7 @@ INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80024A80);
 
 INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80024B94);
 
-int func_80024C30(int arg0, int arg1, int arg2) {
+int func_80024C30(int arg0, int arg1) {
     int temp_a2 = *(int*)(arg1 + 0x130);
     
     if (temp_a2 != 0) {

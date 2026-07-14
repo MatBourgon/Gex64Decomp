@@ -11,12 +11,11 @@ INCLUDE_ASM("asm/nonmatchings/_4a780", func_80049B80);
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A2A4);
 
-int func_8004A344(int*** arg0) {
-    int** var_v0 = arg0[7];
+int func_8004A344(Instance* instance) {
+  if (instance->intro->_04 == NULL)
+    return NULL;
 
-  if (var_v0[1] == 0) return 0;
-
-  return *var_v0[1];
+  return *instance->intro->_04;
 }
 
 int func_8004A368(Instance* instance, int arg1) {
@@ -73,45 +72,38 @@ void INSTANCE_InsertInstanceWithFlagsCleared(Instance* instance, int flags) {
     LIST_InsertFunc(&gameTracker8->instanceList->group[groupId], &instance->node);
 }
 
-int func_8004A61C(Instance* arg0) {
-    int var_a1 = -1;
-    if (arg0 != 0) {
-        int* temp_v1 = ((int*)arg0)[6]; 
+int INSTANCE_GetCurrentAnimationFrameCount(Instance* instance) {
+    int numFrames = -1;
+    if (instance != 0) {
+        Object* object = instance->object; 
         
-        if (temp_v1 != 0) {
-            unsigned char temp_a0 = ((unsigned char*)arg0)[0x4E];
-            
-            if (temp_a0 < ((short*)temp_v1)[5]) {
-                short** temp_v1_2 = (short**)temp_v1[4];
+        if (object != NULL) {            
+            if (instance->currentModelAnim < object->_0A) {
+                short** animList = (short**)object->animList;
                 
-                if (temp_v1_2 != 0) {
-                    var_a1 = temp_v1_2[temp_a0][1];
+                if (animList != NULL) {
+                    numFrames = animList[instance->currentModelAnim][1];
                 }
             }
         }
     }  
-    return var_a1;
+    return numFrames;
 }
 
-extern int func_8004A61C(Instance* instance);
+int INSTANCE_GetNextAnimationFrame(Instance* instance) {
+    int numFrames;
+    int nextFrame = -1;
 
-int func_8004A67C(Instance* arg0) {
-    
-    int temp_v0;
-    int var_s0 = -1;
-
-    if (arg0 != 0) {
+    if (instance != NULL) {
+        nextFrame = instance->currentAnimFrame + 1;
+        numFrames = INSTANCE_GetCurrentAnimationFrameCount(instance);
         
-         var_s0 = arg0->currentAnimFrame + 1;
-        
-        temp_v0 = func_8004A61C(arg0);
-        
-        if (var_s0 >= temp_v0) {
-             var_s0 = temp_v0 - 1;
+        if (nextFrame >= numFrames) {
+            nextFrame = numFrames - 1;
         }
     }
     
-    return  var_s0;
+    return nextFrame;
 }
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004A6C8);
@@ -157,7 +149,7 @@ int func_8004AADC(void) {
 
 INCLUDE_ASM("asm/nonmatchings/_4a780", func_8004AAE4);
 
-int func_8004AC10(int *arg0, int unused, int arg2, int arg3) {
+int func_8004AC10(Instance* instance, int unused, int arg2, int arg3) {
     int var1 = 2;
     int var2 = arg2 < 0 ? arg2 + 3 : arg2;
     int msb;
@@ -169,9 +161,9 @@ int func_8004AC10(int *arg0, int unused, int arg2, int arg3) {
     if (arg3 < ((arg2 + msb) >> 1)) {
 
         if (arg3 & var1) {
-            arg0[4] |=  0x800;  
+            instance->flags |=  0x800;  
         } else {
-            arg0[4] &= ~0x800;    
+            instance->flags &= ~0x800;    
         }
     }
 }

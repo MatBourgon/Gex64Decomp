@@ -177,7 +177,7 @@ void scifi_onoff_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
     if (instance->currentMainState == 0 || instance->work1 != 0) {
         instance->currentAnimFrame = 0;
-    } else if (((short*)&instance->object->_08)[1] != 0) {
+    } else if (instance->object->_0A != 0) {
         instance->currentAnimFrame = ((unsigned short*)(instance->object->animList[0]))[1] - 1;
     }
 }
@@ -197,7 +197,7 @@ void scifi_onoff_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             instance->currentSubState = 0;
             if (instance->currentMainState == 0 || instance->work1 != 0) {
                 instance->currentAnimFrame = 0;
-            } else if (((short*)&instance->object->_08)[1] != 0) {
+            } else if (instance->object->_0A != 0) {
                 instance->currentAnimFrame = ((unsigned short*)(instance->object->animList[0]))[1] - 1;
             }
         }
@@ -262,7 +262,7 @@ void scifi_onoff_OnCollide(Instance* instance, GameTracker* gameTracker) {
             fire = 1;
         }
         if (fire != 0) {
-            if (((short*)&instance->object->_08)[1] != 0) {
+            if (instance->object->_0A != 0) {
                 instance->currentSubState = 1;
             }
             if (*(int*)list == 0x29A) {
@@ -729,7 +729,7 @@ void scifi_gas_OnCreate(Instance* instance, GameTracker* gameTracker) {
                     WORK_AS(int, instance->work3) |= 0x8000;
                     WORK_AS_IDX(char, instance->work1, 2) = ~WORK_AS_IDX(unsigned char, instance->work1, 2);
                 }
-                t = func_8004A61C(instance);
+                t = INSTANCE_GetCurrentAnimationFrameCount(instance);
                 m = introData[0];
                 m %= (unsigned int)(((unsigned short*)&instance->work0)[1] + *(unsigned short*)&instance->work0 + WORK_AS_IDX(unsigned char, instance->work1, 1));
                 if (m < ((unsigned short*)&instance->work0)[1]) {
@@ -764,7 +764,7 @@ void scifi_gas_OnCreate(Instance* instance, GameTracker* gameTracker) {
                 }
             } else {
                 instance->currentMainState = 5;
-                t = func_8004A61C(instance) - 1;
+                t = INSTANCE_GetCurrentAnimationFrameCount(instance) - 1;
                 instance->flags |= 0x10000;
             }
         }
@@ -824,7 +824,7 @@ void scifi_gas_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     case 2:
         func_8004A820(instance, 0);
         if (instance->flags2 & 0x10) {
-            fc[6] = func_8004A61C(instance);
+            fc[6] = INSTANCE_GetCurrentAnimationFrameCount(instance);
             instance->currentMainState = 3;
         }
         break;
@@ -838,7 +838,7 @@ void scifi_gas_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     case 4:
         func_8004A8A8(instance, 0);
         if (instance->flags2 & 0x10) {
-            fc[6] = func_8004A61C(instance);
+            fc[6] = INSTANCE_GetCurrentAnimationFrameCount(instance);
             instance->currentMainState = 0;
             func_800331BC(((int*)fc)[2]);
             instance->flags &= ~0x400;

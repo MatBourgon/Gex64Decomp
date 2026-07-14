@@ -84,9 +84,9 @@ void func_80046DA4(Instance* instance, int* arg1, int* arg2) {
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80046DDC);
 
-void func_80046E70(short* arg0, int arg1)
+void func_80046E70(Instance* instance, int arg1)
 {
-    arg0[0x64/2] = (arg0[0x64/2] + arg1) & 0xFFF;
+    instance->rotation.z = (instance->rotation.z + arg1) & 0xFFF;
 }
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80046E88);
@@ -751,9 +751,9 @@ void func_80049224(Instance* instance, int arg1, int arg2) {
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80049250);
 
-void func_80049330(short* arg0)
+void func_80049330(Instance* instance)
 {
-    arg0[0xC0 / 2] = arg0[0x4C / 2];
+    instance->shadowPosition.z = instance->position.z;
 }
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80049340);

@@ -439,9 +439,9 @@ extern void func_8015F200_903A0(void); // unknown
 void final_frez_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if (!(instance->flags & 0x20000)) {
         instance->_D0[3] = OBTABLE_FindObject(D_80161588_92728);
-        instance->_C0[2] = 0;
-        instance->_C0[3] = 1;
-        instance->_C0[4] = 1;
+        instance->_C4[2] = 0;
+        instance->_C4[3] = 1;
+        instance->_C4[4] = 1;
         instance->_40[6] -= 0x12C;
         instance->_E0[2] = OBTABLE_FindObject(D_8016166C_9280C);
         instance->additionalDrawFunc = (void*)&func_8015F200_903A0;
@@ -471,7 +471,7 @@ extern char D_801616F0_92890[];
 
 void final_frez_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp = instance->bspTree;
-    short* temp_s1 = &instance->_C0[2];
+    short* temp_s1 = &instance->_C4[2];
     
     if (G2String_Compare_EQ(bsp->instanceSpline->object->name, D_8016166C_9280C)) {
         if (instance->currentMainState != 0) {

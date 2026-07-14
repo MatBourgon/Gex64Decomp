@@ -572,7 +572,7 @@ void gexzil_gas_OnCreate(Instance* instance, GameTracker* gameTracker) {
                     WORK_AS(int, instance->work3) |= 0x8000;
                     WORK_AS_IDX(char, instance->work1, 2) = ~WORK_AS_IDX(unsigned char, instance->work1, 2);
                 }
-                t = func_8004A61C(instance);
+                t = INSTANCE_GetCurrentAnimationFrameCount(instance);
                 m = introData[0];
                 m %= (unsigned int)(((unsigned short*)&instance->work0)[1] + *(unsigned short*)&instance->work0 + WORK_AS_IDX(unsigned char, instance->work1, 1));
                 if (m < ((unsigned short*)&instance->work0)[1]) {
@@ -607,7 +607,7 @@ void gexzil_gas_OnCreate(Instance* instance, GameTracker* gameTracker) {
                 }
             } else {
                 instance->currentMainState = 5;
-                t = func_8004A61C(instance) - 1;
+                t = INSTANCE_GetCurrentAnimationFrameCount(instance) - 1;
                 instance->flags |= 0x10000;
             }
         }
@@ -671,7 +671,7 @@ void gexzil_gas_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     case 2:
         func_8004A820(instance, 0);
         if (instance->flags2 & 0x10) {
-            fc[6] = func_8004A61C(instance);
+            fc[6] = INSTANCE_GetCurrentAnimationFrameCount(instance);
             instance->currentMainState = 3;
         }
         break;
@@ -685,7 +685,7 @@ void gexzil_gas_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     case 4:
         func_8004A8A8(instance, 0);
         if (instance->flags2 & 0x10) {
-            fc[6] = func_8004A61C(instance);
+            fc[6] = INSTANCE_GetCurrentAnimationFrameCount(instance);
             instance->currentMainState = 0;
             func_800331BC(((int*)fc)[2]);
             instance->flags &= ~0x400;

@@ -395,7 +395,7 @@ void kungfu_onoff_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
     if (instance->currentMainState == 0 || instance->work1 != 0) {
         instance->currentAnimFrame = 0;
-    } else if (((short*)&instance->object->_08)[1] != 0) {
+    } else if (instance->object->_0A != 0) {
         instance->currentAnimFrame = ((unsigned short*)(instance->object->animList[0]))[1] - 1;
     }
 }
@@ -415,7 +415,7 @@ void kungfu_onoff_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             instance->currentSubState = 0;
             if (instance->currentMainState == 0 || instance->work1 != 0) {
                 instance->currentAnimFrame = 0;
-            } else if (((short*)&instance->object->_08)[1] != 0) {
+            } else if (instance->object->_0A != 0) {
                 instance->currentAnimFrame = ((unsigned short*)(instance->object->animList[0]))[1] - 1;
             }
         }
@@ -482,7 +482,7 @@ void kungfu_onoff_OnCollide(Instance* instance, GameTracker* gameTracker) {
             fire = 1;
         }
         if (fire != 0) {
-            if (((short*)&instance->object->_08)[1] != 0) {
+            if (instance->object->_0A != 0) {
                 instance->currentSubState = 1;
             }
             if (*(int*)list == 0x29A) {
@@ -1070,7 +1070,7 @@ void kungfu_brkbone_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
 void kungfu_brkbone_OnCollide(Instance* instance, GameTracker* gameTracker) {
     if (func_80027500(instance->bspTree, gameTracker)) {
-        if (((short*)&instance->object->_08)[0] >= 2) {
+        if (instance->object->_08 >= 2) {
             instance->currentModel = 1;
         }
         INSTANCE_PlainDeath(instance, 5, -1, 0);
