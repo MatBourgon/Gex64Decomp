@@ -420,7 +420,7 @@ void map_lkdoor_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
     var_s2 = 1;
     temp_s1 = (short*)instance->introData;
-    temp_s3 = &instance->_F0[6];
+    temp_s3 = &instance->_FC;
     switch (temp_s3[0]) {
     case 0:
         osSyncPrintf("LKDOOR_CLOSED\n");
@@ -1124,7 +1124,7 @@ void map_tvbutn_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
     temp_s1 = (int*)instance->introData;
     instance->flags |= 0x80;
-    s2 = (u8*)(instance->_F0 + 6);
+    s2 = &instance->_FC;
     INSTANCE_InsertInstanceWithFlagsCleared(instance, 0x4000);
     WORK_AS_IDX(char, instance->_10C, 1) = 5;
     WORK_AS_IDX(char, instance->_10C, 0) = 5;
@@ -1182,7 +1182,7 @@ void map_tvbutn_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     var_s4 = NULL;
     temp_v0 = (int*)instance->_FC;
     temp_s0 = (int*)instance->introData;
-    temp_s2 = &instance->_F0[6];
+    temp_s2 = &instance->_FC;
     if (temp_v0 != NULL) {
         var_s4 = &temp_v0[0xFC/4];
         var_s5 = (int*)temp_v0[0x24/4];
@@ -1330,7 +1330,7 @@ void map_ctrlbutn_OnCreate(Instance* instance, GameTracker* gameTracker) {
     SVECTOR* temp_v0;
 
     WORK_AS_IDX(short, instance->_100, 1) = 2;
-    instance->_F0[6] = 0x64;
+    WORK_AS_IDX(short, instance->_FC, 0) = 0x64;
     temp_a1 = (int)instance->introData;
     instance->flags |= 0x800;
     if (temp_a1 != 0) {

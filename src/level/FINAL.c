@@ -377,7 +377,7 @@ void final_finaltv_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->position.y = 9850;
     instance->position.z = 6000;
     instance->_E0[1] = -10;
-    instance->_E0[4] = 100;
+    instance->_F0 = 100;
     instance->_FC = 30;
 }
 

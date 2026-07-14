@@ -41,7 +41,7 @@ void func_80044B2C(Instance* instance) {
     int* temp_a2;
 
     temp_a2 = ((((int***)instance->object->modelList)[instance->currentModel]))[0x20/4];
-    temp_v1 = (instance->_F0[6] * 3);
+    temp_v1 = (WORK_AS_IDX(short, instance->_FC, 0) * 3);
     WORK_AS_IDX(short, instance->_100, 0) = ((temp_v1 + 1) * temp_a2[3]);
     WORK_AS_IDX(short, instance->_100, 1) = (((temp_v1 + 4) * temp_a2[3]) - 1);
     WORK_AS_IDX(short, instance->_104, 0) = -1;
@@ -65,10 +65,10 @@ void common_powertv_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->flags |= 0x80;
     
     if (intro != NULL) {
-        instance->_F0[6] = intro->type;
-        instance->_F0[7] = intro->respawns;
+        WORK_AS_IDX(short, instance->_FC, 0) = intro->type;
+        WORK_AS_IDX(short, instance->_FC, 1) = intro->respawns;
     } else {
-        instance->_F0[6] = EPTV_HEALTH;
+        WORK_AS_IDX(short, instance->_FC, 0) = EPTV_HEALTH;
     }
     
     instance->currentMainState = 0;
@@ -92,7 +92,7 @@ void common_powertv_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int var_a0;
     short* temp_s1;
 
-    temp_s1 = &instance->_F0[6];
+    temp_s1 = &instance->_FC;
     if ((instance->currentMainState - 1) >= 2U) {
         instance->currentTextureAnimFrame++;
         if (WORK_AS_IDX(short, instance->_100, 1) < instance->currentTextureAnimFrame) {
@@ -220,7 +220,7 @@ void common_powertv_OnCollide(Instance* instance, GameTracker* gameTracker) {
     intro = instance->introData;
     temp_a1 = bsp->_0C[5];
     temp_s5 = (int*)temp_a0->data;
-    temp_s2 = &instance->_F0[6];
+    temp_s2 = &instance->_FC;
     if ((instance->currentMainState == 0) && (((bsp->_06 == 1) && (temp_a1 >= 8)) || ((bsp->instanceSpline == temp_a0) && (temp_a2 != 0)))) {
         if (!(temp_s2[1] & 1)) {
             instance->intro->flags |= 0x800;

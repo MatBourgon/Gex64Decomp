@@ -64,7 +64,7 @@ typedef struct Instance_s
     short _C0[6];
     int _D0[4];
     int _E0[4];
-    short _F0[2];
+    int _F0;
     int currentMainState;
     int currentSubState;
     int _FC;    // work0

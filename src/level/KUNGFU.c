@@ -1083,7 +1083,7 @@ void kungfu_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
     intro = (BTimerIntro*)instance->introData;
     instance->_104 = (intro->exitTime * 30);
-    instance->_F0[6] = intro->missionTime;
+    WORK_AS_IDX(short, instance->_FC, 0) = intro->missionTime;
     WORK_AS_IDX(short, instance->_100, 0) = 0;
     instance->flags |= 0xC00;
     gameTracker->player->_FC |= 0x4000;
@@ -1106,7 +1106,7 @@ void kungfu_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
     var_v1 = 1;
     intro = instance->introData;
-    temp_s2 = &instance->_F0[6];
+    temp_s2 = &instance->_FC;
     if (WORK_AS_IDX(short, instance->_100, 0) == 0) {
         if (temp_s2[0] != 0) {
             if ((int)(((int**)gameTracker))[0x4BFC/4] < gameTracker->level->collectibleCountA) {

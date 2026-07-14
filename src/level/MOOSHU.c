@@ -294,7 +294,7 @@ INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015D6B0_C6030);
 
 void func_8015D7B4_C6134(Instance* instance, GameTracker* gameTracker)
 {
-    instance->_F0[6]++;
+    WORK_AS_IDX(short, instance->_FC, 0)++;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015D7C8_C6148);
