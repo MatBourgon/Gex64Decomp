@@ -2250,7 +2250,7 @@ void func_8015F770_C01A0(void) {
     }
 }
 
-void func_8015F804_C0234(short* arg0) {
+void func_8015F804_C0234(GameTracker* gameTracker) {
     char buffer[18];
     int i;
 
@@ -2299,11 +2299,11 @@ void func_8015F804_C0234(short* arg0) {
     gSPDisplayList(D_80157050++, D_8006D578);
     DrawTextToScreen(buffer, 0x50, 0x8C, 1);
     if (gControllerButtons[1] & A_BUTTON) {
-        if (func_8003FDD8(arg0) == 0) {
+        if (func_8003FDD8(gameTracker) == 0) {
             D_80078170 = 1;
             ((short*)gameTracker8)[0x4C66/2] = 0;
             ((short*)gameTracker8)[0x4C68/2] = 0;
-            func_800396E0(0, &D_80161314_C1D44, arg0);
+            func_800396E0(0, &D_80161314_C1D44, gameTracker);
         } else {
             func_80040170(8);
             D_80161680_C20B0 = 0;
@@ -2314,7 +2314,7 @@ void func_8015F804_C0234(short* arg0) {
     }
     else if (gControllerButtons[1] & START_BUTTON) {
         if (D_80078170 != 0) {
-            arg0[0x4C12/2] = 0;
+            (*(short*)&gameTracker->_4C12) = 0;
             func_80032F90();
         }
     }
