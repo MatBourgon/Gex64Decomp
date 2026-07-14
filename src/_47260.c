@@ -516,7 +516,7 @@ SplineDef *SCRIPT_GetScaleSplineDef(Instance *instance, MultiSpline *multi, int 
 
     if ((isParent != 0) || (isClass != 0))
     {
-        splineDef = (SplineDef *)&instance->_10C; // work4
+        splineDef = WORK_AS_PTR(SplineDef *, instance->_10C); // work4
 
         return splineDef;
     }

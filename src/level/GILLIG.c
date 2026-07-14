@@ -218,19 +218,19 @@ void gillig_tikifir_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->scale.z = 1;
     instance->_104 = 0;
     *(int*)&instance->_108 = 1;
-    *(int*)&instance->_10C = ((rand() & 0x1F) - 0x10);
+    WORK_AS(int, instance->_10C) = ((rand() & 0x1F) - 0x10);
 }
 
 void gillig_tikifir_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     short newScale;
 
     if (instance->_104 != 0) {
-        if (func_800506B8(instance, instance->_104, *(short*)&instance->_10E, *(short*)&instance->_10A, 0xDAC) == 0) {
+        if (func_800506B8(instance, instance->_104, WORK_AS_IDX(short, instance->_10C, 1), *(short*)&instance->_10A, 0xDAC) == 0) {
             func_800331BC(instance->_104);
             instance->_104 = 0;
         }
     } else {
-        instance->_104 = func_80050508(instance, 0x69, *(short*)&instance->_10E, *(short*)&instance->_10A, 0xDAC);
+        instance->_104 = func_80050508(instance, 0x69, WORK_AS_IDX(short, instance->_10C, 1), *(short*)&instance->_10A, 0xDAC);
     }
     if (instance->_F4[0] == 0) {
         *(int*)&instance->_108 = *(int*)&instance->_108 + 9;

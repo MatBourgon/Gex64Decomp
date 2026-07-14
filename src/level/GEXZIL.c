@@ -14,7 +14,7 @@ void gexzil_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
         ((short*)&instance->_104)[1] = intro[1];
         *(short*)&instance->_108 = intro[2];
         ((short*)&instance->_108)[1] = intro[3];
-        *(short*)&instance->_10C = intro[4];
+        WORK_AS_IDX(short, instance->_10C, 0) = intro[4];
         if (((short*)intro)[5] != 0) {
             ((short*)&instance->_10C)[1] = ((short*)intro)[5];
         } else {
@@ -25,8 +25,8 @@ void gexzil_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
         ((short*)&instance->_104)[1] = ((unsigned short*)&instance->intro->position)[0] - 0x500;
         *(short*)&instance->_108 = ((unsigned short*)&instance->intro->position)[1] - 0x780;
         ((short*)&instance->_108)[1] = ((unsigned short*)&instance->intro->position)[0] + 0x500;
-        *(short*)&instance->_10C = ((unsigned short*)&instance->intro->position)[1] + 0x780;
-        ((short*)&instance->_10C)[1] = 0x40;
+        WORK_AS_IDX(short, instance->_10C, 0) = ((unsigned short*)&instance->intro->position)[1] + 0x780;
+        WORK_AS_IDX(short, instance->_10C, 1) = 0x40;
     }
 }
 

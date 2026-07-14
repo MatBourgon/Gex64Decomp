@@ -43,19 +43,19 @@ void circuit_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
         ((short*)&instance->_104)[1] = intro[1];
         *(short*)&instance->_108 = intro[2];
         ((short*)&instance->_108)[1] = intro[3];
-        *(short*)&instance->_10C = intro[4];
+        WORK_AS_IDX(short, instance->_10C, 0) = intro[4];
         if (((short*)intro)[5] != 0) {
-            ((short*)&instance->_10C)[1] = ((short*)intro)[5];
+            WORK_AS_IDX(short, instance->_10C, 1) = ((short*)intro)[5];
         } else {
-            ((short*)&instance->_10C)[1] = 0x40;
+            WORK_AS_IDX(short, instance->_10C, 1) = 0x40;
         }
     } else {
         *(short*)&instance->_100 = 0x96;
         ((short*)&instance->_104)[1] = ((unsigned short*)&instance->intro->position)[0] - 0x500;
         *(short*)&instance->_108 = ((unsigned short*)&instance->intro->position)[1] - 0x780;
         ((short*)&instance->_108)[1] = ((unsigned short*)&instance->intro->position)[0] + 0x500;
-        *(short*)&instance->_10C = ((unsigned short*)&instance->intro->position)[1] + 0x780;
-        ((short*)&instance->_10C)[1] = 0x40;
+        WORK_AS_IDX(short, instance->_10C, 0) = ((unsigned short*)&instance->intro->position)[1] + 0x780;
+        WORK_AS_IDX(short, instance->_10C, 1) = 0x40;
     }
 }
 
@@ -331,16 +331,16 @@ void circuit_launch_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->initialPos.z = instance->position.z;
     instance->_11C = 0;
     instance->flags |= 0x800;
-    *(int*)&instance->_10C = 0x500;
+    WORK_AS(int, instance->_10C) = 0x500;
     *(int*)&instance->_110 = 0x80;
     instance->_120 = 0x1000;
     instance->_100 = 4;
     instance->_104 = 0x14;
     
     if (intro != NULL) {
-        *(int*)&instance->_10C = intro[0];
+        WORK_AS(int, instance->_10C) = intro[0];
     } else if (objData != NULL) {
-        *(int*)&instance->_10C = objData[0];
+        WORK_AS(int, instance->_10C) = objData[0];
         *(int*)&instance->_110 = objData[1];
         instance->_11C = *(int*)&objData[2];
         if (instance->_11C & 2) {
@@ -479,7 +479,7 @@ void circuit_follow_OnCollide(Instance* instance, GameTracker* gameTracker) {
             if (!(player->_F4[2] & 1)) {
                 data[0xE0 / 4] = (int)instance;
                 spline = instance->intro->multiSpline->positional;
-                *(int*)&instance->_10C = spline->key[spline->numkeys - 1].point.y;
+                WORK_AS(int, instance->_10C) = spline->key[spline->numkeys - 1].point.y;
                 player->_F4[2] |= 2;
             }
         }
@@ -562,7 +562,7 @@ void circuit_fxgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
                 ((short*)&instance->_110)[1] = 0x46;
                 ((short*)&instance->_114)[1] = 0xDAC;
                 *(short*)&instance->_114 = (rand() & 0x7F) - 0x15E;
-                ((short*)&instance->_10C)[1] = *(short*)&instance->_10C = rand() & 7;
+                WORK_AS_IDX(short, instance->_10C, 1) = WORK_AS_IDX(short, instance->_10C, 0) = rand() & 7;
                 intro[1] |= 0x80;
             }
         }
@@ -593,7 +593,7 @@ void circuit_qmark_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     
     intro = (QMarkIntro*)instance->introData;
     temp_s0 = &instance->_F4[2];
-    if (((*(int*)&instance->_10C) != 0) && !(gameTracker->gameFlags & 0x2000)) {
+    if ((WORK_AS(int, instance->_10C) != 0) && !(gameTracker->gameFlags & 0x2000)) {
         func_8003F6CC(intro->x, intro->y, intro->w, intro->h, intro->numMessages, intro->messages);
     }
     switch (temp_s0[2])
@@ -634,7 +634,7 @@ void circuit_qmark_OnCollide(Instance* instance, GameTracker* gameTracker) {
         instance->_104 = 1;
         instance->_F4[2] = 0x12C;
         *((int*)&instance->_110) = intro->time;
-        *((int*)&instance->_10C) = 1;
+        WORK_AS(int, instance->_10C) = 1;
     }
 }
 

@@ -292,7 +292,7 @@ void common_tvend_OnUpdate(Instance* instance, Object* gameTracker) {
                 ((Instance*)instance->_100)->scale.z = 1;
                 instance->_F4[1] = 3;
                 intro->condition = 1;
-                (*(int*)&instance->_10C) = 0x10;
+                WORK_AS(int, instance->_10C) = 0x10;
                 if (((&((unsigned char*)gameTracker)[((unsigned char*)gameTracker)[0x4CA1]])[0x4C6E] >> intro->remoteId) & 1) {
                     ((Instance*)instance->_100)->currentModel = 1;
                 }
@@ -306,15 +306,15 @@ void common_tvend_OnUpdate(Instance* instance, Object* gameTracker) {
         sp18 = D_8007B950;
         
         if ((iRemred2 != NULL)) {
-            temp_a0 = (*(int*)&instance->_10C) - 1;
-            (*(int*)&instance->_10C) = temp_a0;
+            temp_a0 = WORK_AS(int, instance->_10C) - 1;
+            WORK_AS(int, instance->_10C) = temp_a0;
             if (temp_a0 <= 0) {
                 instance->_F4[1] = 0;
             }
             else if (temp_a0 < 0x10) {
-                iRemred2->scale.x = ((short*)&sp18)[0x10 - (*(int*)&instance->_10C)];
-                iRemred2->scale.y = ((short*)&sp18)[0x10 - (*(int*)&instance->_10C)];
-                iRemred2->scale.z = ((short*)&sp18)[0x10 - (*(int*)&instance->_10C)];
+                iRemred2->scale.x = ((short*)&sp18)[0x10 - WORK_AS(int, instance->_10C)];
+                iRemred2->scale.y = ((short*)&sp18)[0x10 - WORK_AS(int, instance->_10C)];
+                iRemred2->scale.z = ((short*)&sp18)[0x10 - WORK_AS(int, instance->_10C)];
             }
         }
     }

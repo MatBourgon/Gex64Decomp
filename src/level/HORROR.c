@@ -386,7 +386,7 @@ void horror_skelh_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_F4[0] = 0;
     if (instance->parent != 0 && instance->parent->intro != 0) {
         instance->flags |= 0x100400;
-        *(int*)&instance->_10C = 0;
+        WORK_AS(int, instance->_10C) = 0;
         *(int*)&instance->_110 = (int)instance->parent->intro->multiSpline;
         *(int*)&instance->_114 = (int)instance->parent->introData;
     }
@@ -510,19 +510,19 @@ void horror_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
         ((short*)&instance->_104)[1] = intro[1];
         *(short*)&instance->_108 = intro[2];
         ((short*)&instance->_108)[1] = intro[3];
-        *(short*)&instance->_10C = intro[4];
+        WORK_AS_IDX(short, instance->_10C, 0) = intro[4];
         if (((short*)intro)[5] != 0) {
-            ((short*)&instance->_10C)[1] = ((short*)intro)[5];
+            WORK_AS_IDX(short, instance->_10C, 1) = ((short*)intro)[5];
         } else {
-            ((short*)&instance->_10C)[1] = 0x40;
+            WORK_AS_IDX(short, instance->_10C, 1) = 0x40;
         }
     } else {
         *(short*)&instance->_100 = 0x96;
         ((short*)&instance->_104)[1] = ((unsigned short*)&instance->intro->position)[0] - 0x500;
         *(short*)&instance->_108 = ((unsigned short*)&instance->intro->position)[1] - 0x780;
         ((short*)&instance->_108)[1] = ((unsigned short*)&instance->intro->position)[0] + 0x500;
-        *(short*)&instance->_10C = ((unsigned short*)&instance->intro->position)[1] + 0x780;
-        ((short*)&instance->_10C)[1] = 0x40;
+        WORK_AS_IDX(short, instance->_10C, 0) = ((unsigned short*)&instance->intro->position)[1] + 0x780;
+        WORK_AS_IDX(short, instance->_10C, 1) = 0x40;
     }
 }
 
@@ -976,7 +976,7 @@ void horror_qmark_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     
     intro = (QMarkIntro*)instance->introData;
     temp_s0 = &instance->_F4[2];
-    if (((*(int*)&instance->_10C) != 0) && !(gameTracker->gameFlags & 0x2000)) {
+    if ((WORK_AS(int, instance->_10C) != 0) && !(gameTracker->gameFlags & 0x2000)) {
         func_8003F6CC(intro->x, intro->y, intro->w, intro->h, intro->numMessages, intro->messages);
     }
     switch (temp_s0[2])
@@ -1017,7 +1017,7 @@ void horror_qmark_OnCollide(Instance* instance, GameTracker* gameTracker) {
         instance->_104 = 1;
         instance->_F4[2] = 0x12C;
         *((int*)&instance->_110) = intro->time;
-        *((int*)&instance->_10C) = 1;
+        WORK_AS(int, instance->_10C) = 1;
     }
 }
 

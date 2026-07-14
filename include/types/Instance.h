@@ -13,6 +13,10 @@ typedef void (*AdditionalDrawFunc)(void*, struct Instance_s*, void* /*unused*/, 
 
 struct GameTracker_s;
 
+#define WORK_AS_PTR(Type, Object) ((Type*)&Object)
+#define WORK_AS_IDX(Type, Object, Index) (((Type*)&Object)[Index])
+#define WORK_AS(Type, Object) (*(Type*)&Object)
+
 typedef struct Instance_s
 {
     NodeType node; // 00 (prev), 04 (next)
@@ -68,10 +72,7 @@ typedef struct Instance_s
     char _109;
     char _10A;
     char _10B;
-    char _10C;
-    char _10D;
-    char _10E;
-    char _10F;
+    int _10C;
     char _110;
     char _111;
     unsigned char _112;
