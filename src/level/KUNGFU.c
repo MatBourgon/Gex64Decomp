@@ -36,7 +36,7 @@ void kungfu_kbgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->flags |= 0x100C00;
     if (intro != 0) {
         if (intro[3] == 0 || (((unsigned short*)intro)[0xC] & 4)) {
-            instance->_FC = intro[2];
+            instance->work0 = intro[2];
         } else {
             instance->currentMainState = 1;
         }
@@ -127,28 +127,28 @@ void kungfu_spray_OnCollide(Instance* instance, GameTracker* gameTracker) {
 void kungfu_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
     unsigned short* intro;
 
-    WORK_AS_IDX(short, instance->_100, 1) = 0x18;
+    WORK_AS_IDX(short, instance->work1, 1) = 0x18;
     instance->flags |= 0x100000;
     intro = (unsigned short*)instance->introData;
 
     if (intro != NULL) {
-        WORK_AS_IDX(short, instance->_100, 0) = intro[0];
-        WORK_AS_IDX(short, instance->_104, 1) = intro[1];
-        WORK_AS_IDX(short, instance->_108, 0) = intro[2];
-        WORK_AS_IDX(short, instance->_108, 1) = intro[3];
-        WORK_AS_IDX(short, instance->_10C, 0) = intro[4];
+        WORK_AS_IDX(short, instance->work1, 0) = intro[0];
+        WORK_AS_IDX(short, instance->work2, 1) = intro[1];
+        WORK_AS_IDX(short, instance->work3, 0) = intro[2];
+        WORK_AS_IDX(short, instance->work3, 1) = intro[3];
+        WORK_AS_IDX(short, instance->work4, 0) = intro[4];
         if (((short*)intro)[5] != 0) {
-            WORK_AS_IDX(short, instance->_10C, 1) = ((short*)intro)[5];
+            WORK_AS_IDX(short, instance->work4, 1) = ((short*)intro)[5];
         } else {
-            WORK_AS_IDX(short, instance->_10C, 1) = 0x40;
+            WORK_AS_IDX(short, instance->work4, 1) = 0x40;
         }
     } else {
-        WORK_AS_IDX(short, instance->_100, 0) = 0x96;
-        WORK_AS_IDX(short, instance->_104, 1) = ((unsigned short*)&instance->intro->position)[0] - 0x500;
-        WORK_AS_IDX(short, instance->_108, 0) = ((unsigned short*)&instance->intro->position)[1] - 0x780;
-        WORK_AS_IDX(short, instance->_108, 1) = ((unsigned short*)&instance->intro->position)[0] + 0x500;
-        WORK_AS_IDX(short, instance->_10C, 0) = ((unsigned short*)&instance->intro->position)[1] + 0x780;
-        WORK_AS_IDX(short, instance->_10C, 1) = 0x40;
+        WORK_AS_IDX(short, instance->work1, 0) = 0x96;
+        WORK_AS_IDX(short, instance->work2, 1) = ((unsigned short*)&instance->intro->position)[0] - 0x500;
+        WORK_AS_IDX(short, instance->work3, 0) = ((unsigned short*)&instance->intro->position)[1] - 0x780;
+        WORK_AS_IDX(short, instance->work3, 1) = ((unsigned short*)&instance->intro->position)[0] + 0x500;
+        WORK_AS_IDX(short, instance->work4, 0) = ((unsigned short*)&instance->intro->position)[1] + 0x780;
+        WORK_AS_IDX(short, instance->work4, 1) = 0x40;
     }
 }
 
@@ -156,7 +156,7 @@ INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_bug_OnUpdate);
 
 void kungfu_bug_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp = instance->bspTree;
-    short* temp = (short*)&instance->_FC;
+    short* temp = (short*)&instance->work0;
 
     if (bsp->_06 == 1) {
         if ((bsp->instanceSpline == gameTracker->player) && (bsp->_08[4] < 2U) && (bsp->_0C[5] >= 6U)) {
@@ -228,34 +228,34 @@ void kungfu_launch_OnCreate(Instance* instance, GameTracker* gameTracker) {
     objData = instance->object->data;
     intro = instance->introData;
     
-    WORK_AS(int, instance->_108) = 0;
+    WORK_AS(int, instance->work3) = 0;
     instance->initialPos.x = instance->position.x;
     instance->initialPos.y = instance->position.y;
     instance->initialPos.z = instance->position.z;
-    instance->_11C = 0;
+    instance->work8 = 0;
     instance->flags |= 0x800;
-    WORK_AS(int, instance->_10C) = 0x500;
-    WORK_AS(int, instance->_110) = 0x80;
-    instance->_120 = 0x1000;
-    instance->_100 = 4;
-    instance->_104 = 0x14;
+    WORK_AS(int, instance->work4) = 0x500;
+    WORK_AS(int, instance->work5) = 0x80;
+    instance->work9 = 0x1000;
+    instance->work1 = 4;
+    instance->work2 = 0x14;
     
     if (intro != NULL) {
-        WORK_AS(int, instance->_10C) = intro[0];
+        WORK_AS(int, instance->work4) = intro[0];
     } else if (objData != NULL) {
-        WORK_AS(int, instance->_10C) = objData[0];
-        WORK_AS(int, instance->_110) = objData[1];
-        instance->_11C = *(int*)&objData[2];
-        if (instance->_11C & 2) {
-            instance->_118 = 0x200;
+        WORK_AS(int, instance->work4) = objData[0];
+        WORK_AS(int, instance->work5) = objData[1];
+        instance->work8 = *(int*)&objData[2];
+        if (instance->work8 & 2) {
+            instance->work7 = 0x200;
             instance->flags &= ~0x800;
         }
-        if (instance->_11C & 0x10) {
-            instance->_120 = objData[8];
+        if (instance->work8 & 0x10) {
+            instance->work9 = objData[8];
         }
     }
     
-    instance->_D0[0] = WORK_AS_IDX(short, instance->_110, 1);
+    instance->_D0[0] = WORK_AS_IDX(short, instance->work5, 1);
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_launch_OnUpdate);
@@ -268,12 +268,12 @@ void kungfu_launch_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp = instance->bspTree;
     char var_a2 = (bsp->_06 == 1) ? bsp->_0C[5] : -1;
     
-    if (((instance->currentMainState - 1) >= 2U) && (WORK_AS(int, instance->_108) == 0) && (bsp->instanceSpline == player) && (bsp->_04 == 5) && (var_a2 < 8) && (bsp->_08[2] == 0)) {
-        if (instance->_11C & 0x10) {
-            player->_FC |= 0x200;
-            instance->_11C |= 0x20;
+    if (((instance->currentMainState - 1) >= 2U) && (WORK_AS(int, instance->work3) == 0) && (bsp->instanceSpline == player) && (bsp->_04 == 5) && (var_a2 < 8) && (bsp->_08[2] == 0)) {
+        if (instance->work8 & 0x10) {
+            player->work0 |= 0x200;
+            instance->work8 |= 0x20;
         }
-        else if ((((func_80025798(player, bsp) != 0) && (instance->_11C == 0)) || (instance->_11C & 1)) && (func_8015AC6C_A9E8C(instance, gameTracker) == 0)) {
+        else if ((((func_80025798(player, bsp) != 0) && (instance->work8 == 0)) || (instance->work8 & 1)) && (func_8015AC6C_A9E8C(instance, gameTracker) == 0)) {
             func_8015ADC8_A9FE8(instance, gameTracker);
         }
     }
@@ -281,8 +281,8 @@ void kungfu_launch_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 void func_8015AC1C_A9E3C(Instance* instance, GameTracker* gameTracker) {
     instance->flags &= ~0x800;
-    if (!(instance->_11C & 8)) {
-        instance->_FC = instance->_104;
+    if (!(instance->work8 & 8)) {
+        instance->work0 = instance->work2;
         instance->position.x = PlayerInstance->position.x;
         instance->position.y = PlayerInstance->position.y;
     }
@@ -311,7 +311,7 @@ int func_8015AC6C_A9E8C(Instance* instance, GameTracker* gameTracker) {
                         if ((other->currentMainState - 1) < 2U) {
                             return 1;
                         }
-                        if (*(int*)&other->_108 != 0) {
+                        if (*(int*)&other->work3 != 0) {
                             return 1;
                         }
                     }
@@ -330,7 +330,7 @@ void func_8015AD44_A9F64(Instance* instance, GameTracker* gameTracker) {
     func_8015AC1C_A9E3C(instance, gameTracker);
     instance->currentMainState = 2;
     PlayerInstance->_E0[1] = pData[4];
-    gameTracker->player->_FC |= 0x400;
+    gameTracker->player->work0 |= 0x400;
     func_8004AAA8(instance, 0x6A, 0);
 }
 
@@ -345,7 +345,7 @@ void func_8015ADC8_A9FE8(Instance* instance, GameTracker* gameTracker) {
     data[0x9C/2] = data[0xA0/2] - 1;
     data[0x9E/2] = data[0xA0/2] - 1;
     instance->currentMainState = 1;
-    WORK_AS(int, instance->_110) = ((short*)&instance->_D0[0])[1];
+    WORK_AS(int, instance->work5) = ((short*)&instance->_D0[0])[1];
     player->_D0[2] = 0;
     player->_E0[1] = 0;
     player->flags |= 0x400000;
@@ -390,10 +390,10 @@ void kungfu_onoff_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 
     if (instance->object->data != NULL && *((int*)instance->object->data) != 0) {
-        instance->_100 = 1;
+        instance->work1 = 1;
     }
 
-    if (instance->currentMainState == 0 || instance->_100 != 0) {
+    if (instance->currentMainState == 0 || instance->work1 != 0) {
         instance->currentAnimFrame = 0;
     } else if (((short*)&instance->object->_08)[1] != 0) {
         instance->currentAnimFrame = ((unsigned short*)(instance->object->animList[0]))[1] - 1;
@@ -404,7 +404,7 @@ void kungfu_onoff_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     instance->currentTextureAnimFrame = instance->currentMainState ^ 1;
 
     if (instance->currentSubState == 1) {
-        if (instance->currentMainState == 1 || instance->_100 != 0) {
+        if (instance->currentMainState == 1 || instance->work1 != 0) {
             func_8002DAF8(instance, -1);
         } else {
             func_8002DAF8(instance, -0x3E9);
@@ -413,7 +413,7 @@ void kungfu_onoff_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         if (instance->flags2 & 0x10) {
             instance->flags2 &= ~0x10;
             instance->currentSubState = 0;
-            if (instance->currentMainState == 0 || instance->_100 != 0) {
+            if (instance->currentMainState == 0 || instance->work1 != 0) {
                 instance->currentAnimFrame = 0;
             } else if (((short*)&instance->object->_08)[1] != 0) {
                 instance->currentAnimFrame = ((unsigned short*)(instance->object->animList[0]))[1] - 1;
@@ -493,7 +493,7 @@ void kungfu_onoff_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 void kungfu_spike_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    short* p = ((short*)&instance->_FC);
+    short* p = ((short*)&instance->work0);
     int v;
     int t;
 
@@ -501,7 +501,7 @@ void kungfu_spike_OnCreate(Instance* instance, GameTracker* gameTracker) {
     p[2] = 0x1E;
     p[3] = 0x1E;
     if (instance->introData != 0) {
-        *(SVector*)&instance->_FC = *((SVector*)instance->introData);
+        *(SVector*)&instance->work0 = *((SVector*)instance->introData);
     }
     t = p[0];
     instance->currentMainState = t;
@@ -738,11 +738,11 @@ void kungfu_boat_OnCreate(Instance* instance, GameTracker* gameTracker) {
     short* p;
 
     instance->flags |= 0x100000;
-    p = ((short*)&instance->_FC);
+    p = ((short*)&instance->work0);
     if (instance->introData != 0) {
-        ((short*)&instance->_FC)[1] = ((unsigned short*)instance->introData)[1];
+        ((short*)&instance->work0)[1] = ((unsigned short*)instance->introData)[1];
     } else {
-        ((short*)&instance->_FC)[1] = 0x19;
+        ((short*)&instance->work0)[1] = 0x19;
     }
     if (p[1] < 0 && spline != 0) {
         instance->position = *SplineGetLastPoint(spline->positional, &spline->curPositional);
@@ -757,7 +757,7 @@ void kungfu_boat_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
     ms = instance->intro->multiSpline;
     if (ms != 0) {
-        point = func_800517E4(ms->positional, ((short*)&instance->_FC)[1], &ms->curPositional);
+        point = func_800517E4(ms->positional, ((short*)&instance->work0)[1], &ms->curPositional);
         if (point != 0) {
             instance->position.x = point->x;
             instance->position.y = point->y;
@@ -776,9 +776,9 @@ void kungfu_slider_OnCreate(Instance* instance, GameTracker* gameTracker)
 
 void kungfu_slider_OnUpdate(Instance* instance, GameTracker* gameTracker)
 {
-    if (instance->_FC > 0)
+    if (instance->work0 > 0)
     {
-        instance->_FC--;
+        instance->work0--;
     }
 }
 
@@ -786,12 +786,12 @@ void kungfu_slider_OnCollide(Instance* instance, GameTracker* gameTracker) {
     int* temp_s1;
 
     temp_s1 = (int*)PlayerInstance->data;
-    if (!(PlayerInstance->_FC & 1) && (instance->_FC == 0)) {
+    if (!(PlayerInstance->work0 & 1) && (instance->work0 == 0)) {
         func_8015AE8C_AA0AC(instance, gameTracker);
         
-        instance->_FC = 0x3C;
+        instance->work0 = 0x3C;
         temp_s1[0xE0/4] = (int)instance;
-        PlayerInstance->_FC &= ~2;
+        PlayerInstance->work0 &= ~2;
         
         func_8002B7CC(PlayerInstance);
 
@@ -915,7 +915,7 @@ void kungfu_leafgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
     const char name[] = "leaffx__";
     char* targetObjectName = instance->introData;
     char* d = instance->object->data;
-    int* p = &instance->_FC;
+    long* p = &instance->work0;
     if (targetObjectName == 0) {
         if (d != 0) {
             targetObjectName = d;
@@ -924,7 +924,7 @@ void kungfu_leafgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
             targetObjectName = (char*)name;
         }
     }
-    p[0] = ((int)OBTABLE_FindObject(targetObjectName));
+    p[0] = ((long)OBTABLE_FindObject(targetObjectName));
     p[7] = (rand() & 0xF) + 1;
 }
 
@@ -944,8 +944,8 @@ extern void func_801616D4_B08F4();
 void func_801619A4_B0BC4(Instance* instance, int arg1, int arg2) {
     Model* model;
 
-    if (instance->_FC != 0) {
-        model = ((Object*)instance->_FC)->modelList[0];
+    if (instance->work0 != 0) {
+        model = ((Object*)instance->work0)->modelList[0];
         D_80078244 = (rand() & 3) + 2;
         func_800170E8(model, model->_14 + 0xC, arg2, 0, 0, D_800EB8A0, func_801616D4_B08F4, func_80161944_B0B64, 0x28);
     }
@@ -1049,7 +1049,7 @@ void kungfu_funplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
                 instance->_D0[0] = (-newPosition.y) << 6;
                 instance->_D0[1] = newPosition.x << 6;
 
-                if (instance->_FC != 0) {
+                if (instance->work0 != 0) {
                     instance->_E0[3] = -0x1000;
                 } else {
                     instance->_E0[3] = -0x4000;
@@ -1082,11 +1082,11 @@ void kungfu_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     BTimerIntro* intro;
 
     intro = (BTimerIntro*)instance->introData;
-    instance->_104 = (intro->exitTime * 30);
-    WORK_AS_IDX(short, instance->_FC, 0) = intro->missionTime;
-    WORK_AS_IDX(short, instance->_100, 0) = 0;
+    instance->work2 = (intro->exitTime * 30);
+    WORK_AS_IDX(short, instance->work0, 0) = intro->missionTime;
+    WORK_AS_IDX(short, instance->work1, 0) = 0;
     instance->flags |= 0xC00;
-    gameTracker->player->_FC |= 0x4000;
+    gameTracker->player->work0 |= 0x4000;
     gameTracker->player->flags |= 0x100;
     func_8002CA2C(4, intro->missionTime, intro);
     for (var_s0 = 1; var_s0 < 4; var_s0++) {
@@ -1106,12 +1106,12 @@ void kungfu_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
     var_v1 = 1;
     intro = instance->introData;
-    temp_s2 = &instance->_FC;
-    if (WORK_AS_IDX(short, instance->_100, 0) == 0) {
+    temp_s2 = WORK_AS_PTR(short, instance->work0);
+    if (WORK_AS_IDX(short, instance->work1, 0) == 0) {
         if (temp_s2[0] != 0) {
             if ((int)(((int**)gameTracker))[0x4BFC/4] < gameTracker->level->collectibleCountA) {
                 if (D_80154834 != 0) {
-                    WORK_AS_IDX(short, instance->_108, 0) = 1;
+                    WORK_AS_IDX(short, instance->work3, 0) = 1;
                 }
                 Set3DTextPosition(0x64, 0x69);
                 Print3DTextf(ANIMATED_3DTEXT("COLLECT"));
@@ -1138,15 +1138,15 @@ void kungfu_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         if ((((short*)((int**)gameTracker))[0x4C12/2] == 0) && (var_v1 != 0) && (instance->intro->_2C == 0)) {
             ((int*)temp_s2)[0x8/4] -= D_800E5FD8;
         }
-        if (((gameTracker->player->_FC & 0x600000) == 0x600000) && (instance->currentSubState == 0)) {
+        if (((gameTracker->player->work0 & 0x600000) == 0x600000) && (instance->currentSubState == 0)) {
             temp_s2[0] = (intro->missionTime - 1);
             if (intro->collectType == EBTIMER_COLLECTTYPE_CUTSCENE) {
                 SIGNAL_HandleSignal(PlayerInstance, intro->b + 4, 0);
             }
             instance->currentSubState = 1;
-            PlayerInstance->_FC &= ~0x400000;
+            PlayerInstance->work0 &= ~0x400000;
         }
-        if ((gameTracker->player->_FC & 0x400000) && ((((int**)gameTracker)[0x4C00/4] != 0) || (((int**)gameTracker)[0x4C04/4] != 0))) {
+        if ((gameTracker->player->work0 & 0x400000) && ((((int**)gameTracker)[0x4C00/4] != 0) || (((int**)gameTracker)[0x4C04/4] != 0))) {
             func_8002C18C(5);
             ((int*)temp_s2)[0x8/4] = 0x3C;
             temp_s2[2] = 1;
@@ -1184,9 +1184,9 @@ void kungfu_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         }
     } else {
         gameTracker->player->flags |= 0x100;
-        if (WORK_AS_IDX(short, instance->_100, 0) == 2) {
+        if (WORK_AS_IDX(short, instance->work1, 0) == 2) {
             // Delay map load
-            if (--instance->_104 < 0) {
+            if (--instance->work2 < 0) {
                 func_800396E0("map", "map5", ((int**)gameTracker));
             }
             else

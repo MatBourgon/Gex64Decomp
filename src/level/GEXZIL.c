@@ -5,28 +5,28 @@
 void gexzil_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
     unsigned short* intro;
 
-    WORK_AS_IDX(short, instance->_100, 1) = 0x18;
+    WORK_AS_IDX(short, instance->work1, 1) = 0x18;
     instance->flags |= 0x100000;
     intro = (unsigned short*)instance->introData;
 
     if (intro != NULL) {
-        WORK_AS_IDX(short, instance->_100, 0) = intro[0];
-        WORK_AS_IDX(short, instance->_104, 1) = intro[1];
-        WORK_AS_IDX(short, instance->_108, 0) = intro[2];
-        WORK_AS_IDX(short, instance->_108, 1) = intro[3];
-        WORK_AS_IDX(short, instance->_10C, 0) = intro[4];
+        WORK_AS_IDX(short, instance->work1, 0) = intro[0];
+        WORK_AS_IDX(short, instance->work2, 1) = intro[1];
+        WORK_AS_IDX(short, instance->work3, 0) = intro[2];
+        WORK_AS_IDX(short, instance->work3, 1) = intro[3];
+        WORK_AS_IDX(short, instance->work4, 0) = intro[4];
         if (((short*)intro)[5] != 0) {
-            WORK_AS_IDX(short, instance->_10C, 1) = ((short*)intro)[5];
+            WORK_AS_IDX(short, instance->work4, 1) = ((short*)intro)[5];
         } else {
-            WORK_AS_IDX(short, instance->_10C, 1) = 0x40;
+            WORK_AS_IDX(short, instance->work4, 1) = 0x40;
         }
     } else {
-        WORK_AS_IDX(short, instance->_100, 0) = 0x96;
-        WORK_AS_IDX(short, instance->_104, 1) = ((unsigned short*)&instance->intro->position)[0] - 0x500;
-        WORK_AS_IDX(short, instance->_108, 0) = ((unsigned short*)&instance->intro->position)[1] - 0x780;
-        WORK_AS_IDX(short, instance->_108, 1) = ((unsigned short*)&instance->intro->position)[0] + 0x500;
-        WORK_AS_IDX(short, instance->_10C, 0) = ((unsigned short*)&instance->intro->position)[1] + 0x780;
-        WORK_AS_IDX(short, instance->_10C, 1) = 0x40;
+        WORK_AS_IDX(short, instance->work1, 0) = 0x96;
+        WORK_AS_IDX(short, instance->work2, 1) = ((unsigned short*)&instance->intro->position)[0] - 0x500;
+        WORK_AS_IDX(short, instance->work3, 0) = ((unsigned short*)&instance->intro->position)[1] - 0x780;
+        WORK_AS_IDX(short, instance->work3, 1) = ((unsigned short*)&instance->intro->position)[0] + 0x500;
+        WORK_AS_IDX(short, instance->work4, 0) = ((unsigned short*)&instance->intro->position)[1] + 0x780;
+        WORK_AS_IDX(short, instance->work4, 1) = 0x40;
     }
 }
 
@@ -34,7 +34,7 @@ INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_bug_OnUpdate);
 
 void gexzil_bug_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp = instance->bspTree;
-    short* temp = (short*)&instance->_FC;
+    short* temp = (short*)&instance->work0;
 
     if (bsp->_06 == 1) {
         if ((bsp->instanceSpline == gameTracker->player) && (bsp->_08[4] < 2U) && (bsp->_0C[5] >= 6U)) {
@@ -60,9 +60,9 @@ INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015A09C_9321C);
 extern void func_80017AB8(short* arg0, short arg1);
 void gexzil_ebolt_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if (instance->flags & 0x20000) {
-        if (WORK_AS(short*, instance->_108) != 0) {
-            func_80017AB8(WORK_AS(short*, instance->_108), 0);
-            WORK_AS(short*, instance->_108) = 0;
+        if (WORK_AS(short*, instance->work3) != 0) {
+            func_80017AB8(WORK_AS(short*, instance->work3), 0);
+            WORK_AS(short*, instance->work3) = 0;
         }
     } else {
         instance->flags |= 0x100000;
@@ -72,10 +72,10 @@ void gexzil_ebolt_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
 void gexzil_ebolt_OnUpdate(Instance* instance, GameTracker* gameTracker) {
-    func_80159DEC_92F6C(instance, instance->_100);
-    if (instance->_FC > 0) {
-        instance->_FC--;
-    } else if (instance->_FC == 0) {
+    func_80159DEC_92F6C(instance, instance->work1);
+    if (instance->work0 > 0) {
+        instance->work0--;
+    } else if (instance->work0 == 0) {
         func_8002E350(instance);
     }
 }
@@ -103,7 +103,7 @@ int func_8015B334_944B4(Intro* intro) {
 
     instance = intro->instance;
     if (instance != 0) {
-        result = instance->_FC < instance->_100;
+        result = instance->work0 < instance->work1;
     } else {
         flag = intro->flags & 8;
         result = flag == 0;
@@ -211,7 +211,7 @@ void func_8015CADC_95C5C(Instance* instance, short* arg1) {
         if (arg1[0x26] <= 0) {
             gameTracker8->player->flags2 |= 0x10;
             PlayerInstance->currentMainState = 2;
-            gameTracker8->player->_FC &= ~0x1000000;
+            gameTracker8->player->work0 &= ~0x1000000;
             arg1[0x13] = 0x29;
         } else {
             instance->flags2 = f & ~0x10;
@@ -555,46 +555,46 @@ void gexzil_gas_OnCreate(Instance* instance, GameTracker* gameTracker) {
     t = 0;
     introData = ((unsigned short*)instance->introData);
     data = instance->data;
-    fc = (char*)&instance->_FC;
+    fc = (char*)&instance->work0;
     if (instance->flags & 0x20000) {
         if (instance->currentMainState == 5) {
-            func_800331BC(instance->_104);
+            func_800331BC(instance->work2);
         }
     } else {
-        *(GasData*)&instance->_FC = *(GasData*)data;
+        *(GasData*)&instance->work0 = *(GasData*)data;
         r = rand();
         instance->flags |= 0x80;
         instance->currentTextureAnimFrame = r % 24;
         if (introData != NULL) {
             if (introData[0] != 0xFFFF) {
-                *(GasData*)&instance->_FC = *(GasData*)(introData + 1);
-                if (WORK_AS_IDX(char, instance->_100, 2) < 0) {
-                    WORK_AS(int, instance->_108) |= 0x8000;
-                    WORK_AS_IDX(char, instance->_100, 2) = ~WORK_AS_IDX(unsigned char, instance->_100, 2);
+                *(GasData*)&instance->work0 = *(GasData*)(introData + 1);
+                if (WORK_AS_IDX(char, instance->work1, 2) < 0) {
+                    WORK_AS(int, instance->work3) |= 0x8000;
+                    WORK_AS_IDX(char, instance->work1, 2) = ~WORK_AS_IDX(unsigned char, instance->work1, 2);
                 }
                 t = func_8004A61C(instance);
                 m = introData[0];
-                m %= (unsigned int)(((unsigned short*)&instance->_FC)[1] + *(unsigned short*)&instance->_FC + WORK_AS_IDX(unsigned char, instance->_100, 1));
-                if (m < ((unsigned short*)&instance->_FC)[1]) {
-                    WORK_AS_IDX(short, instance->_108, 0) = m;
+                m %= (unsigned int)(((unsigned short*)&instance->work0)[1] + *(unsigned short*)&instance->work0 + WORK_AS_IDX(unsigned char, instance->work1, 1));
+                if (m < ((unsigned short*)&instance->work0)[1]) {
+                    WORK_AS_IDX(short, instance->work3, 0) = m;
                     instance->currentMainState = 0;
                 } else {
-                    m -= ((unsigned short*)&instance->_FC)[1];
-                    if (m < WORK_AS_IDX(unsigned char, instance->_100, 1)) {
-                        WORK_AS_IDX(short, instance->_108, 0) = m;
+                    m -= ((unsigned short*)&instance->work0)[1];
+                    if (m < WORK_AS_IDX(unsigned char, instance->work1, 1)) {
+                        WORK_AS_IDX(short, instance->work3, 0) = m;
                         instance->currentMainState = 1;
                     } else {
-                        m -= WORK_AS_IDX(unsigned char, instance->_100, 1);
+                        m -= WORK_AS_IDX(unsigned char, instance->work1, 1);
                         if (m < t) {
                             instance->currentMainState = 2;
                             t = m;
                         } else {
                             m -= t;
-                            if (m < *(unsigned short*)&instance->_FC) {
-                                WORK_AS_IDX(short, instance->_108, 0) = m;
+                            if (m < *(unsigned short*)&instance->work0) {
+                                WORK_AS_IDX(short, instance->work3, 0) = m;
                                 instance->currentMainState = 3;
                             } else {
-                                m -= *(unsigned short*)&instance->_FC;
+                                m -= *(unsigned short*)&instance->work0;
                                 if (m < t) {
                                     instance->currentMainState = 4;
                                     t = t - m;
@@ -628,11 +628,11 @@ void gexzil_gas_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     unsigned short y;
     int w;
 
-    fc = (unsigned short*)&instance->_FC;
-    x = WORK_AS_IDX(unsigned short, instance->_108, 0);
+    fc = (unsigned short*)&instance->work0;
+    x = WORK_AS_IDX(unsigned short, instance->work3, 0);
     y = instance->currentTextureAnimFrame;
-    WORK_AS_IDX(unsigned short, instance->_108, 0) = x + 1;
-    w = WORK_AS(int, instance->_108);
+    WORK_AS_IDX(unsigned short, instance->work3, 0) = x + 1;
+    w = WORK_AS(int, instance->work3);
     instance->currentTextureAnimFrame = y + 1;
     if (w & 0x8000) {
         instance->rotation.z = (instance->rotation.z + 0x2200) & 0xFFF;

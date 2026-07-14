@@ -39,28 +39,28 @@ void looney_shittrn_OnCollide(Instance* instance, GameTracker* gameTracker) {
 void looney_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
     unsigned short* intro;
 
-    WORK_AS_IDX(short, instance->_100, 1) = 0x18;
+    WORK_AS_IDX(short, instance->work1, 1) = 0x18;
     instance->flags |= 0x100000;
     intro = (unsigned short*)instance->introData;
 
     if (intro != NULL) {
-        WORK_AS_IDX(short, instance->_100, 0) = intro[0];
-        WORK_AS_IDX(short, instance->_104, 1) = intro[1];
-        WORK_AS_IDX(short, instance->_108, 0) = intro[2];
-        WORK_AS_IDX(short, instance->_108, 1) = intro[3];
-        WORK_AS_IDX(short, instance->_10C, 0) = intro[4];
+        WORK_AS_IDX(short, instance->work1, 0) = intro[0];
+        WORK_AS_IDX(short, instance->work2, 1) = intro[1];
+        WORK_AS_IDX(short, instance->work3, 0) = intro[2];
+        WORK_AS_IDX(short, instance->work3, 1) = intro[3];
+        WORK_AS_IDX(short, instance->work4, 0) = intro[4];
         if (((short*)intro)[5] != 0) {
-            WORK_AS_IDX(short, instance->_10C, 1) = ((short*)intro)[5];
+            WORK_AS_IDX(short, instance->work4, 1) = ((short*)intro)[5];
         } else {
-            WORK_AS_IDX(short, instance->_10C, 1) = 0x40;
+            WORK_AS_IDX(short, instance->work4, 1) = 0x40;
         }
     } else {
-        WORK_AS_IDX(short, instance->_100, 0) = 0x96;
-        WORK_AS_IDX(short, instance->_104, 1) = ((unsigned short*)&instance->intro->position)[0] - 0x500;
-        WORK_AS_IDX(short, instance->_108, 0) = ((unsigned short*)&instance->intro->position)[1] - 0x780;
-        WORK_AS_IDX(short, instance->_108, 1) = ((unsigned short*)&instance->intro->position)[0] + 0x500;
-        WORK_AS_IDX(short, instance->_10C, 0) = ((unsigned short*)&instance->intro->position)[1] + 0x780;
-        WORK_AS_IDX(short, instance->_10C, 1) = 0x40;
+        WORK_AS_IDX(short, instance->work1, 0) = 0x96;
+        WORK_AS_IDX(short, instance->work2, 1) = ((unsigned short*)&instance->intro->position)[0] - 0x500;
+        WORK_AS_IDX(short, instance->work3, 0) = ((unsigned short*)&instance->intro->position)[1] - 0x780;
+        WORK_AS_IDX(short, instance->work3, 1) = ((unsigned short*)&instance->intro->position)[0] + 0x500;
+        WORK_AS_IDX(short, instance->work4, 0) = ((unsigned short*)&instance->intro->position)[1] + 0x780;
+        WORK_AS_IDX(short, instance->work4, 1) = 0x40;
     }
 }
 
@@ -68,7 +68,7 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_bug_OnUpdate);
 
 void looney_bug_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp = instance->bspTree;
-    short* temp  = (short*)&instance->_FC;
+    short* temp  = (short*)&instance->work0;
 
     if (bsp->_06 == 1) {
         if ((bsp->instanceSpline == gameTracker->player) && (bsp->_08[4] < 2U) && (bsp->_0C[5] >= 6U)) {
@@ -83,17 +83,17 @@ void looney_bug_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 void looney_bouncer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     short* intro;
-    int* fc;
+    long* fc;
     
     intro = instance->introData;
-    fc = &instance->_FC;
+    fc = &instance->work0;
     
     if (intro != NULL) {
-        WORK_AS_IDX(short, instance->_100, 1) = intro[0];
-        WORK_AS_IDX(short, instance->_104, 0) = intro[1];
+        WORK_AS_IDX(short, instance->work1, 1) = intro[0];
+        WORK_AS_IDX(short, instance->work2, 0) = intro[1];
     } else {
-        WORK_AS_IDX(short, instance->_100, 1) = 0U;
-        WORK_AS_IDX(short, instance->_104, 0) = 0U;
+        WORK_AS_IDX(short, instance->work1, 1) = 0U;
+        WORK_AS_IDX(short, instance->work2, 0) = 0U;
     }
     fc[3] = instance->intro->position.x;
     fc[4] = instance->intro->position.y;
@@ -111,7 +111,7 @@ void looney_bouncer_OnCollide(Instance* instance, GameTracker* gameTracker) {
         && (bsp->_08[4] < 2U)
         && (bsp->_0C[5] >= 6U)
         && (
-            (WORK_AS_IDX(short, instance->_104, 0) != 3)
+            (WORK_AS_IDX(short, instance->work2, 0) != 3)
             || ((instance->currentMainState - 2) < 2U)
             || (instance->currentMainState == 4)
         )) {
@@ -181,7 +181,7 @@ void looney_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
 void looney_bowling_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if ((instance->parent != NULL) && (instance->parent->intro != NULL)) {
         instance->flags |= 0x100400;
-        WORK_AS(MultiSpline*, instance->_10C) = instance->parent->intro->multiSpline;
+        WORK_AS(MultiSpline*, instance->work4) = instance->parent->intro->multiSpline;
     }
 }
 
@@ -189,10 +189,10 @@ void looney_bowling_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     if (instance->parent == NULL) {
         INSTANCE_KillInstance(instance);
     }
-    if (SCRIPT_InstanceSplineProcess(instance, (SplineDef*)&instance->_FC, WORK_AS_PTR(SplineDef, instance->_104), NULL, 1) > 0) {
+    if (SCRIPT_InstanceSplineProcess(instance, (SplineDef*)&instance->work0, WORK_AS_PTR(SplineDef, instance->work2), NULL, 1) > 0) {
         INSTANCE_PlainDeath(instance, 5, -1, 0);
     }
-    if (++(WORK_AS(int, instance->_110)) == 0x50) {
+    if (++(WORK_AS(int, instance->work5)) == 0x50) {
         instance->flags &= ~0x400;
     }
 }
@@ -212,7 +212,7 @@ void looney_doeboy_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         intro = instance->intro;
         temp_v1 = (short*)intro->_2C;
         if (temp_v1 != NULL) {
-            instance->_FC = ((int*)intro->data)[1];
+            instance->work0 = ((int*)intro->data)[1];
             if (temp_v1[0] != 0) {
                 instance->currentModelAnim = temp_v1[1];
             }
@@ -235,8 +235,8 @@ void looney_doeboy_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     
     func_8001DA8C(instance, gameTracker);
     
-    if (instance->_FC > 0) {
-        instance->_FC--;
+    if (instance->work0 > 0) {
+        instance->work0--;
     }
 }
 
@@ -244,7 +244,7 @@ void looney_doeboy_OnCollide(Instance* instance, GameTracker* gameTracker) {
     void* temp_a1;
     void* intro;
 
-    if ((func_80027500(instance->bspTree, gameTracker) != 0) && (instance->_FC == 0)) {
+    if ((func_80027500(instance->bspTree, gameTracker) != 0) && (instance->work0 == 0)) {
         intro = instance->introData;
         if (intro != NULL) {
             temp_a1 = *(void**)intro;
@@ -263,8 +263,8 @@ void looney_brkblok_OnCreate(Instance* instance, GameTracker* gameTracker) {
         instance->intro->position = instance->position;
     } else {
         if (intro != 0) {
-            instance->_FC = intro[0];
-            instance->_100 = intro[1];
+            instance->work0 = intro[0];
+            instance->work1 = intro[1];
         }
         instance->flags |= 0x10000;
     }
@@ -378,7 +378,7 @@ void looney_leafgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
     const char name[] = "leaffx__";
     char* targetObjectName = instance->introData;
     char* d = instance->object->data;
-    int* p = &instance->_FC;
+    long* p = &instance->work0;
     if (targetObjectName == 0) {
         if (d != 0) {
             targetObjectName = d;
@@ -407,8 +407,8 @@ extern void func_8015B934_B3BE4();
 void func_8015BC04_B3EB4(Instance* instance, int arg1, int arg2) {
     Model* model;
 
-    if (instance->_FC != 0) {
-        model = ((Object*)instance->_FC)->modelList[0];
+    if (instance->work0 != 0) {
+        model = ((Object*)instance->work0)->modelList[0];
         D_80078244 = (rand() & 3) + 2;
         func_800170E8(model, model->_14 + 0xC, arg2, 0, 0, D_800EB8A0, func_8015B934_B3BE4, func_8015BBA4_B3E54, 0x28);
     }
@@ -440,10 +440,8 @@ void func_8015C230_B44E0(Instance* instance, short* arg1) {
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_8015C2D8_B4588);
 
 void looney_funguy_OnUpdate(Instance* instance, GameTracker* gameTracker) {
-    int* fc;
-
-    fc = &instance->_FC;
-    switch (WORK_AS(int, instance->_108)) {
+    long* fc = &instance->work0;
+    switch (WORK_AS(int, instance->work3)) {
     case 0:
         func_8015BFCC_B427C(instance, gameTracker);
         break;
@@ -470,13 +468,13 @@ typedef struct {
 
 void looney_fallgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
     FallGenIntro* intro;
-    int* fc;
+    long* fc;
     int total;
     int i;
 
     total = 0;
     intro = instance->introData;
-    fc = &instance->_FC;
+    fc = &instance->work0;
     if (intro != NULL) {
         for (i = 0; i < intro->count; i++) {
             total += intro->entries[i][2];
@@ -513,8 +511,8 @@ void looney_teeter_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if (instance->introData == NULL) {
         instance->introData = &D_80161C9C_B9F4C;
     }
-    instance->_118 = 0;
-    instance->_11C = 0;
+    instance->work7 = 0;
+    instance->work8 = 0;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_teeter_OnUpdate);
@@ -527,11 +525,11 @@ void looney_trapsit_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if (instance->introData == 0) {
         instance->introData = D_80161CA4_B9F54;
     }
-    instance->_104 = instance->position.z;
+    instance->work2 = instance->position.z;
     if (((short*)instance->introData)[0] == 0) {
-        instance->_FC = 2;
+        instance->work0 = 2;
     } else {
-        instance->_FC = 0;
+        instance->work0 = 0;
     }
 }
 
@@ -550,12 +548,12 @@ void looney_trapmuv_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 void looney_pusher_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    WORK_AS(int, instance->_108) = 0;
-    instance->_100 = 0;
+    WORK_AS(int, instance->work3) = 0;
+    instance->work1 = 0;
     if (G2String_Compare_EQ(instance->object->name, "pusha___")) {
-        instance->_104 = 0;
+        instance->work2 = 0;
     } else {
-        instance->_104 = 0x14;
+        instance->work2 = 0x14;
     }
 }
 
@@ -569,8 +567,8 @@ void looney_bullet_OnCreate(Instance* instance, GameTracker* gameTracker) {
     Intro* intro;
     int angle;
 
-    instance->_FC = 0x5A;
-    instance->_100 = 0;
+    instance->work0 = 0x5A;
+    instance->work1 = 0;
     d.x = PlayerInstance->position.x - instance->position.x;
     d.y = PlayerInstance->position.y - instance->position.y;
     d.z = PlayerInstance->position.z - instance->position.z;
@@ -778,7 +776,7 @@ void looney_funplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
                 instance->_D0[0] = (-newPosition.y) << 6;
                 instance->_D0[1] = newPosition.x << 6;
 
-                if (instance->_FC != 0) {
+                if (instance->work0 != 0) {
                     instance->_E0[3] = -0x1000;
                 } else {
                     instance->_E0[3] = -0x4000;
@@ -794,14 +792,14 @@ void looney_funplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
 extern char D_80161DA8_BA058[];
 
 void looney_fxgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    int* fc;
+    long* fc;
     unsigned char* intro;
 
-    fc = &instance->_FC;
+    fc = &instance->work0;
     if (instance->flags & 0x20000) {
-        if (WORK_AS(int, instance->_108) != 0) {
-            func_800331BC(WORK_AS(int, instance->_108));
-            WORK_AS(int, instance->_108) = 0;
+        if (WORK_AS(int, instance->work3) != 0) {
+            func_800331BC(WORK_AS(int, instance->work3));
+            WORK_AS(int, instance->work3) = 0;
         }
     } else {
         if (instance->introData == NULL) {
@@ -811,11 +809,11 @@ void looney_fxgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
         fc[0] = (int)OBTABLE_FindObject(intro + 0xC);
         if ((intro[1] & 1) == 0) {
             if ((intro[1] & 2) != 0) {
-                WORK_AS_IDX(short, instance->_110, 0) = 0x119;
-                WORK_AS_IDX(short, instance->_110, 1) = 0x78;
-                WORK_AS_IDX(short, instance->_114, 1) = 0xDAC;
-                WORK_AS_IDX(short, instance->_114, 0)= (rand() & 0x7F) - 0x15E;
-                WORK_AS_IDX(short, instance->_10C, 1) = WORK_AS_IDX(short, instance->_10C, 0) = rand() & 7;
+                WORK_AS_IDX(short, instance->work5, 0) = 0x119;
+                WORK_AS_IDX(short, instance->work5, 1) = 0x78;
+                WORK_AS_IDX(short, instance->work6, 1) = 0xDAC;
+                WORK_AS_IDX(short, instance->work6, 0)= (rand() & 0x7F) - 0x15E;
+                WORK_AS_IDX(short, instance->work4, 1) = WORK_AS_IDX(short, instance->work4, 0) = rand() & 7;
                 intro[1] |= 0x80;
             }
         }
@@ -865,7 +863,7 @@ void looney_frocket_OnCollide(Instance* instance, GameTracker* gameTracker) {
     GenericCollide(instance, gameTracker);
     if (bspTree->instanceSpline == PlayerInstance) {
         if (PlayerInstance->currentMainState == 1) {
-            instance->_100 = 1;
+            instance->work1 = 1;
         }
     }
 }

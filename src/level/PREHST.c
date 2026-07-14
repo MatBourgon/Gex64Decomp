@@ -8,8 +8,8 @@ void prehst_ttplat_OnCreate(Instance* instance, GameTracker* gameTracker) {
         instance->scale.z = *(int*)instance->introData;
     }
     instance->currentMainState = 4;
-    instance->_FC = 0;
-    instance->_100 = 2;
+    instance->work0 = 0;
+    instance->work1 = 2;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_ttplat_OnUpdate);
@@ -27,14 +27,14 @@ void prehst_ttplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
         }
         if (instance->currentMainState != 6) {
             instance->currentMainState = 6;
-            if (instance->_FC >= -0x1F) {
-                instance->_FC = -0x20;
+            if (instance->work0 >= -0x1F) {
+                instance->work0 = -0x20;
             }
-            instance->_100 = -1;
+            instance->work1 = -1;
             target->currentMainState = 5;
-            target->_100 = 1;
-            if (target->_FC < 0x20) {
-                target->_FC = 0x20;
+            target->work1 = 1;
+            if (target->work0 < 0x20) {
+                target->work0 = 0x20;
             }
         }
         instance->currentSubState = 0;
@@ -44,28 +44,28 @@ void prehst_ttplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
 void prehst_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
     unsigned short* intro;
 
-    WORK_AS_IDX(short, instance->_100, 1) = 0x18;
+    WORK_AS_IDX(short, instance->work1, 1) = 0x18;
     instance->flags |= 0x100000;
     intro = (unsigned short*)instance->introData;
 
     if (intro != NULL) {
-        WORK_AS_IDX(short, instance->_100, 0) = intro[0];
-        WORK_AS_IDX(short, instance->_104, 1) = intro[1];
-        WORK_AS_IDX(short, instance->_108, 0) = intro[2];
-        WORK_AS_IDX(short, instance->_108, 1) = intro[3];
-        WORK_AS_IDX(short, instance->_10C, 0) = intro[4];
+        WORK_AS_IDX(short, instance->work1, 0) = intro[0];
+        WORK_AS_IDX(short, instance->work2, 1) = intro[1];
+        WORK_AS_IDX(short, instance->work3, 0) = intro[2];
+        WORK_AS_IDX(short, instance->work3, 1) = intro[3];
+        WORK_AS_IDX(short, instance->work4, 0) = intro[4];
         if (((short*)intro)[5] != 0) {
-            WORK_AS_IDX(short, instance->_10C, 1) = ((short*)intro)[5];
+            WORK_AS_IDX(short, instance->work4, 1) = ((short*)intro)[5];
         } else {
-            WORK_AS_IDX(short, instance->_10C, 1) = 0x40;
+            WORK_AS_IDX(short, instance->work4, 1) = 0x40;
         }
     } else {
-        WORK_AS_IDX(short, instance->_100, 0) = 0x96;
-        WORK_AS_IDX(short, instance->_104, 1) = ((unsigned short*)&instance->intro->position)[0] - 0x500;
-        WORK_AS_IDX(short, instance->_108, 0) = ((unsigned short*)&instance->intro->position)[1] - 0x780;
-        WORK_AS_IDX(short, instance->_108, 1) = ((unsigned short*)&instance->intro->position)[0] + 0x500;
-        WORK_AS_IDX(short, instance->_10C, 0) = ((unsigned short*)&instance->intro->position)[1] + 0x780;
-        WORK_AS_IDX(short, instance->_10C, 1) = 0x40;
+        WORK_AS_IDX(short, instance->work1, 0) = 0x96;
+        WORK_AS_IDX(short, instance->work2, 1) = ((unsigned short*)&instance->intro->position)[0] - 0x500;
+        WORK_AS_IDX(short, instance->work3, 0) = ((unsigned short*)&instance->intro->position)[1] - 0x780;
+        WORK_AS_IDX(short, instance->work3, 1) = ((unsigned short*)&instance->intro->position)[0] + 0x500;
+        WORK_AS_IDX(short, instance->work4, 0) = ((unsigned short*)&instance->intro->position)[1] + 0x780;
+        WORK_AS_IDX(short, instance->work4, 1) = 0x40;
     }
 }
 
@@ -73,7 +73,7 @@ INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_bug_OnUpdate);
 
 void prehst_bug_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp = instance->bspTree;
-    short* temp = (short*)&instance->_FC;
+    short* temp = (short*)&instance->work0;
 
     if (bsp->_06 == 1) {
         if ((bsp->instanceSpline == gameTracker->player) && (bsp->_08[4] < 2U) && (bsp->_0C[5] >= 6U)) {
@@ -88,17 +88,17 @@ void prehst_bug_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 void prehst_bouncer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     short* intro;
-    int* fc;
+    long* fc;
     
     intro = instance->introData;
-    fc = &instance->_FC;
+    fc = &instance->work0;
     
     if (intro != NULL) {
-        WORK_AS_IDX(short, instance->_100, 1) = intro[0];
-        WORK_AS_IDX(short, instance->_104, 0) = intro[1];
+        WORK_AS_IDX(short, instance->work1, 1) = intro[0];
+        WORK_AS_IDX(short, instance->work2, 0) = intro[1];
     } else {
-        WORK_AS_IDX(short, instance->_100, 1) = 0U;
-        WORK_AS_IDX(short, instance->_104, 0) = 0U;
+        WORK_AS_IDX(short, instance->work1, 1) = 0U;
+        WORK_AS_IDX(short, instance->work2, 0) = 0U;
     }
     fc[3] = instance->intro->position.x;
     fc[4] = instance->intro->position.y;
@@ -116,7 +116,7 @@ void prehst_bouncer_OnCollide(Instance* instance, GameTracker* gameTracker) {
         && (bsp->_08[4] < 2U)
         && (bsp->_0C[5] >= 6U)
         && (
-            (WORK_AS_IDX(short, instance->_104, 0) != 3)
+            (WORK_AS_IDX(short, instance->work2, 0) != 3)
             || ((instance->currentMainState - 2) < 2U)
             || (instance->currentMainState == 4)
         )) {
@@ -252,9 +252,9 @@ void prehst_eel_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->currentAnimFrame = 0;
     instance->_D0[3] = 0;
     instance->currentMainState = 0;
-    instance->_100 = 0;
+    instance->work1 = 0;
     instance->flags |= 0x800;
-    instance->_104 = ((short*)instance->object->animList[1])[1];
+    instance->work2 = ((short*)instance->object->animList[1])[1];
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_eel_OnUpdate);
@@ -271,9 +271,9 @@ void prehst_stmvent_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
     introData = instance->introData;
     RotMatrix(&instance->intro->rotation, &mat);
-    WORK_AS(int, instance->_10C) = mat.m[0][2] * 25 >> 10;
-    WORK_AS(int, instance->_110) = mat.m[1][2] * 25 >> 10;
-    WORK_AS(int, instance->_114)= mat.m[2][2] * 25 >> 10;
+    WORK_AS(int, instance->work4) = mat.m[0][2] * 25 >> 10;
+    WORK_AS(int, instance->work5) = mat.m[1][2] * 25 >> 10;
+    WORK_AS(int, instance->work6)= mat.m[2][2] * 25 >> 10;
     if (introData != NULL) {
         instance->_D0[0] = introData[1];
         instance->_D0[1] = introData[2];
@@ -390,31 +390,31 @@ void func_8015B5B0_C8E30(Instance* instance) {
     } else {
         model = obj->modelList[1];
     }
-    if (instance->_104 != 0) {
-        WORK_AS(int, instance->_108) += 0x1000;
-        if (WORK_AS(int, instance->_108) == 0xC000) {
-            instance->_104 = 0;
+    if (instance->work2 != 0) {
+        WORK_AS(int, instance->work3) += 0x1000;
+        if (WORK_AS(int, instance->work3) == 0xC000) {
+            instance->work2 = 0;
         }
     } else {
-        WORK_AS(int, instance->_108) -= 0x1000;
-        if (WORK_AS(int, instance->_108) == -0xC000) {
-            instance->_104 = 1;
+        WORK_AS(int, instance->work3) -= 0x1000;
+        if (WORK_AS(int, instance->work3) == -0xC000) {
+            instance->work2 = 1;
         }
     }
-    if (*(int*)&instance->_118 != 0) {
-        *(int*)&instance->_11C += 0x1000;
-        if (*(int*)&instance->_11C == 0xA000) {
-            *(int*)&instance->_118 = 0;
+    if (*(int*)&instance->work7 != 0) {
+        *(int*)&instance->work8 += 0x1000;
+        if (*(int*)&instance->work8 == 0xA000) {
+            *(int*)&instance->work7 = 0;
         }
     } else {
-        *(int*)&instance->_11C -= 0x1000;
-        if (*(int*)&instance->_11C == -0xA000) {
-            *(int*)&instance->_118 = 1;
+        *(int*)&instance->work8 -= 0x1000;
+        if (*(int*)&instance->work8 == -0xA000) {
+            *(int*)&instance->work7 = 1;
         }
     }
-    rot.x = (WORK_AS(int, instance->_10C) >> 1) + (*(int*)&instance->_11C >> 12);
-    rot.y = (WORK_AS(int, instance->_110) >> 1) + (*(int*)&instance->_11C >> 12);
-    rot.z = (WORK_AS(int, instance->_114)>> 1) + (WORK_AS(int, instance->_108) >> 12);
+    rot.x = (WORK_AS(int, instance->work4) >> 1) + (*(int*)&instance->work8 >> 12);
+    rot.y = (WORK_AS(int, instance->work5) >> 1) + (*(int*)&instance->work8 >> 12);
+    rot.z = (WORK_AS(int, instance->work6)>> 1) + (WORK_AS(int, instance->work3) >> 12);
     vel.x = 0;
     vel.y = 0;
     vel.z = 0;
@@ -438,11 +438,11 @@ void prehst_stmvent_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         instance->_E0[2] = instance->_E0[0] % instance->_E0[1];
         if (instance->_D0[0] < instance->_E0[2]) {
             if (PlayerInstance->currentSubState == 0x200000) {
-                instance->_100++;
+                instance->work1++;
             }
-            if (instance->_100 >= 10) {
+            if (instance->work1 >= 10) {
                 instance->_E0[0] = 0;
-                instance->_100 = 0;
+                instance->work1 = 0;
             }
             func_8015B5B0_C8E30(instance);
         }
@@ -461,25 +461,25 @@ void prehst_stmvent_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 void prehst_sptball_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    instance->_100 = 0x10;
-    instance->_104 = 0x1E;
-    WORK_AS(int, instance->_108) = instance->parent->position.z;
+    instance->work1 = 0x10;
+    instance->work2 = 0x1E;
+    WORK_AS(int, instance->work3) = instance->parent->position.z;
     instance->position.z += 0x80;
 }
 
 void prehst_sptball_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     if (instance->currentMainState == 0) {
-        if (instance->_104 >= -0x17) {
-            instance->_104 -= 1;
+        if (instance->work2 >= -0x17) {
+            instance->work2 -= 1;
         }
-        if (WORK_AS(int, instance->_108) < instance->position.z + instance->_104) {
-            instance->position.z = instance->position.z + instance->_104;
+        if (WORK_AS(int, instance->work3) < instance->position.z + instance->work2) {
+            instance->position.z = instance->position.z + instance->work2;
         } else {
             instance->currentMainState = 1;
         }
-        instance->position.x = instance->position.x + ((instance->_100 * ((short)func_8003A6AC(instance->_FC))) >> 12);
-        instance->position.y = instance->position.y + ((instance->_100 * ((short)func_8003A4E0(instance->_FC))) >> 12);
-        instance->_FC += 0x20;
+        instance->position.x = instance->position.x + ((instance->work1 * ((short)func_8003A6AC(instance->work0))) >> 12);
+        instance->position.y = instance->position.y + ((instance->work1 * ((short)func_8003A4E0(instance->work0))) >> 12);
+        instance->work0 += 0x20;
     } else if (instance->currentMainState == 1) {
         if (instance->scale.x >= 0x1F5) {
             instance->scale.x -= 0x199;
@@ -503,17 +503,17 @@ void prehst_cavegex_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
     intro = instance->introData;
     instance->currentMainState = 2;
-    instance->_FC = 2;
-    WORK_AS(int, instance->_108) = instance->position.x;
-    WORK_AS(int, instance->_10C) = instance->position.y;
-    WORK_AS(int, instance->_110) = instance->position.z;
+    instance->work0 = 2;
+    WORK_AS(int, instance->work3) = instance->position.x;
+    WORK_AS(int, instance->work4) = instance->position.y;
+    WORK_AS(int, instance->work5) = instance->position.z;
     if (intro != NULL) {
-        instance->_104 = intro[0] * intro[0];
-        instance->_100 = intro[1] * intro[1];
+        instance->work2 = intro[0] * intro[0];
+        instance->work1 = intro[1] * intro[1];
         return;
     }
-    instance->_104 = 0x895440;
-    instance->_100 = 0x190000;
+    instance->work2 = 0x895440;
+    instance->work1 = 0x190000;
 }
 
 extern int D_80164480_D1D00;
@@ -521,12 +521,12 @@ void func_8015BAFC_C937C(Instance* instance, GameTracker* gameTracker, int arg2)
     D_80164480_D1D00 ^= 1;
     if (arg2 == 0) {
         if (D_80164480_D1D00 != 0) {
-            WORK_AS(int, instance->_114)= 2;
+            WORK_AS(int, instance->work6)= 2;
         } else {
-            WORK_AS(int, instance->_114)= 1;
+            WORK_AS(int, instance->work6)= 1;
         }
     } else {
-        WORK_AS(int, instance->_114)= arg2;
+        WORK_AS(int, instance->work6)= arg2;
     }
     instance->currentSubState = 1;
     instance->currentAnimFrame = 0;
@@ -573,18 +573,18 @@ void prehst_tricer_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
     data = instance->data;
     ScriptGetPosSpline(instance);
-    ((short*)&instance->_118)[1] = 0;
-    instance->_FC = (int)((char*)data + 0x2A);
-    func_8004A98C(instance, &instance->_100, (short*)((char*)data + 0x26), 1);
+    ((short*)&instance->work7)[1] = 0;
+    instance->work0 = (int)((char*)data + 0x2A);
+    func_8004A98C(instance, &instance->work1, (short*)((char*)data + 0x26), 1);
     func_8004A9C8(instance, 0, 0, 0, *(short*)((char*)data + 0x26));
     instance->flags |= 0x100080;
-    func_80048DE4(instance, &instance->_110, &instance->_114, 0);
+    func_80048DE4(instance, &instance->work5, &instance->work6, 0);
     instance->currentMainState = 1;
     instance->currentSubState = 3;
     func_8004A7B8(instance, 3, 0);
     func_80049330(instance);
-    instance->_11C |= 0x2000;
-    *(unsigned short*)&instance->_120 = *(unsigned short*)&instance->_120 | 8;
+    instance->work8 |= 0x2000;
+    *(unsigned short*)&instance->work9 = *(unsigned short*)&instance->work9 | 8;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_tricer_OnUpdate);
@@ -595,7 +595,7 @@ void prehst_raptor_OnCreate(Instance* instance, GameTracker* gameTracker) {
     unsigned char* fc;
     unsigned short* data;
 
-    fc = (unsigned char*)&instance->_FC;
+    fc = (unsigned char*)&instance->work0;
     data = instance->data;
     if (instance->intro->multiSpline == NULL || ((int*)instance->intro->multiSpline)[0] == 0) {
         fc[0xB] = 1;
@@ -648,13 +648,13 @@ void prehst_zviolet_OnCreate(Instance* instance, GameTracker* gameTracker) {
     void* data;
 
     data = instance->data;
-    *(SVECTOR*)&instance->_FC = *(SVECTOR*)data;
-    instance->_104 = (int)((char*)data + 4);
+    WORK_AS(SVECTOR, instance->work0) = *(SVECTOR*)data;
+    instance->work2 = (int)((char*)data + 4);
     func_8004A7B8(instance, 1, 0);
-    if (*(char*)&instance->_FC != 0) {
+    if (WORK_AS_IDX(char, instance->work0, 0) != 0) {
         instance->flags2 |= 8;
     }
-    WORK_AS_IDX(char, instance->_10C, 2) = 0;
+    WORK_AS_IDX(char, instance->work4, 2) = 0;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_zviolet_OnUpdate);
@@ -665,7 +665,7 @@ void prehst_zviolet_OnCollide(Instance* instance, GameTracker* gameTracker) {
     int* mask;
     int state;
     BSPTree* bsp = instance->bspTree;
-    unsigned char* fc = (unsigned char*)&instance->_FC;
+    unsigned char* fc = (unsigned char*)&instance->work0;
 
     if (bsp->instanceSpline == gameTracker->player) {
         if (*(int*)&bsp->_04 == 0x20004
@@ -690,7 +690,7 @@ void prehst_zviolet_OnCollide(Instance* instance, GameTracker* gameTracker) {
             fc[0x10] = 1;
         }
     }
-    gameTracker->player->_FC |= 0x40000000;
+    gameTracker->player->work0 |= 0x40000000;
 }
 
 void func_8015F1F0_CCA70(Instance* instance) {
@@ -727,8 +727,8 @@ void func_8015F290_CCB10(Instance* instance) {
         instance->flags &= ~0x400;
         PlayerInstance->flags &= ~0x400000;
     }
-    WORK_AS_IDX(short, instance->_108, 0) = 0;
-    WORK_AS_IDX(short, instance->_108, 1) = 0;
+    WORK_AS_IDX(short, instance->work3, 0) = 0;
+    WORK_AS_IDX(short, instance->work3, 1) = 0;
 }
 
 typedef struct {
@@ -749,46 +749,46 @@ void prehst_gas_OnCreate(Instance* instance, GameTracker* gameTracker) {
     t = 0;
     introData = ((unsigned short*)instance->introData);
     data = instance->data;
-    fc = (char*)&instance->_FC;
+    fc = (char*)&instance->work0;
     if (instance->flags & 0x20000) {
         if (instance->currentMainState == 5) {
-            func_800331BC(instance->_104);
+            func_800331BC(instance->work2);
         }
     } else {
-        *(GasData*)&instance->_FC = *(GasData*)data;
+        *(GasData*)&instance->work0 = *(GasData*)data;
         r = rand();
         instance->flags |= 0x80;
         instance->currentTextureAnimFrame = r % 24;
         if (introData != NULL) {
             if (introData[0] != 0xFFFF) {
-                *(GasData*)&instance->_FC = *(GasData*)(introData + 1);
-                if (WORK_AS_IDX(char, instance->_100, 2) < 0) {
-                    WORK_AS(int, instance->_108) |= 0x8000;
-                    WORK_AS_IDX(char, instance->_100, 2) = ~WORK_AS_IDX(unsigned char, instance->_100, 2);
+                *(GasData*)&instance->work0 = *(GasData*)(introData + 1);
+                if (WORK_AS_IDX(char, instance->work1, 2) < 0) {
+                    WORK_AS(int, instance->work3) |= 0x8000;
+                    WORK_AS_IDX(char, instance->work1, 2) = ~WORK_AS_IDX(unsigned char, instance->work1, 2);
                 }
                 t = func_8004A61C(instance);
                 m = introData[0];
-                m %= (unsigned int)(((unsigned short*)&instance->_FC)[1] + *(unsigned short*)&instance->_FC + WORK_AS_IDX(unsigned char, instance->_100, 1));
-                if (m < ((unsigned short*)&instance->_FC)[1]) {
-                    WORK_AS_IDX(short, instance->_108, 0) = m;
+                m %= (unsigned int)(((unsigned short*)&instance->work0)[1] + *(unsigned short*)&instance->work0 + WORK_AS_IDX(unsigned char, instance->work1, 1));
+                if (m < ((unsigned short*)&instance->work0)[1]) {
+                    WORK_AS_IDX(short, instance->work3, 0) = m;
                     instance->currentMainState = 0;
                 } else {
-                    m -= ((unsigned short*)&instance->_FC)[1];
-                    if (m < WORK_AS_IDX(unsigned char, instance->_100, 1)) {
-                        WORK_AS_IDX(short, instance->_108, 0) = m;
+                    m -= ((unsigned short*)&instance->work0)[1];
+                    if (m < WORK_AS_IDX(unsigned char, instance->work1, 1)) {
+                        WORK_AS_IDX(short, instance->work3, 0) = m;
                         instance->currentMainState = 1;
                     } else {
-                        m -= WORK_AS_IDX(unsigned char, instance->_100, 1);
+                        m -= WORK_AS_IDX(unsigned char, instance->work1, 1);
                         if (m < t) {
                             instance->currentMainState = 2;
                             t = m;
                         } else {
                             m -= t;
-                            if (m < *(unsigned short*)&instance->_FC) {
-                                WORK_AS_IDX(short, instance->_108, 0) = m;
+                            if (m < *(unsigned short*)&instance->work0) {
+                                WORK_AS_IDX(short, instance->work3, 0) = m;
                                 instance->currentMainState = 3;
                             } else {
-                                m -= *(unsigned short*)&instance->_FC;
+                                m -= *(unsigned short*)&instance->work0;
                                 if (m < t) {
                                     instance->currentMainState = 4;
                                     t = t - m;
@@ -818,11 +818,11 @@ void prehst_gas_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     unsigned short y;
     int w;
 
-    fc = (unsigned short*)&instance->_FC;
-    x = WORK_AS_IDX(unsigned short, instance->_108, 0);
+    fc = (unsigned short*)&instance->work0;
+    x = WORK_AS_IDX(unsigned short, instance->work3, 0);
     y = instance->currentTextureAnimFrame;
-    WORK_AS_IDX(unsigned short, instance->_108, 0) = x + 1;
-    w = WORK_AS(int, instance->_108);
+    WORK_AS_IDX(unsigned short, instance->work3, 0) = x + 1;
+    w = WORK_AS(int, instance->work3);
     instance->currentTextureAnimFrame = y + 1;
     if (w & 0x8000) {
         instance->rotation.z = (instance->rotation.z + 0x2200) & 0xFFF;
@@ -922,7 +922,7 @@ void prehst_bldrgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if (((int*)instance->introData)[1] != 0) {
         instance->currentMainState = 1;
     } else {
-        instance->_FC = ((int*)instance->introData)[0];
+        instance->work0 = ((int*)instance->introData)[0];
     }
 }
 
@@ -931,16 +931,16 @@ void prehst_bldrgen_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
     intro = instance->introData;
     if (instance->currentMainState == 1) {
-        instance->_FC++;
-        if (instance->_FC >= intro[1]) {
-            instance->_FC = intro[0];
+        instance->work0++;
+        if (instance->work0 >= intro[1]) {
+            instance->work0 = intro[0];
             instance->currentMainState = 0;
         }
     } else {
-        instance->_FC++;
-        if (instance->_FC >= intro[0]) {
+        instance->work0++;
+        if (instance->work0 >= intro[0]) {
             INSTANCE_BirthCachedObject(instance, 0x20);
-            instance->_FC = 0;
+            instance->work0 = 0;
         }
     }
 }
@@ -950,10 +950,10 @@ void prehst_bldrgen_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 void prehst_boulder_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->currentMainState = 0;
-    WORK_AS(int, instance->_10C) = 0;
+    WORK_AS(int, instance->work4) = 0;
     instance->flags |= 0x100400;
-    WORK_AS(int, instance->_110) = ((int)instance->parent->intro->multiSpline);
-    WORK_AS(int, instance->_114)= ((int)instance->parent->introData);
+    WORK_AS(int, instance->work5) = ((int)instance->parent->intro->multiSpline);
+    WORK_AS(int, instance->work6)= ((int)instance->parent->introData);
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_8015F9A4_CD224);
@@ -984,7 +984,7 @@ void prehst_spitplt_OnCreate(Instance* instance, GameTracker* gameTracker) {
             *(short*)(intro + i * 8 + 0xE) = accum;
         }
     }
-    instance->_118 = accum;
+    instance->work7 = accum;
     instance->currentMainState = 0;
 }
 
@@ -1340,24 +1340,24 @@ void prehst_lavadrp_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     flag = 0;
     ms = instance->intro->multiSpline;
     introData = instance->introData;
-    fc = (short*)&instance->_FC;
-    if (*(short*)&instance->_118 == 0) {
+    fc = (short*)&instance->work0;
+    if (*(short*)&instance->work7 == 0) {
         flag = 1;
         ms = instance->object->modelList[instance->currentModel]->multiSpline;
     }
-    sp1 = WORK_AS_PTR(SplineDef, instance->_10C);
-    sp2 = WORK_AS_PTR(SplineDef, instance->_110);
-    sp3 = WORK_AS_PTR(SplineDef, instance->_114);
+    sp1 = WORK_AS_PTR(SplineDef, instance->work4);
+    sp2 = WORK_AS_PTR(SplineDef, instance->work5);
+    sp3 = WORK_AS_PTR(SplineDef, instance->work6);
     if (SCRIPT_SplineProcess(instance, ms, sp1, sp2, sp3, 1, flag) == 1) {
-        if (*(short*)&instance->_118 == 0) {
+        if (*(short*)&instance->work7 == 0) {
             func_80048DE4(instance, sp1, sp2, sp3);
-            *(short*)&instance->_118 = 1;
+            *(short*)&instance->work7 = 1;
         } else {
             if (introData != NULL) {
-                *(LavaDropIntro*)&instance->_FC = *introData;
+                *(LavaDropIntro*)&instance->work0 = *introData;
             }
             i = 0;
-            if (*(short*)&instance->_FC > 0) {
+            if (*(short*)&instance->work0 > 0) {
                 do {
                     func_80163F94_D1814(instance);
                     i++;
@@ -1365,7 +1365,7 @@ void prehst_lavadrp_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             }
             INSTANCE_PlainDeath(instance, -1, 0, 0);
         }
-    } else if (*(short*)&instance->_118 == 1) {
+    } else if (*(short*)&instance->work7 == 1) {
         func_80047DB4(instance, 0);
     }
 }

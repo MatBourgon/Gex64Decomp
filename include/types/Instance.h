@@ -67,16 +67,16 @@ typedef struct Instance_s
     int _F0;
     int currentMainState;
     int currentSubState;
-    int _FC;    // work0
-    long _100;  // work1
-    long _104;  // work2
-    long _108;  // work3
-    long _10C;  // work4
-    long _110;  // work5
-    long _114;  // work6
-    int _118;   // work7
-    int _11C;   // work8
-    int _120;   // work9
+    long work0;
+    long work1;
+    long work2;
+    long work3;
+    long work4;
+    long work5;
+    long work6;
+    long work7;
+    long work8;
+    long work9;
 } Instance; // Should be size accurate now
 
 extern Instance* PlayerInstance;

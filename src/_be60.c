@@ -23,7 +23,7 @@ void* func_8000B778(Instance* arg0, int arg1, int arg2, int arg3, int arg4, int 
     Object* object;
     int* temp_a0;
     Instance* instance;
-    int *ptr;
+    long *ptr;
 
     if (13 < gameTracker8->levelIdToLoad && gameTracker8->levelIdToLoad < 21) {
         object = (Object*)OBTABLE_FindObject("cola____");
@@ -38,7 +38,7 @@ void* func_8000B778(Instance* arg0, int arg1, int arg2, int arg3, int arg4, int 
     arg0->position.z -= 0x80;
     
     if (instance != NULL) {
-        ptr = &instance->_FC;
+        ptr = &instance->work0;
         instance->intro = NULL;
         instance->scale.x = 0x1000;
         instance->scale.y = 0x1000;
@@ -76,9 +76,9 @@ void func_8000B968(Instance* instance, GameTracker* gameTracker) {
 
     object = NULL;
     
-    WORK_AS_IDX(short, instance->_110, 0) = -0x7D00;
+    WORK_AS_IDX(short, instance->work5, 0) = -0x7D00;
     instance->flags |= 0x80;
-    instance->_FC &= ~1;
+    instance->work0 &= ~1;
     
     if (instance->parent != 0) {
         instance->flags |= 0x100000;
@@ -88,11 +88,11 @@ void func_8000B968(Instance* instance, GameTracker* gameTracker) {
     
     instance->flags |= 0x40;
     
-    if (WORK_AS(int, instance->_108) == 0)
+    if (WORK_AS(int, instance->work3) == 0)
         object = (Object*)OBTABLE_FindObject(gameTracker8->level->collectibleTypeA);
-    else if (WORK_AS(int, instance->_108) == 1)
+    else if (WORK_AS(int, instance->work3) == 1)
         object = (Object*)OBTABLE_FindObject(gameTracker8->level->collectibleTypeB);
-    else if (WORK_AS(int, instance->_108) == 2)
+    else if (WORK_AS(int, instance->work3) == 2)
         object = (Object*)OBTABLE_FindObject(gameTracker8->level->collectibleTypeC);
     
     if (object != NULL) {
@@ -111,7 +111,7 @@ INCLUDE_ASM("asm/nonmatchings/_be60", func_8000BB88);
 
 void common_cola_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
-    WORK_AS(int, instance->_108) = 0;
+    WORK_AS(int, instance->work3) = 0;
     func_8000B968(instance, gameTracker);
 }
 
@@ -122,7 +122,7 @@ void common_cola_OnUpdate(Instance* instance, GameTracker* gameTracker)
 
 void common_colb_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
-    WORK_AS(int, instance->_108) = 1;
+    WORK_AS(int, instance->work3) = 1;
     func_8000B968(instance, gameTracker);
 }
 
@@ -138,7 +138,7 @@ void common_colb_OnCollide(Instance* instance, GameTracker* gameTracker)
 
 void common_colc_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
-    WORK_AS(int, instance->_108) = 2;
+    WORK_AS(int, instance->work3) = 2;
     func_8000B968(instance, gameTracker);
 }
 
@@ -153,15 +153,15 @@ void common_colc_OnCollide(Instance* instance, GameTracker* gameTracker)
 }
 
 void common_cold_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    int* temp_a3;
+    long* temp_a3;
 
-    temp_a3 = &instance->_FC;
+    temp_a3 = &instance->work0;
     if (((int*)gameTracker)[0x4C00/4] >= gameTracker->level->collectibleCountB) {
-        WORK_AS(int, instance->_108) = 2;
+        WORK_AS(int, instance->work3) = 2;
     } else if (((int*)gameTracker)[0x4BFC/4] >= gameTracker->level->collectibleCountA) {
-        WORK_AS(int, instance->_108) = 1;
+        WORK_AS(int, instance->work3) = 1;
     } else {
-        WORK_AS(int, instance->_108) = 0;
+        WORK_AS(int, instance->work3) = 0;
     }
     if ((((unsigned char*)gameTracker)[0x4CA1] - 0xE) < 7U) {
         temp_a3[3] = 0;
@@ -222,7 +222,7 @@ void common_tvend_OnCreate(Instance* instance, GameTracker* gameTracker) {
         oRemred = (Object*)OBTABLE_FindObject(D_8007B944);
         if (oEtvbtn != 0) {
             iEtvbtn = (Instance*)INSTANCE_BirthObject(instance, oEtvbtn);
-            instance->_FC = (int)iEtvbtn;
+            instance->work0 = (int)iEtvbtn;
             iEtvbtn->flags |= 0x400;
         }
         instance->currentTextureAnimFrame = 1;
@@ -235,13 +235,13 @@ void common_tvend_OnCreate(Instance* instance, GameTracker* gameTracker) {
         }
         if ((oRemred != 0) && !(instance->intro->flags & 0x100)) {
             if (intro->condition != 0) {
-                instance->_100 = (int)CreateRemRedInstance(instance, oRemred);
-                ((Instance*)instance->_100)->flags |= 0x400;
+                instance->work1 = (int)CreateRemRedInstance(instance, oRemred);
+                ((Instance*)instance->work1)->flags |= 0x400;
                 if (((&((unsigned char*)gameTracker)[((unsigned char*)gameTracker)[0x4CA1]])[0x4C6E] >> intro->remoteId) & 1) {
                     ((short**)instance)[0x100/4][0xC2/2] = 1;
                 }
             } else {
-                instance->_100 = NULL;
+                instance->work1 = NULL;
             }
         }
         instance->flags |= 0x10000;
@@ -250,8 +250,8 @@ void common_tvend_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
     else
     {
-        iEtvbtn = (Instance*)instance->_FC;
-        iRemred = (Instance*)instance->_100;
+        iEtvbtn = (Instance*)instance->work0;
+        iRemred = (Instance*)instance->work1;
         if (iEtvbtn != NULL) {
             iEtvbtn->flags &= ~0x400;
             func_8002E350(iEtvbtn);
@@ -282,19 +282,19 @@ void common_tvend_OnUpdate(Instance* instance, Object* gameTracker) {
     intro = instance->introData;
     if ((intro->condition == 0) && (D_800785CC[intro->_04] != 0)) {
         instance->currentTextureAnimFrame = 1;
-        if ((instance->_100 == NULL) && (D_800785CC[intro->_04] >= 2)) {
+        if ((instance->work1 == NULL) && (D_800785CC[intro->_04] >= 2)) {
             oRemred = (Object*)OBTABLE_FindObject(&D_8007B944);
             if (oRemred != 0) {
                 iRemred = (Instance*)CreateRemRedInstance(instance, oRemred);
-                instance->_100 = (int)iRemred;
-                ((Instance*)instance->_100)->scale.x = 1;
-                ((Instance*)instance->_100)->scale.y = 1;
-                ((Instance*)instance->_100)->scale.z = 1;
+                instance->work1 = (int)iRemred;
+                ((Instance*)instance->work1)->scale.x = 1;
+                ((Instance*)instance->work1)->scale.y = 1;
+                ((Instance*)instance->work1)->scale.z = 1;
                 instance->currentSubState = 3;
                 intro->condition = 1;
-                WORK_AS(int, instance->_10C) = 0x10;
+                WORK_AS(int, instance->work4) = 0x10;
                 if (((&((unsigned char*)gameTracker)[((unsigned char*)gameTracker)[0x4CA1]])[0x4C6E] >> intro->remoteId) & 1) {
-                    ((Instance*)instance->_100)->currentModel = 1;
+                    ((Instance*)instance->work1)->currentModel = 1;
                 }
                 func_80050508(gameTracker8->player, 0x7A, -0x190, 0x64, 0x5DC);
             }
@@ -302,19 +302,19 @@ void common_tvend_OnUpdate(Instance* instance, Object* gameTracker) {
     }
     if ((instance->currentSubState == 3))
     {
-        iRemred2 = (Instance*)instance->_100;
+        iRemred2 = (Instance*)instance->work1;
         sp18 = D_8007B950;
         
         if ((iRemred2 != NULL)) {
-            temp_a0 = WORK_AS(int, instance->_10C) - 1;
-            WORK_AS(int, instance->_10C) = temp_a0;
+            temp_a0 = WORK_AS(int, instance->work4) - 1;
+            WORK_AS(int, instance->work4) = temp_a0;
             if (temp_a0 <= 0) {
                 instance->currentSubState = 0;
             }
             else if (temp_a0 < 0x10) {
-                iRemred2->scale.x = ((short*)&sp18)[0x10 - WORK_AS(int, instance->_10C)];
-                iRemred2->scale.y = ((short*)&sp18)[0x10 - WORK_AS(int, instance->_10C)];
-                iRemred2->scale.z = ((short*)&sp18)[0x10 - WORK_AS(int, instance->_10C)];
+                iRemred2->scale.x = ((short*)&sp18)[0x10 - WORK_AS(int, instance->work4)];
+                iRemred2->scale.y = ((short*)&sp18)[0x10 - WORK_AS(int, instance->work4)];
+                iRemred2->scale.z = ((short*)&sp18)[0x10 - WORK_AS(int, instance->work4)];
             }
         }
     }
@@ -343,7 +343,7 @@ int func_8000C8E8(Instance* instance, GameTracker* gameTracker) {
     bsp = instance->bspTree;
     var_a1 = 0;
     if (((((unsigned char*)gameTracker))[0x4CA1] == 2) || ((bsp->_06 != 1))) {
-        temp_s2 = (Instance*)instance->parent->_100;
+        temp_s2 = (Instance*)instance->parent->work1;
         if (bsp->_08[2] == 1 && temp_s2 != NULL && !(instance->parent->intro->flags & 0x100) && instance->parent->currentSubState == 0) {
             temp_s4 = (int*)gameTracker->player->data;
             func_80018B60(gameTracker->player, D_800EB8A0, temp_s2->position.x, temp_s2->position.y, temp_s2->position.z + 0x40);
@@ -359,7 +359,7 @@ int func_8000C8E8(Instance* instance, GameTracker* gameTracker) {
             }
             instance->parent->currentSubState = 1;
             instance->currentModel = 1;
-            gameTracker->player->_FC |= 0x02000000;
+            gameTracker->player->work0 |= 0x02000000;
             temp_s4[0x178/4] = (int)instance->parent;
             (((int*)gameTracker))[0x4C08/4] |= 0x80;
             var_a1 = 1;

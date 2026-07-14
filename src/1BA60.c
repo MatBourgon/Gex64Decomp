@@ -153,7 +153,7 @@ INCLUDE_ASM("asm/nonmatchings/1BA60", func_8001E6E0);
 
 void func_8001E838(Instance* instance, void* arg1, unsigned short* data, int arg3) {
     if (data[0x45] & 0x2) {
-        if (!(instance->_FC & 0x8000)) {
+        if (!(instance->work0 & 0x8000)) {
             instance->currentSubState = 0x400;
             instance->currentModelAnim = 0x18;
         }

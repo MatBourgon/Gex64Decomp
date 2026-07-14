@@ -6,8 +6,8 @@
 
 void gillig_couldrn_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
-    WORK_AS(int, instance->_108) = 3;
-    instance->_FC = 0x5A;
+    WORK_AS(int, instance->work3) = 3;
+    instance->work0 = 0x5A;
 }
 
 INCLUDE_RODATA("asm/nonmatchings/level/GILLIG", D_8015A920_9CF00);
@@ -18,32 +18,32 @@ extern short func_8003A4E0(int);
 void gillig_couldrn_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int state;
 
-    if (WORK_AS(int, instance->_108) == 3) {
-        instance->_FC += 1;
-        if ((instance->_FC % 155) == 0) {
+    if (WORK_AS(int, instance->work3) == 3) {
+        instance->work0 += 1;
+        if ((instance->work0 % 155) == 0) {
             instance->currentMainState = 1;
             ((Intro**)instance->intro->_04)[2]->instance->currentSubState = 1;
             ((Intro**)instance->intro->_04)[3]->instance->currentSubState = 1;
             ((Intro**)instance->intro->_04)[4]->instance->currentSubState = 1;
-            instance->_FC = 0;
+            instance->work0 = 0;
         }
-    } else if (WORK_AS(int, instance->_108) < 3) {
-        if ((instance->_FC % 189) == 0) {
+    } else if (WORK_AS(int, instance->work3) < 3) {
+        if ((instance->work0 % 189) == 0) {
             instance->currentMainState = 1;
             ((Intro**)instance->intro->_04)[2]->instance->currentSubState = 1;
             ((Intro**)instance->intro->_04)[3]->instance->currentSubState = 1;
             ((Intro**)instance->intro->_04)[4]->instance->currentSubState = 1;
-            instance->_FC = 0;
+            instance->work0 = 0;
         }
-        if ((instance->_100 % 189) == 0) {
+        if ((instance->work1 % 189) == 0) {
             instance->currentMainState = 2;
             ((Intro**)instance->intro->_04)[2]->instance->currentSubState = 1;
             ((Intro**)instance->intro->_04)[3]->instance->currentSubState = 1;
             ((Intro**)instance->intro->_04)[4]->instance->currentSubState = 1;
-            instance->_100 = 0;
+            instance->work1 = 0;
         }
-        instance->_FC += 1;
-        instance->_100 += 1;
+        instance->work0 += 1;
+        instance->work1 += 1;
     }
     state = instance->currentMainState;
     if (state == 1) {
@@ -56,29 +56,29 @@ void gillig_couldrn_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
         obj = OBTABLE_FindObject("tikifb__");
         fcObj = OBTABLE_FindObject("tikifc__");
-        count = instance->_104;
+        count = instance->work2;
         first = INSTANCE_BirthObject(instance, fcObj);
         second = INSTANCE_BirthObject(instance, obj);
         third = INSTANCE_BirthObject(instance, obj);
         if (count == 0) {
             first->currentModel = 1;
-            first->_FC = -0x80;
-            second->_FC = 0;
-            third->_FC = 0x80;
+            first->work0 = -0x80;
+            second->work0 = 0;
+            third->work0 = 0x80;
         } else if (count == state) {
             first->currentModel = 1;
-            first->_FC = 0;
-            second->_FC = -0x80;
-            third->_FC = 0x80;
+            first->work0 = 0;
+            second->work0 = -0x80;
+            third->work0 = 0x80;
         } else {
             first->currentModel = 1;
-            first->_FC = 0x80;
-            second->_FC = 0;
-            third->_FC = -0x80;
-            instance->_104 = -1;
+            first->work0 = 0x80;
+            second->work0 = 0;
+            third->work0 = -0x80;
+            instance->work2 = -1;
         }
         instance->currentMainState = 0;
-        instance->_104 += 1;
+        instance->work2 += 1;
     } else if (state == 2) {
         Object* obj;
         Instance* fire;
@@ -89,16 +89,16 @@ void gillig_couldrn_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         fire->position.y = fire->position.y + (func_8003A4E0(0x60) * 39 >> 6);
         fire->position.z = fire->position.z + 0x80;
         fire->rotation.z = -0x3A0;
-        fire->_FC = 0x18;
+        fire->work0 = 0x18;
         fire = INSTANCE_BirthObject(instance, obj);
         fire->position.x = fire->position.x + (func_8003A6AC(0x7A0) * 39 >> 6);
         fire->position.y = fire->position.y + (func_8003A4E0(0x7A0) * 39 >> 6);
         fire->position.z = fire->position.z + 0x80;
         fire->rotation.z = 0x3A0;
-        fire->_FC = -0x18;
+        fire->work0 = -0x18;
         instance->currentMainState = 0;
     }
-    if (PlayerInstance->_FC & 0x400000) {
+    if (PlayerInstance->work0 & 0x400000) {
         func_800396E0("map", "map5", gameTracker);
     }
 }
@@ -135,29 +135,29 @@ void gillig_tikifb_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         }
         px = instance->position.x;
         py = instance->position.y;
-        instance->_100 = ratan2(py - PlayerInstance->position.y, px - PlayerInstance->position.x) + 0x800;
+        instance->work1 = ratan2(py - PlayerInstance->position.y, px - PlayerInstance->position.x) + 0x800;
         instance->currentMainState = 1;
         return;
     }
     if (state == 1) {
         if (instance->intro->position.z + 0x100 < instance->position.z) {
-            instance->position.x += (func_8003A6AC(instance->_100 + instance->_FC) * 3 >> 7);
-            instance->position.y += (func_8003A4E0(instance->_100 + instance->_FC) * 3 >> 7);
+            instance->position.x += (func_8003A6AC(instance->work1 + instance->work0) * 3 >> 7);
+            instance->position.y += (func_8003A4E0(instance->work1 + instance->work0) * 3 >> 7);
             instance->position.z -= 0x1E;
             return;
         }
-        instance->position.x += (func_8003A6AC(instance->_100 + instance->_FC) * 25 >> 10);
-        instance->position.y += (func_8003A4E0(instance->_100 + instance->_FC) * 25 >> 10);
+        instance->position.x += (func_8003A6AC(instance->work1 + instance->work0) * 25 >> 10);
+        instance->position.y += (func_8003A4E0(instance->work1 + instance->work0) * 25 >> 10);
         return;
     }
     if (state == 2) {
-        instance->position.x += (func_8003A6AC((instance->_100 + instance->_FC) - 0x800) * 3 >> 6);
-        instance->position.y += (func_8003A4E0((instance->_100 + instance->_FC) - 0x800) * 3 >> 6);
+        instance->position.x += (func_8003A6AC((instance->work1 + instance->work0) - 0x800) * 3 >> 6);
+        instance->position.y += (func_8003A4E0((instance->work1 + instance->work0) - 0x800) * 3 >> 6);
         return;
     }
     if (state == 3) {
-        instance->_104 = instance->_104 + 1;
-        if (instance->_104 >= 4) {
+        instance->work2 = instance->work2 + 1;
+        if (instance->work2 >= 4) {
             INSTANCE_KillInstance(instance);
         }
     }
@@ -200,10 +200,10 @@ void gillig_tikifb_OnCollide(Instance* instance, GameTracker* gameTracker) {
             }
         } else if (*(int*)bsp->instanceSpline->object->parentName == D_8015A960_9CF40
                    && ((int*)bsp->instanceSpline->object->parentName)[1] == D_8015A964_9CF44) {
-            *(int*)&instance->parent->_108 = *(int*)&instance->parent->_108 - 1;
-            if (*(int*)&instance->parent->_108 == 2) {
-                instance->parent->_FC = 0xBD;
-                instance->parent->_100 = 0x7C;
+            *(int*)&instance->parent->work3 = *(int*)&instance->parent->work3 - 1;
+            if (*(int*)&instance->parent->work3 == 2) {
+                instance->parent->work0 = 0xBD;
+                instance->parent->work1 = 0x7C;
             }
             INSTANCE_KillInstance(instance);
             bsp->instanceSpline->currentMainState = 3;
@@ -216,53 +216,53 @@ void gillig_tikifb_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 void gillig_tikifir_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->scale.z = 1;
-    instance->_104 = 0;
-    WORK_AS(int, instance->_108) = 1;
-    WORK_AS(int, instance->_10C) = ((rand() & 0x1F) - 0x10);
+    instance->work2 = 0;
+    WORK_AS(int, instance->work3) = 1;
+    WORK_AS(int, instance->work4) = ((rand() & 0x1F) - 0x10);
 }
 
 void gillig_tikifir_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     short newScale;
 
-    if (instance->_104 != 0) {
-        if (func_800506B8(instance, instance->_104, WORK_AS_IDX(short, instance->_10C, 1), WORK_AS_IDX(short, instance->_108, 1), 0xDAC) == 0) {
-            func_800331BC(instance->_104);
-            instance->_104 = 0;
+    if (instance->work2 != 0) {
+        if (func_800506B8(instance, instance->work2, WORK_AS_IDX(short, instance->work4, 1), WORK_AS_IDX(short, instance->work3, 1), 0xDAC) == 0) {
+            func_800331BC(instance->work2);
+            instance->work2 = 0;
         }
     } else {
-        instance->_104 = func_80050508(instance, 0x69, WORK_AS_IDX(short, instance->_10C, 1), WORK_AS_IDX(short, instance->_108, 1), 0xDAC);
+        instance->work2 = func_80050508(instance, 0x69, WORK_AS_IDX(short, instance->work4, 1), WORK_AS_IDX(short, instance->work3, 1), 0xDAC);
     }
     if (instance->currentMainState == 0) {
-        WORK_AS(int, instance->_108) = WORK_AS(int, instance->_108) + 9;
+        WORK_AS(int, instance->work3) = WORK_AS(int, instance->work3) + 9;
         newScale = instance->scale.z + 0x200;
         instance->scale.z = newScale;
         if (newScale >= 0x1000) {
             instance->currentMainState = 1;
         }
     } else if (instance->currentMainState == 1) {
-        instance->_100 = instance->_100 + 1;
-        if ((instance->_100 >= 0x4D))
+        instance->work1 = instance->work1 + 1;
+        if ((instance->work1 >= 0x4D))
         {
             instance->currentMainState = 2;
         }
         else
         {
-            instance->rotation.z = instance->rotation.z + instance->_FC;
+            instance->rotation.z = instance->rotation.z + instance->work0;
             instance->position.x = instance->parent->position.x + (func_8003A6AC(instance->rotation.z + 0x400) * 39 >> 6);
             instance->position.y = instance->parent->position.y + (func_8003A4E0(instance->rotation.z + 0x400) * 39 >> 6);
             if (((int**)((int**)instance->intro->_04)[1])[0x24/4][0x108/4] == 0)
                instance->currentMainState = 2;
         }
     } else if (instance->currentMainState == 2) {
-        WORK_AS(int, instance->_108) = WORK_AS(int, instance->_108) - 9;
-        if (WORK_AS(int, instance->_108) <= 0) {
-            WORK_AS(int, instance->_108) = 1;
+        WORK_AS(int, instance->work3) = WORK_AS(int, instance->work3) - 9;
+        if (WORK_AS(int, instance->work3) <= 0) {
+            WORK_AS(int, instance->work3) = 1;
         }
         newScale = instance->scale.z - 0x200;
         instance->scale.z = newScale;
         if (newScale < 2) {
-            if (instance->_104 != 0) {
-                func_800331BC(instance->_104);
+            if (instance->work2 != 0) {
+                func_800331BC(instance->work2);
             }
             INSTANCE_KillInstance(instance);
         }
@@ -343,59 +343,59 @@ void gillig_hedhntr_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             instance->currentMainState = link;
             instance->currentModelAnim = 0;
             if (*introData == 0) {
-                instance->_FC = 0x9D2;
+                instance->work0 = 0x9D2;
                 instance->rotation.z = 0x5D2 - instance->intro->rotation.z;
             } else if (*introData == link) {
-                instance->_FC = 0xC22;
+                instance->work0 = 0xC22;
                 instance->rotation.z = 0x822 - instance->intro->rotation.z;
             } else {
-                instance->_FC = 0xE66;
+                instance->work0 = 0xE66;
                 instance->rotation.z = 0xA66 - instance->intro->rotation.z;
             }
             if (*introData != 2) {
-                instance->_100 = *introData + 1;
+                instance->work1 = *introData + 1;
                 return;
             }
-            instance->_100 = 1;
-            instance->_104 = 0;
+            instance->work1 = 1;
+            instance->work2 = 0;
         }
     } else if (state == 1) {
         int accel;
         int idx;
 
         func_8002DAF8(instance, -1);
-        instance->position.x = ((Intro**)instance->intro->_04)[1]->instance->position.x + (func_8003A6AC(instance->_FC) * 39 >> 6);
-        instance->position.y = ((Intro**)instance->intro->_04)[1]->instance->position.y + (func_8003A4E0(instance->_FC) * 39 >> 6);
-        if (instance->_104 != 0) {
-            idx = instance->_100;
-            accel = instance->_FC;
+        instance->position.x = ((Intro**)instance->intro->_04)[1]->instance->position.x + (func_8003A6AC(instance->work0) * 39 >> 6);
+        instance->position.y = ((Intro**)instance->intro->_04)[1]->instance->position.y + (func_8003A4E0(instance->work0) * 39 >> 6);
+        if (instance->work2 != 0) {
+            idx = instance->work1;
+            accel = instance->work0;
             if (accel < D_8015A920_9CF00[idx]) {
-                instance->_FC = accel + 8;
+                instance->work0 = accel + 8;
             } else {
                 if (idx != 2) {
-                    instance->_100 = idx + 1;
+                    instance->work1 = idx + 1;
                 } else {
-                    instance->_100 = 1;
-                    instance->_104 = 0;
+                    instance->work1 = 1;
+                    instance->work2 = 0;
                 }
                 instance->currentMainState = 2;
             }
         } else {
-            idx = instance->_100;
-            accel = instance->_FC;
+            idx = instance->work1;
+            accel = instance->work0;
             if (D_8015A920_9CF00[idx] < accel) {
-                instance->_FC = accel - 8;
+                instance->work0 = accel - 8;
             } else {
                 if (idx != 0) {
-                    instance->_100 = idx - 1;
+                    instance->work1 = idx - 1;
                 } else {
-                    instance->_100 = 1;
-                    instance->_104 = 1;
+                    instance->work1 = 1;
+                    instance->work2 = 1;
                 }
                 instance->currentMainState = 2;
             }
         }
-        instance->rotation.z = (instance->_FC - instance->intro->rotation.z) - 0x400;
+        instance->rotation.z = (instance->work0 - instance->intro->rotation.z) - 0x400;
         return;
     } else if (state == 2) {
         func_8002DAF8(instance, -1);

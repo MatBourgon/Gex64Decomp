@@ -1003,7 +1003,7 @@ s32 SIGNAL_8004E9F8(Instance* instance, void* signal) {
         inst = intro->instance;
         
         if (inst != 0) {
-        inst->_120 = ((int*)signal)[1];
+        inst->work9 = ((int*)signal)[1];
         }
     } 
     

@@ -63,7 +63,7 @@ void horror_chand_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->currentMainState = 0;
     instance->_D0[2] = 0;
     instance->flags |= 0x100000;
-    WORK_AS(int, instance->_108) = instance->position.z;
+    WORK_AS(int, instance->work3) = instance->position.z;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_chand_OnUpdate);
@@ -91,8 +91,8 @@ void horror_axe_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
     instance->currentMainState = v;
     v = 2;
-    instance->_104 = v;
-    instance->_100 = 0;
+    instance->work2 = v;
+    instance->work1 = 0;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_80159D8C_9D5BC);
@@ -114,8 +114,8 @@ void horror_face_OnCreate(Instance* instance, GameTracker* gameTracker) {
         instance->currentMainState = 0;
         instance->flags |= 0x800;
     }
-    instance->_104 = 0;
-    WORK_AS(int, instance->_108) = 0;
+    instance->work2 = 0;
+    WORK_AS(int, instance->work3) = 0;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_face_OnUpdate);
@@ -134,13 +134,13 @@ void horror_zombie_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
     intro = (int*)instance->introData;
     if (instance->flags & 0x20000) {
-        if (WORK_AS_IDX(short, instance->_114, 0) >= 3) {
+        if (WORK_AS_IDX(short, instance->work6, 0) >= 3) {
             instance->intro->flags |= 8;
         }
     } else {
         instance->currentMainState = 1;
         instance->currentModelAnim = 0;
-        instance->_120 = intro[0];
+        instance->work9 = intro[0];
         instance->flags |= 0x10000;
     }
     *(int*)&instance->_34[2] = 0;
@@ -160,11 +160,11 @@ void horror_zomarm_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_E0[1] = -0x10;
     instance->_D0[2] = 0;
     instance->currentMainState = 1;
-    /* the interleaved _100 store keeps rand's result in a temp; a plain
+    /* the interleaved work1 store keeps rand's result in a temp; a plain
        inline call places the stores on the wrong side of the modulo */
     v = rand();
-    instance->_100 = 0;
-    instance->_FC = v % 20 + 90;
+    instance->work1 = 0;
+    instance->work0 = v % 20 + 90;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_zomarm_OnUpdate);
@@ -182,7 +182,7 @@ void horror_zomarm_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 void horror_zomleg_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->currentMainState = 1;
-    instance->_FC = 0x3C;
+    instance->work0 = 0x3C;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_zomleg_OnUpdate);
@@ -206,7 +206,7 @@ void func_8015BF7C_9F7AC(Instance* instance, GameTracker* gameTracker) {
     Instance* e;
 
     for (e = gameTracker->instanceList->first; e != 0; e = e->next) {
-        if (e != gameTracker->player && G2String_Compare_EQ(e->object->name, &D_80164C58_A8488) && e->_100 == ((int)instance)) {
+        if (e != gameTracker->player && G2String_Compare_EQ(e->object->name, &D_80164C58_A8488) && e->work1 == ((int)instance)) {
             common_icecube_OnCollide(e, gameTracker);
             break;
         }
@@ -254,7 +254,7 @@ void horror_ledge_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int* intro;
 
     intro = instance->introData;
-    instance->_100 = 0xA;
+    instance->work1 = 0xA;
     if (intro != NULL && intro[0] == 1) {
         instance->currentModel = 1;
     }
@@ -264,15 +264,15 @@ void horror_ledge_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int v;
 
     if (instance->currentMainState == 1) {
-        v = instance->_FC++;
-        if (v + 1 == instance->_100) {
+        v = instance->work0++;
+        if (v + 1 == instance->work1) {
             instance->currentMainState = 2;
-            instance->_100 = v;
+            instance->work1 = v;
             instance->currentModel = 1;
-            instance->_FC = 0;
+            instance->work0 = 0;
         }
     } else if (instance->currentMainState == 2) {
-        if (instance->_100 > 0) {
+        if (instance->work1 > 0) {
             instance->currentMainState = 1;
             instance->currentModel = 0;
         } else {
@@ -386,9 +386,9 @@ void horror_skelh_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->currentMainState = 0;
     if (instance->parent != 0 && instance->parent->intro != 0) {
         instance->flags |= 0x100400;
-        WORK_AS(int, instance->_10C) = 0;
-        WORK_AS(int, instance->_110) = (int)instance->parent->intro->multiSpline;
-        WORK_AS(int, instance->_114)= (int)instance->parent->introData;
+        WORK_AS(int, instance->work4) = 0;
+        WORK_AS(int, instance->work5) = (int)instance->parent->intro->multiSpline;
+        WORK_AS(int, instance->work6)= (int)instance->parent->introData;
     }
 }
 
@@ -501,28 +501,28 @@ void horror_shittrn_OnCollide(Instance* instance, GameTracker* gameTracker) {
 void horror_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
     unsigned short* intro;
 
-    WORK_AS_IDX(short, instance->_100, 1) = 0x18;
+    WORK_AS_IDX(short, instance->work1, 1) = 0x18;
     instance->flags |= 0x100000;
     intro = (unsigned short*)instance->introData;
 
     if (intro != NULL) {
-        WORK_AS_IDX(short, instance->_100, 0) = intro[0];
-        WORK_AS_IDX(short, instance->_104, 1) = intro[1];
-        WORK_AS_IDX(short, instance->_108, 0) = intro[2];
-        WORK_AS_IDX(short, instance->_108, 1) = intro[3];
-        WORK_AS_IDX(short, instance->_10C, 0) = intro[4];
+        WORK_AS_IDX(short, instance->work1, 0) = intro[0];
+        WORK_AS_IDX(short, instance->work2, 1) = intro[1];
+        WORK_AS_IDX(short, instance->work3, 0) = intro[2];
+        WORK_AS_IDX(short, instance->work3, 1) = intro[3];
+        WORK_AS_IDX(short, instance->work4, 0) = intro[4];
         if (((short*)intro)[5] != 0) {
-            WORK_AS_IDX(short, instance->_10C, 1) = ((short*)intro)[5];
+            WORK_AS_IDX(short, instance->work4, 1) = ((short*)intro)[5];
         } else {
-            WORK_AS_IDX(short, instance->_10C, 1) = 0x40;
+            WORK_AS_IDX(short, instance->work4, 1) = 0x40;
         }
     } else {
-        WORK_AS_IDX(short, instance->_100, 0) = 0x96;
-        WORK_AS_IDX(short, instance->_104, 1) = ((unsigned short*)&instance->intro->position)[0] - 0x500;
-        WORK_AS_IDX(short, instance->_108, 0) = ((unsigned short*)&instance->intro->position)[1] - 0x780;
-        WORK_AS_IDX(short, instance->_108, 1) = ((unsigned short*)&instance->intro->position)[0] + 0x500;
-        WORK_AS_IDX(short, instance->_10C, 0) = ((unsigned short*)&instance->intro->position)[1] + 0x780;
-        WORK_AS_IDX(short, instance->_10C, 1) = 0x40;
+        WORK_AS_IDX(short, instance->work1, 0) = 0x96;
+        WORK_AS_IDX(short, instance->work2, 1) = ((unsigned short*)&instance->intro->position)[0] - 0x500;
+        WORK_AS_IDX(short, instance->work3, 0) = ((unsigned short*)&instance->intro->position)[1] - 0x780;
+        WORK_AS_IDX(short, instance->work3, 1) = ((unsigned short*)&instance->intro->position)[0] + 0x500;
+        WORK_AS_IDX(short, instance->work4, 0) = ((unsigned short*)&instance->intro->position)[1] + 0x780;
+        WORK_AS_IDX(short, instance->work4, 1) = 0x40;
     }
 }
 
@@ -530,7 +530,7 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_bug_OnUpdate);
 
 void horror_bug_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp = instance->bspTree;
-    short* temp = (short*)&instance->_FC;
+    short* temp = (short*)&instance->work0;
 
     if (bsp->_06 == 1) {
         if ((bsp->instanceSpline == gameTracker->player) && (bsp->_08[4] < 2U) && (bsp->_0C[5] >= 6U)) {
@@ -545,17 +545,17 @@ void horror_bug_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 void horror_bouncer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     short* intro;
-    int* fc;
+    long* fc;
     
     intro = instance->introData;
-    fc = &instance->_FC;
+    fc = &instance->work0;
     
     if (intro != NULL) {
-        WORK_AS_IDX(short, instance->_100, 1) = intro[0];
-        WORK_AS_IDX(short, instance->_104, 0) = intro[1];
+        WORK_AS_IDX(short, instance->work1, 1) = intro[0];
+        WORK_AS_IDX(short, instance->work2, 0) = intro[1];
     } else {
-        WORK_AS_IDX(short, instance->_100, 1) = 0U;
-        WORK_AS_IDX(short, instance->_104, 0) = 0U;
+        WORK_AS_IDX(short, instance->work1, 1) = 0U;
+        WORK_AS_IDX(short, instance->work2, 0) = 0U;
     }
     fc[3] = instance->intro->position.x;
     fc[4] = instance->intro->position.y;
@@ -573,7 +573,7 @@ void horror_bouncer_OnCollide(Instance* instance, GameTracker* gameTracker) {
         && (bsp->_08[4] < 2U)
         && (bsp->_0C[5] >= 6U)
         && (
-            (WORK_AS_IDX(short, instance->_104, 0) != 3)
+            (WORK_AS_IDX(short, instance->work2, 0) != 3)
             || ((instance->currentMainState - 2) < 2U)
             || (instance->currentMainState == 4)
         )) {
@@ -617,7 +617,7 @@ void horror_evileye_OnCollide(Instance* instance, GameTracker* gameTracker) {
         && instance->bspTree->instanceSpline->currentSubState == 0x1000
         && (unsigned int)(instance->currentMainState - 1) >= 2 && intro[0] == 0) {
         instance->currentMainState = 1;
-        instance->_FC = 0;
+        instance->work0 = 0;
         func_80050508(instance, 0x1D0, 0, 0x64, 0xFA0);
     }
 }
@@ -628,11 +628,11 @@ void horror_splitob_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     Instance* player;
 
     player = PlayerInstance;
-    if (player->position.z < instance->_100 && instance->_100 - 0x100 < player->position.z) {
-        *(int*)&player->_C0[0] = instance->_FC;
+    if (player->position.z < instance->work1 && instance->work1 - 0x100 < player->position.z) {
+        *(int*)&player->_C0[0] = instance->work0;
         player->_C0[2] = player->position.x;
         player->_C0[3] = player->position.y;
-        player->_C0[4] = instance->_100;
+        player->_C0[4] = instance->work1;
     }
 }
 
@@ -679,10 +679,10 @@ void horror_onoff_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 
     if (instance->object->data != NULL && *((int*)instance->object->data) != 0) {
-        instance->_100 = 1;
+        instance->work1 = 1;
     }
 
-    if (instance->currentMainState == 0 || instance->_100 != 0) {
+    if (instance->currentMainState == 0 || instance->work1 != 0) {
         instance->currentAnimFrame = 0;
     } else if (((short*)&instance->object->_08)[1] != 0) {
         instance->currentAnimFrame = ((unsigned short*)(instance->object->animList[0]))[1] - 1;
@@ -693,7 +693,7 @@ void horror_onoff_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     instance->currentTextureAnimFrame = instance->currentMainState ^ 1;
 
     if (instance->currentSubState == 1) {
-        if (instance->currentMainState == 1 || instance->_100 != 0) {
+        if (instance->currentMainState == 1 || instance->work1 != 0) {
             func_8002DAF8(instance, -1);
         } else {
             func_8002DAF8(instance, -0x3E9);
@@ -702,7 +702,7 @@ void horror_onoff_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         if (instance->flags2 & 0x10) {
             instance->flags2 &= ~0x10;
             instance->currentSubState = 0;
-            if (instance->currentMainState == 0 || instance->_100 != 0) {
+            if (instance->currentMainState == 0 || instance->work1 != 0) {
                 instance->currentAnimFrame = 0;
             } else if (((short*)&instance->object->_08)[1] != 0) {
                 instance->currentAnimFrame = ((unsigned short*)(instance->object->animList[0]))[1] - 1;
@@ -873,7 +873,7 @@ void horror_funplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
                 instance->_D0[0] = (-newPosition.y) << 6;
                 instance->_D0[1] = newPosition.x << 6;
 
-                if (instance->_FC != 0) {
+                if (instance->work0 != 0) {
                     instance->_E0[3] = -0x1000;
                 } else {
                     instance->_E0[3] = -0x4000;
@@ -965,18 +965,18 @@ void horror_door_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 void horror_qmark_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
-    instance->_104 = 0;
-    instance->_FC = 0x40;
-    instance->_100 = 0;
+    instance->work2 = 0;
+    instance->work0 = 0x40;
+    instance->work1 = 0;
 }
 
 void horror_qmark_OnUpdate(Instance* instance, GameTracker* gameTracker) {
-    int* temp_s0;
+    long* temp_s0;
     QMarkIntro* intro;
     
     intro = (QMarkIntro*)instance->introData;
-    temp_s0 = &instance->_FC;
-    if ((WORK_AS(int, instance->_10C) != 0) && !(gameTracker->gameFlags & 0x2000)) {
+    temp_s0 = &instance->work0;
+    if ((WORK_AS(int, instance->work4) != 0) && !(gameTracker->gameFlags & 0x2000)) {
         func_8003F6CC(intro->x, intro->y, intro->w, intro->h, intro->numMessages, intro->messages);
     }
     switch (temp_s0[2])
@@ -1014,10 +1014,10 @@ void horror_qmark_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
     intro = (QMarkIntro*)instance->introData;
     if (func_80027500(instance->bspTree, gameTracker) != 0) {
-        instance->_104 = 1;
-        instance->_FC = 0x12C;
-        WORK_AS(int, instance->_110) = intro->time;
-        WORK_AS(int, instance->_10C) = 1;
+        instance->work2 = 1;
+        instance->work0 = 0x12C;
+        WORK_AS(int, instance->work5) = intro->time;
+        WORK_AS(int, instance->work4) = 1;
     }
 }
 
@@ -1036,12 +1036,12 @@ void horror_reza_OnCollide(Instance* instance, GameTracker* gameTracker) {
     bsp = instance->bspTree;
     if (bsp->instanceSpline == gameTracker->player && bsp->_06 == 1 && instance->currentModelAnim != 5) {
         /* the in-place mask keeps the original byte alive in g (register scheduling) */
-        f = ((char*)&instance->_118)[3];
+        f = ((char*)&instance->work7)[3];
         g = f;
         f &= 0x80;
         if (f == 0) {
             if (g & 2) {
-                ((char*)&instance->_118)[3] = g | 0x80;
+                ((char*)&instance->work7)[3] = g | 0x80;
                 func_8004A7B8(instance, 2, 0);
             } else {
                 func_80022714(instance, gameTracker);
@@ -1055,11 +1055,11 @@ void horror_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     BTimerIntro* intro;
 
     intro = (BTimerIntro*)instance->introData;
-    instance->_104 = (intro->exitTime * 30);
-    WORK_AS_IDX(short, instance->_FC, 0) = intro->missionTime;
-    WORK_AS_IDX(short, instance->_100, 0) = 0;
+    instance->work2 = (intro->exitTime * 30);
+    WORK_AS_IDX(short, instance->work0, 0) = intro->missionTime;
+    WORK_AS_IDX(short, instance->work1, 0) = 0;
     instance->flags |= 0xC00;
-    gameTracker->player->_FC |= 0x4000;
+    gameTracker->player->work0 |= 0x4000;
     gameTracker->player->flags |= 0x100;
     func_8002CA2C(4, intro->missionTime, intro);
     for (var_s0 = 1; var_s0 < 4; var_s0++) {
@@ -1083,12 +1083,12 @@ void horror_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
     var_v1 = 1;
     intro = instance->introData;
-    temp_s2 = &instance->_FC;
-    if (WORK_AS_IDX(short, instance->_100, 0) == 0) {
+    temp_s2 = WORK_AS_PTR(short, instance->work0);
+    if (WORK_AS_IDX(short, instance->work1, 0) == 0) {
         if (temp_s2[0] != 0) {
             if ((int)(((int**)gameTracker))[0x4BFC/4] < gameTracker->level->collectibleCountA) {
                 if (D_80154834 != 0) {
-                    WORK_AS_IDX(short, instance->_108, 0) = 1;
+                    WORK_AS_IDX(short, instance->work3, 0) = 1;
                 }
                 Set3DTextPosition(0x64, 0x69);
                 Print3DTextf(ANIMATED_3DTEXT("COLLECT"));
@@ -1115,15 +1115,15 @@ void horror_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         if ((((short*)((int**)gameTracker))[0x4C12/2] == 0) && (var_v1 != 0) && (instance->intro->_2C == 0)) {
             ((int*)temp_s2)[0x8/4] -= D_800E5FD8;
         }
-        if (((gameTracker->player->_FC & 0x600000) == 0x600000) && (instance->currentSubState == 0)) {
+        if (((gameTracker->player->work0 & 0x600000) == 0x600000) && (instance->currentSubState == 0)) {
             temp_s2[0] = (intro->missionTime - 1);
             if (intro->collectType == EBTIMER_COLLECTTYPE_CUTSCENE) {
                 SIGNAL_HandleSignal(PlayerInstance, intro->b + 4, 0);
             }
             instance->currentSubState = 1;
-            PlayerInstance->_FC &= 0xFFBFFFFF;
+            PlayerInstance->work0 &= 0xFFBFFFFF;
         }
-        if ((gameTracker->player->_FC & 0x400000) && ((((int**)gameTracker)[0x4C00/4] != 0) || (((int**)gameTracker)[0x4C04/4] != 0))) {
+        if ((gameTracker->player->work0 & 0x400000) && ((((int**)gameTracker)[0x4C00/4] != 0) || (((int**)gameTracker)[0x4C04/4] != 0))) {
             func_8002C18C(5);
             ((int*)temp_s2)[0x8/4] = 0x3C;
             temp_s2[2] = 1;
@@ -1161,9 +1161,9 @@ void horror_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         }
     } else {
         gameTracker->player->flags |= 0x100;
-        if (WORK_AS_IDX(short, instance->_100, 0) == 2) {
+        if (WORK_AS_IDX(short, instance->work1, 0) == 2) {
             // Delay map load
-            if (--instance->_104 < 0) {
+            if (--instance->work2 < 0) {
                 func_800396E0("map", "map5", ((int**)gameTracker));
             }
             else

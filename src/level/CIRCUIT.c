@@ -24,7 +24,7 @@ void circuit_plat_OnCollide(Instance* instance, GameTracker* gameTracker) {
         }
     }
     if (bsp->_06 == 4) {
-        if (instance->currentMainState == 1 && instance->_120 != 2) {
+        if (instance->currentMainState == 1 && instance->work9 != 2) {
             instance->currentMainState = 0;
         }
         instance->currentSubState = 1;
@@ -34,28 +34,28 @@ void circuit_plat_OnCollide(Instance* instance, GameTracker* gameTracker) {
 void circuit_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
     unsigned short* intro;
 
-    WORK_AS_IDX(short, instance->_100, 1) = 0x18;
+    WORK_AS_IDX(short, instance->work1, 1) = 0x18;
     instance->flags |= 0x100000;
     intro = (unsigned short*)instance->introData;
 
     if (intro != NULL) {
-        WORK_AS_IDX(short, instance->_100, 0) = intro[0];
-        WORK_AS_IDX(short, instance->_104, 1) = intro[1];
-        WORK_AS_IDX(short, instance->_108, 0) = intro[2];
-        WORK_AS_IDX(short, instance->_108, 1) = intro[3];
-        WORK_AS_IDX(short, instance->_10C, 0) = intro[4];
+        WORK_AS_IDX(short, instance->work1, 0) = intro[0];
+        WORK_AS_IDX(short, instance->work2, 1) = intro[1];
+        WORK_AS_IDX(short, instance->work3, 0) = intro[2];
+        WORK_AS_IDX(short, instance->work3, 1) = intro[3];
+        WORK_AS_IDX(short, instance->work4, 0) = intro[4];
         if (((short*)intro)[5] != 0) {
-            WORK_AS_IDX(short, instance->_10C, 1) = ((short*)intro)[5];
+            WORK_AS_IDX(short, instance->work4, 1) = ((short*)intro)[5];
         } else {
-            WORK_AS_IDX(short, instance->_10C, 1) = 0x40;
+            WORK_AS_IDX(short, instance->work4, 1) = 0x40;
         }
     } else {
-        WORK_AS_IDX(short, instance->_100, 0) = 0x96;
-        WORK_AS_IDX(short, instance->_104, 1) = ((unsigned short*)&instance->intro->position)[0] - 0x500;
-        WORK_AS_IDX(short, instance->_108, 0) = ((unsigned short*)&instance->intro->position)[1] - 0x780;
-        WORK_AS_IDX(short, instance->_108, 1) = ((unsigned short*)&instance->intro->position)[0] + 0x500;
-        WORK_AS_IDX(short, instance->_10C, 0) = ((unsigned short*)&instance->intro->position)[1] + 0x780;
-        WORK_AS_IDX(short, instance->_10C, 1) = 0x40;
+        WORK_AS_IDX(short, instance->work1, 0) = 0x96;
+        WORK_AS_IDX(short, instance->work2, 1) = ((unsigned short*)&instance->intro->position)[0] - 0x500;
+        WORK_AS_IDX(short, instance->work3, 0) = ((unsigned short*)&instance->intro->position)[1] - 0x780;
+        WORK_AS_IDX(short, instance->work3, 1) = ((unsigned short*)&instance->intro->position)[0] + 0x500;
+        WORK_AS_IDX(short, instance->work4, 0) = ((unsigned short*)&instance->intro->position)[1] + 0x780;
+        WORK_AS_IDX(short, instance->work4, 1) = 0x40;
     }
 }
 
@@ -63,7 +63,7 @@ INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_bug_OnUpdate);
 
 void circuit_bug_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp = instance->bspTree;
-    short* temp = (short*)&instance->_FC;
+    short* temp = (short*)&instance->work0;
 
     if (bsp->_06 == 1) {
         if ((bsp->instanceSpline == gameTracker->player) && (bsp->_08[4] < 2U) && (bsp->_0C[5] >= 6U)) {
@@ -78,17 +78,17 @@ void circuit_bug_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 void circuit_bouncer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     short* intro;
-    int* fc;
+    long* fc;
     
     intro = instance->introData;
-    fc = &instance->_FC;
+    fc = &instance->work0;
     
     if (intro != NULL) {
-        WORK_AS_IDX(short, instance->_100, 1) = intro[0];
-        WORK_AS_IDX(short, instance->_104, 0) = intro[1];
+        WORK_AS_IDX(short, instance->work1, 1) = intro[0];
+        WORK_AS_IDX(short, instance->work2, 0) = intro[1];
     } else {
-        WORK_AS_IDX(short, instance->_100, 1) = 0U;
-        WORK_AS_IDX(short, instance->_104, 0) = 0U;
+        WORK_AS_IDX(short, instance->work1, 1) = 0U;
+        WORK_AS_IDX(short, instance->work2, 0) = 0U;
     }
     fc[3] = instance->intro->position.x;
     fc[4] = instance->intro->position.y;
@@ -106,7 +106,7 @@ void circuit_bouncer_OnCollide(Instance* instance, GameTracker* gameTracker) {
         && (bsp->_08[4] < 2U)
         && (bsp->_0C[5] >= 6U)
         && (
-            (WORK_AS_IDX(short, instance->_104, 0) != 3)
+            (WORK_AS_IDX(short, instance->work2, 0) != 3)
             || ((instance->currentMainState - 2) < 2U)
             || (instance->currentMainState == 4)
         )) {
@@ -188,7 +188,7 @@ void circuit_chrganm_OnCreate(Instance* instance, GameTracker* gameTracker) {
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_chrganm_OnUpdate);
 
 void func_8015B548_82728(Instance* instance) {
-    instance->scale.y = instance->_FC;
+    instance->scale.y = instance->work0;
     func_8002E704();
 }
 
@@ -200,8 +200,8 @@ void func_8015B780_82960(Instance* instance, GameTracker* gameTracker) {
     Camera* camera;
 
     camera = gameTracker->camera;
-    if (instance->_120 & 4) {
-        instance->_120 &= ~4;
+    if (instance->work9 & 4) {
+        instance->work9 &= ~4;
         CAMERA_SetSmoothValue(camera, instance->_D0[1]);
         CAMERA_CameraUnlock(camera, -1);
         CAMERA_Restore(camera, 1);
@@ -217,7 +217,7 @@ INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_ebridge_OnUpdate);
 void circuit_ebridge_OnCollide(Instance* instance, GameTracker* gameTracker) {
     if (instance->bspTree->instanceSpline == gameTracker->player) {
         instance->_D0[0] = 10;
-        instance->_120 |= 1;
+        instance->work9 |= 1;
     }
 }
 
@@ -225,15 +225,15 @@ void circuit_ebrijac_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int* intro;
 
     intro = instance->introData;
-    instance->_FC = -1;
+    instance->work0 = -1;
     if (intro != NULL) {
-        instance->_FC = intro[0];
+        instance->work0 = intro[0];
     }
-    instance->_104 = 0;
+    instance->work2 = 0;
 }
 
 void circuit_ebrijac_OnUpdate(Instance* instance, GameTracker* gameTracker) {
-    if (instance->_104 != 0) {
+    if (instance->work2 != 0) {
         if (instance->scale.z == 0x1000) {
             instance->scale.z = 0x800;
             func_8002E704();
@@ -250,7 +250,7 @@ INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_ebrijac_OnCollide);
 
 extern G2String D_801635CC_8A7AC;
 
-/* set _104 on every instance in the intro group whose object parentName matches */
+/* set work2 on every instance in the intro group whose object parentName matches */
 void func_8015C18C_8336C(Instance* instance, int val) {
     char unused[1];    /* dead local — reproduces the 8-byte frame */
     int i;
@@ -265,7 +265,7 @@ void func_8015C18C_8336C(Instance* instance, int val) {
     for (i = 0; i < count; i++, p++) {
         e = *(Intro**)p;
         if (e->instance != 0 && G2String_Compare_EQ(e->instance->object->parentName, &D_801635CC_8A7AC)) {
-            e->instance->_104 = val;
+            e->instance->work2 = val;
         }
     }
 }
@@ -281,10 +281,10 @@ void circuit_orbplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
     if (bsp->_06 == 4) {
         instance->currentSubState = 1;
     }
-    if (bsp->_06 == 3 && instance->_120 <= 0 && instance->_D0[0] <= 0 && instance->currentMainState == 2) {
-        instance->_120 = 4;
-        WORK_AS(int, instance->_110) = -1;
-        instance->_FC = (instance->_FC + 0x800) & 0xFFF;
+    if (bsp->_06 == 3 && instance->work9 <= 0 && instance->_D0[0] <= 0 && instance->currentMainState == 2) {
+        instance->work9 = 4;
+        WORK_AS(int, instance->work5) = -1;
+        instance->work0 = (instance->work0 + 0x800) & 0xFFF;
         func_8004AAA8(instance, 0x1A, 0);
     }
 }
@@ -325,34 +325,34 @@ void circuit_launch_OnCreate(Instance* instance, GameTracker* gameTracker) {
     objData = instance->object->data;
     intro = instance->introData;
     
-    WORK_AS(int, instance->_108) = 0;
+    WORK_AS(int, instance->work3) = 0;
     instance->initialPos.x = instance->position.x;
     instance->initialPos.y = instance->position.y;
     instance->initialPos.z = instance->position.z;
-    instance->_11C = 0;
+    instance->work8 = 0;
     instance->flags |= 0x800;
-    WORK_AS(int, instance->_10C) = 0x500;
-    WORK_AS(int, instance->_110) = 0x80;
-    instance->_120 = 0x1000;
-    instance->_100 = 4;
-    instance->_104 = 0x14;
+    WORK_AS(int, instance->work4) = 0x500;
+    WORK_AS(int, instance->work5) = 0x80;
+    instance->work9 = 0x1000;
+    instance->work1 = 4;
+    instance->work2 = 0x14;
     
     if (intro != NULL) {
-        WORK_AS(int, instance->_10C) = intro[0];
+        WORK_AS(int, instance->work4) = intro[0];
     } else if (objData != NULL) {
-        WORK_AS(int, instance->_10C) = objData[0];
-        WORK_AS(int, instance->_110) = objData[1];
-        instance->_11C = *(int*)&objData[2];
-        if (instance->_11C & 2) {
-            instance->_118 = 0x200;
+        WORK_AS(int, instance->work4) = objData[0];
+        WORK_AS(int, instance->work5) = objData[1];
+        instance->work8 = *(int*)&objData[2];
+        if (instance->work8 & 2) {
+            instance->work7 = 0x200;
             instance->flags &= ~0x800;
         }
-        if (instance->_11C & 0x10) {
-            instance->_120 = objData[8];
+        if (instance->work8 & 0x10) {
+            instance->work9 = objData[8];
         }
     }
     
-    instance->_D0[0] = WORK_AS_IDX(short, instance->_110, 1);
+    instance->_D0[0] = WORK_AS_IDX(short, instance->work5, 1);
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_launch_OnUpdate);
@@ -365,12 +365,12 @@ void circuit_launch_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp = instance->bspTree;
     char var_a2 = (bsp->_06 == 1) ? bsp->_0C[5] : -1;
     
-    if (((instance->currentMainState - 1) >= 2U) && (WORK_AS(int, instance->_108) == 0) && (bsp->instanceSpline == player) && (bsp->_04 == 5) && (var_a2 < 8) && (bsp->_08[2] == 0)) {
-        if (instance->_11C & 0x10) {
-            player->_FC |= 0x200;
-            instance->_11C |= 0x20;
+    if (((instance->currentMainState - 1) >= 2U) && (WORK_AS(int, instance->work3) == 0) && (bsp->instanceSpline == player) && (bsp->_04 == 5) && (var_a2 < 8) && (bsp->_08[2] == 0)) {
+        if (instance->work8 & 0x10) {
+            player->work0 |= 0x200;
+            instance->work8 |= 0x20;
         }
-        else if ((((func_80025798(player, bsp) != 0) && (instance->_11C == 0)) || (instance->_11C & 1)) && (func_8015D354_84534(instance, gameTracker) == 0)) {
+        else if ((((func_80025798(player, bsp) != 0) && (instance->work8 == 0)) || (instance->work8 & 1)) && (func_8015D354_84534(instance, gameTracker) == 0)) {
             func_8015D4B0_84690(instance, gameTracker);
         }
     }
@@ -378,8 +378,8 @@ void circuit_launch_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 void func_8015D304_844E4(Instance* instance, GameTracker* gameTracker) {
     instance->flags &= ~0x800;
-    if (!(instance->_11C & 8)) {
-        instance->_FC = instance->_104;
+    if (!(instance->work8 & 8)) {
+        instance->work0 = instance->work2;
         instance->position.x = PlayerInstance->position.x;
         instance->position.y = PlayerInstance->position.y;
     }
@@ -408,7 +408,7 @@ int func_8015D354_84534(Instance* instance, GameTracker* gameTracker) {
                         if ((other->currentMainState - 1) < 2U) {
                             return 1;
                         }
-                        if (*(int*)&other->_108 != 0) {
+                        if (*(int*)&other->work3 != 0) {
                             return 1;
                         }
                     }
@@ -427,7 +427,7 @@ void func_8015D42C_8460C(Instance* instance, GameTracker* gameTracker) {
     func_8015D304_844E4(instance, gameTracker);
     instance->currentMainState = 2;
     PlayerInstance->_E0[1] = pData[4];
-    gameTracker->player->_FC |= 0x400;
+    gameTracker->player->work0 |= 0x400;
     func_8004AAA8(instance, 0x18, 0);
 }
 
@@ -442,7 +442,7 @@ void func_8015D4B0_84690(Instance* instance, GameTracker* gameTracker) {
     data[0x9C/2] = data[0xA0/2] - 1;
     data[0x9E/2] = data[0xA0/2] - 1;
     instance->currentMainState = 1;
-    WORK_AS(int, instance->_110) = ((short*)&instance->_D0[0])[1];
+    WORK_AS(int, instance->work5) = ((short*)&instance->_D0[0])[1];
     player->_D0[2] = 0;
     player->_E0[1] = 0;
     player->flags |= 0x400000;
@@ -460,7 +460,7 @@ void circuit_follow_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if ((instance->intro->flags & 0x80) == 0) {
         instance->flags |= 0x400;
     }
-    instance->_100 = 1;
+    instance->work1 = 1;
     instance->flags |= 0x100800;
 }
 
@@ -471,16 +471,16 @@ void circuit_follow_OnCollide(Instance* instance, GameTracker* gameTracker) {
     Spline* spline;
     int* data;
 
-    if (instance->_FC == 0) {
-        instance->_FC = 0x1E;
+    if (instance->work0 == 0) {
+        instance->work0 = 0x1E;
         if (instance->intro->multiSpline != 0) {
             player = PlayerInstance;
             data = (int*)player->data;
-            if (!(player->_FC & 1)) {
+            if (!(player->work0 & 1)) {
                 data[0xE0 / 4] = (int)instance;
                 spline = instance->intro->multiSpline->positional;
-                WORK_AS(int, instance->_10C) = spline->key[spline->numkeys - 1].point.y;
-                player->_FC |= 2;
+                WORK_AS(int, instance->work4) = spline->key[spline->numkeys - 1].point.y;
+                player->work0 |= 2;
             }
         }
     }
@@ -541,14 +541,14 @@ void circuit_ppath_OnCollide(Instance* instance, GameTracker* gameTracker) {
 extern char D_801635A0_8A780[];
 
 void circuit_fxgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    int* fc;
+    long* fc;
     unsigned char* intro;
 
-    fc = &instance->_FC;
+    fc = &instance->work0;
     if (instance->flags & 0x20000) {
-        if (WORK_AS(int, instance->_108) != 0) {
-            func_800331BC(WORK_AS(int, instance->_108));
-            WORK_AS(int, instance->_108) = 0;
+        if (WORK_AS(int, instance->work3) != 0) {
+            func_800331BC(WORK_AS(int, instance->work3));
+            WORK_AS(int, instance->work3) = 0;
         }
     } else {
         if (instance->introData == NULL) {
@@ -558,11 +558,11 @@ void circuit_fxgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
         fc[0] = OBTABLE_FindObject(intro + 0xC);
         if ((intro[1] & 1) == 0) {
             if ((intro[1] & 2) != 0) {
-                WORK_AS_IDX(short, instance->_110, 0) = 0x119;
-                WORK_AS_IDX(short, instance->_110, 1) = 0x46;
-                WORK_AS_IDX(short, instance->_114, 1) = 0xDAC;
-                WORK_AS_IDX(short, instance->_114, 0)= (rand() & 0x7F) - 0x15E;
-                WORK_AS_IDX(short, instance->_10C, 1) = WORK_AS_IDX(short, instance->_10C, 0) = rand() & 7;
+                WORK_AS_IDX(short, instance->work5, 0) = 0x119;
+                WORK_AS_IDX(short, instance->work5, 1) = 0x46;
+                WORK_AS_IDX(short, instance->work6, 1) = 0xDAC;
+                WORK_AS_IDX(short, instance->work6, 0)= (rand() & 0x7F) - 0x15E;
+                WORK_AS_IDX(short, instance->work4, 1) = WORK_AS_IDX(short, instance->work4, 0) = rand() & 7;
                 intro[1] |= 0x80;
             }
         }
@@ -582,18 +582,18 @@ void circuit_fxgen_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 void circuit_qmark_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
-    instance->_104 = 0;
-    instance->_FC = 0x40;
-    instance->_100 = 0;
+    instance->work2 = 0;
+    instance->work0 = 0x40;
+    instance->work1 = 0;
 }
 
 void circuit_qmark_OnUpdate(Instance* instance, GameTracker* gameTracker) {
-    int* temp_s0;
+    long* temp_s0;
     QMarkIntro* intro;
     
     intro = (QMarkIntro*)instance->introData;
-    temp_s0 = &instance->_FC;
-    if ((WORK_AS(int, instance->_10C) != 0) && !(gameTracker->gameFlags & 0x2000)) {
+    temp_s0 = &instance->work0;
+    if ((WORK_AS(int, instance->work4) != 0) && !(gameTracker->gameFlags & 0x2000)) {
         func_8003F6CC(intro->x, intro->y, intro->w, intro->h, intro->numMessages, intro->messages);
     }
     switch (temp_s0[2])
@@ -631,10 +631,10 @@ void circuit_qmark_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
     intro = (QMarkIntro*)instance->introData;
     if (func_80027500(instance->bspTree, gameTracker) != 0) {
-        instance->_104 = 1;
-        instance->_FC = 0x12C;
-        WORK_AS(int, instance->_110) = intro->time;
-        WORK_AS(int, instance->_10C) = 1;
+        instance->work2 = 1;
+        instance->work0 = 0x12C;
+        WORK_AS(int, instance->work5) = intro->time;
+        WORK_AS(int, instance->work4) = 1;
     }
 }
 
@@ -653,12 +653,12 @@ void circuit_reza_OnCollide(Instance* instance, GameTracker* gameTracker) {
     bsp = instance->bspTree;
     if (bsp->instanceSpline == gameTracker->player && bsp->_06 == 1 && instance->currentModelAnim != 5) {
         /* the in-place mask keeps the original byte alive in g (register scheduling) */
-        f = ((char*)&instance->_118)[3];
+        f = ((char*)&instance->work7)[3];
         g = f;
         f &= 0x80;
         if (f == 0) {
             if (g & 2) {
-                ((char*)&instance->_118)[3] = g | 0x80;
+                ((char*)&instance->work7)[3] = g | 0x80;
                 func_8004A7B8(instance, 2, 0);
             } else {
                 func_80022714(instance, gameTracker);
@@ -672,8 +672,8 @@ void func_8015F6B8_86898(Instance* instance, int arg1, int arg2) {
     instance->currentSubState = 2;
     instance->currentModelAnim = 1;
     instance->currentAnimFrame = 0;
-    WORK_AS_IDX(short, instance->_110, 0) = arg1;
-    WORK_AS_IDX(short, instance->_110, 1) = arg2;
+    WORK_AS_IDX(short, instance->work5, 0) = arg1;
+    WORK_AS_IDX(short, instance->work5, 1) = arg2;
     instance->flags &= ~1;
     func_8015FC70_86E50(instance);
 }
@@ -685,8 +685,8 @@ void func_8015F708_868E8(Instance* instance) {
 }
 
 void func_8015F720_86900(Instance* instance) {
-    if (instance->_FC == 0) {
-        instance->_FC = instance->currentMainState | (instance->currentSubState << 16) | (instance->currentModelAnim << 24);
+    if (instance->work0 == 0) {
+        instance->work0 = instance->currentMainState | (instance->currentSubState << 16) | (instance->currentModelAnim << 24);
     }
 }
 
@@ -695,11 +695,11 @@ void func_8015F75C_8693C(Instance* instance) {
     unsigned char val1;
     int val2;
 
-    val0 = ((unsigned short*)&instance->_FC)[1];
-    val1 = ((unsigned char*)&instance->_FC)[1];
-    val2 = ((char*)&instance->_FC)[0];
+    val0 = ((unsigned short*)&instance->work0)[1];
+    val1 = ((unsigned char*)&instance->work0)[1];
+    val2 = ((char*)&instance->work0)[0];
     instance->currentAnimFrame = 0;
-    instance->_FC = 0;
+    instance->work0 = 0;
     instance->currentMainState = val0;
     instance->currentSubState = val1;
     instance->currentModelAnim = val2;
@@ -734,16 +734,16 @@ int* func_8015FA1C_86BFC(Instance* instance) {
     int* p;
     int* q;
 
-    p = func_8015F780_86960(intro, WORK_AS_IDX(short, instance->_110, 0));
-    q = func_8015F780_86960(intro, WORK_AS_IDX(short, instance->_110, 1));
-    if (WORK_AS_IDX(short, instance->_114, 0)< q[2]) {
+    p = func_8015F780_86960(intro, WORK_AS_IDX(short, instance->work5, 0));
+    q = func_8015F780_86960(intro, WORK_AS_IDX(short, instance->work5, 1));
+    if (WORK_AS_IDX(short, instance->work6, 0)< q[2]) {
         return p;
     }
     p = q;
-    WORK_AS_IDX(short, instance->_114, 0)= WORK_AS_IDX(short, instance->_114, 0)- q[2];
-    WORK_AS_IDX(short, instance->_110, 0) = WORK_AS_IDX(short, instance->_110, 1);
-    *(short*)&instance->_118 = p[1];
-    WORK_AS_IDX(short, instance->_110, 1) = func_8015F930_86B10(instance, p, WORK_AS_IDX(short, instance->_110, 1));
+    WORK_AS_IDX(short, instance->work6, 0)= WORK_AS_IDX(short, instance->work6, 0)- q[2];
+    WORK_AS_IDX(short, instance->work5, 0) = WORK_AS_IDX(short, instance->work5, 1);
+    *(short*)&instance->work7 = p[1];
+    WORK_AS_IDX(short, instance->work5, 1) = func_8015F930_86B10(instance, p, WORK_AS_IDX(short, instance->work5, 1));
     return p;
 }
 
@@ -831,11 +831,11 @@ void circuit_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     BTimerIntro* intro;
 
     intro = (BTimerIntro*)instance->introData;
-    instance->_104 = (intro->exitTime * 30);
-    WORK_AS_IDX(short, instance->_FC, 0) = intro->missionTime;
-    WORK_AS_IDX(short, instance->_100, 0) = 0;
+    instance->work2 = (intro->exitTime * 30);
+    WORK_AS_IDX(short, instance->work0, 0) = intro->missionTime;
+    WORK_AS_IDX(short, instance->work1, 0) = 0;
     instance->flags |= 0xC00;
-    gameTracker->player->_FC |= 0x4000;
+    gameTracker->player->work0 |= 0x4000;
     gameTracker->player->flags |= 0x100;
     func_8002CA2C(4, intro->missionTime, intro);
     for (var_s0 = 1; var_s0 < 4; var_s0++) {
@@ -855,12 +855,12 @@ void circuit_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
     var_v1 = 1;
     intro = instance->introData;
-    temp_s2 = &instance->_FC;
-    if (WORK_AS_IDX(short, instance->_100, 0) == 0) {
+    temp_s2 = WORK_AS_PTR(short, instance->work0);
+    if (WORK_AS_IDX(short, instance->work1, 0) == 0) {
         if (temp_s2[0] != 0) {
             if ((int)(((int**)gameTracker))[0x4BFC/4] < gameTracker->level->collectibleCountA) {
                 if (D_80154834 != 0) {
-                    WORK_AS_IDX(short, instance->_108, 0) = 1;
+                    WORK_AS_IDX(short, instance->work3, 0) = 1;
                 }
                 Set3DTextPosition(0x64, 0x69);
                 Print3DTextf(ANIMATED_3DTEXT("COLLECT"));
@@ -887,15 +887,15 @@ void circuit_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         if ((((short*)((int**)gameTracker))[0x4C12/2] == 0) && (var_v1 != 0) && (instance->intro->_2C == 0)) {
             ((int*)temp_s2)[0x8/4] -= D_800E5FD8;
         }
-        if (((gameTracker->player->_FC & 0x600000) == 0x600000) && (instance->currentSubState == 0)) {
+        if (((gameTracker->player->work0 & 0x600000) == 0x600000) && (instance->currentSubState == 0)) {
             temp_s2[0] = (intro->missionTime - 1);
             if (intro->collectType == EBTIMER_COLLECTTYPE_CUTSCENE) {
                 SIGNAL_HandleSignal(PlayerInstance, intro->b + 4, 0);
             }
             instance->currentSubState = 1;
-            PlayerInstance->_FC &= ~0x400000;
+            PlayerInstance->work0 &= ~0x400000;
         }
-        if ((gameTracker->player->_FC & 0x400000) && ((((int**)gameTracker)[0x4C00/4] != 0) || (((int**)gameTracker)[0x4C04/4] != 0))) {
+        if ((gameTracker->player->work0 & 0x400000) && ((((int**)gameTracker)[0x4C00/4] != 0) || (((int**)gameTracker)[0x4C04/4] != 0))) {
             func_8002C18C(5);
             ((int*)temp_s2)[0x8/4] = 0x3C;
             temp_s2[2] = 1;
@@ -933,9 +933,9 @@ void circuit_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         }
     } else {
         gameTracker->player->flags |= 0x100;
-        if (WORK_AS_IDX(short, instance->_100, 0) == 2) {
+        if (WORK_AS_IDX(short, instance->work1, 0) == 2) {
             // Delay map load
-            if (--instance->_104 < 0) {
+            if (--instance->work2 < 0) {
                 func_800396E0("map", "map5", ((int**)gameTracker));
             }
             else

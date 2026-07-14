@@ -121,9 +121,9 @@ void* LoadGexObject(void) {
     if (compressedSize == 0)
         return NULL;
         
-    ptr = (int)func_80030BE0(0x3A980);
+    ptr = (int*)func_80030BE0(0x3A980);
     func_801DA910(&sp10, ptr, 0x3A980);
-    uncompressedSize = inflate(&sp10, start, compressedSize);
+    uncompressedSize = inflate((z_stream*)&sp10, start, compressedSize);
     uncompressedSize = func_8003B270(ptr, uncompressedSize);
     osWritebackDCache(ptr, uncompressedSize);
     func_80030C50(0x3A980 - uncompressedSize);

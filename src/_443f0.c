@@ -41,11 +41,11 @@ void func_80044B2C(Instance* instance) {
     int* temp_a2;
 
     temp_a2 = ((((int***)instance->object->modelList)[instance->currentModel]))[0x20/4];
-    temp_v1 = (WORK_AS_IDX(short, instance->_FC, 0) * 3);
-    WORK_AS_IDX(short, instance->_100, 0) = ((temp_v1 + 1) * temp_a2[3]);
-    WORK_AS_IDX(short, instance->_100, 1) = (((temp_v1 + 4) * temp_a2[3]) - 1);
-    WORK_AS_IDX(short, instance->_104, 0) = -1;
-    instance->currentTextureAnimFrame = WORK_AS_IDX(short, instance->_100, 0);
+    temp_v1 = (WORK_AS_IDX(short, instance->work0, 0) * 3);
+    WORK_AS_IDX(short, instance->work1, 0) = ((temp_v1 + 1) * temp_a2[3]);
+    WORK_AS_IDX(short, instance->work1, 1) = (((temp_v1 + 4) * temp_a2[3]) - 1);
+    WORK_AS_IDX(short, instance->work2, 0) = -1;
+    instance->currentTextureAnimFrame = WORK_AS_IDX(short, instance->work1, 0);
 }
 
 void common_powertv_OnCreate(Instance* instance, GameTracker* gameTracker) {
@@ -65,10 +65,10 @@ void common_powertv_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->flags |= 0x80;
     
     if (intro != NULL) {
-        WORK_AS_IDX(short, instance->_FC, 0) = intro->type;
-        WORK_AS_IDX(short, instance->_FC, 1) = intro->respawns;
+        WORK_AS_IDX(short, instance->work0, 0) = intro->type;
+        WORK_AS_IDX(short, instance->work0, 1) = intro->respawns;
     } else {
-        WORK_AS_IDX(short, instance->_FC, 0) = EPTV_HEALTH;
+        WORK_AS_IDX(short, instance->work0, 0) = EPTV_HEALTH;
     }
     
     instance->currentMainState = 0;
@@ -92,26 +92,26 @@ void common_powertv_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int var_a0;
     short* temp_s1;
 
-    temp_s1 = &instance->_FC;
+    temp_s1 = WORK_AS_PTR(short, instance->work0);
     if ((instance->currentMainState - 1) >= 2U) {
         instance->currentTextureAnimFrame++;
-        if (WORK_AS_IDX(short, instance->_100, 1) < instance->currentTextureAnimFrame) {
-            instance->currentTextureAnimFrame = WORK_AS_IDX(short, instance->_100, 0);
+        if (WORK_AS_IDX(short, instance->work1, 1) < instance->currentTextureAnimFrame) {
+            instance->currentTextureAnimFrame = WORK_AS_IDX(short, instance->work1, 0);
         }
     }
     else if (instance->currentMainState == 1) {
-        if (WORK_AS_IDX(short, instance->_104, 1) > 0) {
-            WORK_AS_IDX(short, instance->_104, 1)--;
-            if ((WORK_AS_IDX(short, instance->_104, 1) << 0x10) == 0) {
-                instance->currentTextureAnimFrame = WORK_AS_IDX(short, instance->_100, 0);
+        if (WORK_AS_IDX(short, instance->work2, 1) > 0) {
+            WORK_AS_IDX(short, instance->work2, 1)--;
+            if ((WORK_AS_IDX(short, instance->work2, 1) << 0x10) == 0) {
+                instance->currentTextureAnimFrame = WORK_AS_IDX(short, instance->work1, 0);
                 goto block_7;
             }
         }
         else
         {
 block_7:
-            func_8002DAF8(instance, WORK_AS_IDX(short, instance->_104, 0));
-            if ((WORK_AS_IDX(short, instance->_104, 0) == -0x3E9) && (instance->currentAnimFrame == 0x1A)) {
+            func_8002DAF8(instance, WORK_AS_IDX(short, instance->work2, 0));
+            if ((WORK_AS_IDX(short, instance->work2, 0) == -0x3E9) && (instance->currentAnimFrame == 0x1A)) {
                 instance->flags2 |= 0x10;
             }
             if (instance->flags2 & 0x10) {
@@ -220,7 +220,7 @@ void common_powertv_OnCollide(Instance* instance, GameTracker* gameTracker) {
     intro = instance->introData;
     temp_a1 = bsp->_0C[5];
     temp_s5 = (int*)temp_a0->data;
-    temp_s2 = &instance->_FC;
+    temp_s2 = WORK_AS_PTR(short, instance->work0);
     if ((instance->currentMainState == 0) && (((bsp->_06 == 1) && (temp_a1 >= 8)) || ((bsp->instanceSpline == temp_a0) && (temp_a2 != 0)))) {
         if (!(temp_s2[1] & 1)) {
             instance->intro->flags |= 0x800;
@@ -240,7 +240,7 @@ void common_powertv_OnCollide(Instance* instance, GameTracker* gameTracker) {
         }
         if (temp_s5[0x138/4] != 0) {
             if (bsp->instanceSpline == gameTracker->player) {
-                bsp->instanceSpline->_FC |= 0x800;
+                bsp->instanceSpline->work0 |= 0x800;
             }
         }
     }

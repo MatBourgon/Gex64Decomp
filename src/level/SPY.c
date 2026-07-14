@@ -40,39 +40,39 @@ void spy_launch_OnCreate(Instance* instance, GameTracker* gameTracker) {
     objData = instance->object->data;
     intro = instance->introData;
     
-    WORK_AS(int, instance->_108) = 0;
+    WORK_AS(int, instance->work3) = 0;
     instance->initialPos.x = instance->position.x;
     instance->initialPos.y = instance->position.y;
     instance->initialPos.z = instance->position.z;
-    instance->_11C = 0;
+    instance->work8 = 0;
     instance->flags |= 0x800;
-    WORK_AS(int, instance->_10C) = 0x500;
-    WORK_AS(int, instance->_110) = 0x80;
-    instance->_120 = 0x1000;
-    instance->_100 = 4;
-    instance->_104 = 0x14;
+    WORK_AS(int, instance->work4) = 0x500;
+    WORK_AS(int, instance->work5) = 0x80;
+    instance->work9 = 0x1000;
+    instance->work1 = 4;
+    instance->work2 = 0x14;
     
     if (intro != NULL) {
-        WORK_AS(int, instance->_10C) = intro[0];
+        WORK_AS(int, instance->work4) = intro[0];
     } else if (objData != NULL) {
-        WORK_AS(int, instance->_10C) = objData[0];
-        WORK_AS(int, instance->_110) = objData[1];
-        instance->_11C = *(int*)&objData[2];
-        if (instance->_11C & 2) {
-            instance->_118 = 0x200;
+        WORK_AS(int, instance->work4) = objData[0];
+        WORK_AS(int, instance->work5) = objData[1];
+        instance->work8 = *(int*)&objData[2];
+        if (instance->work8 & 2) {
+            instance->work7 = 0x200;
             instance->flags &= ~0x800;
         }
-        if (instance->_11C & 0x10) {
-            instance->_120 = objData[8];
+        if (instance->work8 & 0x10) {
+            instance->work9 = objData[8];
         }
     }
     
-    instance->_D0[0] = WORK_AS_IDX(short, instance->_110, 1);
+    instance->_D0[0] = WORK_AS_IDX(short, instance->work5, 1);
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/SPY", spy_launch_OnUpdate);
 /* near-match: every instruction matches except ONE scheduler window in the state-1 block.
-   The target emits [slt; lw _110; nop; beqz; subu-in-delay] - KMC's reorg pulls the lw
+   The target emits [slt; lw work5; nop; beqz; subu-in-delay] - KMC's reorg pulls the lw
    above the branch and delay-fills the subu (a 2-insn thread steal). Our GCC either
    leaves the lw inside the block (extra nop) or, with the load written before the if,
    hoists it above the slt as well. All arrangements are +/-1 instruction.
@@ -95,7 +95,7 @@ void spy_launch_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
     player = gameTracker->player;
     pdata = player->data;
-    if (instance->currentMainState == 0 && (instance->_11C & 0x30) == 0x30
+    if (instance->currentMainState == 0 && (instance->work8 & 0x30) == 0x30
         && ((gameTracker->_0014[2] & 0x10) || player->currentSubState == 0x20 || player->currentSubState == 0x80)) {
         if (func_80159F3C_EB60C(instance, gameTracker) == 0) {
             if (pdata[0x78/2] != 0) {
@@ -105,24 +105,24 @@ void spy_launch_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             }
         }
     }
-    if (instance->_FC > 0) {
-        instance->_FC = instance->_FC - instance->_100;
-        if (instance->_FC <= 0) {
-            if (!(instance->_11C & 2)) {
+    if (instance->work0 > 0) {
+        instance->work0 = instance->work0 - instance->work1;
+        if (instance->work0 <= 0) {
+            if (!(instance->work8 & 2)) {
                 instance->flags |= 0x800;
             }
             instance->position = instance->initialPos;
-            instance->_FC = 0;
+            instance->work0 = 0;
         }
-        instance->scale.x = instance->_FC * (*(int*)&instance->_118) / instance->_104 + 0x1000;
-        instance->scale.y = instance->_FC * (*(int*)&instance->_118) / instance->_104 + 0x1000;
-        instance->scale.z = instance->_FC * (*(int*)&instance->_118) / instance->_104 + 0x1000;
+        instance->scale.x = instance->work0 * (*(int*)&instance->work7) / instance->work2 + 0x1000;
+        instance->scale.y = instance->work0 * (*(int*)&instance->work7) / instance->work2 + 0x1000;
+        instance->scale.z = instance->work0 * (*(int*)&instance->work7) / instance->work2 + 0x1000;
     }
     if (instance->currentMainState == 2) {
         short* d;
         d = gameTracker->player->data;
-        player->_FC |= 0x40;
-        d[0x144/2] = instance->_120;
+        player->work0 |= 0x40;
+        d[0x144/2] = instance->work9;
         instance->currentSubState += 1;
         d[0x9E/2] = d[0xA0/2] - 1;
     }
@@ -137,11 +137,11 @@ void spy_launch_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         short chunk;
 
         speed = *(short*)&instance->_112;
-        total = WORK_AS(int, instance->_10C);
+        total = WORK_AS(int, instance->work4);
         step = total / speed;
         chunk = 0x20;
         step = step - speed / chunk;
-        progress = WORK_AS(int, instance->_108);
+        progress = WORK_AS(int, instance->work3);
         threshold = speed * step;
         if (progress + speed >= total) {
             delta = total - progress;
@@ -152,13 +152,13 @@ void spy_launch_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         player->position.z += delta;
         if (done != 0) {
             instance->currentMainState = 3;
-            WORK_AS(int, instance->_108) = 0;
+            WORK_AS(int, instance->work3) = 0;
             player->flags &= ~0x400000;
         } else {
-            WORK_AS(int, instance->_108) += delta;
-            if (threshold < WORK_AS(int, instance->_108)) {
+            WORK_AS(int, instance->work3) += delta;
+            if (threshold < WORK_AS(int, instance->work3)) {
                 if (chunk < *(short*)&instance->_112) {
-                    WORK_AS(int, instance->_110) = ((WORK_AS(int, instance->_110) - chunk) << 16) >> 16;
+                    WORK_AS(int, instance->work5) = ((WORK_AS(int, instance->work5) - chunk) << 16) >> 16;
                 }
             }
         }
@@ -171,7 +171,7 @@ void spy_launch_OnUpdate(Instance* instance, GameTracker* gameTracker) {
                 mask400 = ~0x400;
                 mask40 = ~0x40;
                 instance->flags &= mask400;
-                player->_FC = player->_FC & mask40 & mask400;
+                player->work0 = player->work0 & mask40 & mask400;
                 instance->currentMainState = 0;
                 instance->currentSubState = 0;
             }
@@ -182,7 +182,7 @@ void spy_launch_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             func_800176E8(&player->position, D_8007684C->modelList[0], D_800EB8A0, 0xA);
         }
     }
-    instance->_11C &= ~0x20;
+    instance->work8 &= ~0x20;
 }
 */
 
@@ -194,12 +194,12 @@ void spy_launch_OnCollide(Instance* instance, GameTracker* gameTracker) {
     Instance* player  = gameTracker->player;
     char var_a2 = (bsp->_06 == 1) ? bsp->_0C[5] : -1;
     
-    if (((instance->currentMainState - 1) >= 2U) && (WORK_AS(int, instance->_108) == 0) && (bsp->instanceSpline == player) && (bsp->_04 == 5) && (var_a2 < 8) && (bsp->_08[2] == 0)) {
-        if (instance->_11C & 0x10) {
-            player->_FC |= 0x200;
-            instance->_11C |= 0x20;
+    if (((instance->currentMainState - 1) >= 2U) && (WORK_AS(int, instance->work3) == 0) && (bsp->instanceSpline == player) && (bsp->_04 == 5) && (var_a2 < 8) && (bsp->_08[2] == 0)) {
+        if (instance->work8 & 0x10) {
+            player->work0 |= 0x200;
+            instance->work8 |= 0x20;
         }
-        else if ((((func_80025798(player, bsp) != 0) && (instance->_11C == 0)) || (instance->_11C & 1)) && (func_80159F3C_EB60C(instance, gameTracker) == 0)) {
+        else if ((((func_80025798(player, bsp) != 0) && (instance->work8 == 0)) || (instance->work8 & 1)) && (func_80159F3C_EB60C(instance, gameTracker) == 0)) {
             func_8015A098_EB768(instance, gameTracker);
         }
     }
@@ -207,8 +207,8 @@ void spy_launch_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 void func_80159EEC_EB5BC(Instance* instance, GameTracker* gameTracker) {
     instance->flags &= ~0x800;
-    if (!(instance->_11C & 8)) {
-        instance->_FC = instance->_104;
+    if (!(instance->work8 & 8)) {
+        instance->work0 = instance->work2;
         instance->position.x = PlayerInstance->position.x;
         instance->position.y = PlayerInstance->position.y;
     }
@@ -237,7 +237,7 @@ int func_80159F3C_EB60C(Instance* instance, GameTracker* gameTracker) {
                         if ((other->currentMainState - 1) < 2U) {
                             return 1;
                         }
-                        if (*(int*)&other->_108 != 0) {
+                        if (*(int*)&other->work3 != 0) {
                             return 1;
                         }
                     }
@@ -256,7 +256,7 @@ void func_8015A014_EB6E4(Instance* instance, GameTracker* gameTracker) {
     func_80159EEC_EB5BC(instance, gameTracker);
     instance->currentMainState = 2;
     PlayerInstance->_E0[1] = pData[4];
-    gameTracker->player->_FC |= 0x400;
+    gameTracker->player->work0 |= 0x400;
     func_8004AAA8(instance, 0x18, 0);
 }
 
@@ -271,7 +271,7 @@ void func_8015A098_EB768(Instance* instance, GameTracker* gameTracker) {
     data[0x9C/2] = data[0xA0/2] - 1;
     data[0x9E/2] = data[0xA0/2] - 1;
     instance->currentMainState = 1;
-    WORK_AS(int, instance->_110) = ((short*)&instance->_D0[0])[1];
+    WORK_AS(int, instance->work5) = ((short*)&instance->_D0[0])[1];
     player->_D0[2] = 0;
     player->_E0[1] = 0;
     player->flags |= 0x400000;
@@ -303,10 +303,10 @@ void spy_onoff_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 
     if (instance->object->data != NULL && *((int*)instance->object->data) != 0) {
-        instance->_100 = 1;
+        instance->work1 = 1;
     }
 
-    if (instance->currentMainState == 0 || instance->_100 != 0) {
+    if (instance->currentMainState == 0 || instance->work1 != 0) {
         instance->currentAnimFrame = 0;
     } else if (((short*)&instance->object->_08)[1] != 0) {
         instance->currentAnimFrame = ((unsigned short*)(instance->object->animList[0]))[1] - 1;
@@ -317,7 +317,7 @@ void spy_onoff_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     instance->currentTextureAnimFrame = instance->currentMainState ^ 1;
 
     if (instance->currentSubState == 1) {
-        if (instance->currentMainState == 1 || instance->_100 != 0) {
+        if (instance->currentMainState == 1 || instance->work1 != 0) {
             func_8002DAF8(instance, -1);
         } else {
             func_8002DAF8(instance, -0x3E9);
@@ -326,7 +326,7 @@ void spy_onoff_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         if (instance->flags2 & 0x10) {
             instance->flags2 &= ~0x10;
             instance->currentSubState = 0;
-            if (instance->currentMainState == 0 || instance->_100 != 0) {
+            if (instance->currentMainState == 0 || instance->work1 != 0) {
                 instance->currentAnimFrame = 0;
             } else if (((short*)&instance->object->_08)[1] != 0) {
                 instance->currentAnimFrame = ((unsigned short*)(instance->object->animList[0]))[1] - 1;
@@ -411,7 +411,7 @@ void spy_gnrobot_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if (instance->introData == NULL) {
         instance->introData = D_8015AD70_EC440;
     }
-    instance->_100 = ((short*)instance->introData)[1];
+    instance->work1 = ((short*)instance->introData)[1];
 }
 
 typedef struct {
@@ -430,7 +430,7 @@ void spy_gnrobot_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     intro = instance->introData;
     ms = SCRIPT_GetMultiSpline(instance, NULL, NULL);
     frame = SplineGetFrameNumber(ms->positional, &ms->curPositional);
-    instance->_FC += 1;
+    instance->work0 += 1;
     p = (GnRobotKeyframe*)intro;
     if (((int*)intro)[1] > 0) {
         i = 0;
@@ -450,7 +450,7 @@ void spy_gnrobot_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
 void spy_gnrobot_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp = instance->bspTree;
-    int* fc = &instance->_FC;
+    long* fc = &instance->work0;
 
     if ((bsp->instanceSpline == PlayerInstance) && (bsp->_0C[5] == 8)) {
         fc[1]--;
@@ -468,11 +468,11 @@ void spy_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     BTimerIntro* intro;
 
     intro = (BTimerIntro*)instance->introData;
-    instance->_104 = (intro->exitTime * 30);
-    WORK_AS_IDX(short, instance->_FC, 0) = intro->missionTime;
-    WORK_AS_IDX(short, instance->_100, 0) = 0;
+    instance->work2 = (intro->exitTime * 30);
+    WORK_AS_IDX(short, instance->work0, 0) = intro->missionTime;
+    WORK_AS_IDX(short, instance->work1, 0) = 0;
     instance->flags |= 0xC00;
-    gameTracker->player->_FC |= 0x4000;
+    gameTracker->player->work0 |= 0x4000;
     gameTracker->player->flags |= 0x100;
     func_8002CA2C(4, intro->missionTime, intro);
     for (var_s0 = 1; var_s0 < 4; var_s0++) {
@@ -503,12 +503,12 @@ void spy_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
     var_v1 = 1;
     intro = instance->introData;
-    temp_s2 = &instance->_FC;
-    if (WORK_AS_IDX(short, instance->_100, 0) == 0) {
+    temp_s2 = WORK_AS_PTR(short, instance->work0);
+    if (WORK_AS_IDX(short, instance->work1, 0) == 0) {
         if (temp_s2[0] != 0) {
             if ((int)(((int**)gameTracker))[0x4BFC/4] < gameTracker->level->collectibleCountA) {
                 if (D_80154834 != 0) {
-                    WORK_AS_IDX(short, instance->_108, 0) = 1;
+                    WORK_AS_IDX(short, instance->work3, 0) = 1;
                 }
                 Set3DTextPosition(0x64, 0x69);
                 Print3DTextf(ANIMATED_3DTEXT("COLLECT"));
@@ -535,15 +535,15 @@ void spy_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         if ((((short*)((int**)gameTracker))[0x4C12/2] == 0) && (var_v1 != 0) && (instance->intro->_2C == 0)) {
             ((int*)temp_s2)[0x8/4] -= D_800E5FD8;
         }
-        if (((gameTracker->player->_FC & 0x600000) == 0x600000) && (instance->currentSubState == 0)) {
+        if (((gameTracker->player->work0 & 0x600000) == 0x600000) && (instance->currentSubState == 0)) {
             temp_s2[0] = (intro->missionTime - 1);
             if (intro->collectType == EBTIMER_COLLECTTYPE_CUTSCENE) {
                 SIGNAL_HandleSignal(PlayerInstance, intro->b + 4, 0);
             }
             instance->currentSubState = 1;
-            PlayerInstance->_FC &= ~0x400000;
+            PlayerInstance->work0 &= ~0x400000;
         }
-        if ((gameTracker->player->_FC & 0x400000) && ((((int**)gameTracker)[0x4C00/4] != 0) || (((int**)gameTracker)[0x4C04/4] != 0))) {
+        if ((gameTracker->player->work0 & 0x400000) && ((((int**)gameTracker)[0x4C00/4] != 0) || (((int**)gameTracker)[0x4C04/4] != 0))) {
             func_8002C18C(5);
             ((int*)temp_s2)[0x8/4] = 0x3C;
             temp_s2[2] = 1;
@@ -581,9 +581,9 @@ void spy_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         }
     } else {
         gameTracker->player->flags |= 0x100;
-        if (WORK_AS_IDX(short, instance->_100, 0) == 2) {
+        if (WORK_AS_IDX(short, instance->work1, 0) == 2) {
             // Delay map load
-            if (--instance->_104 < 0) {
+            if (--instance->work2 < 0) {
                 func_800396E0("map", "map5", ((int**)gameTracker));
             }
             else

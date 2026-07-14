@@ -18,7 +18,7 @@ void LIGHT_CalcShadowPositions(GameTracker* gameTracker) {
             (instance->flags2 & 0x40) != 0
             && (instance->flags & 0x200) != 0
             && ((instance->flags & 0x18000000) != 0x08000000)
-            || (instance == PlayerInstance && instance->currentMainState != 5 && !(instance->_FC & 0x1000))
+            || (instance == PlayerInstance && instance->currentMainState != 5 && !(instance->work0 & 0x1000))
         )
         {
             if (instance->flags & 0x10000000) {
@@ -31,7 +31,7 @@ void LIGHT_CalcShadowPositions(GameTracker* gameTracker) {
             }
             
             if (instance->object->oflags & 0x02000000) {
-                newPos.z -= *(short*)&instance->_120;
+                newPos.z -= *(short*)&instance->work9;
             } else {
                 newPos.z -= 1280;
             }

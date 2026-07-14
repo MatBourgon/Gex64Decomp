@@ -43,7 +43,7 @@ void func_8015A150_C2AD0(Instance* instance, short arg1, short arg2) {
 int func_8015A18C_C2B0C(Instance* instance) {
     if (instance->flags2 & 0x10) {
         PlayerInstance->currentMainState = 2;
-        gameTracker8->player->_FC &= ~0x1000000;
+        gameTracker8->player->work0 &= ~0x1000000;
         return 1;
     }
     return 0;
@@ -103,7 +103,7 @@ void mooshu_moobar_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
     if (instance->parent != 0) {
         data = (unsigned short*)instance->parent->object->data;
-        if (instance->_FC == 0) {
+        if (instance->work0 == 0) {
             func_80022738(instance, gameTracker);
             data[2] |= 0x4000;
         }
@@ -240,13 +240,13 @@ int func_8015C6D0_C5050(Instance* instance) {
 
 void func_8015C708_C5088(Instance* instance, GameTracker* gameTracker)
 {
-    instance->_FC = 0;
+    instance->work0 = 0;
 }
 
 void func_8015C710_C5090(Instance* instance, GameTracker* gameTracker) {
-    instance->_FC = 0;
+    instance->work0 = 0;
     if (instance->currentMainState == 1) {
-        instance->_104 = 0x10;
+        instance->work2 = 0x10;
         instance->currentSubState = 0;
         instance->currentMainState = 3;
         func_80050508(instance, 0x126, (short)((rand() & 0x1F) - 0xF), 0xC8, 0x2710);
@@ -254,17 +254,17 @@ void func_8015C710_C5090(Instance* instance, GameTracker* gameTracker) {
 }
 
 void func_8015C780_C5100(Instance* instance) {
-    if (instance->_FC == 0) {
+    if (instance->work0 == 0) {
         instance->currentSubState = 0;
-        instance->_104 = 0;
+        instance->work2 = 0;
         if (instance->currentMainState == 1) {
-            instance->_FC = 0x14;
+            instance->work0 = 0x14;
             instance->currentMainState = 3;
             func_80050508(instance, 0x126, (short)((rand() & 0x1F) - 0xF), 0xC8, 0x2710);
         } else if (instance->currentMainState == 0) {
-            instance->_FC = 0x14;
+            instance->work0 = 0x14;
             instance->currentMainState = 2;
-            instance->_100 = 0x40;
+            instance->work1 = 0x40;
         }
     }
 }
@@ -294,7 +294,7 @@ INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015D6B0_C6030);
 
 void func_8015D7B4_C6134(Instance* instance, GameTracker* gameTracker)
 {
-    WORK_AS_IDX(short, instance->_FC, 0)++;
+    WORK_AS_IDX(short, instance->work0, 0)++;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015D7C8_C6148);
@@ -304,9 +304,9 @@ INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015DA78_C63F8);
 extern void func_80017AB8(short* arg0, short arg1);
 void mooshu_ebolt_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if (instance->flags & 0x20000) {
-        if (WORK_AS(short*, instance->_108) != 0) {
-            func_80017AB8(WORK_AS(short*, instance->_108), 0);
-            WORK_AS(short*, instance->_108) = 0;
+        if (WORK_AS(short*, instance->work3) != 0) {
+            func_80017AB8(WORK_AS(short*, instance->work3), 0);
+            WORK_AS(short*, instance->work3) = 0;
         }
     } else {
         instance->flags |= 0x100000;
@@ -316,10 +316,10 @@ void mooshu_ebolt_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
 void mooshu_ebolt_OnUpdate(Instance* instance, GameTracker* gameTracker) {
-    func_8015D7C8_C6148(instance, instance->_100);
-    if (instance->_FC > 0) {
-        instance->_FC--;
-    } else if (instance->_FC == 0) {
+    func_8015D7C8_C6148(instance, instance->work1);
+    if (instance->work0 > 0) {
+        instance->work0--;
+    } else if (instance->work0 == 0) {
         func_8002E350(instance);
     }
 }

@@ -49,13 +49,13 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_80159D54_DFB74);
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_80159E3C_DFC5C);
 
 void scifi_dust_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    instance->_FC = rand() % 10 + 6;
+    instance->work0 = rand() % 10 + 6;
 }
 
 void scifi_dust_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     unsigned short z;
 
-    z = instance->position.z - instance->_FC;
+    z = instance->position.z - instance->work0;
     instance->position.z = z;
     if ((short)z < instance->intro->position.z - 0x190) {
         INSTANCE_KillInstance(instance);
@@ -149,7 +149,7 @@ void scifi_rocket_OnCollide(Instance* instance, GameTracker* gameTracker) {
     GenericCollide(instance, gameTracker);
     if (bspTree->instanceSpline == PlayerInstance) {
         if (PlayerInstance->currentMainState == 1) {
-            instance->_100 = 1;
+            instance->work1 = 1;
         }
     }
 }
@@ -172,10 +172,10 @@ void scifi_onoff_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 
     if (instance->object->data != NULL && *((int*)instance->object->data) != 0) {
-        instance->_100 = 1;
+        instance->work1 = 1;
     }
 
-    if (instance->currentMainState == 0 || instance->_100 != 0) {
+    if (instance->currentMainState == 0 || instance->work1 != 0) {
         instance->currentAnimFrame = 0;
     } else if (((short*)&instance->object->_08)[1] != 0) {
         instance->currentAnimFrame = ((unsigned short*)(instance->object->animList[0]))[1] - 1;
@@ -186,7 +186,7 @@ void scifi_onoff_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     instance->currentTextureAnimFrame = instance->currentMainState ^ 1;
 
     if (instance->currentSubState == 1) {
-        if (instance->currentMainState == 1 || instance->_100 != 0) {
+        if (instance->currentMainState == 1 || instance->work1 != 0) {
             func_8002DAF8(instance, -1);
         } else {
             func_8002DAF8(instance, -0x3E9);
@@ -195,7 +195,7 @@ void scifi_onoff_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         if (instance->flags2 & 0x10) {
             instance->flags2 &= ~0x10;
             instance->currentSubState = 0;
-            if (instance->currentMainState == 0 || instance->_100 != 0) {
+            if (instance->currentMainState == 0 || instance->work1 != 0) {
                 instance->currentAnimFrame = 0;
             } else if (((short*)&instance->object->_08)[1] != 0) {
                 instance->currentAnimFrame = ((unsigned short*)(instance->object->animList[0]))[1] - 1;
@@ -279,22 +279,22 @@ void scifi_bub_OnCreate(Instance* instance, GameTracker* gameTracker) {
     introData = instance->introData;
     objData = instance->object->data;
     if (introData != NULL) {
-        instance->_FC = introData[0];
-        instance->_100 = introData[1];
-        WORK_AS(int, instance->_10C) = introData[2];
+        instance->work0 = introData[0];
+        instance->work1 = introData[1];
+        WORK_AS(int, instance->work4) = introData[2];
     } else if (objData != NULL) {
-        instance->_FC = objData[0];
-        instance->_100 = objData[1];
-        WORK_AS(int, instance->_10C) = objData[2];
+        instance->work0 = objData[0];
+        instance->work1 = objData[1];
+        WORK_AS(int, instance->work4) = objData[2];
     }
-    if (((short*)&instance->_FC)[1] == 0) {
-        instance->_FC = 0x64;
+    if (((short*)&instance->work0)[1] == 0) {
+        instance->work0 = 0x64;
     }
-    if (WORK_AS_IDX(short, instance->_100, 1) == 0) {
-        instance->_100 = 0x1E;
+    if (WORK_AS_IDX(short, instance->work1, 1) == 0) {
+        instance->work1 = 0x1E;
     }
-    if (WORK_AS_IDX(short, instance->_10C, 1) == 0) {
-        WORK_AS(int, instance->_10C) = 0x384;
+    if (WORK_AS_IDX(short, instance->work4, 1) == 0) {
+        WORK_AS(int, instance->work4) = 0x384;
     }
     INSTANCE_InsertInstanceWithFlagsSet(instance, 0x1000);
     func_8004A7B8(instance, 0, 0);
@@ -305,7 +305,7 @@ void scifi_bub_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->rotation.z = 0;
     instance->flags |= 0x80;
     instance->initialPos = instance->position;
-    WORK_AS(int, instance->_110) = 1;
+    WORK_AS(int, instance->work5) = 1;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015AC28_E0A48);
@@ -314,7 +314,7 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_bub_OnUpdate);
 
 void scifi_bub_OnCollide(Instance* instance, GameTracker* gameTracker) {
     if (instance->bspTree->instanceSpline == gameTracker->player && instance->bspTree->_08[4] == 0) {
-        func_80159720_DF540(((short*)&instance->_FC)[1]);
+        func_80159720_DF540(((short*)&instance->work0)[1]);
         instance->currentMainState = 1;
     }
 }
@@ -324,9 +324,9 @@ void scifi_eel_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->currentAnimFrame = 0;
     instance->_D0[3] = 0;
     instance->currentMainState = 0;
-    instance->_100 = 0;
+    instance->work1 = 0;
     instance->flags |= 0x800;
-    instance->_104 = ((short*)instance->object->animList[1])[1];
+    instance->work2 = ((short*)instance->object->animList[1])[1];
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_eel_OnUpdate);
@@ -343,9 +343,9 @@ void scifi_stmvent_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
     introData = instance->introData;
     RotMatrix(&instance->intro->rotation, &mat);
-    WORK_AS(int, instance->_10C) = mat.m[0][2] * 25 >> 10;
-    WORK_AS(int, instance->_110) = mat.m[1][2] * 25 >> 10;
-    WORK_AS(int, instance->_114)= mat.m[2][2] * 25 >> 10;
+    WORK_AS(int, instance->work4) = mat.m[0][2] * 25 >> 10;
+    WORK_AS(int, instance->work5) = mat.m[1][2] * 25 >> 10;
+    WORK_AS(int, instance->work6)= mat.m[2][2] * 25 >> 10;
     if (introData != NULL) {
         instance->_D0[0] = introData[1];
         instance->_D0[1] = introData[2];
@@ -447,31 +447,31 @@ void func_8015B5F0_E1410(Instance* instance) {
     } else {
         model = obj->modelList[1];
     }
-    if (instance->_104 != 0) {
-        WORK_AS(int, instance->_108) += 0x1000;
-        if (WORK_AS(int, instance->_108) == 0xC000) {
-            instance->_104 = 0;
+    if (instance->work2 != 0) {
+        WORK_AS(int, instance->work3) += 0x1000;
+        if (WORK_AS(int, instance->work3) == 0xC000) {
+            instance->work2 = 0;
         }
     } else {
-        WORK_AS(int, instance->_108) -= 0x1000;
-        if (WORK_AS(int, instance->_108) == -0xC000) {
-            instance->_104 = 1;
+        WORK_AS(int, instance->work3) -= 0x1000;
+        if (WORK_AS(int, instance->work3) == -0xC000) {
+            instance->work2 = 1;
         }
     }
-    if (*(int*)&instance->_118 != 0) {
-        *(int*)&instance->_11C += 0x1000;
-        if (*(int*)&instance->_11C == 0xA000) {
-            *(int*)&instance->_118 = 0;
+    if (*(int*)&instance->work7 != 0) {
+        *(int*)&instance->work8 += 0x1000;
+        if (*(int*)&instance->work8 == 0xA000) {
+            *(int*)&instance->work7 = 0;
         }
     } else {
-        *(int*)&instance->_11C -= 0x1000;
-        if (*(int*)&instance->_11C == -0xA000) {
-            *(int*)&instance->_118 = 1;
+        *(int*)&instance->work8 -= 0x1000;
+        if (*(int*)&instance->work8 == -0xA000) {
+            *(int*)&instance->work7 = 1;
         }
     }
-    rot.x = (WORK_AS(int, instance->_10C) >> 1) + (*(int*)&instance->_11C >> 12);
-    rot.y = (WORK_AS(int, instance->_110) >> 1) + (*(int*)&instance->_11C >> 12);
-    rot.z = (WORK_AS(int, instance->_114)>> 1) + (WORK_AS(int, instance->_108) >> 12);
+    rot.x = (WORK_AS(int, instance->work4) >> 1) + (*(int*)&instance->work8 >> 12);
+    rot.y = (WORK_AS(int, instance->work5) >> 1) + (*(int*)&instance->work8 >> 12);
+    rot.z = (WORK_AS(int, instance->work6)>> 1) + (WORK_AS(int, instance->work3) >> 12);
     vel.x = 0;
     vel.y = 0;
     vel.z = 0;
@@ -493,11 +493,11 @@ void scifi_stmvent_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         instance->_E0[2] = instance->_E0[0] % instance->_E0[1];
         if (instance->_D0[0] < instance->_E0[2]) {
             if (PlayerInstance->currentSubState == 0x200000) {
-                instance->_100++;
+                instance->work1++;
             }
-            if (instance->_100 >= 10) {
+            if (instance->work1 >= 10) {
                 instance->_E0[0] = 0;
-                instance->_100 = 0;
+                instance->work1 = 0;
             }
             func_8015B5F0_E1410(instance);
         }
@@ -554,12 +554,12 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015BFD4_E1DF4);
 
 void scifi_bldbota_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if (instance->flags & 0x20000) {
-        func_8015BFA8_E1DC8((Instance*)instance->_FC);
-        instance->_FC = 0xCDCDCDCD;
+        func_8015BFA8_E1DC8((Instance*)instance->work0);
+        instance->work0 = 0xCDCDCDCD;
     } else {
         instance->flags |= 0x10080;
         instance->currentTextureAnimFrame = 0;
-        instance->_FC = func_8015BF08_E1D28(instance);
+        instance->work0 = func_8015BF08_E1D28(instance);
     }
 }
 
@@ -568,7 +568,7 @@ void scifi_bldbota_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
     frame = instance->currentTextureAnimFrame;
     instance->currentTextureAnimFrame = frame + 1;
-    func_8015BFD4_E1DF4(instance->_FC, (short)frame);
+    func_8015BFD4_E1DF4(instance->work0, (short)frame);
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_abubble_OnCreate);
@@ -577,10 +577,10 @@ void scifi_abubble_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     SVECTOR unused;    /* dead local — reproduces the 0x20 frame */
     int v;
 
-    v = instance->_104;
-    if (WORK_AS_IDX(short, instance->_104, 1) < WORK_AS_IDX(short, instance->_100, 1)) {
+    v = instance->work2;
+    if (WORK_AS_IDX(short, instance->work2, 1) < WORK_AS_IDX(short, instance->work1, 1)) {
         if (instance->flags & 0x1000) {
-            instance->_104 = (short)(v + 1);
+            instance->work2 = (short)(v + 1);
         }
     } else if (instance->flags & 0x1000) {
         INSTANCE_InsertInstanceWithFlagsCleared(instance, 0x1000);
@@ -589,7 +589,7 @@ void scifi_abubble_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
 void scifi_abubble_OnCollide(Instance* instance, GameTracker* gameTracker) {
     if (instance->bspTree->instanceSpline == gameTracker->player && instance->bspTree->_08[4] == 0) {
-        func_80159720_DF540(((short*)&instance->_FC)[1]);
+        func_80159720_DF540(((short*)&instance->work0)[1]);
         INSTANCE_PlainDeath(instance, 5, -1, 0);
     }
 }
@@ -601,7 +601,7 @@ void scifi_acrate_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
     intro = (unsigned short*)instance->introData;
     data = (unsigned short*)instance->object->data;
-    fc = (short*)&instance->_FC;
+    fc = (short*)&instance->work0;
     if (intro != 0) {
         fc[0] = intro[0];
         fc[1] = intro[1];
@@ -624,16 +624,16 @@ INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_acrate_OnCollide);
 
 void scifi_xa_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
-    instance->_FC = 0;
+    instance->work0 = 0;
 }
 
 
 void scifi_xa_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int w;
 
-    instance->_FC += 1;
+    instance->work0 += 1;
     instance->scale.x += 0x555;
-    w = instance->_FC;
+    w = instance->work0;
     instance->scale.y += 0x555;
     instance->scale.z += 0x555;
     if (w >= 0xD) {
@@ -665,17 +665,17 @@ typedef struct {
 } AlienData;
 
 void scifi_alien_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    *(AlienData*)&instance->_FC = *(AlienData*)instance->data;
+    *(AlienData*)&instance->work0 = *(AlienData*)instance->data;
     if (!(instance->flags & 0x20000)) {
         instance->flags |= 0x10000;
         instance->currentMainState = 2;
         func_8004A7B8(instance, 2, 0);
-        instance->position.z += ((AlienData*)&instance->_FC)->_08;
+        instance->position.z += ((AlienData*)&instance->work0)->_08;
         func_80049330(instance);
         instance->flags |= 0x100000;
-        WORK_AS_IDX(short, instance->_110, 1) = ((AlienData*)&instance->_FC)->_00 / 2 + 1;
-        WORK_AS_IDX(short, instance->_110, 0) = WORK_AS_IDX(short, instance->_114, 0)= ((AlienData*)&instance->_FC)->_00;
-    } else if (instance->_120 != 0) {
+        WORK_AS_IDX(short, instance->work5, 1) = ((AlienData*)&instance->work0)->_00 / 2 + 1;
+        WORK_AS_IDX(short, instance->work5, 0) = WORK_AS_IDX(short, instance->work6, 0)= ((AlienData*)&instance->work0)->_00;
+    } else if (instance->work9 != 0) {
         instance->intro->flags |= 8;
     }
 }
@@ -712,46 +712,46 @@ void scifi_gas_OnCreate(Instance* instance, GameTracker* gameTracker) {
     t = 0;
     introData = ((unsigned short*)instance->introData);
     data = instance->data;
-    fc = (char*)&instance->_FC;
+    fc = (char*)&instance->work0;
     if (instance->flags & 0x20000) {
         if (instance->currentMainState == 5) {
-            func_800331BC(instance->_104);
+            func_800331BC(instance->work2);
         }
     } else {
-        *(GasData*)&instance->_FC = *(GasData*)data;
+        *(GasData*)&instance->work0 = *(GasData*)data;
         r = rand();
         instance->flags |= 0x80;
         instance->currentTextureAnimFrame = r % 24;
         if (introData != NULL) {
             if (introData[0] != 0xFFFF) {
-                *(GasData*)&instance->_FC = *(GasData*)(introData + 1);
-                if (WORK_AS_IDX(char, instance->_100, 2) < 0) {
-                    WORK_AS(int, instance->_108) |= 0x8000;
-                    WORK_AS_IDX(char, instance->_100, 2) = ~WORK_AS_IDX(unsigned char, instance->_100, 2);
+                *(GasData*)&instance->work0 = *(GasData*)(introData + 1);
+                if (WORK_AS_IDX(char, instance->work1, 2) < 0) {
+                    WORK_AS(int, instance->work3) |= 0x8000;
+                    WORK_AS_IDX(char, instance->work1, 2) = ~WORK_AS_IDX(unsigned char, instance->work1, 2);
                 }
                 t = func_8004A61C(instance);
                 m = introData[0];
-                m %= (unsigned int)(((unsigned short*)&instance->_FC)[1] + *(unsigned short*)&instance->_FC + WORK_AS_IDX(unsigned char, instance->_100, 1));
-                if (m < ((unsigned short*)&instance->_FC)[1]) {
-                    WORK_AS_IDX(short, instance->_108, 0) = m;
+                m %= (unsigned int)(((unsigned short*)&instance->work0)[1] + *(unsigned short*)&instance->work0 + WORK_AS_IDX(unsigned char, instance->work1, 1));
+                if (m < ((unsigned short*)&instance->work0)[1]) {
+                    WORK_AS_IDX(short, instance->work3, 0) = m;
                     instance->currentMainState = 0;
                 } else {
-                    m -= ((unsigned short*)&instance->_FC)[1];
-                    if (m < WORK_AS_IDX(unsigned char, instance->_100, 1)) {
-                        WORK_AS_IDX(short, instance->_108, 0) = m;
+                    m -= ((unsigned short*)&instance->work0)[1];
+                    if (m < WORK_AS_IDX(unsigned char, instance->work1, 1)) {
+                        WORK_AS_IDX(short, instance->work3, 0) = m;
                         instance->currentMainState = 1;
                     } else {
-                        m -= WORK_AS_IDX(unsigned char, instance->_100, 1);
+                        m -= WORK_AS_IDX(unsigned char, instance->work1, 1);
                         if (m < t) {
                             instance->currentMainState = 2;
                             t = m;
                         } else {
                             m -= t;
-                            if (m < *(unsigned short*)&instance->_FC) {
-                                WORK_AS_IDX(short, instance->_108, 0) = m;
+                            if (m < *(unsigned short*)&instance->work0) {
+                                WORK_AS_IDX(short, instance->work3, 0) = m;
                                 instance->currentMainState = 3;
                             } else {
-                                m -= *(unsigned short*)&instance->_FC;
+                                m -= *(unsigned short*)&instance->work0;
                                 if (m < t) {
                                     instance->currentMainState = 4;
                                     t = t - m;
@@ -781,11 +781,11 @@ void scifi_gas_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     unsigned short y;
     int w;
 
-    fc = (unsigned short*)&instance->_FC;
-    x = WORK_AS_IDX(unsigned short, instance->_108, 0);
+    fc = (unsigned short*)&instance->work0;
+    x = WORK_AS_IDX(unsigned short, instance->work3, 0);
     y = instance->currentTextureAnimFrame;
-    WORK_AS_IDX(unsigned short, instance->_108, 0) = x + 1;
-    w = WORK_AS(int, instance->_108);
+    WORK_AS_IDX(unsigned short, instance->work3, 0) = x + 1;
+    w = WORK_AS(int, instance->work3);
     instance->currentTextureAnimFrame = y + 1;
     if (w & 0x8000) {
         instance->rotation.z = (instance->rotation.z + 0x2200) & 0xFFF;
@@ -1210,10 +1210,10 @@ void scifi_rtblast_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
     dx = instance->position.x - instance->initialPos.x;
     dy = instance->position.y - instance->initialPos.y;
-    if (((short*)&instance->_FC)[1] * ((short*)&instance->_FC)[1] < dx * dx + dy * dy) {
+    if (((short*)&instance->work0)[1] * ((short*)&instance->work0)[1] < dx * dx + dy * dy) {
         INSTANCE_PlainDeath(instance, 4, -1, 0);
     }
-    func_80047E64(instance, ((short*)&instance->_FC)[0]);
+    func_80047E64(instance, ((short*)&instance->work0)[0]);
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_rtblast_OnCollide);
