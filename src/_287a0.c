@@ -38,11 +38,11 @@ INCLUDE_ASM("asm/nonmatchings/_287a0", func_8002948C);
 
 INCLUDE_ASM("asm/nonmatchings/_287a0", func_800295A0);
 
-void func_80029600(short* arg0, int* arg1, char* arg2) {
-    if (*(int*)((char*)arg0 + 0x14) & 0x10) {
-        *(int*)((char*)arg0 + 0xF8) = 1;
-        ((char*)arg0)[0x4E] = 0;
-        *(short*)((char*)arg0 + 0x5E) = 0;
+void func_80029600(Instance* instance, int* arg1, char* arg2) {
+    if (instance->flags2 & 0x10) {
+        instance->currentSubState = 1;
+        instance->currentModelAnim = 0;
+        instance->currentAnimFrame = 0;
         *(short*)(arg2 + 0x9C) = 0;
         *(short*)(arg2 + 0x9E) = 0;
     }
@@ -66,10 +66,10 @@ INCLUDE_ASM("asm/nonmatchings/_287a0", func_80029FA4);
 
 INCLUDE_ASM("asm/nonmatchings/_287a0", func_8002A0AC);
 
-int func_8002A140(short* arg0, int* arg1, char* arg2) {
-    if (*(int*)((char*)arg0 + 0x14) & 0x10) {
-        *(int*)((char*)arg0 + 0xF8) = 2;
-        *(char*)((char*)arg0 + 0x4e) = 8;
+int func_8002A140(Instance* instance, int* arg1, char* arg2) {
+    if (instance->flags2 & 0x10) {
+        instance->currentSubState = 2;
+        instance->currentModelAnim = 8;
         *(short*)((char*)arg2 + 0x9E) = 0;
          *(short*)((char*)arg2 + 0x9C) = 0;
         *(short*)((int)arg2 + 0xDC) = 0x3C;

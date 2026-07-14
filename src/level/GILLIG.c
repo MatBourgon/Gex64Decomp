@@ -250,7 +250,7 @@ void gillig_tikifir_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             instance->rotation.z = instance->rotation.z + instance->work0;
             instance->position.x = instance->parent->position.x + (func_8003A6AC(instance->rotation.z + 0x400) * 39 >> 6);
             instance->position.y = instance->parent->position.y + (func_8003A4E0(instance->rotation.z + 0x400) * 39 >> 6);
-            if (((int**)((int**)instance->intro->_04)[1])[0x24/4][0x108/4] == 0)
+            if (((Intro**)instance->intro->_04)[1]->instance->work3 == 0)
                instance->currentMainState = 2;
         }
     } else if (instance->currentMainState == 2) {
@@ -338,7 +338,7 @@ void gillig_hedhntr_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             }
             instance->flags2 &= ~0x10;
         }
-        link = ((int**)((int**)instance->intro->_04)[1])[0x24/4][0x108/4];
+        link = ((Intro**)instance->intro->_04)[1]->instance->work3;
         if (link == 1) {
             instance->currentMainState = link;
             instance->currentModelAnim = 0;
@@ -399,7 +399,7 @@ void gillig_hedhntr_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         return;
     } else if (state == 2) {
         func_8002DAF8(instance, -1);
-        if (((int**)((int**)instance->intro->_04)[1])[0x24/4][0xFC/4] == 0x7C) {
+        if (((Intro**)instance->intro->_04)[1]->instance->work0 == 0x7C) {
             instance->currentMainState = 1;
         }
     } else if (state == 3) {
@@ -411,13 +411,13 @@ void gillig_hedhntr_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             instance->currentAnimFrame = ((short*)instance->object->animList[instance->currentModelAnim])[1] - 1;
             instance->intro->flags |= 0x80;
             instance->currentMainState = 4;
-            link = ((int**)((int**)instance->intro->_04)[1])[0x24/4][0x108/4];
+            link = ((Intro**)instance->intro->_04)[1]->instance->work3;
             if (link == 2) {
                 func_80050A80(0, 1);
             } else if (link == 1) {
                 func_80050A80(0, 2);
             }
-            if (((int**)((int**)instance->intro->_04)[1])[0x24/4][0x108/4] == 0) {
+            if (((Intro**)instance->intro->_04)[1]->instance->work3 == 0) {
                 func_800278EC(PlayerInstance);
             }
         }

@@ -34,12 +34,12 @@ typedef struct Instance_s
     short _34[6];
     short _40[4];
     SVECTOR position; // 48, 4A, 4C
-    unsigned char currentModelAnim;
-    char lightGroup;
+    unsigned char currentModelAnim; // 4E
+    char lightGroup; // 4F
     SVECTOR oldPos; // 50, 52, 54
-    short currentTextureAnimFrame;
+    short currentTextureAnimFrame; // 56
     SVECTOR initialPos; // 58, 5A, 5C
-    short currentAnimFrame;
+    short currentAnimFrame; // 5E
     ROTATION rotation; // 60, 62, 64, 66
     SVector scale; // 68, 6A, 6C, 6E
     int _70;
@@ -65,18 +65,18 @@ typedef struct Instance_s
     int _D0[4];
     int _E0[4];
     int _F0;
-    int currentMainState;
-    int currentSubState;
-    long work0;
-    long work1;
-    long work2;
-    long work3;
-    long work4;
-    long work5;
-    long work6;
-    long work7;
-    long work8;
-    long work9;
+    int currentMainState;   //  F4
+    int currentSubState;    //  F8
+    long work0;             //  FC
+    long work1;             // 100
+    long work2;             // 104
+    long work3;             // 108
+    long work4;             // 10C
+    long work5;             // 110
+    long work6;             // 114
+    long work7;             // 118
+    long work8;             // 11C
+    long work9;             // 120
 } Instance; // Should be size accurate now
 
 extern Instance* PlayerInstance;
