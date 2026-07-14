@@ -3,12 +3,24 @@
 #include "level/KUNGFU.h"
 #include "types/intro/BTimer.h"
 #include "types/G2String.h"
+#include "SPLINE.h"
+#include "OBTABLE.h"
 
 
 extern int D_800E5FD8;
 extern int D_80154834;
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_kboat_OnCreate);
+void kungfu_kboat_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    SVECTOR a;
+    SVECTOR b;
+
+    instance->flags |= 0x400;
+    a.x = b.x = instance->position.x;
+    a.y = b.y = instance->position.y;
+    a.z = instance->position.z - 0x100;
+    b.z = instance->position.z + 0x200;
+    COLLIDE_PointAndTerrain(gameTracker8->level->segmentAddress, &a, &b, instance);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_kboat_OnUpdate);
 
@@ -480,7 +492,31 @@ void kungfu_onoff_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_spike_OnCreate);
+void kungfu_spike_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    short* p = ((short*)&instance->_F4[2]);
+    int v;
+    int t;
+
+    p[0] = 0;
+    p[2] = 0x1E;
+    p[3] = 0x1E;
+    if (instance->introData != 0) {
+        *(SVector*)&instance->_F4[2] = *((SVector*)instance->introData);
+    }
+    t = p[0];
+    instance->_F4[0] = t;
+    if (t == 1) {
+        v = ((unsigned short*)instance->object->animList[0])[1] - 1;
+    } else {
+        v = 0;
+    }
+    instance->currentAnimFrame = v;
+    v = p[1];
+    if (v == 0) {
+        v = p[2];
+    }
+    *(int*)&p[4] = v;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_spike_OnUpdate);
 
@@ -517,9 +553,42 @@ void kungfu_dragbod_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->flags |= 0x100400;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_dragbod_OnCollide);
+void func_8015C884_ABAA4(Instance* instance, Instance* arg1, GameTracker* gameTracker);
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_dragon_OnCollide);
+extern G2String D_80162700_B1920;
+
+void kungfu_dragbod_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    Intro** p = ((Intro**)instance->intro->_04);
+    int count = ((int*)p)[0];
+    int i;
+    Intro* entry;
+
+    p += 1;
+    for (i = 0; i < count; i++) {
+        entry = p[0];
+        if (G2String_Compare_EQ(entry->object->name, &D_80162700_B1920)) {
+            func_8015C884_ABAA4(instance, entry->instance, gameTracker);
+            break;
+        }
+        p += 1;
+    }
+}
+
+void kungfu_dragon_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp = instance->bspTree;
+    char c = -1;
+    short* p = (short*)&instance->_E0[2];
+    if (bsp->_04 == 1) {
+        c = bsp->_08[4];
+    } else if (bsp->_04 == 5) {
+        c = bsp->_08[2];
+    }
+    if (c == 1) {
+        p[0] |= 1;
+    } else {
+        func_8015C884_ABAA4(instance, instance, gameTracker);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_cannon_OnCreate);
 
@@ -636,7 +705,23 @@ void func_8015DBB0_ACDD0(Instance* instance, short* arg1) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015DC00_ACE20);
+void func_8015DC00_ACE20(Instance* instance, short* arg1) {
+    Intro* intro;
+    int dx;
+    int dy;
+
+    instance->flags2 &= ~0x10;
+    arg1[0x18 / 2] = 7;
+    if (instance->currentModelAnim != 0 && instance->currentModelAnim != 5) {
+        instance->currentModelAnim = (arg1[0x10 / 2] != 0) ? 5 : 0;
+        instance->currentAnimFrame = 0;
+    }
+    intro = instance->intro;
+    dx = intro->position.x - instance->position.x;
+    dy = intro->position.y - instance->position.y;
+    ((int*)arg1)[0x14 / 4] = (short)ratan2(dy, dx);
+    arg1[0x1A / 2] = 0;
+}
 
 void func_8015DC9C_ACEBC(Instance* instance, GameTracker* gameTracker)
 {
@@ -648,9 +733,38 @@ INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_samuri_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_samuri_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_boat_OnCreate);
+void kungfu_boat_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    MultiSpline* spline = instance->intro->multiSpline;
+    short* p;
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_boat_OnUpdate);
+    instance->flags |= 0x100000;
+    p = ((short*)&instance->_F4[2]);
+    if (instance->introData != 0) {
+        ((short*)&instance->_F4[2])[1] = ((unsigned short*)instance->introData)[1];
+    } else {
+        ((short*)&instance->_F4[2])[1] = 0x19;
+    }
+    if (p[1] < 0 && spline != 0) {
+        instance->position = *SplineGetLastPoint(spline->positional, &spline->curPositional);
+    }
+}
+
+SVECTOR* func_800517E4(Spline* spline, short frame, SplineDef* def);
+
+void kungfu_boat_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    MultiSpline* ms;
+    SVECTOR* point;
+
+    ms = instance->intro->multiSpline;
+    if (ms != 0) {
+        point = func_800517E4(ms->positional, ((short*)&instance->_F4[2])[1], &ms->curPositional);
+        if (point != 0) {
+            instance->position.x = point->x;
+            instance->position.y = point->y;
+            instance->position.z = point->z;
+        }
+    }
+}
 
 void kungfu_boat_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
@@ -727,7 +841,17 @@ void func_8015F5F4_AE814(Instance* instance, short* arg1) {
     arg1[8] = 0xB;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_8015F61C_AE83C);
+void func_8015F61C_AE83C(Instance* instance) {
+    if ((instance->flags2 & 0x10) || (unsigned int)(instance->currentModelAnim - 7) >= 2) {
+        instance->flags2 &= ~0x10;
+        if (rand() % 100 < 0x14) {
+            instance->currentModelAnim = 7;
+        } else {
+            instance->currentModelAnim = 8;
+        }
+        instance->currentAnimFrame = 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_ninja_OnUpdate);
 
@@ -741,7 +865,25 @@ void kungfu_swing_OnCollide(Instance* instance, GameTracker* gameTracker) {
     func_80022D54(instance, gameTracker);
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_oneway_OnCreate);
+void kungfu_oneway_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    short* d = ((short*)instance->object->data);
+    int r;
+    short m;
+
+    ((short*)instance->_D0)[0] = 1;
+    instance->flags |= 0x100000;
+    r = func_8004A3B4(instance);
+    m = 0xA;
+    ((short*)instance->_D0)[2] = 0x3C;
+    if (d != 0) {
+        ((short*)instance->_D0)[2] = d[0];
+        m = d[1];
+    }
+    if (r >= 0) {
+        ((short*)instance->_D0)[1] = r * m;
+    }
+    SCRIPT_InstanceSplineInit(instance, gameTracker);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_oneway_OnUpdate);
 
@@ -769,7 +911,22 @@ INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_joyride_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_joyride_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_leafgen_OnCreate);
+void kungfu_leafgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    const char name[] = "leaffx__";
+    char* targetObjectName = instance->introData;
+    char* d = instance->object->data;
+    int* p = &instance->_F4[2];
+    if (targetObjectName == 0) {
+        if (d != 0) {
+            targetObjectName = d;
+        } else {
+            instance->introData = (char*)name;
+            targetObjectName = (char*)name;
+        }
+    }
+    p[0] = ((int)OBTABLE_FindObject(targetObjectName));
+    p[7] = (rand() & 0xF) + 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_801616D4_B08F4);
 
@@ -780,7 +937,19 @@ void func_80161944_B0B64(short* arg0) {
     RotMatrixZ(((short*)arg0)[0x48/2], (char*)((int*)arg0)[5] + 0xC);
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_801619A4_B0BC4);
+extern int D_80078244;
+extern int D_800EB8A0;
+extern void func_801616D4_B08F4();
+
+void func_801619A4_B0BC4(Instance* instance, int arg1, int arg2) {
+    Model* model;
+
+    if (instance->_F4[2] != 0) {
+        model = ((Object*)instance->_F4[2])->modelList[0];
+        D_80078244 = (rand() & 3) + 2;
+        func_800170E8(model, model->_14 + 0xC, arg2, 0, 0, D_800EB8A0, func_801616D4_B08F4, func_80161944_B0B64, 0x28);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_leafgen_OnUpdate);
 

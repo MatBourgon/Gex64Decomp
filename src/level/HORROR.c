@@ -5,6 +5,7 @@
 #include "types/intro/QMark.h"
 #include "types/intro/BTimer.h"
 #include "types/G2String.h"
+#include "level/COMMON.h"
 
 #include "types/Vector.h"
 extern int D_800E5FD8;
@@ -199,7 +200,18 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_huckhed_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_huckhed_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_8015BF7C_9F7AC);
+extern G2String D_80164C58_A8488;
+
+void func_8015BF7C_9F7AC(Instance* instance, GameTracker* gameTracker) {
+    Instance* e;
+
+    for (e = gameTracker->instanceList->first; e != 0; e = e->next) {
+        if (e != gameTracker->player && G2String_Compare_EQ(e->object->name, &D_80164C58_A8488) && e->_100 == ((int)instance)) {
+            common_icecube_OnCollide(e, gameTracker);
+            break;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_huckhed_OnCollide);
 
@@ -318,7 +330,7 @@ INCLUDE_RODATA("asm/nonmatchings/level/HORROR", D_80164C4C_A847C);
 
 INCLUDE_RODATA("asm/nonmatchings/level/HORROR", D_80164C50_A8480);
 
-INCLUDE_RODATA("asm/nonmatchings/level/HORROR", D_80164C58_A8488);
+INCLUDE_RODATA("asm/nonmatchings/level/HORROR", D_80164C58_A8488); // icecube_
 
 INCLUDE_RODATA("asm/nonmatchings/level/HORROR", D_80164C64_A8494);
 
@@ -597,7 +609,18 @@ void horror_evileye_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_evileye_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_evileye_OnCollide);
+void horror_evileye_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    int* intro;
+
+    intro = (int*)instance->introData;
+    if (instance->bspTree->instanceSpline == PlayerInstance
+        && instance->bspTree->instanceSpline->_F4[1] == 0x1000
+        && (unsigned int)(instance->_F4[0] - 1) >= 2 && intro[0] == 0) {
+        instance->_F4[0] = 1;
+        instance->_F4[2] = 0;
+        func_80050508(instance, 0x1D0, 0, 0x64, 0xFA0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_splitob_OnCreate);
 
@@ -1004,7 +1027,28 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_reza_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_reza_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_reza_OnCollide);
+void horror_reza_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    SVECTOR unused;    /* dead local — reproduces the 0x20 frame */
+    BSPTree* bsp;
+    int f;
+    int g;
+
+    bsp = instance->bspTree;
+    if (bsp->instanceSpline == gameTracker->player && bsp->_06 == 1 && instance->currentModelAnim != 5) {
+        /* the in-place mask keeps the original byte alive in g (register scheduling) */
+        f = ((char*)&instance->_118)[3];
+        g = f;
+        f &= 0x80;
+        if (f == 0) {
+            if (g & 2) {
+                ((char*)&instance->_118)[3] = g | 0x80;
+                func_8004A7B8(instance, 2, 0);
+            } else {
+                func_80022714(instance, gameTracker);
+            }
+        }
+    }
+}
 
 void horror_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int var_s0;

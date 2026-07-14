@@ -148,7 +148,26 @@ INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015A170_8B310);
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015A3DC_8B57C);
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015A434_8B5D4);
+extern int D_800EB8A0;
+extern void func_80017E88();
+extern int func_8015A3DC_8B57C();
+
+void func_8015A434_8B5D4(Instance* instance, Object* obj, int pos, int rot) {
+    SVECTOR vel;
+    short* spray;
+    Model* model;
+
+    if (obj != 0) {
+        model = obj->modelList[2];
+        vel.z = -4;
+        vel.y = 0;
+        vel.x = 0;
+        spray = (short*)func_800170E8(model, model->_14, pos, rot, &vel, D_800EB8A0, func_80017E88, func_8015A3DC_8B57C, 0x3C);
+        if (spray != 0) {
+            spray[0x44 / 2] = instance->position.z;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015A4C8_8B668);
 
@@ -178,11 +197,48 @@ INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015AED8_8C078);
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015B07C_8C21C);
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015B130_8C2D0);
+extern void func_8004ACB0(short* angle, short target, int step);
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015B1D8_8C378);
+int func_8015B130_8C2D0(Instance* instance, int arg1, short arg2) {
+    SVECTOR d;
+    int angle;
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015B268_8C408);
+    d.x = 0x2D00 - instance->position.x;
+    d.y = 0x267A - instance->position.y;
+    d.z = -instance->position.z;
+    angle = ((ratan2(d.y, d.x) << 16) >> 16) + 0x400;
+    func_8004ACB0(&instance->rotation.z, angle, arg2);
+    return instance->rotation.z == angle;
+}
+
+/* swing the camera focus toward the player at 0x40 per tick */
+void func_8015B1D8_8C378(Instance* instance, GameTracker* gameTracker) {
+    SVECTOR d;
+
+    d.x = PlayerInstance->position.x - instance->position.x;
+    d.y = PlayerInstance->position.y - instance->position.y;
+    d.z = PlayerInstance->position.z - instance->position.z;
+    func_8004ACB0(&gameTracker->camera->focusRotationX, ((ratan2(d.y, d.x) << 16) + 0x4000000) >> 16, 0x40);
+}
+
+void func_8015B268_8C408(Instance* instance, GameTracker* gameTracker) {
+    SVECTOR d;
+    SVECTOR a;
+    Camera* camera = gameTracker->camera;
+
+    a.x = instance->position.x;
+    a.y = instance->position.y;
+    a.z = instance->position.z + 0x200;
+    func_80005438(&camera->_data7[4], &a, camera);
+    d.x = a.x - camera->cameraCore.position.x;
+    d.y = a.y - camera->cameraCore.position.y;
+    d.z = a.z - camera->cameraCore.position.z;
+    camera->cameraCore._08[0x13] = CAMERA_LengthSVector(&d) >> 3;
+    *(short*)&camera->_data7[7] = 0;
+    *(short*)&camera->_data7[9] = 0;
+    camera->_data8[3] = 0;
+    camera->_data8[2] = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015B30C_8C4AC);
 
@@ -256,7 +312,21 @@ INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_801615D8_92778); // Z %s
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015CC64_8DE04);
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015CD54_8DEF4);
+extern int D_800BDEE0[5];
+
+void func_8015CD54_8DEF4(int arg0, int arg1, int count) {
+    char buf[16];
+    int i;
+
+    if (count >= 0x29) {
+        for (i = 0; i < 8; i++) {
+            D_800BDEE0[0] = 0x14;
+            D_800BDEE0[1] = i * 8 + 0x14;
+            func_8015CAF8_8DC98(buf, (rand() << 16) | rand());
+            osSyncPrintf("%s", buf);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015CDF0_8DF90);
 
@@ -313,12 +383,14 @@ void final_finaltv_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_finaltv_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_finaltv_OnCollide);
+void final_finaltv_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    if (G2String_Compare_EQ(instance->bspTree->instanceSpline->object->name, D_80161618_927B8)) {
+        func_80046978(instance);
+        func_800509E0(0x10, 0x78, 0x80, 0);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015EEF4_90094);
-
-extern int D_800EB8A0;
-extern void func_80017E88();
 
 void func_8015F05C_901FC(int arg0, Object* obj, SVECTOR* pos) {
     Model* model;
