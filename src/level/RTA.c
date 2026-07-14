@@ -222,8 +222,8 @@ void rta_zgeyser_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_F4[2] = (int)OBTABLE_FindObject(D_8015EE74_DF4E4);
     instance->scale.x = 0x1000;
     instance->scale.y = 0x1000;
-    *(short*)&instance->_100 = 0;
-    ((short*)&instance->_100)[1] = 0;
+    WORK_AS_IDX(short, instance->_100, 0) = 0;
+    WORK_AS_IDX(short, instance->_100, 1) = 0;
     WORK_AS_IDX(short, instance->_104, 0) = 0;
     instance->scale.z = 0x180;
 }

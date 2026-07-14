@@ -290,7 +290,7 @@ void scifi_bub_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if (((short*)&instance->_F4[2])[1] == 0) {
         instance->_F4[2] = 0x64;
     }
-    if (((short*)&instance->_100)[1] == 0) {
+    if (WORK_AS_IDX(short, instance->_100, 1) == 0) {
         instance->_100 = 0x1E;
     }
     if (WORK_AS_IDX(short, instance->_10C, 1) == 0) {
@@ -578,7 +578,7 @@ void scifi_abubble_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int v;
 
     v = instance->_104;
-    if (WORK_AS_IDX(short, instance->_104, 1) < ((short*)&instance->_100)[1]) {
+    if (WORK_AS_IDX(short, instance->_104, 1) < WORK_AS_IDX(short, instance->_100, 1)) {
         if (instance->flags & 0x1000) {
             instance->_104 = (short)(v + 1);
         }
@@ -725,23 +725,23 @@ void scifi_gas_OnCreate(Instance* instance, GameTracker* gameTracker) {
         if (introData != NULL) {
             if (introData[0] != 0xFFFF) {
                 *(GasData*)&instance->_F4[2] = *(GasData*)(introData + 1);
-                if (((char*)&instance->_100)[2] < 0) {
+                if (WORK_AS_IDX(char, instance->_100, 2) < 0) {
                     WORK_AS(int, instance->_108) |= 0x8000;
-                    ((char*)&instance->_100)[2] = ~((unsigned char*)&instance->_100)[2];
+                    WORK_AS_IDX(char, instance->_100, 2) = ~WORK_AS_IDX(unsigned char, instance->_100, 2);
                 }
                 t = func_8004A61C(instance);
                 m = introData[0];
-                m %= (unsigned int)(((unsigned short*)&instance->_F4[2])[1] + *(unsigned short*)&instance->_F4[2] + ((unsigned char*)&instance->_100)[1]);
+                m %= (unsigned int)(((unsigned short*)&instance->_F4[2])[1] + *(unsigned short*)&instance->_F4[2] + WORK_AS_IDX(unsigned char, instance->_100, 1));
                 if (m < ((unsigned short*)&instance->_F4[2])[1]) {
                     WORK_AS_IDX(short, instance->_108, 0) = m;
                     instance->_F4[0] = 0;
                 } else {
                     m -= ((unsigned short*)&instance->_F4[2])[1];
-                    if (m < ((unsigned char*)&instance->_100)[1]) {
+                    if (m < WORK_AS_IDX(unsigned char, instance->_100, 1)) {
                         WORK_AS_IDX(short, instance->_108, 0) = m;
                         instance->_F4[0] = 1;
                     } else {
-                        m -= ((unsigned char*)&instance->_100)[1];
+                        m -= WORK_AS_IDX(unsigned char, instance->_100, 1);
                         if (m < t) {
                             instance->_F4[0] = 2;
                             t = m;

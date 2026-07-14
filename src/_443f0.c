@@ -42,10 +42,10 @@ void func_80044B2C(Instance* instance) {
 
     temp_a2 = ((((int***)instance->object->modelList)[instance->currentModel]))[0x20/4];
     temp_v1 = (instance->_F0[6] * 3);
-    ((short*)&instance->_100)[0] = ((temp_v1 + 1) * temp_a2[3]);
-    ((short*)&instance->_100)[1] = (((temp_v1 + 4) * temp_a2[3]) - 1);
+    WORK_AS_IDX(short, instance->_100, 0) = ((temp_v1 + 1) * temp_a2[3]);
+    WORK_AS_IDX(short, instance->_100, 1) = (((temp_v1 + 4) * temp_a2[3]) - 1);
     WORK_AS_IDX(short, instance->_104, 0) = -1;
-    instance->currentTextureAnimFrame = *(short*)&instance->_100;
+    instance->currentTextureAnimFrame = WORK_AS_IDX(short, instance->_100, 0);
 }
 
 void common_powertv_OnCreate(Instance* instance, GameTracker* gameTracker) {
@@ -95,15 +95,15 @@ void common_powertv_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     temp_s1 = &instance->_F0[6];
     if ((instance->_F4[0] - 1) >= 2U) {
         instance->currentTextureAnimFrame++;
-        if (((short*)&instance->_100)[1] < instance->currentTextureAnimFrame) {
-            instance->currentTextureAnimFrame = *(short*)&instance->_100;
+        if (WORK_AS_IDX(short, instance->_100, 1) < instance->currentTextureAnimFrame) {
+            instance->currentTextureAnimFrame = WORK_AS_IDX(short, instance->_100, 0);
         }
     }
     else if (instance->_F4[0] == 1) {
         if (WORK_AS_IDX(short, instance->_104, 1) > 0) {
             WORK_AS_IDX(short, instance->_104, 1)--;
             if ((WORK_AS_IDX(short, instance->_104, 1) << 0x10) == 0) {
-                instance->currentTextureAnimFrame = ((short*)&instance->_100)[0];
+                instance->currentTextureAnimFrame = WORK_AS_IDX(short, instance->_100, 0);
                 goto block_7;
             }
         }

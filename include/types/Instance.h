@@ -66,8 +66,8 @@ typedef struct Instance_s
     int _E0[4];
     short _F0[2];
     int _F4[3];
-    int _100;
-    int _104;
+    long _100;
+    long _104;
     long _108;
     long _10C;
     char _110;

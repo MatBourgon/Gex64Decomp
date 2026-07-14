@@ -313,10 +313,10 @@ void map_intro_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 void map_angel_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    ((short*)&instance->_100)[1] = -0x1000;
+    WORK_AS_IDX(short, instance->_100, 1) = -0x1000;
     instance->flags |= 0xC00;
     if (instance->object->data != 0) {
-        ((short*)&instance->_100)[1] = ((int*)instance->object->data)[0];
+        WORK_AS_IDX(short, instance->_100, 1) = ((int*)instance->object->data)[0];
     }
 }
 
@@ -341,7 +341,7 @@ void map_angel_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     {
         instance->position = *(SVECTOR*)&temp_s3[0x48/2];
         instance->_40[6] = (s16) ((u16) instance->_40[6] + 0x400);
-        if ( temp_s3[0x4C/2] <= ((short*)&instance->_100)[1]) {
+        if ( temp_s3[0x4C/2] <= WORK_AS_IDX(short, instance->_100, 1)) {
             INSTANCE_InsertInstanceWithFlagsCleared(instance, 0x1000);
             instance->_F4[0] = 1;
             gameTracker->gameFlags |= 1;
@@ -408,7 +408,7 @@ void map_lkdoor_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     *(((short*)&instance->_F4[2]) + 1) = 1;
     instance->flags |= 0x400;
-    *((short*)&instance->_100) = instance->rotation.z;
+    WORK_AS_IDX(short, instance->_100, 0) = instance->rotation.z;
 }
 
 void map_lkdoor_OnUpdate(Instance* instance, GameTracker* gameTracker) {
@@ -458,11 +458,11 @@ void map_lkdoor_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         break;
     case 4:
         if (temp_s3[1] != 0) {
-            ((short*)&instance->_100)[1] = 0x2DU;
+            WORK_AS_IDX(short, instance->_100, 1) = 0x2DU;
             temp_s3[1] = 0;
         }
         osSyncPrintf("LKDOOR_PREOPEN\n");
-        if ((--((short*)&instance->_100)[1] << 0x10) < 0) {
+        if ((--WORK_AS_IDX(short, instance->_100, 1) << 0x10) < 0) {
             temp_s3[0] = 3;
             func_8004AAA8(instance, 0x49, 0);
         }
@@ -470,13 +470,13 @@ void map_lkdoor_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     case 3:
         if (temp_s1[0x4/2] == 0) {
             instance->rotation.z -= 0x20;
-            if (instance->rotation.z == (((short*)&instance->_100)[0] - 0x400)) {
+            if (instance->rotation.z == (WORK_AS_IDX(short, instance->_100, 0) - 0x400)) {
                 temp_s3[0] = 1;
                 temp_s3[1] = 1;
             }
         } else {
             instance->rotation.z += 0x20;
-            if (instance->rotation.z == (((short*)&instance->_100)[0] + 0x400)) {
+            if (instance->rotation.z == (WORK_AS_IDX(short, instance->_100, 0) + 0x400)) {
                 temp_s3[0] = 1;
                 temp_s3[1] = 1;
             }
@@ -1329,12 +1329,12 @@ void map_ctrlbutn_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int temp_a1;
     SVECTOR* temp_v0;
 
-    ((short*)&instance->_100)[1] = 2;
+    WORK_AS_IDX(short, instance->_100, 1) = 2;
     instance->_F0[6] = 0x64;
     temp_a1 = (int)instance->introData;
     instance->flags |= 0x800;
     if (temp_a1 != 0) {
-        temp_v0 = (SVECTOR*)((((short*)&instance->_100)[1] * sizeof(SVECTOR)) + temp_a1 + 4);
+        temp_v0 = (SVECTOR*)((WORK_AS_IDX(short, instance->_100, 1) * sizeof(SVECTOR)) + temp_a1 + 4);
         PlayerInstance->oldPos
             = PlayerInstance->position
             = *(SVECTOR*)temp_v0;

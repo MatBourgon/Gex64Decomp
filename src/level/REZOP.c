@@ -623,7 +623,7 @@ void rezop_iris_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int y;
 
     data = ((unsigned short*)instance->object->data);
-    ((short*)&instance->_100)[1] = (short)data[0] / 2;
+    WORK_AS_IDX(short, instance->_100, 1) = (short)data[0] / 2;
     WORK_AS_IDX(short, instance->_104, 0) = -((short)data[0] / 2);
     WORK_AS_IDX(short, instance->_10C, 1) = data[3];
     WORK_AS_IDX(short, instance->_104, 1) = (short)data[1] / 2 + 0x140;
@@ -751,23 +751,23 @@ void rezop_gas_OnCreate(Instance* instance, GameTracker* gameTracker) {
         if (introData != NULL) {
             if (introData[0] != 0xFFFF) {
                 *(GasData*)&instance->_F4[2] = *(GasData*)(introData + 1);
-                if (((char*)&instance->_100)[2] < 0) {
+                if (WORK_AS_IDX(char, instance->_100, 2) < 0) {
                     WORK_AS(int, instance->_108) |= 0x8000;
-                    ((char*)&instance->_100)[2] = ~((unsigned char*)&instance->_100)[2];
+                    WORK_AS_IDX(char, instance->_100, 2) = ~WORK_AS_IDX(unsigned char, instance->_100, 2);
                 }
                 t = func_8004A61C(instance);
                 m = introData[0];
-                m %= (unsigned int)(((unsigned short*)&instance->_F4[2])[1] + *(unsigned short*)&instance->_F4[2] + ((unsigned char*)&instance->_100)[1]);
+                m %= (unsigned int)(((unsigned short*)&instance->_F4[2])[1] + *(unsigned short*)&instance->_F4[2] + WORK_AS_IDX(unsigned char, instance->_100, 1));
                 if (m < ((unsigned short*)&instance->_F4[2])[1]) {
                     WORK_AS_IDX(short, instance->_108, 0) = m;
                     instance->_F4[0] = 0;
                 } else {
                     m -= ((unsigned short*)&instance->_F4[2])[1];
-                    if (m < ((unsigned char*)&instance->_100)[1]) {
+                    if (m < WORK_AS_IDX(unsigned char, instance->_100, 1)) {
                         WORK_AS_IDX(short, instance->_108, 0) = m;
                         instance->_F4[0] = 1;
                     } else {
-                        m -= ((unsigned char*)&instance->_100)[1];
+                        m -= WORK_AS_IDX(unsigned char, instance->_100, 1);
                         if (m < t) {
                             instance->_F4[0] = 2;
                             t = m;
@@ -897,7 +897,7 @@ void rezop_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     intro = (BTimerIntro*)instance->introData;
     instance->_104 = (intro->exitTime * 30);
     instance->_F0[6] = intro->missionTime;
-    *(short*)&instance->_100 = 0;
+    WORK_AS_IDX(short, instance->_100, 0) = 0;
     instance->flags |= 0xC00;
     gameTracker->player->_F4[2] |= 0x4000;
     gameTracker->player->flags |= 0x100;
@@ -922,7 +922,7 @@ void rezop_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     var_v1 = 1;
     intro = instance->introData;
     temp_s2 = &instance->_F0[6];
-    if (*(short*)&instance->_100 == 0) {
+    if (WORK_AS_IDX(short, instance->_100, 0) == 0) {
         if (temp_s2[0] != 0) {
             if ((int)(((int**)gameTracker))[0x4BFC/4] < gameTracker->level->collectibleCountA) {
                 if (D_80154834 != 0) {
@@ -999,7 +999,7 @@ void rezop_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         }
     } else {
         gameTracker->player->flags |= 0x100;
-        if (*(short*)&instance->_100 == 2) {
+        if (WORK_AS_IDX(short, instance->_100, 0) == 2) {
             // Delay map load
             if (--instance->_104 < 0) {
                 func_800396E0("map", "map5", ((int**)gameTracker));

@@ -44,12 +44,12 @@ void prehst_ttplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
 void prehst_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
     unsigned short* intro;
 
-    ((short*)&instance->_100)[1] = 0x18;
+    WORK_AS_IDX(short, instance->_100, 1) = 0x18;
     instance->flags |= 0x100000;
     intro = (unsigned short*)instance->introData;
 
     if (intro != NULL) {
-        *(short*)&instance->_100 = intro[0];
+        WORK_AS_IDX(short, instance->_100, 0) = intro[0];
         WORK_AS_IDX(short, instance->_104, 1) = intro[1];
         WORK_AS_IDX(short, instance->_108, 0) = intro[2];
         WORK_AS_IDX(short, instance->_108, 1) = intro[3];
@@ -60,7 +60,7 @@ void prehst_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
             WORK_AS_IDX(short, instance->_10C, 1) = 0x40;
         }
     } else {
-        *(short*)&instance->_100 = 0x96;
+        WORK_AS_IDX(short, instance->_100, 0) = 0x96;
         WORK_AS_IDX(short, instance->_104, 1) = ((unsigned short*)&instance->intro->position)[0] - 0x500;
         WORK_AS_IDX(short, instance->_108, 0) = ((unsigned short*)&instance->intro->position)[1] - 0x780;
         WORK_AS_IDX(short, instance->_108, 1) = ((unsigned short*)&instance->intro->position)[0] + 0x500;
@@ -94,10 +94,10 @@ void prehst_bouncer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     fc = &instance->_F4[2];
     
     if (intro != NULL) {
-        ((short*)&instance->_100)[1] = intro[0];
+        WORK_AS_IDX(short, instance->_100, 1) = intro[0];
         WORK_AS_IDX(short, instance->_104, 0) = intro[1];
     } else {
-        ((short*)&instance->_100)[1] = 0U;
+        WORK_AS_IDX(short, instance->_100, 1) = 0U;
         WORK_AS_IDX(short, instance->_104, 0) = 0U;
     }
     fc[3] = instance->intro->position.x;
@@ -762,23 +762,23 @@ void prehst_gas_OnCreate(Instance* instance, GameTracker* gameTracker) {
         if (introData != NULL) {
             if (introData[0] != 0xFFFF) {
                 *(GasData*)&instance->_F4[2] = *(GasData*)(introData + 1);
-                if (((char*)&instance->_100)[2] < 0) {
+                if (WORK_AS_IDX(char, instance->_100, 2) < 0) {
                     WORK_AS(int, instance->_108) |= 0x8000;
-                    ((char*)&instance->_100)[2] = ~((unsigned char*)&instance->_100)[2];
+                    WORK_AS_IDX(char, instance->_100, 2) = ~WORK_AS_IDX(unsigned char, instance->_100, 2);
                 }
                 t = func_8004A61C(instance);
                 m = introData[0];
-                m %= (unsigned int)(((unsigned short*)&instance->_F4[2])[1] + *(unsigned short*)&instance->_F4[2] + ((unsigned char*)&instance->_100)[1]);
+                m %= (unsigned int)(((unsigned short*)&instance->_F4[2])[1] + *(unsigned short*)&instance->_F4[2] + WORK_AS_IDX(unsigned char, instance->_100, 1));
                 if (m < ((unsigned short*)&instance->_F4[2])[1]) {
                     WORK_AS_IDX(short, instance->_108, 0) = m;
                     instance->_F4[0] = 0;
                 } else {
                     m -= ((unsigned short*)&instance->_F4[2])[1];
-                    if (m < ((unsigned char*)&instance->_100)[1]) {
+                    if (m < WORK_AS_IDX(unsigned char, instance->_100, 1)) {
                         WORK_AS_IDX(short, instance->_108, 0) = m;
                         instance->_F4[0] = 1;
                     } else {
-                        m -= ((unsigned char*)&instance->_100)[1];
+                        m -= WORK_AS_IDX(unsigned char, instance->_100, 1);
                         if (m < t) {
                             instance->_F4[0] = 2;
                             t = m;

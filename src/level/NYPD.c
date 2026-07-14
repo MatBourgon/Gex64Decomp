@@ -60,7 +60,7 @@ void nypd_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     intro = (BTimerIntro*)instance->introData;
     instance->_104 = (intro->exitTime * 30);
     instance->_F0[6] = intro->missionTime;
-    *(short*)&instance->_100 = 0;
+    WORK_AS_IDX(short, instance->_100, 0) = 0;
     instance->flags |= 0xC00;
     gameTracker->player->_F4[2] |= 0x4000;
     gameTracker->player->flags |= 0x100;
@@ -83,7 +83,7 @@ void nypd_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     var_v1 = 1;
     intro = instance->introData;
     temp_s2 = &instance->_F0[6];
-    if (*(short*)&instance->_100 == 0) {
+    if (WORK_AS_IDX(short, instance->_100, 0) == 0) {
         if (temp_s2[0] != 0) {
             if ((int)(((int**)gameTracker))[0x4BFC/4] < gameTracker->level->collectibleCountA) {
                 if (D_80154834 != 0) {
@@ -162,7 +162,7 @@ void nypd_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         }
     } else {
         gameTracker->player->flags |= 0x100;
-        if (*(short*)&instance->_100 == 2) {
+        if (WORK_AS_IDX(short, instance->_100, 0) == 2) {
             // Delay map load
             if (--instance->_104 < 0) {
                 func_800396E0("map", "map5", ((int**)gameTracker));

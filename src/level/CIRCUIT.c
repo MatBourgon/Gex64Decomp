@@ -34,12 +34,12 @@ void circuit_plat_OnCollide(Instance* instance, GameTracker* gameTracker) {
 void circuit_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
     unsigned short* intro;
 
-    ((short*)&instance->_100)[1] = 0x18;
+    WORK_AS_IDX(short, instance->_100, 1) = 0x18;
     instance->flags |= 0x100000;
     intro = (unsigned short*)instance->introData;
 
     if (intro != NULL) {
-        *(short*)&instance->_100 = intro[0];
+        WORK_AS_IDX(short, instance->_100, 0) = intro[0];
         WORK_AS_IDX(short, instance->_104, 1) = intro[1];
         WORK_AS_IDX(short, instance->_108, 0) = intro[2];
         WORK_AS_IDX(short, instance->_108, 1) = intro[3];
@@ -50,7 +50,7 @@ void circuit_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
             WORK_AS_IDX(short, instance->_10C, 1) = 0x40;
         }
     } else {
-        *(short*)&instance->_100 = 0x96;
+        WORK_AS_IDX(short, instance->_100, 0) = 0x96;
         WORK_AS_IDX(short, instance->_104, 1) = ((unsigned short*)&instance->intro->position)[0] - 0x500;
         WORK_AS_IDX(short, instance->_108, 0) = ((unsigned short*)&instance->intro->position)[1] - 0x780;
         WORK_AS_IDX(short, instance->_108, 1) = ((unsigned short*)&instance->intro->position)[0] + 0x500;
@@ -84,10 +84,10 @@ void circuit_bouncer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     fc = &instance->_F4[2];
     
     if (intro != NULL) {
-        ((short*)&instance->_100)[1] = intro[0];
+        WORK_AS_IDX(short, instance->_100, 1) = intro[0];
         WORK_AS_IDX(short, instance->_104, 0) = intro[1];
     } else {
-        ((short*)&instance->_100)[1] = 0U;
+        WORK_AS_IDX(short, instance->_100, 1) = 0U;
         WORK_AS_IDX(short, instance->_104, 0) = 0U;
     }
     fc[3] = instance->intro->position.x;
@@ -833,7 +833,7 @@ void circuit_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     intro = (BTimerIntro*)instance->introData;
     instance->_104 = (intro->exitTime * 30);
     instance->_F0[6] = intro->missionTime;
-    *(short*)&instance->_100 = 0;
+    WORK_AS_IDX(short, instance->_100, 0) = 0;
     instance->flags |= 0xC00;
     gameTracker->player->_F4[2] |= 0x4000;
     gameTracker->player->flags |= 0x100;
@@ -856,7 +856,7 @@ void circuit_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     var_v1 = 1;
     intro = instance->introData;
     temp_s2 = &instance->_F0[6];
-    if (*(short*)&instance->_100 == 0) {
+    if (WORK_AS_IDX(short, instance->_100, 0) == 0) {
         if (temp_s2[0] != 0) {
             if ((int)(((int**)gameTracker))[0x4BFC/4] < gameTracker->level->collectibleCountA) {
                 if (D_80154834 != 0) {
@@ -933,7 +933,7 @@ void circuit_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         }
     } else {
         gameTracker->player->flags |= 0x100;
-        if (*(short*)&instance->_100 == 2) {
+        if (WORK_AS_IDX(short, instance->_100, 0) == 2) {
             // Delay map load
             if (--instance->_104 < 0) {
                 func_800396E0("map", "map5", ((int**)gameTracker));
