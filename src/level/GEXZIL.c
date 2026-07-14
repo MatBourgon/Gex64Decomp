@@ -16,9 +16,9 @@ void gexzil_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
         ((short*)&instance->_108)[1] = intro[3];
         WORK_AS_IDX(short, instance->_10C, 0) = intro[4];
         if (((short*)intro)[5] != 0) {
-            ((short*)&instance->_10C)[1] = ((short*)intro)[5];
+            WORK_AS_IDX(short, instance->_10C, 1) = ((short*)intro)[5];
         } else {
-            ((short*)&instance->_10C)[1] = 0x40;
+            WORK_AS_IDX(short, instance->_10C, 1) = 0x40;
         }
     } else {
         *(short*)&instance->_100 = 0x96;

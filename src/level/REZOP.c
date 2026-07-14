@@ -135,7 +135,7 @@ void rezop_rezplat_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_104 = 7;
     instance->flags |= 0x80;
     *(int*)&instance->_108 = instance->rotation.y;
-    *(short*)&instance->_10C = instance->rotation.z;
+    WORK_AS_IDX(short, instance->_10C, 0) = instance->rotation.z;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_rezplat_OnUpdate);
@@ -625,13 +625,13 @@ void rezop_iris_OnCreate(Instance* instance, GameTracker* gameTracker) {
     data = ((unsigned short*)instance->object->data);
     ((short*)&instance->_100)[1] = (short)data[0] / 2;
     *(short*)&instance->_104 = -((short)data[0] / 2);
-    *(short*)&instance->_10E = data[3];
+    WORK_AS_IDX(short, instance->_10C, 1) = data[3];
     ((short*)&instance->_104)[1] = (short)data[1] / 2 + 0x140;
     x = -0x140 - (short)data[1] / 2;
     *(short*)&instance->_108 = x;
     y = data[2];
     x = -0x40;
-    *(short*)&instance->_10C = x;
+    WORK_AS_IDX(short, instance->_10C, 0) = x;
     ((short*)&instance->_F4[2])[1] = 0;
     ((short*)&instance->_108)[1] = x - y;
 }

@@ -53,19 +53,19 @@ void prehst_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
         ((short*)&instance->_104)[1] = intro[1];
         *(short*)&instance->_108 = intro[2];
         ((short*)&instance->_108)[1] = intro[3];
-        *(short*)&instance->_10C = intro[4];
+        WORK_AS_IDX(short, instance->_10C, 0) = intro[4];
         if (((short*)intro)[5] != 0) {
-            ((short*)&instance->_10C)[1] = ((short*)intro)[5];
+            WORK_AS_IDX(short, instance->_10C, 1) = ((short*)intro)[5];
         } else {
-            ((short*)&instance->_10C)[1] = 0x40;
+            WORK_AS_IDX(short, instance->_10C, 1) = 0x40;
         }
     } else {
         *(short*)&instance->_100 = 0x96;
         ((short*)&instance->_104)[1] = ((unsigned short*)&instance->intro->position)[0] - 0x500;
         *(short*)&instance->_108 = ((unsigned short*)&instance->intro->position)[1] - 0x780;
         ((short*)&instance->_108)[1] = ((unsigned short*)&instance->intro->position)[0] + 0x500;
-        *(short*)&instance->_10C = ((unsigned short*)&instance->intro->position)[1] + 0x780;
-        ((short*)&instance->_10C)[1] = 0x40;
+        WORK_AS_IDX(short, instance->_10C, 0) = ((unsigned short*)&instance->intro->position)[1] + 0x780;
+        WORK_AS_IDX(short, instance->_10C, 1) = 0x40;
     }
 }
 
@@ -271,7 +271,7 @@ void prehst_stmvent_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
     introData = instance->introData;
     RotMatrix(&instance->intro->rotation, &mat);
-    *(int*)&instance->_10C = mat.m[0][2] * 25 >> 10;
+    WORK_AS(int, instance->_10C) = mat.m[0][2] * 25 >> 10;
     *(int*)&instance->_110 = mat.m[1][2] * 25 >> 10;
     *(int*)&instance->_114 = mat.m[2][2] * 25 >> 10;
     if (introData != NULL) {
@@ -412,7 +412,7 @@ void func_8015B5B0_C8E30(Instance* instance) {
             *(int*)&instance->_118 = 1;
         }
     }
-    rot.x = (*(int*)&instance->_10C >> 1) + (*(int*)&instance->_11C >> 12);
+    rot.x = (WORK_AS(int, instance->_10C) >> 1) + (*(int*)&instance->_11C >> 12);
     rot.y = (*(int*)&instance->_110 >> 1) + (*(int*)&instance->_11C >> 12);
     rot.z = (*(int*)&instance->_114 >> 1) + (*(int*)&instance->_108 >> 12);
     vel.x = 0;
@@ -505,7 +505,7 @@ void prehst_cavegex_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_F4[0] = 2;
     instance->_F4[2] = 2;
     *(int*)&instance->_108 = instance->position.x;
-    *(int*)&instance->_10C = instance->position.y;
+    WORK_AS(int, instance->_10C) = instance->position.y;
     *(int*)&instance->_110 = instance->position.z;
     if (intro != NULL) {
         instance->_104 = intro[0] * intro[0];
@@ -654,7 +654,7 @@ void prehst_zviolet_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if (*(char*)&instance->_F4[2] != 0) {
         instance->flags2 |= 8;
     }
-    instance->_10E = 0;
+    WORK_AS_IDX(char, instance->_10C, 2) = 0;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_zviolet_OnUpdate);
@@ -950,7 +950,7 @@ void prehst_bldrgen_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 void prehst_boulder_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_F4[0] = 0;
-    *(int*)&instance->_10C = 0;
+    WORK_AS(int, instance->_10C) = 0;
     instance->flags |= 0x100400;
     *(int*)&instance->_110 = ((int)instance->parent->intro->multiSpline);
     *(int*)&instance->_114 = ((int)instance->parent->introData);
@@ -1345,7 +1345,7 @@ void prehst_lavadrp_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         flag = 1;
         ms = instance->object->modelList[instance->currentModel]->multiSpline;
     }
-    sp1 = ((SplineDef*)&instance->_10C);
+    sp1 = WORK_AS_PTR(SplineDef, instance->_10C);
     sp2 = ((SplineDef*)&instance->_110);
     sp3 = ((SplineDef*)&instance->_114);
     if (SCRIPT_SplineProcess(instance, ms, sp1, sp2, sp3, 1, flag) == 1) {

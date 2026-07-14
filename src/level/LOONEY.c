@@ -48,19 +48,19 @@ void looney_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
         ((short*)&instance->_104)[1] = intro[1];
         *(short*)&instance->_108 = intro[2];
         ((short*)&instance->_108)[1] = intro[3];
-        *(short*)&instance->_10C = intro[4];
+        WORK_AS_IDX(short, instance->_10C, 0) = intro[4];
         if (((short*)intro)[5] != 0) {
-            ((short*)&instance->_10C)[1] = ((short*)intro)[5];
+            WORK_AS_IDX(short, instance->_10C, 1) = ((short*)intro)[5];
         } else {
-            ((short*)&instance->_10C)[1] = 0x40;
+            WORK_AS_IDX(short, instance->_10C, 1) = 0x40;
         }
     } else {
         *(short*)&instance->_100 = 0x96;
         ((short*)&instance->_104)[1] = ((unsigned short*)&instance->intro->position)[0] - 0x500;
         *(short*)&instance->_108 = ((unsigned short*)&instance->intro->position)[1] - 0x780;
         ((short*)&instance->_108)[1] = ((unsigned short*)&instance->intro->position)[0] + 0x500;
-        *(short*)&instance->_10C = ((unsigned short*)&instance->intro->position)[1] + 0x780;
-        ((short*)&instance->_10C)[1] = 0x40;
+        WORK_AS_IDX(short, instance->_10C, 0) = ((unsigned short*)&instance->intro->position)[1] + 0x780;
+        WORK_AS_IDX(short, instance->_10C, 1) = 0x40;
     }
 }
 
@@ -181,7 +181,7 @@ void looney_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
 void looney_bowling_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if ((instance->parent != NULL) && (instance->parent->intro != NULL)) {
         instance->flags |= 0x100400;
-        *(MultiSpline**)&instance->_10C = instance->parent->intro->multiSpline;
+        WORK_AS(MultiSpline*, instance->_10C) = instance->parent->intro->multiSpline;
     }
 }
 
@@ -815,7 +815,7 @@ void looney_fxgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
                 ((short*)&instance->_110)[1] = 0x78;
                 ((short*)&instance->_114)[1] = 0xDAC;
                 *(short*)&instance->_114 = (rand() & 0x7F) - 0x15E;
-                ((short*)&instance->_10C)[1] = *(short*)&instance->_10C = rand() & 7;
+                WORK_AS_IDX(short, instance->_10C, 1) = WORK_AS_IDX(short, instance->_10C, 0) = rand() & 7;
                 intro[1] |= 0x80;
             }
         }

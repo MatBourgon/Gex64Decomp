@@ -172,7 +172,7 @@ void rta_zturtle_OnCreate(Instance* instance, GameTracker* gameTracker) {
     *(int*)&instance->_34[0] = 5;
     instance->scale.x = instance->scale.y = instance->scale.z = 0xCE4;
     instance->_F4[2] = 0;
-    *(int*)&instance->_10C = 0;
+    WORK_AS(int, instance->_10C) = 0;
     instance->flags |= 0x100000;
 }
 
@@ -314,7 +314,7 @@ void rta_qmark_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     
     intro = (QMarkIntro*)instance->introData;
     temp_s0 = &instance->_F4[2];
-    if (((*(int*)&instance->_10C) != 0) && !(gameTracker->gameFlags & 0x2000)) {
+    if (((WORK_AS(int, instance->_10C)) != 0) && !(gameTracker->gameFlags & 0x2000)) {
         func_8003F6CC(intro->x, intro->y, intro->w, intro->h, intro->numMessages, intro->messages);
     }
     switch (temp_s0[2])
@@ -358,7 +358,7 @@ void rta_qmark_OnCollide(Instance* instance, GameTracker* gameTracker) {
         instance->_104 = 1;
         instance->_F4[2] = 0x12C;
          (*(int*)&instance->_110) = intro->time;
-        (*(int*)&instance->_10C) = 1;
+        (WORK_AS(int, instance->_10C)) = 1;
         instance->flags |= 0x400;
     }
 }
@@ -427,10 +427,10 @@ void rta_zstmvent_OnCreate(Instance* instance, GameTracker* gameTracker) {
     z = instance->position.z;
     *(int*)&instance->_108 = z;
     instance->_118 = z + 0x15E0;
-    *(int*)&instance->_10C = *(int*)&instance->_108 - 0x514;
+    WORK_AS(int, instance->_10C) = *(int*)&instance->_108 - 0x514;
     *(int*)&instance->_110 = *(int*)&instance->_108;
     *(int*)&instance->_114 = instance->_118;
-    instance->position.z = *(int*)&instance->_10C;
+    instance->position.z = WORK_AS(int, instance->_10C);
     instance->_100 = r & 0x3F;
     instance->_104 = 0;
 }

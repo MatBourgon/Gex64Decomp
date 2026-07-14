@@ -508,7 +508,7 @@ void map_qmark_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     
     intro = (QMarkIntro*)instance->introData;
     temp_s0 = &instance->_F4[2];
-    if (((*(int*)&instance->_10C) != 0) && !(gameTracker->gameFlags & 0x2000)) {
+    if (((WORK_AS(int, instance->_10C)) != 0) && !(gameTracker->gameFlags & 0x2000)) {
         func_8003F6CC(intro->x, intro->y, intro->w, intro->h, intro->numMessages, intro->messages);
     }
     switch (temp_s0[2])
@@ -549,7 +549,7 @@ void map_qmark_OnCollide(Instance* instance, GameTracker* gameTracker) {
         instance->_104 = 1;
         instance->_F4[2] = 0x12C;
         *((int*)&instance->_110) = intro->time;
-        *((int*)&instance->_10C) = 1;
+        WORK_AS(int, instance->_10C) = 1;
     }
 }
 
@@ -606,7 +606,7 @@ void map_speaker_OnCreate(Instance* instance, GameTracker* gameTracker) {
         case 1:
             (*(short*)&instance->_10A) = ((int*)gameTracker8)[0x4C54/4];
             instance->_F4[0] = ((char*)gameTracker8)[0x4C61];
-            *(short*)&instance->_10E = 0x5A;
+            WORK_AS_IDX(short, instance->_10C, 1) = 0x5A;
             *(short*)&instance->_110 = func_8003333C();
             break;
         case 2:
@@ -1126,16 +1126,16 @@ void map_tvbutn_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->flags |= 0x80;
     s2 = (u8*)(instance->_F0 + 6);
     INSTANCE_InsertInstanceWithFlagsCleared(instance, 0x4000);
-    instance->_10D = 5U;
-    instance->_10C = 5U;
+    WORK_AS_IDX(char, instance->_10C, 1) = 5U;
+    WORK_AS_IDX(char, instance->_10C, 0) = 5U;
     if (temp_s1 != 0) {
         instance->currentModel = (temp_s1[1] * 2);
     }
-    instance->_10E = 1;
+    WORK_AS_IDX(char, instance->_10C, 2) = 1;
 
     if (temp_s1[1] == 0)
     {
-        instance->_10F = 1U;
+        WORK_AS_IDX(char, instance->_10C, 3) = 1U;
         instance->_110 = 4U;
         instance->_111 = 9;
         instance->_112 = 8;
@@ -1143,21 +1143,21 @@ void map_tvbutn_OnCreate(Instance* instance, GameTracker* gameTracker) {
     else if (temp_s1[1] == 1)
     {
         temp_v0 = ((char*)temp_s1)[8];
-        instance->_10D = temp_v0;
-        instance->_10C = temp_v0;
+        WORK_AS_IDX(char, instance->_10C, 1) = temp_v0;
+        WORK_AS_IDX(char, instance->_10C, 0) = temp_v0;
         instance->_110 = temp_v0;
-        instance->_10F = temp_v0;
+        WORK_AS_IDX(char, instance->_10C, 3) = temp_v0;
     }
     else if (temp_s1[1] == 2)
     {
-        instance->_10F = 0x11U;
+        WORK_AS_IDX(char, instance->_10C, 3) = 0x11U;
         instance->_110 = 0x14U;
         instance->_111 = 0xF;
         instance->_112 = 0x10;
     }
     else
     {
-        instance->_10F = 0U;
+        WORK_AS_IDX(char, instance->_10C, 3) = 0U;
         instance->_110 = 0U;
         instance->_111 = 0;
         instance->_112 = 0;
@@ -1189,8 +1189,8 @@ void map_tvbutn_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     }
     if (instance->_F4[0] != 0) {
         INSTANCE_InsertInstanceWithFlagsSet(instance, 0x5000);
-        if (instance->currentTextureAnimFrame < instance->_10C) {
-            instance->currentTextureAnimFrame = instance->_10C;
+        if (instance->currentTextureAnimFrame < WORK_AS_IDX(char, instance->_10C, 0)) {
+            instance->currentTextureAnimFrame = WORK_AS_IDX(char, instance->_10C, 0);
         }
         if (instance->_F4[0] == 3) {
             func_8015BFE0_BCA10(instance, gameTracker);

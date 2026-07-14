@@ -281,11 +281,11 @@ void scifi_bub_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if (introData != NULL) {
         instance->_F4[2] = introData[0];
         instance->_100 = introData[1];
-        *(int*)&instance->_10C = introData[2];
+        WORK_AS(int, instance->_10C) = introData[2];
     } else if (objData != NULL) {
         instance->_F4[2] = objData[0];
         instance->_100 = objData[1];
-        *(int*)&instance->_10C = objData[2];
+        WORK_AS(int, instance->_10C) = objData[2];
     }
     if (((short*)&instance->_F4[2])[1] == 0) {
         instance->_F4[2] = 0x64;
@@ -293,8 +293,8 @@ void scifi_bub_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if (((short*)&instance->_100)[1] == 0) {
         instance->_100 = 0x1E;
     }
-    if (((short*)&instance->_10C)[1] == 0) {
-        *(int*)&instance->_10C = 0x384;
+    if (WORK_AS_IDX(short, instance->_10C, 1) == 0) {
+        WORK_AS(int, instance->_10C) = 0x384;
     }
     INSTANCE_InsertInstanceWithFlagsSet(instance, 0x1000);
     func_8004A7B8(instance, 0, 0);
@@ -343,7 +343,7 @@ void scifi_stmvent_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
     introData = instance->introData;
     RotMatrix(&instance->intro->rotation, &mat);
-    *(int*)&instance->_10C = mat.m[0][2] * 25 >> 10;
+    WORK_AS(int, instance->_10C) = mat.m[0][2] * 25 >> 10;
     *(int*)&instance->_110 = mat.m[1][2] * 25 >> 10;
     *(int*)&instance->_114 = mat.m[2][2] * 25 >> 10;
     if (introData != NULL) {
@@ -469,7 +469,7 @@ void func_8015B5F0_E1410(Instance* instance) {
             *(int*)&instance->_118 = 1;
         }
     }
-    rot.x = (*(int*)&instance->_10C >> 1) + (*(int*)&instance->_11C >> 12);
+    rot.x = (WORK_AS(int, instance->_10C) >> 1) + (*(int*)&instance->_11C >> 12);
     rot.y = (*(int*)&instance->_110 >> 1) + (*(int*)&instance->_11C >> 12);
     rot.z = (*(int*)&instance->_114 >> 1) + (*(int*)&instance->_108 >> 12);
     vel.x = 0;

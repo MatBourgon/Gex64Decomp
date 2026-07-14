@@ -46,16 +46,16 @@ void spy_launch_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->initialPos.z = instance->position.z;
     instance->_11C = 0;
     instance->flags |= 0x800;
-    *(int*)&instance->_10C = 0x500;
+    WORK_AS(int, instance->_10C) = 0x500;
     *(int*)&instance->_110 = 0x80;
     instance->_120 = 0x1000;
     instance->_100 = 4;
     instance->_104 = 0x14;
     
     if (intro != NULL) {
-        *(int*)&instance->_10C = intro[0];
+        WORK_AS(int, instance->_10C) = intro[0];
     } else if (objData != NULL) {
-        *(int*)&instance->_10C = objData[0];
+        WORK_AS(int, instance->_10C) = objData[0];
         *(int*)&instance->_110 = objData[1];
         instance->_11C = *(int*)&objData[2];
         if (instance->_11C & 2) {
@@ -137,7 +137,7 @@ void spy_launch_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         short chunk;
 
         speed = *(short*)&instance->_112;
-        total = *(int*)&instance->_10C;
+        total = WORK_AS(int, instance->_10C);
         step = total / speed;
         chunk = 0x20;
         step = step - speed / chunk;
