@@ -97,9 +97,9 @@ void common_tailpuf_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int* temp_v1_2;
 
     temp_a3 = gameTracker->player;
-    if (((temp_a3->_F4[1] == 0x10) || (temp_a3->_F4[1] == 0x2000)) && (instance->_100 != 0)) {
+    if (((temp_a3->currentSubState == 0x10) || (temp_a3->currentSubState == 0x2000)) && (instance->_100 != 0)) {
         instance->position = temp_a3->position;
-        temp_v1_2 = ((int*)temp_a3->_2C) + ((instance->_F4[2] << 3) + 0x480/4);
+        temp_v1_2 = ((int*)temp_a3->_2C) + ((instance->_FC << 3) + 0x480/4);
         sp10.x = temp_v1_2[0x14/4];
         sp10.y = temp_v1_2[0x18/4];
         sp10.z = temp_v1_2[0x1C/4];
@@ -132,7 +132,7 @@ void common_magic_OnCollide(Instance* instance, GameTracker* gameTracker)
 {
     if (instance->bspTree->instanceSpline == (void*)gameTracker->player)
     {
-        instance->_F4[0] = 1;
+        instance->currentMainState = 1;
     }
 }
 
@@ -208,14 +208,14 @@ void common_gengen_OnCreate(Instance* instance, GameTracker* gameTracker) {
     GengenIntro* intro;
 
     intro = instance->introData;
-    instance->_F4[0] = 0;
+    instance->currentMainState = 0;
     instance->_100 = 0;
     instance->flags |= 0x100800;
     if (intro != NULL) {
         if ((*(int*)&intro->_04 == 0) || (intro->_10 & 4)) {
-            instance->_F4[2] = intro->_00;
+            instance->_FC = intro->_00;
         } else {
-            instance->_F4[0] = 1;
+            instance->currentMainState = 1;
         }
         temp_v1 = intro->_10;
         if ((temp_v1 & 1) && (temp_v1 & 2)) {
@@ -246,18 +246,18 @@ void common_gengen_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         return;
     }
     
-    if (instance->_F4[0] == 1) {
-        temp_v0 = instance->_F4[2] + 1;
-        instance->_F4[2] = temp_v0;
+    if (instance->currentMainState == 1) {
+        temp_v0 = instance->_FC + 1;
+        instance->_FC = temp_v0;
         if (temp_v0 == *(int*)&intro->_04) {
-            instance->_F4[2] = intro->_00;
-            instance->_F4[0] = 0;
+            instance->_FC = intro->_00;
+            instance->currentMainState = 0;
         }
     } else {
-        temp_v0_2 = instance->_F4[2] + 1;
-        instance->_F4[2] = temp_v0_2;
+        temp_v0_2 = instance->_FC + 1;
+        instance->_FC = temp_v0_2;
         if (temp_v0_2 >= intro->_00) {
-            instance->_F4[2] = 0;
+            instance->_FC = 0;
             if (((char*)intro)[0x12] != 0) {
                 temp_a1 = intro->_14;
                 if (temp_a1 != 0) {

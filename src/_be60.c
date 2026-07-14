@@ -38,7 +38,7 @@ void* func_8000B778(Instance* arg0, int arg1, int arg2, int arg3, int arg4, int 
     arg0->position.z -= 0x80;
     
     if (instance != NULL) {
-        ptr = &instance->_F4[2];
+        ptr = &instance->_FC;
         instance->intro = NULL;
         instance->scale.x = 0x1000;
         instance->scale.y = 0x1000;
@@ -78,7 +78,7 @@ void func_8000B968(Instance* instance, GameTracker* gameTracker) {
     
     WORK_AS_IDX(short, instance->_110, 0) = -0x7D00;
     instance->flags |= 0x80;
-    instance->_F4[2] &= ~1;
+    instance->_FC &= ~1;
     
     if (instance->parent != 0) {
         instance->flags |= 0x100000;
@@ -155,7 +155,7 @@ void common_colc_OnCollide(Instance* instance, GameTracker* gameTracker)
 void common_cold_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int* temp_a3;
 
-    temp_a3 = &instance->_F4[2];
+    temp_a3 = &instance->_FC;
     if (((int*)gameTracker)[0x4C00/4] >= gameTracker->level->collectibleCountB) {
         WORK_AS(int, instance->_108) = 2;
     } else if (((int*)gameTracker)[0x4BFC/4] >= gameTracker->level->collectibleCountA) {
@@ -222,7 +222,7 @@ void common_tvend_OnCreate(Instance* instance, GameTracker* gameTracker) {
         oRemred = (Object*)OBTABLE_FindObject(D_8007B944);
         if (oEtvbtn != 0) {
             iEtvbtn = (Instance*)INSTANCE_BirthObject(instance, oEtvbtn);
-            instance->_F4[2] = (int)iEtvbtn;
+            instance->_FC = (int)iEtvbtn;
             iEtvbtn->flags |= 0x400;
         }
         instance->currentTextureAnimFrame = 1;
@@ -245,12 +245,12 @@ void common_tvend_OnCreate(Instance* instance, GameTracker* gameTracker) {
             }
         }
         instance->flags |= 0x10000;
-        instance->_F4[1] = 0;
+        instance->currentSubState = 0;
         instance->flags |= 0x80;
     }
     else
     {
-        iEtvbtn = (Instance*)instance->_F4[2];
+        iEtvbtn = (Instance*)instance->_FC;
         iRemred = (Instance*)instance->_100;
         if (iEtvbtn != NULL) {
             iEtvbtn->flags &= ~0x400;
@@ -290,7 +290,7 @@ void common_tvend_OnUpdate(Instance* instance, Object* gameTracker) {
                 ((Instance*)instance->_100)->scale.x = 1;
                 ((Instance*)instance->_100)->scale.y = 1;
                 ((Instance*)instance->_100)->scale.z = 1;
-                instance->_F4[1] = 3;
+                instance->currentSubState = 3;
                 intro->condition = 1;
                 WORK_AS(int, instance->_10C) = 0x10;
                 if (((&((unsigned char*)gameTracker)[((unsigned char*)gameTracker)[0x4CA1]])[0x4C6E] >> intro->remoteId) & 1) {
@@ -300,7 +300,7 @@ void common_tvend_OnUpdate(Instance* instance, Object* gameTracker) {
             }
         }
     }
-    if ((instance->_F4[1] == 3))
+    if ((instance->currentSubState == 3))
     {
         iRemred2 = (Instance*)instance->_100;
         sp18 = D_8007B950;
@@ -309,7 +309,7 @@ void common_tvend_OnUpdate(Instance* instance, Object* gameTracker) {
             temp_a0 = WORK_AS(int, instance->_10C) - 1;
             WORK_AS(int, instance->_10C) = temp_a0;
             if (temp_a0 <= 0) {
-                instance->_F4[1] = 0;
+                instance->currentSubState = 0;
             }
             else if (temp_a0 < 0x10) {
                 iRemred2->scale.x = ((short*)&sp18)[0x10 - WORK_AS(int, instance->_10C)];
@@ -344,7 +344,7 @@ int func_8000C8E8(Instance* instance, GameTracker* gameTracker) {
     var_a1 = 0;
     if (((((unsigned char*)gameTracker))[0x4CA1] == 2) || ((bsp->_06 != 1))) {
         temp_s2 = (Instance*)instance->parent->_100;
-        if (bsp->_08[2] == 1 && temp_s2 != NULL && !(instance->parent->intro->flags & 0x100) && instance->parent->_F4[1] == 0) {
+        if (bsp->_08[2] == 1 && temp_s2 != NULL && !(instance->parent->intro->flags & 0x100) && instance->parent->currentSubState == 0) {
             temp_s4 = (int*)gameTracker->player->data;
             func_80018B60(gameTracker->player, D_800EB8A0, temp_s2->position.x, temp_s2->position.y, temp_s2->position.z + 0x40);
             func_80050508(instance, 3, -0x64, 0x7F, 0x5DC);
@@ -357,9 +357,9 @@ int func_8000C8E8(Instance* instance, GameTracker* gameTracker) {
                 (((short*)gameTracker))[0x4DA2/2] = intro->x;
                 D_8006FC69 = 1;
             }
-            instance->parent->_F4[1] = 1;
+            instance->parent->currentSubState = 1;
             instance->currentModel = 1;
-            gameTracker->player->_F4[2] |= 0x02000000;
+            gameTracker->player->_FC |= 0x02000000;
             temp_s4[0x178/4] = (int)instance->parent;
             (((int*)gameTracker))[0x4C08/4] |= 0x80;
             var_a1 = 1;

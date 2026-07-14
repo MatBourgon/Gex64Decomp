@@ -18,7 +18,7 @@ void LIGHT_CalcShadowPositions(GameTracker* gameTracker) {
             (instance->flags2 & 0x40) != 0
             && (instance->flags & 0x200) != 0
             && ((instance->flags & 0x18000000) != 0x08000000)
-            || (instance == PlayerInstance && instance->_F4[0] != 5 && !(instance->_F4[2] & 0x1000))
+            || (instance == PlayerInstance && instance->currentMainState != 5 && !(instance->_FC & 0x1000))
         )
         {
             if (instance->flags & 0x10000000) {

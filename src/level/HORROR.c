@@ -20,13 +20,13 @@ void horror_drawer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     intro = (int*)instance->introData;
     if (intro != 0) {
         v = intro[0];
-        instance->_F4[0] = v;
+        instance->currentMainState = v;
         if (v == 1) {
             instance->scale.x = 1;
             func_8002E704();
         }
     } else {
-        instance->_F4[0] = 0;
+        instance->currentMainState = 0;
     }
 }
 
@@ -39,7 +39,7 @@ void horror_chandb_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int* intro;
 
     intro = (int*)instance->introData;
-    instance->_F4[0] = 0;
+    instance->currentMainState = 0;
     instance->flags |= 0x100000;
     if (intro[0] == 1) {
         instance->currentModelAnim = 1;
@@ -51,16 +51,16 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_chandb_OnUpdate);
 void horror_chandb_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp = instance->bspTree;
     if (bsp->_04 == 1) {
-        instance->_F4[1] = 2;
+        instance->currentSubState = 2;
     }
     if (bsp->_06 == 4) {
-        instance->_F4[1] = 1;
+        instance->currentSubState = 1;
     }
 }
 
 void horror_chand_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_E0[1] = -8;
-    instance->_F4[0] = 0;
+    instance->currentMainState = 0;
     instance->_D0[2] = 0;
     instance->flags |= 0x100000;
     WORK_AS(int, instance->_108) = instance->position.z;
@@ -73,7 +73,7 @@ void horror_chand_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
     on = 1;    /* materialized early — required for the original register allocation */
     if (instance->bspTree->_06 == 4) {
-        instance->_F4[1] = on;
+        instance->currentSubState = on;
     }
     if (instance->intro->multiSpline != 0) {
         GenericCollide(instance, gameTracker);
@@ -89,7 +89,7 @@ void horror_axe_OnCreate(Instance* instance, GameTracker* gameTracker) {
     } else {
         v = 1;
     }
-    instance->_F4[0] = v;
+    instance->currentMainState = v;
     v = 2;
     instance->_104 = v;
     instance->_100 = 0;
@@ -102,16 +102,16 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_8015A014_9D844);
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_axe_OnUpdate);
 
 void horror_axe_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    if (instance->bspTree->_06 == 1 && instance->bspTree->instanceSpline == gameTracker->player && instance->_F4[0] != 0) {
+    if (instance->bspTree->_06 == 1 && instance->bspTree->instanceSpline == gameTracker->player && instance->currentMainState != 0) {
         func_80022714(instance, gameTracker);
     }
 }
 
 void horror_face_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    instance->_F4[0] = 1;
+    instance->currentMainState = 1;
     instance->flags |= 0x100000;
     if (((short*)instance->introData)[1] != 0) {
-        instance->_F4[0] = 0;
+        instance->currentMainState = 0;
         instance->flags |= 0x800;
     }
     instance->_104 = 0;
@@ -122,7 +122,7 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_face_OnUpdate);
 
 void horror_face_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp  = instance->bspTree;
-    int state = instance->_F4[0];
+    int state = instance->currentMainState;
 
     if (state == 1 && bsp->_06 == 1 && bsp->instanceSpline == gameTracker->player) {
         func_80022714(instance, gameTracker);
@@ -138,7 +138,7 @@ void horror_zombie_OnCreate(Instance* instance, GameTracker* gameTracker) {
             instance->intro->flags |= 8;
         }
     } else {
-        instance->_F4[0] = 1;
+        instance->currentMainState = 1;
         instance->currentModelAnim = 0;
         instance->_120 = intro[0];
         instance->flags |= 0x10000;
@@ -159,12 +159,12 @@ void horror_zomarm_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
     instance->_E0[1] = -0x10;
     instance->_D0[2] = 0;
-    instance->_F4[0] = 1;
+    instance->currentMainState = 1;
     /* the interleaved _100 store keeps rand's result in a temp; a plain
        inline call places the stores on the wrong side of the modulo */
     v = rand();
     instance->_100 = 0;
-    instance->_F4[2] = v % 20 + 90;
+    instance->_FC = v % 20 + 90;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_zomarm_OnUpdate);
@@ -172,7 +172,7 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_zomarm_OnUpdate);
 void horror_zomarm_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp = instance->bspTree;
     if (!(((unsigned short*)bsp->_0C)[3] & 1) && instance->_D0[2] <= 0) {
-        instance->_F4[1] = 1;
+        instance->currentSubState = 1;
         instance->position.x += bsp->localOffset.x;
         instance->position.y += bsp->localOffset.y;
         instance->position.z += bsp->localOffset.z;
@@ -181,8 +181,8 @@ void horror_zomarm_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 void horror_zomleg_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    instance->_F4[0] = 1;
-    instance->_F4[2] = 0x3C;
+    instance->currentMainState = 1;
+    instance->_FC = 0x3C;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_zomleg_OnUpdate);
@@ -221,7 +221,7 @@ void horror_gate_OnCreate(Instance* instance, GameTracker* gameTracker) {
     intro = (short*)instance->introData;
     if (intro != 0 && intro[0] == 1) {
         instance->scale.z = 1;
-        instance->_F4[0] = 2;
+        instance->currentMainState = 2;
         func_8002E704();
     }
 }
@@ -230,11 +230,11 @@ void horror_gate_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     short* intro;
 
     intro = (short*)instance->introData;
-    if (intro != 0 && instance->_F4[0] == 1) {
+    if (intro != 0 && instance->currentMainState == 1) {
         instance->scale.z -= 0x44;
         if (instance->scale.z <= 0) {
             instance->scale.z = 1;
-            instance->_F4[0] = 2;
+            instance->currentMainState = 2;
             intro[0] = 1;
         }
         func_8002E704();
@@ -263,20 +263,20 @@ void horror_ledge_OnCreate(Instance* instance, GameTracker* gameTracker) {
 void horror_ledge_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int v;
 
-    if (instance->_F4[0] == 1) {
-        v = instance->_F4[2]++;
+    if (instance->currentMainState == 1) {
+        v = instance->_FC++;
         if (v + 1 == instance->_100) {
-            instance->_F4[0] = 2;
+            instance->currentMainState = 2;
             instance->_100 = v;
             instance->currentModel = 1;
-            instance->_F4[2] = 0;
+            instance->_FC = 0;
         }
-    } else if (instance->_F4[0] == 2) {
+    } else if (instance->currentMainState == 2) {
         if (instance->_100 > 0) {
-            instance->_F4[0] = 1;
+            instance->currentMainState = 1;
             instance->currentModel = 0;
         } else {
-            instance->_F4[0] = 3;
+            instance->currentMainState = 3;
             *(int*)instance->introData = 1;
         }
     }
@@ -297,12 +297,12 @@ void horror_bkshlf_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
 void horror_bkshlf_OnUpdate(Instance* instance, GameTracker* gameTracker) {
-    if (instance->_F4[1] == 1) {
+    if (instance->currentSubState == 1) {
         instance->rotation.z -= 0xC;
-    } else if (instance->_F4[1] == 2) {
+    } else if (instance->currentSubState == 2) {
         instance->rotation.z += 0xC;
     }
-    instance->_F4[1] = 0;
+    instance->currentSubState = 0;
 }
 
 void horror_bkshlf_OnCollide(Instance* instance, GameTracker* gameTracker) {
@@ -310,15 +310,15 @@ void horror_bkshlf_OnCollide(Instance* instance, GameTracker* gameTracker) {
     if (bsp->_06 == 1 && bsp->instanceSpline == gameTracker->player) {
         if (bsp->globalOffset.y < -0x77) {
             if (bsp->globalOffset.x <= 0) {
-                instance->_F4[1] = 1;
+                instance->currentSubState = 1;
             } else {
-                instance->_F4[1] = 2;
+                instance->currentSubState = 2;
             }
         } else if (bsp->globalOffset.y > 0x77) {
             if (bsp->globalOffset.x <= 0) {
-                instance->_F4[1] = 2;
+                instance->currentSubState = 2;
             } else {
-                instance->_F4[1] = 1;
+                instance->currentSubState = 1;
             }
         }
     }
@@ -383,7 +383,7 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_skel_OnUpdate);
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_skel_OnCollide);
 
 void horror_skelh_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    instance->_F4[0] = 0;
+    instance->currentMainState = 0;
     if (instance->parent != 0 && instance->parent->intro != 0) {
         instance->flags |= 0x100400;
         WORK_AS(int, instance->_10C) = 0;
@@ -456,7 +456,7 @@ void func_8015F620_A2E50(void* arg0) {
         dz = player->position.z - posZadj;
         if (dz < 0) dz = -dz;
         if (dz < 0x100) {
-            if (player->_F4[1] != 0x200000) {
+            if (player->currentSubState != 0x200000) {
                 func_800223F8(gameTracker8, 0x78, 0);
             }
         }
@@ -530,14 +530,14 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_bug_OnUpdate);
 
 void horror_bug_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp = instance->bspTree;
-    short* temp = (short*)&instance->_F4[2];
+    short* temp = (short*)&instance->_FC;
 
     if (bsp->_06 == 1) {
         if ((bsp->instanceSpline == gameTracker->player) && (bsp->_08[4] < 2U) && (bsp->_0C[5] >= 6U)) {
             INSTANCE_PlainDeath(instance, 5, 3, 0);
         } else if ((bsp->_06 == 1) && (bsp->instanceSpline == gameTracker->player) && ((bsp->_08[4] == 0) || (bsp->_08[4] == 2))) {
             func_80022714(instance, gameTracker);
-            instance->_F4[0] = 0;
+            instance->currentMainState = 0;
             temp[4] = 0x5A;
         }
     }
@@ -548,7 +548,7 @@ void horror_bouncer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int* fc;
     
     intro = instance->introData;
-    fc = &instance->_F4[2];
+    fc = &instance->_FC;
     
     if (intro != NULL) {
         WORK_AS_IDX(short, instance->_100, 1) = intro[0];
@@ -561,7 +561,7 @@ void horror_bouncer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     fc[4] = instance->intro->position.y;
     ((short*)fc)[5] = 6;
     instance->intro->rotation.z = instance->intro->rotation.z & 0xFFF;
-    instance->_F4[0] = 1;
+    instance->currentMainState = 1;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_bouncer_OnUpdate);
@@ -574,8 +574,8 @@ void horror_bouncer_OnCollide(Instance* instance, GameTracker* gameTracker) {
         && (bsp->_0C[5] >= 6U)
         && (
             (WORK_AS_IDX(short, instance->_104, 0) != 3)
-            || ((instance->_F4[0] - 2) < 2U)
-            || (instance->_F4[0] == 4)
+            || ((instance->currentMainState - 2) < 2U)
+            || (instance->currentMainState == 4)
         )) {
             INSTANCE_PlainDeath(instance, 5, 3, 0);
     }
@@ -614,10 +614,10 @@ void horror_evileye_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
     intro = (int*)instance->introData;
     if (instance->bspTree->instanceSpline == PlayerInstance
-        && instance->bspTree->instanceSpline->_F4[1] == 0x1000
-        && (unsigned int)(instance->_F4[0] - 1) >= 2 && intro[0] == 0) {
-        instance->_F4[0] = 1;
-        instance->_F4[2] = 0;
+        && instance->bspTree->instanceSpline->currentSubState == 0x1000
+        && (unsigned int)(instance->currentMainState - 1) >= 2 && intro[0] == 0) {
+        instance->currentMainState = 1;
+        instance->_FC = 0;
         func_80050508(instance, 0x1D0, 0, 0x64, 0xFA0);
     }
 }
@@ -629,7 +629,7 @@ void horror_splitob_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
     player = PlayerInstance;
     if (player->position.z < instance->_100 && instance->_100 - 0x100 < player->position.z) {
-        *(int*)&player->_C0[0] = instance->_F4[2];
+        *(int*)&player->_C0[0] = instance->_FC;
         player->_C0[2] = player->position.x;
         player->_C0[3] = player->position.y;
         player->_C0[4] = instance->_100;
@@ -667,22 +667,22 @@ void horror_onoff_OnCreate(Instance* instance, GameTracker* gameTracker) {
         return;
     }
 
-    instance->_F4[0] = 0;
+    instance->currentMainState = 0;
     instance->flags |= 0x80;
 
     if (instance->introData != NULL && *((int*)instance->introData) & 0x12) {
-        instance->_F4[0] = 1;
+        instance->currentMainState = 1;
     }
 
     if (instance->intro->flags & 0x800) {
-        instance->_F4[0] = instance->_F4[0] != 1;
+        instance->currentMainState = instance->currentMainState != 1;
     }
 
     if (instance->object->data != NULL && *((int*)instance->object->data) != 0) {
         instance->_100 = 1;
     }
 
-    if (instance->_F4[0] == 0 || instance->_100 != 0) {
+    if (instance->currentMainState == 0 || instance->_100 != 0) {
         instance->currentAnimFrame = 0;
     } else if (((short*)&instance->object->_08)[1] != 0) {
         instance->currentAnimFrame = ((unsigned short*)(instance->object->animList[0]))[1] - 1;
@@ -690,10 +690,10 @@ void horror_onoff_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
 void horror_onoff_OnUpdate(Instance* instance, GameTracker* gameTracker) {
-    instance->currentTextureAnimFrame = instance->_F4[0] ^ 1;
+    instance->currentTextureAnimFrame = instance->currentMainState ^ 1;
 
-    if (instance->_F4[1] == 1) {
-        if (instance->_F4[0] == 1 || instance->_100 != 0) {
+    if (instance->currentSubState == 1) {
+        if (instance->currentMainState == 1 || instance->_100 != 0) {
             func_8002DAF8(instance, -1);
         } else {
             func_8002DAF8(instance, -0x3E9);
@@ -701,8 +701,8 @@ void horror_onoff_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
         if (instance->flags2 & 0x10) {
             instance->flags2 &= ~0x10;
-            instance->_F4[1] = 0;
-            if (instance->_F4[0] == 0 || instance->_100 != 0) {
+            instance->currentSubState = 0;
+            if (instance->currentMainState == 0 || instance->_100 != 0) {
                 instance->currentAnimFrame = 0;
             } else if (((short*)&instance->object->_08)[1] != 0) {
                 instance->currentAnimFrame = ((unsigned short*)(instance->object->animList[0]))[1] - 1;
@@ -728,17 +728,17 @@ void horror_onoff_OnCollide(Instance* instance, GameTracker* gameTracker) {
     fire = 0;
     intro = instance->introData;
     bsp = instance->bspTree;
-    if (intro != NULL && bsp->_06 == 1 && bsp->_0C[5] >= 8U && instance->_F4[1] != 1) {
+    if (intro != NULL && bsp->_06 == 1 && bsp->_0C[5] >= 8U && instance->currentSubState != 1) {
         list = (int**)(intro + 2);
         if (intro[1] == 0) {
             match = 1;
         } else if (intro[1] == 1) {
-            if (instance->_F4[0] == 0) {
+            if (instance->currentMainState == 0) {
                 match = 1;
                 checkState = 1;
             }
         } else if (intro[1] == 2) {
-            if (instance->_F4[0] == 1) {
+            if (instance->currentMainState == 1) {
                 match = 1;
                 checkState = 1;
             }
@@ -763,14 +763,14 @@ void horror_onoff_OnCollide(Instance* instance, GameTracker* gameTracker) {
         }
         if ((match != 0 && toggled != 0) || intro[0] == 0) {
             instance->intro->flags ^= 0x800;
-            instance->_F4[0] ^= 1;
+            instance->currentMainState ^= 1;
             fire = 1;
         } else if (G2String_Compare_EQ(instance->object->name, "gong____")) {
             fire = 1;
         }
         if (fire != 0) {
             if (((short*)&instance->object->_08)[1] != 0) {
-                instance->_F4[1] = 1;
+                instance->currentSubState = 1;
             }
             if (*(int*)list == 0x29A) {
                 SIGNAL_HandleSignal(instance, (int*)((int*)list)[1] + 1, 0);
@@ -807,7 +807,7 @@ void horror_funplat_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     accelY = ((-instance->rotation.y << 5) - (instance->_D0[3] >> 6));
     accelY <<= 1;
 
-    if (instance->_F4[1]) {
+    if (instance->currentSubState) {
         GenericProcess(instance, gameTracker);
     }
 
@@ -873,7 +873,7 @@ void horror_funplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
                 instance->_D0[0] = (-newPosition.y) << 6;
                 instance->_D0[1] = newPosition.x << 6;
 
-                if (instance->_F4[2] != 0) {
+                if (instance->_FC != 0) {
                     instance->_E0[3] = -0x1000;
                 } else {
                     instance->_E0[3] = -0x4000;
@@ -966,7 +966,7 @@ void horror_door_OnCollide(Instance* instance, GameTracker* gameTracker) {
 void horror_qmark_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     instance->_104 = 0;
-    instance->_F4[2] = 0x40;
+    instance->_FC = 0x40;
     instance->_100 = 0;
 }
 
@@ -975,7 +975,7 @@ void horror_qmark_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     QMarkIntro* intro;
     
     intro = (QMarkIntro*)instance->introData;
-    temp_s0 = &instance->_F4[2];
+    temp_s0 = &instance->_FC;
     if ((WORK_AS(int, instance->_10C) != 0) && !(gameTracker->gameFlags & 0x2000)) {
         func_8003F6CC(intro->x, intro->y, intro->w, intro->h, intro->numMessages, intro->messages);
     }
@@ -1015,7 +1015,7 @@ void horror_qmark_OnCollide(Instance* instance, GameTracker* gameTracker) {
     intro = (QMarkIntro*)instance->introData;
     if (func_80027500(instance->bspTree, gameTracker) != 0) {
         instance->_104 = 1;
-        instance->_F4[2] = 0x12C;
+        instance->_FC = 0x12C;
         WORK_AS(int, instance->_110) = intro->time;
         WORK_AS(int, instance->_10C) = 1;
     }
@@ -1059,13 +1059,13 @@ void horror_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_F0[6] = intro->missionTime;
     WORK_AS_IDX(short, instance->_100, 0) = 0;
     instance->flags |= 0xC00;
-    gameTracker->player->_F4[2] |= 0x4000;
+    gameTracker->player->_FC |= 0x4000;
     gameTracker->player->flags |= 0x100;
     func_8002CA2C(4, intro->missionTime, intro);
     for (var_s0 = 1; var_s0 < 4; var_s0++) {
         func_8002C1AC(var_s0);
     }
-    instance->_F4[1] = 0;
+    instance->currentSubState = 0;
 }
 
 INCLUDE_RODATA("asm/nonmatchings/level/HORROR", D_80164CCC_A84FC);
@@ -1115,15 +1115,15 @@ void horror_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         if ((((short*)((int**)gameTracker))[0x4C12/2] == 0) && (var_v1 != 0) && (instance->intro->_2C == 0)) {
             ((int*)temp_s2)[0x8/4] -= D_800E5FD8;
         }
-        if (((gameTracker->player->_F4[2] & 0x600000) == 0x600000) && (instance->_F4[1] == 0)) {
+        if (((gameTracker->player->_FC & 0x600000) == 0x600000) && (instance->currentSubState == 0)) {
             temp_s2[0] = (intro->missionTime - 1);
             if (intro->collectType == EBTIMER_COLLECTTYPE_CUTSCENE) {
                 SIGNAL_HandleSignal(PlayerInstance, intro->b + 4, 0);
             }
-            instance->_F4[1] = 1;
-            PlayerInstance->_F4[2] &= 0xFFBFFFFF;
+            instance->currentSubState = 1;
+            PlayerInstance->_FC &= 0xFFBFFFFF;
         }
-        if ((gameTracker->player->_F4[2] & 0x400000) && ((((int**)gameTracker)[0x4C00/4] != 0) || (((int**)gameTracker)[0x4C04/4] != 0))) {
+        if ((gameTracker->player->_FC & 0x400000) && ((((int**)gameTracker)[0x4C00/4] != 0) || (((int**)gameTracker)[0x4C04/4] != 0))) {
             func_8002C18C(5);
             ((int*)temp_s2)[0x8/4] = 0x3C;
             temp_s2[2] = 1;

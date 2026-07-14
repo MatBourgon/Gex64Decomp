@@ -28,9 +28,9 @@ void nypd_slider_OnCreate(Instance* instance, GameTracker* gameTracker)
 
 void nypd_slider_OnUpdate(Instance* instance, GameTracker* gameTracker)
 {
-    if (instance->_F4[2] > 0)
+    if (instance->_FC > 0)
     {
-        instance->_F4[2]--;
+        instance->_FC--;
     }
 }
 
@@ -38,12 +38,12 @@ void nypd_slider_OnCollide(Instance* instance, GameTracker* gameTracker) {
     int* temp_s1;
 
     temp_s1 = (int*)PlayerInstance->data;
-    if (!(PlayerInstance->_F4[2] & 1) && (instance->_F4[2] == 0)) {
+    if (!(PlayerInstance->_FC & 1) && (instance->_FC == 0)) {
         func_80159720_C6800(instance, gameTracker);
         
-        instance->_F4[2] = 0x3C;
+        instance->_FC = 0x3C;
         temp_s1[0xE0/4] = (int)instance;
-        PlayerInstance->_F4[2] &= ~2;
+        PlayerInstance->_FC &= ~2;
         
         func_8002B7CC(PlayerInstance);
 
@@ -62,13 +62,13 @@ void nypd_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_F0[6] = intro->missionTime;
     WORK_AS_IDX(short, instance->_100, 0) = 0;
     instance->flags |= 0xC00;
-    gameTracker->player->_F4[2] |= 0x4000;
+    gameTracker->player->_FC |= 0x4000;
     gameTracker->player->flags |= 0x100;
     func_8002CA2C(4, intro->missionTime, intro);
     for (var_s0 = 1; var_s0 < 4; var_s0++) {
         func_8002C1AC(var_s0);
     }
-    instance->_F4[1] = 0;
+    instance->currentSubState = 0;
 }
 
 void nypd_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
@@ -116,15 +116,15 @@ void nypd_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         if ((((short*)((int**)gameTracker))[0x4C12/2] == 0) && (var_v1 != 0) && (instance->intro->_2C == 0)) {
             ((int*)temp_s2)[0x8/4] -= D_800E5FD8;
         }
-        if (((gameTracker->player->_F4[2] & 0x600000) == 0x600000) && (instance->_F4[1] == 0)) {
+        if (((gameTracker->player->_FC & 0x600000) == 0x600000) && (instance->currentSubState == 0)) {
             temp_s2[0] = (intro->missionTime - 1);
             if (intro->collectType == EBTIMER_COLLECTTYPE_CUTSCENE) {
                 SIGNAL_HandleSignal(PlayerInstance, intro->b + 4, 0);
             }
-            instance->_F4[1] = 1;
-            PlayerInstance->_F4[2] &= ~0x400000;
+            instance->currentSubState = 1;
+            PlayerInstance->_FC &= ~0x400000;
         }
-        if ((gameTracker->player->_F4[2] & 0x400000) && ((((int**)gameTracker)[0x4C00/4] != 0) || (((int**)gameTracker)[0x4C04/4] != 0))) {
+        if ((gameTracker->player->_FC & 0x400000) && ((((int**)gameTracker)[0x4C00/4] != 0) || (((int**)gameTracker)[0x4C04/4] != 0))) {
             func_8002C18C(5);
             ((int*)temp_s2)[0x8/4] = 0x3C;
             temp_s2[2] = 1;

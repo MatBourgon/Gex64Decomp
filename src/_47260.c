@@ -30,7 +30,7 @@ int func_80046924(Instance* instance) {
     instance->processFunc = func_8004675C;
     instance->collideFunc = 0;
 
-    instance->_F4[2] = 0x1000;
+    instance->_FC = 0x1000;
     instance->_100 = func_80015F14(D_800EB8A0); 
 
     instance->_104 = 0;
@@ -478,7 +478,7 @@ SplineDef *SCRIPT_GetPosSplineDef(Instance *instance, MultiSpline *multi, int is
 
     if ((isParent != 0) || (isClass != 0))
     {
-        splineDef = (SplineDef *)&instance->_F4[2]; // work0
+        splineDef = (SplineDef *)&instance->_FC; // work0
 
         return splineDef;
     }

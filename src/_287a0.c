@@ -94,8 +94,8 @@ void func_8002AE40(Instance* instance) {
     void* data;
 
     data = instance->data;
-    instance->_F4[0] = 0;
-    instance->_F4[1] = 1;
+    instance->currentMainState = 0;
+    instance->currentSubState = 1;
     instance->currentAnimFrame = 0;
     instance->currentModelAnim = 0;
     ((short*)data)[0x4E] = 0;

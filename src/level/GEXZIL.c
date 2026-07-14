@@ -34,14 +34,14 @@ INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_bug_OnUpdate);
 
 void gexzil_bug_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp = instance->bspTree;
-    short* temp = (short*)&instance->_F4[2];
+    short* temp = (short*)&instance->_FC;
 
     if (bsp->_06 == 1) {
         if ((bsp->instanceSpline == gameTracker->player) && (bsp->_08[4] < 2U) && (bsp->_0C[5] >= 6U)) {
             INSTANCE_PlainDeath(instance, 5, 3, 0);
         } else if ((bsp->_06 == 1) && (bsp->instanceSpline == gameTracker->player) && ((bsp->_08[4] == 0) || (bsp->_08[4] == 2))) {
             func_80022714(instance, gameTracker);
-            instance->_F4[0] = 0;
+            instance->currentMainState = 0;
             temp[4] = 0x5A;
         }
     }
@@ -73,9 +73,9 @@ void gexzil_ebolt_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 void gexzil_ebolt_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     func_80159DEC_92F6C(instance, instance->_100);
-    if (instance->_F4[2] > 0) {
-        instance->_F4[2]--;
-    } else if (instance->_F4[2] == 0) {
+    if (instance->_FC > 0) {
+        instance->_FC--;
+    } else if (instance->_FC == 0) {
         func_8002E350(instance);
     }
 }
@@ -103,7 +103,7 @@ int func_8015B334_944B4(Intro* intro) {
 
     instance = intro->instance;
     if (instance != 0) {
-        result = instance->_F4[2] < instance->_100;
+        result = instance->_FC < instance->_100;
     } else {
         flag = intro->flags & 8;
         result = flag == 0;
@@ -120,14 +120,14 @@ void gexzil_mechjet_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
 void gexzil_mechjet_OnUpdate(Instance* instance, GameTracker* gameTracker) {
-    if (instance->_F4[0] == 0) {
+    if (instance->currentMainState == 0) {
         func_8002DAF8(instance, -1);
         if (instance->flags2 & 0x10) {
-            instance->_F4[0] = 1;
+            instance->currentMainState = 1;
             instance->currentAnimFrame = ((unsigned short*)instance->object->animList[0])[1] - 1;
             instance->flags2 &= ~0x10;
         }
-    } else if (instance->_F4[0] != 1) {
+    } else if (instance->currentMainState != 1) {
         func_8002DAF8(instance, -0x3E9);
         if (instance->flags2 & 0x10) {
             func_8002E350(instance);
@@ -210,8 +210,8 @@ void func_8015CADC_95C5C(Instance* instance, short* arg1) {
     if (f & 0x10) {
         if (arg1[0x26] <= 0) {
             gameTracker8->player->flags2 |= 0x10;
-            PlayerInstance->_F4[0] = 2;
-            gameTracker8->player->_F4[2] &= ~0x1000000;
+            PlayerInstance->currentMainState = 2;
+            gameTracker8->player->_FC &= ~0x1000000;
             arg1[0x13] = 0x29;
         } else {
             instance->flags2 = f & ~0x10;
@@ -555,48 +555,48 @@ void gexzil_gas_OnCreate(Instance* instance, GameTracker* gameTracker) {
     t = 0;
     introData = ((unsigned short*)instance->introData);
     data = instance->data;
-    fc = (char*)&instance->_F4[2];
+    fc = (char*)&instance->_FC;
     if (instance->flags & 0x20000) {
-        if (instance->_F4[0] == 5) {
+        if (instance->currentMainState == 5) {
             func_800331BC(instance->_104);
         }
     } else {
-        *(GasData*)&instance->_F4[2] = *(GasData*)data;
+        *(GasData*)&instance->_FC = *(GasData*)data;
         r = rand();
         instance->flags |= 0x80;
         instance->currentTextureAnimFrame = r % 24;
         if (introData != NULL) {
             if (introData[0] != 0xFFFF) {
-                *(GasData*)&instance->_F4[2] = *(GasData*)(introData + 1);
+                *(GasData*)&instance->_FC = *(GasData*)(introData + 1);
                 if (WORK_AS_IDX(char, instance->_100, 2) < 0) {
                     WORK_AS(int, instance->_108) |= 0x8000;
                     WORK_AS_IDX(char, instance->_100, 2) = ~WORK_AS_IDX(unsigned char, instance->_100, 2);
                 }
                 t = func_8004A61C(instance);
                 m = introData[0];
-                m %= (unsigned int)(((unsigned short*)&instance->_F4[2])[1] + *(unsigned short*)&instance->_F4[2] + WORK_AS_IDX(unsigned char, instance->_100, 1));
-                if (m < ((unsigned short*)&instance->_F4[2])[1]) {
+                m %= (unsigned int)(((unsigned short*)&instance->_FC)[1] + *(unsigned short*)&instance->_FC + WORK_AS_IDX(unsigned char, instance->_100, 1));
+                if (m < ((unsigned short*)&instance->_FC)[1]) {
                     WORK_AS_IDX(short, instance->_108, 0) = m;
-                    instance->_F4[0] = 0;
+                    instance->currentMainState = 0;
                 } else {
-                    m -= ((unsigned short*)&instance->_F4[2])[1];
+                    m -= ((unsigned short*)&instance->_FC)[1];
                     if (m < WORK_AS_IDX(unsigned char, instance->_100, 1)) {
                         WORK_AS_IDX(short, instance->_108, 0) = m;
-                        instance->_F4[0] = 1;
+                        instance->currentMainState = 1;
                     } else {
                         m -= WORK_AS_IDX(unsigned char, instance->_100, 1);
                         if (m < t) {
-                            instance->_F4[0] = 2;
+                            instance->currentMainState = 2;
                             t = m;
                         } else {
                             m -= t;
-                            if (m < *(unsigned short*)&instance->_F4[2]) {
+                            if (m < *(unsigned short*)&instance->_FC) {
                                 WORK_AS_IDX(short, instance->_108, 0) = m;
-                                instance->_F4[0] = 3;
+                                instance->currentMainState = 3;
                             } else {
-                                m -= *(unsigned short*)&instance->_F4[2];
+                                m -= *(unsigned short*)&instance->_FC;
                                 if (m < t) {
-                                    instance->_F4[0] = 4;
+                                    instance->currentMainState = 4;
                                     t = t - m;
                                 } else {
                                     t = 0;
@@ -606,7 +606,7 @@ void gexzil_gas_OnCreate(Instance* instance, GameTracker* gameTracker) {
                     }
                 }
             } else {
-                instance->_F4[0] = 5;
+                instance->currentMainState = 5;
                 t = func_8004A61C(instance) - 1;
                 instance->flags |= 0x10000;
             }
@@ -628,7 +628,7 @@ void gexzil_gas_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     unsigned short y;
     int w;
 
-    fc = (unsigned short*)&instance->_F4[2];
+    fc = (unsigned short*)&instance->_FC;
     x = WORK_AS_IDX(unsigned short, instance->_108, 0);
     y = instance->currentTextureAnimFrame;
     WORK_AS_IDX(unsigned short, instance->_108, 0) = x + 1;
@@ -637,33 +637,33 @@ void gexzil_gas_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     if (w & 0x8000) {
         instance->rotation.z = (instance->rotation.z + 0x2200) & 0xFFF;
     }
-    switch (instance->_F4[0]) {
+    switch (instance->currentMainState) {
     case 0:
         if (fc[6] >= fc[1]) {
             fc[6] = 0;
-            instance->_F4[0] = 1;
-            instance->_F4[1] = 2;
+            instance->currentMainState = 1;
+            instance->currentSubState = 2;
             instance->flags2 &= ~0x10;
         }
         break;
     case 1:
         if (fc[6] >= ((unsigned char*)fc)[5]) {
             fc[6] = 0;
-            instance->_F4[0] = 2;
+            instance->currentMainState = 2;
             instance->flags2 &= ~0x10;
             instance->flags |= 0x400;
-        } else if (instance->_F4[1] == 2) {
+        } else if (instance->currentSubState == 2) {
             func_8004A820(instance, 0);
             if (instance->currentAnimFrame >= ((unsigned char*)fc)[4]) {
-                instance->_F4[1] = 4;
+                instance->currentSubState = 4;
                 instance->currentAnimFrame = ((unsigned char*)fc)[4];
             } else if (instance->flags2 & 0x10) {
-                instance->_F4[1] = 4;
+                instance->currentSubState = 4;
             }
-        } else if (instance->_F4[1] == 4) {
+        } else if (instance->currentSubState == 4) {
             func_8004A8A8(instance, 0);
             if (instance->flags2 & 0x10) {
-                instance->_F4[1] = 0;
+                instance->currentSubState = 0;
             }
             instance->flags2 &= ~0x10;
         }
@@ -672,13 +672,13 @@ void gexzil_gas_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         func_8004A820(instance, 0);
         if (instance->flags2 & 0x10) {
             fc[6] = func_8004A61C(instance);
-            instance->_F4[0] = 3;
+            instance->currentMainState = 3;
         }
         break;
     case 3:
         if (fc[6] >= fc[0]) {
             fc[6] = 0;
-            instance->_F4[0] = 4;
+            instance->currentMainState = 4;
             instance->flags2 &= ~0x10;
         }
         break;
@@ -686,7 +686,7 @@ void gexzil_gas_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         func_8004A8A8(instance, 0);
         if (instance->flags2 & 0x10) {
             fc[6] = func_8004A61C(instance);
-            instance->_F4[0] = 0;
+            instance->currentMainState = 0;
             func_800331BC(((int*)fc)[2]);
             instance->flags &= ~0x400;
         }
@@ -703,8 +703,8 @@ void gexzil_gas_OnCollide(Instance* instance, GameTracker* gameTracker) {
     bspPlayer = instance->bspTree->instanceSpline;
     playerState = (int)gameTracker->player;
     if (bspPlayer->object != NULL && bspPlayer == (Instance*)playerState
-        && instance->_F4[0] >= 2 && func_80027578(instance, gameTracker, bspPlayer) == 0) {
-        playerState = PlayerInstance->_F4[1];
+        && instance->currentMainState >= 2 && func_80027578(instance, gameTracker, bspPlayer) == 0) {
+        playerState = PlayerInstance->currentSubState;
         if (playerState != 0x200000 && playerState != 0x10 && playerState != 0x2000) {
             func_800223F8(gameTracker8, 0x78, 0);
         }

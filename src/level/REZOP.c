@@ -19,15 +19,15 @@ void rezop_rrdoor_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int data2;
     int off;
 
-    if (instance->_F4[0] == 1) {
+    if (instance->currentMainState == 1) {
         data = instance->object->modelList[0]->_14;
-        off = instance->_F4[2] * 0xC;
+        off = instance->_FC * 0xC;
         if (*(int*)(off + data + 8) != *(int*)(data + 0x1E8)) {
             *(int*)(off + data + 8) = *(int*)(data + 0x1E8);
             data2 = instance->object->modelList[0]->_14;
             *(int*)(off + data2 + 0x14) = *(int*)(data2 + 0x1F4);
         }
-        instance->_F4[0] = 0;
+        instance->currentMainState = 0;
     }
 }
 
@@ -44,7 +44,7 @@ void rezop_rrspark_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 void rezop_rezrat_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    instance->_F4[0] = 0;
+    instance->currentMainState = 0;
     instance->flags |= 0x100400;
     func_8004AAA8(instance, 0x18, 0);
 }
@@ -58,12 +58,12 @@ INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_rezrat_OnUpdate);
 extern int D_800EB8A0;
 void rezop_rezrat_OnCollide(Instance* instance, GameTracker* gameTracker) {
     if (instance->bspTree->_06 == 1 && instance->bspTree->instanceSpline == gameTracker->player
-        && instance->bspTree->_0C[5] >= 6U && instance->_F4[0] != 2) {
+        && instance->bspTree->_0C[5] >= 6U && instance->currentMainState != 2) {
         if (((Instance*)instance->_11C)->_100 >= 0x14) {
             func_80017598(instance, 0, 0, 0, D_800EB8A0, 0, 0);
             INSTANCE_KillInstance(instance);
         } else {
-            instance->_F4[0] = 2;
+            instance->currentMainState = 2;
             func_80017598(instance, 0, 0, 0, D_800EB8A0, 0, 0);
             instance->flags |= 0x800;
         }
@@ -77,12 +77,12 @@ void rezop_rrgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
     intro = instance->introData;
     obj = OBTABLE_FindObject("rrzap___");
-    instance->_F4[0] = 2;
+    instance->currentMainState = 2;
     instance->flags |= 0x100080;
     if (*(short*)(intro + 8) != 0) {
-        instance->_F4[0] = 1;
+        instance->currentMainState = 1;
     } else {
-        instance->_F4[2] = *(short*)(intro + 6);
+        instance->_FC = *(short*)(intro + 6);
     }
     instance->_100 = 1;
     instance->_104 = 1;
@@ -97,30 +97,30 @@ void rezop_rrgen_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 void rezop_rrzap_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    instance->_F4[2] = 0x20;
+    instance->_FC = 0x20;
     instance->flags |= 0x100080;
 }
 
 void rezop_rrzap_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     unsigned short t;
 
-    if (instance->_F4[0] == 0) {
+    if (instance->currentMainState == 0) {
         if (*(int*)&instance->position.x != *(int*)&PlayerInstance->position.x) {
-            t = ((unsigned short*)&instance->_F4[2])[1];
+            t = ((unsigned short*)&instance->_FC)[1];
             func_80049B80(instance, &t, 0x100, 0xDDB, 0x100, &PlayerInstance->position, 0x100);
         }
         instance->currentTextureAnimFrame = ((Instance*)instance->parent)->_120;
         if (instance->parent->_120 == 5) {
-            instance->_F4[0] = 1;
+            instance->currentMainState = 1;
             gameTracker->player->flags |= 0x100;
         }
-    } else if (instance->_F4[0] == 1) {
+    } else if (instance->currentMainState == 1) {
         if (instance->_100 == 0) {
             func_80022714(instance, gameTracker);
         }
         instance->_100 = instance->_100 + 1;
         if (instance->_100 == 0x3C) {
-            instance->_F4[0] = 0;
+            instance->currentMainState = 0;
             instance->_100 = 0;
             PlayerInstance->flags &= ~0x100;
         }
@@ -154,16 +154,16 @@ void rezop_tbbttn_OnCollide(Instance* instance, GameTracker* gameTracker) {
     short six = bsp->_06;
 
     if (six == 1 && bsp->instanceSpline == gameTracker->player
-        && (PlayerInstance->_F4[1] == 0x80 || PlayerInstance->_F4[1] == 0x20)) {
-        state = instance->_F4[0];
+        && (PlayerInstance->currentSubState == 0x80 || PlayerInstance->currentSubState == 0x20)) {
+        state = instance->currentMainState;
         if (state != 3 && bsp->_0C[4] == 9) {
             if (state != six) {
                 func_80050508(instance, 0xB4, 0, 0x5A, 0x9C4);
             }
             instance->scale.z = 0x400;
-            instance->_F4[0] = six;
+            instance->currentMainState = six;
             list = instance->intro->_04;
-            ((Intro**)list)[list[0]]->instance->_F4[0] = six;
+            ((Intro**)list)[list[0]]->instance->currentMainState = six;
         }
     }
 }
@@ -195,11 +195,11 @@ void rezop_simontv_OnCollide(Instance* instance, GameTracker* gameTracker) {
     Instance* other = ((Instance*)instance->_100)->introData;
     short* otherIntro = other->introData;
 
-    if (bsp->_06 == 4 && bsp->instanceSpline == PlayerInstance && instance->_F4[0] == 0) {
-        if (other->_F4[0] == 0 || otherIntro[4] != 1) {
-            other->_F4[0] = 1;
-            instance->_F4[1] = 1;
-        } else if (instance->_F4[1] != otherIntro[4]) {
+    if (bsp->_06 == 4 && bsp->instanceSpline == PlayerInstance && instance->currentMainState == 0) {
+        if (other->currentMainState == 0 || otherIntro[4] != 1) {
+            other->currentMainState = 1;
+            instance->currentSubState = 1;
+        } else if (instance->currentSubState != otherIntro[4]) {
             func_80050508(instance, 0xAE, 0, 0x64, 0xFA0);
         }
     }
@@ -210,7 +210,7 @@ void rezop_simon_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
     intro = instance->introData;
     instance->_100 = (instance->intro->_04[0] - 2) / 2;
-    instance->_F4[0] = 0;
+    instance->currentMainState = 0;
     instance->_104 = 0;
     WORK_AS(int, instance->_114)= *(int*)(((short)(rand() % *(short*)(intro + 0xA)) << 2) + *(int*)(intro + 0xC));
 }
@@ -237,7 +237,7 @@ void rezop_simon_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 void rezop_rezbot_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    instance->_F4[2] = PlayerInstance->position.z + 0x282;
+    instance->_FC = PlayerInstance->position.z + 0x282;
     instance->currentModelAnim = 0;
 }
 
@@ -268,17 +268,17 @@ void rezop_rezcrnk_OnCreate(Instance* instance, GameTracker* gameTracker) {
 void rezop_rezcrnk_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int t;
 
-    if (instance->_F4[0] == 1) {
-        t = instance->_F4[2];
+    if (instance->currentMainState == 1) {
+        t = instance->_FC;
         if (t > 0) {
-            instance->_F4[2] = t - 0x10;
-            if (instance->_F4[2] < 0) {
-                instance->_F4[2] = 0;
+            instance->_FC = t - 0x10;
+            if (instance->_FC < 0) {
+                instance->_FC = 0;
             }
         } else if (t == 0) {
-            instance->_F4[0] = 0;
+            instance->currentMainState = 0;
         }
-        instance->rotation.z += instance->_F4[2];
+        instance->rotation.z += instance->_FC;
     }
     if (instance->_100 >= 0) {
         instance->_100 = instance->_100 - 1;
@@ -297,11 +297,11 @@ void rezop_rezcrnk_OnCollide(Instance* instance, GameTracker* gameTracker) {
         if (sig != NULL) {
             COLLIDE_HandleSignal(gameTracker->player, (BaseSignal*)(sig + 1), sig[0], 0);
         }
-        t = instance->_F4[2];
-        instance->_F4[0] = six;
+        t = instance->_FC;
+        instance->currentMainState = six;
         instance->flags2 |= 0x400000;
         if (t < 0x180) {
-            instance->_F4[2] = t + 0x100;
+            instance->_FC = t + 0x100;
         }
     }
 }
@@ -351,7 +351,7 @@ void rezop_snkplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 void rezop_rezbull_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_E0[1] = -0xF;
-    instance->_F4[0] = 0;
+    instance->currentMainState = 0;
     instance->_D0[2] = 0x3C;
     WORK_AS(int, instance->_108) = 0x3C;
 }
@@ -365,14 +365,14 @@ void rezop_rezbull_OnCollide(Instance* instance, GameTracker* gameTracker) {
     int px;
 
     if (bsp->_06 == 1 && bsp->instanceSpline == gameTracker->player
-        && bsp->_0C[5] >= 6U && instance->_F4[0] != 5) {
+        && bsp->_0C[5] >= 6U && instance->currentMainState != 5) {
         px = instance->position.x;
-        instance->_F4[2] = (short)ratan2(instance->position.y - PlayerInstance->position.y,
+        instance->_FC = (short)ratan2(instance->position.y - PlayerInstance->position.y,
                                    px - PlayerInstance->position.x);
         instance->_100 = 0x20;
-        instance->_F4[0] = 4;
+        instance->currentMainState = 4;
     } else if (bsp->_06 == 2) {
-        if (instance->_F4[0] == bsp->_06) {
+        if (instance->currentMainState == bsp->_06) {
             func_8004AAE4(bsp, &out, gameTracker);
             if (out.z >= 0xED9) {
                 WORK_AS(Instance*, instance->_104) = bsp->instanceSpline;
@@ -390,7 +390,7 @@ void rezop_srchlit_OnCreate(Instance* instance, GameTracker* gameTracker) {
     short* intro;
     short i;
 
-    fc = (short*)&instance->_F4[2];
+    fc = (short*)&instance->_FC;
     intro = instance->introData;
     for (i = 0; i < gameTracker->level->_68; i++) {
         if (*(int*)((char*)gameTracker->level->_6C + i * 12) == intro[0]) {
@@ -406,7 +406,7 @@ void rezop_srchlit_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 void rezop_spotlit_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    *(short*)&instance->_F4[2] = (unsigned char)PlayerInstance->lightGroup;
+    *(short*)&instance->_FC = (unsigned char)PlayerInstance->lightGroup;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_spotlit_OnUpdate);
@@ -430,8 +430,8 @@ void rezop_spnplat_OnCreate(Instance* instance, GameTracker* gameTracker) {
         OBTABLE_InstanceInit(birthed);
         ((Instance**)birthed->introData)[2] = instance;
     }
-    instance->_F4[2] = 1;
-    instance->_F4[0] = 0;
+    instance->_FC = 1;
+    instance->currentMainState = 0;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_spnplat_OnUpdate);
@@ -441,10 +441,10 @@ void rezop_spnplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp = instance->bspTree;
     Instance* other;
 
-    if ((unsigned int)(instance->_F4[0] - 3) >= 2U) {
+    if ((unsigned int)(instance->currentMainState - 3) >= 2U) {
         if (bsp->instanceSpline == gameTracker->player) {
-            instance->_F4[1] = 1;
-            instance->_F4[0] = instance->_F4[2];
+            instance->currentSubState = 1;
+            instance->currentMainState = instance->_FC;
         } else if (bsp->_06 == 3 && instance->_104 == 0) {
             instance->_104 = 1;
             instance->position.x += (unsigned short)bsp->localOffset.x * 2;
@@ -452,13 +452,13 @@ void rezop_spnplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
             instance->position.z += (unsigned short)bsp->localOffset.z * 2;
             COLLIDE_UpdateAllTransforms(instance, &bsp->localOffset, gameTracker);
             other = ((Instance*)intro[2]);
-            if (other->_F4[2] == 1) {
-                other->_F4[2] = 2;
+            if (other->_FC == 1) {
+                other->_FC = 2;
             } else {
-                other->_F4[2] = 1;
+                other->_FC = 1;
             }
             other = ((Instance*)intro[2]);
-            other->_F4[0] = other->_F4[2];
+            other->currentMainState = other->_FC;
         }
     }
 }
@@ -481,7 +481,7 @@ void rezop_mutant_OnCreate(Instance* instance, GameTracker* gameTracker) {
         } else {
             v = *intro;
         }
-        instance->_F4[2] = v;
+        instance->_FC = v;
         instance->currentModelAnim = 4;
         instance->flags2 &= ~0x10;
         instance->flags |= 0x10000;
@@ -503,12 +503,12 @@ void rezop_mutant_OnCollide(Instance* instance, GameTracker* gameTracker) {
         return;
 
     if (instance->bspTree->_0C[5] >= 6U) {
-        if (instance->_F4[0] == 3) {
+        if (instance->currentMainState == 3) {
             func_8002275C(instance, gameTracker);
             return;
         }
             
-        instance->_F4[0] = 5;
+        instance->currentMainState = 5;
         if (instance->currentModelAnim == 4) {
             instance->currentModelAnim = 0;
             instance->currentAnimFrame = 0;
@@ -522,7 +522,7 @@ void rezop_mutant_OnCollide(Instance* instance, GameTracker* gameTracker) {
             instance->currentModelAnim = 0;
             instance->flags2 &= ~0x10;
         }
-    } else if (instance->_F4[0] == 3) {
+    } else if (instance->currentMainState == 3) {
         func_80022714(instance, gameTracker);
     }
 }
@@ -539,10 +539,10 @@ void rezop_mtntsht_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
     dx = instance->position.x - instance->initialPos.x;
     dy = instance->position.y - instance->initialPos.y;
-    if (((short*)&instance->_F4[2])[1] * ((short*)&instance->_F4[2])[1] < dx * dx + dy * dy) {
+    if (((short*)&instance->_FC)[1] * ((short*)&instance->_FC)[1] < dx * dx + dy * dy) {
         INSTANCE_PlainDeath(instance, 4, -1, 0);
     }
-    func_80047E64(instance, ((short*)&instance->_F4[2])[0]);
+    func_80047E64(instance, ((short*)&instance->_FC)[0]);
 }
 
 extern char D_801615AC_D9D1C[];
@@ -572,7 +572,7 @@ void rezop_rebggen_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     Object* obj;
     Instance* birthed;
 
-    if (instance->_F4[0] == 1) {
+    if (instance->currentMainState == 1) {
         obj = OBTABLE_FindObject("rebug___");
         birthed = INSTANCE_BirthObject(instance, obj);
         if (birthed != NULL) {
@@ -580,7 +580,7 @@ void rezop_rebggen_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             obj->oflags |= 0x2000;
             birthed->introData = NULL;
         }
-        instance->_F4[0] = 0;
+        instance->currentMainState = 0;
     }
 }
 
@@ -603,7 +603,7 @@ void rezop_rebug_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int ox;
     int oy;
 
-    if (instance->_F4[0] != 1) {
+    if (instance->currentMainState != 1) {
         ox = instance->oldPos.x;
         oy = instance->oldPos.y;
         instance->rotation.z = ratan2(oy - instance->position.y, ox - instance->position.x) + 0x400;
@@ -632,7 +632,7 @@ void rezop_iris_OnCreate(Instance* instance, GameTracker* gameTracker) {
     y = data[2];
     x = -0x40;
     WORK_AS_IDX(short, instance->_10C, 0) = x;
-    ((short*)&instance->_F4[2])[1] = 0;
+    ((short*)&instance->_FC)[1] = 0;
     WORK_AS_IDX(short, instance->_108, 1) = x - y;
 }
 
@@ -642,7 +642,7 @@ void rezop_iris_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 void rezop_tvgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    instance->_F4[0] = 0;
+    instance->currentMainState = 0;
     instance->flags |= 0x100800;
 }
 
@@ -656,17 +656,17 @@ void rezop_tvgen_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     obj = OBTABLE_FindObject(intro + 8);
     if (intro == NULL || obj == NULL) {
         INSTANCE_KillInstance(instance);
-    } else if (instance->_F4[0] == 1) {
-        instance->_F4[2] = instance->_F4[2] + 1;
-        if (instance->_F4[2] == ((int*)intro)[1]) {
+    } else if (instance->currentMainState == 1) {
+        instance->_FC = instance->_FC + 1;
+        if (instance->_FC == ((int*)intro)[1]) {
             v = ((int*)intro)[0];
-            instance->_F4[0] = 0;
-            instance->_F4[2] = v;
+            instance->currentMainState = 0;
+            instance->_FC = v;
         }
     } else {
-        instance->_F4[2] += 1;
+        instance->_FC += 1;
         if ((unsigned int)gameTracker8->_0051[0x14] % (unsigned int)((int*)intro)[0] == 0) {
-            instance->_F4[2] = 0;
+            instance->_FC = 0;
             birthed = INSTANCE_BirthObject(instance, obj);
             if (birthed != NULL) {
                 obj->oflags |= 0x2000;
@@ -707,10 +707,10 @@ void rezop_tvgurny_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         b.x = instance->position.x;
         b.y = instance->position.y;
         b.z = instance->position.z;
-        pt = SplineGetLastPoint(instance->intro->multiSpline->positional, (SplineDef*)&instance->_F4[2]);
+        pt = SplineGetLastPoint(instance->intro->multiSpline->positional, (SplineDef*)&instance->_FC);
         a = *pt;
         COLLIDE_PointAndTerrain(gameTracker8->level->segmentAddress, &a, &b, instance);
-        SCRIPT_InstanceSplineSet(instance, (short)(instance->_120 - 0x28), (SplineDef*)&instance->_F4[2], WORK_AS_PTR(SplineDef, instance->_104), 0);
+        SCRIPT_InstanceSplineSet(instance, (short)(instance->_120 - 0x28), (SplineDef*)&instance->_FC, WORK_AS_PTR(SplineDef, instance->_104), 0);
         instance->_D0[0] += 1;
     }
     GenericProcess(instance, gameTracker);
@@ -738,48 +738,48 @@ void rezop_gas_OnCreate(Instance* instance, GameTracker* gameTracker) {
     t = 0;
     introData = ((unsigned short*)instance->introData);
     data = instance->data;
-    fc = (char*)&instance->_F4[2];
+    fc = (char*)&instance->_FC;
     if (instance->flags & 0x20000) {
-        if (instance->_F4[0] == 5) {
+        if (instance->currentMainState == 5) {
             func_800331BC(instance->_104);
         }
     } else {
-        *(GasData*)&instance->_F4[2] = *(GasData*)data;
+        *(GasData*)&instance->_FC = *(GasData*)data;
         r = rand();
         instance->flags |= 0x80;
         instance->currentTextureAnimFrame = r % 24;
         if (introData != NULL) {
             if (introData[0] != 0xFFFF) {
-                *(GasData*)&instance->_F4[2] = *(GasData*)(introData + 1);
+                *(GasData*)&instance->_FC = *(GasData*)(introData + 1);
                 if (WORK_AS_IDX(char, instance->_100, 2) < 0) {
                     WORK_AS(int, instance->_108) |= 0x8000;
                     WORK_AS_IDX(char, instance->_100, 2) = ~WORK_AS_IDX(unsigned char, instance->_100, 2);
                 }
                 t = func_8004A61C(instance);
                 m = introData[0];
-                m %= (unsigned int)(((unsigned short*)&instance->_F4[2])[1] + *(unsigned short*)&instance->_F4[2] + WORK_AS_IDX(unsigned char, instance->_100, 1));
-                if (m < ((unsigned short*)&instance->_F4[2])[1]) {
+                m %= (unsigned int)(((unsigned short*)&instance->_FC)[1] + *(unsigned short*)&instance->_FC + WORK_AS_IDX(unsigned char, instance->_100, 1));
+                if (m < ((unsigned short*)&instance->_FC)[1]) {
                     WORK_AS_IDX(short, instance->_108, 0) = m;
-                    instance->_F4[0] = 0;
+                    instance->currentMainState = 0;
                 } else {
-                    m -= ((unsigned short*)&instance->_F4[2])[1];
+                    m -= ((unsigned short*)&instance->_FC)[1];
                     if (m < WORK_AS_IDX(unsigned char, instance->_100, 1)) {
                         WORK_AS_IDX(short, instance->_108, 0) = m;
-                        instance->_F4[0] = 1;
+                        instance->currentMainState = 1;
                     } else {
                         m -= WORK_AS_IDX(unsigned char, instance->_100, 1);
                         if (m < t) {
-                            instance->_F4[0] = 2;
+                            instance->currentMainState = 2;
                             t = m;
                         } else {
                             m -= t;
-                            if (m < *(unsigned short*)&instance->_F4[2]) {
+                            if (m < *(unsigned short*)&instance->_FC) {
                                 WORK_AS_IDX(short, instance->_108, 0) = m;
-                                instance->_F4[0] = 3;
+                                instance->currentMainState = 3;
                             } else {
-                                m -= *(unsigned short*)&instance->_F4[2];
+                                m -= *(unsigned short*)&instance->_FC;
                                 if (m < t) {
-                                    instance->_F4[0] = 4;
+                                    instance->currentMainState = 4;
                                     t = t - m;
                                 } else {
                                     t = 0;
@@ -789,7 +789,7 @@ void rezop_gas_OnCreate(Instance* instance, GameTracker* gameTracker) {
                     }
                 }
             } else {
-                instance->_F4[0] = 5;
+                instance->currentMainState = 5;
                 t = func_8004A61C(instance) - 1;
                 instance->flags |= 0x10000;
             }
@@ -807,7 +807,7 @@ void rezop_gas_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     unsigned short y;
     int w;
 
-    fc = (unsigned short*)&instance->_F4[2];
+    fc = (unsigned short*)&instance->_FC;
     x = WORK_AS_IDX(unsigned short, instance->_108, 0);
     y = instance->currentTextureAnimFrame;
     WORK_AS_IDX(unsigned short, instance->_108, 0) = x + 1;
@@ -816,33 +816,33 @@ void rezop_gas_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     if (w & 0x8000) {
         instance->rotation.z = (instance->rotation.z + 0x2200) & 0xFFF;
     }
-    switch (instance->_F4[0]) {
+    switch (instance->currentMainState) {
     case 0:
         if (fc[6] >= fc[1]) {
             fc[6] = 0;
-            instance->_F4[0] = 1;
-            instance->_F4[1] = 2;
+            instance->currentMainState = 1;
+            instance->currentSubState = 2;
             instance->flags2 &= ~0x10;
         }
         break;
     case 1:
         if (fc[6] >= ((unsigned char*)fc)[5]) {
             fc[6] = 0;
-            instance->_F4[0] = 2;
+            instance->currentMainState = 2;
             instance->flags2 &= ~0x10;
             instance->flags |= 0x400;
-        } else if (instance->_F4[1] == 2) {
+        } else if (instance->currentSubState == 2) {
             func_8004A820(instance, 0);
             if (instance->currentAnimFrame >= ((unsigned char*)fc)[4]) {
-                instance->_F4[1] = 4;
+                instance->currentSubState = 4;
                 instance->currentAnimFrame = ((unsigned char*)fc)[4];
             } else if (instance->flags2 & 0x10) {
-                instance->_F4[1] = 4;
+                instance->currentSubState = 4;
             }
-        } else if (instance->_F4[1] == 4) {
+        } else if (instance->currentSubState == 4) {
             func_8004A8A8(instance, 0);
             if (instance->flags2 & 0x10) {
-                instance->_F4[1] = 0;
+                instance->currentSubState = 0;
             }
             instance->flags2 &= ~0x10;
         }
@@ -851,13 +851,13 @@ void rezop_gas_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         func_8004A820(instance, 0);
         if (instance->flags2 & 0x10) {
             fc[6] = func_8004A61C(instance);
-            instance->_F4[0] = 3;
+            instance->currentMainState = 3;
         }
         break;
     case 3:
         if (fc[6] >= fc[0]) {
             fc[6] = 0;
-            instance->_F4[0] = 4;
+            instance->currentMainState = 4;
             instance->flags2 &= ~0x10;
         }
         break;
@@ -865,7 +865,7 @@ void rezop_gas_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         func_8004A8A8(instance, 0);
         if (instance->flags2 & 0x10) {
             fc[6] = func_8004A61C(instance);
-            instance->_F4[0] = 0;
+            instance->currentMainState = 0;
             func_800331BC(((int*)fc)[2]);
             instance->flags &= ~0x400;
         }
@@ -882,8 +882,8 @@ void rezop_gas_OnCollide(Instance* instance, GameTracker* gameTracker) {
     bspPlayer = instance->bspTree->instanceSpline;
     playerState = (int)gameTracker->player;
     if (bspPlayer->object != NULL && bspPlayer == (Instance*)playerState
-        && instance->_F4[0] >= 2 && func_80027578(instance, gameTracker, bspPlayer) == 0) {
-        playerState = PlayerInstance->_F4[1];
+        && instance->currentMainState >= 2 && func_80027578(instance, gameTracker, bspPlayer) == 0) {
+        playerState = PlayerInstance->currentSubState;
         if (playerState != 0x200000 && playerState != 0x10 && playerState != 0x2000) {
             func_800223F8(gameTracker8, 0x78, 0);
         }
@@ -899,13 +899,13 @@ void rezop_btimer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_F0[6] = intro->missionTime;
     WORK_AS_IDX(short, instance->_100, 0) = 0;
     instance->flags |= 0xC00;
-    gameTracker->player->_F4[2] |= 0x4000;
+    gameTracker->player->_FC |= 0x4000;
     gameTracker->player->flags |= 0x100;
     func_8002CA2C(4, intro->missionTime, intro);
     for (var_s0 = 1; var_s0 < 4; var_s0++) {
         func_8002C1AC(var_s0);
     }
-    instance->_F4[1] = 0;
+    instance->currentSubState = 0;
 }
 
 extern char D_80161590_D9D00[];
@@ -953,15 +953,15 @@ void rezop_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         if ((((short*)((int**)gameTracker))[0x4C12/2] == 0) && (var_v1 != 0) && (instance->intro->_2C == 0)) {
             ((int*)temp_s2)[0x8/4] -= D_800E5FD8;
         }
-        if (((gameTracker->player->_F4[2] & 0x600000) == 0x600000) && (instance->_F4[1] == 0)) {
+        if (((gameTracker->player->_FC & 0x600000) == 0x600000) && (instance->currentSubState == 0)) {
             temp_s2[0] = (intro->missionTime - 1);
             if (intro->collectType == EBTIMER_COLLECTTYPE_CUTSCENE) {
                 SIGNAL_HandleSignal(PlayerInstance, (void*)(intro->b + 4), 0);
             }
-            instance->_F4[1] = 1;
-            PlayerInstance->_F4[2] &= ~0x400000;
+            instance->currentSubState = 1;
+            PlayerInstance->_FC &= ~0x400000;
         }
-        if ((gameTracker->player->_F4[2] & 0x400000) && ((((int**)gameTracker)[0x4C00/4] != 0) || (((int**)gameTracker)[0x4C04/4] != 0))) {
+        if ((gameTracker->player->_FC & 0x400000) && ((((int**)gameTracker)[0x4C00/4] != 0) || (((int**)gameTracker)[0x4C04/4] != 0))) {
             func_8002C18C(5);
             ((int*)temp_s2)[0x8/4] = 0x3C;
             temp_s2[2] = 1;

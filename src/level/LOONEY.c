@@ -68,14 +68,14 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_bug_OnUpdate);
 
 void looney_bug_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp = instance->bspTree;
-    short* temp  = (short*)&instance->_F4[2];
+    short* temp  = (short*)&instance->_FC;
 
     if (bsp->_06 == 1) {
         if ((bsp->instanceSpline == gameTracker->player) && (bsp->_08[4] < 2U) && (bsp->_0C[5] >= 6U)) {
             INSTANCE_PlainDeath(instance, 5, 3, 0);
         } else if ((bsp->_06 == 1) && (bsp->instanceSpline == gameTracker->player) && ((bsp->_08[4] == 0) || (bsp->_08[4] == 2))) {
             func_80022714(instance, gameTracker);
-            instance->_F4[0] = 0;
+            instance->currentMainState = 0;
             temp[4] = 0x5A;
         }
     }
@@ -86,7 +86,7 @@ void looney_bouncer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int* fc;
     
     intro = instance->introData;
-    fc = &instance->_F4[2];
+    fc = &instance->_FC;
     
     if (intro != NULL) {
         WORK_AS_IDX(short, instance->_100, 1) = intro[0];
@@ -99,7 +99,7 @@ void looney_bouncer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     fc[4] = instance->intro->position.y;
     ((short*)fc)[5] = 6;
     instance->intro->rotation.z = instance->intro->rotation.z & 0xFFF;
-    instance->_F4[0] = 1;
+    instance->currentMainState = 1;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_bouncer_OnUpdate);
@@ -112,8 +112,8 @@ void looney_bouncer_OnCollide(Instance* instance, GameTracker* gameTracker) {
         && (bsp->_0C[5] >= 6U)
         && (
             (WORK_AS_IDX(short, instance->_104, 0) != 3)
-            || ((instance->_F4[0] - 2) < 2U)
-            || (instance->_F4[0] == 4)
+            || ((instance->currentMainState - 2) < 2U)
+            || (instance->currentMainState == 4)
         )) {
             INSTANCE_PlainDeath(instance, 5, 3, 0);
     }
@@ -128,27 +128,27 @@ void looney_bouncer_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 void looney_crawler_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
-    instance->_F4[0] = 0;
+    instance->currentMainState = 0;
     instance->currentModelAnim = 0;
 }
 
 void looney_crawler_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int v0, v1;
 
-    if (instance->_F4[0] == 0)
+    if (instance->currentMainState == 0)
     {
         v1 = instance->oldPos.x;
         v0 = instance->oldPos.y;
         instance->rotation.z = ratan2(v0 - instance->position.y, v1 - instance->position.x) - 0x400;
         func_8002DAF8(instance, -1);
     }
-    else if (instance->_F4[0] == 1)
+    else if (instance->currentMainState == 1)
     {
         func_8002DAF8(instance, -1);
         if ((instance->flags2 & 0x10))
         {
             instance->currentAnimFrame = ((unsigned short*)(instance->object->animList[(*(unsigned char*)&instance->_40[7])]))[1] - 1; 
-            instance->_F4[0] = 2;
+            instance->currentMainState = 2;
         }
         
     }
@@ -160,19 +160,19 @@ void looney_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
     
     if (temp_a3 == 1) {
         if ((bsp->instanceSpline == gameTracker->player) && (bsp->_0C[5] >= 6U)) {
-            if (instance->_F4[0] == 0)
+            if (instance->currentMainState == 0)
             {
                 ((char*)instance->_40)[0xe] = 1;
-                instance->_F4[0] = temp_a3;
+                instance->currentMainState = temp_a3;
                 instance->currentAnimFrame = 0;
                 instance->flags2 &= ~0x10;
                 instance->flags |= 0x100000;
             }
-            else if (instance->_F4[0] == 2)
+            else if (instance->currentMainState == 2)
             {
                 INSTANCE_PlainDeath(instance, 5, 3, 0);
             }
-        } else if ((bsp->_06 == 1) && (bsp->instanceSpline == gameTracker->player) && ((instance->_F4[0] - 1) >= 2U)) {
+        } else if ((bsp->_06 == 1) && (bsp->instanceSpline == gameTracker->player) && ((instance->currentMainState - 1) >= 2U)) {
             func_80022714(instance, gameTracker);
         }
     }
@@ -189,7 +189,7 @@ void looney_bowling_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     if (instance->parent == NULL) {
         INSTANCE_KillInstance(instance);
     }
-    if (SCRIPT_InstanceSplineProcess(instance, (SplineDef*)&instance->_F4[2], WORK_AS_PTR(SplineDef, instance->_104), NULL, 1) > 0) {
+    if (SCRIPT_InstanceSplineProcess(instance, (SplineDef*)&instance->_FC, WORK_AS_PTR(SplineDef, instance->_104), NULL, 1) > 0) {
         INSTANCE_PlainDeath(instance, 5, -1, 0);
     }
     if (++(WORK_AS(int, instance->_110)) == 0x50) {
@@ -208,26 +208,26 @@ void looney_doeboy_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     Intro* intro;
     short* temp_v1;
 
-    if (instance->_F4[0] == 0) {
+    if (instance->currentMainState == 0) {
         intro = instance->intro;
         temp_v1 = (short*)intro->_2C;
         if (temp_v1 != NULL) {
-            instance->_F4[2] = ((int*)intro->data)[1];
+            instance->_FC = ((int*)intro->data)[1];
             if (temp_v1[0] != 0) {
                 instance->currentModelAnim = temp_v1[1];
             }
-            instance->_F4[0] = 1;
+            instance->currentMainState = 1;
             instance->intro->_2C = NULL;
         } else if (instance->flags & 0x2000000) {
-            instance->_F4[0] = 1;
+            instance->currentMainState = 1;
         }
     }
     
-    if (instance->_F4[0] != 0) {
+    if (instance->currentMainState != 0) {
         func_8002DAF8(instance, -1);
         if (instance->flags2 & 0x10) {
             instance->flags2 &= ~0x10;
-            instance->_F4[0] = 0;
+            instance->currentMainState = 0;
             instance->flags &= ~0x2000000;
             instance->intro->_2C = NULL;
         }
@@ -235,8 +235,8 @@ void looney_doeboy_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     
     func_8001DA8C(instance, gameTracker);
     
-    if (instance->_F4[2] > 0) {
-        instance->_F4[2]--;
+    if (instance->_FC > 0) {
+        instance->_FC--;
     }
 }
 
@@ -244,7 +244,7 @@ void looney_doeboy_OnCollide(Instance* instance, GameTracker* gameTracker) {
     void* temp_a1;
     void* intro;
 
-    if ((func_80027500(instance->bspTree, gameTracker) != 0) && (instance->_F4[2] == 0)) {
+    if ((func_80027500(instance->bspTree, gameTracker) != 0) && (instance->_FC == 0)) {
         intro = instance->introData;
         if (intro != NULL) {
             temp_a1 = *(void**)intro;
@@ -263,7 +263,7 @@ void looney_brkblok_OnCreate(Instance* instance, GameTracker* gameTracker) {
         instance->intro->position = instance->position;
     } else {
         if (intro != 0) {
-            instance->_F4[2] = intro[0];
+            instance->_FC = intro[0];
             instance->_100 = intro[1];
         }
         instance->flags |= 0x10000;
@@ -378,7 +378,7 @@ void looney_leafgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
     const char name[] = "leaffx__";
     char* targetObjectName = instance->introData;
     char* d = instance->object->data;
-    int* p = &instance->_F4[2];
+    int* p = &instance->_FC;
     if (targetObjectName == 0) {
         if (d != 0) {
             targetObjectName = d;
@@ -407,8 +407,8 @@ extern void func_8015B934_B3BE4();
 void func_8015BC04_B3EB4(Instance* instance, int arg1, int arg2) {
     Model* model;
 
-    if (instance->_F4[2] != 0) {
-        model = ((Object*)instance->_F4[2])->modelList[0];
+    if (instance->_FC != 0) {
+        model = ((Object*)instance->_FC)->modelList[0];
         D_80078244 = (rand() & 3) + 2;
         func_800170E8(model, model->_14 + 0xC, arg2, 0, 0, D_800EB8A0, func_8015B934_B3BE4, func_8015BBA4_B3E54, 0x28);
     }
@@ -442,7 +442,7 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_8015C2D8_B4588);
 void looney_funguy_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int* fc;
 
-    fc = &instance->_F4[2];
+    fc = &instance->_FC;
     switch (WORK_AS(int, instance->_108)) {
     case 0:
         func_8015BFCC_B427C(instance, gameTracker);
@@ -476,7 +476,7 @@ void looney_fallgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
     total = 0;
     intro = instance->introData;
-    fc = &instance->_F4[2];
+    fc = &instance->_FC;
     if (intro != NULL) {
         for (i = 0; i < intro->count; i++) {
             total += intro->entries[i][2];
@@ -529,9 +529,9 @@ void looney_trapsit_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
     instance->_104 = instance->position.z;
     if (((short*)instance->introData)[0] == 0) {
-        instance->_F4[2] = 2;
+        instance->_FC = 2;
     } else {
-        instance->_F4[2] = 0;
+        instance->_FC = 0;
     }
 }
 
@@ -569,7 +569,7 @@ void looney_bullet_OnCreate(Instance* instance, GameTracker* gameTracker) {
     Intro* intro;
     int angle;
 
-    instance->_F4[2] = 0x5A;
+    instance->_FC = 0x5A;
     instance->_100 = 0;
     d.x = PlayerInstance->position.x - instance->position.x;
     d.y = PlayerInstance->position.y - instance->position.y;
@@ -636,7 +636,7 @@ void looney_hunter_OnCollide(Instance* instance, GameTracker* gameTracker) {
     if (bsp->instanceSpline == gameTracker->player && bsp->_06 == 1 && bsp->_0C[5] == 8 &&
         ((short*)instance->_D0)[0] != 8 && ((short*)instance->_D0)[0] != 0xC &&
         (unsigned short)(((short*)instance->_D0)[0] - 9) >= 2) {
-        if (PlayerInstance->_F4[1] != 0x20) {
+        if (PlayerInstance->currentSubState != 0x20) {
             ((short*)instance->_D0)[0] = 0xC;
         } else {
             ((short*)instance->_D0)[0] = 8;
@@ -712,7 +712,7 @@ void looney_funplat_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     accelY = ((-instance->rotation.y << 5) - (instance->_D0[3] >> 6));
     accelY <<= 1;
 
-    if (instance->_F4[1]) {
+    if (instance->currentSubState) {
         GenericProcess(instance, gameTracker);
     }
 
@@ -778,7 +778,7 @@ void looney_funplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
                 instance->_D0[0] = (-newPosition.y) << 6;
                 instance->_D0[1] = newPosition.x << 6;
 
-                if (instance->_F4[2] != 0) {
+                if (instance->_FC != 0) {
                     instance->_E0[3] = -0x1000;
                 } else {
                     instance->_E0[3] = -0x4000;
@@ -797,7 +797,7 @@ void looney_fxgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int* fc;
     unsigned char* intro;
 
-    fc = &instance->_F4[2];
+    fc = &instance->_FC;
     if (instance->flags & 0x20000) {
         if (WORK_AS(int, instance->_108) != 0) {
             func_800331BC(WORK_AS(int, instance->_108));
@@ -864,7 +864,7 @@ void looney_frocket_OnCollide(Instance* instance, GameTracker* gameTracker) {
     bspTree = instance->bspTree;
     GenericCollide(instance, gameTracker);
     if (bspTree->instanceSpline == PlayerInstance) {
-        if (PlayerInstance->_F4[0] == 1) {
+        if (PlayerInstance->currentMainState == 1) {
             instance->_100 = 1;
         }
     }

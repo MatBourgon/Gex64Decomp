@@ -14,7 +14,7 @@ void intro_rezzull_OnCreate(Instance* instance, GameTracker* gameTracker) {
     short* temp_v1;
     int* ptr;
 
-    ptr = &instance->_F4[2];
+    ptr = &instance->_FC;
     var_a1 = 0;
     temp_s1 = PlayerInstance->data;
     instance->flags |= 0x400;
