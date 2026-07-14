@@ -76,7 +76,7 @@ void func_8000B968(Instance* instance, GameTracker* gameTracker) {
 
     object = NULL;
     
-    *(short*)&instance->_110 = -0x7D00;
+    WORK_AS_IDX(short, instance->_110, 0) = -0x7D00;
     instance->flags |= 0x80;
     instance->_F4[2] &= ~1;
     

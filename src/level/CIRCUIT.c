@@ -283,7 +283,7 @@ void circuit_orbplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
     if (bsp->_06 == 3 && instance->_120 <= 0 && instance->_D0[0] <= 0 && instance->_F4[0] == 2) {
         instance->_120 = 4;
-        *(int*)&instance->_110 = -1;
+        WORK_AS(int, instance->_110) = -1;
         instance->_F4[2] = (instance->_F4[2] + 0x800) & 0xFFF;
         func_8004AAA8(instance, 0x1A, 0);
     }
@@ -332,7 +332,7 @@ void circuit_launch_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_11C = 0;
     instance->flags |= 0x800;
     WORK_AS(int, instance->_10C) = 0x500;
-    *(int*)&instance->_110 = 0x80;
+    WORK_AS(int, instance->_110) = 0x80;
     instance->_120 = 0x1000;
     instance->_100 = 4;
     instance->_104 = 0x14;
@@ -341,7 +341,7 @@ void circuit_launch_OnCreate(Instance* instance, GameTracker* gameTracker) {
         WORK_AS(int, instance->_10C) = intro[0];
     } else if (objData != NULL) {
         WORK_AS(int, instance->_10C) = objData[0];
-        *(int*)&instance->_110 = objData[1];
+        WORK_AS(int, instance->_110) = objData[1];
         instance->_11C = *(int*)&objData[2];
         if (instance->_11C & 2) {
             instance->_118 = 0x200;
@@ -352,7 +352,7 @@ void circuit_launch_OnCreate(Instance* instance, GameTracker* gameTracker) {
         }
     }
     
-    instance->_D0[0] = *(short*)&instance->_112;
+    instance->_D0[0] = WORK_AS_IDX(short, instance->_110, 1);
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_launch_OnUpdate);
@@ -442,7 +442,7 @@ void func_8015D4B0_84690(Instance* instance, GameTracker* gameTracker) {
     data[0x9C/2] = data[0xA0/2] - 1;
     data[0x9E/2] = data[0xA0/2] - 1;
     instance->_F4[0] = 1;
-    *(int*)&instance->_110 = ((short*)&instance->_D0[0])[1];
+    WORK_AS(int, instance->_110) = ((short*)&instance->_D0[0])[1];
     player->_D0[2] = 0;
     player->_E0[1] = 0;
     player->flags |= 0x400000;
@@ -558,8 +558,8 @@ void circuit_fxgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
         fc[0] = OBTABLE_FindObject(intro + 0xC);
         if ((intro[1] & 1) == 0) {
             if ((intro[1] & 2) != 0) {
-                *(short*)&instance->_110 = 0x119;
-                ((short*)&instance->_110)[1] = 0x46;
+                WORK_AS_IDX(short, instance->_110, 0) = 0x119;
+                WORK_AS_IDX(short, instance->_110, 1) = 0x46;
                 ((short*)&instance->_114)[1] = 0xDAC;
                 *(short*)&instance->_114 = (rand() & 0x7F) - 0x15E;
                 WORK_AS_IDX(short, instance->_10C, 1) = WORK_AS_IDX(short, instance->_10C, 0) = rand() & 7;
@@ -633,7 +633,7 @@ void circuit_qmark_OnCollide(Instance* instance, GameTracker* gameTracker) {
     if (func_80027500(instance->bspTree, gameTracker) != 0) {
         instance->_104 = 1;
         instance->_F4[2] = 0x12C;
-        *((int*)&instance->_110) = intro->time;
+        WORK_AS(int, instance->_110) = intro->time;
         WORK_AS(int, instance->_10C) = 1;
     }
 }
@@ -672,8 +672,8 @@ void func_8015F6B8_86898(Instance* instance, int arg1, int arg2) {
     instance->_F4[1] = 2;
     instance->currentModelAnim = 1;
     instance->currentAnimFrame = 0;
-    *(short*)&instance->_110 = arg1;
-    ((short*)&instance->_110)[1] = arg2;
+    WORK_AS_IDX(short, instance->_110, 0) = arg1;
+    WORK_AS_IDX(short, instance->_110, 1) = arg2;
     instance->flags &= ~1;
     func_8015FC70_86E50(instance);
 }
@@ -734,16 +734,16 @@ int* func_8015FA1C_86BFC(Instance* instance) {
     int* p;
     int* q;
 
-    p = func_8015F780_86960(intro, *(short*)&instance->_110);
-    q = func_8015F780_86960(intro, ((short*)&instance->_110)[1]);
+    p = func_8015F780_86960(intro, WORK_AS_IDX(short, instance->_110, 0));
+    q = func_8015F780_86960(intro, WORK_AS_IDX(short, instance->_110, 1));
     if (*(short*)&instance->_114 < q[2]) {
         return p;
     }
     p = q;
     *(short*)&instance->_114 = *(short*)&instance->_114 - q[2];
-    *(short*)&instance->_110 = ((short*)&instance->_110)[1];
+    WORK_AS_IDX(short, instance->_110, 0) = WORK_AS_IDX(short, instance->_110, 1);
     *(short*)&instance->_118 = p[1];
-    *(short*)&instance->_112 = func_8015F930_86B10(instance, p, ((short*)&instance->_110)[1]);
+    WORK_AS_IDX(short, instance->_110, 1) = func_8015F930_86B10(instance, p, WORK_AS_IDX(short, instance->_110, 1));
     return p;
 }
 

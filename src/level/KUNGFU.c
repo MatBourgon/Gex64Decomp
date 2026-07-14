@@ -235,7 +235,7 @@ void kungfu_launch_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_11C = 0;
     instance->flags |= 0x800;
     WORK_AS(int, instance->_10C) = 0x500;
-    *(int*)&instance->_110 = 0x80;
+    WORK_AS(int, instance->_110) = 0x80;
     instance->_120 = 0x1000;
     instance->_100 = 4;
     instance->_104 = 0x14;
@@ -244,7 +244,7 @@ void kungfu_launch_OnCreate(Instance* instance, GameTracker* gameTracker) {
         WORK_AS(int, instance->_10C) = intro[0];
     } else if (objData != NULL) {
         WORK_AS(int, instance->_10C) = objData[0];
-        *(int*)&instance->_110 = objData[1];
+        WORK_AS(int, instance->_110) = objData[1];
         instance->_11C = *(int*)&objData[2];
         if (instance->_11C & 2) {
             instance->_118 = 0x200;
@@ -255,7 +255,7 @@ void kungfu_launch_OnCreate(Instance* instance, GameTracker* gameTracker) {
         }
     }
     
-    instance->_D0[0] = *(short*)&instance->_112;
+    instance->_D0[0] = WORK_AS_IDX(short, instance->_110, 1);
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_launch_OnUpdate);
@@ -345,7 +345,7 @@ void func_8015ADC8_A9FE8(Instance* instance, GameTracker* gameTracker) {
     data[0x9C/2] = data[0xA0/2] - 1;
     data[0x9E/2] = data[0xA0/2] - 1;
     instance->_F4[0] = 1;
-    *(int*)&instance->_110 = ((short*)&instance->_D0[0])[1];
+    WORK_AS(int, instance->_110) = ((short*)&instance->_D0[0])[1];
     player->_D0[2] = 0;
     player->_E0[1] = 0;
     player->flags |= 0x400000;

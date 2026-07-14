@@ -305,7 +305,7 @@ void scifi_bub_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->rotation.z = 0;
     instance->flags |= 0x80;
     instance->initialPos = instance->position;
-    *(int*)&instance->_110 = 1;
+    WORK_AS(int, instance->_110) = 1;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015AC28_E0A48);
@@ -344,7 +344,7 @@ void scifi_stmvent_OnCreate(Instance* instance, GameTracker* gameTracker) {
     introData = instance->introData;
     RotMatrix(&instance->intro->rotation, &mat);
     WORK_AS(int, instance->_10C) = mat.m[0][2] * 25 >> 10;
-    *(int*)&instance->_110 = mat.m[1][2] * 25 >> 10;
+    WORK_AS(int, instance->_110) = mat.m[1][2] * 25 >> 10;
     *(int*)&instance->_114 = mat.m[2][2] * 25 >> 10;
     if (introData != NULL) {
         instance->_D0[0] = introData[1];
@@ -470,7 +470,7 @@ void func_8015B5F0_E1410(Instance* instance) {
         }
     }
     rot.x = (WORK_AS(int, instance->_10C) >> 1) + (*(int*)&instance->_11C >> 12);
-    rot.y = (*(int*)&instance->_110 >> 1) + (*(int*)&instance->_11C >> 12);
+    rot.y = (WORK_AS(int, instance->_110) >> 1) + (*(int*)&instance->_11C >> 12);
     rot.z = (*(int*)&instance->_114 >> 1) + (WORK_AS(int, instance->_108) >> 12);
     vel.x = 0;
     vel.y = 0;
@@ -673,8 +673,8 @@ void scifi_alien_OnCreate(Instance* instance, GameTracker* gameTracker) {
         instance->position.z += ((AlienData*)&instance->_F4[2])->_08;
         func_80049330(instance);
         instance->flags |= 0x100000;
-        *(short*)&instance->_112 = ((AlienData*)&instance->_F4[2])->_00 / 2 + 1;
-        *(short*)&instance->_110 = *(short*)&instance->_114 = ((AlienData*)&instance->_F4[2])->_00;
+        WORK_AS_IDX(short, instance->_110, 1) = ((AlienData*)&instance->_F4[2])->_00 / 2 + 1;
+        WORK_AS_IDX(short, instance->_110, 0) = *(short*)&instance->_114 = ((AlienData*)&instance->_F4[2])->_00;
     } else if (instance->_120 != 0) {
         instance->intro->flags |= 8;
     }

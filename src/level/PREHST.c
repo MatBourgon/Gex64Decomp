@@ -272,7 +272,7 @@ void prehst_stmvent_OnCreate(Instance* instance, GameTracker* gameTracker) {
     introData = instance->introData;
     RotMatrix(&instance->intro->rotation, &mat);
     WORK_AS(int, instance->_10C) = mat.m[0][2] * 25 >> 10;
-    *(int*)&instance->_110 = mat.m[1][2] * 25 >> 10;
+    WORK_AS(int, instance->_110) = mat.m[1][2] * 25 >> 10;
     *(int*)&instance->_114 = mat.m[2][2] * 25 >> 10;
     if (introData != NULL) {
         instance->_D0[0] = introData[1];
@@ -413,7 +413,7 @@ void func_8015B5B0_C8E30(Instance* instance) {
         }
     }
     rot.x = (WORK_AS(int, instance->_10C) >> 1) + (*(int*)&instance->_11C >> 12);
-    rot.y = (*(int*)&instance->_110 >> 1) + (*(int*)&instance->_11C >> 12);
+    rot.y = (WORK_AS(int, instance->_110) >> 1) + (*(int*)&instance->_11C >> 12);
     rot.z = (*(int*)&instance->_114 >> 1) + (WORK_AS(int, instance->_108) >> 12);
     vel.x = 0;
     vel.y = 0;
@@ -506,7 +506,7 @@ void prehst_cavegex_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_F4[2] = 2;
     WORK_AS(int, instance->_108) = instance->position.x;
     WORK_AS(int, instance->_10C) = instance->position.y;
-    *(int*)&instance->_110 = instance->position.z;
+    WORK_AS(int, instance->_110) = instance->position.z;
     if (intro != NULL) {
         instance->_104 = intro[0] * intro[0];
         instance->_100 = intro[1] * intro[1];
@@ -952,7 +952,7 @@ void prehst_boulder_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_F4[0] = 0;
     WORK_AS(int, instance->_10C) = 0;
     instance->flags |= 0x100400;
-    *(int*)&instance->_110 = ((int)instance->parent->intro->multiSpline);
+    WORK_AS(int, instance->_110) = ((int)instance->parent->intro->multiSpline);
     *(int*)&instance->_114 = ((int)instance->parent->introData);
 }
 
@@ -1346,8 +1346,8 @@ void prehst_lavadrp_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         ms = instance->object->modelList[instance->currentModel]->multiSpline;
     }
     sp1 = WORK_AS_PTR(SplineDef, instance->_10C);
-    sp2 = ((SplineDef*)&instance->_110);
-    sp3 = ((SplineDef*)&instance->_114);
+    sp2 = WORK_AS_PTR(SplineDef, instance->_110);
+    sp3 = WORK_AS_PTR(SplineDef, instance->_114);
     if (SCRIPT_SplineProcess(instance, ms, sp1, sp2, sp3, 1, flag) == 1) {
         if (*(short*)&instance->_118 == 0) {
             func_80048DE4(instance, sp1, sp2, sp3);

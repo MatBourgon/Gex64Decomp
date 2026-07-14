@@ -192,7 +192,7 @@ void looney_bowling_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     if (SCRIPT_InstanceSplineProcess(instance, (SplineDef*)&instance->_F4[2], WORK_AS_PTR(SplineDef, instance->_104), NULL, 1) > 0) {
         INSTANCE_PlainDeath(instance, 5, -1, 0);
     }
-    if (++(*(int*)&instance->_110) == 0x50) {
+    if (++(WORK_AS(int, instance->_110)) == 0x50) {
         instance->flags &= ~0x400;
     }
 }
@@ -811,8 +811,8 @@ void looney_fxgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
         fc[0] = (int)OBTABLE_FindObject(intro + 0xC);
         if ((intro[1] & 1) == 0) {
             if ((intro[1] & 2) != 0) {
-                *(short*)&instance->_110 = 0x119;
-                ((short*)&instance->_110)[1] = 0x78;
+                WORK_AS_IDX(short, instance->_110, 0) = 0x119;
+                WORK_AS_IDX(short, instance->_110, 1) = 0x78;
                 ((short*)&instance->_114)[1] = 0xDAC;
                 *(short*)&instance->_114 = (rand() & 0x7F) - 0x15E;
                 WORK_AS_IDX(short, instance->_10C, 1) = WORK_AS_IDX(short, instance->_10C, 0) = rand() & 7;

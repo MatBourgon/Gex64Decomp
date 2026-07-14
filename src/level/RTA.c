@@ -357,7 +357,7 @@ void rta_qmark_OnCollide(Instance* instance, GameTracker* gameTracker) {
         }
         instance->_104 = 1;
         instance->_F4[2] = 0x12C;
-         (*(int*)&instance->_110) = intro->time;
+         (WORK_AS(int, instance->_110)) = intro->time;
         (WORK_AS(int, instance->_10C)) = 1;
         instance->flags |= 0x400;
     }
@@ -428,7 +428,7 @@ void rta_zstmvent_OnCreate(Instance* instance, GameTracker* gameTracker) {
     WORK_AS(int, instance->_108) = z;
     instance->_118 = z + 0x15E0;
     WORK_AS(int, instance->_10C) = WORK_AS(int, instance->_108) - 0x514;
-    *(int*)&instance->_110 = WORK_AS(int, instance->_108);
+    WORK_AS(int, instance->_110) = WORK_AS(int, instance->_108);
     *(int*)&instance->_114 = instance->_118;
     instance->position.z = WORK_AS(int, instance->_10C);
     instance->_100 = r & 0x3F;

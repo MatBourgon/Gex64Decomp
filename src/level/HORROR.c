@@ -387,7 +387,7 @@ void horror_skelh_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if (instance->parent != 0 && instance->parent->intro != 0) {
         instance->flags |= 0x100400;
         WORK_AS(int, instance->_10C) = 0;
-        *(int*)&instance->_110 = (int)instance->parent->intro->multiSpline;
+        WORK_AS(int, instance->_110) = (int)instance->parent->intro->multiSpline;
         *(int*)&instance->_114 = (int)instance->parent->introData;
     }
 }
@@ -1016,7 +1016,7 @@ void horror_qmark_OnCollide(Instance* instance, GameTracker* gameTracker) {
     if (func_80027500(instance->bspTree, gameTracker) != 0) {
         instance->_104 = 1;
         instance->_F4[2] = 0x12C;
-        *((int*)&instance->_110) = intro->time;
+        WORK_AS(int, instance->_110) = intro->time;
         WORK_AS(int, instance->_10C) = 1;
     }
 }
