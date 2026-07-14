@@ -71,10 +71,7 @@ typedef struct Instance_s
     long _108;
     long _10C;
     long _110;
-    char _114;
-    unsigned char _115;
-    char _116;
-    char _117;
+    long _114;
     int _118;
     int _11C;
     int _120;

@@ -134,7 +134,7 @@ void horror_zombie_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
     intro = (int*)instance->introData;
     if (instance->flags & 0x20000) {
-        if (((short*)&instance->_114)[0] >= 3) {
+        if (WORK_AS_IDX(short, instance->_114, 0) >= 3) {
             instance->intro->flags |= 8;
         }
     } else {
@@ -388,7 +388,7 @@ void horror_skelh_OnCreate(Instance* instance, GameTracker* gameTracker) {
         instance->flags |= 0x100400;
         WORK_AS(int, instance->_10C) = 0;
         WORK_AS(int, instance->_110) = (int)instance->parent->intro->multiSpline;
-        *(int*)&instance->_114 = (int)instance->parent->introData;
+        WORK_AS(int, instance->_114)= (int)instance->parent->introData;
     }
 }
 

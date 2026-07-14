@@ -813,8 +813,8 @@ void looney_fxgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
             if ((intro[1] & 2) != 0) {
                 WORK_AS_IDX(short, instance->_110, 0) = 0x119;
                 WORK_AS_IDX(short, instance->_110, 1) = 0x78;
-                ((short*)&instance->_114)[1] = 0xDAC;
-                *(short*)&instance->_114 = (rand() & 0x7F) - 0x15E;
+                WORK_AS_IDX(short, instance->_114, 1) = 0xDAC;
+                WORK_AS_IDX(short, instance->_114, 0)= (rand() & 0x7F) - 0x15E;
                 WORK_AS_IDX(short, instance->_10C, 1) = WORK_AS_IDX(short, instance->_10C, 0) = rand() & 7;
                 intro[1] |= 0x80;
             }

@@ -1613,10 +1613,10 @@ void map_lvltv_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             func_8015DAC8_BE4F8(instance);
         }
     } else if (D_80078594[WORK_AS_IDX(unsigned char, instance->_110, 2)] == 1) {
-        if (instance->_115 == 0U) {
-            instance->_115 = 0x69U;
+        if (WORK_AS_IDX(unsigned char, instance->_114, 1) == 0U) {
+            WORK_AS_IDX(unsigned char, instance->_114, 1) = 0x69U;
         }
-        if ((rand() % ((instance->_115 >> 3) + 1)) == 0) {
+        if ((rand() % ((WORK_AS_IDX(unsigned char, instance->_114, 1) >> 3) + 1)) == 0) {
             WORK_AS_IDX(char, instance->_110, 1) = WORK_AS_IDX(char, instance->_110, 0) = (intro->screenType * 9) + 7;
         } else {
             WORK_AS_IDX(char, instance->_110, 0) = 7;

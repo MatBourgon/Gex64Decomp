@@ -273,7 +273,7 @@ void prehst_stmvent_OnCreate(Instance* instance, GameTracker* gameTracker) {
     RotMatrix(&instance->intro->rotation, &mat);
     WORK_AS(int, instance->_10C) = mat.m[0][2] * 25 >> 10;
     WORK_AS(int, instance->_110) = mat.m[1][2] * 25 >> 10;
-    *(int*)&instance->_114 = mat.m[2][2] * 25 >> 10;
+    WORK_AS(int, instance->_114)= mat.m[2][2] * 25 >> 10;
     if (introData != NULL) {
         instance->_D0[0] = introData[1];
         instance->_D0[1] = introData[2];
@@ -414,7 +414,7 @@ void func_8015B5B0_C8E30(Instance* instance) {
     }
     rot.x = (WORK_AS(int, instance->_10C) >> 1) + (*(int*)&instance->_11C >> 12);
     rot.y = (WORK_AS(int, instance->_110) >> 1) + (*(int*)&instance->_11C >> 12);
-    rot.z = (*(int*)&instance->_114 >> 1) + (WORK_AS(int, instance->_108) >> 12);
+    rot.z = (WORK_AS(int, instance->_114)>> 1) + (WORK_AS(int, instance->_108) >> 12);
     vel.x = 0;
     vel.y = 0;
     vel.z = 0;
@@ -521,12 +521,12 @@ void func_8015BAFC_C937C(Instance* instance, GameTracker* gameTracker, int arg2)
     D_80164480_D1D00 ^= 1;
     if (arg2 == 0) {
         if (D_80164480_D1D00 != 0) {
-            *(int*)&instance->_114 = 2;
+            WORK_AS(int, instance->_114)= 2;
         } else {
-            *(int*)&instance->_114 = 1;
+            WORK_AS(int, instance->_114)= 1;
         }
     } else {
-        *(int*)&instance->_114 = arg2;
+        WORK_AS(int, instance->_114)= arg2;
     }
     instance->_F4[1] = 1;
     instance->currentAnimFrame = 0;
@@ -953,7 +953,7 @@ void prehst_boulder_OnCreate(Instance* instance, GameTracker* gameTracker) {
     WORK_AS(int, instance->_10C) = 0;
     instance->flags |= 0x100400;
     WORK_AS(int, instance->_110) = ((int)instance->parent->intro->multiSpline);
-    *(int*)&instance->_114 = ((int)instance->parent->introData);
+    WORK_AS(int, instance->_114)= ((int)instance->parent->introData);
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_8015F9A4_CD224);

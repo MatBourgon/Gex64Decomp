@@ -560,8 +560,8 @@ void circuit_fxgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
             if ((intro[1] & 2) != 0) {
                 WORK_AS_IDX(short, instance->_110, 0) = 0x119;
                 WORK_AS_IDX(short, instance->_110, 1) = 0x46;
-                ((short*)&instance->_114)[1] = 0xDAC;
-                *(short*)&instance->_114 = (rand() & 0x7F) - 0x15E;
+                WORK_AS_IDX(short, instance->_114, 1) = 0xDAC;
+                WORK_AS_IDX(short, instance->_114, 0)= (rand() & 0x7F) - 0x15E;
                 WORK_AS_IDX(short, instance->_10C, 1) = WORK_AS_IDX(short, instance->_10C, 0) = rand() & 7;
                 intro[1] |= 0x80;
             }
@@ -736,11 +736,11 @@ int* func_8015FA1C_86BFC(Instance* instance) {
 
     p = func_8015F780_86960(intro, WORK_AS_IDX(short, instance->_110, 0));
     q = func_8015F780_86960(intro, WORK_AS_IDX(short, instance->_110, 1));
-    if (*(short*)&instance->_114 < q[2]) {
+    if (WORK_AS_IDX(short, instance->_114, 0)< q[2]) {
         return p;
     }
     p = q;
-    *(short*)&instance->_114 = *(short*)&instance->_114 - q[2];
+    WORK_AS_IDX(short, instance->_114, 0)= WORK_AS_IDX(short, instance->_114, 0)- q[2];
     WORK_AS_IDX(short, instance->_110, 0) = WORK_AS_IDX(short, instance->_110, 1);
     *(short*)&instance->_118 = p[1];
     WORK_AS_IDX(short, instance->_110, 1) = func_8015F930_86B10(instance, p, WORK_AS_IDX(short, instance->_110, 1));

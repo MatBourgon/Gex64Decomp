@@ -212,7 +212,7 @@ void rezop_simon_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_100 = (instance->intro->_04[0] - 2) / 2;
     instance->_F4[0] = 0;
     instance->_104 = 0;
-    *(int*)&instance->_114 = *(int*)(((short)(rand() % *(short*)(intro + 0xA)) << 2) + *(int*)(intro + 0xC));
+    WORK_AS(int, instance->_114)= *(int*)(((short)(rand() % *(short*)(intro + 0xA)) << 2) + *(int*)(intro + 0xC));
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/REZOP", func_8015B750_D3EC0);
