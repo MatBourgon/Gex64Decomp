@@ -15,13 +15,19 @@
 #include "types/Vector.h"
 #include "types/intro/QMark.h"
 
+#define MENU_UP (U_JPAD | U_CBUTTONS)
+#define MENU_DOWN (D_JPAD | D_CBUTTONS)
+#define MENU_LEFT (L_JPAD | L_CBUTTONS)
+#define MENU_RIGHT (R_JPAD | R_CBUTTONS)
+#define MENU_CONFIRM (A_BUTTON | START_BUTTON)
+
 extern char D_8014F34C;
 extern void map_lvltv_OnCollide();
 extern char D_80161394_C1DC4[];
 extern char* D_80161684_C20B4;
 extern void func_8015D5E4_BE014();
 extern int D_800785CC[];
-extern unsigned short D_800E5DB2;
+extern unsigned short gControllerButtons[];
 extern int D_80161680_C20B0;
 
 extern Gfx D_8006D578[];
@@ -2014,10 +2020,10 @@ void func_8015EED8_BF908(GameTracker* arg0) {
         }
     }
     
-    if ((D_800E5DB2 & 0x808) || (D_800E5B98 != 0)) {
+    if ((gControllerButtons[1] & MENU_UP) || (D_800E5B98 != 0)) {
         D_8014F34C--;
     }
-    else if ((D_800E5DB2 & 0x404) || (D_80157030 != 0)) {
+    else if ((gControllerButtons[1] & MENU_DOWN) || (D_80157030 != 0)) {
         D_8014F34C++;
     }
     
@@ -2053,7 +2059,7 @@ void func_8015EED8_BF908(GameTracker* arg0) {
         Print3DTextf(D_80078190);
     }
     
-    if (D_800E5DB2 & 0x9000) {
+    if (gControllerButtons[1] & MENU_CONFIRM) {
         switch (D_8014F34C) {
         case 0:
             D_80078170 = 1;
@@ -2079,10 +2085,10 @@ void func_8015F228_BFC58(int* arg0) {
     char sp10[0x40];
     s32 var_v1;
 
-    if ((D_800E5DB2 & 0x808) || (D_800E5B98 != 0)) {
+    if ((gControllerButtons[1] & MENU_UP) || (D_800E5B98 != 0)) {
         D_8014F34C--;
     }
-    else if ((D_800E5DB2 & 0x404) || (D_80157030 != 0)) {
+    else if ((gControllerButtons[1] & MENU_DOWN) || (D_80157030 != 0)) {
         D_8014F34C++;
     }
     
@@ -2148,7 +2154,7 @@ void func_8015F228_BFC58(int* arg0) {
         Print3DTextf(D_800781B8);
     }
     
-    if ((D_800E5DB2 & 0x8000)) {
+    if ((gControllerButtons[1] & A_BUTTON)) {
         switch (D_8014F34C) {
         case 1:
             
@@ -2187,7 +2193,7 @@ void func_8015F228_BFC58(int* arg0) {
             break;
         }
     }
-    else if (D_800E5DB2 & 0x1000)
+    else if (gControllerButtons[1] & START_BUTTON)
     {
         ((short*)arg0)[0x4C12/2] = 0;
         func_80032F90();
@@ -2198,7 +2204,7 @@ void func_8015F228_BFC58(int* arg0) {
     gDPPipeSync(D_80157050++);
 }
 
-void func_8015F678_C00A8(short* arg0) {
+void func_8015F678_C00A8(GameTracker* gameTracker) {
     int var_a0;
     char* var_v1;
 
@@ -2207,24 +2213,25 @@ void func_8015F678_C00A8(short* arg0) {
     gSPDisplayList(D_80157050++, D_8006D578);
     DrawTextToScreen("PRESS A TO START NEW GAME", 0x2D, 0xB4, 1);
     gDPPipeSync2(D_80157050);
-    if (D_800E5DB2 & 0x8000) {
-        ((int*)arg0)[0x4BF4/4] = 5;
-        ((int*)arg0)[0x4C9C/4] = 0;
-        arg0[0x4C8E/2] = 0;
-        arg0[0x4C90/2] = 0;
-        ((int*)arg0)[0x4C94/4] = 0;
-        ((int*)arg0)[0x4C98/4] = 0;
+    if (gControllerButtons[1] & A_BUTTON) {
+        ((int*)gameTracker)[0x4BF4/4] = 5;
+        ((int*)gameTracker)[0x4C9C/4] = 0;
+        ((short*)gameTracker)[0x4C8E/2] = 0;
+        ((short*)gameTracker)[0x4C90/2] = 0;
+        gameTracker->silver_remote_bits = 0;
+        gameTracker->gold_remote_bits = 0;
         
         var_a0 = 0x1E;
-        var_v1 = (char*)arg0 + 0x1E;
+        var_v1 = (char*)gameTracker + 0x1E;
         
         for(var_a0; var_a0 >= 0; var_a0--)
         {
+            // red_remote_bits
             (var_v1--)[0x4C6E] = 0;
         }
         
         D_8006FCD2 = 0;
-        func_800396E0(0, D_80161314_C1D44, arg0);
+        func_800396E0(0, D_80161314_C1D44, gameTracker);
     }
 }
 
@@ -2238,7 +2245,7 @@ void func_8015F770_C01A0(void) {
     } else {
         func_80040170(4);
     }
-    if (D_800E5DB2 & 0x8000) {
+    if (gControllerButtons[1] & A_BUTTON) {
         D_80161680_C20B0 = 0x3C;
     }
 }
@@ -2247,20 +2254,20 @@ void func_8015F804_C0234(short* arg0) {
     char buffer[18];
     int i;
 
-    if ((D_800E5DB2 & 0x808) || (D_800E5B98 != 0)) {
+    if ((gControllerButtons[1] & MENU_UP) || (D_800E5B98 != 0)) {
         D_800E5D00[D_80156BE4]++;
         D_8014F34C = 0;
     }
-    else if ((D_800E5DB2 & 0x404) || (D_80157030 != 0)) {
+    else if ((gControllerButtons[1] & MENU_DOWN) || (D_80157030 != 0)) {
         D_800E5D00[D_80156BE4]--;
         D_8014F34C = 0;
-    } else if ((D_800E5DB2 & 0x202) || (D_801539C4 != 0)) {
+    } else if ((gControllerButtons[1] & MENU_LEFT) || (D_801539C4 != 0)) {
         D_80156BE4--;
         D_8014F34C = 0;
         if (D_80156BE4 < 0) {
             D_80156BE4 = 0;
         }
-    } else if ((D_800E5DB2 & 0x101) || (D_800E9732 != 0)) {
+    } else if ((gControllerButtons[1] & MENU_RIGHT) || (D_800E9732 != 0)) {
         D_80156BE4++;
         D_8014F34C = 0;
         if (D_80156BE4 > 17) {
@@ -2291,7 +2298,7 @@ void func_8015F804_C0234(short* arg0) {
     Print3DTextf(D_801611D8_C1C08);
     gSPDisplayList(D_80157050++, D_8006D578);
     DrawTextToScreen(buffer, 0x50, 0x8C, 1);
-    if (D_800E5DB2 & 0x8000) {
+    if (gControllerButtons[1] & A_BUTTON) {
         if (func_8003FDD8(arg0) == 0) {
             D_80078170 = 1;
             ((short*)gameTracker8)[0x4C66/2] = 0;
@@ -2302,10 +2309,10 @@ void func_8015F804_C0234(short* arg0) {
             D_80161680_C20B0 = 0;
         }
     }
-    else if (D_800E5DB2 & 0x4000) {
+    else if (gControllerButtons[1] & B_BUTTON) {
         func_80040170(1);
     }
-    else if (D_800E5DB2 & 0x1000) {
+    else if (gControllerButtons[1] & START_BUTTON) {
         if (D_80078170 != 0) {
             arg0[0x4C12/2] = 0;
             func_80032F90();
@@ -2328,7 +2335,7 @@ void func_8015FBBC_C05EC(short* arg0) {
     DrawTextToScreen(D_800E5D00, 0x50, 0x82, 1);
     DrawTextToScreen("PRESS A TO CONTINUE", 0x50, 0xC8, 1);
     gDPPipeSync2(D_80157050);
-    if (D_800E5DB2 & 0x8000) {
+    if (gControllerButtons[1] & A_BUTTON) {
         arg0[0x4C12/2] = 0;
         func_80032F90();
     }
@@ -2337,10 +2344,10 @@ void func_8015FBBC_C05EC(short* arg0) {
 void func_8015FC88_C06B8(int* arg0) {
     char sp10[0x40];
 
-    if ((D_800E5DB2 & 0x808) || (D_800E5B98 != 0)) {
+    if ((gControllerButtons[1] & MENU_UP) || (D_800E5B98 != 0)) {
         D_8014F34C--;
     }
-    else if ((D_800E5DB2 & 0x404) || (D_80157030 != 0)) {
+    else if ((gControllerButtons[1] & MENU_DOWN) || (D_80157030 != 0)) {
         D_8014F34C++;
     }
     if (D_8014F34C < 0) {
@@ -2366,7 +2373,7 @@ void func_8015FC88_C06B8(int* arg0) {
     } else {
         Print3DTextf(&D_80078198);
     }
-    if (D_800E5DB2 & 0x8000) {
+    if (gControllerButtons[1] & A_BUTTON) {
         switch (D_8014F34C) {
         case 0:
             func_80040170(4);
@@ -2376,13 +2383,13 @@ void func_8015FC88_C06B8(int* arg0) {
             func_80040170(5);
             break;
         }
-    } else if (D_800E5DB2 & 0x4000) {
+    } else if (gControllerButtons[1] & B_BUTTON) {
         if (D_80078170 != 0) {
             func_80040170(0);
         } else {
             func_80040170(0xD);
         }
-    } else if ((D_800E5DB2 & 0x1000) && (D_80078170 != 0)) {
+    } else if ((gControllerButtons[1] & START_BUTTON) && (D_80078170 != 0)) {
         ((short*)arg0)[0x4C12/2] = 0;
         func_80032F90();
     }
@@ -2398,10 +2405,10 @@ void func_8015FC88_C06B8(int* arg0) {
 void func_8015FF60_C0990(int* arg0) {
     char sp10[0x40];
 
-    if ((D_800E5DB2 & 0x808) || (D_800E5B98 != 0)) {
+    if ((gControllerButtons[1] & MENU_UP) || (D_800E5B98 != 0)) {
         D_8014F34C--;
     }
-    else if ((D_800E5DB2 & 0x404) || (D_80157030 != 0)) {
+    else if ((gControllerButtons[1] & MENU_DOWN) || (D_80157030 != 0)) {
         D_8014F34C++;
     }
     if (D_8014F34C < 0) {
@@ -2426,7 +2433,7 @@ void func_8015FF60_C0990(int* arg0) {
     } else {
         Print3DTextf(&D_80078198);
     }
-    if (D_800E5DB2 & 0x8000) {
+    if (gControllerButtons[1] & A_BUTTON) {
         switch (D_8014F34C) {
         case 0:
             func_80040170(6);
@@ -2436,7 +2443,7 @@ void func_8015FF60_C0990(int* arg0) {
             func_80040170(7);
             break;
         }
-    } else if (D_800E5DB2 & 0x4000) {
+    } else if (gControllerButtons[1] & B_BUTTON) {
         if (D_8006FC69 != 0) {
             ((short*)arg0)[0x4C12/2] = 0;
             func_80032F90();
@@ -2444,7 +2451,7 @@ void func_8015FF60_C0990(int* arg0) {
         } else {
             func_80040170(0);
         }
-    } else if (D_800E5DB2 & 0x1000) {
+    } else if (gControllerButtons[1] & START_BUTTON) {
         ((short*)arg0)[0x4C12/2] = 0;
         func_80032F90();
     }
@@ -2511,12 +2518,12 @@ void func_80160214_C0C44(short* arg0) {
         D_801574FC = D_8014F34C;
         return;
     case 19:
-        if ((D_800E5DB2 & 0x808) || (D_800E5B98 != 0)) {
+        if ((gControllerButtons[1] & MENU_UP) || (D_800E5B98 != 0)) {
             D_8014F34C = func_80014C80(D_8014F34C);
             if (D_8014F34C < D_801574FC) {
                 D_801574FC = D_8014F34C;
             }
-        } else if ((D_800E5DB2 & 0x404) || (D_80157030 != 0)) {
+        } else if ((gControllerButtons[1] & MENU_DOWN) || (D_80157030 != 0)) {
             temp_v0_3 = func_80014D00(D_8014F34C);
             if (temp_v0_3 != D_8014F34C) {
                 
@@ -2537,17 +2544,17 @@ void func_80160214_C0C44(short* arg0) {
                 D_8014F34C = temp_v0_3;
             }
         }
-        if (D_800E5DB2 & 0x8000) {
+        if (gControllerButtons[1] & A_BUTTON) {
             D_8006FA54 = 0x14;
             D_800E5CD4 = D_8014F34C;
             osSendMesg(&gGlobalMessageBuffer, (void*)OS_EVENT_VI, OS_MESG_NOBLOCK);
-        } else if (D_800E5DB2 & 0x1000) {
+        } else if (gControllerButtons[1] & START_BUTTON) {
             if (D_80078170 != 0) {
                 arg0[0x4C12/2] = 0;
                 func_80032F90();
                 D_8006FA54 = 0xD;
             }
-        } else if (D_800E5DB2 & 0x4000) {
+        } else if (gControllerButtons[1] & B_BUTTON) {
             func_80040170(1);
         }
         gSPDisplayList(D_80157050++, D_8006D578);
@@ -2610,16 +2617,16 @@ void func_80160838_C1268(void) {
         DrawTextToScreen("SAVE TO FILE:", 0x5A, 0x46, 1);
         DrawTextToScreen(&D_800E5DDE[D_800E5CD4], 0x50, 0x73, 0);
     }
-    if ((D_800E5DB2 & 0x808) || (D_800E5B98 != 0)) {
+    if ((gControllerButtons[1] & MENU_UP) || (D_800E5B98 != 0)) {
         D_8014F34C = 0;
-    } else if ((D_800E5DB2 & 0x404) || (D_80157030 != 0)) {
+    } else if ((gControllerButtons[1] & MENU_DOWN) || (D_80157030 != 0)) {
         D_8014F34C = 1;
     }
     DrawTextToScreen("YES, SAVE FILE", 0x3C, 0x96, 1);
     DrawTextToScreen("NO, DON'T SAVE", 0x3C, 0xAA, 1);
     DrawTextToScreen(">", 0x2D, (D_8014F34C * 0x14) + 0x96, 1);
     DrawTextToScreen("PRESS A TO SELECT", 0x55, 0xC8, 1);
-    if (D_800E5DB2 & 0x8000) {
+    if (gControllerButtons[1] & A_BUTTON) {
         if (D_8014F34C == 0) {
             func_80040170(7);
             if (D_800E8EB4 == 0) {
@@ -2644,26 +2651,26 @@ void func_80160838_C1268(void) {
 void func_80160ACC_C14FC(short* arg0) {
     char var_s1;
 
-    if ((D_800E5DB2 & 0x808) || (D_800E5B98 != 0)) {
+    if ((gControllerButtons[1] & MENU_UP) || (D_800E5B98 != 0)) {
         D_80078174[D_80156BE4]++;
         if ((D_80078174[D_80156BE4] - 0x10) >= 0x32U) {
             D_80078174[D_80156BE4] = 0x10;
         }
         D_8014F34C = 0;
     }
-    else if ((D_800E5DB2 & 0x404) || (D_80157030 != 0)) {
+    else if ((gControllerButtons[1] & MENU_DOWN) || (D_80157030 != 0)) {
         D_80078174[D_80156BE4]--;
         if (((char*)D_80078174)[D_80156BE4] < 0x10) {
             D_80078174[D_80156BE4] = 0x41;
         }
         D_8014F34C = 0;
-    } else if ((D_800E5DB2 & 0x202) || (D_801539C4 != 0)) {
+    } else if ((gControllerButtons[1] & MENU_LEFT) || (D_801539C4 != 0)) {
         D_8014F34C = 0;
         D_80156BE4 = D_80156BE4 - 1;
         if (D_80156BE4 < 4) {
             D_80156BE4 = 4;
         }
-    } else if ((D_800E5DB2 & 0x101) || (D_800E9732 != 0)) {
+    } else if ((gControllerButtons[1] & MENU_RIGHT) || (D_800E9732 != 0)) {
         D_8014F34C = 0;
         D_80156BE4++;
         if (D_80156BE4 >= 15) {
@@ -2682,10 +2689,10 @@ void func_80160ACC_C14FC(short* arg0) {
     if (D_8014F34C & 0x10) {
         D_80078174[D_80156BE4] = var_s1;
     }
-    if (D_800E5DB2 & 0x8000) {
+    if (gControllerButtons[1] & A_BUTTON) {
         D_800E8EB4 = 0;
         func_80040170(21);
-    } else if (D_800E5DB2 & 0x1000) {
+    } else if (gControllerButtons[1] & START_BUTTON) {
         arg0[0x4C12/2] = 0;
         func_80032F90();
         D_8006FA54 = 13;

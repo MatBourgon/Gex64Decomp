@@ -52,6 +52,8 @@ void func_8003A350(int* arg0, unsigned int arg1) {
     *arg0 = var_v1;
 }
 
+extern unsigned short gControllerButtons[];
+
 void func_8003A400(int* arg0) {
     int var_a0;
     int var_v1;
@@ -60,7 +62,7 @@ void func_8003A400(int* arg0) {
     arg0[3] = 0;
     arg0[4] = 0;
     if (((short*)gameTracker8)[0x4C12/2] != 8) {
-        func_8003A350(arg0, D_800E5DB0);
+        func_8003A350(arg0, gControllerButtons[0]);
         
         var_v1 = -D_800E5DB7;
         var_a0 = D_800E5DB6;

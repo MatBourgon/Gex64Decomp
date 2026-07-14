@@ -55,6 +55,7 @@ _MotorStartData = 0x800E5BB0;
 _motorstartbuf = 0x800E5CB0;
 __osRdb_Read_Data_Ct = 0x800E5CF8;
 __osDiskHandle = 0x800E5DA8;
+gControllerButtons = 0x800E5DB0;
 ramromThreadStack = 0x800B24B0;
 getRamromQ = 0x800B28B0;
 getRamromBuf = 0x800B28C8;
