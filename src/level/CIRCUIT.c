@@ -159,7 +159,7 @@ void circuit_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
         if ((bsp->instanceSpline == gameTracker->player) && (bsp->_0C[5] >= 6U)) {
             if (instance->currentMainState == 0)
             {
-                ((char*)instance->_40)[0xe] = 1;
+                instance->currentModelAnim = 1;
                 instance->currentMainState = temp_a3;
                 instance->currentAnimFrame = 0;
                 instance->flags2 &= ~0x10;

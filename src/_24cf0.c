@@ -223,7 +223,7 @@ INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80027398);
 
 void func_80027400(Instance* instance) {
     instance->currentMainState = 4;
-    ((char*)instance->_40)[0xe] = 0;
+    instance->currentModelAnim = 0;
 }
 
 void func_80027410(Instance* instance) {
