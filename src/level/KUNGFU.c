@@ -912,7 +912,7 @@ INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_joyride_OnUpdate);
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_joyride_OnCollide);
 
 void kungfu_leafgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    char name[] = "leaffx__";
+    const char name[] = "leaffx__";
     char* targetObjectName = instance->introData;
     char* d = instance->object->data;
     int* p = &instance->_F4[2];
@@ -920,8 +920,8 @@ void kungfu_leafgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
         if (d != 0) {
             targetObjectName = d;
         } else {
-            instance->introData = name;
-            targetObjectName = name;
+            instance->introData = (char*)name;
+            targetObjectName = (char*)name;
         }
     }
     p[0] = ((int)OBTABLE_FindObject(targetObjectName));

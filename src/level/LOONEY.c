@@ -375,7 +375,7 @@ INCLUDE_RODATA("asm/nonmatchings/level/LOONEY", D_80161DA8_BA058);
 INCLUDE_RODATA("asm/nonmatchings/level/LOONEY", D_80161DC0_BA070);
 
 void looney_leafgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    char name[] = "leaffx__";
+    const char name[] = "leaffx__";
     char* targetObjectName = instance->introData;
     char* d = instance->object->data;
     int* p = &instance->_F4[2];
@@ -383,8 +383,8 @@ void looney_leafgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
         if (d != 0) {
             targetObjectName = d;
         } else {
-            instance->introData = name;
-            targetObjectName = name;
+            instance->introData = (char*)name;
+            targetObjectName = (char*)name;
         }
     }
     p[0] = ((int)OBTABLE_FindObject(targetObjectName));
