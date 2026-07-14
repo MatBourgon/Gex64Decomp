@@ -302,16 +302,16 @@ s32 SIGNAL_Freeze(Instance* instance, void* signal) {
     FreezeSignal* frSignal = signal;
 
     if (frSignal->intro == NULL) {
-        n = PlayerInstance->_F4[0];
+        n = PlayerInstance->currentMainState;
         if (n != 5) {
             if (n == 4) {
                 func_8000B054(gameTracker8->camera);
             }
-            D_800785C8 = PlayerInstance->_F4[0];
+            D_800785C8 = PlayerInstance->currentMainState;
         } else {
             D_800785C8 = 0;
         }
-        PlayerInstance->_F4[0] = 5;
+        PlayerInstance->currentMainState = 5;
     } else {
         frSignal->intro->flags |= 0x100;
         frInstance = frSignal->intro->instance;
@@ -331,7 +331,7 @@ s32 SIGNAL_UnFreeze(Instance* instance, void* signal) {
     FreezeSignal* frSignal = signal;
 
     if (frSignal->intro == NULL) {
-        PlayerInstance->_F4[0] = D_800785C8;
+        PlayerInstance->currentMainState = D_800785C8;
     } else {
         frSignal->intro->flags &= ~0x100;
         inst = frSignal->intro->instance;
@@ -358,14 +358,14 @@ s32 SIGNAL_FreezeAll(Instance* instance, void* signal) {
         var_v1->flags |= 0x100;
     }
     
-    if (PlayerInstance->_F4[0] != 4) {
-        if (PlayerInstance->_F4[0] == 5) {
+    if (PlayerInstance->currentMainState != 4) {
+        if (PlayerInstance->currentMainState == 5) {
             D_800785C8 = 0;
         } else {
-            D_800785C8 = PlayerInstance->_F4[0];
+            D_800785C8 = PlayerInstance->currentMainState;
         }
     }
-    PlayerInstance->_F4[0] = 5;
+    PlayerInstance->currentMainState = 5;
     return 1;
 }
 
@@ -391,7 +391,7 @@ INCLUDE_ASM("asm/nonmatchings/SIGNAL", SIGNAL_UnfreezeAll);
         }
     }
     
-    PlayerInstance->_F4[0] = D_800785C8;
+    PlayerInstance->currentMainState = D_800785C8;
     return 1;
 }*/
 
@@ -1003,7 +1003,7 @@ s32 SIGNAL_8004E9F8(Instance* instance, void* signal) {
         inst = intro->instance;
         
         if (inst != 0) {
-        inst->_120 = ((int*)signal)[1];
+        inst->work9 = ((int*)signal)[1];
         }
     } 
     

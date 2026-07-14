@@ -20,7 +20,7 @@ void GenericInit(Instance* instance, GameTracker* gameTracker) {
         instance->_E0[1] = -10; // zAccl
         instance->_E0[2] = 100; // maxXVel
         instance->_E0[3] = 100; // maxYVel
-        instance->_F4[-1] = 100; // maxZVel
+        instance->_F0 = 100; // maxZVel
     }
     
 }

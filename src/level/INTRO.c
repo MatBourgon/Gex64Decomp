@@ -12,9 +12,9 @@ void intro_rezzull_OnCreate(Instance* instance, GameTracker* gameTracker) {
     short* temp_s1;
     char* temp_v0;
     short* temp_v1;
-    int* ptr;
+    long* ptr;
 
-    ptr = &instance->_F4[2];
+    ptr = &instance->work0;
     var_a1 = 0;
     temp_s1 = PlayerInstance->data;
     instance->flags |= 0x400;
@@ -52,12 +52,12 @@ void intro_rezzull_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 void intro_rezzull_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     func_8002C1AC(0);
-    instance->_104--;
-    if (instance->_104 == 0xAF) {
+    instance->work2--;
+    if (instance->work2 == 0xAF) {
         D_80154840 = 0x171;
         func_80052758();
     }
-    if (instance->_104 == 0) {
+    if (instance->work2 == 0) {
         ((short*)gameTracker)[0x9c/2] = -1;
         func_800396E0("map", "map5", gameTracker8);
         ((char*)gameTracker8)[0x4CDC] = 0;
@@ -67,7 +67,7 @@ void intro_rezzull_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
 void intro_gextext_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
-    instance->_104 = 0xB4;
+    instance->work2 = 0xB4;
     instance->position.x = 4375;
     instance->position.y = 1900;
     instance->position.z = 648;
@@ -78,9 +78,9 @@ void intro_gextext_OnCreate(Instance* instance, GameTracker* gameTracker)
 
 void intro_gextext_OnUpdate(Instance* instance, GameTracker* gameTracker)
 {
-    if (instance->_104)
+    if (instance->work2)
     {
-        instance->_104--;
+        instance->work2--;
         return;
     }
     else
@@ -95,7 +95,7 @@ void intro_gextext_OnUpdate(Instance* instance, GameTracker* gameTracker)
 
 void intro_enttext_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
-    instance->_104 = 0xD2;
+    instance->work2 = 0xD2;
     instance->position.x = 3670;
     instance->position.y = 1900;
     instance->position.z = 85;
@@ -109,7 +109,7 @@ void intro_enttext_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
 void intro_gectext_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
-    instance->_104 = 0xD2;
+    instance->work2 = 0xD2;
     instance->position.x = 5050;
     instance->position.y = 1900;
     instance->position.z = 50;
@@ -123,7 +123,7 @@ void intro_gectext_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
 void intro_remtext_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
-    instance->_104 = 0x12C;
+    instance->work2 = 0x12C;
     instance->position.x = 5500;
     instance->position.y = 1800;
     instance->position.z = 85;
@@ -137,7 +137,7 @@ void intro_remtext_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
 void intro_gexcopy_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
-    instance->_104 = 0xFA;
+    instance->work2 = 0xFA;
     instance->position.x = 6000;
     instance->position.y = 3200;
     instance->position.z = -900;
@@ -148,12 +148,12 @@ void intro_gexcopy_OnCreate(Instance* instance, GameTracker* gameTracker)
 
 void intro_gexcopy_OnUpdate(Instance* instance, GameTracker* gameTracker)
 {
-    if (instance->_104)
+    if (instance->work2)
     {
-        instance->_104--;
+        instance->work2--;
     }
 
-    if (instance->_104 < 0x32)
+    if (instance->work2 < 0x32)
     {
         instance->position.x = 4000;
     }

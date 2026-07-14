@@ -13,6 +13,10 @@ typedef void (*AdditionalDrawFunc)(void*, struct Instance_s*, void* /*unused*/, 
 
 struct GameTracker_s;
 
+#define WORK_AS_PTR(Type, Object) ((Type*)&Object)
+#define WORK_AS_IDX(Type, Object, Index) (((Type*)&Object)[Index])
+#define WORK_AS(Type, Object) (*(Type*)&Object)
+
 typedef struct Instance_s
 {
     NodeType node; // 00 (prev), 04 (next)
@@ -30,12 +34,12 @@ typedef struct Instance_s
     short _34[6];
     short _40[4];
     SVECTOR position; // 48, 4A, 4C
-    unsigned char currentModelAnim;
-    char lightGroup;
+    unsigned char currentModelAnim; // 4E
+    char lightGroup; // 4F
     SVECTOR oldPos; // 50, 52, 54
-    short currentTextureAnimFrame;
+    short currentTextureAnimFrame; // 56
     SVECTOR initialPos; // 58, 5A, 5C
-    short currentAnimFrame;
+    short currentAnimFrame; // 5E
     ROTATION rotation; // 60, 62, 64, 66
     SVector scale; // 68, 6A, 6C, 6E
     int _70;
@@ -55,34 +59,24 @@ typedef struct Instance_s
     void (*collideFunc)(struct Instance_s*,struct GameTracker_s*);
     AdditionalDrawFunc additionalDrawFunc;
     int _B8;
-    SVECTOR shadowPosition;
-    short currentModel;
-    short _C0[6];
+    SVECTOR shadowPosition; // BC, BE, C0
+    short currentModel; // C2
+    short _C4[6]; // C4, C6, C8, CA, CC, CE
     int _D0[4];
     int _E0[4];
-    short _F0[2];
-    int _F4[3];
-    int _100;
-    int _104;
-    char _108;
-    char _109;
-    char _10A;
-    char _10B;
-    char _10C;
-    char _10D;
-    char _10E;
-    char _10F;
-    char _110;
-    char _111;
-    unsigned char _112;
-    char _113;
-    char _114;
-    unsigned char _115;
-    char _116;
-    char _117;
-    int _118;
-    int _11C;
-    int _120;
+    int _F0;
+    int currentMainState;   //  F4
+    int currentSubState;    //  F8
+    long work0;             //  FC
+    long work1;             // 100
+    long work2;             // 104
+    long work3;             // 108
+    long work4;             // 10C
+    long work5;             // 110
+    long work6;             // 114
+    long work7;             // 118
+    long work8;             // 11C
+    long work9;             // 120
 } Instance; // Should be size accurate now
 
 extern Instance* PlayerInstance;

@@ -41,11 +41,11 @@ void func_80044B2C(Instance* instance) {
     int* temp_a2;
 
     temp_a2 = ((((int***)instance->object->modelList)[instance->currentModel]))[0x20/4];
-    temp_v1 = (instance->_F0[6] * 3);
-    ((short*)&instance->_100)[0] = ((temp_v1 + 1) * temp_a2[3]);
-    ((short*)&instance->_100)[1] = (((temp_v1 + 4) * temp_a2[3]) - 1);
-    *(short*)&instance->_104 = -1;
-    instance->currentTextureAnimFrame = *(short*)&instance->_100;
+    temp_v1 = (WORK_AS_IDX(short, instance->work0, 0) * 3);
+    WORK_AS_IDX(short, instance->work1, 0) = ((temp_v1 + 1) * temp_a2[3]);
+    WORK_AS_IDX(short, instance->work1, 1) = (((temp_v1 + 4) * temp_a2[3]) - 1);
+    WORK_AS_IDX(short, instance->work2, 0) = -1;
+    instance->currentTextureAnimFrame = WORK_AS_IDX(short, instance->work1, 0);
 }
 
 void common_powertv_OnCreate(Instance* instance, GameTracker* gameTracker) {
@@ -65,16 +65,16 @@ void common_powertv_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->flags |= 0x80;
     
     if (intro != NULL) {
-        instance->_F0[6] = intro->type;
-        instance->_F0[7] = intro->respawns;
+        WORK_AS_IDX(short, instance->work0, 0) = intro->type;
+        WORK_AS_IDX(short, instance->work0, 1) = intro->respawns;
     } else {
-        instance->_F0[6] = EPTV_HEALTH;
+        WORK_AS_IDX(short, instance->work0, 0) = EPTV_HEALTH;
     }
     
-    instance->_F4[0] = 0;
+    instance->currentMainState = 0;
     
     if (instance->intro->flags & 0x800) {
-        instance->_F4[0] = 2;
+        instance->currentMainState = 2;
         instance->currentAnimFrame = ((((short**)instance->object->animList)[instance->currentModelAnim])[1] - 1);
         instance->currentTextureAnimFrame = 0;
     }
@@ -92,32 +92,32 @@ void common_powertv_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int var_a0;
     short* temp_s1;
 
-    temp_s1 = &instance->_F0[6];
-    if ((instance->_F4[0] - 1) >= 2U) {
+    temp_s1 = WORK_AS_PTR(short, instance->work0);
+    if ((instance->currentMainState - 1) >= 2U) {
         instance->currentTextureAnimFrame++;
-        if (((short*)&instance->_100)[1] < instance->currentTextureAnimFrame) {
-            instance->currentTextureAnimFrame = *(short*)&instance->_100;
+        if (WORK_AS_IDX(short, instance->work1, 1) < instance->currentTextureAnimFrame) {
+            instance->currentTextureAnimFrame = WORK_AS_IDX(short, instance->work1, 0);
         }
     }
-    else if (instance->_F4[0] == 1) {
-        if (((short*)&instance->_104)[1] > 0) {
-            ((short*)&instance->_104)[1]--;
-            if ((((short*)&instance->_104)[1] << 0x10) == 0) {
-                instance->currentTextureAnimFrame = ((short*)&instance->_100)[0];
+    else if (instance->currentMainState == 1) {
+        if (WORK_AS_IDX(short, instance->work2, 1) > 0) {
+            WORK_AS_IDX(short, instance->work2, 1)--;
+            if ((WORK_AS_IDX(short, instance->work2, 1) << 0x10) == 0) {
+                instance->currentTextureAnimFrame = WORK_AS_IDX(short, instance->work1, 0);
                 goto block_7;
             }
         }
         else
         {
 block_7:
-            func_8002DAF8(instance, ((short*)&instance->_104)[0]);
-            if ((((short*)&instance->_104)[0] == -0x3E9) && (instance->currentAnimFrame == 0x1A)) {
+            func_8002DAF8(instance, WORK_AS_IDX(short, instance->work2, 0));
+            if ((WORK_AS_IDX(short, instance->work2, 0) == -0x3E9) && (instance->currentAnimFrame == 0x1A)) {
                 instance->flags2 |= 0x10;
             }
             if (instance->flags2 & 0x10) {
                 if (temp_s1[1] & 1) {
                     if (temp_s1[4] == -0x3E9) {
-                        instance->_F4[0] = 0;
+                        instance->currentMainState = 0;
                         instance->currentAnimFrame = 0;
                         temp_s1[4] = -1;
                         return;
@@ -129,7 +129,7 @@ block_7:
                 }
                 else
                 {
-                    instance->_F4[0] = 2;
+                    instance->currentMainState = 2;
                     func_8002DAF8(instance, -0x3E9);
                 }
                 func_80050508(instance, 0x10, (short) ((rand() & 0x1F) - 0xF), 0x6E, 0x9C4);
@@ -170,7 +170,7 @@ block_7:
         }
     }
     
-    if (instance->_F4[1] == 1) {
+    if (instance->currentSubState == 1) {
         var_a0 = (temp_s1[6] + 1) * 0x55;
         if (var_a0 >= 0x100) {
             var_a0 = 0xFF;
@@ -179,12 +179,12 @@ block_7:
         if (temp_s1[6] < 3) {
             temp_s1[6] = temp_s1[6] + 1;
         } else {
-            instance->_F4[1] = 2;
+            instance->currentSubState = 2;
             temp_s1[6] = 0x33;
         }
         func_8003F748(var_a0, 0);
     }
-    else if (instance->_F4[1] == 2) {
+    else if (instance->currentSubState == 2) {
         var_a1 = 0;
         var_a0 = temp_s1[6] * 5;
         if (var_a0 >= 0x100) {
@@ -197,7 +197,7 @@ block_7:
                 var_a1 = 1;
             }
         } else {
-            instance->_F4[1] = 0;
+            instance->currentSubState = 0;
         }
         func_8003F748(var_a0, var_a1);
     }
@@ -216,22 +216,22 @@ void common_powertv_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
     temp_a0 = gameTracker->player;
     bsp = instance->bspTree;
-    temp_a2 = temp_a0->_F4[0] == 6;
+    temp_a2 = temp_a0->currentMainState == 6;
     intro = instance->introData;
     temp_a1 = bsp->_0C[5];
     temp_s5 = (int*)temp_a0->data;
-    temp_s2 = &instance->_F0[6];
-    if ((instance->_F4[0] == 0) && (((bsp->_06 == 1) && (temp_a1 >= 8)) || ((bsp->instanceSpline == temp_a0) && (temp_a2 != 0)))) {
+    temp_s2 = WORK_AS_PTR(short, instance->work0);
+    if ((instance->currentMainState == 0) && (((bsp->_06 == 1) && (temp_a1 >= 8)) || ((bsp->instanceSpline == temp_a0) && (temp_a2 != 0)))) {
         if (!(temp_s2[1] & 1)) {
             instance->intro->flags |= 0x800;
         }
-        instance->_F4[0] = 1;
+        instance->currentMainState = 1;
         instance->currentTextureAnimFrame = 0;
         instance->flags2 &= ~0x10;
         func_80050508(instance, 0x11, (short) ((rand() & 0x1F) - 0xF), 0x6E, 0x9C4);
-        if ((*temp_s2 == 5) && (instance->_F4[1] == 0)) {
+        if ((*temp_s2 == 5) && (instance->currentSubState == 0)) {
             func_8004AAA8(instance, 0x84, 0);
-            instance->_F4[1] = 1;
+            instance->currentSubState = 1;
             temp_s2[6] = 0;
             gameTracker->level->spawnPosition.x = (instance->position.x + ((func_8003A6AC(instance->intro->rotation.z) << 0x10) >> 0x14));
             gameTracker->level->spawnPosition.y = (instance->position.y + ((func_8003A4E0(instance->intro->rotation.z) << 0x10) >> 0x14));
@@ -240,7 +240,7 @@ void common_powertv_OnCollide(Instance* instance, GameTracker* gameTracker) {
         }
         if (temp_s5[0x138/4] != 0) {
             if (bsp->instanceSpline == gameTracker->player) {
-                bsp->instanceSpline->_F4[2] |= 0x800;
+                bsp->instanceSpline->work0 |= 0x800;
             }
         }
     }

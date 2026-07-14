@@ -8,26 +8,26 @@
 #include "types/Vector.h"
 
 void rta_zgrate_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    instance->_F4[2] = instance->intro->position.z;
+    instance->work0 = instance->intro->position.z;
 }
 
 extern char D_8015EF10_DF580;
 
 void rta_zgrate_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     SVECTOR unused;          /* dead local — reproduces the 8-byte frame */
-    int z;
-    int zz;
+    long z;
+    long zz;
 
     if (D_8015EF10_DF580 != 0) {
         z = instance->position.z;
         zz = z;
-        z = z - instance->_F4[2];
+        z = z - instance->work0;
         if (z < 0x9C4) {
             instance->position.z = zz + 100;
         }
     } else {
-        instance->position.z = instance->_F4[2];
-        instance->_100 = 0;
+        instance->position.z = instance->work0;
+        instance->work1 = 0;
     }
 }
 
@@ -97,7 +97,7 @@ INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015A2B0_DA920);
 
 void rta_crawler_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
-    instance->_F4[0] = 0;
+    instance->currentMainState = 0;
     instance->currentModelAnim = 0;
 }
 
@@ -130,10 +130,10 @@ void rta_eel_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->currentModelAnim = 0;
     instance->currentAnimFrame = 0;
     instance->_D0[3] = 0;
-    instance->_F4[0] = 0;
-    instance->_100 = 0;
+    instance->currentMainState = 0;
+    instance->work1 = 0;
     instance->flags |= 0x800;
-    instance->_104 = ((short*)instance->object->animList[1])[1];
+    instance->work2 = ((short*)instance->object->animList[1])[1];
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_eel_OnUpdate);
@@ -142,7 +142,7 @@ void rta_eel_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp = instance->bspTree;
     Instance* player = gameTracker->player;
     
-    if (func_80027500(bsp, gameTracker) || player->_F4[1] == 0x10) {
+    if (func_80027500(bsp, gameTracker) || player->currentSubState == 0x10) {
         INSTANCE_PlainDeath(instance, 5, 3, 0);
     } else if (bsp->_06 == 1 && bsp->instanceSpline == player) {
         func_80022714(instance, gameTracker);
@@ -171,8 +171,8 @@ void rta_zturtle_OnCreate(Instance* instance, GameTracker* gameTracker) {
     SCRIPT_InstanceSplineInit(instance, gameTracker);
     *(int*)&instance->_34[0] = 5;
     instance->scale.x = instance->scale.y = instance->scale.z = 0xCE4;
-    instance->_F4[2] = 0;
-    *(int*)&instance->_10C = 0;
+    instance->work0 = 0;
+    WORK_AS(int, instance->work4) = 0;
     instance->flags |= 0x100000;
 }
 
@@ -183,8 +183,8 @@ INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zturtle_OnCollide);
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zarchsig_OnCollide);
 
 void rta_count_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    instance->_F4[2] = 0x20;
-    instance->_100 = 0x15E;
+    instance->work0 = 0x20;
+    instance->work1 = 0x15E;
     instance->flags |= 0x80;
     instance->currentTextureAnimFrame = ((int*)gameTracker8)[0x4CC8 / 4] + 1;
 }
@@ -219,12 +219,12 @@ INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015B4EC_DBB5C);
 extern char D_8015EE74_DF4E4[];
 
 void rta_zgeyser_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    instance->_F4[2] = (int)OBTABLE_FindObject(D_8015EE74_DF4E4);
+    instance->work0 = (int)OBTABLE_FindObject(D_8015EE74_DF4E4);
     instance->scale.x = 0x1000;
     instance->scale.y = 0x1000;
-    *(short*)&instance->_100 = 0;
-    ((short*)&instance->_100)[1] = 0;
-    *(short*)&instance->_104 = 0;
+    WORK_AS_IDX(short, instance->work1, 0) = 0;
+    WORK_AS_IDX(short, instance->work1, 1) = 0;
+    WORK_AS_IDX(short, instance->work2, 0) = 0;
     instance->scale.z = 0x180;
 }
 
@@ -237,14 +237,14 @@ INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zdoor_OnCreate);
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zdoor_OnUpdate);
 
 void func_8015BD04_DC374(Instance* instance) {
-    if (instance->_F4[0] == ((int*)instance->introData)[0]) {
+    if (instance->currentMainState == ((int*)instance->introData)[0]) {
         instance->position.x = instance->initialPos.x;
         instance->position.y = instance->initialPos.y;
         instance->position.z = instance->initialPos.z;
     } else {
-        instance->position.x = instance->_F4[2];
-        instance->position.y = instance->_100;
-        instance->position.z = instance->_104;
+        instance->position.x = instance->work0;
+        instance->position.y = instance->work1;
+        instance->position.z = instance->work2;
     }
 }
 
@@ -267,7 +267,7 @@ int func_8015C344_DC9B4(Instance* instance) {
     if (instance != NULL) {
         object = instance->object;
         if (object != NULL) {
-            if (((short*)&object->_08)[1] > 0) {
+            if (object->_0A > 0) {
                 animData = (short*)(object->animList)[0];
                 if (animData != NULL) {
                     if (animData[1] > 0) {
@@ -283,7 +283,7 @@ int func_8015C344_DC9B4(Instance* instance) {
 INCLUDE_RODATA("asm/nonmatchings/level/RTA", D_8015EE74_DF4E4); // geysfx__
 
 void rta_zbubgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    int* p = &instance->_F4[2];
+    long* p = &instance->work0;
 
     if (instance->flags & 0x20000) {
         instance->intro->flags &= ~8;
@@ -293,7 +293,7 @@ void rta_zbubgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
             instance->intro->flags &= ~0x800;
         } else {
             memset(p, 0, 0x28);
-            instance->_F4[2] = ((int)OBTABLE_FindObject("zbubblb_"));
+            instance->work0 = ((int)OBTABLE_FindObject("zbubblb_"));
         }
     }
 }
@@ -302,19 +302,19 @@ INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zbubgen_OnUpdate);
 
 void rta_qmark_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
-    instance->_104 = 0;
-    instance->_F4[2] = 0x40;
-    instance->_100 = 0;
+    instance->work2 = 0;
+    instance->work0 = 0x40;
+    instance->work1 = 0;
 }
 
 void rta_qmark_OnUpdate(Instance* instance, GameTracker* gameTracker) {
-    int* temp_s0;
+    long* temp_s0;
     QMarkIntro* intro;
     volatile char _[4];
     
     intro = (QMarkIntro*)instance->introData;
-    temp_s0 = &instance->_F4[2];
-    if (((*(int*)&instance->_10C) != 0) && !(gameTracker->gameFlags & 0x2000)) {
+    temp_s0 = &instance->work0;
+    if (((WORK_AS(int, instance->work4)) != 0) && !(gameTracker->gameFlags & 0x2000)) {
         func_8003F6CC(intro->x, intro->y, intro->w, intro->h, intro->numMessages, intro->messages);
     }
     switch (temp_s0[2])
@@ -352,13 +352,13 @@ void rta_qmark_OnCollide(Instance* instance, GameTracker* gameTracker) {
     intro = (QMarkIntro*)instance->introData;
     
     if (instance->bspTree->instanceSpline == gameTracker->player) {
-        if (instance->_104 != 1) {
+        if (instance->work2 != 1) {
             func_80050508(instance, 3, 0, 0x64, 0x1388);
         }
-        instance->_104 = 1;
-        instance->_F4[2] = 0x12C;
-         (*(int*)&instance->_110) = intro->time;
-        (*(int*)&instance->_10C) = 1;
+        instance->work2 = 1;
+        instance->work0 = 0x12C;
+         (WORK_AS(int, instance->work5)) = intro->time;
+        (WORK_AS(int, instance->work4)) = 1;
         instance->flags |= 0x400;
     }
 }
@@ -368,7 +368,7 @@ void rta_zarrow_OnCreate(Instance* instance, GameTracker* gameTracker) {
         instance->intro->flags &= ~8;
     } else {
         instance->flags |= 0x10400;
-        instance->_F4[2] = 0;
+        instance->work0 = 0;
     }
 }
 
@@ -378,10 +378,10 @@ extern short D_8015ED10_DF380[];
 void rta_zarrow_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int v;
 
-    v = instance->_F4[2] + 1;
-    instance->_F4[2] = v;
+    v = instance->work0 + 1;
+    instance->work0 = v;
     if (v >= 0x14) {
-        instance->_F4[2] = 0;
+        instance->work0 = 0;
         if (D_8015EF14_DF584 != 0) {
             func_8015C8C8_DCF38(&instance->position, 0x206C, D_8015EF14_DF584, D_8015ED10_DF380);
         }
@@ -403,10 +403,10 @@ void rta_fxgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if (instance->introData == 0) {
         instance->introData = D_8015EE18_DF488;
     }
-    memset(&instance->_F4[2], 0, 0x28);
+    memset(&instance->work0, 0, 0x28);
     obj = OBTABLE_FindObject(D_8015EE74_DF4E4);
     if (obj != 0) {
-        instance->_F4[2] = (int)obj->modelList[0];
+        instance->work0 = (int)obj->modelList[0];
     }
 }
 
@@ -421,18 +421,18 @@ void rta_zstmvent_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->scale.x = 0x2000;
     instance->scale.y = 0x2000;
     instance->scale.z = 0x1000;
-    memset(&instance->_F4[2], 0, 0x28);
-    instance->_F4[2] = ((int)OBTABLE_FindObject("zstmbub_"));
+    memset(&instance->work0, 0, 0x28);
+    instance->work0 = ((int)OBTABLE_FindObject("zstmbub_"));
     r = rand();
     z = instance->position.z;
-    *(int*)&instance->_108 = z;
-    instance->_118 = z + 0x15E0;
-    *(int*)&instance->_10C = *(int*)&instance->_108 - 0x514;
-    *(int*)&instance->_110 = *(int*)&instance->_108;
-    *(int*)&instance->_114 = instance->_118;
-    instance->position.z = *(int*)&instance->_10C;
-    instance->_100 = r & 0x3F;
-    instance->_104 = 0;
+    WORK_AS(int, instance->work3) = z;
+    instance->work7 = z + 0x15E0;
+    WORK_AS(int, instance->work4) = WORK_AS(int, instance->work3) - 0x514;
+    WORK_AS(int, instance->work5) = WORK_AS(int, instance->work3);
+    WORK_AS(int, instance->work6)= instance->work7;
+    instance->position.z = WORK_AS(int, instance->work4);
+    instance->work1 = r & 0x3F;
+    instance->work2 = 0;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zstmvent_OnUpdate);
@@ -478,10 +478,10 @@ INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015E038_DE6A8);
 extern int D_8015EF18_DF588;
 
 void func_8015E228_DE898(Instance* instance) {
-    instance->_F4[0] = 6;
+    instance->currentMainState = 6;
     instance->currentAnimFrame = 0x1A;
     instance->currentModelAnim = 0x35;
-    instance->_F4[1] = 0;
+    instance->currentSubState = 0;
     D_8015EF18_DF588 = 0x10;
     D_8015EF14_DF584 = (int)OBTABLE_FindObject("zbubbl__");
 }

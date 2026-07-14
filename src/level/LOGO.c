@@ -6,6 +6,12 @@
 
 #include "level/LOGO.h"
 
+#define MENU_UP (U_JPAD | U_CBUTTONS)
+#define MENU_DOWN (D_JPAD | D_CBUTTONS)
+#define MENU_LEFT (L_JPAD | L_CBUTTONS)
+#define MENU_RIGHT (R_JPAD | R_CBUTTONS)
+#define MENU_CONFIRM (A_BUTTON | START_BUTTON)
+
 extern Gfx D_8006D578[];
 extern char D_8014F34C;
 extern Gfx* D_80157050;
@@ -22,7 +28,7 @@ extern int D_80156BDC;
 extern int D_80157034;
 extern int D_801574FC;
 extern char D_8006CF20;
-extern unsigned short D_800E5DB2;
+extern unsigned short gControllerButtons[];
 
 void logo_select_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
@@ -66,7 +72,7 @@ void logo_select_OnUpdate(Instance* instance, GameTracker* gameTracker)
             func_80040170(10);
             D_8006FA54 = 12;
         }
-        else if (D_800E5DB0 & 0x1000)
+        else if (gControllerButtons[0] & START_BUTTON)
         {
             if (D_800E97CC != 0)
             {
@@ -122,7 +128,7 @@ void logo_cryslogo_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     D_8006CF20 = 0;
     D_8006FA54 = 0xD;
-    instance->_104 = 0;
+    instance->work2 = 0;
     instance->flags |= 0x400;
     func_8002C1AC(0);
     ((short*)gameTracker->camera)[0x30/2] = 0xFA0;
@@ -139,12 +145,12 @@ void logo_cryslogo_OnUpdate(Instance* instance, GameTracker* gameTracker)
     func_8002C1AC(0);
     gameTracker->player->flags |= 0x800;
     
-    if (instance->_104 < 0x50)
+    if (instance->work2 < 0x50)
     {
-        instance->_104++;
+        instance->work2++;
     }
 
-    if ((D_800E5DB2 & 0x9000) || (instance->_104 == 0x50))
+    if ((gControllerButtons[1] & MENU_CONFIRM) || (instance->work2 == 0x50))
     {
         func_800396E0("logo", "logo1", gameTracker8);
     }
@@ -153,20 +159,20 @@ void logo_cryslogo_OnUpdate(Instance* instance, GameTracker* gameTracker)
 void logo_mwgex_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
     instance->rotation.z = 0xC8;
-    instance->_104 = 0x50;
+    instance->work2 = 0x50;
     instance->flags |= 0x400;
 }
 
-FORCE_INLINE void logo_mwgex_OnUpdate_dec(int* a)
+FORCE_INLINE void logo_mwgex_OnUpdate_dec(long* a)
 {
     (*a)--;
 }
 
 void logo_mwgex_OnUpdate(Instance* instance, GameTracker* gameTracker)
 {
-    logo_mwgex_OnUpdate_dec(&instance->_104);
+    logo_mwgex_OnUpdate_dec(&instance->work2);
     
-    if ((D_800E5DB2 & 0x9000) != 0 || instance->_104 == 0)
+    if ((gControllerButtons[1] & MENU_CONFIRM) != 0 || instance->work2 == 0)
     {
         func_800396E0("logo", "logo2", gameTracker8);
     }
@@ -188,7 +194,7 @@ void logo_mwlogo_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
 void logo_rtlogor_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
-    instance->_104 = 0;
+    instance->work2 = 0;
     instance->flags |= 0x400;
     func_8002C1AC(0);
     instance->rotation.x = 0x400;
@@ -206,11 +212,11 @@ void logo_rtlogor_OnCreate(Instance* instance, GameTracker* gameTracker)
 
 void logo_rtlogor_OnUpdate(Instance* instance, GameTracker* gameTracker)
 {
-    if (instance->_104 < 0x50) {
-        instance->_104++;
+    if (instance->work2 < 0x50) {
+        instance->work2++;
     }
     
-    if ((D_800E5DB2 & 0x9000) || (instance->_104 == 0x50)) {
+    if ((gControllerButtons[1] & MENU_CONFIRM) || (instance->work2 == 0x50)) {
         func_8001A790();
     }
 }

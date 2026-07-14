@@ -75,11 +75,11 @@ void func_800508CC(void) {
 extern unsigned int* D_80156B14;
 
 void func_800508D4(void) {
-    gameTracker8->_4B12[0x4E] = 1;
-    gameTracker8->_4B12[0x4F] = 1;
-    gameTracker8->_4B12[0x50] = 1;
-    gameTracker8->_4B12[0x51] = 1;
-    D_80156B14 = (unsigned int*)&gameTracker8->_4B12[0x3E];
+    gameTracker8->_4C12[0x4E] = 1;
+    gameTracker8->_4C12[0x4F] = 1;
+    gameTracker8->_4C12[0x50] = 1;
+    gameTracker8->_4C12[0x51] = 1;
+    D_80156B14 = (unsigned int*)&gameTracker8->_4C12[0x3E];
 }
 
 INCLUDE_ASM("asm/nonmatchings/4FC20", func_80050930);
@@ -98,7 +98,7 @@ extern int D_800EB860[];
 extern int D_8014F360[];
 
 void func_80050BC4(int arg0, int volume, int arg2) {
-    if (gameTracker8->_4B12[0x4F] != 0) {
+    if (gameTracker8->_4C12[0x4F] != 0) {
         if (D_800EB860[arg0] != 0) {
             D_800BDF08[arg0] = func_800543D4(D_8014F360, D_800EB860[arg0]); // MusHandleStartSong?
             MusHandleSetVolume(D_800BDF08[arg0], volume);

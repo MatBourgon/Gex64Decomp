@@ -97,22 +97,22 @@ void common_tailpuf_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int* temp_v1_2;
 
     temp_a3 = gameTracker->player;
-    if (((temp_a3->_F4[1] == 0x10) || (temp_a3->_F4[1] == 0x2000)) && (instance->_100 != 0)) {
+    if (((temp_a3->currentSubState == 0x10) || (temp_a3->currentSubState == 0x2000)) && (instance->work1 != 0)) {
         instance->position = temp_a3->position;
-        temp_v1_2 = ((int*)temp_a3->_2C) + ((instance->_F4[2] << 3) + 0x480/4);
+        temp_v1_2 = ((int*)temp_a3->_2C) + ((instance->work0 << 3) + 0x480/4);
         sp10.x = temp_v1_2[0x14/4];
         sp10.y = temp_v1_2[0x18/4];
         sp10.z = temp_v1_2[0x1C/4];
-        temp_v0 = func_800176E8(&sp10, instance->_100, D_800EB8A0, -1);
+        temp_v0 = func_800176E8(&sp10, instance->work1, D_800EB8A0, -1);
         if (temp_v0 != NULL) {
             sp18.x = 0x2000;
             sp18.y = 0x2000;
             sp18.z = 0x2000;
             func_80017AE0(temp_v0, &sp18);
-            if ((*(int*)&instance->_108 == 0) && (instance->_104 == 0)) {
-                func_80018AB4(temp_v0, &instance->_10C, 0xF, 0xA);
+            if ((WORK_AS(int, instance->work3) == 0) && (instance->work2 == 0)) {
+                func_80018AB4(temp_v0, &instance->work4, 0xF, 0xA);
                 if (temp_v0->node.next != NULL) {
-                    func_80018AB4(temp_v0->node.next, (int*)&instance->_10C, 0xF, 0xA);
+                    func_80018AB4(temp_v0->node.next, (int*)&instance->work4, 0xF, 0xA);
                 }
             }
         }
@@ -132,7 +132,7 @@ void common_magic_OnCollide(Instance* instance, GameTracker* gameTracker)
 {
     if (instance->bspTree->instanceSpline == (void*)gameTracker->player)
     {
-        instance->_F4[0] = 1;
+        instance->currentMainState = 1;
     }
 }
 
@@ -208,18 +208,18 @@ void common_gengen_OnCreate(Instance* instance, GameTracker* gameTracker) {
     GengenIntro* intro;
 
     intro = instance->introData;
-    instance->_F4[0] = 0;
-    instance->_100 = 0;
+    instance->currentMainState = 0;
+    instance->work1 = 0;
     instance->flags |= 0x100800;
     if (intro != NULL) {
         if ((*(int*)&intro->_04 == 0) || (intro->_10 & 4)) {
-            instance->_F4[2] = intro->_00;
+            instance->work0 = intro->_00;
         } else {
-            instance->_F4[0] = 1;
+            instance->currentMainState = 1;
         }
         temp_v1 = intro->_10;
         if ((temp_v1 & 1) && (temp_v1 & 2)) {
-            instance->_100 = func_80015F14(D_800EB8A0);
+            instance->work1 = func_80015F14(D_800EB8A0);
         }
     }
 }
@@ -246,18 +246,18 @@ void common_gengen_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         return;
     }
     
-    if (instance->_F4[0] == 1) {
-        temp_v0 = instance->_F4[2] + 1;
-        instance->_F4[2] = temp_v0;
+    if (instance->currentMainState == 1) {
+        temp_v0 = instance->work0 + 1;
+        instance->work0 = temp_v0;
         if (temp_v0 == *(int*)&intro->_04) {
-            instance->_F4[2] = intro->_00;
-            instance->_F4[0] = 0;
+            instance->work0 = intro->_00;
+            instance->currentMainState = 0;
         }
     } else {
-        temp_v0_2 = instance->_F4[2] + 1;
-        instance->_F4[2] = temp_v0_2;
+        temp_v0_2 = instance->work0 + 1;
+        instance->work0 = temp_v0_2;
         if (temp_v0_2 >= intro->_00) {
-            instance->_F4[2] = 0;
+            instance->work0 = 0;
             if (((char*)intro)[0x12] != 0) {
                 temp_a1 = intro->_14;
                 if (temp_a1 != 0) {
@@ -265,7 +265,7 @@ void common_gengen_OnUpdate(Instance* instance, GameTracker* gameTracker) {
                 }
             }
             if (intro->_10 & 1) {
-                func_80017768(instance->intro->multiSpline, *obj->modelList, instance->_100, D_800EB8A0);
+                func_80017768(instance->intro->multiSpline, *obj->modelList, instance->work1, D_800EB8A0);
                 return;
             }
             inst = (Instance*)INSTANCE_BirthObject(instance, obj);
@@ -275,8 +275,8 @@ void common_gengen_OnUpdate(Instance* instance, GameTracker* gameTracker) {
                 if (instance->object->oflags & 0x400) {
                     inst->processFunc = GenericProcess;
                     inst->collideFunc = GenericCollide;
-                    if ((intro->_10 & 4) && (*(int*)&instance->_108 == 0)) {
-                        *(int*)&instance->_108 = 1;
+                    if ((intro->_10 & 4) && (WORK_AS(int, instance->work3) == 0)) {
+                        WORK_AS(int, instance->work3) = 1;
                         SCRIPT_InstanceSplineSet(inst, intro->_06, 0, 0, 0);
                     }
                 }

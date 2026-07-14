@@ -6,8 +6,8 @@
 extern int D_80161510_926B0;
 
 void final_oldpoptv_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    instance->_100 = 1;
-    instance->_F4[2] = 0;
+    instance->work1 = 1;
+    instance->work0 = 0;
     instance->flags |= 0x400;
     if (instance->introData == NULL) {
         instance->introData = (void*)&D_80161510_926B0;
@@ -45,9 +45,9 @@ void final_lectro_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->currentTextureAnimFrame = 0;
     instance->flags |= 0x10000;
     if (instance->flags & 0x20000) {
-        if (instance->_F4[2] != 0) {
-            func_800331BC(instance->_F4[2]);
-            instance->_F4[2] = 0;
+        if (instance->work0 != 0) {
+            func_800331BC(instance->work0);
+            instance->work0 = 0;
         }
     }
 }
@@ -64,9 +64,9 @@ void final_probe_OnCreate(Instance* instance, GameTracker* gameTracker)
 
 void final_probe_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     if (instance->intro->_2C != 0) {
-        instance->_F4[0] = 1;
+        instance->currentMainState = 1;
     }
-    if (instance->_F4[0] == 1) {
+    if (instance->currentMainState == 1) {
         instance->position.z += 0x20;
         if (instance->position.z > 0x2000) {
             func_8002E350(instance);
@@ -126,8 +126,8 @@ extern char D_80161588_92728[];
 
 void final_rezbomb_OnCreate(Instance* instance, GameTracker* gameTracker) {
     *(short*)&instance->_E0[0] = 0;
-    instance->_F4[0] = OBTABLE_FindObject(D_80161588_92728);
-    instance->_F4[1] = OBTABLE_FindObject("rezxpl__");
+    instance->currentMainState = OBTABLE_FindObject(D_80161588_92728);
+    instance->currentSubState = OBTABLE_FindObject("rezxpl__");
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_80159E50_8AFF0);
@@ -189,7 +189,7 @@ INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015ADC4_8BF64);
 extern int D_800785C8;
 
 void func_8015AE98_8C038(void) {
-    PlayerInstance->_F4[0] = D_800785C8;
+    PlayerInstance->currentMainState = D_800785C8;
     func_80003234(gameTracker8->camera);
 }
 
@@ -349,13 +349,13 @@ INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015E788_8F928);
 extern char D_8016166C_9280C[];
 
 void final_popper_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    *(short*)&instance->_F4[2] = 2;
+    *(short*)&instance->work0 = 2;
     instance->scale.z = 0;
-    instance->_104 = 0;
+    instance->work2 = 0;
     instance->position.z -= 0x12C;
     instance->flags |= 0x400;
-    *(int*)&instance->_108 = OBTABLE_FindObject(D_80161588_92728);
-    *(int*)&instance->_10C = OBTABLE_FindObject(D_8016166C_9280C);
+    WORK_AS(int, instance->work3) = OBTABLE_FindObject(D_80161588_92728);
+    WORK_AS(int, instance->work4) = OBTABLE_FindObject(D_8016166C_9280C);
 }
 
 INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_8016166C_9280C);
@@ -368,7 +368,7 @@ extern char D_80161618_927B8[];
 
 void final_popper_OnCollide(Instance* instance, GameTracker* gameTracker) {
     if (G2String_Compare_EQ(instance->bspTree->instanceSpline->object->name, D_80161618_927B8)) {
-        *(short*)&instance->_F4[2] = 3;
+        *(short*)&instance->work0 = 3;
     }
 }
 
@@ -377,8 +377,8 @@ void final_finaltv_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->position.y = 9850;
     instance->position.z = 6000;
     instance->_E0[1] = -10;
-    instance->_F4[-1] = 100;
-    instance->_F4[2] = 30;
+    instance->_F0 = 100;
+    instance->work0 = 30;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_finaltv_OnUpdate);
@@ -439,9 +439,9 @@ extern void func_8015F200_903A0(void); // unknown
 void final_frez_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if (!(instance->flags & 0x20000)) {
         instance->_D0[3] = OBTABLE_FindObject(D_80161588_92728);
-        instance->_C0[2] = 0;
-        instance->_C0[3] = 1;
-        instance->_C0[4] = 1;
+        instance->_C4[2] = 0;
+        instance->_C4[3] = 1;
+        instance->_C4[4] = 1;
         instance->_40[6] -= 0x12C;
         instance->_E0[2] = OBTABLE_FindObject(D_8016166C_9280C);
         instance->additionalDrawFunc = (void*)&func_8015F200_903A0;
@@ -471,12 +471,12 @@ extern char D_801616F0_92890[];
 
 void final_frez_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp = instance->bspTree;
-    short* temp_s1 = &instance->_C0[2];
+    short* temp_s1 = &instance->_C4[2];
     
     if (G2String_Compare_EQ(bsp->instanceSpline->object->name, D_8016166C_9280C)) {
-        if (instance->_F4[0] != 0) {
-            func_800331BC(instance->_F4[0]);
-            instance->_F4[0] = 0;
+        if (instance->currentMainState != 0) {
+            func_800331BC(instance->currentMainState);
+            instance->currentMainState = 0;
         }
         if (*temp_s1 != 0xB) {
             ((short*)instance->_D0)[3]++;
@@ -500,10 +500,10 @@ void final_frez_OnCollide(Instance* instance, GameTracker* gameTracker) {
 extern int D_80161558_926F8[];
 void final_rezcam_OnCreate(Instance* instance, GameTracker* gameTracker) {
     Camera* temp_s2;
-    int* ptr;
+    long* ptr;
 
     temp_s2 = gameTracker->camera;
-    ptr = &instance->_F4[2];
+    ptr = &instance->work0;
     instance->flags |= 0x800;
     CAMERA_SetMode(gameTracker->camera, 8);
     if (instance->introData == NULL) {
@@ -521,18 +521,18 @@ void final_finplat_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int temp_ret;
 
     func_80000F24(gameTracker->camera, 213);
-    instance->_F4[2] = (rand() % 120) + 120;
+    instance->work0 = (rand() % 120) + 120;
     GenericInit(instance, gameTracker);
 }
 
 void final_finplat_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     
-    if (--instance->_F4[2] <= 0) {
+    if (--instance->work0 <= 0) {
         if (func_80052FB8() != 0) {
             func_80052C2C(0x4C);
         }
         
-        instance->_F4[2] = (rand() % 120) + 120;
+        instance->work0 = (rand() % 120) + 120;
     }
     GenericProcess(instance, gameTracker);
 }

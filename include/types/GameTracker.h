@@ -21,7 +21,7 @@ typedef struct GameTracker_s
     uint    gameFlags;
     int     _4C0C;
     short   _4C10;
-    char    _4B12[0x5C];
+    char    _4C12[0x5C];
     byte    red_remote_bits[14];
     char    _4C7C[0x18];
     uint    silver_remote_bits;

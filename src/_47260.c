@@ -3,6 +3,7 @@
 #include "INSTANCE.h"
 #include "SCRIPT.h"
 #include "SPLINE.h"
+#include "OBTABLE.h"
 
 #include "types/Spline.h"
 #include "types/Instance.h"
@@ -13,27 +14,27 @@
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80046660);
 
-extern void func_80046660();
+extern void func_80046660(Instance*, GameTracker*);
 
 void func_80046730(Instance* instance) {
     instance->collideFunc = 0;
-    instance->processFunc = (void(*)(void*,void*))func_80046660;
+    instance->processFunc = func_80046660;
     func_8004A47C(instance);
 }
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_8004675C);
 
 extern int D_800EB8A0;
-extern func_8004675C(void*,void*);
+extern void func_8004675C(Instance*,GameTracker*);
 
 int func_80046924(Instance* instance) {
     instance->processFunc = func_8004675C;
     instance->collideFunc = 0;
 
-    instance->_F4[2] = 0x1000;
-    instance->_100 = func_80015F14(D_800EB8A0); 
+    instance->work0 = 0x1000;
+    instance->work1 = func_80015F14(D_800EB8A0); 
 
-    instance->_104 = 0;
+    instance->work2 = 0;
     func_8004A47C(instance);
 }
 
@@ -70,7 +71,7 @@ void func_80046CE4(Instance* instance)
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80046D04);
 
 void func_80046DA4(Instance* instance, int* arg1, int* arg2) {
-    instance->processFunc = (void(*)(void*,void*))instance->_D0[0];
+    instance->processFunc = (void(*)(Instance*,GameTracker*))instance->_D0[0];
     *arg2 = ((short*)&instance->_D0[1])[0];
     *arg1 = ((short*)&instance->_D0[1])[1];
     instance->_D0[0] = 0;
@@ -83,9 +84,9 @@ void func_80046DA4(Instance* instance, int* arg1, int* arg2) {
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80046DDC);
 
-void func_80046E70(short* arg0, int arg1)
+void func_80046E70(Instance* instance, int arg1)
 {
-    arg0[0x64/2] = (arg0[0x64/2] + arg1) & 0xFFF;
+    instance->rotation.z = (instance->rotation.z + arg1) & 0xFFF;
 }
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80046E88);
@@ -478,7 +479,7 @@ SplineDef *SCRIPT_GetPosSplineDef(Instance *instance, MultiSpline *multi, int is
 
     if ((isParent != 0) || (isClass != 0))
     {
-        splineDef = (SplineDef *)&instance->_F4[2]; // work0
+        splineDef = (SplineDef *)&instance->work0; // work0
 
         return splineDef;
     }
@@ -497,7 +498,7 @@ SplineDef *SCRIPT_GetRotSplineDef(Instance *instance, MultiSpline *multi, int is
 
     if ((isParent != 0) || (isClass != 0))
     {
-        splineDef = (SplineDef *)&instance->_104; // work2
+        splineDef = WORK_AS_PTR(SplineDef, instance->work2); // work2
 
         return splineDef;
     }
@@ -516,7 +517,7 @@ SplineDef *SCRIPT_GetScaleSplineDef(Instance *instance, MultiSpline *multi, int 
 
     if ((isParent != 0) || (isClass != 0))
     {
-        splineDef = (SplineDef *)&instance->_10C; // work4
+        splineDef = WORK_AS_PTR(SplineDef, instance->work4); // work4
 
         return splineDef;
     }
@@ -750,9 +751,9 @@ void func_80049224(Instance* instance, int arg1, int arg2) {
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80049250);
 
-void func_80049330(short* arg0)
+void func_80049330(Instance* instance)
 {
-    arg0[0xC0 / 2] = arg0[0x4C / 2];
+    instance->shadowPosition.z = instance->position.z;
 }
 
 INCLUDE_ASM("asm/nonmatchings/_47260", func_80049340);

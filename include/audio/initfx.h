@@ -38,7 +38,7 @@
 #define SMALLROOM_L2 2640	/* 66 ms */
 #define SMALLROOM_C2 10000
 #define SMALLROOM_FILT_CNT 1
-#define SMALLROOM_FC0 0x4000	/* .25 */
+#define SMALLROOMwork00 0x4000	/* .25 */
 
 #define BIGROOM_SECT_CNT 3
 #define BIGROOM_SIZE AL_FX_BUFFER_SIZE
@@ -49,7 +49,7 @@
 #define BIGROOM_L2 3792		/* 86 ms */
 #define BIGROOM_C2 12000
 #define BIGROOM_FILT_CNT 1
-#define BIGROOM_FC0 0x4000	/* .25 */
+#define BIGROOMwork00 0x4000	/* .25 */
 
 #define ECHO_SIZE AL_FX_BUFFER_SIZE
 #define ECHO_SECT_CNT 1

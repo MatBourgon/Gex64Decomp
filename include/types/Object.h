@@ -8,7 +8,8 @@ typedef struct
     int oflags;
     short id;
     short _06;
-    int _08;
+    short _08;
+    short _0A;
     Model** modelList; // 0C
     int** animList; // 10
     short _14;

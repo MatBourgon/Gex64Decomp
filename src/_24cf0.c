@@ -4,22 +4,23 @@
 #include "types/GameTracker.h"
 #include "types/BSPTree.h"
 
-int func_800240F0(int* arg0, int* arg1) {
-    if (arg0 != 0) {
-        arg0[4] &= ~0x400;
+int func_800240F0(Instance* instance, GameTracker* gameTracker) {
+    if (instance != 0) {
+        instance->flags &= ~0x400;
     }
 
-    if (arg1 != 0) {
-        arg1 = (int*)arg1[3];
-        if (arg1 != 0) {
-            arg1 = (int*)arg1[8];
-            if (arg1 != 0) {
-                *(int*)((int)arg1 + 0x130) = 0;
-                *(short*)((int)arg1 + 0x134) = 0;
-                *(short*)((int)arg1 + 0xDE) = 0;
-                *(short*)((int)arg1 + 0x18C) = 0;
-            }
-        }
+    if (gameTracker == NULL)
+        return;
+
+    if (gameTracker->player == NULL)
+        return;
+
+    if (gameTracker->player->data != NULL) {
+        void* data = gameTracker->player->data;
+        *(int*)(data + 0x130) = 0;
+        *(short*)(data + 0x134) = 0;
+        *(short*)(data + 0xDE) = 0;
+        *(short*)(data + 0x18C) = 0;
     }
 }
 
@@ -35,7 +36,7 @@ INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80024A80);
 
 INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80024B94);
 
-int func_80024C30(int arg0, int arg1, int arg2) {
+int func_80024C30(int arg0, int arg1) {
     int temp_a2 = *(int*)(arg1 + 0x130);
     
     if (temp_a2 != 0) {
@@ -60,7 +61,7 @@ INCLUDE_ASM("asm/nonmatchings/_24cf0", func_8002528C);
 INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80025588);
 
 void func_8002569C(Instance* instance) {
-    instance->_F4[0] = 3;
+    instance->currentMainState = 3;
 }
 
 INCLUDE_ASM("asm/nonmatchings/_24cf0", func_800256A8);
@@ -93,7 +94,7 @@ int func_800257B4(Instance* instance) {
     unsigned short* data;
     int result;
 
-    state = instance->_F4[0];
+    state = instance->currentMainState;
     data = ((unsigned short*)instance->data);
     result = 0;
     if (state == 1 || state == 0x8000) {
@@ -222,12 +223,12 @@ INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80027184);
 INCLUDE_ASM("asm/nonmatchings/_24cf0", func_80027398);
 
 void func_80027400(Instance* instance) {
-    instance->_F4[0] = 4;
-    ((char*)instance->_40)[0xe] = 0;
+    instance->currentMainState = 4;
+    instance->currentModelAnim = 0;
 }
 
 void func_80027410(Instance* instance) {
-    instance->_F4[0] = 0;
+    instance->currentMainState = 0;
     instance->_B8 = *(int*)instance->data;
 }
 
@@ -268,7 +269,7 @@ int func_80027578(void) {
     short* data;
     int result;
 
-    state = PlayerInstance->_F4[0];
+    state = PlayerInstance->currentMainState;
     data = ((short*)gameTracker8->player->data);
     result = 0;
     if ((unsigned int)(state - 2) < 2 || data[0x6E] != 0) {
