@@ -85,15 +85,15 @@ void gillig_couldrn_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
         obj = OBTABLE_FindObject("tikifir_");
         fire = INSTANCE_BirthObject(instance, obj);
-        fire->position.x = (unsigned short)fire->position.x + (func_8003A6AC(0x60) * 39 >> 6);
-        fire->position.y = (unsigned short)fire->position.y + (func_8003A4E0(0x60) * 39 >> 6);
-        fire->position.z = (unsigned short)fire->position.z + 0x80;
+        fire->position.x = fire->position.x + (func_8003A6AC(0x60) * 39 >> 6);
+        fire->position.y = fire->position.y + (func_8003A4E0(0x60) * 39 >> 6);
+        fire->position.z = fire->position.z + 0x80;
         fire->rotation.z = -0x3A0;
         fire->_F4[2] = 0x18;
         fire = INSTANCE_BirthObject(instance, obj);
-        fire->position.x = (unsigned short)fire->position.x + (func_8003A6AC(0x7A0) * 39 >> 6);
-        fire->position.y = (unsigned short)fire->position.y + (func_8003A4E0(0x7A0) * 39 >> 6);
-        fire->position.z = (unsigned short)fire->position.z + 0x80;
+        fire->position.x = fire->position.x + (func_8003A6AC(0x7A0) * 39 >> 6);
+        fire->position.y = fire->position.y + (func_8003A4E0(0x7A0) * 39 >> 6);
+        fire->position.z = fire->position.z + 0x80;
         fire->rotation.z = 0x3A0;
         fire->_F4[2] = -0x18;
         instance->_F4[0] = 0;
@@ -141,18 +141,18 @@ void gillig_tikifb_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     }
     if (state == 1) {
         if (instance->intro->position.z + 0x100 < instance->position.z) {
-            instance->position.x = (unsigned short)instance->position.x + (func_8003A6AC(instance->_100 + instance->_F4[2]) * 3 >> 7);
-            instance->position.y = (unsigned short)instance->position.y + (func_8003A4E0(instance->_100 + instance->_F4[2]) * 3 >> 7);
-            instance->position.z = (unsigned short)instance->position.z - 0x1E;
+            instance->position.x += (func_8003A6AC(instance->_100 + instance->_F4[2]) * 3 >> 7);
+            instance->position.y += (func_8003A4E0(instance->_100 + instance->_F4[2]) * 3 >> 7);
+            instance->position.z -= 0x1E;
             return;
         }
-        instance->position.x = (unsigned short)instance->position.x + (func_8003A6AC(instance->_100 + instance->_F4[2]) * 25 >> 10);
-        instance->position.y = (unsigned short)instance->position.y + (func_8003A4E0(instance->_100 + instance->_F4[2]) * 25 >> 10);
+        instance->position.x += (func_8003A6AC(instance->_100 + instance->_F4[2]) * 25 >> 10);
+        instance->position.y += (func_8003A4E0(instance->_100 + instance->_F4[2]) * 25 >> 10);
         return;
     }
     if (state == 2) {
-        instance->position.x = (unsigned short)instance->position.x + (func_8003A6AC((instance->_100 + instance->_F4[2]) - 0x800) * 3 >> 6);
-        instance->position.y = (unsigned short)instance->position.y + (func_8003A4E0((instance->_100 + instance->_F4[2]) - 0x800) * 3 >> 6);
+        instance->position.x += (func_8003A6AC((instance->_100 + instance->_F4[2]) - 0x800) * 3 >> 6);
+        instance->position.y += (func_8003A4E0((instance->_100 + instance->_F4[2]) - 0x800) * 3 >> 6);
         return;
     }
     if (state == 3) {
@@ -234,26 +234,31 @@ void gillig_tikifir_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     }
     if (instance->_F4[0] == 0) {
         *(int*)&instance->_108 = *(int*)&instance->_108 + 9;
-        newScale = (unsigned short)instance->scale.z + 0x200;
+        newScale = instance->scale.z + 0x200;
         instance->scale.z = newScale;
         if (newScale >= 0x1000) {
             instance->_F4[0] = 1;
         }
     } else if (instance->_F4[0] == 1) {
         instance->_100 = instance->_100 + 1;
-        if ((instance->_100 >= 0x4D) ||
-            (instance->rotation.z = (unsigned short)instance->rotation.z + instance->_F4[2],
-             instance->position.x = (unsigned short)instance->parent->position.x + (func_8003A6AC(instance->rotation.z + 0x400) * 39 >> 6),
-             instance->position.y = (unsigned short)instance->parent->position.y + (func_8003A4E0(instance->rotation.z + 0x400) * 39 >> 6),
-             ((int**)((int**)instance->intro->_04)[1])[0x24/4][0x108/4] == 0)) {
+        if ((instance->_100 >= 0x4D))
+        {
             instance->_F4[0] = 2;
+        }
+        else
+        {
+            instance->rotation.z = instance->rotation.z + instance->_F4[2];
+            instance->position.x = instance->parent->position.x + (func_8003A6AC(instance->rotation.z + 0x400) * 39 >> 6);
+            instance->position.y = instance->parent->position.y + (func_8003A4E0(instance->rotation.z + 0x400) * 39 >> 6);
+            if (((int**)((int**)instance->intro->_04)[1])[0x24/4][0x108/4] == 0)
+               instance->_F4[0] = 2;
         }
     } else if (instance->_F4[0] == 2) {
         *(int*)&instance->_108 = *(int*)&instance->_108 - 9;
         if (*(int*)&instance->_108 <= 0) {
             *(int*)&instance->_108 = 1;
         }
-        newScale = (unsigned short)instance->scale.z - 0x200;
+        newScale = instance->scale.z - 0x200;
         instance->scale.z = newScale;
         if (newScale < 2) {
             if (instance->_104 != 0) {
@@ -339,13 +344,13 @@ void gillig_hedhntr_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             instance->currentModelAnim = 0;
             if (*introData == 0) {
                 instance->_F4[2] = 0x9D2;
-                instance->rotation.z = 0x5D2 - (unsigned short)instance->intro->rotation.z;
+                instance->rotation.z = 0x5D2 - instance->intro->rotation.z;
             } else if (*introData == link) {
                 instance->_F4[2] = 0xC22;
-                instance->rotation.z = 0x822 - (unsigned short)instance->intro->rotation.z;
+                instance->rotation.z = 0x822 - instance->intro->rotation.z;
             } else {
                 instance->_F4[2] = 0xE66;
-                instance->rotation.z = 0xA66 - (unsigned short)instance->intro->rotation.z;
+                instance->rotation.z = 0xA66 - instance->intro->rotation.z;
             }
             if (*introData != 2) {
                 instance->_100 = *introData + 1;
@@ -359,8 +364,8 @@ void gillig_hedhntr_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         int idx;
 
         func_8002DAF8(instance, -1);
-        instance->position.x = (unsigned short)((Instance*)((int**)((int**)instance->intro->_04)[1])[0x24/4])->position.x + (func_8003A6AC(instance->_F4[2]) * 39 >> 6);
-        instance->position.y = (unsigned short)((Instance*)((int**)((int**)instance->intro->_04)[1])[0x24/4])->position.y + (func_8003A4E0(instance->_F4[2]) * 39 >> 6);
+        instance->position.x = ((Intro**)instance->intro->_04)[1]->instance->position.x + (func_8003A6AC(instance->_F4[2]) * 39 >> 6);
+        instance->position.y = ((Intro**)instance->intro->_04)[1]->instance->position.y + (func_8003A4E0(instance->_F4[2]) * 39 >> 6);
         if (instance->_104 != 0) {
             idx = instance->_100;
             accel = instance->_F4[2];
@@ -390,7 +395,7 @@ void gillig_hedhntr_OnUpdate(Instance* instance, GameTracker* gameTracker) {
                 instance->_F4[0] = 2;
             }
         }
-        instance->rotation.z = (instance->_F4[2] - (unsigned short)instance->intro->rotation.z) - 0x400;
+        instance->rotation.z = (instance->_F4[2] - instance->intro->rotation.z) - 0x400;
         return;
     } else if (state == 2) {
         func_8002DAF8(instance, -1);

@@ -1467,18 +1467,18 @@ void func_8015D9E4_BE414(Instance* instance) {
     instance->_F4[2] = INSTANCE_BirthObject(instance, OBTABLE_FindObject("lvllabl_"));
     instance->position = v;
     instance->flags |= 0x10000;
-    ((int*)instance->_F4[2])[0x10/4] |= 0x100000;
-    ((int*)instance->_F4[2])[0x10/4] |= 0x400;
-    (*(char**)&instance->_F0[6])[0x100] = instance->_112;
+    ((Instance*)instance->_F4[2])->flags |= 0x100000;
+    ((Instance*)instance->_F4[2])->flags |= 0x400;
+    *(char*)&(((Instance*)instance->_F4[2])->_100) = instance->_112;
     func_8015D52C_BDF5C((Instance*)instance->_F4[2], gameTracker8);
 }
 
 void func_8015DAC8_BE4F8(Instance* instance) {
     instance->_100 = INSTANCE_BirthObject(instance, OBTABLE_FindObject("etvbutn_" /*etvbutn_*/));
     instance->flags |= 0x10000;
-    ((int*)instance->_100)[0x10/4] |= 0x100000;
-    ((int*)instance->_100)[0x10/4] |= 0x400;
-    ((void**)instance->_100)[0xB0/4] = &map_lvltv_OnCollide;
+    ((Instance*)instance->_100)->flags |= 0x100000;
+    ((Instance*)instance->_100)->flags |= 0x400;
+    ((Instance*)instance->_100)->collideFunc = map_lvltv_OnCollide;
 }
 
 void func_8015DB54_BE584(Instance* instance) {

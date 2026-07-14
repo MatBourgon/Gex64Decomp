@@ -251,8 +251,8 @@ void rezop_crnkplt_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
     a.x = b.x = instance->position.x;
     a.y = b.y = instance->position.y;
-    a.z = (unsigned short)instance->position.z - 0x100;
-    b.z = (unsigned short)instance->position.z + 0x100;
+    a.z = instance->position.z - 0x100;
+    b.z = instance->position.z + 0x100;
     COLLIDE_PointAndTerrain(gameTracker8->level->segmentAddress, &a, &b, instance);
 }
 
@@ -278,7 +278,7 @@ void rezop_rezcrnk_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         } else if (t == 0) {
             instance->_F4[0] = 0;
         }
-        instance->rotation.z = (unsigned short)instance->rotation.z + instance->_F4[2];
+        instance->rotation.z += instance->_F4[2];
     }
     if (instance->_100 >= 0) {
         instance->_100 = instance->_100 - 1;
@@ -318,28 +318,27 @@ void rezop_snkplat_OnCreate(Instance* instance, GameTracker* gameTracker) {
     a.y = b.y = instance->position.y;
     d = instance->_D0;
     a.z = instance->position.z;
-    b.z = (unsigned short)instance->position.z + 0x300;
+    b.z = instance->position.z + 0x300;
     COLLIDE_PointAndTerrain(gameTracker8->level->segmentAddress, &a, &b, instance);
     if (intro != NULL) {
         instance->_D0[2] = intro[0];
     } else {
         instance->_D0[2] = 0;
     }
-    d[0] = instance->position.x + (((func_8003A6AC(d[2]) << 16) >> 16) * 0xF >> 6);
-    d[1] = instance->position.y + (((func_8003A4E0(d[2]) << 16) >> 16) * 0xF >> 6);
+    d[0] = instance->position.x + (((short)func_8003A6AC(d[2])) * 0xF >> 6);
+    d[1] = instance->position.y + (((short)func_8003A4E0(d[2])) * 0xF >> 6);
 }
 
 void rezop_snkplat_OnUpdate(Instance* instance, GameTracker* gameTracker) {
-    int d[2];
-    SVector dead; /* dead local — reproduces the original's 0x30-byte frame */
+    LVECTOR d;
 
     instance->_D0[2] += 0x20;
-    instance->_D0[0] = instance->position.x + (((func_8003A6AC(instance->_D0[2]) << 16) >> 16) * 0xF >> 6);
-    instance->_D0[1] = instance->position.y + (((func_8003A4E0(instance->_D0[2]) << 16) >> 16) * 0xF >> 6);
-    d[0] = instance->_D0[0] - instance->position.x;
-    d[1] = instance->_D0[1] - instance->position.y;
-    instance->rotation.x = d[0] >> 3;
-    instance->rotation.y = d[1] >> 3;
+    instance->_D0[0] = instance->position.x + (((short)func_8003A6AC(instance->_D0[2])) * 0xF >> 6);
+    instance->_D0[1] = instance->position.y + (((short)func_8003A4E0(instance->_D0[2])) * 0xF >> 6);
+    d.x = instance->_D0[0] - instance->position.x;
+    d.y = instance->_D0[1] - instance->position.y;
+    instance->rotation.x = d.x >> 3;
+    instance->rotation.y = d.y >> 3;
     GenericProcess(instance, gameTracker);
 }
 
@@ -368,8 +367,8 @@ void rezop_rezbull_OnCollide(Instance* instance, GameTracker* gameTracker) {
     if (bsp->_06 == 1 && bsp->instanceSpline == gameTracker->player
         && bsp->_0C[5] >= 6U && instance->_F4[0] != 5) {
         px = instance->position.x;
-        instance->_F4[2] = (ratan2(instance->position.y - PlayerInstance->position.y,
-                                   px - PlayerInstance->position.x) << 16) >> 16;
+        instance->_F4[2] = (short)ratan2(instance->position.y - PlayerInstance->position.y,
+                                   px - PlayerInstance->position.x);
         instance->_100 = 0x20;
         instance->_F4[0] = 4;
     } else if (bsp->_06 == 2) {
@@ -380,7 +379,7 @@ void rezop_rezbull_OnCollide(Instance* instance, GameTracker* gameTracker) {
             }
         }
     } else if (bsp->_06 == 3 && (*(unsigned short*)&bsp->_0C[6] & 8)) {
-        instance->position.z = (unsigned short)instance->position.z + 0x500;
+        instance->position.z += 0x500;
         func_80017598(instance, 0, 0, 0, D_800EB8A0, 0, 0);
         INSTANCE_KillInstance(instance);
     }
@@ -577,7 +576,7 @@ void rezop_rebggen_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         obj = OBTABLE_FindObject("rebug___");
         birthed = INSTANCE_BirthObject(instance, obj);
         if (birthed != NULL) {
-            birthed->rotation.z = (unsigned short)birthed->rotation.z + 0x400;
+            birthed->rotation.z += 0x400;
             obj->oflags |= 0x2000;
             birthed->introData = NULL;
         }
@@ -688,8 +687,8 @@ void rezop_tvgurny_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->flags |= 0x40000000;
     a.x = instance->position.x;
     a.y = instance->position.y;
-    b.x = (unsigned short)instance->position.x + (((func_8003A6AC(instance->intro->rotation.z + 0x400) << 16) >> 16) * 5 >> 4);
-    b.y = (unsigned short)instance->position.y + (((func_8003A4E0(instance->intro->rotation.z + 0x400) << 16) >> 16) * 5 >> 4);
+    b.x = instance->position.x + (((short)func_8003A6AC(instance->intro->rotation.z + 0x400)) * 5 >> 4);
+    b.y = instance->position.y + (((short)func_8003A4E0(instance->intro->rotation.z + 0x400)) * 5 >> 4);
     a.z = b.z = instance->position.z;
     COLLIDE_PointAndTerrain(gameTracker8->level->segmentAddress, &a, &b, instance);
     instance->_120 = (SCRIPT_CountFramesInSpline(instance) << 16) >> 16;
@@ -815,7 +814,7 @@ void rezop_gas_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     w = *(int*)&instance->_108;
     instance->currentTextureAnimFrame = y + 1;
     if (w & 0x8000) {
-        instance->rotation.z = ((unsigned short)instance->rotation.z + 0x2200) & 0xFFF;
+        instance->rotation.z = (instance->rotation.z + 0x2200) & 0xFFF;
     }
     switch (instance->_F4[0]) {
     case 0:

@@ -477,8 +477,8 @@ void prehst_sptball_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         } else {
             instance->_F4[0] = 1;
         }
-        instance->position.x = instance->position.x + ((instance->_100 * ((func_8003A6AC(instance->_F4[2]) << 16) >> 16)) >> 12);
-        instance->position.y = instance->position.y + ((instance->_100 * ((func_8003A4E0(instance->_F4[2]) << 16) >> 16)) >> 12);
+        instance->position.x = instance->position.x + ((instance->_100 * ((short)func_8003A6AC(instance->_F4[2]))) >> 12);
+        instance->position.y = instance->position.y + ((instance->_100 * ((short)func_8003A4E0(instance->_F4[2]))) >> 12);
         instance->_F4[2] += 0x20;
     } else if (instance->_F4[0] == 1) {
         if (instance->scale.x >= 0x1F5) {
@@ -542,8 +542,8 @@ void prehst_cavetl_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_F4[0] = 4;
     state[2] = 0x14;
     state[5] = -2;
-    state[0] = -(((func_8003A6AC(instance->rotation.z - 0x400) << 16) >> 16) * 40) >> 12;
-    state[1] = -(((func_8003A4E0(instance->rotation.z - 0x400) << 16) >> 16) * 40) >> 12;
+    state[0] = -(((short)func_8003A6AC(instance->rotation.z - 0x400)) * 40) >> 12;
+    state[1] = -(((short)func_8003A4E0(instance->rotation.z - 0x400)) * 40) >> 12;
     state[6] = 0x28;
     state[7] = 0x28;
     state[8] = 0x1E;
@@ -825,7 +825,7 @@ void prehst_gas_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     w = *(int*)&instance->_108;
     instance->currentTextureAnimFrame = y + 1;
     if (w & 0x8000) {
-        instance->rotation.z = ((unsigned short)instance->rotation.z + 0x2200) & 0xFFF;
+        instance->rotation.z = (instance->rotation.z + 0x2200) & 0xFFF;
     }
     switch (instance->_F4[0]) {
     case 0:
