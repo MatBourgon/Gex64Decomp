@@ -273,8 +273,8 @@ void common_gengen_OnUpdate(Instance* instance, GameTracker* gameTracker) {
                 obj->oflags |= 0x2000;
                 inst->introData = NULL;
                 if (instance->object->oflags & 0x400) {
-                    inst->processFunc = (void*)GenericProcess;
-                    inst->collideFunc = (void*)GenericCollide;
+                    inst->processFunc = GenericProcess;
+                    inst->collideFunc = GenericCollide;
                     if ((intro->_10 & 4) && (*(int*)&instance->_108 == 0)) {
                         *(int*)&instance->_108 = 1;
                         SCRIPT_InstanceSplineSet(inst, intro->_06, 0, 0, 0);

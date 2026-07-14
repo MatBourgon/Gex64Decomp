@@ -788,7 +788,7 @@ void scifi_gas_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     w = *(int*)&instance->_108;
     instance->currentTextureAnimFrame = y + 1;
     if (w & 0x8000) {
-        instance->rotation.z = ((unsigned short)instance->rotation.z + 0x2200) & 0xFFF;
+        instance->rotation.z = (instance->rotation.z + 0x2200) & 0xFFF;
     }
     switch (instance->_F4[0]) {
     case 0:

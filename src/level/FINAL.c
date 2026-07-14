@@ -206,7 +206,7 @@ int func_8015B130_8C2D0(Instance* instance, int arg1, short arg2) {
     d.x = 0x2D00 - instance->position.x;
     d.y = 0x267A - instance->position.y;
     d.z = -instance->position.z;
-    angle = ((ratan2(d.y, d.x) << 16) >> 16) + 0x400;
+    angle = (short)ratan2(d.y, d.x) + 0x400;
     func_8004ACB0(&instance->rotation.z, angle, arg2);
     return instance->rotation.z == angle;
 }

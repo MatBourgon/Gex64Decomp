@@ -310,11 +310,11 @@ void func_8015B4BC_B376C(Instance* instance) {
         pos.z = instance->position.z + 0x140;
         model = obj->modelList[0];
         for (i = 0; i < 20; i++) {
-            unsigned short* entry;
-            entry = D_80078A40[rand() % 244];
-            vel.x = (entry[0] << 16) >> 23;
-            vel.y = (entry[1] << 16) >> 23;
-            vel.z = (entry[2] << 16) >> 23;
+            SVECTOR* entry;
+            entry = (SVECTOR*)D_80078A40[rand() % 244];
+            vel.x = entry->x >> 7;
+            vel.y = entry->y >> 7;
+            vel.z = entry->z >> 7;
             func_800170E8(model, model->_14, &pos, &vel, 0, D_800EB8A0, func_80017E88, func_80016894, 0xF);
         }
     }

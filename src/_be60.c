@@ -197,11 +197,12 @@ void common_derez_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 Instance* CreateRemRedInstance(Instance* instance, Object* object) {
     Instance* newInstance;
-    instance->position.x += (func_8003A4E0(instance->intro->rotation.z) << 0x10) >> 0x13;
+    instance->position.x += ((short)func_8003A4E0(instance->intro->rotation.z)) >> 0x3;
     instance->position.y += -((func_8003A6AC(instance->intro->rotation.z) << 0x10) >> 7) >> 0xC;
     instance->position.z += 0x100;
+    
     newInstance = (Instance*)INSTANCE_BirthObject(instance, object);
-    instance->position.x -= (func_8003A4E0(instance->intro->rotation.z) << 0x10) >> 0x13;
+    instance->position.x -= ((short)func_8003A4E0(instance->intro->rotation.z)) >> 0x3;
     instance->position.y -= -((func_8003A6AC(instance->intro->rotation.z) << 0x10) >> 7) >> 0xC;
     instance->position.z -= 0x100;
     return newInstance;
@@ -252,7 +253,7 @@ void common_tvend_OnCreate(Instance* instance, GameTracker* gameTracker) {
         iEtvbtn = (Instance*)instance->_F4[2];
         iRemred = (Instance*)instance->_100;
         if (iEtvbtn != NULL) {
-            (iEtvbtn)->flags &= ~0x400;
+            iEtvbtn->flags &= ~0x400;
             func_8002E350(iEtvbtn);
         }
         if (iRemred != NULL) {
