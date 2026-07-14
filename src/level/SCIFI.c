@@ -2,6 +2,8 @@
 
 #include "level/SCIFI.h"
 #include "types/G2String.h"
+#include "INSTANCE.h"
+#include "OBTABLE.h"
 #include "MATRIX.h"
 
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_80159720_DF540);
@@ -367,7 +369,13 @@ void scifi_stmvent_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
 typedef struct {
-    char _00[0x1C];
+    char _00[8];
+    void* next;
+    unsigned short flags;
+    short _0E;
+    void* callback;
+    void* _14;
+    int _18;
     short posX;
     short posY;
     short posZ;
@@ -389,7 +397,16 @@ typedef struct {
     unsigned short unk40;
     short _42;
     short _44;
-    char _46[0x26];
+    unsigned short _46;
+    unsigned short _48;
+    short _4A;
+    unsigned short _4C;
+    unsigned short _4E;
+    unsigned short _50;
+    unsigned short _52;
+    unsigned short _54;
+    unsigned short _56;
+    char _58[0x14];
     unsigned short frame;
 } VentSprayData;
 
@@ -441,7 +458,7 @@ void func_8015B5F0_E1410(Instance* instance) {
     SVECTOR vel;
     VentSprayData* spray;
 
-    obj = ((Object*)OBTABLE_FindObject("sprysht_"));
+    obj = OBTABLE_FindObject("sprysht_");
     if (instance->_E0[3] == 0) {
         model = obj->modelList[0];
     } else {
@@ -512,7 +529,52 @@ void scifi_stmvent_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015B904_E1724);
+void func_8015B904_E1724(VentSprayData* p, void* callback, char* data, int arg3, unsigned short* def, char* table, int arg6, int arg7, int arg8, int arg9, unsigned short arg10) {
+    SVECTOR c;
+    short* va;
+    short* vb;
+    short* vc;
+    int* nxt;
+    unsigned short t;
+
+    va = (short*)(table + def[0] * 12);
+    vb = (short*)(table + def[1] * 12);
+    vc = (short*)(table + def[2] * 12);
+    c.x = (va[0] + vb[0] + vc[0]) / 3;
+    c.y = (va[1] + vb[1] + vc[1]) / 3;
+    c.z = (va[2] + vb[2] + vc[2]) / 3;
+    p->posX = c.x + ((int*)data)[0x20 / 4];
+    p->posY = c.y + ((int*)data)[0x24 / 4];
+    p->posZ = c.z + ((int*)data)[0x28 / 4];
+    p->unk24 = va[0] - c.x;
+    p->_26 = va[1] - c.y;
+    p->unk28 = va[2] - c.z;
+    p->unk2C = vb[0] - c.x;
+    p->_2E = vb[1] - c.y;
+    p->unk30 = vb[2] - c.z;
+    p->unk34 = vc[0] - c.x;
+    p->_36 = vc[1] - c.y;
+    p->unk38 = vc[2] - c.z;
+    if (((unsigned char*)def)[7] & 2) {
+        p->flags |= 1;
+        nxt = ((int**)def)[2];
+        p->next = nxt;
+        p->_18 = (nxt[3] & 0x3FFFFFF) | 0x24000000;
+    } else {
+        p->flags &= ~1;
+        p->_18 = (((int*)def)[2] & 0x3FFFFFF) | 0x20000000;
+    }
+    p->callback = callback;
+    p->_14 = data;
+    p->_4C = -c.x >> 1;
+    p->_4E = -c.y >> 1;
+    t = c.z;
+    p->_52 = 0;
+    p->_54 = 0;
+    p->_56 = 0;
+    p->_0E = arg10;
+    p->_50 = -((t << 16) >> 17);
+}
 
 void func_8015BB90_E19B0(short* arg0) {
     func_800162C0(arg0);
@@ -543,7 +605,19 @@ void scifi_genbrk_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015BF08_E1D28);
+Instance* func_8015BF08_E1D28(Instance* instance) {
+    Instance* ring = INSTANCE_BirthObject(instance, OBTABLE_FindObject("sring___"));
+
+    ring->flags |= 0x400;
+    ring->work0 = instance->position.z;
+    ring->position.x = instance->position.x;
+    ring->position.y = instance->position.y;
+    ring->position.z = instance->position.z;
+    ring->rotation.x = instance->rotation.x;
+    ring->rotation.y = instance->rotation.y;
+    ring->rotation.z = instance->rotation.z;
+    return ring;
+}
 
 void func_8015BFA8_E1DC8(Instance* instance) {
     instance->flags &= ~0x400;
@@ -559,7 +633,7 @@ void scifi_bldbota_OnCreate(Instance* instance, GameTracker* gameTracker) {
     } else {
         instance->flags |= 0x10080;
         instance->currentTextureAnimFrame = 0;
-        instance->work0 = func_8015BF08_E1D28(instance);
+        instance->work0 = ((int)func_8015BF08_E1D28(instance));
     }
 }
 
@@ -571,7 +645,28 @@ void scifi_bldbota_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     func_8015BFD4_E1DF4(instance->work0, (short)frame);
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_abubble_OnCreate);
+void scifi_abubble_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    short* intro = instance->introData;
+    short* data = instance->object->data;
+
+    if (intro != 0) {
+        instance->work0 = intro[0];
+        instance->work1 = intro[1];
+    } else if (data != 0) {
+        instance->work0 = data[0];
+        instance->work1 = data[1];
+    }
+    if (WORK_AS_IDX(short, instance->work0, 1) == 0) {
+        instance->work0 = 0x64;
+    }
+    if (WORK_AS_IDX(short, instance->work1, 1) == 0) {
+        instance->work1 = 0x1E;
+    }
+    INSTANCE_InsertInstanceWithFlagsSet(instance, 0x1000);
+    if (instance->parent != 0) {
+        instance->flags |= 0x100000;
+    }
+}
 
 void scifi_abubble_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     SVECTOR unused;    /* dead local — reproduces the 0x20 frame */

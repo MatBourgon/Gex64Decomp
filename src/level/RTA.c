@@ -178,7 +178,29 @@ void rta_zturtle_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zturtle_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zturtle_OnCollide);
+extern int D_8015EE24;
+
+void rta_zturtle_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    Instance* player;
+    Instance* collider;
+
+    if (instance->work0 == 0) {
+        player = gameTracker->player;
+        collider = instance->bspTree->instanceSpline;
+        if (collider == player) {
+            instance->work0 = 1;
+            instance->work1 = collider->position.x - instance->position.x;
+            D_8015EF10_DF580 = 1;
+            instance->work2 = collider->position.y - instance->position.y;
+            D_8015EE24 = 0xC8;
+            WORK_AS(int, instance->work3) = collider->position.z - instance->position.z;
+            collider->currentSubState = 5;
+            collider->flags |= 0x100;
+            ((int*)gameTracker->camera)[0x444 / 4] = 0x4B0;
+            func_80050A80(0, 2);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zarchsig_OnCollide);
 
@@ -189,7 +211,21 @@ void rta_count_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->currentTextureAnimFrame = ((int*)gameTracker8)[0x4CC8 / 4] + 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_count_OnUpdate);
+void rta_count_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    if (instance->work1 >= 0x7D1) {
+        func_8002E350(instance);
+    } else {
+        instance->rotation.z += instance->work0;
+        if (instance->rotation.z >= 0x1000) {
+            instance->rotation.z -= 0x1000;
+        }
+        instance->position.x = gameTracker->player->position.x;
+        instance->position.y = gameTracker->player->position.y;
+        instance->position.z = gameTracker->player->position.z + instance->work1;
+        instance->work1 += 0x14;
+        instance->work0 += 0x10;
+    }
+}
 
 extern int D_800EB8A0;
 
@@ -208,7 +244,27 @@ void rta_zcargo_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zwleak_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zwleak_OnUpdate);
+extern short D_8015ED9C_DF40C;
+
+void rta_zwleak_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    Instance* player;
+    int dx;
+    int dy;
+    int dz;
+
+    instance->work2 += 1;
+    if (D_8015ED9C_DF40C < instance->work2) {
+        player = gameTracker->player;
+        dx = instance->position.x - player->position.x;
+        dy = instance->position.y - player->position.y;
+        dz = instance->position.z - player->position.z;
+        if (dx * dx + dy * dy + dz * dz <= 0xBAEB8F) {
+            func_8015B1D4_DB844(instance);
+        }
+        instance->work2 = 0;
+    }
+    func_8015A2B0_DA920(instance, 0x9C4);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zwleak_OnCollide);
 

@@ -32,7 +32,26 @@ INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_80159EC4_C2844);
 void func_8015A07C_C29FC(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015A084_C2A04);
+void func_8015B4D4_C3E54(Instance* instance, short* arg1);
+int func_8015B510_C3E90(Instance* instance, short* arg1, int arg2, short arg3);
+void func_8015B5F0_C3F70(Instance* instance, short* arg1);
+
+void func_8015A084_C2A04(Instance* instance, short arg1, short arg2, short* arg3) {
+    Instance* player = gameTracker8->player;
+
+    if (instance->flags2 & 0x10) {
+        if (arg3[0x40 / 2] == 0) {
+            func_8015B39C_C3D1C(instance, arg1, arg2);
+        } else if ((short)func_8004B23C(instance, player) < 0x280) {
+            arg3[0x14 / 2] = 6;
+            if (func_8015B510_C3E90(instance, arg3, 1, 0) != 0) {
+                func_8015B4D4_C3E54(instance, arg3);
+            }
+        } else {
+            func_8015B5F0_C3F70(instance, arg3);
+        }
+    }
+}
 
 void func_8015A150_C2AD0(Instance* instance, short arg1, short arg2) {
     if (instance->flags2 & 0x10) {
@@ -80,7 +99,15 @@ void func_8015A258_C2BD8(SVECTOR* pos, int arg1, GameTracker* gameTracker) {
     c[0x17] = c[6] = c[0x1A];
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015A2E0_C2C60);
+void func_8015A2E0_C2C60(Camera* camera, SVECTOR* arg1, SVector* arg2) {
+    camera->cameraCore.position = *arg1;
+    *(SVector*)&camera->cameraCore._08[0x28 / 4] = *arg2;
+    *(SVECTOR*)&camera->cameraCore._08[0x8 / 4] = *arg1;
+    *(SVector*)&camera->cameraCore._08[0x10 / 4] = *arg2;
+    *(SVector*)&camera->cameraCore._08[0] = *arg2;
+    ((short*)camera->cameraCore._08)[0x26 / 2] = arg2->z;
+    CAMERA_SetMode(camera, 8);
+}
 
 void func_8015A398_C2D18()
 {
@@ -145,7 +172,29 @@ void func_8015B4D4_C3E54(Instance* instance, short* arg1) {
     arg1[6] = 6;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015B510_C3E90);
+int func_8015B510_C3E90(Instance* instance, short* arg1, int arg2, short arg3) {
+    short angle;
+    int result = 0;
+
+    if (arg2 != 0) {
+        arg1[0x4 / 2] |= 1;
+    } else {
+        arg1[0x12 / 2] = arg3;
+        arg1[0x4 / 2] &= ~1;
+    }
+    if (func_8015B9D0_C4350(instance, arg1, &angle) != 0) {
+        result = 1;
+        instance->rotation.z = angle + 0x400;
+    } else {
+        instance->flags2 &= ~0x10;
+        if (instance->currentModelAnim != 0) {
+            instance->currentModelAnim = 0;
+            instance->currentAnimFrame = 0;
+        }
+        arg1[0xC / 2] = 9;
+    }
+    return result;
+}
 
 void func_8015B5C0_C3F40(Instance* instance, short* arg1) {
     arg1[5] = (gameTracker8->player->position.y > 0) ? -1 : 1;

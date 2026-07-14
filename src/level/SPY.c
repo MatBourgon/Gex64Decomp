@@ -136,7 +136,7 @@ void spy_launch_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         int delta;
         short chunk;
 
-        speed = *(short*)&instance->_112;
+        speed = WORK_AS_IDX(short, instance->work5, 1);
         total = WORK_AS(int, instance->work4);
         step = total / speed;
         chunk = 0x20;
@@ -157,7 +157,7 @@ void spy_launch_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         } else {
             WORK_AS(int, instance->work3) += delta;
             if (threshold < WORK_AS(int, instance->work3)) {
-                if (chunk < *(short*)&instance->_112) {
+                if (chunk < WORK_AS_IDX(short, instance->work5, 1)) {
                     WORK_AS(int, instance->work5) = ((WORK_AS(int, instance->work5) - chunk) << 16) >> 16;
                 }
             }

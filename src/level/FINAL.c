@@ -130,7 +130,94 @@ void final_rezbomb_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->currentSubState = OBTABLE_FindObject("rezxpl__");
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_80159E50_8AFF0);
+typedef struct {
+    char _00[8];
+    int* next;
+    unsigned short flags;
+    short _0E;
+    void* callback;
+    void* _14;
+    int _18;
+    short posX;
+    short posY;
+    short posZ;
+    short _22;
+    unsigned short unk24;
+    short _26;
+    unsigned short unk28;
+    short _2A;
+    unsigned short unk2C;
+    short _2E;
+    unsigned short unk30;
+    short _32;
+    unsigned short unk34;
+    short _36;
+    unsigned short unk38;
+    short _3A;
+    unsigned short unk3C;
+    short _3E;
+    unsigned short unk40;
+    short _42;
+    short _44;
+    unsigned short _46;
+    unsigned short _48;
+    short _4A;
+    unsigned short _4C;
+    unsigned short _4E;
+    unsigned short _50;
+    unsigned short _52;
+    unsigned short _54;
+    unsigned short _56;
+    int _58[5];
+    unsigned short frame;
+} VentSprayData;
+
+void func_80159E50_8AFF0(VentSprayData* p, void* callback, char* data, int arg3, unsigned short* def, char* table, int arg6, int arg7, int arg8, int arg9, unsigned short arg10) {
+    SVECTOR c;
+    short* va;
+    short* vb;
+    short* vc;
+    int* nxt;
+    unsigned short t;
+
+    va = (short*)(table + def[0] * 12);
+    vb = (short*)(table + def[1] * 12);
+    vc = (short*)(table + def[2] * 12);
+    c.x = (va[0] + vb[0] + vc[0]) / 3;
+    c.y = (va[1] + vb[1] + vc[1]) / 3;
+    c.z = (va[2] + vb[2] + vc[2]) / 3;
+    p->posX = c.x + ((int*)data)[0x20 / 4];
+    p->posY = c.y + ((int*)data)[0x24 / 4];
+    p->posZ = c.z + ((int*)data)[0x28 / 4];
+    p->unk24 = va[0] - c.x;
+    p->_26 = va[1] - c.y;
+    p->unk28 = va[2] - c.z;
+    p->unk2C = vb[0] - c.x;
+    p->_2E = vb[1] - c.y;
+    p->unk30 = vb[2] - c.z;
+    p->unk34 = vc[0] - c.x;
+    p->_36 = vc[1] - c.y;
+    p->unk38 = vc[2] - c.z;
+    if (((unsigned char*)def)[7] & 2) {
+        p->flags |= 1;
+        nxt = ((int**)def)[2];
+        p->next = nxt;
+        p->_18 = (nxt[3] & 0x3FFFFFF) | 0x24000000;
+    } else {
+        p->flags &= ~1;
+        p->_18 = (((int*)def)[2] & 0x3FFFFFF) | 0x20000000;
+    }
+    p->callback = callback;
+    p->_14 = data;
+    p->_4C = -c.x >> 1;
+    p->_4E = -c.y >> 1;
+    t = c.z;
+    p->_52 = 0;
+    p->_54 = 0;
+    p->_56 = 0;
+    p->_0E = arg10;
+    p->_50 = -((t << 16) >> 17);
+}
 
 void func_8015A0DC_8B27C(short* arg0) {
     func_800162C0(arg0);
@@ -169,7 +256,23 @@ void func_8015A434_8B5D4(Instance* instance, Object* obj, int pos, int rot) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015A4C8_8B668);
+extern void func_80016894();
+
+void func_8015A4C8_8B668(int arg0, Object* obj, int arg2) {
+    Model* model;
+    VentSprayData* spray;
+
+    if (obj != 0) {
+        model = obj->modelList[1];
+        spray = ((VentSprayData*)func_800170E8(model, model->_14, arg2, 0, 0, D_800EB8A0, func_80017E88, func_80016894, -1));
+        if (model->_20 != 0 && spray != 0) {
+            spray->flags |= 4;
+            memcpy(spray->_58, spray->next, 0x10);
+            spray->_58[4] = model->_20 + 4;
+            spray->frame = 0;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015A590_8B730);
 
@@ -195,9 +298,19 @@ void func_8015AE98_8C038(void) {
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015AED8_8C078);
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015B07C_8C21C);
-
 extern void func_8004ACB0(short* angle, short target, int step);
+
+int func_8015B07C_8C21C(Instance* instance, int arg1, short arg2) {
+    SVECTOR d;
+    int angle;
+
+    d.x = PlayerInstance->position.x - instance->position.x;
+    d.y = PlayerInstance->position.y - instance->position.y;
+    d.z = PlayerInstance->position.z - instance->position.z;
+    angle = (short)ratan2(d.y, d.x) + 0x400;
+    func_8004ACB0(&instance->rotation.z, angle, arg2);
+    return instance->rotation.z == angle;
+}
 
 int func_8015B130_8C2D0(Instance* instance, int arg1, short arg2) {
     SVECTOR d;
@@ -383,6 +496,7 @@ void final_finaltv_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_finaltv_OnUpdate);
 
+
 void final_finaltv_OnCollide(Instance* instance, GameTracker* gameTracker) {
     if (G2String_Compare_EQ(instance->bspTree->instanceSpline->object->name, D_80161618_927B8)) {
         func_80046978(instance);
@@ -425,13 +539,46 @@ int func_8015F0C8_90268(int arg0, SVector* p1, SVector* p2, unsigned short* t) {
     return CAMERA_LengthSVector(&n) < t[3];
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015F13C_902DC);
+extern int D_80161544_926E4;
+extern SVECTOR D_80161830_929D0;
+extern SVECTOR D_80161838_929D8;
+extern SVECTOR D_80161840_929E0;
+extern SVECTOR D_80161848_929E8;
+
+void func_8015F13C_902DC(SVECTOR* a, SVECTOR* b) {
+    if (D_80161544_926E4 == 0) {
+        D_80161848_929E8.x = a->x;
+        D_80161848_929E8.y = a->y;
+        D_80161848_929E8.z = a->z;
+        D_80161840_929E0.x = b->x;
+        D_80161840_929E0.y = b->y;
+        D_80161840_929E0.z = b->z;
+    } else {
+        D_80161830_929D0.x = a->x;
+        D_80161830_929D0.y = a->y;
+        D_80161830_929D0.z = a->z;
+        D_80161838_929D8.x = b->x;
+        D_80161838_929D8.y = b->y;
+        D_80161838_929D8.z = b->z;
+    }
+    D_80161544_926E4 += 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015F200_903A0);
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015F480_90620);
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015F818_909B8);
+int func_8015F818_909B8(Instance* instance, SVECTOR* target, int arg2, short arg3) {
+    SVECTOR d;
+    int angle;
+
+    d.x = target->x - instance->position.x;
+    d.y = target->y - instance->position.y;
+    d.z = target->z - instance->position.z;
+    angle = (short)ratan2(d.y, d.x) + 0x400;
+    func_8004ACB0(&instance->rotation.z, angle, arg3);
+    return instance->rotation.z == angle;
+}
 
 extern char D_8016166C_9280C[];
 extern void func_8015F200_903A0(void); // unknown

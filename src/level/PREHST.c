@@ -336,7 +336,7 @@ typedef struct {
     unsigned short frame;
 } VentSprayData;
 
-extern void func_80016894(void*);
+extern void func_80016894();
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_8015B47C_C8CFC);
 /* near-match (8 diffs: frame a1/a2, mflo v0/v1, z-check load order — scheduler difference):
 void func_8015B47C_C8CFC(void* arg0) {
@@ -1308,7 +1308,21 @@ void func_80163C4C_D14CC(VentSprayData* p, void* callback, char* data, int arg3,
     p->unk38 += 0x28;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_80163EE0_D1760);
+void func_80163EE0_D1760(short* p, int arg1) {
+    if (p[0x20 / 2] + p[0x50 / 2] <= p[0x44 / 2]) {
+        if (p[0x46 / 2] < 3) {
+            p[0x46 / 2] += 1;
+            p[0x48 / 2] = p[0x50 / 2] = p[0x48 / 2] - 0xA;
+        }
+    }
+    p[0x24 / 2] -= 1;
+    p[0x28 / 2] += 3;
+    p[0x2C / 2] -= 1;
+    p[0x30 / 2] -= 1;
+    p[0x34 / 2] += 3;
+    p[0x38 / 2] -= 1;
+    func_80016894(p, arg1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_80163F94_D1814);
 

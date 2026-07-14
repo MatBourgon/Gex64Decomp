@@ -270,11 +270,119 @@ void looney_brkblok_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_brkblok_OnUpdate);
+void looney_brkblok_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    int v;
+
+    if (WORK_AS_IDX(short, instance->work2, 0) != 0) {
+        v = instance->_D0[2] - 10;
+        instance->_D0[2] = v;
+        instance->position.z += v;
+        if (instance->position.z < WORK_AS_IDX(short, instance->work2, 1)) {
+            instance->position.z = WORK_AS_IDX(short, instance->work2, 1);
+            instance->_D0[2] = 0;
+            WORK_AS_IDX(short, instance->work2, 0) = 0;
+        }
+    } else if (WORK_AS_IDX(short, instance->work3, 0) != 0) {
+        WORK_AS_IDX(short, instance->work3, 0) -= 1;
+        if (WORK_AS_IDX(short, instance->work3, 0) == 0) {
+            func_8002E350(instance);
+        }
+    }
+    if (instance->object->oflags & 0x400) {
+        GenericProcess(instance, gameTracker);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_8015ADD8_B3088);
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_8015AF30_B31E0);
+typedef struct {
+    char _00[8];
+    void* next;
+    unsigned short flags;
+    short _0E;
+    void* callback;
+    void* _14;
+    int _18;
+    short posX;
+    short posY;
+    short posZ;
+    short _22;
+    unsigned short unk24;
+    short _26;
+    unsigned short unk28;
+    short _2A;
+    unsigned short unk2C;
+    short _2E;
+    unsigned short unk30;
+    short _32;
+    unsigned short unk34;
+    short _36;
+    unsigned short unk38;
+    short _3A;
+    unsigned short unk3C;
+    short _3E;
+    unsigned short unk40;
+    short _42;
+    short _44;
+    unsigned short _46;
+    unsigned short _48;
+    short _4A;
+    unsigned short _4C;
+    unsigned short _4E;
+    unsigned short _50;
+    unsigned short _52;
+    unsigned short _54;
+    unsigned short _56;
+    char _58[0x14];
+    unsigned short frame;
+} VentSprayData;
+
+void func_8015AF30_B31E0(VentSprayData* p, void* callback, char* data, void* arg3, unsigned short* def, char* table, int arg6, int arg7, int arg8, int arg9, unsigned short arg10) {
+    SVECTOR c;
+    short* va;
+    short* vb;
+    short* vc;
+    int* nxt;
+    unsigned short t;
+
+    va = (short*)(table + def[0] * 12);
+    vb = (short*)(table + def[1] * 12);
+    vc = (short*)(table + def[2] * 12);
+    c.x = (va[0] + vb[0] + vc[0]) / 3;
+    c.y = (va[1] + vb[1] + vc[1]) / 3;
+    c.z = (va[2] + vb[2] + vc[2]) / 3;
+    p->posX = c.x + ((int*)data)[0x20 / 4];
+    p->posY = c.y + ((int*)data)[0x24 / 4];
+    p->posZ = c.z + ((int*)data)[0x28 / 4];
+    p->unk24 = va[0] - c.x;
+    p->_26 = va[1] - c.y;
+    p->unk28 = va[2] - c.z;
+    p->unk2C = vb[0] - c.x;
+    p->_2E = vb[1] - c.y;
+    p->unk30 = vb[2] - c.z;
+    p->unk34 = vc[0] - c.x;
+    p->_36 = vc[1] - c.y;
+    p->unk38 = vc[2] - c.z;
+    if (((unsigned char*)def)[7] & 2) {
+        p->flags |= 1;
+        nxt = ((int**)def)[2];
+        p->next = nxt;
+        p->_18 = (nxt[3] & 0x3FFFFFF) | 0x24000000;
+    } else {
+        p->flags &= ~1;
+        p->_18 = (((int*)def)[2] & 0x3FFFFFF) | 0x20000000;
+    }
+    p->callback = callback;
+    p->_14 = data;
+    p->_4C = -c.x >> 1;
+    p->_4E = -c.y >> 1;
+    t = c.z;
+    p->_52 = 0;
+    p->_54 = 0;
+    p->_56 = 0;
+    p->_0E = arg10;
+    p->_50 = -((t << 16) >> 17);
+}
 
 void func_8015B1BC_B346C(short* arg0) {
     func_800162C0(arg0);
@@ -455,7 +563,23 @@ void looney_funguy_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     fc[4] -= 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_funguy_OnCollide);
+void looney_funguy_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    int fd = ((int*)instance->work0)[1];
+    BSPTree* bsp = instance->bspTree;
+    int* fc = WORK_AS_PTR(int, instance->work0);
+    Instance* player;
+
+    if (fd != 0 && (player = bsp->instanceSpline) == gameTracker->player && bsp->_06 == 1 && bsp->_0C[5] == 8 &&
+        WORK_AS(int, instance->work3) != 2 &&
+        ((player->currentSubState == 0x20 && (fd & 2)) || (player->currentSubState != 0x80 && (fd & 1)))) {
+        instance->flags2 = (instance->flags2 | 0x200) & ~0x10;
+        instance->currentAnimFrame = 0;
+        fc[3] = 2;
+        if (fc[5] >= 0) {
+            fc[5] -= 1;
+        }
+    }
+}
 
 typedef struct {
     char _00[8];
@@ -497,13 +621,56 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_fallgen_OnUpdate);
 void looney_fallgen_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_fallobj_OnCreate);
+extern short D_80161C64_B9F14[];
+extern char D_80161DD8_BA088[];
+
+void looney_fallobj_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    short* data = instance->object->data;
+    int* pc = 0;
+
+    if (data == 0) {
+        instance->object->data = D_80161C64_B9F14;
+        data = D_80161C64_B9F14;
+    }
+    instance->object->oflags |= 0x2000000;
+    instance->flags |= 0x40;
+    WORK_AS_IDX(short, instance->work9, 1) = data[0];
+    instance->_D0[2] = data[3];
+    instance->_E0[1] = data[2];
+    WORK_AS(int, instance->work3) = ((int)OBTABLE_FindObject(D_80161DD8_BA088));
+    WORK_AS(int, instance->work4) = 3;
+    instance->shadowPosition.z = -0x8000;
+    if (instance->parent != 0) {
+        pc = WORK_AS_PTR(int, instance->parent->work0);
+    }
+    if (pc != 0) {
+        pc[2] = 0x1E;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_8015CB5C_B4E0C);
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_fallobj_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_fallobj_OnCollide);
+void looney_fallobj_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    Instance* parent = instance->parent;
+    BSPTree* bsp = instance->bspTree;
+    int* pc;
+
+    pc = 0;
+    if (parent != 0) {
+        pc = WORK_AS_PTR(int, parent->work0);
+    }
+    if (bsp->instanceSpline == gameTracker->player && instance->work0 == 0 && PlayerInstance->scale.z == 0x1000) {
+        if (pc != 0) {
+            pc[2] = 0x3C;
+        }
+        func_80022810(instance, gameTracker, 0x3C);
+        if (*(int*)&gameTracker->_4BF4[4] > 0) {
+            func_800279AC(PlayerInstance, 0x14, 0x2000, 0xD, 0x2000, 0x78);
+        }
+    }
+}
 
 void looney_teeter_OnCreate(Instance* instance, GameTracker* gameTracker) {
     extern int D_80161C9C_B9F4C;
@@ -517,7 +684,24 @@ void looney_teeter_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_teeter_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_teeter_OnCollide);
+void looney_teeter_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    LVECTOR newPosition;
+    MATRIX transformMatrix;
+    BSPTree* bsp = instance->bspTree;
+
+    if (bsp->_06 == 4) {
+        if (bsp->instanceSpline == gameTracker->player) {
+            if (instance->matrix) {
+                func_80041FD0(&transformMatrix, instance->matrix);
+                MATH3D_ApplyMatrixT(&transformMatrix, &bsp->globalOffset, &newPosition);
+                instance->work1 = newPosition.x << 2;
+                WORK_AS(int, instance->work3) = newPosition.x;
+                instance->work2 = ((int)bsp->instanceSpline);
+                GenericCollide(instance, gameTracker);
+            }
+        }
+    }
+}
 
 extern short D_80161CA4_B9F54[];
 
@@ -883,7 +1067,20 @@ void looney_genbrk_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_jimboat_OnCollide);
+void looney_jimboat_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    GenericCollide(instance, gameTracker);
+    if (instance->work0 == 0) {
+        instance->work0 = instance->flags & 0x400;
+        if (instance->work0 != 0) {
+            func_80032B34(-1, 2, 0x20, gameTracker->levelIdToLoad, 0);
+        }
+    } else if (instance->work1 == 0) {
+        instance->work1 = instance->intro->flags & 0x100;
+        if (instance->work1 != 0) {
+            func_80032B34(-1, 1, 2, gameTracker->levelIdToLoad, 0);
+        }
+    }
+}
 
 void looney_colorset_OnCreate(Instance* instance, GameTracker* gameTracker) {
     unsigned short* intro;
