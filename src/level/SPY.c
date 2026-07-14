@@ -40,7 +40,7 @@ void spy_launch_OnCreate(Instance* instance, GameTracker* gameTracker) {
     objData = instance->object->data;
     intro = instance->introData;
     
-    *(int*)&instance->_108 = 0;
+    WORK_AS(int, instance->_108) = 0;
     instance->initialPos.x = instance->position.x;
     instance->initialPos.y = instance->position.y;
     instance->initialPos.z = instance->position.z;
@@ -141,7 +141,7 @@ void spy_launch_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         step = total / speed;
         chunk = 0x20;
         step = step - speed / chunk;
-        progress = *(int*)&instance->_108;
+        progress = WORK_AS(int, instance->_108);
         threshold = speed * step;
         if (progress + speed >= total) {
             delta = total - progress;
@@ -152,11 +152,11 @@ void spy_launch_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         player->position.z += delta;
         if (done != 0) {
             instance->_F4[0] = 3;
-            *(int*)&instance->_108 = 0;
+            WORK_AS(int, instance->_108) = 0;
             player->flags &= ~0x400000;
         } else {
-            *(int*)&instance->_108 += delta;
-            if (threshold < *(int*)&instance->_108) {
+            WORK_AS(int, instance->_108) += delta;
+            if (threshold < WORK_AS(int, instance->_108)) {
                 if (chunk < *(short*)&instance->_112) {
                     *(int*)&instance->_110 = ((*(int*)&instance->_110 - chunk) << 16) >> 16;
                 }
@@ -194,7 +194,7 @@ void spy_launch_OnCollide(Instance* instance, GameTracker* gameTracker) {
     Instance* player  = gameTracker->player;
     char var_a2 = (bsp->_06 == 1) ? bsp->_0C[5] : -1;
     
-    if (((instance->_F4[0] - 1) >= 2U) && (*(int*)&instance->_108 == 0) && (bsp->instanceSpline == player) && (bsp->_04 == 5) && (var_a2 < 8) && (bsp->_08[2] == 0)) {
+    if (((instance->_F4[0] - 1) >= 2U) && (WORK_AS(int, instance->_108) == 0) && (bsp->instanceSpline == player) && (bsp->_04 == 5) && (var_a2 < 8) && (bsp->_08[2] == 0)) {
         if (instance->_11C & 0x10) {
             player->_F4[2] |= 0x200;
             instance->_11C |= 0x20;
@@ -508,7 +508,7 @@ void spy_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         if (temp_s2[0] != 0) {
             if ((int)(((int**)gameTracker))[0x4BFC/4] < gameTracker->level->collectibleCountA) {
                 if (D_80154834 != 0) {
-                    *(short*)&instance->_108 = 1;
+                    WORK_AS_IDX(short, instance->_108, 0) = 1;
                 }
                 Set3DTextPosition(0x64, 0x69);
                 Print3DTextf(ANIMATED_3DTEXT("COLLECT"));

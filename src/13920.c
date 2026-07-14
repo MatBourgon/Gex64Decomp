@@ -109,7 +109,7 @@ void common_tailpuf_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             sp18.y = 0x2000;
             sp18.z = 0x2000;
             func_80017AE0(temp_v0, &sp18);
-            if ((*(int*)&instance->_108 == 0) && (instance->_104 == 0)) {
+            if ((WORK_AS(int, instance->_108) == 0) && (instance->_104 == 0)) {
                 func_80018AB4(temp_v0, &instance->_10C, 0xF, 0xA);
                 if (temp_v0->node.next != NULL) {
                     func_80018AB4(temp_v0->node.next, (int*)&instance->_10C, 0xF, 0xA);
@@ -275,8 +275,8 @@ void common_gengen_OnUpdate(Instance* instance, GameTracker* gameTracker) {
                 if (instance->object->oflags & 0x400) {
                     inst->processFunc = GenericProcess;
                     inst->collideFunc = GenericCollide;
-                    if ((intro->_10 & 4) && (*(int*)&instance->_108 == 0)) {
-                        *(int*)&instance->_108 = 1;
+                    if ((intro->_10 & 4) && (WORK_AS(int, instance->_108) == 0)) {
+                        WORK_AS(int, instance->_108) = 1;
                         SCRIPT_InstanceSplineSet(inst, intro->_06, 0, 0, 0);
                     }
                 }

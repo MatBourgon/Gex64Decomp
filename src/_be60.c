@@ -88,11 +88,11 @@ void func_8000B968(Instance* instance, GameTracker* gameTracker) {
     
     instance->flags |= 0x40;
     
-    if (*(int*)&instance->_108 == 0)
+    if (WORK_AS(int, instance->_108) == 0)
         object = (Object*)OBTABLE_FindObject(gameTracker8->level->collectibleTypeA);
-    else if (*(int*)&instance->_108 == 1)
+    else if (WORK_AS(int, instance->_108) == 1)
         object = (Object*)OBTABLE_FindObject(gameTracker8->level->collectibleTypeB);
-    else if (*(int*)&instance->_108 == 2)
+    else if (WORK_AS(int, instance->_108) == 2)
         object = (Object*)OBTABLE_FindObject(gameTracker8->level->collectibleTypeC);
     
     if (object != NULL) {
@@ -111,7 +111,7 @@ INCLUDE_ASM("asm/nonmatchings/_be60", func_8000BB88);
 
 void common_cola_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
-    *(int*)&instance->_108 = 0;
+    WORK_AS(int, instance->_108) = 0;
     func_8000B968(instance, gameTracker);
 }
 
@@ -122,7 +122,7 @@ void common_cola_OnUpdate(Instance* instance, GameTracker* gameTracker)
 
 void common_colb_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
-    *(int*)&instance->_108 = 1;
+    WORK_AS(int, instance->_108) = 1;
     func_8000B968(instance, gameTracker);
 }
 
@@ -138,7 +138,7 @@ void common_colb_OnCollide(Instance* instance, GameTracker* gameTracker)
 
 void common_colc_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
-    *(int*)&instance->_108 = 2;
+    WORK_AS(int, instance->_108) = 2;
     func_8000B968(instance, gameTracker);
 }
 
@@ -157,11 +157,11 @@ void common_cold_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
     temp_a3 = &instance->_F4[2];
     if (((int*)gameTracker)[0x4C00/4] >= gameTracker->level->collectibleCountB) {
-        *(int*)&instance->_108 = 2;
+        WORK_AS(int, instance->_108) = 2;
     } else if (((int*)gameTracker)[0x4BFC/4] >= gameTracker->level->collectibleCountA) {
-        *(int*)&instance->_108 = 1;
+        WORK_AS(int, instance->_108) = 1;
     } else {
-        *(int*)&instance->_108 = 0;
+        WORK_AS(int, instance->_108) = 0;
     }
     if ((((unsigned char*)gameTracker)[0x4CA1] - 0xE) < 7U) {
         temp_a3[3] = 0;

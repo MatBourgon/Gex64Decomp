@@ -88,7 +88,7 @@ void rezop_rrgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_104 = 1;
     birthed = INSTANCE_BirthObject(instance, obj);
     birthed->position.z += 0x180;
-    *(Instance**)&instance->_108 = birthed;
+    WORK_AS(Instance*, instance->_108) = birthed;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_rrgen_OnUpdate);
@@ -134,7 +134,7 @@ void rezop_rezplat_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->currentTextureAnimFrame = 1;
     instance->_104 = 7;
     instance->flags |= 0x80;
-    *(int*)&instance->_108 = instance->rotation.y;
+    WORK_AS(int, instance->_108) = instance->rotation.y;
     WORK_AS_IDX(short, instance->_10C, 0) = instance->rotation.z;
 }
 
@@ -353,7 +353,7 @@ void rezop_rezbull_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_E0[1] = -0xF;
     instance->_F4[0] = 0;
     instance->_D0[2] = 0x3C;
-    *(int*)&instance->_108 = 0x3C;
+    WORK_AS(int, instance->_108) = 0x3C;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_rezbull_OnUpdate);
@@ -628,12 +628,12 @@ void rezop_iris_OnCreate(Instance* instance, GameTracker* gameTracker) {
     WORK_AS_IDX(short, instance->_10C, 1) = data[3];
     ((short*)&instance->_104)[1] = (short)data[1] / 2 + 0x140;
     x = -0x140 - (short)data[1] / 2;
-    *(short*)&instance->_108 = x;
+    WORK_AS_IDX(short, instance->_108, 0) = x;
     y = data[2];
     x = -0x40;
     WORK_AS_IDX(short, instance->_10C, 0) = x;
     ((short*)&instance->_F4[2])[1] = 0;
-    ((short*)&instance->_108)[1] = x - y;
+    WORK_AS_IDX(short, instance->_108, 1) = x - y;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_iris_OnUpdate);
@@ -752,19 +752,19 @@ void rezop_gas_OnCreate(Instance* instance, GameTracker* gameTracker) {
             if (introData[0] != 0xFFFF) {
                 *(GasData*)&instance->_F4[2] = *(GasData*)(introData + 1);
                 if (((char*)&instance->_100)[2] < 0) {
-                    *(int*)&instance->_108 |= 0x8000;
+                    WORK_AS(int, instance->_108) |= 0x8000;
                     ((char*)&instance->_100)[2] = ~((unsigned char*)&instance->_100)[2];
                 }
                 t = func_8004A61C(instance);
                 m = introData[0];
                 m %= (unsigned int)(((unsigned short*)&instance->_F4[2])[1] + *(unsigned short*)&instance->_F4[2] + ((unsigned char*)&instance->_100)[1]);
                 if (m < ((unsigned short*)&instance->_F4[2])[1]) {
-                    *(short*)&instance->_108 = m;
+                    WORK_AS_IDX(short, instance->_108, 0) = m;
                     instance->_F4[0] = 0;
                 } else {
                     m -= ((unsigned short*)&instance->_F4[2])[1];
                     if (m < ((unsigned char*)&instance->_100)[1]) {
-                        *(short*)&instance->_108 = m;
+                        WORK_AS_IDX(short, instance->_108, 0) = m;
                         instance->_F4[0] = 1;
                     } else {
                         m -= ((unsigned char*)&instance->_100)[1];
@@ -774,7 +774,7 @@ void rezop_gas_OnCreate(Instance* instance, GameTracker* gameTracker) {
                         } else {
                             m -= t;
                             if (m < *(unsigned short*)&instance->_F4[2]) {
-                                *(short*)&instance->_108 = m;
+                                WORK_AS_IDX(short, instance->_108, 0) = m;
                                 instance->_F4[0] = 3;
                             } else {
                                 m -= *(unsigned short*)&instance->_F4[2];
@@ -808,10 +808,10 @@ void rezop_gas_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int w;
 
     fc = (unsigned short*)&instance->_F4[2];
-    x = *(unsigned short*)&instance->_108;
+    x = WORK_AS_IDX(unsigned short, instance->_108, 0);
     y = instance->currentTextureAnimFrame;
-    *(unsigned short*)&instance->_108 = x + 1;
-    w = *(int*)&instance->_108;
+    WORK_AS_IDX(unsigned short, instance->_108, 0) = x + 1;
+    w = WORK_AS(int, instance->_108);
     instance->currentTextureAnimFrame = y + 1;
     if (w & 0x8000) {
         instance->rotation.z = (instance->rotation.z + 0x2200) & 0xFFF;
@@ -926,7 +926,7 @@ void rezop_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         if (temp_s2[0] != 0) {
             if ((int)(((int**)gameTracker))[0x4BFC/4] < gameTracker->level->collectibleCountA) {
                 if (D_80154834 != 0) {
-                    *(short*)&instance->_108 = 1;
+                    WORK_AS_IDX(short, instance->_108, 0) = 1;
                 }
                 Set3DTextPosition(0x64, 0x69);
                 Print3DTextf(ANIMATED_3DTEXT("COLLECT"));

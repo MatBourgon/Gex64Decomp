@@ -51,8 +51,8 @@ void prehst_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if (intro != NULL) {
         *(short*)&instance->_100 = intro[0];
         ((short*)&instance->_104)[1] = intro[1];
-        *(short*)&instance->_108 = intro[2];
-        ((short*)&instance->_108)[1] = intro[3];
+        WORK_AS_IDX(short, instance->_108, 0) = intro[2];
+        WORK_AS_IDX(short, instance->_108, 1) = intro[3];
         WORK_AS_IDX(short, instance->_10C, 0) = intro[4];
         if (((short*)intro)[5] != 0) {
             WORK_AS_IDX(short, instance->_10C, 1) = ((short*)intro)[5];
@@ -62,8 +62,8 @@ void prehst_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
     } else {
         *(short*)&instance->_100 = 0x96;
         ((short*)&instance->_104)[1] = ((unsigned short*)&instance->intro->position)[0] - 0x500;
-        *(short*)&instance->_108 = ((unsigned short*)&instance->intro->position)[1] - 0x780;
-        ((short*)&instance->_108)[1] = ((unsigned short*)&instance->intro->position)[0] + 0x500;
+        WORK_AS_IDX(short, instance->_108, 0) = ((unsigned short*)&instance->intro->position)[1] - 0x780;
+        WORK_AS_IDX(short, instance->_108, 1) = ((unsigned short*)&instance->intro->position)[0] + 0x500;
         WORK_AS_IDX(short, instance->_10C, 0) = ((unsigned short*)&instance->intro->position)[1] + 0x780;
         WORK_AS_IDX(short, instance->_10C, 1) = 0x40;
     }
@@ -391,13 +391,13 @@ void func_8015B5B0_C8E30(Instance* instance) {
         model = obj->modelList[1];
     }
     if (instance->_104 != 0) {
-        *(int*)&instance->_108 += 0x1000;
-        if (*(int*)&instance->_108 == 0xC000) {
+        WORK_AS(int, instance->_108) += 0x1000;
+        if (WORK_AS(int, instance->_108) == 0xC000) {
             instance->_104 = 0;
         }
     } else {
-        *(int*)&instance->_108 -= 0x1000;
-        if (*(int*)&instance->_108 == -0xC000) {
+        WORK_AS(int, instance->_108) -= 0x1000;
+        if (WORK_AS(int, instance->_108) == -0xC000) {
             instance->_104 = 1;
         }
     }
@@ -414,7 +414,7 @@ void func_8015B5B0_C8E30(Instance* instance) {
     }
     rot.x = (WORK_AS(int, instance->_10C) >> 1) + (*(int*)&instance->_11C >> 12);
     rot.y = (*(int*)&instance->_110 >> 1) + (*(int*)&instance->_11C >> 12);
-    rot.z = (*(int*)&instance->_114 >> 1) + (*(int*)&instance->_108 >> 12);
+    rot.z = (*(int*)&instance->_114 >> 1) + (WORK_AS(int, instance->_108) >> 12);
     vel.x = 0;
     vel.y = 0;
     vel.z = 0;
@@ -463,7 +463,7 @@ void prehst_stmvent_OnCollide(Instance* instance, GameTracker* gameTracker) {
 void prehst_sptball_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_100 = 0x10;
     instance->_104 = 0x1E;
-    *(int*)&instance->_108 = instance->parent->position.z;
+    WORK_AS(int, instance->_108) = instance->parent->position.z;
     instance->position.z += 0x80;
 }
 
@@ -472,7 +472,7 @@ void prehst_sptball_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         if (instance->_104 >= -0x17) {
             instance->_104 -= 1;
         }
-        if (*(int*)&instance->_108 < instance->position.z + instance->_104) {
+        if (WORK_AS(int, instance->_108) < instance->position.z + instance->_104) {
             instance->position.z = instance->position.z + instance->_104;
         } else {
             instance->_F4[0] = 1;
@@ -504,7 +504,7 @@ void prehst_cavegex_OnCreate(Instance* instance, GameTracker* gameTracker) {
     intro = instance->introData;
     instance->_F4[0] = 2;
     instance->_F4[2] = 2;
-    *(int*)&instance->_108 = instance->position.x;
+    WORK_AS(int, instance->_108) = instance->position.x;
     WORK_AS(int, instance->_10C) = instance->position.y;
     *(int*)&instance->_110 = instance->position.z;
     if (intro != NULL) {
@@ -727,8 +727,8 @@ void func_8015F290_CCB10(Instance* instance) {
         instance->flags &= ~0x400;
         PlayerInstance->flags &= ~0x400000;
     }
-    ((short*)&instance->_108)[0] = 0;
-    ((short*)&instance->_108)[1] = 0;
+    WORK_AS_IDX(short, instance->_108, 0) = 0;
+    WORK_AS_IDX(short, instance->_108, 1) = 0;
 }
 
 typedef struct {
@@ -763,19 +763,19 @@ void prehst_gas_OnCreate(Instance* instance, GameTracker* gameTracker) {
             if (introData[0] != 0xFFFF) {
                 *(GasData*)&instance->_F4[2] = *(GasData*)(introData + 1);
                 if (((char*)&instance->_100)[2] < 0) {
-                    *(int*)&instance->_108 |= 0x8000;
+                    WORK_AS(int, instance->_108) |= 0x8000;
                     ((char*)&instance->_100)[2] = ~((unsigned char*)&instance->_100)[2];
                 }
                 t = func_8004A61C(instance);
                 m = introData[0];
                 m %= (unsigned int)(((unsigned short*)&instance->_F4[2])[1] + *(unsigned short*)&instance->_F4[2] + ((unsigned char*)&instance->_100)[1]);
                 if (m < ((unsigned short*)&instance->_F4[2])[1]) {
-                    *(short*)&instance->_108 = m;
+                    WORK_AS_IDX(short, instance->_108, 0) = m;
                     instance->_F4[0] = 0;
                 } else {
                     m -= ((unsigned short*)&instance->_F4[2])[1];
                     if (m < ((unsigned char*)&instance->_100)[1]) {
-                        *(short*)&instance->_108 = m;
+                        WORK_AS_IDX(short, instance->_108, 0) = m;
                         instance->_F4[0] = 1;
                     } else {
                         m -= ((unsigned char*)&instance->_100)[1];
@@ -785,7 +785,7 @@ void prehst_gas_OnCreate(Instance* instance, GameTracker* gameTracker) {
                         } else {
                             m -= t;
                             if (m < *(unsigned short*)&instance->_F4[2]) {
-                                *(short*)&instance->_108 = m;
+                                WORK_AS_IDX(short, instance->_108, 0) = m;
                                 instance->_F4[0] = 3;
                             } else {
                                 m -= *(unsigned short*)&instance->_F4[2];
@@ -819,10 +819,10 @@ void prehst_gas_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int w;
 
     fc = (unsigned short*)&instance->_F4[2];
-    x = *(unsigned short*)&instance->_108;
+    x = WORK_AS_IDX(unsigned short, instance->_108, 0);
     y = instance->currentTextureAnimFrame;
-    *(unsigned short*)&instance->_108 = x + 1;
-    w = *(int*)&instance->_108;
+    WORK_AS_IDX(unsigned short, instance->_108, 0) = x + 1;
+    w = WORK_AS(int, instance->_108);
     instance->currentTextureAnimFrame = y + 1;
     if (w & 0x8000) {
         instance->rotation.z = (instance->rotation.z + 0x2200) & 0xFFF;

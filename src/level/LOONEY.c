@@ -46,8 +46,8 @@ void looney_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if (intro != NULL) {
         *(short*)&instance->_100 = intro[0];
         ((short*)&instance->_104)[1] = intro[1];
-        *(short*)&instance->_108 = intro[2];
-        ((short*)&instance->_108)[1] = intro[3];
+        WORK_AS_IDX(short, instance->_108, 0) = intro[2];
+        WORK_AS_IDX(short, instance->_108, 1) = intro[3];
         WORK_AS_IDX(short, instance->_10C, 0) = intro[4];
         if (((short*)intro)[5] != 0) {
             WORK_AS_IDX(short, instance->_10C, 1) = ((short*)intro)[5];
@@ -57,8 +57,8 @@ void looney_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
     } else {
         *(short*)&instance->_100 = 0x96;
         ((short*)&instance->_104)[1] = ((unsigned short*)&instance->intro->position)[0] - 0x500;
-        *(short*)&instance->_108 = ((unsigned short*)&instance->intro->position)[1] - 0x780;
-        ((short*)&instance->_108)[1] = ((unsigned short*)&instance->intro->position)[0] + 0x500;
+        WORK_AS_IDX(short, instance->_108, 0) = ((unsigned short*)&instance->intro->position)[1] - 0x780;
+        WORK_AS_IDX(short, instance->_108, 1) = ((unsigned short*)&instance->intro->position)[0] + 0x500;
         WORK_AS_IDX(short, instance->_10C, 0) = ((unsigned short*)&instance->intro->position)[1] + 0x780;
         WORK_AS_IDX(short, instance->_10C, 1) = 0x40;
     }
@@ -443,7 +443,7 @@ void looney_funguy_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int* fc;
 
     fc = &instance->_F4[2];
-    switch (*(int*)&instance->_108) {
+    switch (WORK_AS(int, instance->_108)) {
     case 0:
         func_8015BFCC_B427C(instance, gameTracker);
         break;
@@ -550,7 +550,7 @@ void looney_trapmuv_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 void looney_pusher_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    *(int*)&instance->_108 = 0;
+    WORK_AS(int, instance->_108) = 0;
     instance->_100 = 0;
     if (G2String_Compare_EQ(instance->object->name, "pusha___")) {
         instance->_104 = 0;
@@ -799,9 +799,9 @@ void looney_fxgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
     fc = &instance->_F4[2];
     if (instance->flags & 0x20000) {
-        if (*(int*)&instance->_108 != 0) {
-            func_800331BC(*(int*)&instance->_108);
-            *(int*)&instance->_108 = 0;
+        if (WORK_AS(int, instance->_108) != 0) {
+            func_800331BC(WORK_AS(int, instance->_108));
+            WORK_AS(int, instance->_108) = 0;
         }
     } else {
         if (instance->introData == NULL) {

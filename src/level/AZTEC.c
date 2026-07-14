@@ -153,7 +153,7 @@ void aztec_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         if (temp_s2[0] != 0) {
             if ((int)(((int**)gameTracker))[0x4BFC/4] < gameTracker->level->collectibleCountA) {
                 if (D_80154834 != 0) {
-                    *(short*)&instance->_108 = 1;
+                    WORK_AS_IDX(short, instance->_108, 0) = 1;
                 }
                 Set3DTextPosition(0x64, 0x69);
                 Print3DTextf(ANIMATED_3DTEXT("COLLECT"));

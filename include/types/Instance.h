@@ -68,10 +68,7 @@ typedef struct Instance_s
     int _F4[3];
     int _100;
     int _104;
-    char _108;
-    char _109;
-    char _10A;
-    char _10B;
+    long _108;
     long _10C;
     char _110;
     char _111;

@@ -63,7 +63,7 @@ void horror_chand_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->_F4[0] = 0;
     instance->_D0[2] = 0;
     instance->flags |= 0x100000;
-    *(int*)&instance->_108 = instance->position.z;
+    WORK_AS(int, instance->_108) = instance->position.z;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_chand_OnUpdate);
@@ -115,7 +115,7 @@ void horror_face_OnCreate(Instance* instance, GameTracker* gameTracker) {
         instance->flags |= 0x800;
     }
     instance->_104 = 0;
-    *(int*)&instance->_108 = 0;
+    WORK_AS(int, instance->_108) = 0;
 }
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_face_OnUpdate);
@@ -508,8 +508,8 @@ void horror_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if (intro != NULL) {
         *(short*)&instance->_100 = intro[0];
         ((short*)&instance->_104)[1] = intro[1];
-        *(short*)&instance->_108 = intro[2];
-        ((short*)&instance->_108)[1] = intro[3];
+        WORK_AS_IDX(short, instance->_108, 0) = intro[2];
+        WORK_AS_IDX(short, instance->_108, 1) = intro[3];
         WORK_AS_IDX(short, instance->_10C, 0) = intro[4];
         if (((short*)intro)[5] != 0) {
             WORK_AS_IDX(short, instance->_10C, 1) = ((short*)intro)[5];
@@ -519,8 +519,8 @@ void horror_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
     } else {
         *(short*)&instance->_100 = 0x96;
         ((short*)&instance->_104)[1] = ((unsigned short*)&instance->intro->position)[0] - 0x500;
-        *(short*)&instance->_108 = ((unsigned short*)&instance->intro->position)[1] - 0x780;
-        ((short*)&instance->_108)[1] = ((unsigned short*)&instance->intro->position)[0] + 0x500;
+        WORK_AS_IDX(short, instance->_108, 0) = ((unsigned short*)&instance->intro->position)[1] - 0x780;
+        WORK_AS_IDX(short, instance->_108, 1) = ((unsigned short*)&instance->intro->position)[0] + 0x500;
         WORK_AS_IDX(short, instance->_10C, 0) = ((unsigned short*)&instance->intro->position)[1] + 0x780;
         WORK_AS_IDX(short, instance->_10C, 1) = 0x40;
     }
@@ -1088,7 +1088,7 @@ void horror_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         if (temp_s2[0] != 0) {
             if ((int)(((int**)gameTracker))[0x4BFC/4] < gameTracker->level->collectibleCountA) {
                 if (D_80154834 != 0) {
-                    *(short*)&instance->_108 = 1;
+                    WORK_AS_IDX(short, instance->_108, 0) = 1;
                 }
                 Set3DTextPosition(0x64, 0x69);
                 Print3DTextf(ANIMATED_3DTEXT("COLLECT"));

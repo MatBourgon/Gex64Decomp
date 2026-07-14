@@ -600,17 +600,17 @@ void map_speaker_OnCreate(Instance* instance, GameTracker* gameTracker) {
         switch (temp_s0[2])
         {
         case 0:
-            (*(short*)&instance->_10A) = ((int*)gameTracker8)[0x4C58/4];
+            (WORK_AS_IDX(short, instance->_108, 1)) = ((int*)gameTracker8)[0x4C58/4];
             instance->_F4[0] = ((char*)gameTracker8)[0x4C60];
             break;
         case 1:
-            (*(short*)&instance->_10A) = ((int*)gameTracker8)[0x4C54/4];
+            (WORK_AS_IDX(short, instance->_108, 1)) = ((int*)gameTracker8)[0x4C54/4];
             instance->_F4[0] = ((char*)gameTracker8)[0x4C61];
             WORK_AS_IDX(short, instance->_10C, 1) = 0x5A;
             *(short*)&instance->_110 = func_8003333C();
             break;
         case 2:
-            (*(short*)&instance->_10A) = ((int*)gameTracker8)[0x4C5C/4];
+            (WORK_AS_IDX(short, instance->_108, 1)) = ((int*)gameTracker8)[0x4C5C/4];
             var_a1 = 0;
             if (((int*)gameTracker8)[0x90/4] & 0x80000) {
                 var_a1 = ((char*)gameTracker8)[0x4C62] != 0;
@@ -1198,8 +1198,8 @@ void map_tvbutn_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         }
         if (instance->_F4[0] == 2) {
             temp_a0 = ((instance->currentModel ^ 1) & 1);
-            if (instance->_10B == 1) {
-                if (temp_a0 == instance->_10B) {
+            if (WORK_AS_IDX(char, instance->_108, 3) == 1) {
+                if (temp_a0 == WORK_AS_IDX(char, instance->_108, 3)) {
                     goto block_12;
                 }
             } else if (temp_a0 == 0) {

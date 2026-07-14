@@ -6,7 +6,7 @@
 
 void gillig_couldrn_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
-    *(int*)&instance->_108 = 3;
+    WORK_AS(int, instance->_108) = 3;
     instance->_F4[2] = 0x5A;
 }
 
@@ -18,7 +18,7 @@ extern short func_8003A4E0(int);
 void gillig_couldrn_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int state;
 
-    if (*(int*)&instance->_108 == 3) {
+    if (WORK_AS(int, instance->_108) == 3) {
         instance->_F4[2] += 1;
         if ((instance->_F4[2] % 155) == 0) {
             instance->_F4[0] = 1;
@@ -27,7 +27,7 @@ void gillig_couldrn_OnUpdate(Instance* instance, GameTracker* gameTracker) {
             ((Intro**)instance->intro->_04)[4]->instance->_F4[1] = 1;
             instance->_F4[2] = 0;
         }
-    } else if (*(int*)&instance->_108 < 3) {
+    } else if (WORK_AS(int, instance->_108) < 3) {
         if ((instance->_F4[2] % 189) == 0) {
             instance->_F4[0] = 1;
             ((Intro**)instance->intro->_04)[2]->instance->_F4[1] = 1;
@@ -217,7 +217,7 @@ void gillig_tikifb_OnCollide(Instance* instance, GameTracker* gameTracker) {
 void gillig_tikifir_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->scale.z = 1;
     instance->_104 = 0;
-    *(int*)&instance->_108 = 1;
+    WORK_AS(int, instance->_108) = 1;
     WORK_AS(int, instance->_10C) = ((rand() & 0x1F) - 0x10);
 }
 
@@ -225,15 +225,15 @@ void gillig_tikifir_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     short newScale;
 
     if (instance->_104 != 0) {
-        if (func_800506B8(instance, instance->_104, WORK_AS_IDX(short, instance->_10C, 1), *(short*)&instance->_10A, 0xDAC) == 0) {
+        if (func_800506B8(instance, instance->_104, WORK_AS_IDX(short, instance->_10C, 1), WORK_AS_IDX(short, instance->_108, 1), 0xDAC) == 0) {
             func_800331BC(instance->_104);
             instance->_104 = 0;
         }
     } else {
-        instance->_104 = func_80050508(instance, 0x69, WORK_AS_IDX(short, instance->_10C, 1), *(short*)&instance->_10A, 0xDAC);
+        instance->_104 = func_80050508(instance, 0x69, WORK_AS_IDX(short, instance->_10C, 1), WORK_AS_IDX(short, instance->_108, 1), 0xDAC);
     }
     if (instance->_F4[0] == 0) {
-        *(int*)&instance->_108 = *(int*)&instance->_108 + 9;
+        WORK_AS(int, instance->_108) = WORK_AS(int, instance->_108) + 9;
         newScale = instance->scale.z + 0x200;
         instance->scale.z = newScale;
         if (newScale >= 0x1000) {
@@ -254,9 +254,9 @@ void gillig_tikifir_OnUpdate(Instance* instance, GameTracker* gameTracker) {
                instance->_F4[0] = 2;
         }
     } else if (instance->_F4[0] == 2) {
-        *(int*)&instance->_108 = *(int*)&instance->_108 - 9;
-        if (*(int*)&instance->_108 <= 0) {
-            *(int*)&instance->_108 = 1;
+        WORK_AS(int, instance->_108) = WORK_AS(int, instance->_108) - 9;
+        if (WORK_AS(int, instance->_108) <= 0) {
+            WORK_AS(int, instance->_108) = 1;
         }
         newScale = instance->scale.z - 0x200;
         instance->scale.z = newScale;

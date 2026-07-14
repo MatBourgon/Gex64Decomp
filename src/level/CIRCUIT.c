@@ -41,8 +41,8 @@ void circuit_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if (intro != NULL) {
         *(short*)&instance->_100 = intro[0];
         ((short*)&instance->_104)[1] = intro[1];
-        *(short*)&instance->_108 = intro[2];
-        ((short*)&instance->_108)[1] = intro[3];
+        WORK_AS_IDX(short, instance->_108, 0) = intro[2];
+        WORK_AS_IDX(short, instance->_108, 1) = intro[3];
         WORK_AS_IDX(short, instance->_10C, 0) = intro[4];
         if (((short*)intro)[5] != 0) {
             WORK_AS_IDX(short, instance->_10C, 1) = ((short*)intro)[5];
@@ -52,8 +52,8 @@ void circuit_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
     } else {
         *(short*)&instance->_100 = 0x96;
         ((short*)&instance->_104)[1] = ((unsigned short*)&instance->intro->position)[0] - 0x500;
-        *(short*)&instance->_108 = ((unsigned short*)&instance->intro->position)[1] - 0x780;
-        ((short*)&instance->_108)[1] = ((unsigned short*)&instance->intro->position)[0] + 0x500;
+        WORK_AS_IDX(short, instance->_108, 0) = ((unsigned short*)&instance->intro->position)[1] - 0x780;
+        WORK_AS_IDX(short, instance->_108, 1) = ((unsigned short*)&instance->intro->position)[0] + 0x500;
         WORK_AS_IDX(short, instance->_10C, 0) = ((unsigned short*)&instance->intro->position)[1] + 0x780;
         WORK_AS_IDX(short, instance->_10C, 1) = 0x40;
     }
@@ -325,7 +325,7 @@ void circuit_launch_OnCreate(Instance* instance, GameTracker* gameTracker) {
     objData = instance->object->data;
     intro = instance->introData;
     
-    *(int*)&instance->_108 = 0;
+    WORK_AS(int, instance->_108) = 0;
     instance->initialPos.x = instance->position.x;
     instance->initialPos.y = instance->position.y;
     instance->initialPos.z = instance->position.z;
@@ -365,7 +365,7 @@ void circuit_launch_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp = instance->bspTree;
     char var_a2 = (bsp->_06 == 1) ? bsp->_0C[5] : -1;
     
-    if (((instance->_F4[0] - 1) >= 2U) && (*(int*)&instance->_108 == 0) && (bsp->instanceSpline == player) && (bsp->_04 == 5) && (var_a2 < 8) && (bsp->_08[2] == 0)) {
+    if (((instance->_F4[0] - 1) >= 2U) && (WORK_AS(int, instance->_108) == 0) && (bsp->instanceSpline == player) && (bsp->_04 == 5) && (var_a2 < 8) && (bsp->_08[2] == 0)) {
         if (instance->_11C & 0x10) {
             player->_F4[2] |= 0x200;
             instance->_11C |= 0x20;
@@ -546,9 +546,9 @@ void circuit_fxgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
     fc = &instance->_F4[2];
     if (instance->flags & 0x20000) {
-        if (*(int*)&instance->_108 != 0) {
-            func_800331BC(*(int*)&instance->_108);
-            *(int*)&instance->_108 = 0;
+        if (WORK_AS(int, instance->_108) != 0) {
+            func_800331BC(WORK_AS(int, instance->_108));
+            WORK_AS(int, instance->_108) = 0;
         }
     } else {
         if (instance->introData == NULL) {
@@ -860,7 +860,7 @@ void circuit_btimer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         if (temp_s2[0] != 0) {
             if ((int)(((int**)gameTracker))[0x4BFC/4] < gameTracker->level->collectibleCountA) {
                 if (D_80154834 != 0) {
-                    *(short*)&instance->_108 = 1;
+                    WORK_AS_IDX(short, instance->_108, 0) = 1;
                 }
                 Set3DTextPosition(0x64, 0x69);
                 Print3DTextf(ANIMATED_3DTEXT("COLLECT"));

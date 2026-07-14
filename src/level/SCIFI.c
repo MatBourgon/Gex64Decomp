@@ -448,13 +448,13 @@ void func_8015B5F0_E1410(Instance* instance) {
         model = obj->modelList[1];
     }
     if (instance->_104 != 0) {
-        *(int*)&instance->_108 += 0x1000;
-        if (*(int*)&instance->_108 == 0xC000) {
+        WORK_AS(int, instance->_108) += 0x1000;
+        if (WORK_AS(int, instance->_108) == 0xC000) {
             instance->_104 = 0;
         }
     } else {
-        *(int*)&instance->_108 -= 0x1000;
-        if (*(int*)&instance->_108 == -0xC000) {
+        WORK_AS(int, instance->_108) -= 0x1000;
+        if (WORK_AS(int, instance->_108) == -0xC000) {
             instance->_104 = 1;
         }
     }
@@ -471,7 +471,7 @@ void func_8015B5F0_E1410(Instance* instance) {
     }
     rot.x = (WORK_AS(int, instance->_10C) >> 1) + (*(int*)&instance->_11C >> 12);
     rot.y = (*(int*)&instance->_110 >> 1) + (*(int*)&instance->_11C >> 12);
-    rot.z = (*(int*)&instance->_114 >> 1) + (*(int*)&instance->_108 >> 12);
+    rot.z = (*(int*)&instance->_114 >> 1) + (WORK_AS(int, instance->_108) >> 12);
     vel.x = 0;
     vel.y = 0;
     vel.z = 0;
@@ -726,19 +726,19 @@ void scifi_gas_OnCreate(Instance* instance, GameTracker* gameTracker) {
             if (introData[0] != 0xFFFF) {
                 *(GasData*)&instance->_F4[2] = *(GasData*)(introData + 1);
                 if (((char*)&instance->_100)[2] < 0) {
-                    *(int*)&instance->_108 |= 0x8000;
+                    WORK_AS(int, instance->_108) |= 0x8000;
                     ((char*)&instance->_100)[2] = ~((unsigned char*)&instance->_100)[2];
                 }
                 t = func_8004A61C(instance);
                 m = introData[0];
                 m %= (unsigned int)(((unsigned short*)&instance->_F4[2])[1] + *(unsigned short*)&instance->_F4[2] + ((unsigned char*)&instance->_100)[1]);
                 if (m < ((unsigned short*)&instance->_F4[2])[1]) {
-                    *(short*)&instance->_108 = m;
+                    WORK_AS_IDX(short, instance->_108, 0) = m;
                     instance->_F4[0] = 0;
                 } else {
                     m -= ((unsigned short*)&instance->_F4[2])[1];
                     if (m < ((unsigned char*)&instance->_100)[1]) {
-                        *(short*)&instance->_108 = m;
+                        WORK_AS_IDX(short, instance->_108, 0) = m;
                         instance->_F4[0] = 1;
                     } else {
                         m -= ((unsigned char*)&instance->_100)[1];
@@ -748,7 +748,7 @@ void scifi_gas_OnCreate(Instance* instance, GameTracker* gameTracker) {
                         } else {
                             m -= t;
                             if (m < *(unsigned short*)&instance->_F4[2]) {
-                                *(short*)&instance->_108 = m;
+                                WORK_AS_IDX(short, instance->_108, 0) = m;
                                 instance->_F4[0] = 3;
                             } else {
                                 m -= *(unsigned short*)&instance->_F4[2];
@@ -782,10 +782,10 @@ void scifi_gas_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int w;
 
     fc = (unsigned short*)&instance->_F4[2];
-    x = *(unsigned short*)&instance->_108;
+    x = WORK_AS_IDX(unsigned short, instance->_108, 0);
     y = instance->currentTextureAnimFrame;
-    *(unsigned short*)&instance->_108 = x + 1;
-    w = *(int*)&instance->_108;
+    WORK_AS_IDX(unsigned short, instance->_108, 0) = x + 1;
+    w = WORK_AS(int, instance->_108);
     instance->currentTextureAnimFrame = y + 1;
     if (w & 0x8000) {
         instance->rotation.z = (instance->rotation.z + 0x2200) & 0xFFF;

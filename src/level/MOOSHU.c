@@ -304,9 +304,9 @@ INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015DA78_C63F8);
 extern void func_80017AB8(short* arg0, short arg1);
 void mooshu_ebolt_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if (instance->flags & 0x20000) {
-        if (*(int*)&instance->_108 != 0) {
-            func_80017AB8(*(short**)&instance->_108, 0);
-            *(int*)&instance->_108 = 0;
+        if (WORK_AS(short*, instance->_108) != 0) {
+            func_80017AB8(WORK_AS(short*, instance->_108), 0);
+            WORK_AS(short*, instance->_108) = 0;
         }
     } else {
         instance->flags |= 0x100000;
