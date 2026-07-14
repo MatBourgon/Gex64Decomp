@@ -749,17 +749,19 @@ void kungfu_boat_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
+SVECTOR* func_800517E4(Spline* spline, short frame, SplineDef* def);
+
 void kungfu_boat_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     MultiSpline* ms;
-    short* r;
+    SVECTOR* point;
 
     ms = instance->intro->multiSpline;
     if (ms != 0) {
-        r = (short*)func_800517E4(*(int*)ms, ((short*)&instance->_F4[2])[1], (char*)ms + 0x10);
-        if (r != 0) {
-            instance->position.x = r[0];
-            instance->position.y = r[1];
-            instance->position.z = r[2];
+        point = func_800517E4(ms->positional, ((short*)&instance->_F4[2])[1], &ms->curPositional);
+        if (point != 0) {
+            instance->position.x = point->x;
+            instance->position.y = point->y;
+            instance->position.z = point->z;
         }
     }
 }
@@ -911,18 +913,18 @@ INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_joyride_OnCollide);
 
 void kungfu_leafgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
     char name[] = "leaffx__";
-    char* n = instance->introData;
+    char* targetObjectName = instance->introData;
     char* d = instance->object->data;
     int* p = &instance->_F4[2];
-    if (n == 0) {
+    if (targetObjectName == 0) {
         if (d != 0) {
-            n = d;
+            targetObjectName = d;
         } else {
             instance->introData = name;
-            n = name;
+            targetObjectName = name;
         }
     }
-    p[0] = ((int)OBTABLE_FindObject(n));
+    p[0] = ((int)OBTABLE_FindObject(targetObjectName));
     p[7] = (rand() & 0xF) + 1;
 }
 

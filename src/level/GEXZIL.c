@@ -402,8 +402,6 @@ INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015FFDC_9915C);
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8016014C_992CC);
 
-
-
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_801601D8_99358);
 
 void func_80160344_994C4(void) {

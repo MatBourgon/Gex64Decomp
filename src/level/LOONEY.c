@@ -206,7 +206,6 @@ void looney_doeboy_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 void looney_doeboy_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     Intro* intro;
-    int angle;
     short* temp_v1;
 
     if (instance->_F4[0] == 0) {
@@ -377,18 +376,18 @@ INCLUDE_RODATA("asm/nonmatchings/level/LOONEY", D_80161DC0_BA070);
 
 void looney_leafgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
     char name[] = "leaffx__";
-    char* n = instance->introData;
+    char* targetObjectName = instance->introData;
     char* d = instance->object->data;
     int* p = &instance->_F4[2];
-    if (n == 0) {
+    if (targetObjectName == 0) {
         if (d != 0) {
-            n = d;
+            targetObjectName = d;
         } else {
             instance->introData = name;
-            n = name;
+            targetObjectName = name;
         }
     }
-    p[0] = ((int)OBTABLE_FindObject(n));
+    p[0] = ((int)OBTABLE_FindObject(targetObjectName));
     p[7] = (rand() & 0xF) + 1;
 }
 

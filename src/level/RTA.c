@@ -494,7 +494,7 @@ void func_8015E538_DEBA8(short* rot, short dist, LVECTOR* out) {
     SVector v;
     MATRIX m;
 
-    memset(&v, 0, 8);
+    memset(&v, 0, sizeof(SVector));
     v.x = 0;
     v.y = dist;
     v.z = 0;

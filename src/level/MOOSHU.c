@@ -118,18 +118,18 @@ void func_8015B2FC_C3C7C(Instance* instance, int arg1, int arg2) {
 
     if (instance->currentModelAnim == 0) {
         if (instance->currentAnimFrame == 6) {
-            int* m = ((int*)instance->oldMatrix);
+            MATRIX* m = &instance->oldMatrix[2];
 
-            vec.x = m[0x54 / 4];
-            vec.y = m[0x58 / 4];
-            vec.z = m[0x5C / 4];
+            vec.x = m->l[0];
+            vec.y = m->l[1];
+            vec.z = m->l[2];
             func_8015D544_C5EC4(&vec, 8, 0x1E, arg2);
         } else if (instance->currentAnimFrame == 0x11) {
-            int* m = ((int*)instance->oldMatrix);
+            MATRIX* m = &instance->oldMatrix[6];
 
-            vec.x = m[0xD4 / 4];
-            vec.y = m[0xD8 / 4];
-            vec.z = m[0xDC / 4];
+            vec.x = m->l[0];
+            vec.y = m->l[1];
+            vec.z = m->l[2];
             func_8015D544_C5EC4(&vec, 8, 0x1E, arg2);
         }
     }
