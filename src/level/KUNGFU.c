@@ -615,7 +615,28 @@ void kungfu_canball_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_canball_OnUpdate);
+void kungfu_canball_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    MATRIX m;
+    SVECTOR out;
+    int spin;
+
+    instance->position.x += instance->_D0[0];
+    instance->position.y += instance->_D0[1];
+    instance->position.z += instance->_D0[2];
+    instance->_D0[2] += instance->_E0[1];
+    spin = WORK_AS(int, instance->work3);
+    if (spin != 0) {
+        instance->work2 += spin;
+        MATH3D_SetUnityMatrix(&m);
+        RotMatrixX(instance->work0, &m);
+        RotMatrixY(instance->work1, &m);
+        RotMatrixZ(instance->work2, &m);
+        func_800157BC(&m, &out);
+        instance->rotation.x = out.x;
+        instance->rotation.y = out.y;
+        instance->rotation.z = out.z;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_canball_OnCollide);
 

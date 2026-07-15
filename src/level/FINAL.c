@@ -287,7 +287,32 @@ INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015A9F0_8BB90);
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015AC70_8BE10);
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015ADC4_8BF64);
+void func_8015ADC4_8BF64(Instance* instance) {
+    Camera* cam;
+    unsigned short* c;
+    SVECTOR mid;
+    SVECTOR rot;
+    int px;
+    int py;
+
+    cam = gameTracker8->camera;
+    c = (unsigned short*)cam;
+    mid.x = (instance->position.x + 0x2D00) / 2;
+    mid.y = (instance->position.y + 0x267A) / 2;
+    mid.z = instance->position.z + 0x200;
+    py = instance->position.y;
+    rot.x = (py - 0x267A) << 2;
+    px = instance->position.x;
+    rot.y = (-px + 0x2D00) << 2;
+    rot.z = 0;
+    func_80005438(&cam->cameraCore._08[4], &mid, cam);
+    c[0x18] = c[0xC];
+    c[0x19] = c[0xD];
+    c[0x1A] = c[0xE];
+    c[4] = c[0xC];
+    c[5] = c[0xD];
+    c[0x17] = c[6] = c[0xE];
+}
 
 extern int D_800785C8;
 
@@ -363,7 +388,28 @@ INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015BB78_8CD18);
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015BD84_8CF24);
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015BFB8_8D158);
+typedef struct {
+    char _00[0x3C];
+    SVECTOR position;  // 0x3C
+    char _42[0x12];
+    Model* model;      // 0x54
+} RezSprayerData;
+
+void func_8015BFB8_8D158(Instance* instance) {
+    RezSprayerData* d = ((RezSprayerData*)instance->work0);
+    ParticleData* spray;
+
+    if (d->model != 0) {
+        d->position.z += 10;
+        spray = ((ParticleData*)func_800170E8(d->model, d->model->_14, &d->position, 0, 0, D_800EB8A0, func_80017E88, 0, -1));
+        if (d->model->_20 != 0 && spray != 0) {
+            spray->flags |= 4;
+            memcpy(spray->_58, spray->next, 0x10);
+            spray->_58[4] = d->model->_20 + 4;
+            spray->frame = 0;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015C0A0_8D240);
 

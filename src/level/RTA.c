@@ -2,6 +2,7 @@
 
 #include "level/RTA.h"
 #include "OBTABLE.h"
+#include "INSTANCE.h"
 #include "types/G2String.h"
 #include "types/intro/QMark.h"
 
@@ -202,7 +203,30 @@ void rta_zturtle_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zarchsig_OnCollide);
+extern int D_800EB8A0;
+
+void rta_zarchsig_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    Instance* player;
+    Instance* other;
+    Object* obj;
+    Instance* born;
+
+    player = gameTracker->player;
+    other = instance->bspTree->instanceSpline;
+    if (other == player) {
+        obj = OBTABLE_FindObject("count___");
+        born = INSTANCE_BirthObject(other, obj);
+        born->rotation.x = 0;
+        born->rotation.y = 0;
+        born->rotation.z = 0;
+        born = INSTANCE_BirthObject(other, obj);
+        born->rotation.x = 0;
+        born->rotation.y = 0;
+        born->rotation.z = 0x7FE;
+        func_80018B60(other, D_800EB8A0, other->position.x, other->position.y, other->position.z + 0x15E);
+        INSTANCE_PlainDeath(instance, 1, 0, 0);
+    }
+}
 
 void rta_count_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->work0 = 0x20;
@@ -226,8 +250,6 @@ void rta_count_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         instance->work0 += 0x10;
     }
 }
-
-extern int D_800EB8A0;
 
 void rta_zcargo_OnCollide(Instance* instance, GameTracker* gameTracker) {
     int* data = ((int*)instance->object->data);
@@ -304,7 +326,29 @@ void func_8015BD04_DC374(Instance* instance) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015BD54_DC3C4);
+int func_8015BD54_DC3C4(Instance* instance) {
+    int* intro = instance->introData;
+    int done = 0;
+
+    if (instance->currentSubState == 0) {
+        done = 1;
+    } else if (WORK_AS(int, instance->work3) >= intro[2]) {
+        done = 1;
+        WORK_AS(int, instance->work3) = 0;
+    } else {
+        WORK_AS(int, instance->work3) += 1;
+        if (instance->currentMainState == intro[0]) {
+            instance->position.x += intro[3];
+            instance->position.y += intro[4];
+            instance->position.z += intro[5];
+        } else {
+            instance->position.x -= intro[3];
+            instance->position.y -= intro[4];
+            instance->position.z -= intro[5];
+        }
+    }
+    return done;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zswitch_OnCreate);
 
@@ -312,7 +356,39 @@ INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zswitch_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zswitch_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zswitchm_OnCreate);
+extern short D_8015EDFE_DF46E;
+extern short D_8015EE00_DF470;
+extern int D_8015EE04_DF474;
+extern int D_8015EE08_DF478;
+
+void rta_zswitchm_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    int scale = D_8015EE08_DF478;
+    int f;
+
+    instance->position.z = D_8015EE04_DF474;
+    D_8015EDFE_DF46E = 0;
+    D_8015EE00_DF470 = 0;
+    instance->scale.x = scale;
+    instance->scale.y = scale;
+    instance->scale.z = scale;
+    if (instance->flags & 0x20000) {
+        instance->intro->flags &= ~8;
+    } else {
+        f = instance->flags | 0x10000;
+        instance->flags = f | 0x400;
+        if (instance->intro->flags & 0x1000) {
+            instance->intro->flags &= ~0x800;
+        } else {
+            instance->flags = f | 0x480;
+            instance->currentMainState = 0;
+            instance->currentSubState = 0;
+            instance->currentAnimFrame = 0;
+            memset(&instance->work0, 0, 0x28);
+            instance->work0 = func_8015C344_DC9B4(instance);
+            gameTracker->player->rotation.z = 0x800;
+        }
+    }
+}
 
 int func_8015C344_DC9B4(Instance* instance) {
     int result;
@@ -468,7 +544,23 @@ void rta_fxgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_fxgen_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015CE34_DD4A4);
+int func_8015CE34_DD4A4(Instance* instance, SVECTOR* offset, int arg2, short arg3, int arg4) {
+    SVECTOR rel;
+    SVECTOR pos;
+    int other;
+
+    MATH3D_ApplyMatrixSV(instance->matrix, offset, &rel);
+    pos.x = instance->position.x + rel.x;
+    pos.y = instance->position.y + rel.y;
+    pos.z = instance->position.z + rel.z;
+    other = func_800176E8(&pos, instance->work0, D_800EB8A0, arg3);
+    if (other != 0) {
+        func_80017CD8(other, 0, 0, arg2);
+        func_80017D28(other, 0, 0, -3);
+        func_80017AE0(other, arg4);
+    }
+    return other;
+}
 
 void rta_zstmvent_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int r;

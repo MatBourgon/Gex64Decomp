@@ -179,7 +179,20 @@ INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_charger_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_charger_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_charger_OnCollide);
+extern char D_80078240;
+
+void circuit_charger_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    if (instance->bspTree->instanceSpline == gameTracker->player && instance->work0 == 0 && func_80025798(PlayerInstance) == 0) {
+        instance->work0 = instance->work2;
+    }
+    if (func_80025798(PlayerInstance) == 0) {
+        INSTANCE_BirthCachedObject(instance, 0xC);
+        D_80078240 += 1;
+    }
+    func_80025764(PlayerInstance, gameTracker, WORK_AS_IDX(short, instance->work3, 1));
+    func_80050A80(0, 2);
+    instance->work7 = 1;
+}
 
 void circuit_chrganm_OnCreate(Instance* instance, GameTracker* gameTracker) {
     func_80027110(instance, 0xA, gameTracker);
@@ -769,9 +782,38 @@ int* func_8015F780_86960(int* p, int val) {
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_robo_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015F930_86B10);
+short func_8015F930_86B10(Instance* instance, int* arg1, int frame) {
+    short* fc = WORK_AS_PTR(short, instance->work0);
 
-int func_8015F930_86B10(Instance* instance, int* arg1, short arg2);
+    if (arg1[1] & 8) {
+        frame = arg1[3];
+    } else {
+        if (arg1[1] & 4) {
+            if (instance->currentSubState == 2) {
+                instance->currentSubState = 3;
+            } else {
+                instance->currentSubState = 2;
+            }
+        } else if (frame == WORK_AS_IDX(short, instance->work4, 1) - 1) {
+            func_8015F708_868E8(instance);
+            return frame;
+        }
+        if (instance->currentSubState == 3) {
+            if (frame > 0) {
+                frame -= 1;
+            } else {
+                instance->currentSubState = 2;
+                frame = 1;
+            }
+        } else if (frame < fc[9] - 1) {
+            frame += 1;
+        } else {
+            instance->currentSubState = 3;
+            frame = fc[9] - 2;
+        }
+    }
+    return frame;
+}
 
 int* func_8015FA1C_86BFC(Instance* instance) {
     int* intro = (int*)instance->introData + 1;
