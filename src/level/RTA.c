@@ -541,7 +541,19 @@ void func_8015C8C0_DCF30(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015C8C8_DCF38);
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015CA24_DD094);
+extern int D_8015EE10_DF480;
+
+void func_8015CA24_DD094(SVECTOR* pos, int count) {
+    SVector randVec;
+    int i;
+
+    for (i = 0; i < count; i++) {
+        randVec.x = rand() % 30 - 15;
+        randVec.y = rand() % 30 - 15;
+        randVec.z = rand() % 10 + 25;
+        func_80019828(pos, &randVec, &D_8015EE10_DF480, pos->z);
+    }
+}
 
 extern char D_8015EE18_DF488[];
 
