@@ -408,19 +408,19 @@ typedef struct {
     unsigned short _56;
     char _58[0x14];
     unsigned short frame;
-} VentSprayData;
+} ParticleData;
 
 extern void func_80016894(void*);
 INCLUDE_ASM("asm/nonmatchings/level/SCIFI", func_8015B4BC_E12DC);
 /* near-match (8 diffs: frame a1/a2, mflo v0/v1, z-check load order — scheduler difference):
 void func_8015B4BC_E12DC(void* arg0) {
-    VentSprayData* data;
+    ParticleData* data;
     Instance* player;
     int dz;
     int dx;
     int dy;
 
-    data = ((VentSprayData*)arg0);
+    data = ((ParticleData*)arg0);
     data->unk24 -= 10;
     data->unk28 += 10;
     data->frame++;
@@ -456,7 +456,7 @@ void func_8015B5F0_E1410(Instance* instance) {
     Model* model;
     SVECTOR rot;
     SVECTOR vel;
-    VentSprayData* spray;
+    ParticleData* spray;
 
     obj = OBTABLE_FindObject("sprysht_");
     if (instance->_E0[3] == 0) {
@@ -492,7 +492,7 @@ void func_8015B5F0_E1410(Instance* instance) {
     vel.x = 0;
     vel.y = 0;
     vel.z = 0;
-    spray = ((VentSprayData*)func_800170E8(model, model->_14, &instance->position, &rot, 0, D_800EB8A0, func_80017E88, func_8015B4BC_E12DC, 0x14));
+    spray = ((ParticleData*)func_800170E8(model, model->_14, &instance->position, &rot, 0, D_800EB8A0, func_80017E88, func_8015B4BC_E12DC, 0x14));
     if (*(int*)&instance->_34[2] == 0) {
         *(int*)&instance->_34[2] = func_80050508(instance, 0x112, -0x15E, 0x50, 0xBB8);
     }
@@ -529,7 +529,7 @@ void scifi_stmvent_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-void func_8015B904_E1724(VentSprayData* p, void* callback, char* data, int arg3, unsigned short* def, char* table, int arg6, int arg7, int arg8, int arg9, unsigned short arg10) {
+void func_8015B904_E1724(ParticleData* p, void* callback, char* data, int arg3, unsigned short* def, char* table, int arg6, int arg7, int arg8, int arg9, unsigned short arg10) {
     SVECTOR c;
     short* va;
     short* vb;
@@ -633,7 +633,7 @@ void scifi_bldbota_OnCreate(Instance* instance, GameTracker* gameTracker) {
     } else {
         instance->flags |= 0x10080;
         instance->currentTextureAnimFrame = 0;
-        instance->work0 = ((int)func_8015BF08_E1D28(instance));
+        WORK_AS(Instance*, instance->work0) = func_8015BF08_E1D28(instance);
     }
 }
 

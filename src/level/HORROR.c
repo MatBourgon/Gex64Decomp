@@ -204,7 +204,7 @@ void horror_huck_OnCreate(Instance* instance, GameTracker* gameTracker) {
             v = ~0x400;
             linked = ((Instance*)instance->work9);
             instance->flags = flags & v;
-            linked->parent = 0;
+            linked->parent = NULL;
             instance->work9 = 0;
             if (linked->flags2 & 4) {
                 func_8015BF7C_9F7AC(linked, gameTracker);

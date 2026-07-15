@@ -335,9 +335,9 @@ typedef struct {
     unsigned short _56;
     char _58[0x14];
     unsigned short frame;
-} VentSprayData;
+} ParticleData;
 
-void func_8015AF30_B31E0(VentSprayData* p, void* callback, char* data, void* arg3, unsigned short* def, char* table, int arg6, int arg7, int arg8, int arg9, unsigned short arg10) {
+void func_8015AF30_B31E0(ParticleData* p, void* callback, char* data, void* arg3, unsigned short* def, char* table, int arg6, int arg7, int arg8, int arg9, unsigned short arg10) {
     SVECTOR c;
     short* va;
     short* vb;
@@ -637,7 +637,7 @@ void looney_fallobj_OnCreate(Instance* instance, GameTracker* gameTracker) {
     WORK_AS_IDX(short, instance->work9, 1) = data[0];
     instance->_D0[2] = data[3];
     instance->_E0[1] = data[2];
-    WORK_AS(int, instance->work3) = ((int)OBTABLE_FindObject(D_80161DD8_BA088));
+    WORK_AS(Object*, instance->work3) = OBTABLE_FindObject(D_80161DD8_BA088);
     WORK_AS(int, instance->work4) = 3;
     instance->shadowPosition.z = -0x8000;
     if (instance->parent != 0) {
@@ -694,9 +694,9 @@ void looney_teeter_OnCollide(Instance* instance, GameTracker* gameTracker) {
             if (instance->matrix) {
                 func_80041FD0(&transformMatrix, instance->matrix);
                 MATH3D_ApplyMatrixT(&transformMatrix, &bsp->globalOffset, &newPosition);
-                instance->work1 = newPosition.x << 2;
+                instance->work1 = newPosition.x * 4;
                 WORK_AS(int, instance->work3) = newPosition.x;
-                instance->work2 = ((int)bsp->instanceSpline);
+                WORK_AS(Instance*, instance->work2) = bsp->instanceSpline;
                 GenericCollide(instance, gameTracker);
             }
         }

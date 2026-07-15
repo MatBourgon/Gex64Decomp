@@ -812,7 +812,7 @@ void func_8015FC70_86E50(Instance* instance) {
     base = D_801635B8_8A798 - intro->rotation.z;
     instance->rotation.z = base;
     if (dx == 0) {
-        ext = (base << 16) >> 16;
+        ext = base;
         if (dy > 0) {
             instance->rotation.z = ext + 0x400;
         } else {
@@ -876,8 +876,8 @@ void circuit_explode_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->currentTextureAnimFrame = 0;
     parent = instance->parent;
     if (G2String_Compare_EQ(parent->object->parentName, D_8016363C_8A81C)) {
-        instance->position.x += WORK_AS_IDX(unsigned short, parent->work3, 0);
-        instance->position.z += WORK_AS_IDX(unsigned short, parent->work4, 0);
+        instance->position.x += WORK_AS_IDX(short, parent->work3, 0);
+        instance->position.z += WORK_AS_IDX(short, parent->work4, 0);
     }
     instance->flags |= 0x100480;
     r = (rand() & 0x3F) - 0x20;

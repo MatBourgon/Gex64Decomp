@@ -170,9 +170,9 @@ typedef struct {
     unsigned short _56;
     int _58[5];
     unsigned short frame;
-} VentSprayData;
+} ParticleData;
 
-void func_80159E50_8AFF0(VentSprayData* p, void* callback, char* data, int arg3, unsigned short* def, char* table, int arg6, int arg7, int arg8, int arg9, unsigned short arg10) {
+void func_80159E50_8AFF0(ParticleData* p, void* callback, char* data, int arg3, unsigned short* def, char* table, int arg6, int arg7, int arg8, int arg9, unsigned short arg10) {
     SVECTOR c;
     short* va;
     short* vb;
@@ -260,11 +260,11 @@ extern void func_80016894();
 
 void func_8015A4C8_8B668(int arg0, Object* obj, int arg2) {
     Model* model;
-    VentSprayData* spray;
+    ParticleData* spray;
 
     if (obj != 0) {
         model = obj->modelList[1];
-        spray = ((VentSprayData*)func_800170E8(model, model->_14, arg2, 0, 0, D_800EB8A0, func_80017E88, func_80016894, -1));
+        spray = ((ParticleData*)func_800170E8(model, model->_14, arg2, 0, 0, D_800EB8A0, func_80017E88, func_80016894, -1));
         if (model->_20 != 0 && spray != 0) {
             spray->flags |= 4;
             memcpy(spray->_58, spray->next, 0x10);

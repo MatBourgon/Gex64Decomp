@@ -182,20 +182,20 @@ extern int D_8015EE24;
 
 void rta_zturtle_OnCollide(Instance* instance, GameTracker* gameTracker) {
     Instance* player;
-    Instance* collider;
+    Instance* other;
 
     if (instance->work0 == 0) {
         player = gameTracker->player;
-        collider = instance->bspTree->instanceSpline;
-        if (collider == player) {
+        other = instance->bspTree->instanceSpline;
+        if (other == player) {
             instance->work0 = 1;
-            instance->work1 = collider->position.x - instance->position.x;
+            instance->work1 = other->position.x - instance->position.x;
             D_8015EF10_DF580 = 1;
-            instance->work2 = collider->position.y - instance->position.y;
+            instance->work2 = other->position.y - instance->position.y;
             D_8015EE24 = 0xC8;
-            WORK_AS(int, instance->work3) = collider->position.z - instance->position.z;
-            collider->currentSubState = 5;
-            collider->flags |= 0x100;
+            instance->work3 = other->position.z - instance->position.z;
+            other->currentSubState = 5;
+            other->flags |= 0x100;
             ((int*)gameTracker->camera)[0x444 / 4] = 0x4B0;
             func_80050A80(0, 2);
         }
@@ -258,7 +258,7 @@ void rta_zwleak_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         dx = instance->position.x - player->position.x;
         dy = instance->position.y - player->position.y;
         dz = instance->position.z - player->position.z;
-        if (dx * dx + dy * dy + dz * dz <= 0xBAEB8F) {
+        if (dx * dx + dy * dy + dz * dz <= (12250000 - 1)) {
             func_8015B1D4_DB844(instance);
         }
         instance->work2 = 0;
