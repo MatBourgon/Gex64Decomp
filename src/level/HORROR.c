@@ -97,7 +97,32 @@ void horror_axe_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_80159D8C_9D5BC);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_8015A014_9D844);
+extern void func_80016894();
+
+void func_8015A014_9D844(short* p, int arg1) {
+    short t;
+
+    if (p[0x20 / 2] + p[0x50 / 2] <= p[0x44 / 2]) {
+        t = p[0x46 / 2];
+        if (t == 0) {
+            p[0x46 / 2] = t + 1;
+            p[0x48 / 2] = p[0x50 / 2] = p[0x48 / 2] - 0xF;
+        } else if (t == 1) {
+            p[0x46 / 2] = t + 1;
+            p[0x48 / 2] = p[0x50 / 2] = p[0x48 / 2] - 0xF;
+        } else if (t == 2) {
+            p[0x46 / 2] = t + 1;
+            p[0x48 / 2] = p[0x50 / 2] = p[0x48 / 2] - 0xA;
+        }
+    }
+    p[0x24 / 2] -= 1;
+    p[0x28 / 2] += 3;
+    p[0x2C / 2] -= 1;
+    p[0x30 / 2] -= 1;
+    p[0x34 / 2] += 3;
+    p[0x38 / 2] -= 1;
+    func_80016894(p, arg1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_axe_OnUpdate);
 
@@ -185,7 +210,20 @@ void horror_zomleg_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->work0 = 0x3C;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_zomleg_OnUpdate);
+void horror_zomleg_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    if (instance->currentMainState == 1) {
+        if (instance->rotation.y < 0x400) {
+            instance->rotation.y += 0x80;
+        } else {
+            instance->currentMainState = 0;
+        }
+    }
+    if (instance->work0 > 0) {
+        instance->position.x -= instance->work0 * ((short)func_8003A6AC(instance->rotation.z - 0x400)) >> 12;
+        instance->position.y -= instance->work0 * ((short)func_8003A4E0(instance->rotation.z - 0x400)) >> 12;
+        instance->work0 -= 4;
+    }
+}
 
 void horror_zomleg_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
@@ -230,7 +268,31 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_huck_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_huck_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_huckhed_OnCreate);
+void horror_huckhed_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    if (instance->flags & 0x20000) {
+        if (instance->parent != 0) {
+            instance->parent->work9 = 0;
+            if (instance->parent->flags2 & 4) {
+                func_8015BF7C_9F7AC(instance->parent, gameTracker);
+                instance->parent = 0;
+            } else {
+                INSTANCE_PlainDeath(instance->parent, 5, 3, 0);
+                instance->parent = 0;
+            }
+        }
+    } else {
+        instance->object->oflags |= 0x2000000;
+        WORK_AS_IDX(short, instance->work9, 1) = 0x60;
+        WORK_AS_IDX(short, instance->work9, 0) = 0x3E8;
+        instance->currentModelAnim = 1;
+        instance->_E0[1] = -0x10;
+        instance->_D0[3] = -4;
+        instance->currentMainState = 0;
+        instance->_D0[2] = 0;
+        instance->_D0[0] = 0x60;
+        instance->flags |= 0x10400;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_huckhed_OnUpdate);
 
@@ -322,7 +384,27 @@ void horror_ledge_OnCollide(Instance* instance, GameTracker* gameTracker) {
 void horror_ldgeact_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_ldgeact_OnUpdate);
+void horror_ldgeact_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    Intro* intro = instance->intro;
+    int* introData;
+    int* sig;
+
+    if (intro->_2C != 0 && *(int*)intro->_2C == 1) {
+        introData = instance->introData;
+        if (*(int*)((Intro**)intro->_04)[1]->data == 0) {
+            if (introData[0] != 0) {
+                ((Intro**)intro->_04)[1]->instance->currentMainState = 1;
+                ((Intro**)instance->intro->_04)[2]->instance->currentMainState = 1;
+                instance->currentMainState = 1;
+                sig = ((int*)introData[0]);
+                if (sig != 0) {
+                    COLLIDE_HandleSignal(gameTracker->player, sig + 1, sig[0], 0);
+                }
+                introData[0] = 0;
+            }
+        }
+    }
+}
 
 void horror_ldgeact_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
@@ -468,7 +550,6 @@ typedef struct {
     unsigned short frame;
 } SprayData;
 
-extern void func_80016894(void*);
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_8015F620_A2E50);
 /* near-match (18 diffs: frame a1/a2, mflo v0/v1, z-check v0/v1 swap — scheduler difference):
 void func_8015F620_A2E50(void* arg0) {
@@ -664,7 +745,23 @@ void horror_evileye_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_splitob_OnCreate);
+void horror_splitob_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    SVector a;
+    SVector b;
+    int table;
+
+    a.x = b.x = instance->position.x;
+    a.y = b.y = instance->position.y;
+    a.z = instance->position.z - 0x80;
+    b.z = instance->position.z + 0x80;
+    COLLIDE_PointAndTerrain(gameTracker8->level->segmentAddress, (SVECTOR*)&a, (SVECTOR*)&b, instance);
+    if (*(int*)&instance->_C4[0] != 0) {
+        instance->work0 = *(int*)&instance->_C4[0];
+        table = ((int*)gameTracker8->level->segmentAddress)[0x24 / 4];
+        instance->work1 = *(short*)((**(unsigned short**)&instance->_C4[0] << 4) + table + 4);
+    }
+    instance->flags |= 0x400;
+}
 
 void horror_splitob_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     Instance* player;
@@ -930,7 +1027,28 @@ void horror_funplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_door_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_80161F4C_A577C);
+void func_80161F4C_A577C(Instance* instance, SVECTOR offset) {
+    MATRIX m;
+    SVECTOR vec;
+    SVECTOR res;
+
+    MATH3D_SetUnityMatrix(&m);
+    if (instance->rotation.z >= -0x3FF) {
+        instance->rotation.z -= 0x20;
+        RotMatrixZ(instance->rotation.z + instance->intro->rotation.z, &m);
+        vec.y = 0x40;
+        vec.x = 0;
+        vec.z = 0;
+        res.x = (vec.x * m.m[0][0] >> 12) + (vec.y * m.m[0][1] >> 12) + (vec.z * m.m[0][2] >> 12);
+        res.y = (vec.x * m.m[1][0] >> 12) + (vec.y * m.m[1][1] >> 12) + (vec.z * m.m[1][2] >> 12);
+        res.z = (vec.x * m.m[2][0] >> 12) + (vec.y * m.m[2][1] >> 12) + (vec.z * m.m[2][2] >> 12);
+        instance->position.x = res.x + offset.x;
+        instance->position.y = res.y + offset.y;
+        instance->position.z = res.z + offset.z;
+    } else {
+        WORK_AS_IDX(char, instance->work8, 2) = 4;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_80162024_A5854);
 

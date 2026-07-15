@@ -958,7 +958,30 @@ void prehst_boulder_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_8015F9A4_CD224);
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_8015FC2C_CD4AC);
+void func_8015FC2C_CD4AC(short* p, int arg1) {
+    short t;
+
+    if (p[0x20 / 2] + p[0x50 / 2] <= p[0x44 / 2]) {
+        t = p[0x46 / 2];
+        if (t == 0) {
+            p[0x46 / 2] = t + 1;
+            p[0x48 / 2] = p[0x50 / 2] = p[0x48 / 2] - 0xF;
+        } else if (t == 1) {
+            p[0x46 / 2] = t + 1;
+            p[0x48 / 2] = p[0x50 / 2] = p[0x48 / 2] - 0xF;
+        } else if (t == 2) {
+            p[0x46 / 2] = t + 1;
+            p[0x48 / 2] = p[0x50 / 2] = p[0x48 / 2] - 0xA;
+        }
+    }
+    p[0x24 / 2] -= 1;
+    p[0x28 / 2] += 3;
+    p[0x2C / 2] -= 1;
+    p[0x30 / 2] -= 1;
+    p[0x34 / 2] += 3;
+    p[0x38 / 2] -= 1;
+    func_80016894(p, arg1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_boulder_OnUpdate);
 
@@ -1326,7 +1349,38 @@ void func_80163EE0_D1760(short* p, int arg1) {
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_80163F94_D1814);
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", prehst_lavadrp_OnCreate);
+typedef struct {
+    short _00;
+    short _02;
+    short _04;
+    short _06;
+    short _08;
+    short _0A;
+    short _0C;
+    short _0E;
+} LavaDropData;
+
+void prehst_lavadrp_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    char* data = instance->data;
+    unsigned short va;
+    unsigned short vb;
+    unsigned short vc;
+
+    instance->flags |= 0x100400;
+    func_80048DE4(instance, &instance->work4, &instance->work5, &instance->work6);
+    va = WORK_AS_IDX(unsigned short, instance->work6, 1);
+    vb = WORK_AS_IDX(unsigned short, instance->work5, 1);
+    vc = WORK_AS_IDX(unsigned short, instance->work4, 1);
+    va = (va & 0x8000) | 1;
+    vb = (vb & 0x8000) | 1;
+    vc = (vc & 0x8000) | 1;
+    WORK_AS_IDX(unsigned short, instance->work6, 1) = va;
+    WORK_AS_IDX(unsigned short, instance->work5, 1) = vb;
+    WORK_AS_IDX(unsigned short, instance->work4, 1) = vc;
+    func_80047DD4(instance, 0, 0);
+    WORK_AS_IDX(short, instance->work7, 0) = 0;
+    WORK_AS_IDX(LavaDropData, instance->work0, 0) = *(LavaDropData*)data;
+}
 
 typedef struct {
     short _00;

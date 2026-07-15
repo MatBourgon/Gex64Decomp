@@ -85,6 +85,8 @@ INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_bldg_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_bldg_OnUpdate);
 
+void func_8015B144_942C4(Instance* instance, GameTracker* gameTracker);
+
 void gexzil_bldg_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp = instance->bspTree;
     char* data = gameTracker->player->data;
@@ -103,7 +105,25 @@ INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015AC68_93DE8);
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015AE68_93FE8);
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015B144_942C4);
+void func_8015B144_942C4(Instance* instance, GameTracker* gameTracker) {
+    int one = 1;
+
+    if (instance->currentSubState != one || instance->currentAnimFrame >= 0x12) {
+        if (instance->work0 < instance->work1) {
+            instance->currentAnimFrame = 0;
+            instance->flags2 &= ~0x10;
+            CAMERA_SetShake(gameTracker->camera, 0x14, 0x190);
+            instance->currentSubState = one;
+            instance->work0 += 1;
+            if (instance->work0 >= instance->work1) {
+                instance->flags |= 0x400;
+            }
+            if (instance->intro->data != 0) {
+                *(int*)instance->intro->data = instance->work0;
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015B220_943A0);
 
@@ -153,7 +173,23 @@ void gexzil_mechjet_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_mecha_OnCreate);
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015B964_94AE4);
+void func_8015B964_94AE4(SVECTOR* from, SVECTOR* to, short* outYaw, short* outPitch) {
+    SVECTOR d;
+    int r;
+    int len;
+
+    d.x = to->x - from->x;
+    d.y = to->y - from->y;
+    d.z = to->z - from->z;
+    *outYaw = ratan2(d.y, d.x);
+    r = d.x * d.x + d.y * d.y;
+    if (0x80000 < r) {
+        len = (MATH3D_FastSqrt2(r << 4, 4) + 8) >> 4;
+    } else {
+        len = MATH3D_FastSqrt(r << 12) >> 12;
+    }
+    *outPitch = ratan2(d.z, len);
+}
 
 INCLUDE_RODATA("asm/nonmatchings/level/GEXZIL", D_80162AB8_9BC38);
 
@@ -411,7 +447,32 @@ void func_8015FF80_99100(Instance* instance, short* arg1) {
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015FFDC_9915C);
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8016014C_992CC);
+typedef struct {
+    char _00[0x26];
+    short state;         // 0x26
+    char _28[2];
+    unsigned short _2A;
+    short _2C;
+    char _2E[0xE];
+    short _3C;
+    char _3E[0x56];
+    int _94;
+} MechaData;
+
+int func_8016014C_992CC(Instance* instance, MechaData* d) {
+    int result;
+    short state;
+    int unused[1];
+
+    result = 0;
+    if (d->_2C == -1 && d->_3C == 0) {
+        state = d->state;
+        if (state != 5 && d->_94 == 0 && (unsigned short)(state - 2) >= 2 && d->_2A - 2 >= 2U && state != 7) {
+            result = state != 0x1E;
+        }
+    }
+    return result;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_801601D8_99358);
 
@@ -527,7 +588,39 @@ char* func_801615A8_9A728(char* p) {
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_80161624_9A7A4);
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_80161938_9AAB8);
+typedef struct {
+    int minX;
+    int minY;
+    int maxX;
+    int maxY;
+} BoundsRect;
+
+BoundsRect func_80161938_9AAB8(short* box) {
+    BoundsRect r;
+    short x;
+
+    x = box[0];
+    if (box[2] < box[0]) {
+        x = box[2];
+    }
+    r.minX = x;
+    x = box[0];
+    if (box[0] < box[2]) {
+        x = box[2];
+    }
+    r.maxX = x;
+    x = box[1];
+    if (box[3] < box[1]) {
+        x = box[3];
+    }
+    r.minY = x;
+    x = box[1];
+    if (box[1] < box[3]) {
+        x = box[3];
+    }
+    r.maxY = x;
+    return r;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_80161A18_9AB98);
 

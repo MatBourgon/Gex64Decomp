@@ -177,7 +177,44 @@ INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_tbplat_OnUpdate);
 void rezop_tbplat_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_rezfan_OnCreate);
+void rezop_rezfan_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    short* intro = ((short*)instance->introData);
+    int f;
+
+    instance->currentMainState = 0;
+    instance->flags |= 0x100000;
+    if (intro[0] != 0) {
+        instance->currentMainState = 1;
+    } else {
+        instance->work0 = intro[1];
+    }
+    instance->work1 = 0;
+    if (intro[4] != 0) {
+        instance->work8 = intro[4];
+    } else {
+        instance->work8 = 0x118;
+    }
+    if (intro[5] != 0) {
+        instance->work9 = intro[5];
+    } else {
+        instance->work9 = -0x118;
+    }
+    f = instance->flags;
+    if (f & 0x20000) {
+        if (instance->work2 != 0) {
+            func_800331BC(instance->work2);
+            instance->work2 = 0;
+        }
+    } else {
+        instance->flags = f | 0x10000;
+        instance->work2 = 0;
+        WORK_AS(int, instance->work5) = 0;
+        WORK_AS(int, instance->work4) = 0x64;
+        WORK_AS(int, instance->work3) = (rand() & 0x3F) - 0x20;
+        WORK_AS(int, instance->work6) = 0;
+        instance->work7 = 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_rezfan_OnUpdate);
 

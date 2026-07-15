@@ -2,6 +2,7 @@
 
 #include "level/LOONEY.h"
 #include "types/G2String.h"
+#include "INSTANCE.h"
 #include "OBTABLE.h"
 #include "MATRIX.h"
 
@@ -531,7 +532,16 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_funguy_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_8015BFCC_B427C);
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_8015C158_B4408);
+void func_8015C158_B4408(Instance* instance, GameTracker* gameTracker) {
+    instance->currentModelAnim = ((int*)((int*)instance->work0)[5])[instance->work2];
+    func_8002DAF8(instance, -1);
+    if (instance->currentAnimFrame == ((short*)instance->object->animList[instance->currentModelAnim])[1] - 1) {
+        instance->currentAnimFrame = 0;
+        WORK_AS(int, instance->work3) = 0;
+        instance->flags2 &= ~0x10;
+        WORK_AS(int, instance->work4) = ((int*)instance->work0)[9] + rand() % (((int*)instance->work0)[10] - ((int*)instance->work0)[9]);
+    }
+}
 
 void func_8015C230_B44E0(Instance* instance, short* arg1) {
     LVECTOR out;
@@ -807,7 +817,21 @@ void func_8015E290_B6540(Instance* instance) {
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_8015E31C_B65CC);
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_8015E4C4_B6774);
+void func_8015E4C4_B6774(Instance* instance, int arg1) {
+    int* intro;
+    Instance* spawn;
+
+    if (arg1 != 0) {
+        intro = ((int*)instance->introData);
+        spawn = INSTANCE_BirthObject(instance, ((Object*)instance->_E0[0]));
+        spawn->position.x = instance->matrix[7].l[0];
+        spawn->position.y = instance->matrix[7].l[1];
+        spawn->position.z = instance->matrix[7].l[2];
+        spawn->position.x -= -((short)func_8003A4E0(instance->rotation.z) * 0xC0) >> 12;
+        spawn->position.y -= -((short)func_8003A6AC(instance->rotation.z) * 0xC0) >> 12;
+        spawn->work0 = intro[1];
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_hunter_OnUpdate);
 
@@ -834,7 +858,37 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_daisy_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_daisy_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_8015FEC8_B8178);
+extern G2String D_80161E88_BA138;
+
+void func_8015FEC8_B8178(Instance* instance) {
+    int* list = instance->intro->_04;
+    Intro** p;
+    char* end;
+    Intro* e;
+    Instance* inst;
+
+    if (list != 0) {
+        p = ((Intro**)(list + 1));
+        end = (char*)list + (list[0] * 4 + 4);
+        if ((char*)p < end) {
+            do {
+                e = p[0];
+                if (e != 0) {
+                    inst = e->instance;
+                    if (inst != 0) {
+                        if (G2String_Compare_EQ(inst->object->parentName, &D_80161E88_BA138)) {
+                            if (inst->_D0[0] == 0 || (unsigned int)(inst->_D0[0] - 4) < 2) {
+                                inst->_D0[0] = 1;
+                                inst->_D0[1] = 1;
+                            }
+                        }
+                    }
+                }
+                p += 1;
+            } while ((char*)p < end);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_daisy_OnCollide);
 
