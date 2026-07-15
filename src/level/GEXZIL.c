@@ -1,6 +1,7 @@
 #include "common.h"
 
 #include "level/GEXZIL.h"
+#include "types/G2String.h"
 
 void gexzil_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
     unsigned short* intro;
@@ -84,7 +85,17 @@ INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_bldg_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_bldg_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_bldg_OnCollide);
+void gexzil_bldg_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp = instance->bspTree;
+    char* data = gameTracker->player->data;
+
+    if (func_80027500(bsp, gameTracker) != 0 && instance->work0 < instance->work1) {
+        func_8015B144_942C4(instance, gameTracker);
+        if (instance->work8 != 0 && ((int*)data)[0x138 / 4] != 0 && bsp->instanceSpline == gameTracker->player) {
+            bsp->instanceSpline->work0 |= 0x800;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015A7F0_93970);
 
@@ -711,9 +722,46 @@ void gexzil_gas_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_explode_OnCreate);
+extern char D_80162B70_9BCF0[];
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_explode_OnUpdate);
+void gexzil_explode_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    Instance* parent;
+    int* p = WORK_AS_PTR(int, instance->work0);
+    LVECTOR dims;
+    int r;
+
+    dims = *(LVECTOR*)((int*)instance->object->modelList[instance->currentModel]->_20 + 1);
+    WORK_AS_IDX(short, instance->work0, 0) = 0;
+    WORK_AS_IDX(short, instance->work0, 1) = (dims.y - 1) * dims.z;
+    instance->currentTextureAnimFrame = 0;
+    parent = instance->parent;
+    if (G2String_Compare_EQ(parent->object->parentName, D_80162B70_9BCF0)) {
+        instance->position.x += WORK_AS_IDX(unsigned short, parent->work3, 0);
+        instance->position.z += WORK_AS_IDX(unsigned short, parent->work4, 0);
+    }
+    instance->flags |= 0x100480;
+    r = (rand() & 0x3F) - 0x20;
+    p[2] = r;
+    p[1] = func_80050508(instance, 0x20, (short)r, 0x5C, 0x1D4C);
+}
+
+void gexzil_explode_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    short* p = WORK_AS_PTR(short, instance->work0);
+
+    if (instance->work1 != 0) {
+        if (func_80033200(instance->work1) == 0) {
+            instance->work1 = 0;
+        } else {
+            func_800506B8(instance, instance->work1, WORK_AS_IDX(short, instance->work2, 1), 0x5C, 0x1D4C);
+        }
+    }
+    p[0] += 1;
+    if (p[1] < p[0]) {
+        INSTANCE_KillInstance(instance);
+    } else {
+        instance->currentTextureAnimFrame += 1;
+    }
+}
 
 void gexzil_explode_OnCollide(Instance* instance, GameTracker* gameTracker) {
     if (instance->bspTree->instanceSpline == gameTracker->player && instance->bspTree->_06 == 1) {

@@ -334,19 +334,19 @@ typedef struct {
     unsigned short _56;
     char _58[0x14];
     unsigned short frame;
-} VentSprayData;
+} ParticleData;
 
-extern void func_80016894(void*);
+extern void func_80016894();
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_8015B47C_C8CFC);
 /* near-match (8 diffs: frame a1/a2, mflo v0/v1, z-check load order — scheduler difference):
 void func_8015B47C_C8CFC(void* arg0) {
-    VentSprayData* data;
+    ParticleData* data;
     Instance* player;
     int dz;
     int dx;
     int dy;
 
-    data = ((VentSprayData*)arg0);
+    data = ((ParticleData*)arg0);
     data->unk24 -= 10;
     data->unk28 += 10;
     data->frame++;
@@ -382,7 +382,7 @@ void func_8015B5B0_C8E30(Instance* instance) {
     Model* model;
     SVECTOR rot;
     SVECTOR vel;
-    VentSprayData* spray;
+    ParticleData* spray;
 
     obj = ((Object*)OBTABLE_FindObject("sprysht_"));
     if (instance->_E0[3] == 0) {
@@ -418,7 +418,7 @@ void func_8015B5B0_C8E30(Instance* instance) {
     vel.x = 0;
     vel.y = 0;
     vel.z = 0;
-    spray = ((VentSprayData*)func_800170E8(model, model->_14, &instance->position, &rot, 0, D_800EB8A0, func_80017E88, func_8015B47C_C8CFC, 0x14));
+    spray = ((ParticleData*)func_800170E8(model, model->_14, &instance->position, &rot, 0, D_800EB8A0, func_80017E88, func_8015B47C_C8CFC, 0x14));
     if (spray != NULL) {
         if (*(int*)&instance->_34[2] == 0) {
             *(int*)&instance->_34[2] = func_80050508(instance, 0x112, -0x15E, 0x50, 0xBB8);
@@ -1233,7 +1233,7 @@ void func_80163BC8_D1448(Instance* instance, short target, short step) {
     }
 }
 
-void func_80163C4C_D14CC(VentSprayData* p, void* callback, char* data, int arg3, unsigned short* def, char* table, unsigned short* pos, unsigned short* vel, unsigned short* acc, int arg9, unsigned short arg10) {
+void func_80163C4C_D14CC(ParticleData* p, void* callback, char* data, int arg3, unsigned short* def, char* table, unsigned short* pos, unsigned short* vel, unsigned short* acc, int arg9, unsigned short arg10) {
     short* tail;
     int* nxt;
     int off;
@@ -1308,7 +1308,21 @@ void func_80163C4C_D14CC(VentSprayData* p, void* callback, char* data, int arg3,
     p->unk38 += 0x28;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_80163EE0_D1760);
+void func_80163EE0_D1760(short* p, int arg1) {
+    if (p[0x20 / 2] + p[0x50 / 2] <= p[0x44 / 2]) {
+        if (p[0x46 / 2] < 3) {
+            p[0x46 / 2] += 1;
+            p[0x48 / 2] = p[0x50 / 2] = p[0x48 / 2] - 0xA;
+        }
+    }
+    p[0x24 / 2] -= 1;
+    p[0x28 / 2] += 3;
+    p[0x2C / 2] -= 1;
+    p[0x30 / 2] -= 1;
+    p[0x34 / 2] += 3;
+    p[0x38 / 2] -= 1;
+    func_80016894(p, arg1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/PREHST", func_80163F94_D1814);
 

@@ -185,7 +185,32 @@ void circuit_chrganm_OnCreate(Instance* instance, GameTracker* gameTracker) {
     func_80027110(instance, 0xA, gameTracker);
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_chrganm_OnUpdate);
+void circuit_chrganm_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    Instance* player = gameTracker->player;
+    MATRIX* m;
+    int r;
+    int flags;
+
+    r = func_80025798(player);
+    if (r != 0) {
+        m = &player->matrix[10];
+        instance->position.x = m->l[0];
+        instance->position.y = m->l[1];
+        instance->position.z = m->l[2];
+        func_8002DAF8(instance, -1);
+        flags = instance->flags & ~0x800;
+        instance->flags = flags;
+        if (r < 0x3D) {
+            if (((int*)gameTracker)[0xE0 / 4] & 1) {
+                instance->flags = flags | 0x800;
+            }
+        } else if (r < 0x79) {
+            if (((int*)gameTracker)[0xE0 / 4] & 2) {
+                instance->flags = flags | 0x800;
+            }
+        }
+    }
+}
 
 void func_8015B548_82728(Instance* instance) {
     instance->scale.y = instance->work0;
@@ -517,7 +542,24 @@ void circuit_pball_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015DB80_84D60);
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_ppath_OnCreate);
+void circuit_ppath_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    Model* model;
+    void* introData = instance->introData;
+
+    instance->currentTextureAnimFrame = 0;
+    model = instance->object->modelList[instance->currentModel];
+    instance->work1 = ((int*)model->_20)[2] * ((int*)model->_20)[3];
+    if (instance->intro != 0 && instance->intro->_04 != 0) {
+        instance->flags |= 0x80;
+    }
+    if (introData != 0) {
+        if (instance->intro != 0 && instance->intro->_04 != 0 && instance == ((Intro**)instance->intro->_04)[2]->instance) {
+            instance->work2 = 1;
+            WORK_AS(int, instance->work4) = 0;
+            WORK_AS(int, instance->work5) = -1;
+        }
+    }
+}
 
 void func_8015DD58_84F38(Instance* instance) {
     if (instance->currentMainState != 2) {
@@ -667,6 +709,8 @@ void circuit_reza_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
+void func_8015FC70_86E50(Instance* instance);
+
 void func_8015F6B8_86898(Instance* instance, int arg1, int arg2) {
     instance->currentMainState = 1;
     instance->currentSubState = 2;
@@ -749,7 +793,35 @@ int* func_8015FA1C_86BFC(Instance* instance) {
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015FAC4_86CA4);
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015FC70_86E50);
+extern unsigned short D_801635B8_8A798;
+
+void func_8015FC70_86E50(Instance* instance) {
+    Intro* intro = instance->intro;
+    short** list = ((short**)(intro->_04 + 2));
+    short* ea;
+    short* eb;
+    short dx;
+    short dy;
+    short base;
+    int ext;
+
+    eb = list[WORK_AS_IDX(short, instance->work5, 0)];
+    ea = list[WORK_AS_IDX(short, instance->work5, 1)];
+    dx = ea[0x10 / 2] - eb[0x10 / 2];
+    dy = ea[0x12 / 2] - eb[0x12 / 2];
+    base = D_801635B8_8A798 - intro->rotation.z;
+    instance->rotation.z = base;
+    if (dx == 0) {
+        ext = base;
+        if (dy > 0) {
+            instance->rotation.z = ext + 0x400;
+        } else {
+            instance->rotation.z = ext - 0x400;
+        }
+    } else {
+        instance->rotation.z += ratan2(dy, dx);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_robo_OnUpdate);
 
@@ -790,9 +862,46 @@ INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_bomb_OnUpdate);
 void circuit_bomb_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_explode_OnCreate);
+extern char D_8016363C_8A81C[];
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_explode_OnUpdate);
+void circuit_explode_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    Instance* parent;
+    int* p = WORK_AS_PTR(int, instance->work0);
+    LVECTOR dims;
+    int r;
+
+    dims = *(LVECTOR*)((int*)instance->object->modelList[instance->currentModel]->_20 + 1);
+    WORK_AS_IDX(short, instance->work0, 0) = 0;
+    WORK_AS_IDX(short, instance->work0, 1) = (dims.y - 1) * dims.z;
+    instance->currentTextureAnimFrame = 0;
+    parent = instance->parent;
+    if (G2String_Compare_EQ(parent->object->parentName, D_8016363C_8A81C)) {
+        instance->position.x += WORK_AS_IDX(short, parent->work3, 0);
+        instance->position.z += WORK_AS_IDX(short, parent->work4, 0);
+    }
+    instance->flags |= 0x100480;
+    r = (rand() & 0x3F) - 0x20;
+    p[2] = r;
+    p[1] = func_80050508(instance, 0x20, (short)r, 0x5C, 0x1D4C);
+}
+
+void circuit_explode_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    short* p = WORK_AS_PTR(short, instance->work0);
+
+    if (instance->work1 != 0) {
+        if (func_80033200(instance->work1) == 0) {
+            instance->work1 = 0;
+        } else {
+            func_800506B8(instance, instance->work1, WORK_AS_IDX(short, instance->work2, 1), 0x5C, 0x1D4C);
+        }
+    }
+    p[0] += 1;
+    if (p[1] < p[0]) {
+        INSTANCE_KillInstance(instance);
+    } else {
+        instance->currentTextureAnimFrame += 1;
+    }
+}
 
 void circuit_explode_OnCollide(Instance* instance, GameTracker* gameTracker) {
     if (instance->bspTree->instanceSpline == gameTracker->player && instance->bspTree->_06 == 1) {

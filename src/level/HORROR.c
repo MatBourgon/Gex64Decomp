@@ -190,7 +190,41 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_zomleg_OnUpdate);
 void horror_zomleg_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_huck_OnCreate);
+void func_8015BF7C_9F7AC(Instance* instance, GameTracker* gameTracker);
+
+void horror_huck_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    int* introData = instance->introData;
+    int flags = instance->flags;
+    Instance* linked;
+    int v;
+
+    if (flags & 0x20000) {
+        v = instance->work9;
+        if (v != 0) {
+            v = ~0x400;
+            linked = ((Instance*)instance->work9);
+            instance->flags = flags & v;
+            linked->parent = NULL;
+            instance->work9 = 0;
+            if (linked->flags2 & 4) {
+                func_8015BF7C_9F7AC(linked, gameTracker);
+            } else {
+                INSTANCE_PlainDeath(linked, 5, 3, 0);
+            }
+        }
+    } else {
+        instance->currentMainState = 1;
+        instance->currentModelAnim = 0;
+        WORK_AS(int, instance->work3) = 0x19;
+        instance->work7 = 1;
+        if (introData != 0) {
+            instance->work8 = introData[0];
+        } else {
+            instance->work8 = 0;
+        }
+        instance->flags |= 0x10000;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_huck_OnUpdate);
 
@@ -394,7 +428,15 @@ void horror_skelh_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_skelh_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_skelh_OnCollide);
+void horror_skelh_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp = instance->bspTree;
+
+    if (bsp->_06 == 1 && bsp->instanceSpline == gameTracker->player && bsp->_0C[5] >= 6 && bsp->_08[4] == 0) {
+        INSTANCE_PlainDeath(instance, 5, -1, 0);
+    } else if (bsp->_06 == 1 && bsp->instanceSpline == gameTracker->player) {
+        func_80022714(instance, gameTracker);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_fltlamp_OnCollide);
 

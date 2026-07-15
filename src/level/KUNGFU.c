@@ -596,7 +596,24 @@ INCLUDE_RODATA("asm/nonmatchings/level/KUNGFU", D_80162700_B1920); // draga___
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_cannon_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_canball_OnCreate);
+void kungfu_canball_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    Instance* parent = instance->parent;
+    short* p = WORK_AS_PTR(short, parent->work0);
+
+    if (instance->flags & 0x20000) {
+        if (instance->object->oflags2 & 4) {
+            if (instance->flags2 & 0x2000) {
+                instance->flags2 &= ~0x2000;
+                func_800331BC(*(int*)&instance->_34[4]);
+                *(int*)&instance->_34[4] = 0;
+            }
+        }
+        p[0x18 / 2] -= 1;
+    } else {
+        instance->flags |= 0x10000;
+        WORK_AS_IDX(short, parent->work6, 0) += 1;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_canball_OnUpdate);
 
@@ -909,7 +926,24 @@ void func_8016121C_B043C(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_joyride_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_joyride_OnCollide);
+void kungfu_joyride_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    Instance* player = gameTracker->player;
+    BSPTree* bsp = instance->bspTree;
+
+    if (bsp->instanceSpline == player) {
+        ((short*)instance->_D0)[0] |= 1;
+    }
+    if (*(short*)&instance->_D0[2] == 0) {
+        if (bsp->_04 == 1) {
+            func_8004AEC8(instance, 0, 0, 0x80, (SVECTOR*)((short*)instance->_D0 + 5));
+            *(short*)&instance->_D0[2] = 1;
+            gameTracker->gameFlags |= 1;
+        }
+        player->currentMainState = 5;
+    } else if (*(short*)&instance->_D0[2] == 3) {
+        func_80022D54(instance, gameTracker);
+    }
+}
 
 void kungfu_leafgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
     const char name[] = "leaffx__";
