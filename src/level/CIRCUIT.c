@@ -175,7 +175,35 @@ void circuit_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_charger_OnCreate);
+void circuit_charger_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    short* intro = ((short*)instance->introData);
+    short* data = ((short*)instance->object->data);
+
+    if (instance->flags & 0x20000) {
+        if (WORK_AS(int, instance->work4) != 0) {
+            func_800331BC(WORK_AS(int, instance->work4));
+            WORK_AS(int, instance->work4) = 0;
+        }
+    } else {
+        WORK_AS(int, instance->work4) = 0;
+        WORK_AS(int, instance->work5) = 0x4D;
+        WORK_AS(int, instance->work6) = (rand() & 0x1F) - 0x10;
+        instance->work7 = 0;
+        instance->work8 = 1;
+    }
+    instance->work1 = 2;
+    instance->work2 = 0x14;
+    WORK_AS(int, instance->work3) = 0x12C;
+    instance->work0 = 0;
+    instance->flags |= 0x10000;
+    if (intro != 0) {
+        WORK_AS(int, instance->work3) = intro[1];
+    } else if (data != 0) {
+        instance->work1 = data[0];
+        instance->work2 = data[1];
+        WORK_AS(int, instance->work3) = data[3];
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_charger_OnUpdate);
 

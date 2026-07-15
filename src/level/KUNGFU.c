@@ -4,6 +4,7 @@
 #include "types/intro/BTimer.h"
 #include "types/G2String.h"
 #include "SPLINE.h"
+#include "SCRIPT.h"
 #include "OBTABLE.h"
 
 
@@ -929,7 +930,29 @@ void kungfu_oneway_OnCollide(Instance* instance, GameTracker* gameTracker) {
     func_80022D54(instance, gameTracker);
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_80160D4C_AFF6C);
+void func_80160D4C_AFF6C(Instance* instance) {
+    SVECTOR euler;
+    int isParent;
+    int isClass;
+    MultiSpline* multi;
+    SVECTOR* pt;
+
+    multi = SCRIPT_GetMultiSpline(instance, &isParent, &isClass);
+    if (multi->rotational != 0) {
+        G2Quat_ToEuler((short*)SplineGetLastRot(multi->rotational, SCRIPT_GetRotSplineDef(instance, multi, isParent, isClass)), (short*)&euler);
+        instance->rotation.x = euler.x;
+        instance->rotation.y = euler.y;
+        instance->rotation.z = euler.z;
+    }
+    if (multi->positional != 0) {
+        pt = SplineGetLastPoint(multi->positional, SCRIPT_GetPosSplineDef(instance, multi, isParent, isClass));
+        if (pt != 0) {
+            instance->position.x = pt->x;
+            instance->position.y = pt->y;
+            instance->position.z = pt->z;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_80160E4C_B006C);
 
