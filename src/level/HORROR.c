@@ -1183,7 +1183,50 @@ void horror_qmark_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_80163B88_A73B8);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_reza_OnCreate);
+extern char D_80164CCC_A84FC[];
+
+void horror_reza_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    unsigned char* fc = WORK_AS_PTR(unsigned char, instance->work0);
+    short* intro = ((short*)instance->introData);
+
+    instance->flags |= 0x100000;
+    if (strcmp(gameTracker->level->levelType, D_80164CCC_A84FC) == 0) {
+        instance->currentModelAnim = 0;
+        instance->currentAnimFrame = 0;
+        WORK_AS(int, instance->work3) = 0;
+        instance->flags &= ~0x100000;
+        instance->flags2 &= ~0x10;
+        WORK_AS_IDX(char, instance->work7, 0) = SCRIPT_CountFramesInSpline(instance);
+    } else {
+        if (intro == 0) {
+            WORK_AS_IDX(char, instance->work7, 1) = 0;
+            WORK_AS(int, instance->work6) = 0x80;
+        } else {
+            if (intro[1] == 0) {
+                intro[1] = 0x80;
+            }
+            if (intro[0] == 2) {
+                WORK_AS_IDX(char, instance->work7, 1) = 0;
+            }
+            if (instance->intro->multiSpline != 0) {
+                WORK_AS_IDX(char, instance->work7, 2) = 0;
+                WORK_AS_IDX(char, instance->work7, 0) = SCRIPT_CountFramesInSpline(instance);
+                WORK_AS_IDX(char, instance->work7, 3) |= 1;
+                WORK_AS_IDX(char, instance->work7, 1) = ((unsigned char*)intro)[1] & 0xFB;
+            } else {
+                WORK_AS_IDX(char, instance->work7, 1) = 0;
+                WORK_AS_IDX(char, instance->work7, 3) |= 8;
+            }
+            *(int*)(fc + 0x18) = intro[1];
+        }
+        if (fc[0x1D] == 1) {
+            func_8004A7B8(instance, 3, 0);
+        } else {
+            fc[0x1F] |= 2;
+            func_8004A7B8(instance, 0, 0);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_reza_OnUpdate);
 
