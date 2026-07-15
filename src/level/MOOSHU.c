@@ -324,7 +324,32 @@ void mooshu_moolevr_OnCreate(Instance* instance, GameTracker* gameTracker)
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", mooshu_moolevr_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", mooshu_moolevr_OnCollide);
+void func_8015C780_C5100(Instance* instance, GameTracker* gameTracker);
+
+void mooshu_moolevr_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    Instance* target;
+    Instance* target2;
+    SVECTOR pos;
+
+    if (func_80027500(instance->bspTree, gameTracker)) {
+        if (instance->currentMainState == 0) {
+            target = 0;
+            target2 = 0;
+            if (instance->intro->_04[0] >= 3) {
+                target = ((Intro**)instance->intro->_04)[1]->instance;
+                target2 = ((Intro**)instance->intro->_04)[3]->instance;
+            }
+            if (target != 0 && target2 != 0) {
+                pos = target2->position;
+                pos.z += 0x320;
+                func_8015DA78_C63F8(target2, target, 7, &pos, 0xF);
+            }
+            func_8015C780_C5100(instance, gameTracker);
+            func_8015B8B0_C4230(target, gameTracker);
+            instance->currentSubState = 4;
+        }
+    }
+}
 
 int func_8015C6D0_C5050(Instance* instance) {
     if (instance->rotation.x == 0 || (instance->currentMainState == 3 && instance->rotation.x < 0x400)) {
@@ -348,7 +373,7 @@ void func_8015C710_C5090(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-void func_8015C780_C5100(Instance* instance) {
+void func_8015C780_C5100(Instance* instance, GameTracker* gameTracker) {
     if (instance->work0 == 0) {
         instance->currentSubState = 0;
         instance->work2 = 0;

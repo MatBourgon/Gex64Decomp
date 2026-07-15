@@ -232,7 +232,35 @@ void func_8015B548_82728(Instance* instance) {
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015B570_82750);
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_ebridge_OnCreate);
+void func_8015B780_82960(Instance* instance, GameTracker* gameTracker);
+
+void circuit_ebridge_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    int* intro = ((int*)instance->introData);
+    int* data = ((int*)instance->object->data);
+
+    if (instance->flags & 0x20000) {
+        func_8015B780_82960(instance, gameTracker);
+    } else {
+        instance->flags |= 0x10000;
+        instance->work1 = 0x1FF;
+        instance->work6 = 0;
+        instance->work0 = 0x201;
+        func_8015B548_82728(instance);
+        instance->initialPos.x = instance->position.x;
+        instance->initialPos.y = instance->position.y;
+        instance->initialPos.z = instance->position.z;
+        INSTANCE_InsertInstanceWithFlagsSet(instance, 0x1000);
+        instance->currentMainState = 0;
+        instance->work3 = 0x12C;
+        instance->flags |= 0x800;
+        if (intro != 0) {
+            instance->work3 = intro[0];
+        } else if (data != 0) {
+            instance->work3 = data[0];
+        }
+        instance->flags2 |= 8;
+    }
+}
 
 void func_8015B780_82960(Instance* instance, GameTracker* gameTracker) {
     Camera* camera;
