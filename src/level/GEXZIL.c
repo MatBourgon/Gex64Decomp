@@ -497,7 +497,6 @@ typedef struct {
 int func_8016014C_992CC(Instance* instance, MechaData* d) {
     int result;
     short state;
-    int unused[1]; /* dead local -- reproduces the 8-byte frame */
 
     result = 0;
     if (d->_2C == -1 && d->_3C == 0) {
