@@ -389,7 +389,7 @@ void horror_ldgeact_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     int* introData;
     int* sig;
 
-    if (intro->_2C != 0 && *(int*)intro->_2C == 1) {
+    if (intro->_2C != 0 && *intro->_2C == 1) {
         introData = instance->introData;
         if (*(int*)((Intro**)intro->_04)[1]->data == 0) {
             if (introData[0] != 0) {
@@ -746,15 +746,15 @@ void horror_evileye_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 void horror_splitob_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    SVector a;
-    SVector b;
+    SVECTOR a;
+    SVECTOR b;
     int table;
 
     a.x = b.x = instance->position.x;
     a.y = b.y = instance->position.y;
     a.z = instance->position.z - 0x80;
     b.z = instance->position.z + 0x80;
-    COLLIDE_PointAndTerrain(gameTracker8->level->segmentAddress, (SVECTOR*)&a, (SVECTOR*)&b, instance);
+    COLLIDE_PointAndTerrain(gameTracker8->level->segmentAddress, &a, &b, instance);
     if (*(int*)&instance->_C4[0] != 0) {
         instance->work0 = *(int*)&instance->_C4[0];
         table = ((int*)gameTracker8->level->segmentAddress)[0x24 / 4];

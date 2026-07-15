@@ -150,9 +150,7 @@ void scifi_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
 void scifi_rocket_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    int flags = instance->flags;
-
-    if (flags & 0x20000) {
+    if (instance->flags & 0x20000) {
         if (instance->work1 != 0) {
             instance->work1 = 0;
             gameTracker->player->work0 &= ~0x10000000;
@@ -163,7 +161,7 @@ void scifi_rocket_OnCreate(Instance* instance, GameTracker* gameTracker) {
             func_800331BC(WORK_AS(int, instance->work5));
         }
     } else {
-        instance->flags = flags | 0x10000;
+        instance->flags |= 0x10000;
         WORK_AS_IDX(short, instance->work0, 0) = 0;
         WORK_AS(int, instance->work5) = 0;
         instance->flags &= ~0x2000000;
@@ -699,7 +697,7 @@ void scifi_bldbota_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 
     frame = instance->currentTextureAnimFrame;
     instance->currentTextureAnimFrame = frame + 1;
-    func_8015BFD4_E1DF4((Instance*)instance->work0, (short)frame);
+    func_8015BFD4_E1DF4(WORK_AS(Instance*, instance->work0), (short)frame);
 }
 
 void scifi_abubble_OnCreate(Instance* instance, GameTracker* gameTracker) {
@@ -778,16 +776,16 @@ extern char D_80164E6C_EAC8C[];
 void scifi_acrate_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp = instance->bspTree;
     short* fc = WORK_AS_PTR(short, instance->work0);
-    Instance* crate;
+    Instance* other;
 
     if ((bsp->_06 == 1 && ((unsigned char*)bsp->_0C)[5] >= 8)
         || (bsp->instanceSpline != 0 && strcmp(bsp->instanceSpline->object->name, D_80164E60_EAC80) == 0)) {
-        crate = INSTANCE_BirthObject(instance, OBTABLE_FindObject(D_80164E6C_EAC8C));
-        if (crate != 0) {
-            crate->intro = 0;
-            crate->work0 = fc[0];
-            crate->work1 = fc[1];
-            crate->flags |= 8;
+        other = INSTANCE_BirthObject(instance, OBTABLE_FindObject(D_80164E6C_EAC8C));
+        if (other != 0) {
+            other->intro = 0;
+            other->work0 = fc[0];
+            other->work1 = fc[1];
+            other->flags |= 8;
         }
         INSTANCE_PlainDeath(instance, 5, -1, 0);
     }
@@ -818,7 +816,7 @@ void scifi_apod_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->flags |= 0x10000;
     if (instance->flags & 0x20000) {
         if (instance->work9 != 0) {
-            ((int*)gameTracker)[0x4C08 / 4] &= ~4;
+            gameTracker->gameFlags &= ~4;
         }
         if (WORK_AS(int, instance->work3) != 0) {
             func_800331BC(WORK_AS(int, instance->work3));

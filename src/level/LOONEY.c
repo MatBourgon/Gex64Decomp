@@ -877,7 +877,7 @@ void func_8015FEC8_B8178(Instance* instance) {
                     inst = e->instance;
                     if (inst != 0) {
                         if (G2String_Compare_EQ(inst->object->parentName, &D_80161E88_BA138)) {
-                            if (inst->_D0[0] == 0 || (unsigned int)(inst->_D0[0] - 4) < 2) {
+                            if (inst->_D0[0] == 0 || (inst->_D0[0] - 4) < 2U) {
                                 inst->_D0[0] = 1;
                                 inst->_D0[1] = 1;
                             }

@@ -106,14 +106,12 @@ INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015AC68_93DE8);
 INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015AE68_93FE8);
 
 void func_8015B144_942C4(Instance* instance, GameTracker* gameTracker) {
-    int one = 1;
-
-    if (instance->currentSubState != one || instance->currentAnimFrame >= 0x12) {
+    if (instance->currentSubState != 1 || instance->currentAnimFrame >= 0x12) {
         if (instance->work0 < instance->work1) {
             instance->currentAnimFrame = 0;
             instance->flags2 &= ~0x10;
             CAMERA_SetShake(gameTracker->camera, 0x14, 0x190);
-            instance->currentSubState = one;
+            instance->currentSubState = 1;
             instance->work0 += 1;
             if (instance->work0 >= instance->work1) {
                 instance->flags |= 0x400;
@@ -183,7 +181,7 @@ void func_8015B964_94AE4(SVECTOR* from, SVECTOR* to, short* outYaw, short* outPi
     d.z = to->z - from->z;
     *outYaw = ratan2(d.y, d.x);
     r = d.x * d.x + d.y * d.y;
-    if (0x80000 < r) {
+    if (r > 0x80000) {
         len = (MATH3D_FastSqrt2(r << 4, 4) + 8) >> 4;
     } else {
         len = MATH3D_FastSqrt(r << 12) >> 12;
@@ -231,7 +229,44 @@ void gexzil_mekblst_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->flags |= 0x100000;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", gexzil_mekblst_OnUpdate);
+void gexzil_mekblst_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    int sx = instance->scale.x;
+    int sy = instance->scale.y;
+    int sz = instance->scale.z;
+    int done = 0;
+
+    if (sx < 0x7FFB) {
+        sx += instance->_D0[0];
+        if (sx >= 0x7FFB) {
+            done = 1;
+            sx = 0x7FFB;
+        }
+    }
+    if (sy < 0x7FFB) {
+        sy += instance->_D0[1];
+        if (sy >= 0x7FFB) {
+            done = 1;
+            sy = 0x7FFB;
+        }
+    }
+    if (instance->_D0[2] != 0) {
+        if (sz < 0x7FFB) {
+            sz += instance->_D0[2];
+            if (sz >= 0x7FFB) {
+                done = 1;
+                sz = 0x7FFB;
+            }
+        }
+        instance->_D0[2] /= 2;
+    }
+    instance->scale.x = sx;
+    instance->scale.y = sy;
+    instance->scale.z = sz;
+    if (done != 0) {
+        instance->flags = (instance->flags | 0x10) & ~0x400;
+        func_8002CD3C(gameTracker8->instanceList, instance);
+    }
+}
 
 void func_8015EAB8_97C38(Instance* instance, int* arg1);
 
@@ -462,7 +497,7 @@ typedef struct {
 int func_8016014C_992CC(Instance* instance, MechaData* d) {
     int result;
     short state;
-    int unused[1];
+    int unused[1]; /* dead local -- reproduces the 8-byte frame */
 
     result = 0;
     if (d->_2C == -1 && d->_3C == 0) {

@@ -207,23 +207,23 @@ extern int D_800EB8A0;
 
 void rta_zarchsig_OnCollide(Instance* instance, GameTracker* gameTracker) {
     Instance* player;
-    Instance* collider;
+    Instance* other;
     Object* obj;
     Instance* born;
 
     player = gameTracker->player;
-    collider = instance->bspTree->instanceSpline;
-    if (collider == player) {
+    other = instance->bspTree->instanceSpline;
+    if (other == player) {
         obj = OBTABLE_FindObject("count___");
-        born = INSTANCE_BirthObject(collider, obj);
+        born = INSTANCE_BirthObject(other, obj);
         born->rotation.x = 0;
         born->rotation.y = 0;
         born->rotation.z = 0;
-        born = INSTANCE_BirthObject(collider, obj);
+        born = INSTANCE_BirthObject(other, obj);
         born->rotation.x = 0;
         born->rotation.y = 0;
         born->rotation.z = 0x7FE;
-        func_80018B60(collider, D_800EB8A0, collider->position.x, collider->position.y, collider->position.z + 0x15E);
+        func_80018B60(other, D_800EB8A0, other->position.x, other->position.y, other->position.z + 0x15E);
         INSTANCE_PlainDeath(instance, 1, 0, 0);
     }
 }
@@ -547,19 +547,19 @@ INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_fxgen_OnUpdate);
 int func_8015CE34_DD4A4(Instance* instance, SVECTOR* offset, int arg2, short arg3, int arg4) {
     SVECTOR rel;
     SVECTOR pos;
-    int spray;
+    int other;
 
     MATH3D_ApplyMatrixSV(instance->matrix, offset, &rel);
     pos.x = instance->position.x + rel.x;
     pos.y = instance->position.y + rel.y;
     pos.z = instance->position.z + rel.z;
-    spray = func_800176E8(&pos, instance->work0, D_800EB8A0, arg3);
-    if (spray != 0) {
-        func_80017CD8(spray, 0, 0, arg2);
-        func_80017D28(spray, 0, 0, -3);
-        func_80017AE0(spray, arg4);
+    other = func_800176E8(&pos, instance->work0, D_800EB8A0, arg3);
+    if (other != 0) {
+        func_80017CD8(other, 0, 0, arg2);
+        func_80017D28(other, 0, 0, -3);
+        func_80017AE0(other, arg4);
     }
-    return spray;
+    return other;
 }
 
 void rta_zstmvent_OnCreate(Instance* instance, GameTracker* gameTracker) {
