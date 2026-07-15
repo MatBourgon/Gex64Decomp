@@ -175,7 +175,35 @@ void circuit_crawler_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_charger_OnCreate);
+void circuit_charger_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    short* intro = ((short*)instance->introData);
+    short* data = ((short*)instance->object->data);
+
+    if (instance->flags & 0x20000) {
+        if (WORK_AS(int, instance->work4) != 0) {
+            func_800331BC(WORK_AS(int, instance->work4));
+            WORK_AS(int, instance->work4) = 0;
+        }
+    } else {
+        WORK_AS(int, instance->work4) = 0;
+        WORK_AS(int, instance->work5) = 0x4D;
+        WORK_AS(int, instance->work6) = (rand() & 0x1F) - 0x10;
+        instance->work7 = 0;
+        instance->work8 = 1;
+    }
+    instance->work1 = 2;
+    instance->work2 = 0x14;
+    WORK_AS(int, instance->work3) = 0x12C;
+    instance->work0 = 0;
+    instance->flags |= 0x10000;
+    if (intro != 0) {
+        WORK_AS(int, instance->work3) = intro[1];
+    } else if (data != 0) {
+        instance->work1 = data[0];
+        instance->work2 = data[1];
+        WORK_AS(int, instance->work3) = data[3];
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_charger_OnUpdate);
 
@@ -232,7 +260,35 @@ void func_8015B548_82728(Instance* instance) {
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015B570_82750);
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_ebridge_OnCreate);
+void func_8015B780_82960(Instance* instance, GameTracker* gameTracker);
+
+void circuit_ebridge_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    int* intro = ((int*)instance->introData);
+    int* data = ((int*)instance->object->data);
+
+    if (instance->flags & 0x20000) {
+        func_8015B780_82960(instance, gameTracker);
+    } else {
+        instance->flags |= 0x10000;
+        instance->work1 = 0x1FF;
+        instance->work6 = 0;
+        instance->work0 = 0x201;
+        func_8015B548_82728(instance);
+        instance->initialPos.x = instance->position.x;
+        instance->initialPos.y = instance->position.y;
+        instance->initialPos.z = instance->position.z;
+        INSTANCE_InsertInstanceWithFlagsSet(instance, 0x1000);
+        instance->currentMainState = 0;
+        instance->work3 = 0x12C;
+        instance->flags |= 0x800;
+        if (intro != 0) {
+            instance->work3 = intro[0];
+        } else if (data != 0) {
+            instance->work3 = data[0];
+        }
+        instance->flags2 |= 8;
+    }
+}
 
 void func_8015B780_82960(Instance* instance, GameTracker* gameTracker) {
     Camera* camera;
@@ -695,7 +751,50 @@ void circuit_qmark_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015EC00_85DE0);
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_reza_OnCreate);
+extern char D_80163604_8A7E4[];
+
+void circuit_reza_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    unsigned char* fc = WORK_AS_PTR(unsigned char, instance->work0);
+    short* intro = ((short*)instance->introData);
+
+    instance->flags |= 0x100000;
+    if (strcmp(gameTracker->level->levelType, D_80163604_8A7E4) == 0) {
+        instance->currentModelAnim = 0;
+        instance->currentAnimFrame = 0;
+        WORK_AS(int, instance->work3) = 0;
+        instance->flags &= ~0x100000;
+        instance->flags2 &= ~0x10;
+        WORK_AS_IDX(char, instance->work7, 0) = SCRIPT_CountFramesInSpline(instance);
+    } else {
+        if (intro == 0) {
+            WORK_AS_IDX(char, instance->work7, 1) = 0;
+            WORK_AS(int, instance->work6) = 0x80;
+        } else {
+            if (intro[1] == 0) {
+                intro[1] = 0x80;
+            }
+            if (intro[0] == 2) {
+                WORK_AS_IDX(char, instance->work7, 1) = 0;
+            }
+            if (instance->intro->multiSpline != 0) {
+                WORK_AS_IDX(char, instance->work7, 2) = 0;
+                WORK_AS_IDX(char, instance->work7, 0) = SCRIPT_CountFramesInSpline(instance);
+                WORK_AS_IDX(char, instance->work7, 3) |= 1;
+                WORK_AS_IDX(char, instance->work7, 1) = ((unsigned char*)intro)[1] & 0xFB;
+            } else {
+                WORK_AS_IDX(char, instance->work7, 1) = 0;
+                WORK_AS_IDX(char, instance->work7, 3) |= 8;
+            }
+            *(int*)(fc + 0x18) = intro[1];
+        }
+        if (fc[0x1D] == 1) {
+            func_8004A7B8(instance, 3, 0);
+        } else {
+            fc[0x1F] |= 2;
+            func_8004A7B8(instance, 0, 0);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_reza_OnUpdate);
 

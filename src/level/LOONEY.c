@@ -513,17 +513,46 @@ extern int D_80078244;
 extern int D_800EB8A0;
 extern void func_8015B934_B3BE4();
 
-void func_8015BC04_B3EB4(Instance* instance, int arg1, int arg2) {
+void func_8015BC04_B3EB4(Instance* instance, GameTracker* gameTracker, short* pos) {
     Model* model;
 
     if (instance->work0 != 0) {
         model = ((Object*)instance->work0)->modelList[0];
         D_80078244 = (rand() & 3) + 2;
-        func_800170E8(model, model->_14 + 0xC, arg2, 0, 0, D_800EB8A0, func_8015B934_B3BE4, func_8015BBA4_B3E54, 0x28);
+        func_800170E8(model, model->_14 + 0xC, pos, 0, 0, D_800EB8A0, func_8015B934_B3BE4, func_8015BBA4_B3E54, 0x28);
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_leafgen_OnUpdate);
+void looney_leafgen_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    short* fc = WORK_AS_PTR(short, instance->work0);
+    int i;
+
+    if (instance->object->animList != 0) {
+        func_8002DAF8(instance, -1);
+    }
+    if (WORK_AS(int, instance->work5) != 0) {
+        if (WORK_AS(int, instance->work6) == 0) {
+            for (i = 0; i < 5; i++) {
+                func_8015BC04_B3EB4(instance, gameTracker, fc + 2);
+            }
+            if (!func_80033220(0xD3)) {
+                func_80050508(instance, 0xD3, 0, 0x64, 0xBB8);
+            }
+        } else if (WORK_AS(int, instance->work3) != instance->work1 || WORK_AS_IDX(short, instance->work4, 0) != WORK_AS_IDX(short, instance->work2, 0)) {
+            instance->work7 -= 1;
+            if (instance->work7 < 0) {
+                func_8015BC04_B3EB4(instance, gameTracker, WORK_AS_PTR(short, instance->work1));
+                instance->work7 = (rand() & 0xF) + 1;
+                if (!func_80033220(0xD3)) {
+                    func_80050508(instance, 0xD3, 0, 0x64, 0xBB8);
+                }
+            }
+        }
+    }
+    *(SVector*)&fc[6] = *(SVector*)&fc[2];
+    *(int*)&fc[12] = *(int*)&fc[10];
+    *(int*)&fc[10] = 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_leafgen_OnCollide);
 
@@ -906,7 +935,19 @@ void looney_grrfish_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_80160164_B8414);
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_80160318_B85C8);
+extern int D_80161D9C_BA04C;
+
+void func_80160318_B85C8(SVECTOR* pos, int count) {
+    SVector randVec;
+    int i;
+
+    for (i = 0; i < count; i++) {
+        randVec.x = rand() % 30 - 15;
+        randVec.y = rand() % 30 - 15;
+        randVec.z = rand() % 10 + 25;
+        func_80019828(pos, &randVec, &D_80161D9C_BA04C, pos->z);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_grrfish_OnUpdate);
 

@@ -378,7 +378,94 @@ void scifi_eel_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->work2 = ((short*)instance->object->animList[1])[1];
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/SCIFI", scifi_eel_OnUpdate);
+void scifi_eel_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    Instance* player = gameTracker->player;
+    int dir;
+    int state;
+    int dx;
+    int dy;
+
+    dx = instance->position.x - player->position.x;
+    dy = instance->position.y - player->position.y;
+    instance->work0 = dx * dx + dy * dy;
+    dir = (short)ratan2(dy, dx) - 0x400;
+    if (instance->work0 < ((int*)instance->data)[2] && instance->currentMainState == 0 && instance->work1 == 0) {
+        instance->currentMainState = 2;
+        instance->_D0[3] = 8;
+        instance->currentModelAnim = 0;
+        instance->currentAnimFrame = 0;
+        instance->flags &= ~0x800;
+        func_80050980(0);
+    } else if (instance->work1 > 0) {
+        instance->work1 -= 1;
+    }
+    if (instance->currentMainState == 2) {
+        if (instance->_D0[3] > 0) {
+            instance->position.z += 0x60;
+            if (instance->currentAnimFrame < instance->work2) {
+                func_8002DAF8(instance, -1);
+                if (instance->currentAnimFrame < instance->work2) {
+                    func_8002DAF8(instance, -1);
+                }
+            }
+            func_8004ACB0(&instance->rotation.z, (short)dir, 0x80);
+            instance->_D0[3] -= 1;
+            return;
+        } else if (instance->_D0[3] == 0) {
+            instance->currentMainState = 3;
+            instance->currentModelAnim = 2;
+            instance->currentAnimFrame = 0;
+            instance->_D0[3] = ((short*)instance->object->animList[2])[1];
+            return;
+        }
+    }
+    state = instance->currentMainState;
+    if (state == 3) {
+        if (instance->_D0[3] > 0) {
+            if (instance->currentAnimFrame < ((short*)instance->object->animList[2])[1]) {
+                func_8002DAF8(instance, -1);
+                func_8002DAF8(instance, -1);
+            }
+            func_8004ACB0(&instance->rotation.z, (short)dir, 0x80);
+            instance->_D0[3] -= 1;
+            if (instance->currentAnimFrame == 0x16) {
+                func_80050980(0);
+            }
+            return;
+        } else if (instance->_D0[3] == 0) {
+            if (instance->work0 < ((int*)instance->data)[2]) {
+                instance->currentMainState = state;
+                instance->currentModelAnim = 2;
+                instance->currentAnimFrame = 0;
+                instance->_D0[3] = ((short*)instance->object->animList[2])[1];
+                return;
+            }
+            instance->currentMainState = 4;
+            instance->currentModelAnim = 3;
+            instance->currentAnimFrame = 0;
+            instance->_D0[3] = 8;
+            return;
+        }
+    }
+    if (instance->currentMainState == 4) {
+        if (instance->_D0[3] > 0) {
+            instance->position.z -= 0x60;
+            if (instance->currentAnimFrame < instance->work2) {
+                func_8002DAF8(instance, -1);
+                if (instance->currentAnimFrame < instance->work2) {
+                    func_8002DAF8(instance, -1);
+                }
+            }
+            instance->_D0[3] -= 1;
+            return;
+        }
+        if (instance->_D0[3] == 0) {
+            instance->currentMainState = 0;
+            instance->flags |= 0x800;
+            instance->work1 = rand() % 5;
+        }
+    }
+}
 
 void scifi_eel_OnCollide(Instance* instance, GameTracker* gameTracker) {
     if (func_80027500(instance->bspTree, gameTracker)) {

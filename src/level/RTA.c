@@ -94,7 +94,23 @@ INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zshark_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zshark_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015A2B0_DA920);
+void func_8015A2B0_DA920(Instance* instance, short arg1) {
+    if (*(int*)&instance->_34[2] != 0) {
+        if (func_80033200(*(int*)&instance->_34[2]) == 0) {
+            *(int*)&instance->_34[2] = func_80050508(instance, 0x119, 0, 0x7E, arg1);
+        } else if (func_800506B8(instance, *(int*)&instance->_34[2], 0, 0x7E, arg1) == 0) {
+            func_800331BC(*(int*)&instance->_34[2]);
+            *(int*)&instance->_34[2] = 0;
+        }
+    } else if (instance->_40[3] != 0) {
+        instance->_40[3] -= 1;
+    } else if (!(instance->intro->flags & 0x80)) {
+        *(int*)&instance->_34[2] = func_80050508(instance, 0x119, 0, 0x7E, arg1);
+        if (*(int*)&instance->_34[2] == 0) {
+            instance->_40[3] = 5;
+        }
+    }
+}
 
 void rta_crawler_OnCreate(Instance* instance, GameTracker* gameTracker)
 {
@@ -525,7 +541,19 @@ void func_8015C8C0_DCF30(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015C8C8_DCF38);
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015CA24_DD094);
+extern int D_8015EE10_DF480;
+
+void func_8015CA24_DD094(SVECTOR* pos, int count) {
+    SVector randVec;
+    int i;
+
+    for (i = 0; i < count; i++) {
+        randVec.x = rand() % 30 - 15;
+        randVec.y = rand() % 30 - 15;
+        randVec.z = rand() % 10 + 25;
+        func_80019828(pos, &randVec, &D_8015EE10_DF480, pos->z);
+    }
+}
 
 extern char D_8015EE18_DF488[];
 
@@ -583,7 +611,37 @@ void rta_zstmvent_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->work2 = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zstmvent_OnUpdate);
+void rta_zstmvent_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    int* fc = WORK_AS_PTR(int, instance->work0);
+
+    if (instance->work2 == 0 && instance->position.z < WORK_AS(int, instance->work5)) {
+        if (instance->work1 > 0) {
+            instance->work1 -= 1;
+        } else {
+            instance->work1 = 0;
+            instance->work2 = 1;
+        }
+        return;
+    }
+    if (instance->position.z >= fc[6]) {
+        instance->position.z = fc[4];
+        fc[1] = (rand() & 0x3F) + 0x80;
+        fc[2] = 0;
+    } else {
+        if (fc[5] < instance->position.z) {
+            fc[2] = 0;
+        } else {
+            if (fc[2] == 0) {
+                return;
+            }
+            if (fc[0] == 0) {
+                return;
+            }
+            func_8015D0B4_DD724(instance);
+        }
+        instance->position.z += 0x28;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015D0B4_DD724);
 
