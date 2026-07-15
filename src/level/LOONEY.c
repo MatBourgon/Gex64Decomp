@@ -564,7 +564,7 @@ void looney_funguy_OnUpdate(Instance* instance, GameTracker* gameTracker) {
 }
 
 void looney_funguy_OnCollide(Instance* instance, GameTracker* gameTracker) {
-    int fd = ((int*)instance->work0)[1];
+    int fd = WORK_AS(int*, instance->work0)[1];
     BSPTree* bsp = instance->bspTree;
     int* fc = WORK_AS_PTR(int, instance->work0);
     Instance* player;

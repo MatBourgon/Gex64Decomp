@@ -258,7 +258,7 @@ void rta_zwleak_OnUpdate(Instance* instance, GameTracker* gameTracker) {
         dx = instance->position.x - player->position.x;
         dy = instance->position.y - player->position.y;
         dz = instance->position.z - player->position.z;
-        if (dx * dx + dy * dy + dz * dz <= (12250000 - 1)) {
+        if (dx * dx + dy * dy + dz * dz < (3500 * 3500)) {
             func_8015B1D4_DB844(instance);
         }
         instance->work2 = 0;
