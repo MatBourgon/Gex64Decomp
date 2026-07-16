@@ -65,7 +65,7 @@ Instance* func_8015A09C_9321C(Instance* instance, Instance* target, short arg2, 
     Instance* bolt;
     Object* spotObj;
     Object* boltObj;
-    int spray;
+    int other;
 
     spotObj = OBTABLE_FindObject(D_80162AA0_9BC20);
     boltObj = OBTABLE_FindObject("ebolt___");
@@ -82,10 +82,10 @@ Instance* func_8015A09C_9321C(Instance* instance, Instance* target, short arg2, 
                 if (arg4 < 0) {
                     arg4 = -2;
                 }
-                spray = func_800176E8(&target->position, spotObj->modelList[0], D_800EB8A0, arg4);
-                if (spray != 0) {
-                    func_80015E80(spray, -0x8000);
-                    WORK_AS(int, bolt->work3) = spray;
+                other = func_800176E8(&target->position, spotObj->modelList[0], D_800EB8A0, arg4);
+                if (other != 0) {
+                    func_80015E80(other, -0x8000);
+                    WORK_AS(int, bolt->work3) = other;
                 }
             }
             func_80159DEC_92F6C(bolt, target);
