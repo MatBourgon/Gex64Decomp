@@ -92,7 +92,32 @@ INCLUDE_RODATA("asm/nonmatchings/level/RTA", D_8015EE40_DF4B0);
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zshark_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zshark_OnCollide);
+void rta_zshark_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp = instance->bspTree;
+    if (bsp->instanceSpline == gameTracker->player) {
+        if (WORK_AS(int, instance->work0) != 4) {
+            if (bsp->_0C[5] == 8) {
+                instance->flags = instance->flags & ~0x400;
+                INSTANCE_PlainDeath(instance, 5, 3, 0);
+            }
+            else
+            {
+                func_80022D54(instance, gameTracker);
+                WORK_AS(int, instance->work0) = 5;
+                if (instance->currentModelAnim != 1) {
+                    instance->currentModelAnim = 1;
+                    instance->currentAnimFrame = 0;
+                    instance->flags2 &= ~0x10;
+                }
+            }
+        }
+    } else {
+        instance->position.x += bsp->localOffset.x;
+        instance->position.y += bsp->localOffset.y;
+        instance->position.z += bsp->localOffset.z;
+        COLLIDE_UpdateAllTransforms(instance, &bsp->localOffset, gameTracker);
+    }
+}
 
 void func_8015A2B0_DA920(Instance* instance, short arg1) {
     if (*(int*)&instance->_34[2] != 0) {
