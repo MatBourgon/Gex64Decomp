@@ -1,6 +1,8 @@
 #include "common.h"
 
 #include "level/GEXZIL.h"
+#include "OBTABLE.h"
+#include "INSTANCE.h"
 #include "types/G2String.h"
 
 void gexzil_bug_OnCreate(Instance* instance, GameTracker* gameTracker) {
@@ -56,7 +58,41 @@ INCLUDE_RODATA("asm/nonmatchings/level/GEXZIL", D_80162A90_9BC10);
 
 INCLUDE_RODATA("asm/nonmatchings/level/GEXZIL", D_80162AA0_9BC20);
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015A09C_9321C);
+extern int D_800EB8A0;
+extern char D_80162AA0_9BC20[];
+
+Instance* func_8015A09C_9321C(Instance* instance, Instance* target, short arg2, SVECTOR* pos, short arg4) {
+    Instance* bolt;
+    Object* spotObj;
+    Object* boltObj;
+    int spray;
+
+    spotObj = OBTABLE_FindObject(D_80162AA0_9BC20);
+    boltObj = OBTABLE_FindObject("ebolt___");
+    bolt = 0;
+    if (boltObj != 0) {
+        bolt = INSTANCE_BirthObject(instance, boltObj);
+        if (bolt != 0) {
+            bolt->work0 = arg4;
+            WORK_AS(Instance*, bolt->work1) = target;
+            bolt->position = *pos;
+            bolt->intro = NULL;
+            bolt->work7 = bolt->work2 = arg2;
+            if (spotObj != 0) {
+                if (arg4 < 0) {
+                    arg4 = -2;
+                }
+                spray = func_800176E8(&target->position, spotObj->modelList[0], D_800EB8A0, arg4);
+                if (spray != 0) {
+                    func_80015E80(spray, -0x8000);
+                    WORK_AS(int, bolt->work3) = spray;
+                }
+            }
+            func_80159DEC_92F6C(bolt, target);
+        }
+    }
+    return bolt;
+}
 
 extern void func_80017AB8(short* arg0, short arg1);
 void gexzil_ebolt_OnCreate(Instance* instance, GameTracker* gameTracker) {
@@ -422,7 +458,7 @@ void func_8015F680_98800(Instance* instance) {
     instance->_B8 = 0;
     d[0x1C] = d[0x1D];
     if (((int*)d)[0x90 / 4] != 0) {
-        func_8002E350(((int*)d)[0x90 / 4]);
+        func_8002E350(((Instance**)d)[0x90 / 4]);
         ((int*)d)[0x90 / 4] = 0;
     }
 }

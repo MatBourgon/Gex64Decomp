@@ -351,7 +351,29 @@ INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zgeyser_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zgeyser_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zdoor_OnCreate);
+void func_8015BD04_DC374(Instance* instance);
+
+void rta_zdoor_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    if (instance->flags & 0x20000) {
+        instance->intro->flags &= ~8;
+    } else {
+        instance->flags |= 0x10400;
+        if (((int*)instance->introData) != 0) {
+            int* intro = ((int*)instance->introData);
+            if (intro[0] == 0) {
+                intro[0] = 0;
+            } else {
+                intro[0] = 1;
+            }
+            instance->currentSubState = 0;
+            memset(&instance->work0, 0, 0x28);
+            instance->work0 = instance->initialPos.x + intro[2] * intro[3];
+            instance->work1 = instance->initialPos.y + intro[2] * intro[4];
+            instance->work2 = instance->initialPos.z + intro[2] * intro[5];
+            func_8015BD04_DC374(instance);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zdoor_OnUpdate);
 
