@@ -1,0 +1,22 @@
+name: LabelTroubleMatching
+on:
+  issues:
+    types:
+      - opened
+jobs:
+  add-label:
+    if:  contains(github.event.issue.title, '[Trouble matching]')
+      || contains(github.event.issue.title, '[Trouble Matching]')
+      || contains(github.event.issue.title, '[trouble matching]')
+      || contains(github.event.issue.title, '[TROUBLE MATCHING]')
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Add Label
+        run: gh issue edit "$NUMBER" --add-label "Trouble Matching"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          NUMBER: ${{ github.event.issue.number }}
+    
