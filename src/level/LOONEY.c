@@ -554,7 +554,55 @@ void looney_leafgen_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     *(int*)&fc[10] = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_leafgen_OnCollide);
+void looney_leafgen_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    extern MATRIX* D_800E97C8;
+    extern SVECTOR D_800EB800;
+    BSPTree* bsp;
+    LVECTOR out;
+    short code;
+    int zv;
+
+    bsp = instance->bspTree;
+    if (bsp->instanceSpline == gameTracker->player) {
+        code = bsp->_06;
+        switch (code) {
+            case 4:
+                WORK_AS_IDX(short, instance->work1, 0) = bsp->globalOffset.x;
+                WORK_AS_IDX(short, instance->work1, 1) = bsp->globalOffset.y;
+                zv = (unsigned short)bsp->globalOffset.z;
+                instance->work5 = 1;
+                WORK_AS_IDX(short, instance->work2, 0) = zv;
+                break;
+            case 1:
+                switch (bsp->_04) {
+                    case 2:
+                        instance->work5 = code;
+                        break;
+                    case 1:
+                        if ((bsp->_08[4] - 7) < 3U) {
+                            MATH3D_ApplyMatrixT(D_800E97C8, &D_800EB800, &out);
+                            WORK_AS_IDX(short, instance->work1, 0) = out.x;
+                            WORK_AS_IDX(short, instance->work1, 1) = out.y;
+                            zv = out.z;
+                            instance->work5 = code;
+                            WORK_AS_IDX(short, instance->work2, 0) = zv;
+                        }
+                        break;
+                    case 5:
+                        if ((bsp->_08[2] - 7) < 3U) {
+                            MATH3D_ApplyMatrixT(D_800E97C8, &D_800EB800, &out);
+                            WORK_AS_IDX(short, instance->work1, 0) = out.x;
+                            WORK_AS_IDX(short, instance->work1, 1) = out.y;
+                            zv = out.z;
+                            instance->work5 = code;
+                            WORK_AS_IDX(short, instance->work2, 0) = zv;
+                        }
+                        break;
+                }
+                break;
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_funguy_OnCreate);
 
