@@ -500,7 +500,65 @@ void looney_leafgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
     p[7] = (rand() & 0xF) + 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_8015B934_B3BE4);
+extern int D_80078244;
+extern int D_80078248;
+
+void func_8015B934_B3BE4(ParticleData* p, void* callback, char* data, void* arg3, unsigned short* def, char* table, SVECTOR* pos, int arg7, int arg8, int arg9, unsigned short arg10) {
+    short* va;
+    short* vb;
+    short* vc;
+    int* nxt;
+    int i0;
+    int i1;
+    int i2;
+    unsigned short px0;
+
+    px0 = pos->x;
+    i0 = def[0];
+    i1 = def[1];
+    i2 = def[2];
+    va = (short*)(table + i0 * 12);
+    p->posX = px0;
+    p->posY = pos->y;
+    p->posZ = pos->z;
+    vb = (short*)(table + i2 * 12);
+    p->unk24 = (va[0] - vb[0]) * D_80078244;
+    p->_26 = (va[1] - vb[1]) * D_80078244;
+    vc = (short*)(table + i1 * 12);
+    p->unk28 = (va[2] - vb[2]) * D_80078244;
+    p->unk2C = (vc[0] - vb[0]) * D_80078244;
+    p->_2E = (vc[1] - vb[1]) * D_80078244;
+    p->unk30 = (vc[2] - vb[2]) * D_80078244;
+    p->unk34 = 0;
+    p->_36 = 0;
+    p->unk38 = 0;
+    if (((unsigned char*)def)[7] & 2) {
+        p->flags |= 1;
+        nxt = ((int**)def)[2];
+        p->next = nxt;
+        p->_18 = (nxt[3] & 0x3FFFFFF) | 0x24000000;
+    } else {
+        p->flags &= ~1;
+        p->_18 = (((int*)def)[2] & 0x3FFFFFF) | 0x20000000;
+    }
+    p->callback = callback;
+    p->_14 = data;
+    p->_4C = 0;
+    p->_4E = 0;
+    p->_50 = 0;
+    p->_52 = 0;
+    p->_54 = 0;
+    p->_0E = arg10;
+    p->_56 = D_80078248 - 2;
+    D_80078248 ^= 1;
+    p->_44 = (rand() & 0x3F) - 0x10;
+    p->_46 = (rand() & 0x3F) - 0x10;
+    p->_48 = (rand() & 0x3F) - 0x10;
+    MATH3D_SetUnityMatrix((char*)p->_14 + 0xC);
+    RotMatrixX(rand() & 0xFFF, (char*)p->_14 + 0xC);
+    RotMatrixY(rand() & 0xFFF, (char*)p->_14 + 0xC);
+    RotMatrixZ(rand() & 0xFFF, (char*)p->_14 + 0xC);
+}
 
 void func_8015BBA4_B3E54(short* arg0) {
     func_800162C0(arg0);
