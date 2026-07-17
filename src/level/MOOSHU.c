@@ -1,6 +1,8 @@
 #include "common.h"
 
 #include "level/MOOSHU.h"
+#include "OBTABLE.h"
+#include "INSTANCE.h"
 
 /* quantize a stick/velocity pair into a direction code (0-3) */
 void func_80159720_C20A0(short* out, int arg1, short* vec) {
@@ -325,6 +327,7 @@ void mooshu_moolevr_OnCreate(Instance* instance, GameTracker* gameTracker)
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", mooshu_moolevr_OnUpdate);
 
 void func_8015C780_C5100(Instance* instance, GameTracker* gameTracker);
+Instance* func_8015DA78_C63F8(Instance* instance, Instance* target, short arg2, SVECTOR* pos, short arg4);
 
 void mooshu_moolevr_OnCollide(Instance* instance, GameTracker* gameTracker) {
     Instance* target;
@@ -481,7 +484,40 @@ void func_8015D7B4_C6134(Instance* instance, GameTracker* gameTracker)
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015D7C8_C6148);
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015DA78_C63F8);
+extern int D_800EB8A0;
+
+Instance* func_8015DA78_C63F8(Instance* instance, Instance* target, short arg2, SVECTOR* pos, short arg4) {
+    Instance* bolt;
+    Object* spotObj;
+    Object* boltObj;
+    int other;
+
+    spotObj = OBTABLE_FindObject("bluspot_");
+    boltObj = OBTABLE_FindObject("ebolt___");
+    bolt = 0;
+    if (boltObj != 0) {
+        bolt = INSTANCE_BirthObject(instance, boltObj);
+        if (bolt != 0) {
+            bolt->work0 = arg4;
+            WORK_AS(Instance*, bolt->work1) = target;
+            bolt->position = *pos;
+            bolt->intro = NULL;
+            bolt->work7 = bolt->work2 = arg2;
+            if (spotObj != 0) {
+                if (arg4 < 0) {
+                    arg4 = -2;
+                }
+                other = func_800176E8(&target->position, spotObj->modelList[0], D_800EB8A0, arg4);
+                if (other != 0) {
+                    func_80015E80(other, -0x8000);
+                    WORK_AS(int, bolt->work3) = other;
+                }
+            }
+            func_8015D7C8_C6148(bolt, target);
+        }
+    }
+    return bolt;
+}
 
 extern void func_80017AB8(short* arg0, short arg1);
 void mooshu_ebolt_OnCreate(Instance* instance, GameTracker* gameTracker) {

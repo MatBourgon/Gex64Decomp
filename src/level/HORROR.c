@@ -6,6 +6,7 @@
 #include "types/intro/BTimer.h"
 #include "types/G2String.h"
 #include "level/COMMON.h"
+#include "OBTABLE.h"
 
 #include "types/Vector.h"
 extern int D_800E5FD8;
@@ -551,43 +552,60 @@ typedef struct {
 } SprayData;
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_8015F620_A2E50);
-/* near-match (18 diffs: frame a1/a2, mflo v0/v1, z-check v0/v1 swap — scheduler difference):
-void func_8015F620_A2E50(void* arg0) {
-    SprayData* data;
-    Instance* player;
-    int dz;
-    int posZadj;
-    int dx;
-    int dy;
 
-    data = ((SprayData*)arg0);
-    data->unk24 -= 5;
-    data->unk28 += 5;
-    data->frame++;
-    data->unk2C -= 5;
-    data->unk30 -= 5;
-    data->unk34 += 5;
-    data->unk38 += 5;
-    data->unk3C += 5;
-    data->unk40 -= 5;
-    func_80016894(arg0);
-    player = PlayerInstance;
-    dx = player->position.x - data->posX;
-    dy = player->position.y - data->posY;
-    if (dx * dx + dy * dy < 0x4000) {
-        posZadj = data->posZ - 0x100;
-        dz = player->position.z - posZadj;
-        if (dz < 0) dz = -dz;
-        if (dz < 0x100) {
-            if (player->currentSubState != 0x200000) {
-                func_800223F8(gameTracker8, 0x78, 0);
+extern int D_800EB8A0;
+extern void func_80017E88();
+extern void func_8015F620_A2E50();
+
+void horror_spray_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    SVECTOR rot;
+    SVECTOR pos;
+    Model* model;
+    int state;
+
+    int dy, dx;
+    dx = PlayerInstance->position.x - instance->position.x;
+    dy = PlayerInstance->position.y - instance->position.y;
+
+    func_8004ACB0(&instance->rotation.z, (short)(ratan2(dy, dx) + 0x400), 0x200);
+
+    state = instance->currentMainState;
+    instance->work9 += 1;
+    if (state == 0) {
+        if (instance->work9 >= 0x5A) {
+            instance->currentMainState = 1;
+            instance->work9 = 0;
+        }
+    } else if (state == 1) {
+        model = OBTABLE_FindObject("sprysht_")->modelList[0];
+        if (WORK_AS(int, instance->work7) != 0) {
+            WORK_AS(int, instance->work8) += 8;
+            if (WORK_AS(int, instance->work8) == 0x80) {
+                WORK_AS(int, instance->work7) = 0;
             }
+        } else {
+            WORK_AS(int, instance->work8) -= 8;
+            if (WORK_AS(int, instance->work8) == -0x80) {
+                WORK_AS(int, instance->work7) = state;
+            }
+        }
+        pos.x = instance->position.x + (((short)func_8003A6AC(instance->rotation.z - 0x400)) >> 5);
+        pos.y = instance->position.y + (((short)func_8003A4E0(instance->rotation.z - 0x400)) >> 5);
+        pos.z = instance->position.z;
+        rot.x = (short)func_8003A6AC(instance->rotation.z - 0x400 + (WORK_AS(int, instance->work8))) * 0x19 >> 0xB;
+        rot.y = (short)func_8003A4E0(instance->rotation.z - 0x400 + (WORK_AS(int, instance->work8))) * 0x19 >> 0xB;
+        rot.z = 0;
+        func_800170E8(model, model->_14, &pos, &rot, 0, D_800EB8A0, func_80017E88, func_8015F620_A2E50, 0x14);
+        if (PlayerInstance->currentSubState == 0x200000) {
+            WORK_AS(int, instance->work6) += 1;
+        }
+        if (instance->work9 >= 0x5A || WORK_AS(int, instance->work6) >= 0xA) {
+            instance->work9 = 0;
+            WORK_AS(int, instance->work6) = 0;
+            instance->currentMainState = 0;
         }
     }
 }
-*/
-
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_spray_OnUpdate);
 
 void horror_spray_OnCollide(Instance* instance, GameTracker* gameTracker) {
     if (instance->bspTree->_06 == 1
