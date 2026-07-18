@@ -1068,13 +1068,106 @@ void func_80161F4C_A577C(Instance* instance, SVECTOR offset) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_80162024_A5854);
+void func_80162024_A5854(Instance* instance, SVECTOR offset) {
+    MATRIX m;
+    SVECTOR vec;
+    SVECTOR res;
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_80162118_A5948);
+    MATH3D_SetUnityMatrix(&m);
+    if (instance->rotation.z > 0) {
+        instance->rotation.z -= 0x20;
+        RotMatrixZ(instance->rotation.z + instance->intro->rotation.z, &m);
+        vec.x = 0;
+        vec.z = 0;
+        vec.y = -0x40;
+        res.x = (vec.x * m.m[0][0] >> 12) + (vec.y * m.m[0][1] >> 12) + (vec.z * m.m[0][2] >> 12);
+        res.y = (vec.x * m.m[1][0] >> 12) + (vec.y * m.m[1][1] >> 12) + (vec.z * m.m[1][2] >> 12);
+        res.z = (vec.x * m.m[2][0] >> 12) + (vec.y * m.m[2][1] >> 12) + (vec.z * m.m[2][2] >> 12);
+        instance->position.x = res.x + offset.x;
+        instance->position.y = res.y + offset.y;
+        instance->position.z = res.z + offset.z;
+    } else {
+        WORK_AS_IDX(char, instance->work8, 2) = 0;
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_80162214_A5A44);
+void func_80162118_A5948(Instance* instance, SVECTOR offset) {
+    MATRIX m;
+    SVECTOR vec;
+    SVECTOR res;
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_801622E4_A5B14);
+    MATH3D_SetUnityMatrix(&m);
+    if (instance->rotation.z < 0x400) {
+        instance->rotation.z += 0x20;
+        RotMatrixZ(instance->rotation.z + instance->intro->rotation.z, &m);
+        vec.x = 0;
+        vec.z = 0;
+        vec.y = -0x40;
+        res.x = (vec.x * m.m[0][0] >> 12) + (vec.y * m.m[0][1] >> 12) + (vec.z * m.m[0][2] >> 12);
+        res.y = (vec.x * m.m[1][0] >> 12) + (vec.y * m.m[1][1] >> 12) + (vec.z * m.m[1][2] >> 12);
+        res.z = (vec.x * m.m[2][0] >> 12) + (vec.y * m.m[2][1] >> 12) + (vec.z * m.m[2][2] >> 12);
+        instance->position.x = res.x + offset.x;
+        instance->position.y = res.y + offset.y;
+        instance->position.z = res.z + offset.z;
+    } else {
+        WORK_AS_IDX(char, instance->work8, 2) = 4;
+    }
+}
+
+void func_80162214_A5A44(Instance* instance, SVECTOR offset) {
+    MATRIX m;
+    SVECTOR vec;
+    SVECTOR res;
+
+    MATH3D_SetUnityMatrix(&m);
+    if (instance->rotation.z < 0) {
+        instance->rotation.z += 0x20;
+        RotMatrixZ(instance->rotation.z + instance->intro->rotation.z, &m);
+        vec.y = 0x40;
+        vec.x = 0;
+        vec.z = 0;
+        res.x = (vec.x * m.m[0][0] >> 12) + (vec.y * m.m[0][1] >> 12) + (vec.z * m.m[0][2] >> 12);
+        res.y = (vec.x * m.m[1][0] >> 12) + (vec.y * m.m[1][1] >> 12) + (vec.z * m.m[1][2] >> 12);
+        res.z = (vec.x * m.m[2][0] >> 12) + (vec.y * m.m[2][1] >> 12) + (vec.z * m.m[2][2] >> 12);
+        instance->position.x = res.x + offset.x;
+        instance->position.y = res.y + offset.y;
+        instance->position.z = res.z + offset.z;
+    } else {
+        WORK_AS_IDX(char, instance->work8, 2) = 0;
+    }
+}
+
+void func_801622E4_A5B14(GameTracker* arg0, short arg1, int arg2, Instance* arg3) {
+    Camera* camera;
+    int base;
+
+    camera = arg0->camera;
+    base = (int)arg3 + 0xC8;
+    func_8000B054(camera);
+    if ((arg1 != arg3->intro->rotation.z) ? !(arg3->_C4[4] & 2) : (arg3->_C4[4] & 2)) {
+        if (((short*)camera)[0x16 / 2] != 0) {
+            camera->smooth = 0;
+        } else {
+            camera->smooth = 0x1E;
+        }
+        camera->cameraKey = ((CameraKey*)(base + 0x3E));
+        ((int*)camera)[0x520 / 4] = base + 0x3E;
+        ((int*)camera)[0x3DC / 4] = 0;
+        ((int*)camera)[0x3E0 / 4] = 0;
+        CAMERA_SetMode(camera, 2);
+    } else {
+        if (((short*)camera)[0x16 / 2] != 0) {
+            camera->smooth = 0;
+        } else {
+            camera->smooth = 0x1E;
+        }
+        camera->cameraKey = ((CameraKey*)(base + 0x26));
+        ((int*)camera)[0x520 / 4] = base + 0x26;
+        ((int*)camera)[0x3DC / 4] = 0;
+        ((int*)camera)[0x3E0 / 4] = 0;
+        CAMERA_SetMode(camera, 2);
+    }
+}
 
 void func_801623DC_A5C0C(GameTracker* arg0, short arg1, int arg2, void* arg3) {
     Camera* camera;
@@ -1134,7 +1227,29 @@ int func_80162524_A5D54(short* arg0, short* arg1) {
     return result;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", func_8016257C_A5DAC);
+void func_8016257C_A5DAC(Instance* arg0, Instance* arg1) {
+    Camera* camera;
+
+    camera = gameTracker8->camera;
+    camera->smooth = 0;
+    camera->focusRotationX = ((unsigned short*)camera)[0x17A / 2];
+    if (func_80162524_A5D54((short*)camera, (short*)((int)arg1 + 0x106)) != 0) {
+        ((int*)camera)[0x520 / 4] = (int)arg0 + 0xEE;
+        camera->cameraKey = ((CameraKey*)((int)arg0 + 0xEE));
+        ((int*)camera)[0x3DC / 4] = 0;
+        ((int*)camera)[0x3E0 / 4] = 0;
+        CAMERA_SetMode(camera, 2);
+    } else if (func_80162524_A5D54((short*)camera, (short*)((int)arg1 + 0xEE)) != 0 || !(arg0->_C4[4] & 2)) {
+        ((int*)camera)[0x520 / 4] = (int)arg0 + 0x106;
+        camera->cameraKey = ((CameraKey*)((int)arg0 + 0x106));
+        ((int*)camera)[0x3DC / 4] = 0;
+        ((int*)camera)[0x3E0 / 4] = 0;
+        CAMERA_SetMode(camera, 2);
+    } else {
+        camera->lock &= ~4;
+        camera->lock &= ~2;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_door_OnUpdate);
 
