@@ -32,7 +32,32 @@ void rta_zgrate_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zshark_OnCreate);
+typedef struct {
+    int x, y, z, pad;
+} SharkVector;
+
+void rta_zshark_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    extern SharkVector D_8015EE40_DF4B0;
+    SharkVector v;
+    MATRIX m;
+    LVECTOR out;
+    int f;
+
+    v = D_8015EE40_DF4B0;
+    f = instance->flags;
+    if (!(f & 0x20000)) {
+        instance->flags = f | 0x10400;
+        func_8003E758(&instance->rotation, &m);
+        MATH3D_ApplyMatrixLV(&m, ((LVECTOR*)&v), &out);
+        instance->currentModelAnim = 0;
+        instance->work0 = 0;
+        instance->work1 = 0;
+        instance->work6 = instance->position.x + out.x;
+        instance->work7 = instance->position.y + out.y;
+        instance->work8 = instance->position.z + out.z;
+        instance->work9 = 0;
+    }
+}
 
 INCLUDE_RODATA("asm/nonmatchings/level/RTA", D_8015ED10_DF380);
 
@@ -329,7 +354,26 @@ void rta_zwleak_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     func_8015A2B0_DA920(instance, 0x9C4);
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zwleak_OnCollide);
+extern void func_8000B054();
+extern void func_800256A8();
+
+void rta_zwleak_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    Instance* player;
+    short* d;
+
+    player = gameTracker->player;
+    d = ((short*)player->data);
+    d[0x8C / 2] = instance->work5 * instance->work1 >> 12;
+    d[0x8E / 2] = instance->work6 * instance->work1 >> 12;
+    d[0x90 / 2] = 0;
+    d[0x98 / 2] = 0;
+    d[0x94 / 2] = -(d[0x8C / 2] / 15);
+    d[0x96 / 2] = -(d[0x8E / 2] / 15);
+    if (player->currentMainState == 4) {
+        func_8000B054(gameTracker->camera);
+    }
+    func_800256A8(gameTracker);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015B1D4_DB844);
 
