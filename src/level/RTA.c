@@ -333,7 +333,32 @@ INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zwleak_OnCollide);
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015B1D4_DB844);
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015B4EC_DBB5C);
+void func_8015B4EC_DBB5C(short* arg0, int arg1) {
+    extern int D_8015EF1C_DF58C;
+    int x;
+    int a3;
+
+    x = arg0[0x20 / 2];
+    a3 = x + arg0[0x50 / 2] + arg0[0x56 / 2];
+    if (D_8015EF1C_DF58C < a3) {
+        ((unsigned short*)arg0)[0x52 / 2] += ((unsigned short*)arg0)[0x52 / 2] * 2;
+        a3 = D_8015EF1C_DF58C - arg0[0x20 / 2];
+        ((unsigned short*)arg0)[0x54 / 2] += ((unsigned short*)arg0)[0x54 / 2] * 2;
+        if (a3 > 0) {
+            arg0[0x50 / 2] = a3;
+            if (arg0[0xE / 2] >= 5) {
+                arg0[0xE / 2] = 4;
+            }
+        } else {
+            arg0[0xE / 2] = 0;
+        }
+    } else if (arg0[0x50 / 2] < 0) {
+        if (arg0[0xE / 2] >= 4) {
+            arg0[0xE / 2] = 3;
+        }
+    }
+    func_800162C0(arg0, arg1);
+}
 
 extern char D_8015EE74_DF4E4[];
 
