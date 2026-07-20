@@ -1011,7 +1011,39 @@ INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_80160E4C_B006C);
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_80160F68_B0188);
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_joyride_OnCreate);
+void kungfu_joyride_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    MultiSpline* multi;
+    G2Quat* quat;
+    short* d0;
+    int isParent;
+    int isClass;
+    int flags;
+    Intro* pi;
+
+    d0 = ((short*)instance->_D0);
+    flags = instance->intro->flags;
+    if (flags & 0x1000) {
+        instance->intro->flags = flags & ~0x800;
+        return;
+    }
+    pi = gameTracker->player->intro;
+    d0[8 / 2] = 0;
+    instance->flags |= 0x100000;
+    instance->_E0[0] = (int)pi;
+    if (instance->intro->flags & 0x800) {
+        multi = SCRIPT_GetMultiSpline(instance, &isParent, &isClass);
+        quat = SplineGetLastRot(multi->rotational, &multi->curRotational);
+        if (isParent == 0 && isClass == 0) {
+            G2Quat_ToMatrix_S((MATRIX*)((char*)multi + 0x20), (short*)quat);
+            instance->flags |= 1;
+        }
+        d0[2 / 2] = -1;
+        SCRIPT_InstanceSplineSet(instance, SCRIPT_CountFramesInSpline(instance), 0, 0, 0);
+        return;
+    }
+    d0[2 / 2] = 1;
+    SCRIPT_InstanceSplineInit(instance, gameTracker);
+}
 
 void func_8016121C_B043C(Instance* instance, GameTracker* gameTracker) {
     Instance* player;
