@@ -509,7 +509,30 @@ void horror_skelh_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_skelh_OnUpdate);
+void horror_skelh_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    extern int D_800EB8A0;
+    int* ev;
+    int i;
+    int n;
+
+    ev = WORK_AS(int*, instance->work6);
+    if (instance->parent == NULL) {
+        INSTANCE_KillInstance(instance);
+        return;
+    }
+    if (SCRIPT_InstanceSplineProcess(instance, (SplineDef*)&instance->work0, WORK_AS_PTR(SplineDef, instance->work2), NULL, 1) > 0) {
+        INSTANCE_PlainDeath(instance, 5, -1, 0);
+        func_80050508(instance, 0xA, 0, 0x6E, 0xFA0);
+    }
+    if (ev != NULL) {
+        n = ev[2];
+        i = WORK_AS(int, instance->work4);
+        if (n > i && WORK_AS_IDX(short, instance->work0, 0) + 1 == ((int**)ev)[3][i]) {
+            func_8002768C(instance, D_800EB8A0, WORK_AS(int, instance->work4)++);
+            func_80050508(instance, 0x4C, 0, 0x64, 0xFA0);
+        }
+    }
+}
 
 void horror_skelh_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp = instance->bspTree;
