@@ -968,7 +968,34 @@ void looney_bullet_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_bullet_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_bullet_OnCollide);
+void looney_bullet_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    extern G2String D_80161E0C_BA0BC;
+    Instance* other;
+    long* fc;
+    short state;
+
+    fc = &instance->work0;
+    other = instance->bspTree->instanceSpline;
+    if (other == PlayerInstance) {
+        func_80022714(instance, gameTracker);
+    } else {
+        if (G2String_Compare_EQ(other->object->parentName, &D_80161E0C_BA0BC)) {
+            if (fc[1] != 1) {
+                state = ((short*)other->_D0)[0];
+                if (state != 0xC && state != 8) {
+                    ((short*)other->_D0)[0] = 0xC;
+                    ((short*)other->_D0)[1] = 1;
+                    ((unsigned short*)other->_D0)[3] -= 1;
+                }
+            }
+        }
+    }
+    fc[1] = 1;
+    if (func_80033220(0xD2) == 0) {
+        func_80050508(instance, 0xD2, (short)((rand() & 0x1F) - 0xF), 0x64, 0xDAC);
+    }
+    func_80050A80(2, 0);
+}
 
 INCLUDE_RODATA("asm/nonmatchings/level/LOONEY", D_80161E0C_BA0BC);
 
