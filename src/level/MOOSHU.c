@@ -141,7 +141,41 @@ void mooshu_moobar_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", mooshu_moo_OnCollide);
+void mooshu_moo_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+    short* data;
+    unsigned char* other;
+    int flags;
+    short state;
+    short* pdata;
+
+    bsp = instance->bspTree;
+    data = ((short*)instance->object->data);
+    other = bsp->_08;
+    if (bsp->instanceSpline == gameTracker->player) {
+        flags = ((unsigned short*)data)[4 / 2];
+        data[4 / 2] = flags | 0x2000;
+        if (data[0xC / 2] == 6 && bsp->_04 == 5) {
+            if (bsp->_08[3] != 0) {
+                pdata = ((short*)gameTracker->player->data);
+                data[4 / 2] = flags | 0x2020;
+                func_80022714(instance, gameTracker, flags, other);
+                func_80022780(gameTracker->player, gameTracker);
+                gameTracker->player->_D0[2] = 0xC8;
+                pdata[0x90 / 2] = 0x96;
+                pdata[0x98 / 2] = -8;
+            }
+        } else {
+            state = data[0xC / 2];
+            if (state == 1 && bsp->_04 == state && other[4] != 0) {
+                func_80022738(instance, gameTracker, flags, other);
+                data[4 / 2] = ((unsigned short*)data)[4 / 2] | 0x4000;
+            } else {
+                data[4 / 2] = ((unsigned short*)data)[4 / 2] | 0x8000;
+            }
+        }
+    }
+}
 
 void func_8015B2FC_C3C7C(Instance* instance, int arg1, int arg2) {
     SVECTOR vec;
