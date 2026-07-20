@@ -662,7 +662,33 @@ void looney_leafgen_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_funguy_OnCreate);
+extern int D_80161C34_B9EE4[];
+
+void looney_funguy_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    int* intro = ((int*)instance->introData);
+    long* fca = &instance->work0;
+
+    if (instance->flags & 0x20000) {
+        if (intro != NULL) {
+            *intro = instance->work5;
+        }
+    } else {
+        if (instance->object->data == NULL) {
+            fca[0] = (long)D_80161C34_B9EE4;
+        }
+        else {
+            fca[0] = (long)instance->object->data;
+        }
+
+        if (intro != NULL) {
+            fca[5] = *intro;
+        } else {
+            fca[5]  = (long)((Instance*)((Instance*)fca)->node.prev)->matrix;
+        }
+
+        instance->flags |= 0x10000;
+    }
+}
 
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", func_8015BFCC_B427C);

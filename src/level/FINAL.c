@@ -601,7 +601,23 @@ void final_finaltv_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->work0 = 30;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_finaltv_OnUpdate);
+void final_finaltv_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    if (instance->work0 > 0) {
+        instance->work0--;
+        return;
+    }
+
+    instance->work0--;
+
+    if (instance->work0 == -0x21) {
+        func_80050508(instance, 0x154, 0, 0x7F, 0x4E20);
+    }
+    instance->_D0[2] += instance->_E0[1];
+    if (instance->_F0 < abs(instance->_D0[2])) {
+        instance->_D0[2] = instance->_D0[2] < 0 ? -instance->_F0 : instance->_F0;
+    }
+    instance->position.z += instance->_D0[2];
+}
 
 
 void final_finaltv_OnCollide(Instance* instance, GameTracker* gameTracker) {
