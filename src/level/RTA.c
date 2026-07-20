@@ -513,10 +513,52 @@ INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zswitch_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zswitch_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zswitch_OnCollide);
+void rta_zswitch_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    extern unsigned short D_8015EDFE_DF46E;
+    extern unsigned short D_8015EE00_DF470;
+    short* intro;
+    short state;
+    int a2;
 
-extern short D_8015EDFE_DF46E;
-extern short D_8015EE00_DF470;
+    a2 = 0;
+    if (instance->bspTree->instanceSpline == PlayerInstance) {
+        if (instance->work1 < 0x1E) {
+            instance->work1 = 0;
+            return;
+        }
+        intro = ((short*)instance->introData);
+        if ((D_8015EDFE_DF46E & 0x1000) || (((unsigned short*)intro)[2 / 2] & 0x1000)) {
+            instance->work1 = 0;
+            if (instance->currentSubState == 0) {
+                state = intro[0];
+                if (state == 0) {
+                    if (D_8015EE00_DF470 == 0) {
+                        goto block_15;
+                    }
+                    goto block_14;
+                }
+                if (state == 1 && instance->currentMainState == 0) {
+                    if (D_8015EE00_DF470 == 0) {
+                        a2 = 1;
+                    }
+                } else if (intro[0] == 2) {
+                block_14:
+                    if (instance->currentMainState == 1) {
+                    block_15:
+                        a2 = 1;
+                    }
+                }
+                if (a2 != 0) {
+                    instance->intro->flags ^= 0x800;
+                    instance->currentSubState = 1;
+                }
+            }
+        }
+    }
+}
+
+extern unsigned short D_8015EDFE_DF46E;
+extern unsigned short D_8015EE00_DF470;
 extern int D_8015EE04_DF474;
 extern int D_8015EE08_DF478;
 
