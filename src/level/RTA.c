@@ -330,7 +330,34 @@ void rta_zcargo_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zwleak_OnCreate);
+void rta_zwleak_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    extern unsigned short D_8015ED90_DF400;
+    extern int D_8015ED94_DF404;
+    extern int D_8015ED98_DF408;
+    short* intro;
+    short angle;
+    short c;
+    int w8;
+
+    intro = ((short*)instance->introData);
+    memset(&instance->work0, 0, 0x28);
+    angle = instance->intro->rotation.z + 0x400;
+    instance->work5 = (short)func_8003A6AC(angle);
+    c = func_8003A4E0(angle);
+    instance->work6 = c;
+    if (c != 0) {
+        instance->position.y += D_8015ED90_DF400;
+    }
+    w8 = (unsigned short)instance->position.z - (instance->work6 * D_8015ED98_DF408 >> 12);
+    WORK_AS_IDX(short, instance->work7, 0) = instance->position.x + (instance->work5 * D_8015ED94_DF404 >> 12);
+    WORK_AS_IDX(short, instance->work7, 1) = instance->position.y + (instance->work6 * D_8015ED94_DF404 >> 12);
+    WORK_AS_IDX(short, instance->work8, 0) = w8;
+    if (intro != 0) {
+        instance->work1 = intro[2 / 2];
+        return;
+    }
+    instance->work1 = 0x80;
+}
 
 extern short D_8015ED9C_DF40C;
 
