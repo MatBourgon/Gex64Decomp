@@ -159,7 +159,36 @@ void func_8015B144_942C4(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015B220_943A0);
+int func_8015B220_943A0(Instance* instance, int arg1) {
+    int max;
+    short f;
+    unsigned char b;
+
+    instance->flags2 &= ~0x10;
+    if (arg1 != 0) {
+        return func_8002DAF8();
+    }
+    max = ((short*)instance->object->animList[instance->currentModelAnim])[1] - 1;
+    b = ((unsigned char*)&instance->currentAnimFrame)[1];
+    if (((int*)instance->_34)[0] > 0) {
+        ((int*)instance->_34)[0]--;
+    }
+    if (arg1 >= ((int*)instance->_34)[0]) {
+        f = ++instance->currentAnimFrame;
+        if (max < f) {
+            instance->currentAnimFrame = 0;
+            instance->flags2 |= 0x10;
+        } else if (f < 0) {
+            instance->currentAnimFrame = max;
+            instance->flags2 |= 0x10;
+        }
+        ((int*)instance->_34)[0] = 0;
+        if (instance->object->oflags2 & 8) {
+            func_80050400(instance, b);
+        }
+    }
+    return instance->flags2 & 0x10;
+}
 
 int func_8015B334_944B4(Intro* intro) {
     Instance* instance;

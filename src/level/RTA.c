@@ -827,6 +827,22 @@ void func_8015E538_DEBA8(short* rot, short dist, LVECTOR* out) {
     MATH3D_ApplyMatrix(&m, (SVECTOR*)&v, out);
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015E5E0_DEC50);
+void func_8015E5E0_DEC50(short* p, short* target, short* rot, int dist) {
+    LVECTOR d;
+    LVECTOR q;
+    int unused[4];    /* dead local — reproduces the 0x60 frame */
+    LVECTOR v;
+
+    func_8015E538_DEBA8(rot, -dist, &d);
+    v.x = d.x + target[0];
+    v.y = d.y + target[1];
+    v.z = d.z + target[2];
+    q.x = (p[0] * 3 + v.x) / 4;
+    q.y = (p[1] * 3 + v.y) / 4;
+    q.z = (p[2] * 3 + v.z) / 4;
+    p[0] = q.x;
+    p[1] = q.y;
+    p[2] = q.z;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015E6F4_DED64);
