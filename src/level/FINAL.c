@@ -461,7 +461,42 @@ void func_8015CB34_8DCD4(char* buf, short val) {
 
 INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_801615B8_92758);
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015CB70_8DD10);
+extern int D_800BDEE0[];
+extern int D_800BDEE4;
+
+void func_8015CB70_8DD10(Instance* instance, GameTracker* gameTracker, int count) {
+    extern char D_801615C8_92768[];
+    extern char D_801615D0_92770[];
+    extern char D_801615D8_92778[];
+    char buf[16];
+    short* p;
+    int c;
+
+    /* raw derefs below (not p[i]) keep the loads under the coordinate
+       stores in the schedule; the index form hoists them */
+    p = WORK_AS(short*, instance->work0);
+    if (count >= 0x29) {
+        c = 0x64;
+        D_800BDEE0[0] = 0xDC;
+        D_800BDEE4 = c;
+        osSyncPrintf("Target");
+        c = 0x6C;
+        D_800BDEE0[0] = 0xDC;
+        D_800BDEE4 = c;
+        func_8015CB34_8DCD4(buf, *(short*)((char*)p + 0x3C));
+        osSyncPrintf(D_801615C8_92768, buf);
+        c = 0x74;
+        D_800BDEE0[0] = 0xDC;
+        D_800BDEE4 = c;
+        func_8015CB34_8DCD4(buf, *(short*)((char*)p + 0x3E));
+        osSyncPrintf(D_801615D0_92770, buf);
+        c = 0x7C;
+        D_800BDEE0[0] = 0xDC;
+        D_800BDEE4 = c;
+        func_8015CB34_8DCD4(buf, *(short*)((char*)p + 0x40));
+        osSyncPrintf(D_801615D8_92778, buf);
+    }
+}
 
 INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_801615C8_92768); // X %s
 
@@ -469,7 +504,36 @@ INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_801615D0_92770); // Y %s
 
 INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_801615D8_92778); // Z %s
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015CC64_8DE04);
+void func_8015CC64_8DE04(Instance* instance, GameTracker* gameTracker, int count) {
+    extern char D_801615C8_92768[];
+    extern char D_801615D0_92770[];
+    extern char D_801615D8_92778[];
+    char buf[16];
+    int c;
+
+    /* raw position derefs: same scheduling pin as func_8015CB70 */
+    c = 0x96;
+    if (count >= 0x29) {
+        D_800BDEE0[0] = 0xDC;
+        D_800BDEE4 = c;
+        osSyncPrintf("Position");
+        c = 0x9E;
+        D_800BDEE0[0] = 0xDC;
+        D_800BDEE4 = c;
+        func_8015CB34_8DCD4(buf, *(short*)((char*)instance + 0x48));
+        osSyncPrintf(D_801615C8_92768, buf);
+        c = 0xA6;
+        D_800BDEE0[0] = 0xDC;
+        D_800BDEE4 = c;
+        func_8015CB34_8DCD4(buf, *(short*)((char*)instance + 0x4A));
+        osSyncPrintf(D_801615D0_92770, buf);
+        c = 0xAE;
+        D_800BDEE0[0] = 0xDC;
+        D_800BDEE4 = c;
+        func_8015CB34_8DCD4(buf, *(short*)((char*)instance + 0x4C));
+        osSyncPrintf(D_801615D8_92778, buf);
+    }
+}
 
 extern int D_800BDEE0[5];
 
@@ -540,7 +604,23 @@ void final_finaltv_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->work0 = 30;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_finaltv_OnUpdate);
+void final_finaltv_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    if (instance->work0 > 0) {
+        instance->work0--;
+        return;
+    }
+
+    instance->work0--;
+
+    if (instance->work0 == -0x21) {
+        func_80050508(instance, 0x154, 0, 0x7F, 0x4E20);
+    }
+    instance->_D0[2] += instance->_E0[1];
+    if (instance->_F0 < abs(instance->_D0[2])) {
+        instance->_D0[2] = instance->_D0[2] < 0 ? -instance->_F0 : instance->_F0;
+    }
+    instance->position.z += instance->_D0[2];
+}
 
 
 void final_finaltv_OnCollide(Instance* instance, GameTracker* gameTracker) {

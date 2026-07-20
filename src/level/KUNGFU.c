@@ -6,6 +6,7 @@
 #include "SPLINE.h"
 #include "SCRIPT.h"
 #include "OBTABLE.h"
+#include "MATRIX.h"
 
 
 extern int D_800E5FD8;
@@ -1058,7 +1059,107 @@ void kungfu_leafgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
     p[7] = (rand() & 0xF) + 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_801616D4_B08F4);
+typedef struct {
+    char _00[8];
+    void* next;
+    unsigned short flags;
+    short _0E;
+    void* callback;
+    void* _14;
+    int _18;
+    short posX;
+    short posY;
+    short posZ;
+    short _22;
+    unsigned short unk24;
+    short _26;
+    unsigned short unk28;
+    short _2A;
+    unsigned short unk2C;
+    short _2E;
+    unsigned short unk30;
+    short _32;
+    unsigned short unk34;
+    short _36;
+    unsigned short unk38;
+    short _3A;
+    unsigned short unk3C;
+    short _3E;
+    unsigned short unk40;
+    short _42;
+    short _44;
+    unsigned short _46;
+    unsigned short _48;
+    short _4A;
+    unsigned short _4C;
+    unsigned short _4E;
+    unsigned short _50;
+    unsigned short _52;
+    unsigned short _54;
+    unsigned short _56;
+    char _58[0x14];
+    unsigned short frame;
+} ParticleData;
+
+extern int D_80078244;
+extern int D_80078248;
+
+void func_801616D4_B08F4(ParticleData* p, void* callback, char* data, void* arg3, unsigned short* def, char* table, SVECTOR* pos, int arg7, int arg8, int arg9, unsigned short arg10) {
+    short* va;
+    short* vb;
+    short* vc;
+    int* nxt;
+    int i0;
+    int i1;
+    int i2;
+    unsigned short px0;
+
+    px0 = pos->x;
+    i0 = def[0];
+    i1 = def[1];
+    i2 = def[2];
+    va = (short*)(table + i0 * 12);
+    p->posX = px0;
+    p->posY = pos->y;
+    p->posZ = pos->z;
+    vb = (short*)(table + i2 * 12);
+    p->unk24 = (va[0] - vb[0]) * D_80078244;
+    p->_26 = (va[1] - vb[1]) * D_80078244;
+    vc = (short*)(table + i1 * 12);
+    p->unk28 = (va[2] - vb[2]) * D_80078244;
+    p->unk2C = (vc[0] - vb[0]) * D_80078244;
+    p->_2E = (vc[1] - vb[1]) * D_80078244;
+    p->unk30 = (vc[2] - vb[2]) * D_80078244;
+    p->unk34 = 0;
+    p->_36 = 0;
+    p->unk38 = 0;
+    if (((unsigned char*)def)[7] & 2) {
+        p->flags |= 1;
+        nxt = ((int**)def)[2];
+        p->next = nxt;
+        p->_18 = (nxt[3] & 0x3FFFFFF) | 0x24000000;
+    } else {
+        p->flags &= ~1;
+        p->_18 = (((int*)def)[2] & 0x3FFFFFF) | 0x20000000;
+    }
+    p->callback = callback;
+    p->_14 = data;
+    p->_4C = 0;
+    p->_4E = 0;
+    p->_50 = 0;
+    p->_52 = 0;
+    p->_54 = 0;
+    p->_0E = arg10;
+    p->_56 = D_80078248 - 2;
+    D_80078248 ^= 1;
+    p->_44 = (rand() & 0x3F) - 0x10;
+    p->_46 = (rand() & 0x3F) - 0x10;
+    p->_48 = (rand() & 0x3F) - 0x10;
+    MATH3D_SetUnityMatrix((char*)p->_14 + 0xC);
+    RotMatrixX(rand() & 0xFFF, (char*)p->_14 + 0xC);
+    RotMatrixY(rand() & 0xFFF, (char*)p->_14 + 0xC);
+    RotMatrixZ(rand() & 0xFFF, (char*)p->_14 + 0xC);
+}
 
 void func_80161944_B0B64(short* arg0) {
     func_800162C0(arg0);
@@ -1112,7 +1213,55 @@ void kungfu_leafgen_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     *(int*)&fc[10] = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_leafgen_OnCollide);
+void kungfu_leafgen_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    extern MATRIX* D_800E97C8;
+    extern SVECTOR D_800EB800;
+    BSPTree* bsp;
+    LVECTOR out;
+    short code;
+    int zv;
+
+    bsp = instance->bspTree;
+    if (bsp->instanceSpline == gameTracker->player) {
+        code = bsp->_06;
+        switch (code) {
+            case 4:
+                WORK_AS_IDX(short, instance->work1, 0) = bsp->globalOffset.x;
+                WORK_AS_IDX(short, instance->work1, 1) = bsp->globalOffset.y;
+                zv = (unsigned short)bsp->globalOffset.z;
+                instance->work5 = 1;
+                WORK_AS_IDX(short, instance->work2, 0) = zv;
+                break;
+            case 1:
+                switch (bsp->_04) {
+                    case 2:
+                        instance->work5 = code;
+                        break;
+                    case 1:
+                        if ((bsp->_08[4] - 7) < 3U) {
+                            MATH3D_ApplyMatrixT(D_800E97C8, &D_800EB800, &out);
+                            WORK_AS_IDX(short, instance->work1, 0) = out.x;
+                            WORK_AS_IDX(short, instance->work1, 1) = out.y;
+                            zv = out.z;
+                            instance->work5 = code;
+                            WORK_AS_IDX(short, instance->work2, 0) = zv;
+                        }
+                        break;
+                    case 5:
+                        if ((bsp->_08[2] - 7) < 3U) {
+                            MATH3D_ApplyMatrixT(D_800E97C8, &D_800EB800, &out);
+                            WORK_AS_IDX(short, instance->work1, 0) = out.x;
+                            WORK_AS_IDX(short, instance->work1, 1) = out.y;
+                            zv = out.z;
+                            instance->work5 = code;
+                            WORK_AS_IDX(short, instance->work2, 0) = zv;
+                        }
+                        break;
+                }
+                break;
+        }
+    }
+}
 
 extern int D_801626C0_B18E0[];
 void kungfu_funplat_OnCreate(Instance* instance, GameTracker* gameTracker) {

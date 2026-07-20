@@ -448,7 +448,24 @@ void func_8015D084_C5A04(Instance* instance, GameTracker* gameTracker) {
     fc[4] = 0x28;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015D190_C5B10);
+void func_8015D190_C5B10(Instance* instance) {
+    int* data = instance->intro->data;
+    Intro** cur;
+    short i;
+
+    if (OBTABLE_FindObject("moodam__") != 0) {
+        cur = (Intro**)(data + 2);
+        i = 0;
+        if (data[1] > 0) {
+            do {
+                (*cur)->flags &= ~8;
+                func_8002E21C(*cur);
+                cur += 1;
+                i += 1;
+            } while (i < data[1]);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015D240_C5BC0);
 
