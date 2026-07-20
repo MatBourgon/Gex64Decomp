@@ -578,7 +578,40 @@ void circuit_follow_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->flags |= 0x100800;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_follow_OnUpdate);
+void func_8015D780_84960(Instance* instance, GameTracker* gameTracker);
+
+void circuit_follow_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    int state;
+    int* v;
+
+    if (instance->intro->flags & 0x80) {
+        instance->flags &= ~0x400;
+        return;
+    }
+    instance->flags |= 0x400;
+    if (instance->work0 > 0) {
+        instance->work0 -= 1;
+    }
+    state = instance->currentMainState;
+    if (state == 1) {
+        func_8015D780_84960(instance, gameTracker);
+    } else if (state == -1) {
+        if (func_800257B4(gameTracker->player) != 0) {
+            v = ((int*)instance->introData);
+            if (v != 0 && v[0] == 3) {
+                if (v[3] != 0) {
+                    SIGNAL_HandleSignal(instance, v[3] + 4, 0);
+                }
+            }
+            instance->currentMainState = 0;
+        } else {
+            gameTracker->player->flags |= 0x100;
+        }
+    }
+    if (instance->currentMainState > 0) {
+        instance->currentMainState = instance->currentMainState + 1;
+    }
+}
 
 void circuit_follow_OnCollide(Instance* instance, GameTracker* gameTracker) {
     Instance* player;
