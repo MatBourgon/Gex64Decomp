@@ -472,6 +472,8 @@ void func_8015CB70_8DD10(Instance* instance, GameTracker* gameTracker, int count
     short* p;
     int c;
 
+    /* raw derefs below (not p[i]) keep the loads under the coordinate
+       stores in the schedule; the index form hoists them */
     p = WORK_AS(short*, instance->work0);
     if (count >= 0x29) {
         c = 0x64;
@@ -509,6 +511,7 @@ void func_8015CC64_8DE04(Instance* instance, GameTracker* gameTracker, int count
     char buf[16];
     int c;
 
+    /* raw position derefs: same scheduling pin as func_8015CB70 */
     c = 0x96;
     if (count >= 0x29) {
         D_800BDEE0[0] = 0xDC;
