@@ -895,7 +895,38 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_trapsit_OnUpdate);
 void looney_trapsit_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_trapmuv_OnCreate);
+void looney_trapmuv_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    extern short D_80161CE4_B9F94[];
+    extern int D_80161CA8_B9F58[];
+    short* intro;
+    long* fc;
+    short* wp;
+    SVECTOR d;
+
+    fc = &instance->work0;
+    intro = ((short*)instance->introData);
+    if (intro != 0) {
+        instance->work0 = intro[1];
+    } else {
+        instance->introData = D_80161CE4_B9F94;
+        intro = D_80161CE4_B9F94;
+    }
+    if (instance->object->data == 0) {
+        instance->object->data = D_80161CA8_B9F58;
+    }
+    fc[1] = 3;
+    if (((int**)intro)[1] != 0) {
+        fc[0]++;
+        if (fc[0] >= intro[0]) {
+            fc[0] = 0;
+        }
+        wp = ((short**)((int**)intro)[1])[fc[0]];
+        d.x = wp[0] - instance->position.x;
+        d.y = wp[1] - instance->position.y;
+        d.z = wp[2] - instance->position.z;
+        instance->rotation.z = ratan2(d.y, d.x) + 0x400;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_trapmuv_OnUpdate);
 
