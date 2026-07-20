@@ -629,7 +629,62 @@ void circuit_pball_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015DB80_84D60);
+void func_8015DB80_84D60(Instance* instance) {
+    int* d;
+    int* sd;
+    int* intro2;
+    int* skip;
+    unsigned short* len;
+    Intro** cur;
+    int t2;
+    int n;
+    int frame;
+    int j;
+    int sum;
+    int end;
+    int unused[2];
+
+    skip = 0;
+    d = ((int*)instance->intro->_04);
+    sum = 0;
+    n = d[0] - 1;
+    if (((Intro**)d)[1]->multiSpline != 0) {
+        sd = ((int**)((Intro**)d)[1]->multiSpline)[0];
+        intro2 = ((int*)((Intro**)d)[2]->instance->introData);
+        t2 = intro2[0];
+        len = ((unsigned short**)sd)[0];
+        cur = ((Intro**)(d + 2));
+        if (t2 != 0) {
+            skip = intro2 + 4;
+        }
+        frame = 0;
+        j = 0;
+        if (n > 0) {
+loop:
+            if (frame < ((short*)sd)[2]) {
+                if (t2 != 0 && frame == skip[0]) {
+                    end = frame + skip[1];
+                    if (frame < end) {
+                        do {
+                            sum += len[0];
+                            len += 0x20 / 2;
+                        } while (++frame < end);
+                    }
+                    skip += 2;
+                }
+                j++;
+                (*cur)->instance->work3 = ((short)sum);
+                cur++;
+                frame++;
+                sum += len[0];
+                len += 0x20 / 2;
+                if (j < n) {
+                    goto loop;
+                }
+            }
+        }
+    }
+}
 
 void circuit_ppath_OnCreate(Instance* instance, GameTracker* gameTracker) {
     Model* model;
