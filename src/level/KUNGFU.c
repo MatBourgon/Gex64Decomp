@@ -949,7 +949,40 @@ INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_ninja_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_ninja_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_swing_OnCreate);
+void kungfu_swing_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    short* intro;
+    short v;
+    int av;
+    unsigned int t;
+    int r;
+
+    intro = ((short*)instance->object->data);
+    instance->work7 = 0;
+    WORK_AS_IDX(short, instance->work8, 0) = (rand() & 0x1F) - 0xF;
+    WORK_AS_IDX(short, instance->work2, 0) = 0x2C00;
+    WORK_AS_IDX(short, instance->work1, 1) = 0x180;
+    WORK_AS_IDX(short, instance->work3, 1) = 0xA00;
+    if (intro != 0) {
+        WORK_AS_IDX(short, instance->work2, 0) = intro[0];
+        av = intro[2 / 2];
+        if (av < 0) {
+            av = -av;
+        }
+        WORK_AS_IDX(short, instance->work1, 1) = av;
+        WORK_AS_IDX(short, instance->work3, 1) = ((int*)intro)[4 / 4];
+    }
+    v = WORK_AS_IDX(short, instance->work2, 0);
+    t = (short)(v / WORK_AS_IDX(short, instance->work1, 1)) * v;
+    instance->work0 = 0;
+    WORK_AS_IDX(short, instance->work1, 0) = WORK_AS_IDX(unsigned short, instance->work2, 0);
+    r = (int)((t + (t >> 31)) << 7) >> 16;
+    if (r < 0) {
+        r = -r;
+    }
+    WORK_AS_IDX(short, instance->work3, 0) = r;
+    *(SVECTOR*)&instance->work4 = *(SVECTOR*)&instance->position;
+    WORK_AS_IDX(short, instance->work5, 0) = WORK_AS_IDX(unsigned short, instance->work5, 0) - WORK_AS_IDX(short, instance->work3, 1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_swing_OnUpdate);
 
