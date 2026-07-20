@@ -293,7 +293,50 @@ void rezop_crnkplt_OnCreate(Instance* instance, GameTracker* gameTracker) {
     COLLIDE_PointAndTerrain(gameTracker8->level->segmentAddress, &a, &b, instance);
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_crnkplt_OnUpdate);
+void rezop_crnkplt_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    int fc;
+    int t0;
+    short lim;
+    short base;
+    short pos;
+    short* intro;
+    int one;
+    short target;
+
+    one = 1;
+    target = 0;
+    intro = ((short*)instance->introData);
+    if (instance->currentMainState != one) {
+        fc = instance->work0;
+        t0 = fc - 0x800;
+        lim = instance->intro->position.z;
+        if (instance->position.z + (t0 >> 12) > lim - 0x180) {
+            if (fc >= -0x7FFF) {
+                instance->work0 = t0;
+            }
+        } else {
+            instance->position.z = lim - 0x180;
+            instance->currentMainState = one;
+            instance->work0 = 0;
+        }
+        pos = instance->position.z;
+        target = intro[0];
+        base = instance->intro->position.z;
+        if (pos + (instance->work0 >> 12) <= base + target) {
+            instance->position.z = pos + (instance->work0 >> 12);
+        } else {
+            instance->position.z = base + target;
+        }
+    }
+    if (instance->intro->_2C != 0 && ((int*)instance->intro->_2C)[0] == 1) {
+        if (instance->work0 <= 0xFFFF) {
+            instance->work0 += 0x10000;
+        }
+        instance->currentMainState = 0;
+        instance->intro->_2C = 0;
+    }
+    GenericProcess(instance, gameTracker);
+}
 
 void rezop_crnkplt_OnCollide(Instance* instance, GameTracker* gameTracker) {
     GenericCollide(instance, gameTracker);
