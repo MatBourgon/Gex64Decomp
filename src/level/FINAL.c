@@ -2,6 +2,7 @@
 
 #include "level/FINAL.h"
 #include "types/G2String.h"
+#include "OBTABLE.h"
 
 extern int D_80161510_926B0;
 
@@ -126,8 +127,8 @@ extern char D_80161588_92728[];
 
 void final_rezbomb_OnCreate(Instance* instance, GameTracker* gameTracker) {
     *(short*)&instance->_E0[0] = 0;
-    instance->currentMainState = OBTABLE_FindObject(D_80161588_92728);
-    instance->currentSubState = OBTABLE_FindObject("rezxpl__");
+    instance->currentMainState = ((int)OBTABLE_FindObject(D_80161588_92728));
+    instance->currentSubState = ((int)OBTABLE_FindObject("rezxpl__"));
 }
 
 typedef struct {
@@ -551,11 +552,103 @@ void func_8015CD54_8DEF4(int arg0, int arg1, int count) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015CDF0_8DF90);
+void func_8015CDF0_8DF90(Instance* instance, GameTracker* gameTracker, int count) {
+    extern char D_801615C8_92768[];
+    extern char D_801615D0_92770[];
+    extern char D_801615D8_92778[];
+    char buf[16];
+    int c;
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015CF08_8E0A8);
+    /* raw PlayerInstance derefs: same scheduling pin as func_8015CB70 */
+    if (count >= 0x29) {
+        c = 0x32;
+        D_800BDEE0[0] = 0xDC;
+        D_800BDEE4 = c;
+        osSyncPrintf("Coordinates");
+        c = 0x3A;
+        D_800BDEE0[0] = 0xDC;
+        D_800BDEE4 = c;
+        osSyncPrintf("Subject");
+        c = 0x42;
+        D_800BDEE0[0] = 0xDC;
+        D_800BDEE4 = c;
+        func_8015CB34_8DCD4(buf, *(short*)((char*)PlayerInstance + 0x48));
+        osSyncPrintf(D_801615C8_92768, buf);
+        c = 0x4A;
+        D_800BDEE0[0] = 0xDC;
+        D_800BDEE4 = c;
+        func_8015CB34_8DCD4(buf, *(short*)((char*)PlayerInstance + 0x4A));
+        osSyncPrintf(D_801615D0_92770, buf);
+        c = 0x52;
+        D_800BDEE0[0] = 0xDC;
+        D_800BDEE4 = c;
+        func_8015CB34_8DCD4(buf, *(short*)((char*)PlayerInstance + 0x4C));
+        osSyncPrintf(D_801615D8_92778, buf);
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015D018_8E1B8);
+void func_8015CF08_8E0A8(Instance* instance, GameTracker* gameTracker, int count) {
+    extern short D_80161850_929F0;
+    extern short D_80161852_929F2;
+    extern short D_80161854_929F4;
+    extern short D_80161856_929F6;
+    extern int D_80161858_929F8;
+    short* r;
+
+    if (count >= 0x29) {
+        func_8003F7B4(0x78, 0x5A, 0x8C, 0x5A);
+        func_8003F7B4(0xB4, 0x5A, 0xC8, 0x5A);
+        func_8003F7B4(0x78, 0x96, 0x8C, 0x96);
+        func_8003F7B4(0xB4, 0x96, 0xC8, 0x96);
+        func_8003F7B4(0x78, 0x5A, 0x78, 0x69);
+        func_8003F7B4(0x78, 0x87, 0x78, 0x96);
+        func_8003F7B4(0xC8, 0x5A, 0xC8, 0x69);
+        func_8003F7B4(0xC8, 0x87, 0xC8, 0x96);
+        r = &D_80161850_929F0;
+        *r = -0x28;
+        D_80161852_929F2 = -0x1E;
+        D_80161854_929F4 = 0x28;
+        D_80161856_929F6 = 0x1E;
+        D_80161858_929F8 = 0x7F;
+        func_8003F614(1, r, 0, 0);
+    }
+}
+
+void func_8015D018_8E1B8(int arg0, int arg1, short* arg2, int arg3) {
+    Object* obj;
+    Model* model;
+    SVECTOR offs;
+    SVECTOR pos;
+    SVECTOR vel;
+    int i;
+    int half;
+    int life;
+
+    obj = OBTABLE_FindObject("remsfx__");
+    i = 0;
+    if (obj != 0) {
+        half = arg3 >> 1;
+        model = obj->modelList[0];
+        do {
+            i++;
+            offs.x = rand() % arg3 - half;
+            offs.y = rand() % arg3 - half;
+            offs.z = rand() % arg3 - half;
+            pos.x = arg2[0] + offs.x;
+            pos.y = arg2[1] + offs.z;
+            pos.z = arg2[2] + offs.z;
+            vel.x = 0;
+            vel.y = 0;
+            vel.z = -1;
+            /* the dead life reassignment keeps the constant un-hoistable
+               (loop-invariant motion would steal a saved register from the
+               callback addresses); flow deletes the second store */
+            life = 0x1E;
+            func_800170E8(model, model->_14, arg1, &pos, &vel, D_800EB8A0, func_80017E88, func_80016894, life);
+            life = 0;
+        } while (i < 0x1E);
+    }
+}
 
 INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_80161610_927B0);
 
@@ -577,8 +670,8 @@ void final_popper_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->work2 = 0;
     instance->position.z -= 0x12C;
     instance->flags |= 0x400;
-    WORK_AS(int, instance->work3) = OBTABLE_FindObject(D_80161588_92728);
-    WORK_AS(int, instance->work4) = OBTABLE_FindObject(D_8016166C_9280C);
+    WORK_AS(int, instance->work3) = ((int)OBTABLE_FindObject(D_80161588_92728));
+    WORK_AS(int, instance->work4) = ((int)OBTABLE_FindObject(D_8016166C_9280C));
 }
 
 INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_8016166C_9280C);
@@ -711,12 +804,12 @@ extern void func_8015F200_903A0(void); // unknown
 
 void final_frez_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if (!(instance->flags & 0x20000)) {
-        instance->_D0[3] = OBTABLE_FindObject(D_80161588_92728);
+        instance->_D0[3] = ((int)OBTABLE_FindObject(D_80161588_92728));
         instance->_C4[2] = 0;
         instance->_C4[3] = 1;
         instance->_C4[4] = 1;
         instance->_40[6] -= 0x12C;
-        instance->_E0[2] = OBTABLE_FindObject(D_8016166C_9280C);
+        instance->_E0[2] = ((int)OBTABLE_FindObject(D_8016166C_9280C));
         instance->additionalDrawFunc = (void*)&func_8015F200_903A0;
         instance->flags |= 0x10400;
         instance->flags2 |= 8;
