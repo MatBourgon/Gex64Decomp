@@ -31,7 +31,45 @@ void horror_drawer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_drawer_OnUpdate);
+void horror_drawer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    int state;
+    int f;
+
+    state = instance->currentMainState;
+    f = instance->work0 + 1;
+    instance->work0 = f;
+    if (state == 0) {
+        instance->scale.x -= 0x124;
+        if (instance->scale.x == 0) {
+            instance->scale.x = 1;
+        }
+        func_8002E704(instance);
+        if (instance->work0 == 0xE) {
+            instance->currentMainState = 2;
+            instance->work0 = 0;
+        }
+    } else if (state == 2) {
+        if (f == 0x28) {
+            instance->currentMainState = 1;
+            instance->work0 = 0;
+            func_80050508(instance, 0x46, 0, 0x64, 0xFA0);
+        }
+    } else if (state == 1) {
+        instance->scale.x += 0x124;
+        if (instance->scale.x >= 0x1000) {
+            instance->scale.x = 0x1000;
+        }
+        func_8002E704(instance);
+        if (instance->work0 == 0xE) {
+            instance->currentMainState = 3;
+            instance->work0 = 0;
+        }
+    } else if (state == 3 && f == 0x28) {
+        instance->currentMainState = 0;
+        instance->work0 = 0;
+        func_80050508(instance, 0x46, 0, 0x64, 0xFA0);
+    }
+}
 
 void horror_drawer_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }

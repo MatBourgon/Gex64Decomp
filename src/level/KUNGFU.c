@@ -7,6 +7,7 @@
 #include "SCRIPT.h"
 #include "OBTABLE.h"
 #include "MATRIX.h"
+#include "INSTANCE.h"
 
 
 extern int D_800E5FD8;
@@ -45,7 +46,41 @@ void kungfu_kbgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_kbgen_OnUpdate);
+void kungfu_kbgen_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    int* intro;
+    Object* obj;
+    Instance* child;
+    int u;
+
+    intro = instance->introData;
+    obj = OBTABLE_FindObject((char*)intro + 0x10);
+    if (intro == NULL || obj == NULL) {
+        INSTANCE_KillInstance(instance);
+        return;
+    }
+    if (instance->currentMainState == 1) {
+        instance->work0 += 1;
+        if (instance->work0 == intro[0xC/4]) {
+            u = intro[0x8/4];
+            instance->currentMainState = 0;
+            instance->work0 = u;
+        }
+    } else {
+        instance->work0 += 1;
+        if (instance->work0 >= intro[0x8/4]) {
+            instance->work0 = 0;
+            child = INSTANCE_BirthObject(instance, obj);
+            if (child != NULL) {
+                obj->oflags |= 0x2000;
+                child->introData = intro;
+                if ((instance->object->oflags & 0x400) && (((unsigned short*)intro)[0x18/2] & 4) && (instance->work1 == 0)) {
+                    instance->work1 = 1;
+                    SCRIPT_InstanceSplineSet(child, ((short*)intro)[0xE/2], 0, 0, 0);
+                }
+            }
+        }
+    }
+}
 
 void kungfu_spray_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
