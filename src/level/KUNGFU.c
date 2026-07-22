@@ -630,7 +630,21 @@ INCLUDE_RODATA("asm/nonmatchings/level/KUNGFU", D_801626EC_B190C);
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_dragon_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_dragflm_OnCreate);
+void kungfu_dragflm_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    Instance* parent;
+
+    parent = instance->parent;
+    instance->flags |= 0x100000;
+    instance->work0 = ((short*)parent)[0xF6/2];
+    instance->work1 = 0x2000 / ((short*)parent)[0xF6/2];
+    instance->scale.x = 0x1000 / ((short*)parent)[0xF6/2];
+    instance->scale.y = 0x1000 / ((short*)parent)[0xF6/2];
+    instance->scale.z = 0x1000 / ((short*)parent)[0xF6/2];
+    if (!(instance->flags & 0x20000)) {
+        instance->work9 = (rand() & 0x3F) - 0x20;
+        instance->work8 = 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_dragflm_OnUpdate);
 
