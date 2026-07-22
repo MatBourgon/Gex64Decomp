@@ -383,7 +383,42 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_fltchst_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_fltchst_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_fltchst_OnCollide);
+void horror_fltchst_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+    int* introData;
+    int c6;
+    int state;
+    int* sig;
+
+    bsp = instance->bspTree;
+    c6 = bsp->_06;
+    introData = instance->introData;
+    if (c6 == 1 && bsp->instanceSpline == gameTracker->player &&
+        (unsigned int)(instance->currentMainState - 1) >= 2 && bsp->globalOffset.x < -0x18F) {
+        state = instance->work2;
+        instance->currentSubState = c6;
+        if (state != c6) {
+            if (instance->work0 == c6) {
+                instance->work1 = gameTracker->player->position.y;
+            } else if (instance->work0 == 2) {
+                instance->work1 = gameTracker->player->position.x;
+            }
+            if (instance->work4 != 1 && introData[0xC/4] != 0) {
+                sig = (int*)introData[0x8/4];
+                COLLIDE_HandleSignal(gameTracker->player, sig + 1, sig[0], 0);
+                instance->work4 = 1;
+            }
+        } else {
+            if (instance->work0 == state) {
+                gameTracker->player->position.y = instance->work1;
+                return;
+            }
+            if (instance->work0 == 2) {
+                gameTracker->player->position.x = instance->work1;
+            }
+        }
+    }
+}
 
 void horror_ledge_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int* intro;
