@@ -499,7 +499,50 @@ void horror_polter_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->scale.z = instance->scale.y = instance->scale.x = 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_polter_OnUpdate);
+void horror_polter_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    int state;
+
+    state = instance->currentMainState;
+    if (state == 1) {
+        PlayerInstance->lightGroup = 0;
+        *(int*)PlayerInstance->_C4 = instance->work0;
+        if (instance->scale.x + 0x40 < 0x1000) {
+            instance->scale.x += 0x40;
+            instance->scale.y += 0x40;
+            instance->scale.z += 0x40;
+            return;
+        }
+        instance->scale.x = 0x1000;
+        instance->scale.y = 0x1000;
+        instance->scale.z = 0x1000;
+        if (PlayerInstance->scale.x + 0x80 < 0x1000) {
+            PlayerInstance->scale.x += 0x80;
+            PlayerInstance->scale.y += 0x80;
+            PlayerInstance->scale.z += 0x80;
+            return;
+        }
+        PlayerInstance->scale.x = 0x1000;
+        PlayerInstance->scale.y = 0x1000;
+        PlayerInstance->scale.z = 0x1000;
+        PlayerInstance->currentMainState = 0;
+        gameTracker->player->flags &= ~0x100;
+        instance->currentMainState = 2;
+        return;
+    }
+    if (state == 2) {
+        *(int*)PlayerInstance->_C4 = instance->work0;
+        if (instance->scale.x - 0x20 > 0) {
+            instance->scale.x -= 0x20;
+            instance->scale.y -= 0x20;
+            instance->scale.z -= 0x20;
+            return;
+        }
+        instance->scale.x = 0;
+        instance->scale.y = 0;
+        instance->scale.z = 0;
+        instance->currentMainState = 0;
+    }
+}
 
 void horror_polter_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
