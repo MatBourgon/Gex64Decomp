@@ -509,7 +509,51 @@ int func_8015BD54_DC3C4(Instance* instance) {
     return done;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zswitch_OnCreate);
+extern unsigned short D_8015EDFE_DF46E;
+
+void rta_zswitch_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    void* introData;
+    int flags;
+    int frame;
+    int soundBit;
+    unsigned short v;
+
+    if (instance->flags & 0x20000) {
+        instance->intro->flags &= ~8;
+        return;
+    }
+    flags = instance->flags | 0x10000;
+    instance->flags = flags | 0x400;
+    if (instance->intro->flags & 0x1000) {
+        instance->intro->flags &= ~0x800;
+        return;
+    }
+    introData = instance->introData;
+    instance->flags = flags | 0x480;
+    if (((unsigned short*)introData)[0] & 0x12) {
+        instance->currentMainState = 1;
+    } else {
+        instance->currentMainState = 0;
+    }
+    instance->currentSubState = 0;
+    if (instance->intro->flags & 0x800) {
+        instance->currentMainState ^= 1;
+    }
+    memset(&instance->work0, 0, 0x28);
+    frame = func_8015C344_DC9B4(instance);
+    instance->work0 = frame;
+    if (instance->currentMainState == 0) {
+        instance->currentAnimFrame = 0;
+    } else {
+        instance->currentAnimFrame = frame;
+    }
+    soundBit = ((short*)introData)[1];
+    if (instance->currentMainState == 1) {
+        D_8015EDFE_DF46E = D_8015EDFE_DF46E | soundBit;
+    } else {
+        D_8015EDFE_DF46E = D_8015EDFE_DF46E & ~soundBit;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zswitch_OnUpdate);
 
