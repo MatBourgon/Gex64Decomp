@@ -572,7 +572,38 @@ INCLUDE_ASM("asm/nonmatchings/level/REZOP", func_8015E950_D70C0);
 
 INCLUDE_ASM("asm/nonmatchings/level/REZOP", func_8015EAB0_D7220);
 
-INCLUDE_ASM("asm/nonmatchings/level/REZOP", func_8015ECB8_D7428);
+void func_8015ECB8_D7428(void* arg0) {
+    unsigned short* p = (unsigned short*)arg0;
+
+    func_80016894(p);
+    if (((short*)p)[0xE/2] >= 0xB) {
+        p[0x24/2] -= 4;
+        p[0x28/2] += 4;
+        p[0x2C/2] += 4;
+        p[0x30/2] -= 4;
+        p[0x34/2] += 4;
+        p[0x38/2] += 4;
+        p = ((unsigned short**)p)[0x4/4];
+        if (p != NULL) {
+            p[0x24/2] -= 4;
+            p[0x28/2] += 4;
+            p[0x2C/2] -= 4;
+            p[0x30/2] -= 4;
+            p[0x34/2] += 4;
+            p[0x38/2] -= 4;
+        }
+    } else {
+        p[0x1C/2] += p[0x44/2];
+        p[0x1E/2] += p[0x46/2];
+        p[0x20/2] += p[0x48/2];
+        p = ((unsigned short**)p)[0x4/4];
+        if (p != NULL) {
+            p[0x1C/2] += p[0x44/2];
+            p[0x1E/2] += p[0x46/2];
+            p[0x20/2] += p[0x48/2];
+        }
+    }
+}
 
 INCLUDE_RODATA("asm/nonmatchings/level/REZOP", D_80161590_D9D00);
 
