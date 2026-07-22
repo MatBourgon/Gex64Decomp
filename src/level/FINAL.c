@@ -318,7 +318,46 @@ void final_rezbomb_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015A9F0_8BB90);
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015AC70_8BE10);
+extern int D_800785C8;
+
+void func_8015AC70_8BE10(Instance* instance) {
+    Camera* cam;
+    GameTracker* gt;
+    unsigned short* c;
+    SVECTOR mid;
+    SVECTOR rot;
+    int px;
+    int py;
+    int state;
+
+    cam = gameTracker8->camera;
+    state = PlayerInstance->currentMainState;
+    if (state != 5) {
+        D_800785C8 = state;
+    }
+    PlayerInstance->currentMainState = 5;
+    CAMERA_SetMode(gameTracker8->camera, 8);
+    c = (unsigned short*)cam;
+    mid.x = (instance->position.x + 0x2D00) / 2;
+    mid.y = (instance->position.y + 0x267A) / 2;
+    mid.z = instance->position.z + 0x200;
+    gt = gameTracker8;
+    py = instance->position.y;
+    rot.x = (py - 0x267A) << 2;
+    px = instance->position.x;
+    rot.y = (-px + 0x2D00) << 2;
+    rot.z = 0;
+    ((short*)gt->camera)[0] = mid.x + rot.x;
+    ((short*)gt->camera)[1] = mid.y + rot.y;
+    ((short*)gt->camera)[2] = mid.z + rot.z;
+    func_80005438(&cam->cameraCore._08[4], &mid, cam);
+    c[0x18] = c[0xC];
+    c[0x19] = c[0xD];
+    c[0x1A] = c[0xE];
+    c[4] = c[0xC];
+    c[5] = c[0xD];
+    c[0x17] = c[6] = c[0xE];
+}
 
 void func_8015ADC4_8BF64(Instance* instance) {
     Camera* cam;
