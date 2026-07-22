@@ -53,7 +53,39 @@ void final_lectro_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_lectro_OnUpdate);
+void final_lectro_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    if (instance->intro->_2C != 0) {
+        if (func_80033268(0x147) == 0) {
+            func_80050508(instance, 0x147, 0, 0x5A, 0x2710);
+        }
+        instance->currentMainState = 2;
+    }
+    switch (instance->currentMainState) {
+    case 0:
+        if (instance->work0 != 0) {
+            if (func_80033248(instance->work0) != 0) {
+                if (func_80033200(instance->work0) != 0 && func_800506B8(instance, instance->work0, 0, 0x46, 0x2710) == 0) {
+                    func_800331BC(instance->work0);
+                    instance->work0 = 0;
+                }
+            } else {
+                instance->work0 = func_80050508(instance, 0x148, 0, 0x46, 0x2710);
+            }
+        } else {
+            instance->work0 = func_80050508(instance, 0x148, 0, 0x46, 0x2710);
+        }
+        instance->currentTextureAnimFrame += 1;
+        if (instance->currentTextureAnimFrame == 6) {
+            instance->currentTextureAnimFrame = 0;
+            return;
+        }
+    case 1:
+        return;
+    case 2:
+        func_8002E350(instance);
+        break;
+    }
+}
 
 void final_lectro_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
