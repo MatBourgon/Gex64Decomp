@@ -953,7 +953,37 @@ void func_8015E27C_DE8EC(void* arg0) {
     *(int*)&D_8015EED0_DF540[0x38/2] = *(int*)&src[0x54/2];
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015E3AC_DEA1C);
+extern int D_8015EF08_DF578;
+
+void func_8015E3AC_DEA1C(void* arg0) {
+    unsigned short* dst = (unsigned short*)arg0;
+
+    dst[0x8/2] = D_8015EED0_DF540[0x0/2];
+    dst[0xA/2] = D_8015EED0_DF540[0x2/2];
+    dst[0xC/2] = D_8015EED0_DF540[0x4/2];
+    dst[0x17C/2] = D_8015EED0_DF540[0x8/2];
+    dst[0x17E/2] = D_8015EED0_DF540[0xA/2];
+    dst[0x180/2] = D_8015EED0_DF540[0xC/2];
+    dst[0x18/2] = D_8015EED0_DF540[0x10/2];
+    dst[0x1A/2] = D_8015EED0_DF540[0x12/2];
+    dst[0x1C/2] = D_8015EED0_DF540[0x14/2];
+    dst[0x30/2] = D_8015EED0_DF540[0x18/2];
+    dst[0x32/2] = D_8015EED0_DF540[0x1A/2];
+    dst[0x34/2] = D_8015EED0_DF540[0x1C/2];
+    dst[0x4C/2] = D_8015EED0_DF540[0x20/2];
+    dst[0x4E/2] = D_8015EED0_DF540[0x22/2];
+    dst[0x50/2] = D_8015EED0_DF540[0x24/2];
+    dst[0x1AC/2] = D_8015EED0_DF540[0x26/2];
+    dst[0x1AE/2] = D_8015EED0_DF540[0x28/2];
+    dst[0x1B0/2] = D_8015EED0_DF540[0x2A/2];
+    dst[0x0/2] = D_8015EED0_DF540[0x2C/2];
+    dst[0x2/2] = D_8015EED0_DF540[0x2E/2];
+    dst[0x4/2] = D_8015EED0_DF540[0x30/2];
+    dst[0x10/2] = D_8015EED0_DF540[0x32/2];
+    dst[0x12/2] = D_8015EED0_DF540[0x34/2];
+    dst[0x14/2] = D_8015EED0_DF540[0x36/2];
+    *(int*)&dst[0x54/2] = D_8015EF08_DF578;
+}
 
 void func_8015E538_DEBA8(short* rot, short dist, LVECTOR* out) {
     SVector v;
