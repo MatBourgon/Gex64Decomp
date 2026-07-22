@@ -921,7 +921,37 @@ void func_8015E228_DE898(Instance* instance) {
     D_8015EF14_DF584 = (int)OBTABLE_FindObject("zbubbl__");
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015E27C_DE8EC);
+extern unsigned short D_8015EED0_DF540[];
+
+void func_8015E27C_DE8EC(void* arg0) {
+    unsigned short* src = (unsigned short*)arg0;
+
+    D_8015EED0_DF540[0x0/2] = src[0x8/2];
+    D_8015EED0_DF540[0x2/2] = src[0xA/2];
+    D_8015EED0_DF540[0x4/2] = src[0xC/2];
+    D_8015EED0_DF540[0x8/2] = src[0x17C/2];
+    D_8015EED0_DF540[0xA/2] = src[0x17E/2];
+    D_8015EED0_DF540[0xC/2] = src[0x180/2];
+    D_8015EED0_DF540[0x10/2] = src[0x18/2];
+    D_8015EED0_DF540[0x12/2] = src[0x1A/2];
+    D_8015EED0_DF540[0x14/2] = src[0x1C/2];
+    D_8015EED0_DF540[0x18/2] = src[0x30/2];
+    D_8015EED0_DF540[0x1A/2] = src[0x32/2];
+    D_8015EED0_DF540[0x1C/2] = src[0x34/2];
+    D_8015EED0_DF540[0x20/2] = src[0x4C/2];
+    D_8015EED0_DF540[0x22/2] = src[0x4E/2];
+    D_8015EED0_DF540[0x24/2] = src[0x50/2];
+    D_8015EED0_DF540[0x26/2] = src[0x1AC/2];
+    D_8015EED0_DF540[0x28/2] = src[0x1AE/2];
+    D_8015EED0_DF540[0x2A/2] = src[0x1B0/2];
+    D_8015EED0_DF540[0x2C/2] = src[0x0/2];
+    D_8015EED0_DF540[0x2E/2] = src[0x2/2];
+    D_8015EED0_DF540[0x30/2] = src[0x4/2];
+    D_8015EED0_DF540[0x32/2] = src[0x10/2];
+    D_8015EED0_DF540[0x34/2] = src[0x12/2];
+    D_8015EED0_DF540[0x36/2] = src[0x14/2];
+    *(int*)&D_8015EED0_DF540[0x38/2] = *(int*)&src[0x54/2];
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015E3AC_DEA1C);
 
