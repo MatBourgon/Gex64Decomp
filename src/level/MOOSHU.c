@@ -4,6 +4,8 @@
 #include "OBTABLE.h"
 #include "INSTANCE.h"
 
+void func_8015D7B4_C6134(Instance* instance);
+
 /* quantize a stick/velocity pair into a direction code (0-3) */
 void func_80159720_C20A0(short* out, int arg1, short* vec) {
     if (vec[0] > 0x200) {
@@ -466,7 +468,40 @@ void mooshu_moosprk_OnCreate(Instance* instance, GameTracker* gameTracker)
     instance->_E0[1] = -0x10;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", mooshu_moosprk_OnUpdate);
+void mooshu_moosprk_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    short spread;
+    int sum;
+    int pz;
+    int dz;
+    int iz;
+
+    if (instance->currentMainState == 0) {
+        sum = instance->_D0[2] + instance->_E0[1];
+        if (sum >= -0x7F) {
+            instance->_D0[2] = sum;
+        } else {
+            instance->_D0[2] = -0x80;
+        }
+        if (instance->position.z + instance->_D0[2] > instance->intro->position.z - 0x200) {
+            instance->position.z = instance->position.z + instance->_D0[2];
+        } else {
+            instance->position.z = instance->intro->position.z - 0x280;
+            instance->currentMainState = 1;
+        }
+        instance->position.x += (instance->work0 * (short)func_8003A6AC(instance->work1)) >> 12;
+        instance->position.y += (instance->work0 * (short)func_8003A4E0(instance->work1)) >> 12;
+        return;
+    }
+    if (instance->currentMainState == 1) {
+        spread = 0x30;
+        func_80049B80(instance, &spread, 0x60, 0xDDB, 0x100, &gameTracker->player->position, 2);
+        instance->work2 += 1;
+        if (instance->work2 >= 0x5A) {
+            func_8015D7B4_C6134(instance->parent);
+            INSTANCE_KillInstance(instance);
+        }
+    }
+}
 
 void mooshu_moosprk_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp = instance->bspTree;
@@ -563,7 +598,7 @@ void func_8015D6B0_C6030(Instance* instance, GameTracker* gameTracker) {
     fc[6] = 0x10;
 }
 
-void func_8015D7B4_C6134(Instance* instance, GameTracker* gameTracker)
+void func_8015D7B4_C6134(Instance* instance)
 {
     WORK_AS_IDX(short, instance->work0, 0)++;
 }
