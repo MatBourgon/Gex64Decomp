@@ -287,7 +287,53 @@ void func_8015C188_95308(Instance* instance, short* arg1) {
     arg1[0x12 / 2] = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015C208_95388);
+void func_8015C208_95388(Instance* instance, void* arg1) {
+    int flags;
+    int max;
+    int frame0;
+    short speed;
+    unsigned short acc;
+    int frame;
+    short a1;
+
+    flags = ((int*)arg1)[0x18/4];
+    max = ((short*)instance->object->animList[instance->currentModelAnim])[1] - 1;
+    if (flags & 0x400) {
+        ((int*)arg1)[0x18/4] = flags & ~0x400;
+        return;
+    }
+    if (((short*)arg1)[0x40/2] == 0) {
+        instance->flags2 &= ~0x10;
+        speed = ((short*)arg1)[0x12/2];
+        if (speed == 0) {
+            frame0 = instance->currentAnimFrame;
+            func_8002DAF8(instance, -1);
+            if (frame0 < max) {
+                instance->currentAnimFrame = frame0 + 1;
+                return;
+            }
+            instance->currentAnimFrame = 0;
+            return;
+        }
+        acc = ((unsigned short*)arg1)[0x14/2] + speed;
+        ((unsigned short*)arg1)[0x14/2] = acc;
+        frame = (acc << 16) >> 18;
+        instance->currentAnimFrame = frame;
+        a1 = ((short*)arg1)[0x12/2];
+        if (a1 > 0) {
+            if (max < frame) {
+                instance->currentAnimFrame = 0;
+                instance->flags2 |= 0x10;
+            }
+        } else if (a1 < 0 && frame < 0) {
+            instance->currentAnimFrame = max;
+            instance->flags2 |= 0x10;
+        }
+        if (instance->object->oflags2 & 8) {
+            func_80050400(instance, ((unsigned char*)&instance->currentAnimFrame)[1]);
+        }
+    }
+}
 
 void gexzil_mekblst_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->intro = NULL;
