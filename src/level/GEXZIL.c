@@ -396,7 +396,35 @@ INCLUDE_RODATA("asm/nonmatchings/level/GEXZIL", D_80162B24_9BCA4);
 
 INCLUDE_RODATA("asm/nonmatchings/level/GEXZIL", D_80162B28_9BCA8);
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015E8C0_97A40);
+void func_8015E8C0_97A40(Instance* instance, void* arg1) {
+    SVECTOR euler;
+    MATRIX* m;
+
+    if ((unsigned int)(instance->currentModelAnim - 0xB) < 2) {
+        if (((Instance**)arg1)[0x98/4] != NULL ||
+            (((Instance**)arg1)[0x98/4] = INSTANCE_BirthObject(instance, OBTABLE_FindObject("blububl_"))) != NULL) {
+            ((Instance**)arg1)[0x98/4]->rotation.z = instance->rotation.z - 0x400;
+            m = instance->oldMatrix;
+            if (m != NULL) {
+                func_800157BC(&m[5], (short*)&euler);
+                ((Instance**)arg1)[0x98/4]->rotation.x = euler.x;
+                ((Instance**)arg1)[0x98/4]->rotation.y = euler.y;
+                ((Instance**)arg1)[0x98/4]->rotation.z = euler.z;
+                ((Instance**)arg1)[0x98/4]->position.x = m[5].l[0];
+                ((Instance**)arg1)[0x98/4]->position.y = m[5].l[1];
+                ((Instance**)arg1)[0x98/4]->position.z = m[5].l[2];
+                return;
+            }
+            ((Instance**)arg1)[0x98/4]->position = instance->position;
+            ((Instance**)arg1)[0x98/4]->position.z += 0x100;
+        }
+    } else {
+        if (((Instance**)arg1)[0x98/4] != NULL) {
+            func_8002E350(((Instance**)arg1)[0x98/4]);
+            ((Instance**)arg1)[0x98/4] = NULL;
+        }
+    }
+}
 
 void func_8015EA18_97B98(Instance* instance, short* arg1) {
     instance->flags2 &= ~0x10;
