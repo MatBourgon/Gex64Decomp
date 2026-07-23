@@ -5,6 +5,8 @@
 #include "types/intro/QMark.h"
 #include "types/intro/BTimer.h"
 #include "types/G2String.h"
+#include "INSTANCE.h"
+#include "SPLINE.h"
 
 #include "types/Vector.h"
 extern int D_800E5FD8;
@@ -650,7 +652,41 @@ void circuit_pball_OnCreate(Instance* instance, GameTracker* gameTracker)
     instance->flags |= 0x100000;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015D7F0_849D0);
+extern char D_801635F8_8A7D8[];
+
+void func_8015D7F0_849D0(Instance* instance) {
+    Intro** v1;
+    Instance* obj;
+    SVECTOR* pt;
+    int spline2;
+
+    v1 = (Intro**)instance->intro->_04 + 1;
+    if (v1[0]->multiSpline != NULL) {
+        obj = INSTANCE_BirthCachedObject(instance, 0x1C);
+        if (obj != NULL) {
+            if (G2String_Compare_EQ(instance->object->name, D_801635F8_8A7D8)) {
+                obj->flags |= 0x800;
+                INSTANCE_InsertInstanceWithFlagsCleared(obj, 0xF000);
+            }
+            obj->work4 = 0;
+            pt = SplineGetFirstPoint(((Spline**)v1[0]->multiSpline)[0], (SplineDef*)&obj->work0);
+            if (pt != NULL) {
+                obj->position.x = pt->x;
+                obj->position.y = pt->y;
+                obj->position.z = pt->z;
+            }
+            spline2 = ((int*)v1[0]->multiSpline)[0x8/4];
+            if (spline2 != 0) {
+                pt = SplineGetFirstPoint((Spline*)spline2, (SplineDef*)&obj->work2);
+                if (pt != NULL) {
+                    obj->scale.x = pt->x;
+                    obj->scale.y = pt->y;
+                    obj->scale.z = pt->z;
+                }
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_pball_OnUpdate);
 
