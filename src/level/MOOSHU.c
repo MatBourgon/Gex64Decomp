@@ -450,19 +450,14 @@ void func_8015D084_C5A04(Instance* instance, GameTracker* gameTracker) {
 
 void func_8015D190_C5B10(Instance* instance) {
     int* data = instance->intro->data;
-    Intro** cur;
+    Intro** pIntro;
     short i;
 
-    if (OBTABLE_FindObject("moodam__") != 0) {
-        cur = (Intro**)(data + 2);
-        i = 0;
-        if (data[1] > 0) {
-            do {
-                (*cur)->flags &= ~8;
-                func_8002E21C(*cur);
-                cur += 1;
-                i += 1;
-            } while (i < data[1]);
+    if (OBTABLE_FindObject("moodam__") != NULL) {
+        pIntro = (Intro**)(data + 2);
+        for (i = 0; i < data[1]; pIntro++, i++) {
+            (*pIntro)->flags &= ~8;
+            func_8002E21C(*pIntro);
         }
     }
 }
