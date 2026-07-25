@@ -3,6 +3,8 @@
 #include "level/MOOSHU.h"
 #include "OBTABLE.h"
 #include "INSTANCE.h"
+#include "SCRIPT.h"
+#include "SPLINE.h"
 
 void func_8015D7B4_C6134(Instance* instance);
 
@@ -36,6 +38,7 @@ INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_80159EC4_C2844);
 void func_8015A07C_C29FC(Instance* instance, GameTracker* gameTracker) {
 }
 
+void func_8015B39C_C3D1C();
 void func_8015B4D4_C3E54(Instance* instance, short* arg1);
 int func_8015B510_C3E90(Instance* instance, short* arg1, int arg2, short arg3);
 void func_8015B5F0_C3F70(Instance* instance, short* arg1);
@@ -201,7 +204,32 @@ void func_8015B2FC_C3C7C(Instance* instance, int arg1, int arg2) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015B39C_C3D1C);
+void func_8015B39C_C3D1C(Instance* instance, int arg1, int arg2, short* arg3) {
+    int l1;
+    int l2;
+    MultiSpline* ms;
+    unsigned short frame;
+    short count;
+    short dir;
+
+    ms = SCRIPT_GetMultiSpline(instance, &l1, &l2);
+    func_8015B5F0_C3F70(instance, arg3);
+    frame = SplineGetFrameNumber(ms->positional, SCRIPT_GetPosSplineDef(instance, ms, l1, l2));
+    count = SCRIPT_CountFramesInSpline(instance);
+    dir = arg3[0xA / 2];
+    if (((dir > 0) && ((short)frame < count / 2)) || ((dir < 0) && ((short)frame > count / 2))) {
+        arg3[0x14 / 2] = 1;
+        if (func_8015B510_C3E90(instance, arg3, 0, 0x800) != 0) {
+            func_8015B5F0_C3F70(instance, arg3);
+        }
+        dir = 1;
+        if (arg3[0xA / 2] > 0) {
+            dir = -1;
+        }
+        arg3[0xA / 2] = dir;
+    }
+    arg3[0x4 / 2] |= 8;
+}
 
 void func_8015B4D4_C3E54(Instance* instance, short* arg1) {
     arg1[0x40/2]--;
