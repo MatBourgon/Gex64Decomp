@@ -462,7 +462,6 @@ void func_8015CB34_8DCD4(char* buf, short val) {
 INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_801615B8_92758);
 
 extern int D_800BDEE0[];
-extern int D_800BDEE4;
 
 void func_8015CB70_8DD10(Instance* instance, GameTracker* gameTracker, int count) {
     extern char D_801615C8_92768[];
@@ -478,21 +477,21 @@ void func_8015CB70_8DD10(Instance* instance, GameTracker* gameTracker, int count
     if (count >= 0x29) {
         c = 0x64;
         D_800BDEE0[0] = 0xDC;
-        D_800BDEE4 = c;
+        D_800BDEE0[1] = c;
         osSyncPrintf("Target");
         c = 0x6C;
         D_800BDEE0[0] = 0xDC;
-        D_800BDEE4 = c;
+        D_800BDEE0[1] = c;
         func_8015CB34_8DCD4(buf, *(short*)((char*)p + 0x3C));
         osSyncPrintf(D_801615C8_92768, buf);
         c = 0x74;
         D_800BDEE0[0] = 0xDC;
-        D_800BDEE4 = c;
+        D_800BDEE0[1] = c;
         func_8015CB34_8DCD4(buf, *(short*)((char*)p + 0x3E));
         osSyncPrintf(D_801615D0_92770, buf);
         c = 0x7C;
         D_800BDEE0[0] = 0xDC;
-        D_800BDEE4 = c;
+        D_800BDEE0[1] = c;
         func_8015CB34_8DCD4(buf, *(short*)((char*)p + 0x40));
         osSyncPrintf(D_801615D8_92778, buf);
     }
@@ -511,26 +510,25 @@ void func_8015CC64_8DE04(Instance* instance, GameTracker* gameTracker, int count
     char buf[16];
     int c;
 
-    /* raw position derefs: same scheduling pin as func_8015CB70 */
     c = 0x96;
     if (count >= 0x29) {
         D_800BDEE0[0] = 0xDC;
-        D_800BDEE4 = c;
+        D_800BDEE0[1] = c;
         osSyncPrintf("Position");
         c = 0x9E;
         D_800BDEE0[0] = 0xDC;
-        D_800BDEE4 = c;
-        func_8015CB34_8DCD4(buf, *(short*)((char*)instance + 0x48));
+        D_800BDEE0[1] = c;
+        func_8015CB34_8DCD4(buf, instance->position.x);
         osSyncPrintf(D_801615C8_92768, buf);
         c = 0xA6;
         D_800BDEE0[0] = 0xDC;
-        D_800BDEE4 = c;
-        func_8015CB34_8DCD4(buf, *(short*)((char*)instance + 0x4A));
+        D_800BDEE0[1] = c;
+        func_8015CB34_8DCD4(buf, instance->position.y);
         osSyncPrintf(D_801615D0_92770, buf);
         c = 0xAE;
         D_800BDEE0[0] = 0xDC;
-        D_800BDEE4 = c;
-        func_8015CB34_8DCD4(buf, *(short*)((char*)instance + 0x4C));
+        D_800BDEE0[1] = c;
+        func_8015CB34_8DCD4(buf, instance->position.z);
         osSyncPrintf(D_801615D8_92778, buf);
     }
 }
