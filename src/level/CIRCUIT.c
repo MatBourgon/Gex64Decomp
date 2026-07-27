@@ -364,7 +364,27 @@ void func_8015C18C_8336C(Instance* instance, int val) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_orbplat_OnCreate);
+void circuit_orbplat_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    short* data = ((short*)instance->object->data);
+
+    instance->work0 = -0x400;
+    instance->work8 = 0x320;
+
+    if (data != 0) {
+        instance->work8 = data[0];
+    }
+
+    instance->initialPos.x = ((Intro**)instance->intro->_04)[2]->position.x + (instance->work8 * ((short)func_8003A6AC(instance->work0)) >> 12);
+    instance->initialPos.y = ((Intro**)instance->intro->_04)[2]->position.y + (instance->work8 * ((short)func_8003A4E0(instance->work0)) >> 12);
+
+    instance->work4 = instance->work8;
+    instance->work5 = 0;
+    instance->work6 = 0x20;
+    instance->work7 = 0x38;
+
+    instance->currentSubState = 0;
+    instance->currentMainState = 1;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_orbplat_OnUpdate);
 
