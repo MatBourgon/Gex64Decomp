@@ -17,6 +17,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
+          allow-unsafe-pr-checkout: true
 
       - name: Intall packages
         run: sudo apt-get install -y git make git build-essential binutils-mips-linux-gnu python3 python3-pip
