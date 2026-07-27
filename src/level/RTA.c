@@ -32,13 +32,9 @@ void rta_zgrate_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-typedef struct {
-    int x, y, z, pad;
-} SharkVector;
-
 void rta_zshark_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    extern SharkVector D_8015EE40_DF4B0;
-    SharkVector v;
+    extern LVector D_8015EE40_DF4B0;
+    LVector v;
     MATRIX m;
     LVECTOR out;
 

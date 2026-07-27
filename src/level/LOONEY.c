@@ -511,14 +511,12 @@ void func_8015B934_B3BE4(ParticleData* p, void* callback, char* data, void* arg3
     int i0;
     int i1;
     int i2;
-    unsigned short px0;
 
-    px0 = pos->x;
     i0 = def[0];
     i1 = def[1];
     i2 = def[2];
     va = (short*)(table + i0 * 12);
-    p->posX = px0;
+    p->posX = pos->x;
     p->posY = pos->y;
     p->posZ = pos->z;
     vb = (short*)(table + i2 * 12);
