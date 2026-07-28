@@ -159,7 +159,36 @@ void func_8015B144_942C4(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015B220_943A0);
+int func_8015B220_943A0(Instance* instance, int arg1) {
+    int max;
+    short f;
+    unsigned char b;
+
+    instance->flags2 &= ~0x10;
+    if (arg1 != 0) {
+        return func_8002DAF8();
+    }
+    max = ((short*)instance->object->animList[instance->currentModelAnim])[1] - 1;
+    b = ((unsigned char*)&instance->currentAnimFrame)[1];
+    if (((int*)instance->_34)[0] > 0) {
+        ((int*)instance->_34)[0]--;
+    }
+    if (arg1 >= ((int*)instance->_34)[0]) {
+        f = ++instance->currentAnimFrame;
+        if (max < f) {
+            instance->currentAnimFrame = 0;
+            instance->flags2 |= 0x10;
+        } else if (f < 0) {
+            instance->currentAnimFrame = max;
+            instance->flags2 |= 0x10;
+        }
+        ((int*)instance->_34)[0] = 0;
+        if (instance->object->oflags2 & 8) {
+            func_80050400(instance, b);
+        }
+    }
+    return instance->flags2 & 0x10;
+}
 
 int func_8015B334_944B4(Intro* intro) {
     Instance* instance;
@@ -258,7 +287,53 @@ void func_8015C188_95308(Instance* instance, short* arg1) {
     arg1[0x12 / 2] = 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015C208_95388);
+void func_8015C208_95388(Instance* instance, void* arg1) {
+    int flags;
+    int max;
+    int frame0;
+    short speed;
+    unsigned short acc;
+    int frame;
+    short a1;
+
+    flags = ((int*)arg1)[0x18/4];
+    max = ((short*)instance->object->animList[instance->currentModelAnim])[1] - 1;
+    if (flags & 0x400) {
+        ((int*)arg1)[0x18/4] = flags & ~0x400;
+        return;
+    }
+    if (((short*)arg1)[0x40/2] == 0) {
+        instance->flags2 &= ~0x10;
+        speed = ((short*)arg1)[0x12/2];
+        if (speed == 0) {
+            frame0 = instance->currentAnimFrame;
+            func_8002DAF8(instance, -1);
+            if (frame0 < max) {
+                instance->currentAnimFrame = frame0 + 1;
+                return;
+            }
+            instance->currentAnimFrame = 0;
+            return;
+        }
+        acc = ((unsigned short*)arg1)[0x14/2] + speed;
+        ((unsigned short*)arg1)[0x14/2] = acc;
+        frame = (acc << 16) >> 18;
+        instance->currentAnimFrame = frame;
+        a1 = ((short*)arg1)[0x12/2];
+        if (a1 > 0) {
+            if (max < frame) {
+                instance->currentAnimFrame = 0;
+                instance->flags2 |= 0x10;
+            }
+        } else if (a1 < 0 && frame < 0) {
+            instance->currentAnimFrame = max;
+            instance->flags2 |= 0x10;
+        }
+        if (instance->object->oflags2 & 8) {
+            func_80050400(instance, ((unsigned char*)&instance->currentAnimFrame)[1]);
+        }
+    }
+}
 
 void gexzil_mekblst_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->intro = NULL;
@@ -367,7 +442,35 @@ INCLUDE_RODATA("asm/nonmatchings/level/GEXZIL", D_80162B24_9BCA4);
 
 INCLUDE_RODATA("asm/nonmatchings/level/GEXZIL", D_80162B28_9BCA8);
 
-INCLUDE_ASM("asm/nonmatchings/level/GEXZIL", func_8015E8C0_97A40);
+void func_8015E8C0_97A40(Instance* instance, void* arg1) {
+    SVECTOR euler;
+    MATRIX* m;
+
+    if ((unsigned int)(instance->currentModelAnim - 0xB) < 2) {
+        if (((Instance**)arg1)[0x98/4] != NULL ||
+            (((Instance**)arg1)[0x98/4] = INSTANCE_BirthObject(instance, OBTABLE_FindObject("blububl_"))) != NULL) {
+            ((Instance**)arg1)[0x98/4]->rotation.z = instance->rotation.z - 0x400;
+            m = instance->oldMatrix;
+            if (m != NULL) {
+                func_800157BC(&m[5], (short*)&euler);
+                ((Instance**)arg1)[0x98/4]->rotation.x = euler.x;
+                ((Instance**)arg1)[0x98/4]->rotation.y = euler.y;
+                ((Instance**)arg1)[0x98/4]->rotation.z = euler.z;
+                ((Instance**)arg1)[0x98/4]->position.x = m[5].l[0];
+                ((Instance**)arg1)[0x98/4]->position.y = m[5].l[1];
+                ((Instance**)arg1)[0x98/4]->position.z = m[5].l[2];
+                return;
+            }
+            ((Instance**)arg1)[0x98/4]->position = instance->position;
+            ((Instance**)arg1)[0x98/4]->position.z += 0x100;
+        }
+    } else {
+        if (((Instance**)arg1)[0x98/4] != NULL) {
+            func_8002E350(((Instance**)arg1)[0x98/4]);
+            ((Instance**)arg1)[0x98/4] = NULL;
+        }
+    }
+}
 
 void func_8015EA18_97B98(Instance* instance, short* arg1) {
     instance->flags2 &= ~0x10;

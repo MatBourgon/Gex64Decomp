@@ -31,7 +31,45 @@ void horror_drawer_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_drawer_OnUpdate);
+void horror_drawer_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    int state;
+    int f;
+
+    state = instance->currentMainState;
+    f = instance->work0 + 1;
+    instance->work0 = f;
+    if (state == 0) {
+        instance->scale.x -= 0x124;
+        if (instance->scale.x == 0) {
+            instance->scale.x = 1;
+        }
+        func_8002E704(instance);
+        if (instance->work0 == 0xE) {
+            instance->currentMainState = 2;
+            instance->work0 = 0;
+        }
+    } else if (state == 2) {
+        if (f == 0x28) {
+            instance->currentMainState = 1;
+            instance->work0 = 0;
+            func_80050508(instance, 0x46, 0, 0x64, 0xFA0);
+        }
+    } else if (state == 1) {
+        instance->scale.x += 0x124;
+        if (instance->scale.x >= 0x1000) {
+            instance->scale.x = 0x1000;
+        }
+        func_8002E704(instance);
+        if (instance->work0 == 0xE) {
+            instance->currentMainState = 3;
+            instance->work0 = 0;
+        }
+    } else if (state == 3 && f == 0x28) {
+        instance->currentMainState = 0;
+        instance->work0 = 0;
+        func_80050508(instance, 0x46, 0, 0x64, 0xFA0);
+    }
+}
 
 void horror_drawer_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
@@ -345,7 +383,42 @@ INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_fltchst_OnCreate);
 
 INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_fltchst_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_fltchst_OnCollide);
+void horror_fltchst_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+    int* introData;
+    int c6;
+    int state;
+    int* sig;
+
+    bsp = instance->bspTree;
+    c6 = bsp->_06;
+    introData = instance->introData;
+    if (c6 == 1 && bsp->instanceSpline == gameTracker->player &&
+        (unsigned int)(instance->currentMainState - 1) >= 2 && bsp->globalOffset.x < -0x18F) {
+        state = instance->work2;
+        instance->currentSubState = c6;
+        if (state != c6) {
+            if (instance->work0 == c6) {
+                instance->work1 = gameTracker->player->position.y;
+            } else if (instance->work0 == 2) {
+                instance->work1 = gameTracker->player->position.x;
+            }
+            if (instance->work4 != 1 && introData[0xC/4] != 0) {
+                sig = (int*)introData[0x8/4];
+                COLLIDE_HandleSignal(gameTracker->player, sig + 1, sig[0], 0);
+                instance->work4 = 1;
+            }
+        } else {
+            if (instance->work0 == state) {
+                gameTracker->player->position.y = instance->work1;
+                return;
+            }
+            if (instance->work0 == 2) {
+                gameTracker->player->position.x = instance->work1;
+            }
+        }
+    }
+}
 
 void horror_ledge_OnCreate(Instance* instance, GameTracker* gameTracker) {
     int* intro;
@@ -461,7 +534,50 @@ void horror_polter_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->scale.z = instance->scale.y = instance->scale.x = 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_polter_OnUpdate);
+void horror_polter_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    int state;
+
+    state = instance->currentMainState;
+    if (state == 1) {
+        PlayerInstance->lightGroup = 0;
+        *(int*)PlayerInstance->_C4 = instance->work0;
+        if (instance->scale.x + 0x40 < 0x1000) {
+            instance->scale.x += 0x40;
+            instance->scale.y += 0x40;
+            instance->scale.z += 0x40;
+            return;
+        }
+        instance->scale.x = 0x1000;
+        instance->scale.y = 0x1000;
+        instance->scale.z = 0x1000;
+        if (PlayerInstance->scale.x + 0x80 < 0x1000) {
+            PlayerInstance->scale.x += 0x80;
+            PlayerInstance->scale.y += 0x80;
+            PlayerInstance->scale.z += 0x80;
+            return;
+        }
+        PlayerInstance->scale.x = 0x1000;
+        PlayerInstance->scale.y = 0x1000;
+        PlayerInstance->scale.z = 0x1000;
+        PlayerInstance->currentMainState = 0;
+        gameTracker->player->flags &= ~0x100;
+        instance->currentMainState = 2;
+        return;
+    }
+    if (state == 2) {
+        *(int*)PlayerInstance->_C4 = instance->work0;
+        if (instance->scale.x - 0x20 > 0) {
+            instance->scale.x -= 0x20;
+            instance->scale.y -= 0x20;
+            instance->scale.z -= 0x20;
+            return;
+        }
+        instance->scale.x = 0;
+        instance->scale.y = 0;
+        instance->scale.z = 0;
+        instance->currentMainState = 0;
+    }
+}
 
 void horror_polter_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
@@ -509,7 +625,30 @@ void horror_skelh_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/HORROR", horror_skelh_OnUpdate);
+void horror_skelh_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    extern int D_800EB8A0;
+    int* ev;
+    int i;
+    int n;
+
+    ev = WORK_AS(int*, instance->work6);
+    if (instance->parent == NULL) {
+        INSTANCE_KillInstance(instance);
+        return;
+    }
+    if (SCRIPT_InstanceSplineProcess(instance, (SplineDef*)&instance->work0, WORK_AS_PTR(SplineDef, instance->work2), NULL, 1) > 0) {
+        INSTANCE_PlainDeath(instance, 5, -1, 0);
+        func_80050508(instance, 0xA, 0, 0x6E, 0xFA0);
+    }
+    if (ev != NULL) {
+        n = ev[2];
+        i = WORK_AS(int, instance->work4);
+        if (n > i && WORK_AS_IDX(short, instance->work0, 0) + 1 == ((int**)ev)[3][i]) {
+            func_8002768C(instance, D_800EB8A0, WORK_AS(int, instance->work4)++);
+            func_80050508(instance, 0x4C, 0, 0x64, 0xFA0);
+        }
+    }
+}
 
 void horror_skelh_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp = instance->bspTree;

@@ -3,6 +3,10 @@
 #include "level/MOOSHU.h"
 #include "OBTABLE.h"
 #include "INSTANCE.h"
+#include "SCRIPT.h"
+#include "SPLINE.h"
+
+void func_8015D7B4_C6134(Instance* instance);
 
 /* quantize a stick/velocity pair into a direction code (0-3) */
 void func_80159720_C20A0(short* out, int arg1, short* vec) {
@@ -34,6 +38,7 @@ INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_80159EC4_C2844);
 void func_8015A07C_C29FC(Instance* instance, GameTracker* gameTracker) {
 }
 
+void func_8015B39C_C3D1C();
 void func_8015B4D4_C3E54(Instance* instance, short* arg1);
 int func_8015B510_C3E90(Instance* instance, short* arg1, int arg2, short arg3);
 void func_8015B5F0_C3F70(Instance* instance, short* arg1);
@@ -141,7 +146,41 @@ void mooshu_moobar_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", mooshu_moo_OnCollide);
+void mooshu_moo_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    BSPTree* bsp;
+    short* data;
+    unsigned char* other;
+    int flags;
+    short state;
+    short* pdata;
+
+    bsp = instance->bspTree;
+    data = ((short*)instance->object->data);
+    other = bsp->_08;
+    if (bsp->instanceSpline == gameTracker->player) {
+        flags = ((unsigned short*)data)[4 / 2];
+        data[4 / 2] = flags | 0x2000;
+        if (data[0xC / 2] == 6 && bsp->_04 == 5) {
+            if (bsp->_08[3] != 0) {
+                pdata = ((short*)gameTracker->player->data);
+                data[4 / 2] = flags | 0x2020;
+                func_80022714(instance, gameTracker, flags, other);
+                func_80022780(gameTracker->player, gameTracker);
+                gameTracker->player->_D0[2] = 0xC8;
+                pdata[0x90 / 2] = 0x96;
+                pdata[0x98 / 2] = -8;
+            }
+        } else {
+            state = data[0xC / 2];
+            if (state == 1 && bsp->_04 == state && other[4] != 0) {
+                func_80022738(instance, gameTracker, flags, other);
+                data[4 / 2] = ((unsigned short*)data)[4 / 2] | 0x4000;
+            } else {
+                data[4 / 2] = ((unsigned short*)data)[4 / 2] | 0x8000;
+            }
+        }
+    }
+}
 
 void func_8015B2FC_C3C7C(Instance* instance, int arg1, int arg2) {
     SVECTOR vec;
@@ -165,7 +204,32 @@ void func_8015B2FC_C3C7C(Instance* instance, int arg1, int arg2) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015B39C_C3D1C);
+void func_8015B39C_C3D1C(Instance* instance, int arg1, int arg2, short* arg3) {
+    int l1;
+    int l2;
+    MultiSpline* ms;
+    unsigned short frame;
+    short count;
+    short dir;
+
+    ms = SCRIPT_GetMultiSpline(instance, &l1, &l2);
+    func_8015B5F0_C3F70(instance, arg3);
+    frame = SplineGetFrameNumber(ms->positional, SCRIPT_GetPosSplineDef(instance, ms, l1, l2));
+    count = SCRIPT_CountFramesInSpline(instance);
+    dir = arg3[0xA / 2];
+    if (((dir > 0) && ((short)frame < count / 2)) || ((dir < 0) && ((short)frame > count / 2))) {
+        arg3[0x14 / 2] = 1;
+        if (func_8015B510_C3E90(instance, arg3, 0, 0x800) != 0) {
+            func_8015B5F0_C3F70(instance, arg3);
+        }
+        dir = 1;
+        if (arg3[0xA / 2] > 0) {
+            dir = -1;
+        }
+        arg3[0xA / 2] = dir;
+    }
+    arg3[0x4 / 2] |= 8;
+}
 
 void func_8015B4D4_C3E54(Instance* instance, short* arg1) {
     arg1[0x40/2]--;
@@ -261,7 +325,42 @@ INCLUDE_RODATA("asm/nonmatchings/level/MOOSHU", D_8015DDFC_C677C);
 
 INCLUDE_RODATA("asm/nonmatchings/level/MOOSHU", D_8015DE08_C6788);
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015B8B0_C4230);
+void func_8015B8B0_C4230(Instance* instance, GameTracker* gameTracker) {
+    Intro* intro;
+    Object* obj;
+    Instance* born;
+    short count;
+
+    intro = instance->object->data;
+    obj = OBTABLE_FindObject("mooelec_");
+    if (((short*)intro)[0xE / 2] != 3 && (count = ((short*)intro)[6 / 2], count > 0)) {
+        ((short*)intro)[6 / 2] = count - 1;
+        if (((int*)intro)[0x1C / 4] == 0) {
+            if (obj != 0) {
+                born = INSTANCE_BirthObject(instance, obj);
+                if (born != 0) {
+                    ((int*)intro)[0x1C / 4] = (int)born;
+                    instance->currentModel = 1;
+                    born->flags |= 0x100400;
+                }
+            }
+            if (((int*)intro)[0x1C / 4] == 0) {
+                goto skip;
+            }
+        }
+        ((Instance*)((int*)intro)[0x1C / 4])->currentModelAnim = instance->currentModelAnim;
+        ((Instance*)((int*)intro)[0x1C / 4])->currentAnimFrame = instance->currentAnimFrame;
+skip:
+        if (((short*)intro)[6 / 2] <= 0) {
+            func_8015B75C_C40DC(instance, intro);
+            return;
+        }
+        instance->currentModelAnim = 3;
+        instance->currentAnimFrame = 0;
+        instance->flags2 &= ~0x10;
+        ((short*)intro)[0xE / 2] = 3;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", func_8015B9D0_C4350);
 
@@ -397,7 +496,40 @@ void mooshu_moosprk_OnCreate(Instance* instance, GameTracker* gameTracker)
     instance->_E0[1] = -0x10;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/MOOSHU", mooshu_moosprk_OnUpdate);
+void mooshu_moosprk_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    short spread;
+    int sum;
+    int pz;
+    int dz;
+    int iz;
+
+    if (instance->currentMainState == 0) {
+        sum = instance->_D0[2] + instance->_E0[1];
+        if (sum >= -0x7F) {
+            instance->_D0[2] = sum;
+        } else {
+            instance->_D0[2] = -0x80;
+        }
+        if (instance->position.z + instance->_D0[2] > instance->intro->position.z - 0x200) {
+            instance->position.z = instance->position.z + instance->_D0[2];
+        } else {
+            instance->position.z = instance->intro->position.z - 0x280;
+            instance->currentMainState = 1;
+        }
+        instance->position.x += (instance->work0 * (short)func_8003A6AC(instance->work1)) >> 12;
+        instance->position.y += (instance->work0 * (short)func_8003A4E0(instance->work1)) >> 12;
+        return;
+    }
+    if (instance->currentMainState == 1) {
+        spread = 0x30;
+        func_80049B80(instance, &spread, 0x60, 0xDDB, 0x100, &gameTracker->player->position, 2);
+        instance->work2 += 1;
+        if (instance->work2 >= 0x5A) {
+            func_8015D7B4_C6134(instance->parent);
+            INSTANCE_KillInstance(instance);
+        }
+    }
+}
 
 void mooshu_moosprk_OnCollide(Instance* instance, GameTracker* gameTracker) {
     BSPTree* bsp = instance->bspTree;
@@ -489,7 +621,7 @@ void func_8015D6B0_C6030(Instance* instance, GameTracker* gameTracker) {
     fc[6] = 0x10;
 }
 
-void func_8015D7B4_C6134(Instance* instance, GameTracker* gameTracker)
+void func_8015D7B4_C6134(Instance* instance)
 {
     WORK_AS_IDX(short, instance->work0, 0)++;
 }

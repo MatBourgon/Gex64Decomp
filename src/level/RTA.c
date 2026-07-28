@@ -324,7 +324,34 @@ void rta_zcargo_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zwleak_OnCreate);
+void rta_zwleak_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    extern unsigned short D_8015ED90_DF400;
+    extern int D_8015ED94_DF404;
+    extern int D_8015ED98_DF408;
+    short* intro;
+    short angle;
+    short c;
+    int w8;
+
+    intro = ((short*)instance->introData);
+    memset(&instance->work0, 0, 0x28);
+    angle = instance->intro->rotation.z + 0x400;
+    instance->work5 = (short)func_8003A6AC(angle);
+    c = func_8003A4E0(angle);
+    instance->work6 = c;
+    if (c != 0) {
+        instance->position.y += D_8015ED90_DF400;
+    }
+    w8 = (unsigned short)instance->position.z - (instance->work6 * D_8015ED98_DF408 >> 12);
+    WORK_AS_IDX(short, instance->work7, 0) = instance->position.x + (instance->work5 * D_8015ED94_DF404 >> 12);
+    WORK_AS_IDX(short, instance->work7, 1) = instance->position.y + (instance->work6 * D_8015ED94_DF404 >> 12);
+    WORK_AS_IDX(short, instance->work8, 0) = w8;
+    if (intro != 0) {
+        instance->work1 = intro[2 / 2];
+        return;
+    }
+    instance->work1 = 0x80;
+}
 
 extern short D_8015ED9C_DF40C;
 
@@ -476,14 +503,100 @@ int func_8015BD54_DC3C4(Instance* instance) {
     return done;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zswitch_OnCreate);
+extern unsigned short D_8015EDFE_DF46E;
+
+void rta_zswitch_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    void* introData;
+    int flags;
+    int frame;
+    int soundBit;
+    unsigned short v;
+
+    if (instance->flags & 0x20000) {
+        instance->intro->flags &= ~8;
+        return;
+    }
+    flags = instance->flags | 0x10000;
+    instance->flags = flags | 0x400;
+    if (instance->intro->flags & 0x1000) {
+        instance->intro->flags &= ~0x800;
+        return;
+    }
+    introData = instance->introData;
+    instance->flags = flags | 0x480;
+    if (((unsigned short*)introData)[0] & 0x12) {
+        instance->currentMainState = 1;
+    } else {
+        instance->currentMainState = 0;
+    }
+    instance->currentSubState = 0;
+    if (instance->intro->flags & 0x800) {
+        instance->currentMainState ^= 1;
+    }
+    memset(&instance->work0, 0, 0x28);
+    frame = func_8015C344_DC9B4(instance);
+    instance->work0 = frame;
+    if (instance->currentMainState == 0) {
+        instance->currentAnimFrame = 0;
+    } else {
+        instance->currentAnimFrame = frame;
+    }
+    soundBit = ((short*)introData)[1];
+    if (instance->currentMainState == 1) {
+        D_8015EDFE_DF46E = D_8015EDFE_DF46E | soundBit;
+    } else {
+        D_8015EDFE_DF46E = D_8015EDFE_DF46E & ~soundBit;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zswitch_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", rta_zswitch_OnCollide);
+void rta_zswitch_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    extern unsigned short D_8015EDFE_DF46E;
+    extern unsigned short D_8015EE00_DF470;
+    short* intro;
+    short state;
+    int a2;
 
-extern short D_8015EDFE_DF46E;
-extern short D_8015EE00_DF470;
+    a2 = 0;
+    if (instance->bspTree->instanceSpline == PlayerInstance) {
+        if (instance->work1 < 0x1E) {
+            instance->work1 = 0;
+            return;
+        }
+        intro = ((short*)instance->introData);
+        if ((D_8015EDFE_DF46E & 0x1000) || (((unsigned short*)intro)[2 / 2] & 0x1000)) {
+            instance->work1 = 0;
+            if (instance->currentSubState == 0) {
+                state = intro[0];
+                if (state == 0) {
+                    if (D_8015EE00_DF470 == 0) {
+                        goto block_15;
+                    }
+                    goto block_14;
+                }
+                if (state == 1 && instance->currentMainState == 0) {
+                    if (D_8015EE00_DF470 == 0) {
+                        a2 = 1;
+                    }
+                } else if (intro[0] == 2) {
+                block_14:
+                    if (instance->currentMainState == 1) {
+                    block_15:
+                        a2 = 1;
+                    }
+                }
+                if (a2 != 0) {
+                    instance->intro->flags ^= 0x800;
+                    instance->currentSubState = 1;
+                }
+            }
+        }
+    }
+}
+
+extern unsigned short D_8015EDFE_DF46E;
+extern unsigned short D_8015EE00_DF470;
 extern int D_8015EE04_DF474;
 extern int D_8015EE08_DF478;
 
@@ -802,9 +915,69 @@ void func_8015E228_DE898(Instance* instance) {
     D_8015EF14_DF584 = (int)OBTABLE_FindObject("zbubbl__");
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015E27C_DE8EC);
+extern unsigned short D_8015EED0_DF540[];
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015E3AC_DEA1C);
+void func_8015E27C_DE8EC(void* arg0) {
+    unsigned short* src = (unsigned short*)arg0;
+
+    D_8015EED0_DF540[0x0/2] = src[0x8/2];
+    D_8015EED0_DF540[0x2/2] = src[0xA/2];
+    D_8015EED0_DF540[0x4/2] = src[0xC/2];
+    D_8015EED0_DF540[0x8/2] = src[0x17C/2];
+    D_8015EED0_DF540[0xA/2] = src[0x17E/2];
+    D_8015EED0_DF540[0xC/2] = src[0x180/2];
+    D_8015EED0_DF540[0x10/2] = src[0x18/2];
+    D_8015EED0_DF540[0x12/2] = src[0x1A/2];
+    D_8015EED0_DF540[0x14/2] = src[0x1C/2];
+    D_8015EED0_DF540[0x18/2] = src[0x30/2];
+    D_8015EED0_DF540[0x1A/2] = src[0x32/2];
+    D_8015EED0_DF540[0x1C/2] = src[0x34/2];
+    D_8015EED0_DF540[0x20/2] = src[0x4C/2];
+    D_8015EED0_DF540[0x22/2] = src[0x4E/2];
+    D_8015EED0_DF540[0x24/2] = src[0x50/2];
+    D_8015EED0_DF540[0x26/2] = src[0x1AC/2];
+    D_8015EED0_DF540[0x28/2] = src[0x1AE/2];
+    D_8015EED0_DF540[0x2A/2] = src[0x1B0/2];
+    D_8015EED0_DF540[0x2C/2] = src[0x0/2];
+    D_8015EED0_DF540[0x2E/2] = src[0x2/2];
+    D_8015EED0_DF540[0x30/2] = src[0x4/2];
+    D_8015EED0_DF540[0x32/2] = src[0x10/2];
+    D_8015EED0_DF540[0x34/2] = src[0x12/2];
+    D_8015EED0_DF540[0x36/2] = src[0x14/2];
+    *(int*)&D_8015EED0_DF540[0x38/2] = *(int*)&src[0x54/2];
+}
+
+extern int D_8015EF08_DF578;
+
+void func_8015E3AC_DEA1C(void* arg0) {
+    unsigned short* dst = (unsigned short*)arg0;
+
+    dst[0x8/2] = D_8015EED0_DF540[0x0/2];
+    dst[0xA/2] = D_8015EED0_DF540[0x2/2];
+    dst[0xC/2] = D_8015EED0_DF540[0x4/2];
+    dst[0x17C/2] = D_8015EED0_DF540[0x8/2];
+    dst[0x17E/2] = D_8015EED0_DF540[0xA/2];
+    dst[0x180/2] = D_8015EED0_DF540[0xC/2];
+    dst[0x18/2] = D_8015EED0_DF540[0x10/2];
+    dst[0x1A/2] = D_8015EED0_DF540[0x12/2];
+    dst[0x1C/2] = D_8015EED0_DF540[0x14/2];
+    dst[0x30/2] = D_8015EED0_DF540[0x18/2];
+    dst[0x32/2] = D_8015EED0_DF540[0x1A/2];
+    dst[0x34/2] = D_8015EED0_DF540[0x1C/2];
+    dst[0x4C/2] = D_8015EED0_DF540[0x20/2];
+    dst[0x4E/2] = D_8015EED0_DF540[0x22/2];
+    dst[0x50/2] = D_8015EED0_DF540[0x24/2];
+    dst[0x1AC/2] = D_8015EED0_DF540[0x26/2];
+    dst[0x1AE/2] = D_8015EED0_DF540[0x28/2];
+    dst[0x1B0/2] = D_8015EED0_DF540[0x2A/2];
+    dst[0x0/2] = D_8015EED0_DF540[0x2C/2];
+    dst[0x2/2] = D_8015EED0_DF540[0x2E/2];
+    dst[0x4/2] = D_8015EED0_DF540[0x30/2];
+    dst[0x10/2] = D_8015EED0_DF540[0x32/2];
+    dst[0x12/2] = D_8015EED0_DF540[0x34/2];
+    dst[0x14/2] = D_8015EED0_DF540[0x36/2];
+    *(int*)&dst[0x54/2] = D_8015EF08_DF578;
+}
 
 void func_8015E538_DEBA8(short* rot, short dist, LVECTOR* out) {
     SVector v;
@@ -821,6 +994,22 @@ void func_8015E538_DEBA8(short* rot, short dist, LVECTOR* out) {
     MATH3D_ApplyMatrix(&m, (SVECTOR*)&v, out);
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015E5E0_DEC50);
+void func_8015E5E0_DEC50(short* p, short* target, short* rot, int dist) {
+    LVECTOR d;
+    LVECTOR q;
+    int unused[4];    /* dead local — reproduces the 0x60 frame */
+    LVECTOR v;
+
+    func_8015E538_DEBA8(rot, -dist, &d);
+    v.x = d.x + target[0];
+    v.y = d.y + target[1];
+    v.z = d.z + target[2];
+    q.x = (p[0] * 3 + v.x) / 4;
+    q.y = (p[1] * 3 + v.y) / 4;
+    q.z = (p[2] * 3 + v.z) / 4;
+    p[0] = q.x;
+    p[1] = q.y;
+    p[2] = q.z;
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/RTA", func_8015E6F4_DED64);

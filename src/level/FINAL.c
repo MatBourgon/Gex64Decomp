@@ -2,6 +2,7 @@
 
 #include "level/FINAL.h"
 #include "types/G2String.h"
+#include "OBTABLE.h"
 
 extern int D_80161510_926B0;
 
@@ -52,7 +53,39 @@ void final_lectro_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", final_lectro_OnUpdate);
+void final_lectro_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    if (instance->intro->_2C != 0) {
+        if (func_80033268(0x147) == 0) {
+            func_80050508(instance, 0x147, 0, 0x5A, 0x2710);
+        }
+        instance->currentMainState = 2;
+    }
+    switch (instance->currentMainState) {
+    case 0:
+        if (instance->work0 != 0) {
+            if (func_80033248(instance->work0) != 0) {
+                if (func_80033200(instance->work0) != 0 && func_800506B8(instance, instance->work0, 0, 0x46, 0x2710) == 0) {
+                    func_800331BC(instance->work0);
+                    instance->work0 = 0;
+                }
+            } else {
+                instance->work0 = func_80050508(instance, 0x148, 0, 0x46, 0x2710);
+            }
+        } else {
+            instance->work0 = func_80050508(instance, 0x148, 0, 0x46, 0x2710);
+        }
+        instance->currentTextureAnimFrame += 1;
+        if (instance->currentTextureAnimFrame == 6) {
+            instance->currentTextureAnimFrame = 0;
+            return;
+        }
+    case 1:
+        return;
+    case 2:
+        func_8002E350(instance);
+        break;
+    }
+}
 
 void final_lectro_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
@@ -126,8 +159,8 @@ extern char D_80161588_92728[];
 
 void final_rezbomb_OnCreate(Instance* instance, GameTracker* gameTracker) {
     *(short*)&instance->_E0[0] = 0;
-    instance->currentMainState = OBTABLE_FindObject(D_80161588_92728);
-    instance->currentSubState = OBTABLE_FindObject("rezxpl__");
+    instance->currentMainState = ((int)OBTABLE_FindObject(D_80161588_92728));
+    instance->currentSubState = ((int)OBTABLE_FindObject("rezxpl__"));
 }
 
 typedef struct {
@@ -285,7 +318,46 @@ void final_rezbomb_OnCollide(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015A9F0_8BB90);
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015AC70_8BE10);
+extern int D_800785C8;
+
+void func_8015AC70_8BE10(Instance* instance) {
+    Camera* cam;
+    GameTracker* gt;
+    unsigned short* c;
+    SVECTOR mid;
+    SVECTOR rot;
+    int px;
+    int py;
+    int state;
+
+    cam = gameTracker8->camera;
+    state = PlayerInstance->currentMainState;
+    if (state != 5) {
+        D_800785C8 = state;
+    }
+    PlayerInstance->currentMainState = 5;
+    CAMERA_SetMode(gameTracker8->camera, 8);
+    c = (unsigned short*)cam;
+    mid.x = (instance->position.x + 0x2D00) / 2;
+    mid.y = (instance->position.y + 0x267A) / 2;
+    mid.z = instance->position.z + 0x200;
+    gt = gameTracker8;
+    py = instance->position.y;
+    rot.x = (py - 0x267A) << 2;
+    px = instance->position.x;
+    rot.y = (-px + 0x2D00) << 2;
+    rot.z = 0;
+    ((short*)gt->camera)[0] = mid.x + rot.x;
+    ((short*)gt->camera)[1] = mid.y + rot.y;
+    ((short*)gt->camera)[2] = mid.z + rot.z;
+    func_80005438(&cam->cameraCore._08[4], &mid, cam);
+    c[0x18] = c[0xC];
+    c[0x19] = c[0xD];
+    c[0x1A] = c[0xE];
+    c[4] = c[0xC];
+    c[5] = c[0xD];
+    c[0x17] = c[6] = c[0xE];
+}
 
 void func_8015ADC4_8BF64(Instance* instance) {
     Camera* cam;
@@ -549,11 +621,102 @@ void func_8015CD54_8DEF4(int arg0, int arg1, int count) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015CDF0_8DF90);
+void func_8015CDF0_8DF90(Instance* instance, GameTracker* gameTracker, int count) {
+    extern char D_801615C8_92768[];
+    extern char D_801615D0_92770[];
+    extern char D_801615D8_92778[];
+    char buf[16];
+    int c;
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015CF08_8E0A8);
+    if (count >= 0x29) {
+        c = 0x32;
+        D_800BDEE0[0] = 0xDC;
+        D_800BDEE0[1] = c;
+        osSyncPrintf("Coordinates");
+        c = 0x3A;
+        D_800BDEE0[0] = 0xDC;
+        D_800BDEE0[1] = c;
+        osSyncPrintf("Subject");
+        c = 0x42;
+        D_800BDEE0[0] = 0xDC;
+        D_800BDEE0[1] = c;
+        func_8015CB34_8DCD4(buf, PlayerInstance->position.x);
+        osSyncPrintf(D_801615C8_92768, buf);
+        c = 0x4A;
+        D_800BDEE0[0] = 0xDC;
+        D_800BDEE0[1] = c;
+        func_8015CB34_8DCD4(buf, PlayerInstance->position.y);
+        osSyncPrintf(D_801615D0_92770, buf);
+        c = 0x52;
+        D_800BDEE0[0] = 0xDC;
+        D_800BDEE0[1] = c;
+        func_8015CB34_8DCD4(buf, PlayerInstance->position.z);
+        osSyncPrintf(D_801615D8_92778, buf);
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/level/FINAL", func_8015D018_8E1B8);
+void func_8015CF08_8E0A8(Instance* instance, GameTracker* gameTracker, int count) {
+    extern short D_80161850_929F0;
+    extern short D_80161852_929F2;
+    extern short D_80161854_929F4;
+    extern short D_80161856_929F6;
+    extern int D_80161858_929F8;
+    short* r;
+
+    if (count >= 0x29) {
+        func_8003F7B4(0x78, 0x5A, 0x8C, 0x5A);
+        func_8003F7B4(0xB4, 0x5A, 0xC8, 0x5A);
+        func_8003F7B4(0x78, 0x96, 0x8C, 0x96);
+        func_8003F7B4(0xB4, 0x96, 0xC8, 0x96);
+        func_8003F7B4(0x78, 0x5A, 0x78, 0x69);
+        func_8003F7B4(0x78, 0x87, 0x78, 0x96);
+        func_8003F7B4(0xC8, 0x5A, 0xC8, 0x69);
+        func_8003F7B4(0xC8, 0x87, 0xC8, 0x96);
+        r = &D_80161850_929F0;
+        *r = -0x28;
+        D_80161852_929F2 = -0x1E;
+        D_80161854_929F4 = 0x28;
+        D_80161856_929F6 = 0x1E;
+        D_80161858_929F8 = 0x7F;
+        func_8003F614(1, r, 0, 0);
+    }
+}
+
+void func_8015D018_8E1B8(int arg0, int arg1, short* arg2, int arg3) {
+    Object* obj;
+    Model* model;
+    SVECTOR offs;
+    SVECTOR pos;
+    SVECTOR vel;
+    int i;
+    int half;
+    int life;
+
+    obj = OBTABLE_FindObject("remsfx__");
+    i = 0;
+    if (obj != 0) {
+        half = arg3 >> 1;
+        model = obj->modelList[0];
+        do {
+            i++;
+            offs.x = rand() % arg3 - half;
+            offs.y = rand() % arg3 - half;
+            offs.z = rand() % arg3 - half;
+            pos.x = arg2[0] + offs.x;
+            pos.y = arg2[1] + offs.z;
+            pos.z = arg2[2] + offs.z;
+            vel.x = 0;
+            vel.y = 0;
+            vel.z = -1;
+            /* the dead life reassignment keeps the constant un-hoistable
+               (loop-invariant motion would steal a saved register from the
+               callback addresses); flow deletes the second store */
+            life = 0x1E;
+            func_800170E8(model, model->_14, arg1, &pos, &vel, D_800EB8A0, func_80017E88, func_80016894, life);
+            life = 0;
+        } while (i < 0x1E);
+    }
+}
 
 INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_80161610_927B0);
 
@@ -575,8 +738,8 @@ void final_popper_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->work2 = 0;
     instance->position.z -= 0x12C;
     instance->flags |= 0x400;
-    WORK_AS(int, instance->work3) = OBTABLE_FindObject(D_80161588_92728);
-    WORK_AS(int, instance->work4) = OBTABLE_FindObject(D_8016166C_9280C);
+    WORK_AS(int, instance->work3) = ((int)OBTABLE_FindObject(D_80161588_92728));
+    WORK_AS(int, instance->work4) = ((int)OBTABLE_FindObject(D_8016166C_9280C));
 }
 
 INCLUDE_RODATA("asm/nonmatchings/level/FINAL", D_8016166C_9280C);
@@ -709,12 +872,12 @@ extern void func_8015F200_903A0(void); // unknown
 
 void final_frez_OnCreate(Instance* instance, GameTracker* gameTracker) {
     if (!(instance->flags & 0x20000)) {
-        instance->_D0[3] = OBTABLE_FindObject(D_80161588_92728);
+        instance->_D0[3] = ((int)OBTABLE_FindObject(D_80161588_92728));
         instance->_C4[2] = 0;
         instance->_C4[3] = 1;
         instance->_C4[4] = 1;
         instance->_40[6] -= 0x12C;
-        instance->_E0[2] = OBTABLE_FindObject(D_8016166C_9280C);
+        instance->_E0[2] = ((int)OBTABLE_FindObject(D_8016166C_9280C));
         instance->additionalDrawFunc = (void*)&func_8015F200_903A0;
         instance->flags |= 0x10400;
         instance->flags2 |= 8;

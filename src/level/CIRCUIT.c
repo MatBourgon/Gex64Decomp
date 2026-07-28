@@ -5,6 +5,8 @@
 #include "types/intro/QMark.h"
 #include "types/intro/BTimer.h"
 #include "types/G2String.h"
+#include "INSTANCE.h"
+#include "SPLINE.h"
 
 #include "types/Vector.h"
 extern int D_800E5FD8;
@@ -578,7 +580,40 @@ void circuit_follow_OnCreate(Instance* instance, GameTracker* gameTracker) {
     instance->flags |= 0x100800;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_follow_OnUpdate);
+void func_8015D780_84960(Instance* instance, GameTracker* gameTracker);
+
+void circuit_follow_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    int state;
+    int* v;
+
+    if (instance->intro->flags & 0x80) {
+        instance->flags &= ~0x400;
+        return;
+    }
+    instance->flags |= 0x400;
+    if (instance->work0 > 0) {
+        instance->work0 -= 1;
+    }
+    state = instance->currentMainState;
+    if (state == 1) {
+        func_8015D780_84960(instance, gameTracker);
+    } else if (state == -1) {
+        if (func_800257B4(gameTracker->player) != 0) {
+            v = ((int*)instance->introData);
+            if (v != 0 && v[0] == 3) {
+                if (v[3] != 0) {
+                    SIGNAL_HandleSignal(instance, v[3] + 4, 0);
+                }
+            }
+            instance->currentMainState = 0;
+        } else {
+            gameTracker->player->flags |= 0x100;
+        }
+    }
+    if (instance->currentMainState > 0) {
+        instance->currentMainState = instance->currentMainState + 1;
+    }
+}
 
 void circuit_follow_OnCollide(Instance* instance, GameTracker* gameTracker) {
     Instance* player;
@@ -617,7 +652,41 @@ void circuit_pball_OnCreate(Instance* instance, GameTracker* gameTracker)
     instance->flags |= 0x100000;
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015D7F0_849D0);
+extern char D_801635F8_8A7D8[];
+
+void func_8015D7F0_849D0(Instance* instance) {
+    Intro** v1;
+    Instance* obj;
+    SVECTOR* pt;
+    int spline2;
+
+    v1 = (Intro**)instance->intro->_04 + 1;
+    if (v1[0]->multiSpline != NULL) {
+        obj = INSTANCE_BirthCachedObject(instance, 0x1C);
+        if (obj != NULL) {
+            if (G2String_Compare_EQ(instance->object->name, D_801635F8_8A7D8)) {
+                obj->flags |= 0x800;
+                INSTANCE_InsertInstanceWithFlagsCleared(obj, 0xF000);
+            }
+            obj->work4 = 0;
+            pt = SplineGetFirstPoint(((Spline**)v1[0]->multiSpline)[0], (SplineDef*)&obj->work0);
+            if (pt != NULL) {
+                obj->position.x = pt->x;
+                obj->position.y = pt->y;
+                obj->position.z = pt->z;
+            }
+            spline2 = ((int*)v1[0]->multiSpline)[0x8/4];
+            if (spline2 != 0) {
+                pt = SplineGetFirstPoint((Spline*)spline2, (SplineDef*)&obj->work2);
+                if (pt != NULL) {
+                    obj->scale.x = pt->x;
+                    obj->scale.y = pt->y;
+                    obj->scale.z = pt->z;
+                }
+            }
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", circuit_pball_OnUpdate);
 
@@ -629,7 +698,62 @@ void circuit_pball_OnCollide(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/CIRCUIT", func_8015DB80_84D60);
+void func_8015DB80_84D60(Instance* instance) {
+    int* d;
+    int* sd;
+    int* intro2;
+    int* skip;
+    unsigned short* len;
+    Intro** cur;
+    int t2;
+    int n;
+    int frame;
+    int j;
+    int sum;
+    int end;
+    int unused[2];
+
+    skip = 0;
+    d = ((int*)instance->intro->_04);
+    sum = 0;
+    n = d[0] - 1;
+    if (((Intro**)d)[1]->multiSpline != 0) {
+        sd = ((int**)((Intro**)d)[1]->multiSpline)[0];
+        intro2 = ((int*)((Intro**)d)[2]->instance->introData);
+        t2 = intro2[0];
+        len = ((unsigned short**)sd)[0];
+        cur = ((Intro**)(d + 2));
+        if (t2 != 0) {
+            skip = intro2 + 4;
+        }
+        frame = 0;
+        j = 0;
+        if (n > 0) {
+loop:
+            if (frame < ((short*)sd)[2]) {
+                if (t2 != 0 && frame == skip[0]) {
+                    end = frame + skip[1];
+                    if (frame < end) {
+                        do {
+                            sum += len[0];
+                            len += 0x20 / 2;
+                        } while (++frame < end);
+                    }
+                    skip += 2;
+                }
+                j++;
+                (*cur)->instance->work3 = ((short)sum);
+                cur++;
+                frame++;
+                sum += len[0];
+                len += 0x20 / 2;
+                if (j < n) {
+                    goto loop;
+                }
+            }
+        }
+    }
+}
 
 void circuit_ppath_OnCreate(Instance* instance, GameTracker* gameTracker) {
     Model* model;

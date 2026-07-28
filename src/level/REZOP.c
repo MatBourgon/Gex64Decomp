@@ -293,7 +293,50 @@ void rezop_crnkplt_OnCreate(Instance* instance, GameTracker* gameTracker) {
     COLLIDE_PointAndTerrain(gameTracker8->level->segmentAddress, &a, &b, instance);
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/REZOP", rezop_crnkplt_OnUpdate);
+void rezop_crnkplt_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    int fc;
+    int t0;
+    short lim;
+    short base;
+    short pos;
+    short* intro;
+    int one;
+    short target;
+
+    one = 1;
+    target = 0;
+    intro = ((short*)instance->introData);
+    if (instance->currentMainState != one) {
+        fc = instance->work0;
+        t0 = fc - 0x800;
+        lim = instance->intro->position.z;
+        if (instance->position.z + (t0 >> 12) > lim - 0x180) {
+            if (fc >= -0x7FFF) {
+                instance->work0 = t0;
+            }
+        } else {
+            instance->position.z = lim - 0x180;
+            instance->currentMainState = one;
+            instance->work0 = 0;
+        }
+        pos = instance->position.z;
+        target = intro[0];
+        base = instance->intro->position.z;
+        if (pos + (instance->work0 >> 12) <= base + target) {
+            instance->position.z = pos + (instance->work0 >> 12);
+        } else {
+            instance->position.z = base + target;
+        }
+    }
+    if (instance->intro->_2C != 0 && ((int*)instance->intro->_2C)[0] == 1) {
+        if (instance->work0 <= 0xFFFF) {
+            instance->work0 += 0x10000;
+        }
+        instance->currentMainState = 0;
+        instance->intro->_2C = 0;
+    }
+    GenericProcess(instance, gameTracker);
+}
 
 void rezop_crnkplt_OnCollide(Instance* instance, GameTracker* gameTracker) {
     GenericCollide(instance, gameTracker);
@@ -529,7 +572,38 @@ INCLUDE_ASM("asm/nonmatchings/level/REZOP", func_8015E950_D70C0);
 
 INCLUDE_ASM("asm/nonmatchings/level/REZOP", func_8015EAB0_D7220);
 
-INCLUDE_ASM("asm/nonmatchings/level/REZOP", func_8015ECB8_D7428);
+void func_8015ECB8_D7428(void* arg0) {
+    unsigned short* p = (unsigned short*)arg0;
+
+    func_80016894(p);
+    if (((short*)p)[0xE/2] >= 0xB) {
+        p[0x24/2] -= 4;
+        p[0x28/2] += 4;
+        p[0x2C/2] += 4;
+        p[0x30/2] -= 4;
+        p[0x34/2] += 4;
+        p[0x38/2] += 4;
+        p = ((unsigned short**)p)[0x4/4];
+        if (p != NULL) {
+            p[0x24/2] -= 4;
+            p[0x28/2] += 4;
+            p[0x2C/2] -= 4;
+            p[0x30/2] -= 4;
+            p[0x34/2] += 4;
+            p[0x38/2] -= 4;
+        }
+    } else {
+        p[0x1C/2] += p[0x44/2];
+        p[0x1E/2] += p[0x46/2];
+        p[0x20/2] += p[0x48/2];
+        p = ((unsigned short**)p)[0x4/4];
+        if (p != NULL) {
+            p[0x1C/2] += p[0x44/2];
+            p[0x1E/2] += p[0x46/2];
+            p[0x20/2] += p[0x48/2];
+        }
+    }
+}
 
 INCLUDE_RODATA("asm/nonmatchings/level/REZOP", D_80161590_D9D00);
 
