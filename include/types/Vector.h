@@ -24,6 +24,12 @@ typedef struct
     int x, y, z;
 } LVECTOR;
 
+typedef struct
+{
+    int x, y, z;
+    int pad;
+} LVector; // Required padding difference
+
 FORCE_INLINE void SVECTOR_Subtract(SVECTOR* lhs, SVECTOR* rhs, SVECTOR* out)
 {
     out->x = lhs->x - rhs->x;

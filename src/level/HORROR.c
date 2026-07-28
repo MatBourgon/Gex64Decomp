@@ -1278,10 +1278,10 @@ void func_80162214_A5A44(Instance* instance, SVECTOR offset) {
 
 void func_801622E4_A5B14(GameTracker* arg0, short arg1, int arg2, Instance* arg3) {
     Camera* camera;
-    int base;
+    void* base;
 
     camera = arg0->camera;
-    base = (int)arg3 + 0xC8;
+    base = (void*)(&arg3->_C4[2]);
     func_8000B054(camera);
     if ((arg1 != arg3->intro->rotation.z) ? !(arg3->_C4[4] & 2) : (arg3->_C4[4] & 2)) {
         if (((short*)camera)[0x16 / 2] != 0) {
@@ -1289,8 +1289,7 @@ void func_801622E4_A5B14(GameTracker* arg0, short arg1, int arg2, Instance* arg3
         } else {
             camera->smooth = 0x1E;
         }
-        camera->cameraKey = ((CameraKey*)(base + 0x3E));
-        ((int*)camera)[0x520 / 4] = base + 0x3E;
+        ((CameraKey**)camera)[0x520 / 4] = camera->cameraKey = ((CameraKey*)(base + 0x3E));
         ((int*)camera)[0x3DC / 4] = 0;
         ((int*)camera)[0x3E0 / 4] = 0;
         CAMERA_SetMode(camera, 2);
@@ -1300,8 +1299,7 @@ void func_801622E4_A5B14(GameTracker* arg0, short arg1, int arg2, Instance* arg3
         } else {
             camera->smooth = 0x1E;
         }
-        camera->cameraKey = ((CameraKey*)(base + 0x26));
-        ((int*)camera)[0x520 / 4] = base + 0x26;
+        ((CameraKey**)camera)[0x520 / 4] = camera->cameraKey = ((CameraKey*)(base + 0x26));
         ((int*)camera)[0x3DC / 4] = 0;
         ((int*)camera)[0x3E0 / 4] = 0;
         CAMERA_SetMode(camera, 2);

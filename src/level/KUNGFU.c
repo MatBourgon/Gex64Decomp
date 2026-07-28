@@ -1226,14 +1226,12 @@ void func_801616D4_B08F4(ParticleData* p, void* callback, char* data, void* arg3
     int i0;
     int i1;
     int i2;
-    unsigned short px0;
 
-    px0 = pos->x;
     i0 = def[0];
     i1 = def[1];
     i2 = def[2];
     va = (short*)(table + i0 * 12);
-    p->posX = px0;
+    p->posX = pos->x;
     p->posY = pos->y;
     p->posZ = pos->z;
     vb = (short*)(table + i2 * 12);
@@ -1332,43 +1330,37 @@ void kungfu_leafgen_OnCollide(Instance* instance, GameTracker* gameTracker) {
     extern SVECTOR D_800EB800;
     BSPTree* bsp;
     LVECTOR out;
-    short code;
-    int zv;
 
     bsp = instance->bspTree;
     if (bsp->instanceSpline == gameTracker->player) {
-        code = bsp->_06;
-        switch (code) {
+        switch (bsp->_06) {
             case 4:
-                WORK_AS_IDX(short, instance->work1, 0) = bsp->globalOffset.x;
-                WORK_AS_IDX(short, instance->work1, 1) = bsp->globalOffset.y;
-                zv = (unsigned short)bsp->globalOffset.z;
+                WORK_AS(SVECTOR, instance->work1).x = bsp->globalOffset.x;
+                WORK_AS(SVECTOR, instance->work1).y = bsp->globalOffset.y;
+                WORK_AS(SVECTOR, instance->work1).z = bsp->globalOffset.z;
                 instance->work5 = 1;
-                WORK_AS_IDX(short, instance->work2, 0) = zv;
                 break;
             case 1:
                 switch (bsp->_04) {
                     case 2:
-                        instance->work5 = code;
+                        instance->work5 = 1;
                         break;
                     case 1:
                         if ((bsp->_08[4] - 7) < 3U) {
                             MATH3D_ApplyMatrixT(D_800E97C8, &D_800EB800, &out);
-                            WORK_AS_IDX(short, instance->work1, 0) = out.x;
-                            WORK_AS_IDX(short, instance->work1, 1) = out.y;
-                            zv = out.z;
-                            instance->work5 = code;
-                            WORK_AS_IDX(short, instance->work2, 0) = zv;
+                            WORK_AS(SVECTOR, instance->work1).x = out.x;
+                            WORK_AS(SVECTOR, instance->work1).y = out.y;
+                            WORK_AS(SVECTOR, instance->work1).z = out.z;
+                            instance->work5 = 1;
                         }
                         break;
                     case 5:
                         if ((bsp->_08[2] - 7) < 3U) {
                             MATH3D_ApplyMatrixT(D_800E97C8, &D_800EB800, &out);
-                            WORK_AS_IDX(short, instance->work1, 0) = out.x;
-                            WORK_AS_IDX(short, instance->work1, 1) = out.y;
-                            zv = out.z;
-                            instance->work5 = code;
-                            WORK_AS_IDX(short, instance->work2, 0) = zv;
+                            WORK_AS(SVECTOR, instance->work1).x = out.x;
+                            WORK_AS(SVECTOR, instance->work1).y = out.y;
+                            WORK_AS(SVECTOR, instance->work1).z = out.z;
+                            instance->work5 = 1;
                         }
                         break;
                 }

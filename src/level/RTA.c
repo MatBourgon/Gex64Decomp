@@ -32,29 +32,23 @@ void rta_zgrate_OnUpdate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-typedef struct {
-    int x, y, z, pad;
-} SharkVector;
-
 void rta_zshark_OnCreate(Instance* instance, GameTracker* gameTracker) {
-    extern SharkVector D_8015EE40_DF4B0;
-    SharkVector v;
+    extern LVector D_8015EE40_DF4B0;
+    LVector v;
     MATRIX m;
     LVECTOR out;
-    int f;
 
     v = D_8015EE40_DF4B0;
-    f = instance->flags;
-    if (!(f & 0x20000)) {
-        instance->flags = f | 0x10400;
+    if (!(instance->flags & 0x20000)) {
+        instance->flags |= 0x10400;
         func_8003E758(&instance->rotation, &m);
         MATH3D_ApplyMatrixLV(&m, ((LVECTOR*)&v), &out);
         instance->currentModelAnim = 0;
         instance->work0 = 0;
         instance->work1 = 0;
-        instance->work6 = instance->position.x + out.x;
-        instance->work7 = instance->position.y + out.y;
-        instance->work8 = instance->position.z + out.z;
+        WORK_AS(LVECTOR, instance->work6).x = instance->position.x + out.x;
+        WORK_AS(LVECTOR, instance->work6).y = instance->position.y + out.y;
+        WORK_AS(LVECTOR, instance->work6).z = instance->position.z + out.z;
         instance->work9 = 0;
     }
 }
