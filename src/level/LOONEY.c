@@ -887,7 +887,38 @@ INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_trapsit_OnUpdate);
 void looney_trapsit_OnCollide(Instance* instance, GameTracker* gameTracker) {
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_trapmuv_OnCreate);
+void looney_trapmuv_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    extern short D_80161CE4_B9F94[];
+    extern int D_80161CA8_B9F58[];
+    short* intro;
+    long* fc;
+    short* wp;
+    SVECTOR d;
+
+    fc = &instance->work0;
+    intro = ((short*)instance->introData);
+    if (intro != 0) {
+        instance->work0 = intro[1];
+    } else {
+        instance->introData = D_80161CE4_B9F94;
+        intro = D_80161CE4_B9F94;
+    }
+    if (instance->object->data == 0) {
+        instance->object->data = D_80161CA8_B9F58;
+    }
+    fc[1] = 3;
+    if (((int**)intro)[1] != 0) {
+        fc[0]++;
+        if (fc[0] >= intro[0]) {
+            fc[0] = 0;
+        }
+        wp = ((short**)((int**)intro)[1])[fc[0]];
+        d.x = wp[0] - instance->position.x;
+        d.y = wp[1] - instance->position.y;
+        d.z = wp[2] - instance->position.z;
+        instance->rotation.z = ratan2(d.y, d.x) + 0x400;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_trapmuv_OnUpdate);
 
@@ -929,7 +960,34 @@ void looney_bullet_OnCreate(Instance* instance, GameTracker* gameTracker) {
 
 INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_bullet_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/LOONEY", looney_bullet_OnCollide);
+void looney_bullet_OnCollide(Instance* instance, GameTracker* gameTracker) {
+    extern G2String D_80161E0C_BA0BC;
+    Instance* other;
+    long* fc;
+    short state;
+
+    fc = &instance->work0;
+    other = instance->bspTree->instanceSpline;
+    if (other == PlayerInstance) {
+        func_80022714(instance, gameTracker);
+    } else {
+        if (G2String_Compare_EQ(other->object->parentName, &D_80161E0C_BA0BC)) {
+            if (fc[1] != 1) {
+                state = ((short*)other->_D0)[0];
+                if (state != 0xC && state != 8) {
+                    ((short*)other->_D0)[0] = 0xC;
+                    ((short*)other->_D0)[1] = 1;
+                    ((unsigned short*)other->_D0)[3] -= 1;
+                }
+            }
+        }
+    }
+    fc[1] = 1;
+    if (func_80033220(0xD2) == 0) {
+        func_80050508(instance, 0xD2, (short)((rand() & 0x1F) - 0xF), 0x64, 0xDAC);
+    }
+    func_80050A80(2, 0);
+}
 
 INCLUDE_RODATA("asm/nonmatchings/level/LOONEY", D_80161E0C_BA0BC);
 

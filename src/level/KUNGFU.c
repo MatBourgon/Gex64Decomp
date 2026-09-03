@@ -7,6 +7,7 @@
 #include "SCRIPT.h"
 #include "OBTABLE.h"
 #include "MATRIX.h"
+#include "INSTANCE.h"
 
 
 extern int D_800E5FD8;
@@ -45,7 +46,41 @@ void kungfu_kbgen_OnCreate(Instance* instance, GameTracker* gameTracker) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_kbgen_OnUpdate);
+void kungfu_kbgen_OnUpdate(Instance* instance, GameTracker* gameTracker) {
+    int* intro;
+    Object* obj;
+    Instance* child;
+    int u;
+
+    intro = instance->introData;
+    obj = OBTABLE_FindObject((char*)intro + 0x10);
+    if (intro == NULL || obj == NULL) {
+        INSTANCE_KillInstance(instance);
+        return;
+    }
+    if (instance->currentMainState == 1) {
+        instance->work0 += 1;
+        if (instance->work0 == intro[0xC/4]) {
+            u = intro[0x8/4];
+            instance->currentMainState = 0;
+            instance->work0 = u;
+        }
+    } else {
+        instance->work0 += 1;
+        if (instance->work0 >= intro[0x8/4]) {
+            instance->work0 = 0;
+            child = INSTANCE_BirthObject(instance, obj);
+            if (child != NULL) {
+                obj->oflags |= 0x2000;
+                child->introData = intro;
+                if ((instance->object->oflags & 0x400) && (((unsigned short*)intro)[0x18/2] & 4) && (instance->work1 == 0)) {
+                    instance->work1 = 1;
+                    SCRIPT_InstanceSplineSet(child, ((short*)intro)[0xE/2], 0, 0, 0);
+                }
+            }
+        }
+    }
+}
 
 void kungfu_spray_OnCreate(Instance* instance, GameTracker* gameTracker) {
 }
@@ -595,7 +630,21 @@ INCLUDE_RODATA("asm/nonmatchings/level/KUNGFU", D_801626EC_B190C);
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_dragon_OnUpdate);
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_dragflm_OnCreate);
+void kungfu_dragflm_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    Instance* parent;
+
+    parent = instance->parent;
+    instance->flags |= 0x100000;
+    instance->work0 = ((short*)parent)[0xF6/2];
+    instance->work1 = 0x2000 / ((short*)parent)[0xF6/2];
+    instance->scale.x = 0x1000 / ((short*)parent)[0xF6/2];
+    instance->scale.y = 0x1000 / ((short*)parent)[0xF6/2];
+    instance->scale.z = 0x1000 / ((short*)parent)[0xF6/2];
+    if (!(instance->flags & 0x20000)) {
+        instance->work9 = (rand() & 0x3F) - 0x20;
+        instance->work8 = 0;
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_dragflm_OnUpdate);
 
@@ -949,7 +998,40 @@ INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_ninja_OnUpdate);
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_ninja_OnCollide);
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_swing_OnCreate);
+void kungfu_swing_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    short* intro;
+    short v;
+    int av;
+    unsigned int t;
+    int r;
+
+    intro = ((short*)instance->object->data);
+    instance->work7 = 0;
+    WORK_AS_IDX(short, instance->work8, 0) = (rand() & 0x1F) - 0xF;
+    WORK_AS_IDX(short, instance->work2, 0) = 0x2C00;
+    WORK_AS_IDX(short, instance->work1, 1) = 0x180;
+    WORK_AS_IDX(short, instance->work3, 1) = 0xA00;
+    if (intro != 0) {
+        WORK_AS_IDX(short, instance->work2, 0) = intro[0];
+        av = intro[2 / 2];
+        if (av < 0) {
+            av = -av;
+        }
+        WORK_AS_IDX(short, instance->work1, 1) = av;
+        WORK_AS_IDX(short, instance->work3, 1) = ((int*)intro)[4 / 4];
+    }
+    v = WORK_AS_IDX(short, instance->work2, 0);
+    t = (short)(v / WORK_AS_IDX(short, instance->work1, 1)) * v;
+    instance->work0 = 0;
+    WORK_AS_IDX(short, instance->work1, 0) = WORK_AS_IDX(unsigned short, instance->work2, 0);
+    r = (int)((t + (t >> 31)) << 7) >> 16;
+    if (r < 0) {
+        r = -r;
+    }
+    WORK_AS_IDX(short, instance->work3, 0) = r;
+    *(SVECTOR*)&instance->work4 = *(SVECTOR*)&instance->position;
+    WORK_AS_IDX(short, instance->work5, 0) = WORK_AS_IDX(unsigned short, instance->work5, 0) - WORK_AS_IDX(short, instance->work3, 1);
+}
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_swing_OnUpdate);
 
@@ -1011,7 +1093,39 @@ INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_80160E4C_B006C);
 
 INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", func_80160F68_B0188);
 
-INCLUDE_ASM("asm/nonmatchings/level/KUNGFU", kungfu_joyride_OnCreate);
+void kungfu_joyride_OnCreate(Instance* instance, GameTracker* gameTracker) {
+    MultiSpline* multi;
+    G2Quat* quat;
+    short* d0;
+    int isParent;
+    int isClass;
+    int flags;
+    Intro* pi;
+
+    d0 = ((short*)instance->_D0);
+    flags = instance->intro->flags;
+    if (flags & 0x1000) {
+        instance->intro->flags = flags & ~0x800;
+        return;
+    }
+    pi = gameTracker->player->intro;
+    d0[8 / 2] = 0;
+    instance->flags |= 0x100000;
+    instance->_E0[0] = (int)pi;
+    if (instance->intro->flags & 0x800) {
+        multi = SCRIPT_GetMultiSpline(instance, &isParent, &isClass);
+        quat = SplineGetLastRot(multi->rotational, &multi->curRotational);
+        if (isParent == 0 && isClass == 0) {
+            G2Quat_ToMatrix_S((MATRIX*)((char*)multi + 0x20), (short*)quat);
+            instance->flags |= 1;
+        }
+        d0[2 / 2] = -1;
+        SCRIPT_InstanceSplineSet(instance, SCRIPT_CountFramesInSpline(instance), 0, 0, 0);
+        return;
+    }
+    d0[2 / 2] = 1;
+    SCRIPT_InstanceSplineInit(instance, gameTracker);
+}
 
 void func_8016121C_B043C(Instance* instance, GameTracker* gameTracker) {
     Instance* player;
